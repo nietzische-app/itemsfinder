@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ScanLine, User } from "lucide-react";
+import { Bookmark, Home, ScanLine } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
   { href: "/", label: "Ana Sayfa", icon: Home },
   { href: "/analyze", label: "Tarama", icon: ScanLine },
+  // Replaces a "Profil" tab that pointed at nothing — there is no account
+  // system, so it was a dead affordance.
+  { href: "/kayitlilar", label: "Kayıtlılar", icon: Bookmark },
 ];
 
 /** Bottom tab bar, mobile only — matches the design's mobile navigation. */
@@ -33,10 +36,6 @@ export function MobileNav() {
           </Link>
         );
       })}
-      <span className="flex flex-col items-center justify-center gap-0.5 px-4 py-1 text-outline">
-        <User className="h-6 w-6" strokeWidth={1.5} />
-        <span className="label">Profil</span>
-      </span>
     </nav>
   );
 }

@@ -1,14 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlertCircle, ImageOff, RotateCcw } from "lucide-react";
 
+import { AnalyzeSidebar, type AnalyzeFilters } from "@/components/AnalyzeSidebar";
 import { BoundingBoxOverlay } from "@/components/BoundingBoxOverlay";
 import { DetectedItemsPanel } from "@/components/DetectedItemsPanel";
 import { ResultsSkeleton } from "@/components/ResultsSkeleton";
 import { Button } from "@/components/ui/button";
+import { parseUiCategory, uiCategoryOf, type UiCategory } from "@/lib/categories";
 import { readUploadedImage } from "@/lib/imageSession";
+import { useSavedProducts } from "@/lib/savedItems";
 import type { DetectResponse, DetectionResult, UploadedImage } from "@/types";
 
 /** Delay between detections appearing in the rail, in milliseconds. */
@@ -16,7 +20,10 @@ const REVEAL_INTERVAL_MS = 550;
 
 type Status = "loading-image" | "no-image" | "scanning" | "done" | "error";
 
-export default function AnalyzePage() {
+function AnalyzeWorkspace() {
+  const searchParams = useSearchParams();
+  const { count: savedCount } = useSavedProducts();
+
   const [image, setImage] = useState<UploadedImage | null>(null);
   const [result, setResult] = useState<DetectionResult | null>(null);
   const [status, setStatus] = useState<Status>("loading-image");
@@ -24,9 +31,17 @@ export default function AnalyzePage() {
   const [activeItemId, setActiveItemId] = useState<string | null>(null);
   /** How many detections have finished "matching" and are on screen. */
   const [revealedCount, setRevealedCount] = useState(0);
+  const [maxPrice, setMaxPrice] = useState<number | null>(null);
 
   /** Guards against a duplicate scan from React 18 StrictMode double-effects. */
   const scannedDataUrl = useRef<string | null>(null);
+
+  // The category filter lives in the URL so the header switcher drives it too.
+  const urlCategory = parseUiCategory(searchParams.get("kategori"));
+  const [localCategory, setLocalCategory] = useState<UiCategory | null>(null);
+  const category = localCategory ?? urlCategory;
+
+  useEffect(() => setLocalCategory(urlCategory), [urlCategory]);
 
   useEffect(() => {
     const stored = readUploadedImage();
@@ -100,6 +115,51 @@ export default function AnalyzePage() {
     });
   }, []);
 
+  // Memoised so the derived useMemo hooks below keep a stable dependency.
+  const items = useMemo(() => result?.items ?? [], [result]);
+  const isStreaming = status === "done" && revealedCount < items.length;
+  const isScanning = status === "scanning" || status === "loading-image" || isStreaming;
+  const revealed = items.slice(0, revealedCount);
+
+  const priceCeiling = useMemo(() => {
+    const prices = items.map((item) => item.exactMatch?.price ?? 0);
+    // Round up to a clean step so the slider's maximum reads sensibly.
+    return prices.length > 0 ? Math.ceil(Math.max(...prices) / 100) * 100 : 1000;
+  }, [items]);
+
+  const categoryCounts = useMemo(() => {
+    const counts: Record<UiCategory, number> = { moda: 0, guzellik: 0, aksesuar: 0 };
+    for (const item of items) counts[uiCategoryOf(item)] += 1;
+    return counts;
+  }, [items]);
+
+  /** Filters apply to the rail and the hotspots alike, so the two never disagree. */
+  const visible = useMemo(
+    () =>
+      revealed.filter((item) => {
+        if (category && uiCategoryOf(item) !== category) return false;
+        if (maxPrice !== null && (item.exactMatch?.price ?? 0) > maxPrice) return false;
+        return true;
+      }),
+    [revealed, category, maxPrice],
+  );
+
+  const pending = isStreaming ? (items[revealedCount] ?? null) : null;
+  const isFiltered = category !== null || maxPrice !== null;
+
+  const resetFilters = useCallback(() => {
+    setLocalCategory(null);
+    setMaxPrice(null);
+  }, []);
+
+  // A filter can hide the item that is currently selected; drop the selection
+  // rather than leaving a highlight pointing at nothing.
+  useEffect(() => {
+    if (activeItemId && !visible.some((item) => item.id === activeItemId)) {
+      setActiveItemId(null);
+    }
+  }, [activeItemId, visible]);
+
   if (status === "no-image") {
     return (
       <div className="mx-auto flex min-h-[60dvh] max-w-shell flex-col items-center justify-center px-margin-mobile py-16 text-center">
@@ -110,8 +170,8 @@ export default function AnalyzePage() {
           Henüz bir görsel yok
         </h1>
         <p className="mt-2 max-w-sm text-on-surface-variant">
-          Bir kombin yükle ya da hazır tarzlardan birini seç; içindeki her parçayı
-          tek tek çıkaralım.
+          Bir kombin yükle ya da hazır tarzlardan birini seç; içindeki her parçayı tek
+          tek çıkaralım.
         </p>
         <Button asChild size="lg" className="mt-8">
           <Link href="/">Yüklemeye dön</Link>
@@ -120,31 +180,46 @@ export default function AnalyzePage() {
     );
   }
 
-  const items = result?.items ?? [];
-  const isStreaming = status === "done" && revealedCount < items.length;
-  const isScanning = status === "scanning" || status === "loading-image" || isStreaming;
-  const identified = items.slice(0, revealedCount);
-  const pending = isStreaming ? (items[revealedCount] ?? null) : null;
+  const filters: AnalyzeFilters = { category, maxPrice };
+  const currency = items[0]?.exactMatch?.currency ?? "TRY";
 
   return (
-    <div className="mx-auto flex max-w-shell flex-col lg:h-[calc(100dvh-5rem)] lg:flex-row">
-      {/* Scanning workspace */}
+    <div className="mx-auto flex max-w-shell flex-col lg:h-[calc(100dvh-72px)] lg:flex-row">
+      {/* Tool rail */}
+      {result && revealedCount > 0 ? (
+        <AnalyzeSidebar
+          result={result}
+          filters={filters}
+          onFiltersChange={(next) => {
+            setLocalCategory(next.category);
+            setMaxPrice(next.maxPrice);
+          }}
+          categoryCounts={categoryCounts}
+          priceCeiling={priceCeiling}
+          currency={currency}
+          savedCount={savedCount}
+          visibleCount={visible.length}
+          onReset={resetFilters}
+        />
+      ) : null}
+
+      {/* Canvas */}
       <section className="flex min-h-0 flex-1 items-center justify-center bg-surface-container-low p-gutter">
         {image ? (
           <BoundingBoxOverlay
             imageUrl={image.dataUrl}
-            items={identified}
+            items={visible}
             activeItemId={activeItemId}
             onSelect={handleSelect}
             isScanning={isScanning}
           />
         ) : (
-          <div className="h-[60vh] w-full max-w-md animate-pulse rounded-xl bg-surface-container" />
+          <div className="h-[60vh] w-full max-w-md animate-pulse rounded-2xl bg-surface-container" />
         )}
       </section>
 
-      {/* Detected items rail */}
-      <aside className="flex w-full shrink-0 flex-col border-outline-variant bg-surface-container-lowest lg:h-full lg:w-[420px] lg:border-l">
+      {/* Detections rail */}
+      <aside className="flex w-full shrink-0 flex-col border-outline-variant bg-surface-container-lowest lg:h-full lg:w-[400px] lg:border-l">
         {status === "error" ? (
           <div className="p-gutter">
             <p className="flex items-center gap-2 font-display text-[18px] font-semibold text-error">
@@ -164,10 +239,12 @@ export default function AnalyzePage() {
         ) : result && (status === "done" || revealedCount > 0) ? (
           <DetectedItemsPanel
             result={result}
-            identified={identified}
+            identified={visible}
             pending={pending}
             activeItemId={activeItemId}
             onSelect={handleSelect}
+            isFiltered={isFiltered}
+            onResetFilters={resetFilters}
           />
         ) : (
           <>
@@ -184,5 +261,14 @@ export default function AnalyzePage() {
         )}
       </aside>
     </div>
+  );
+}
+
+/** Static shell; the workspace itself reads `?kategori=` from the URL. */
+export default function AnalyzePage() {
+  return (
+    <Suspense fallback={<div className="min-h-[60dvh]" />}>
+      <AnalyzeWorkspace />
+    </Suspense>
   );
 }

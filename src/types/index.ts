@@ -70,6 +70,12 @@ export interface ProductMatch {
   inStock: boolean;
   /** Hostname of `productUrl`, used for affiliate and brand lookups. */
   merchantDomain: string;
+  /**
+   * Whether `productUrl` is a specific product page or a storefront search.
+   * The CTA wording follows this — promising "go to product" and landing on a
+   * results page is a small lie the UI should not tell.
+   */
+  urlKind: "product" | "search";
   /** True when this row came from live inventory rather than the catalogue. */
   isLive: boolean;
   /** Retailer branding, populated by the Brand API in live mode. */

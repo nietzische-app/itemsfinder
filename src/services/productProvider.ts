@@ -1,6 +1,7 @@
 import "server-only";
 
 import { ContextDevService, type LiveProductCard } from "@/services/contextDevService";
+import { buildSearchQuery } from "@/lib/searchQuery";
 import { hydrateProduct } from "@/services/mockCatalog";
 import type {
   BrandMetadata,
@@ -138,8 +139,17 @@ export class ContextDevProductProvider implements ProductProvider {
     item: DetectedItem,
     signal: AbortSignal,
   ): Promise<DetectedItem | null> {
+    // Search on the enriched query — colour plus descriptors plus type —
+    // rather than the bare label, which is often too generic to rank well.
+    const query = buildSearchQuery({
+      itemType: item.itemType,
+      label: item.label,
+      colorHex: item.colorHex,
+      attributes: item.attributes,
+    });
+
     const cards = await this.context.searchLiveProducts(
-      item.label,
+      query || item.label,
       item.category,
       signal,
     );
@@ -183,7 +193,7 @@ export class ContextDevProductProvider implements ProductProvider {
         // Live results carry no similarity score of their own; rank order from
         // the search is the only signal, so state it conservatively.
         similarity: 0.9,
-        tag: "Live match",
+        tag: "Canlı",
         brand: brands.get(best.merchantDomain) ?? null,
       }),
       alternatives: alternatives.map((card, index) =>
@@ -191,7 +201,7 @@ export class ContextDevProductProvider implements ProductProvider {
           id: `${item.id}-live-alt-${index}`,
           matchType: "alternative",
           similarity: Math.max(0.6, 0.86 - index * 0.05),
-          tag: index === 0 && card.price < best.price ? "Best value" : undefined,
+          tag: index === 0 && card.price < best.price ? "En uygun" : undefined,
           brand: brands.get(card.merchantDomain) ?? null,
         }),
       ),
@@ -234,11 +244,22 @@ interface ProductMatchOverrides {
   brand: BrandMetadata | null;
 }
 
+/** Absolute http(s) only — never hand the CTA anything else. */
+function isSafeHttpUrl(value: string): boolean {
+  try {
+    const { protocol } = new URL(value);
+    return protocol === "http:" || protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 function toProductMatch(
   card: LiveProductCard,
   overrides: ProductMatchOverrides,
 ): ProductMatch {
   const merchant = merchantForDomain(card.merchantDomain);
+  const isUsableUrl = isSafeHttpUrl(card.productUrl);
 
   return {
     id: overrides.id,
@@ -247,14 +268,17 @@ function toProductMatch(
     merchant,
     price: card.price,
     currency: card.currency,
-    productUrl: card.productUrl,
+    productUrl: isUsableUrl ? card.productUrl : "",
+    // Live rows are real product pages, not storefront searches.
+    urlKind: "product",
     // Live listings without an image fall back to the neutral placeholder the
     // catalogue uses, so cards never render an empty box.
     imageUrl: card.imageUrl ?? placeholderImage(card.title),
     matchType: overrides.matchType,
     similarity: overrides.similarity,
     tag: overrides.tag,
-    inStock: card.inStock,
+    // A row we cannot link to is not buyable, whatever the page claimed.
+    inStock: card.inStock && isUsableUrl,
     merchantDomain: card.merchantDomain,
     isLive: true,
     brandMetadata: overrides.brand ?? undefined,

@@ -6,17 +6,19 @@ import { Loader2 } from "lucide-react";
 import { EXAMPLE_IMAGES } from "@/lib/examples";
 import { exampleToDataUrl } from "@/lib/imageSession";
 import { cn } from "@/lib/utils";
-import type { ExampleId, UploadedImage } from "@/types";
+import type { ExampleId, ExampleImage, UploadedImage } from "@/types";
 
 interface DemoLookGridProps {
   onImageReady: (image: UploadedImage) => void;
+  /** Defaults to every look; the page passes a filtered subset. */
+  looks?: ExampleImage[];
 }
 
 /**
  * "Try Demo Look" — a staggered masonry of curated looks. Each card carries a
  * pulsing coral hotspot as a preview of what the scan produces.
  */
-export function DemoLookGrid({ onImageReady }: DemoLookGridProps) {
+export function DemoLookGrid({ onImageReady, looks = EXAMPLE_IMAGES }: DemoLookGridProps) {
   const [busy, setBusy] = useState<ExampleId | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,7 +38,7 @@ export function DemoLookGrid({ onImageReady }: DemoLookGridProps) {
   return (
     <div>
       <div className="grid gap-gutter sm:grid-cols-2 lg:grid-cols-4">
-        {EXAMPLE_IMAGES.map((example, index) => (
+        {looks.map((example, index) => (
           <button
             key={example.id}
             type="button"

@@ -7,6 +7,7 @@ import type {
   ExampleId,
   ItemCategory,
 } from "@/types";
+import { buildSearchQuery, colorNameFromHex } from "@/lib/searchQuery";
 import {
   MOCK_SCENARIOS,
   findProductsForLabel,
@@ -343,16 +344,30 @@ export class GoogleVisionSearchService implements VisualSearchService {
 
       if (entity) usedEntities.add(entity.description);
 
-      const label = entity?.description ?? name;
-      const { exactMatch, alternatives } = findProductsForLabel(label, category);
+      // Vision gives three weak signals; combined they make a query a shopper
+      // would actually type. "Cosmetics" alone is useless, "Kırmızı Mat Ruj"
+      // is not.
+      const phrase = entity?.description;
+      const colorName = colorNameFromHex(dominantHex);
+      const label = [colorName, phrase ?? name].filter(Boolean).join(" ");
+      const searchQuery = buildSearchQuery({
+        itemType: name,
+        label: phrase,
+        colorHex: dominantHex,
+      });
+
+      const { exactMatch, alternatives } = findProductsForLabel(searchQuery, category);
 
       items.push({
         id: `gv-${items.length}-${name.toLowerCase().replace(/\s+/g, "-")}`,
         label,
         itemType: name,
         category,
-        attributes: `${name} • ${Math.round((object.score ?? 0) * 100)}% match`,
-        description: `Detected as "${name}" with ${Math.round((object.score ?? 0) * 100)}% confidence.`,
+        attributes: [colorName, name].filter(Boolean).join(" • "),
+        description:
+          `Görselde "${name}" olarak tespit edildi ` +
+          `(%${Math.round((object.score ?? 0) * 100)} güven). ` +
+          `Arama sorgusu: "${searchQuery}".`,
         confidence: object.score ?? 0,
         boundingBox,
         colorHex: dominantHex,

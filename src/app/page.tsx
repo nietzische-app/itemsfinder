@@ -1,13 +1,15 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useMemo } from "react";
 import { ArrowRight, MoveRight } from "lucide-react";
 
 import { DemoLookGrid } from "@/components/DemoLookGrid";
 import { ImageUploader } from "@/components/ImageUploader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { parseUiCategory } from "@/lib/categories";
+import { EXAMPLE_IMAGES } from "@/lib/examples";
 import { saveUploadedImage } from "@/lib/imageSession";
 import type { UploadedImage } from "@/types";
 
@@ -29,8 +31,28 @@ const STEPS = [
   },
 ];
 
-export default function HomePage() {
+/** Which shopper-facing category each demo look belongs to. */
+const LOOK_CATEGORY: Record<string, "moda" | "guzellik" | "aksesuar"> = {
+  streetwear: "moda",
+  "glam-makeup": "guzellik",
+  tailoring: "moda",
+  "soft-minimal": "aksesuar",
+};
+
+function HomeContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const category = parseUiCategory(searchParams.get("kategori"));
+
+  // The header switcher filters the demo grid too, so the control is never a
+  // no-op on this page.
+  const looks = useMemo(
+    () =>
+      category
+        ? EXAMPLE_IMAGES.filter((look) => LOOK_CATEGORY[look.id] === category)
+        : EXAMPLE_IMAGES,
+    [category],
+  );
 
   const handleImageReady = useCallback(
     (image: UploadedImage) => {
@@ -86,7 +108,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="min-w-0">
+          <div id="upload" className="min-w-0 scroll-mt-28">
             <ImageUploader onImageReady={handleImageReady} />
           </div>
         </section>
@@ -99,7 +121,9 @@ export default function HomePage() {
                 Veya örnek bir tarzı hemen dene
               </h2>
               <p className="text-on-surface-variant">
-                Elinde görsel yok mu? Hazır tarzlardan birini seç, nasıl çalıştığını gör.
+                {looks.length === EXAMPLE_IMAGES.length
+                  ? "Elinde görsel yok mu? Hazır tarzlardan birini seç, nasıl çalıştığını gör."
+                  : `${looks.length} tarz gösteriliyor — tümünü görmek için üstteki «Tümü»ne dokun.`}
               </p>
             </div>
             <a
@@ -111,7 +135,7 @@ export default function HomePage() {
             </a>
           </div>
 
-          <DemoLookGrid onImageReady={handleImageReady} />
+          <DemoLookGrid onImageReady={handleImageReady} looks={looks} />
         </section>
 
         {/* How it works */}
@@ -148,5 +172,18 @@ export default function HomePage() {
         </section>
       </div>
     </div>
+  );
+}
+
+/**
+ * `useSearchParams` opts a component out of static prerendering unless it sits
+ * behind a boundary, so the shell stays static and only the filtered grid waits
+ * on the query string.
+ */
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="min-h-[60dvh]" />}>
+      <HomeContent />
+    </Suspense>
   );
 }

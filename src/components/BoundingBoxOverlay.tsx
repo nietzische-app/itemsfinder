@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles } from "lucide-react";
+import { Maximize2, Minus, Plus, Sparkles } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/utils/affiliate";
@@ -15,6 +15,8 @@ interface BoundingBoxOverlayProps {
   onSelect: (itemId: string | null) => void;
   isScanning: boolean;
 }
+
+const ZOOM_STEPS = [1, 1.5, 2, 3] as const;
 
 /** Minimum gap between two hotspots, in percent of the image. */
 const MIN_HOTSPOT_GAP = 7;
@@ -102,10 +104,66 @@ export function BoundingBoxOverlay({
   isScanning,
 }: BoundingBoxOverlayProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [zoomIndex, setZoomIndex] = useState(0);
   const hotspots = placeHotspots(items);
+  const zoom = ZOOM_STEPS[zoomIndex] ?? 1;
+
+  /**
+   * When zoomed, the canvas centres on the selected detection so the item the
+   * user is inspecting stays in frame — the spotlight behaviour an editor
+   * canvas is expected to have.
+   */
+  const focus = activeItemId ? hotspots.get(activeItemId) : undefined;
+  const originX = focus ? focus.x : 50;
+  const originY = focus ? focus.y : 50;
 
   return (
-    <div className="relative inline-block max-w-full overflow-hidden rounded-xl shadow-ambient-lg">
+    <div className="relative inline-block max-w-full overflow-hidden rounded-2xl shadow-ambient-lg">
+      {/* Zoom controls */}
+      <div className="absolute right-3 top-3 z-40 flex flex-col overflow-hidden rounded-full border border-white/40 bg-surface-container-lowest/80 shadow-ambient backdrop-blur-md">
+        <button
+          type="button"
+          onClick={() => setZoomIndex((i) => Math.min(i + 1, ZOOM_STEPS.length - 1))}
+          disabled={zoomIndex >= ZOOM_STEPS.length - 1}
+          className="p-2 text-primary transition-colors hover:bg-surface-container disabled:opacity-35"
+          aria-label="Yakınlaştır"
+        >
+          <Plus className="h-4 w-4" strokeWidth={2} />
+        </button>
+        <button
+          type="button"
+          onClick={() => setZoomIndex((i) => Math.max(i - 1, 0))}
+          disabled={zoomIndex === 0}
+          className="border-t border-outline-variant/50 p-2 text-primary transition-colors hover:bg-surface-container disabled:opacity-35"
+          aria-label="Uzaklaştır"
+        >
+          <Minus className="h-4 w-4" strokeWidth={2} />
+        </button>
+        {zoomIndex > 0 ? (
+          <button
+            type="button"
+            onClick={() => setZoomIndex(0)}
+            className="border-t border-outline-variant/50 p-2 text-primary transition-colors hover:bg-surface-container"
+            aria-label="Görüntüyü sığdır"
+          >
+            <Maximize2 className="h-4 w-4" strokeWidth={2} />
+          </button>
+        ) : null}
+      </div>
+
+      {zoom > 1 ? (
+        <span className="absolute left-3 top-3 z-40 rounded-full bg-primary/85 px-2.5 py-1 text-[11px] font-bold tabular-nums text-on-primary backdrop-blur-sm">
+          {zoom}x
+        </span>
+      ) : null}
+
+      <div
+        className="transition-transform duration-500 ease-out"
+        style={{
+          transform: `scale(${zoom})`,
+          transformOrigin: `${originX}% ${originY}%`,
+        }}
+      >
       {/* Client-side data URL — nothing for next/image to optimise. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -200,6 +258,8 @@ export function BoundingBoxOverlay({
           </div>
         );
       })}
+
+      </div>
 
       {/* Floating status indicator.
           `pointer-events-none` is load-bearing: this pill sits over the

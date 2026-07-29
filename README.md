@@ -42,10 +42,11 @@ configuration and logs a warning on startup.
 1. **Home** (`/`) — hero with the upload zone, plus a staggered masonry of four
    curated demo looks. The image is held in `sessionStorage` and never leaves
    the browser until a scan is triggered.
-2. **Analyze** (`/analyze`) — a two-pane workspace. The image sits on the left
-   with a scan sweep and a pulsing coral hotspot per detection; the right rail
-   streams detections in one at a time, each moving from `MATCHING…` to
-   `IDENTIFIED`.
+2. **Analyze** (`/analyze`) — a three-column workspace: a tool rail (category
+   filters, budget slider, engine badge), the canvas with zoom and a pulsing
+   coral hotspot per detection, and the detections rail, which streams items in
+   one at a time. Filters apply to the rail *and* the hotspots together, so the
+   canvas and the list never disagree.
 3. **Matches** — hovering a hotspot reveals its bounding box and a frosted
    quick-look card. Selecting one expands that detection in the rail to show
    the exact match and 2–3 cheaper alternatives with a "% less" badge,
@@ -174,6 +175,35 @@ enrich(result: DetectionResult, signal?: AbortSignal): Promise<DetectionResult>
 A provider must be *total*: a detection it cannot resolve keeps the products it
 arrived with, so the UI never loses a card.
 
+## Product links
+
+Catalogue rows store a `searchQuery`, not a URL, and `hydrateProduct()`
+resolves it against `src/services/merchantSearch.ts` into a real Turkish
+storefront search (`trendyol.com/sr?q=`, `amazon.com.tr/s?k=`,
+`zara.com/tr/tr/search?searchTerm=` …).
+
+This replaced hand-written product paths like `/dp/B08XYZ4321`, every one of
+which 404'd — an invented product id cannot resolve, and it rots the moment a
+retailer rotates its catalogue. A search always lands somewhere useful, and
+`ProductMatch.urlKind` records which kind of link it is so the CTA can say
+"Mağazada bul" rather than promising a product page it will not deliver.
+
+Live rows from Context.dev are real product pages and are validated as absolute
+`http(s)` URLs before reaching the UI; a row we cannot link to is marked out of
+stock rather than shipped with a dead button.
+
+### Search precision
+
+`buildSearchQuery()` in `src/lib/searchQuery.ts` combines Vision's three
+signals — dominant colour, the web-detection phrase and the object label — into
+the query a shopper would type. "Cosmetics" becomes "Kırmızı Mat Ruj". Colours
+are mapped to Turkish names by nearest RGB match, generic tokens are dropped,
+and duplicates are collapsed.
+
+> Limitation worth knowing: `IMAGE_PROPERTIES` returns dominant colours for the
+> whole image, not per object, so every detection in one scan shares a colour
+> term. Per-object colour needs server-side cropping, which is not wired up.
+
 ## Affiliate links
 
 Live URLs are wrapped exactly like catalogue ones: `merchantForDomain()` maps a
@@ -210,6 +240,9 @@ src/
 │   ├── ProductImage.tsx         # Thumbnail with dead-URL fallback
 │   ├── EngineBadge.tsx          # Which engines produced this result
 │   ├── MarkasLogo.tsx           # Brand mark + wordmark lockup
+│   ├── AnalyzeSidebar.tsx       # Workspace tool rail: filters + budget
+│   ├── SiteHeader.tsx           # Header, drawer, category switcher
+│   └── ui/toast.tsx             # Toast stack for non-navigating actions
 │   ├── ResultsSkeleton.tsx      # Loading state
 │   ├── SiteHeader.tsx           # Top app bar
 │   ├── MobileNav.tsx            # Bottom tab bar (mobile)
@@ -217,6 +250,7 @@ src/
 ├── services/
 │   ├── visualSearch.ts          # Detector interface + composition/factories
 │   ├── contextDevService.ts     # Context.dev Extract + Brand integration
+│   ├── merchantSearch.ts        # Storefront search URLs + brand colours
 │   ├── productProvider.ts       # ProductProvider seam: mock vs live
 │   └── mockCatalog.ts           # Demo catalogue & scenarios
 ├── types/index.ts               # DetectionResult, ProductMatch, …

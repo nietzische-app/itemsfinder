@@ -1,8 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 
+import { Suspense } from "react";
+
 import { MobileNav } from "@/components/MobileNav";
 import { SiteHeader } from "@/components/SiteHeader";
+import { ToastProvider } from "@/components/ui/toast";
 
 import "./globals.css";
 
@@ -64,12 +67,18 @@ export default function RootLayout({
   return (
     <html lang="tr" className={`${display.variable} ${body.variable}`}>
       <body>
-        <div className="flex min-h-dvh flex-col">
-          <SiteHeader />
-          <main className="flex-1 pb-20 md:pb-0">{children}</main>
-        </div>
+        <ToastProvider>
+          <div className="flex min-h-dvh flex-col">
+            {/* The header reads `?kategori=` via useSearchParams, which needs a
+                boundary so the static shell can still be prerendered. */}
+            <Suspense fallback={<div className="h-16 md:h-[72px]" />}>
+              <SiteHeader />
+            </Suspense>
+            <main className="flex-1 pb-20 md:pb-0">{children}</main>
+          </div>
 
-        <MobileNav />
+          <MobileNav />
+        </ToastProvider>
 
         {/* Subtle paper grain over the whole canvas. */}
         <div

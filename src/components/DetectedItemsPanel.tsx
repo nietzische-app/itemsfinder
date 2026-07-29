@@ -1,6 +1,12 @@
 "use client";
 
-import { CheckCircle2, ChevronDown, Loader2, ShoppingBasket } from "lucide-react";
+import {
+  CheckCircle2,
+  ChevronDown,
+  LayoutGrid,
+  Loader2,
+  ShoppingBasket,
+} from "lucide-react";
 
 import { EngineBadge } from "@/components/EngineBadge";
 import { ProductCard } from "@/components/ProductCard";
@@ -27,6 +33,9 @@ interface DetectedItemsPanelProps {
   pending: DetectedItem | null;
   activeItemId: string | null;
   onSelect: (itemId: string | null) => void;
+  /** True when the rail is showing a filtered subset. */
+  isFiltered?: boolean;
+  onResetFilters?: () => void;
 }
 
 const SECTION_TITLES: Record<ItemCategory, string> = {
@@ -45,6 +54,8 @@ export function DetectedItemsPanel({
   pending,
   activeItemId,
   onSelect,
+  isFiltered = false,
+  onResetFilters,
 }: DetectedItemsPanelProps) {
   const categories: ItemCategory[] = ["clothing", "beauty"];
 
@@ -57,7 +68,7 @@ export function DetectedItemsPanel({
             ? "Mağaza kataloglarında görsel eşleşmeler taranıyor…"
             : `${identified.length} parça eşleşti — muadillerini görmek için birine dokun.`}
         </p>
-        <EngineBadge result={result} className="mt-3" />
+        <EngineBadge result={result} className="mt-3 lg:hidden" />
       </header>
 
       <div className="min-h-0 flex-1 overflow-y-auto p-gutter pb-8">
@@ -85,9 +96,22 @@ export function DetectedItemsPanel({
         {pending ? <PendingItemCard item={pending} /> : null}
 
         {identified.length === 0 && !pending ? (
-          <p className="py-12 text-center text-on-surface-variant">
-            Bu görselde satın alınabilir bir parça bulamadık. Daha net ve yakın bir kare dene.
-          </p>
+          <div className="py-12 text-center">
+            <p className="text-on-surface-variant">
+              {isFiltered
+                ? "Bu filtrelere uyan parça yok."
+                : "Bu görselde satın alınabilir bir parça bulamadık. Daha net ve yakın bir kare dene."}
+            </p>
+            {isFiltered && onResetFilters ? (
+              <button
+                type="button"
+                onClick={onResetFilters}
+                className="mt-3 text-[14px] font-semibold text-secondary-deep hover:underline"
+              >
+                Filtreleri sıfırla
+              </button>
+            ) : null}
+          </div>
         ) : null}
       </div>
 
@@ -112,6 +136,10 @@ interface DetectedItemCardProps {
 }
 
 function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
+  const allMatches = item.exactMatch
+    ? [item.exactMatch, ...item.alternatives]
+    : item.alternatives;
+
   return (
     <article
       id={`item-${item.id}`}
@@ -218,6 +246,35 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
                   />
                 ))}
               </div>
+
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="subtle" size="sm" className="mt-1 w-full">
+                    <LayoutGrid strokeWidth={1.75} />
+                    Tüm muadilleri gör ({allMatches.length})
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-h-[85dvh] max-w-2xl overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>{item.label}</DialogTitle>
+                    <DialogDescription>
+                      {allMatches.length} seçenek, en uygun fiyattan başlayarak.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-3">
+                    {[...allMatches]
+                      .sort((a, b) => a.price - b.price)
+                      .map((product) => (
+                        <ProductCard
+                          key={product.id}
+                          product={product}
+                          detectionId={item.id}
+                          referencePrice={item.exactMatch?.price}
+                        />
+                      ))}
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           ) : null}
         </div>

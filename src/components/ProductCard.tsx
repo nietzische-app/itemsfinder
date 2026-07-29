@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRight, BadgeCheck, TrendingDown } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Bookmark, Search, TrendingDown } from "lucide-react";
 
 import { ProductImage } from "@/components/ProductImage";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
+import { useSavedProducts } from "@/lib/savedItems";
+import { merchantColor, merchantInitials } from "@/services/merchantSearch";
 import { cn } from "@/lib/utils";
 import { buildAffiliateUrl, formatPrice, savingsPercent } from "@/utils/affiliate";
 import type { ProductMatch } from "@/types";
@@ -32,6 +35,9 @@ export function ProductCard({
   detectionId,
 }: ProductCardProps) {
   const [logoFailed, setLogoFailed] = useState(false);
+  const { toast } = useToast();
+  const { isSaved, toggle } = useSavedProducts();
+  const saved = isSaved(product.id);
 
   const href = buildAffiliateUrl(product.productUrl, product.merchant, {
     subId: `${detectionId}:${product.id}`,
@@ -48,7 +54,7 @@ export function ProductCard({
   return (
     <article
       className={cn(
-        "flex min-w-0 gap-4 rounded-2xl border p-4 transition-all",
+        "flex min-w-0 gap-4 rounded-2xl border p-4 shadow-sm transition-all duration-300 hover:shadow-xl",
         isHero
           ? // Verified ring: coral hairline plus a soft halo.
             "border-secondary/35 bg-surface-container-lowest shadow-[0_0_0_3px_rgba(224,86,56,0.06),0_4px_20px_rgba(0,0,0,0.05)]"
@@ -74,7 +80,7 @@ export function ProductCard({
           <div className="flex min-w-0 items-start justify-between gap-2">
             {/* Retailer badge — the Brand API supplies the logo and its colour
                 in live mode; otherwise the merchant name stands alone. */}
-            <span className="label flex min-w-0 items-center gap-1.5 rounded-full border border-outline-variant/70 bg-surface-container-lowest px-2 py-0.5 text-on-surface-variant">
+            <span className="flex min-w-0 items-center gap-1.5 rounded-full border border-outline-variant/70 bg-surface-container-lowest px-2 py-0.5 text-[11px] font-semibold uppercase text-on-surface-variant">
               {product.brandMetadata?.logoUrl && !logoFailed ? (
                 <span
                   className="flex h-3.5 w-3.5 shrink-0 items-center justify-center overflow-hidden rounded-[3px]"
@@ -94,14 +100,27 @@ export function ProductCard({
                     onError={() => setLogoFailed(true)}
                   />
                 </span>
-              ) : null}
+              ) : (
+                // No live logo: a chip in the retailer's own brand colour still
+                // makes the store recognisable at a glance.
+                <span
+                  aria-hidden="true"
+                  className="flex h-4 shrink-0 items-center justify-center rounded-[4px] px-1 text-[9px] font-bold leading-none text-white"
+                  style={{ backgroundColor: merchantColor(product.merchant) }}
+                >
+                  {merchantInitials(product.merchant)}
+                </span>
+              )}
               <span className="truncate">{retailer}</span>
             </span>
 
             {isHero ? (
-              <span className="label flex shrink-0 items-center gap-1 text-secondary-deep">
-                <BadgeCheck className="h-3.5 w-3.5" strokeWidth={2} />
-                Birebir
+              <span
+                className="shrink-0 text-secondary-deep"
+                title="Birebir eşleşme"
+                aria-label="Birebir eşleşme"
+              >
+                <BadgeCheck className="h-4 w-4" strokeWidth={2} />
               </span>
             ) : product.tag ? (
               <Badge variant="muted" className="shrink-0 text-[10px]">
@@ -138,19 +157,67 @@ export function ProductCard({
               {formatPrice(product.price, product.currency)}
             </span>
             {savings > 0 ? (
-              <Badge variant="success" className="text-[10px]">
+              <Badge variant="success" className="whitespace-nowrap text-[10px]">
                 <TrendingDown className="h-3 w-3" strokeWidth={2} />%{savings} daha uygun
               </Badge>
             ) : null}
           </div>
 
-          <Button asChild size="sm" className="shrink-0 shadow-sm hover:shadow-md">
-            {/* Affiliate links are third-party: never leak the opener. */}
-            <a href={href} target="_blank" rel="noopener noreferrer sponsored nofollow">
-              {isHero ? "Ürüne git" : "İncele"}
-              <ArrowUpRight strokeWidth={1.5} />
-            </a>
-          </Button>
+          <div className="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              onClick={() => {
+                const state = toggle(product);
+                toast(
+                  state === "saved" ? "Kaydedilenlere eklendi" : "Kayıtlılardan çıkarıldı",
+                );
+              }}
+              aria-pressed={saved}
+              aria-label={saved ? "Kayıtlılardan çıkar" : "Kaydet"}
+              title={saved ? "Kayıtlılardan çıkar" : "Kaydet"}
+              className={cn(
+                "rounded-full p-2 transition-colors",
+                saved
+                  ? "bg-primary/[0.06] text-primary"
+                  : "text-on-surface-variant hover:bg-surface-container hover:text-primary",
+              )}
+            >
+              <Bookmark
+                className="h-4 w-4"
+                strokeWidth={1.75}
+                fill={saved ? "currentColor" : "none"}
+              />
+            </button>
+
+            {product.productUrl ? (
+              <Button asChild size="sm">
+                {/* Affiliate links are third-party: never leak the opener. */}
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored nofollow"
+                >
+                  {/* A storefront search is not a product page — the label says
+                      which one the user is about to land on. */}
+                  {product.urlKind === "search" ? (
+                    <>
+                      <Search strokeWidth={1.75} />
+                      Mağazada bul
+                    </>
+                  ) : (
+                    <>
+                      {isHero ? "Ürüne git" : "İncele"}
+                      <ArrowUpRight strokeWidth={1.5} />
+                    </>
+                  )}
+                </a>
+              </Button>
+            ) : (
+              <span className="rounded-full bg-surface-container px-3 py-1.5 text-label-sm uppercase text-outline">
+                Bağlantı yok
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </article>
