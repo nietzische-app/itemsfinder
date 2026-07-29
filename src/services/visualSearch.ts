@@ -7,7 +7,18 @@ import type {
   ExampleId,
   ItemCategory,
 } from "@/types";
-import { MOCK_SCENARIOS, findProductsForLabel } from "@/services/mockCatalog";
+import {
+  MOCK_SCENARIOS,
+  findProductsForLabel,
+  hydrateItems,
+  hydrateProduct,
+} from "@/services/mockCatalog";
+import { ContextDevService } from "@/services/contextDevService";
+import {
+  ContextDevProductProvider,
+  MockProductProvider,
+  type ProductProvider,
+} from "@/services/productProvider";
 
 /* -------------------------------------------------------------------------- */
 /*  Service contract                                                          */
@@ -20,6 +31,8 @@ export interface VisualSearchInput {
   mimeType: string;
   /** Set when the analysis was kicked off from a built-in example image. */
   exampleId?: ExampleId;
+  /** Cancels in-flight work when the caller gives up on the request. */
+  signal?: AbortSignal;
 }
 
 /**
@@ -56,6 +69,10 @@ function makeResult(
   return {
     id: `det_${hashString(seed).toString(36)}`,
     source,
+    // Detection only ever produces catalogue products; the product provider
+    // stage upgrades these fields if it resolves live inventory.
+    productSource: "mock",
+    liveItemCount: 0,
     processedAt: new Date().toISOString(),
     durationMs: Date.now() - startedAt,
     items,
@@ -149,9 +166,14 @@ export class MockVisualSearchService implements VisualSearchService {
     await new Promise((resolve) => setTimeout(resolve, this.latencyMs));
 
     const scenarioKey = input.exampleId ?? "generic";
-    const items = MOCK_SCENARIOS[scenarioKey] ?? MOCK_SCENARIOS.generic;
+    const scenario = MOCK_SCENARIOS[scenarioKey] ?? MOCK_SCENARIOS.generic;
 
-    return makeResult(items, this.source, startedAt, input.imageBase64.slice(0, 256));
+    return makeResult(
+      hydrateItems(scenario),
+      this.source,
+      startedAt,
+      input.imageBase64.slice(0, 256),
+    );
   }
 }
 
@@ -334,8 +356,8 @@ export class GoogleVisionSearchService implements VisualSearchService {
         confidence: object.score ?? 0,
         boundingBox,
         colorHex: dominantHex,
-        exactMatch,
-        alternatives,
+        exactMatch: exactMatch ? hydrateProduct(exactMatch) : null,
+        alternatives: alternatives.map(hydrateProduct),
       });
     }
 
@@ -347,6 +369,46 @@ export class GoogleVisionSearchService implements VisualSearchService {
 /*  Factory                                                                   */
 /* -------------------------------------------------------------------------- */
 
+/* -------------------------------------------------------------------------- */
+/*  Composition: detector + product provider                                  */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Runs a detector, then hands the result to a product provider.
+ *
+ * Detection and pricing are separate concerns: Cloud Vision decides *what* is
+ * in the image, Context.dev decides *what to buy*. Composing them here means
+ * either half can be live or mocked independently, and the route stays a
+ * single call.
+ */
+class ComposedVisualSearchService implements VisualSearchService {
+  constructor(
+    private readonly detector: VisualSearchService,
+    private readonly products: ProductProvider,
+  ) {}
+
+  get source(): DetectionSource {
+    return this.detector.source;
+  }
+
+  async analyze(input: VisualSearchInput): Promise<DetectionResult> {
+    const detected = await this.detector.analyze(input);
+
+    try {
+      return await this.products.enrich(detected, input.signal);
+    } catch (error) {
+      // The provider is written not to throw, but a bug there must never cost
+      // the user their detections — the catalogue products are already valid.
+      console.error("[products] provider threw, keeping catalogue products:", error);
+      return { ...detected, productSource: "mock", liveItemCount: 0 };
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Factories                                                                 */
+/* -------------------------------------------------------------------------- */
+
 /** True when real credentials are present and mocking is not forced on. */
 export function isVisionConfigured(): boolean {
   return (
@@ -355,13 +417,16 @@ export function isVisionConfigured(): boolean {
   );
 }
 
-/**
- * Returns the engine to use for this request.
- *
- * Falls back to the mock whenever credentials are missing, so `npm run dev`
- * on a fresh clone produces a complete, clickable experience.
- */
-export function getVisualSearchService(): VisualSearchService {
+/** True when live product intelligence is both enabled and credentialled. */
+export function isContextDevConfigured(): boolean {
+  return (
+    Boolean(process.env.CONTEXT_DEV_API_KEY) &&
+    process.env.ENABLE_CONTEXT_DEV_LIVE === "true"
+  );
+}
+
+/** Which detector to use for this request. */
+function getDetector(): VisualSearchService {
   const apiKey = process.env.GOOGLE_CLOUD_VISION_API_KEY;
 
   if (apiKey && process.env.USE_MOCK_VISION !== "true") {
@@ -369,4 +434,45 @@ export function getVisualSearchService(): VisualSearchService {
   }
 
   return new MockVisualSearchService();
+}
+
+/**
+ * Which product provider to use.
+ *
+ * Note this is independent of the detector: live product data works with the
+ * mock detector too. That matters, because the mock detector is what runs
+ * without a Vision key — tying the two together would make
+ * `ENABLE_CONTEXT_DEV_LIVE=true` silently do nothing for most setups.
+ */
+function getProductProvider(): ProductProvider {
+  const apiKey = process.env.CONTEXT_DEV_API_KEY;
+
+  if (!apiKey || process.env.ENABLE_CONTEXT_DEV_LIVE !== "true") {
+    return new MockProductProvider();
+  }
+
+  return new ContextDevProductProvider(
+    new ContextDevService(apiKey, {
+      extractsPerQuery: readInt(process.env.CONTEXT_DEV_EXTRACTS_PER_QUERY, 3),
+    }),
+    {
+      maxLiveItems: readInt(process.env.CONTEXT_DEV_MAX_LIVE_ITEMS, 4),
+      deadlineMs: readInt(process.env.CONTEXT_DEV_DEADLINE_MS, 45_000),
+    },
+  );
+}
+
+function readInt(value: string | undefined, fallback: number): number {
+  const parsed = Number.parseInt(value ?? "", 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+/**
+ * Returns the engine to use for this request.
+ *
+ * Falls back to mocks whenever credentials are missing, so `npm run dev` on a
+ * fresh clone produces a complete, clickable experience.
+ */
+export function getVisualSearchService(): VisualSearchService {
+  return new ComposedVisualSearchService(getDetector(), getProductProvider());
 }

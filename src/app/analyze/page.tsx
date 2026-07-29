@@ -161,8 +161,9 @@ export default function AnalyzePage() {
               Try again
             </Button>
           </div>
-        ) : status === "done" || revealedCount > 0 ? (
+        ) : result && (status === "done" || revealedCount > 0) ? (
           <DetectedItemsPanel
+            result={result}
             identified={identified}
             pending={pending}
             activeItemId={activeItemId}

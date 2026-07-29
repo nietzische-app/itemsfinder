@@ -2,7 +2,9 @@
 
 import { CheckCircle2, ChevronDown, Loader2, ShoppingBasket } from "lucide-react";
 
+import { EngineBadge } from "@/components/EngineBadge";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductImage } from "@/components/ProductImage";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,9 +16,11 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/utils/affiliate";
-import type { DetectedItem, ItemCategory } from "@/types";
+import type { DetectedItem, DetectionResult, ItemCategory } from "@/types";
 
 interface DetectedItemsPanelProps {
+  /** Provenance of the scan, surfaced as the engine badge. */
+  result: DetectionResult;
   /** Detections that have finished matching. */
   identified: DetectedItem[];
   /** The detection currently being matched, if a scan is still running. */
@@ -36,6 +40,7 @@ const SECTION_TITLES: Record<ItemCategory, string> = {
  * alternatives, and highlights the matching hotspot on the image.
  */
 export function DetectedItemsPanel({
+  result,
   identified,
   pending,
   activeItemId,
@@ -52,6 +57,7 @@ export function DetectedItemsPanel({
             ? "Refining visual matches across our retailer index."
             : `${identified.length} item${identified.length === 1 ? "" : "s"} matched — tap one to see alternatives.`}
         </p>
+        <EngineBadge result={result} className="mt-3" />
       </header>
 
       <div className="min-h-0 flex-1 overflow-y-auto p-gutter pb-8">
@@ -124,13 +130,7 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
       >
         <span className="h-24 w-20 shrink-0 overflow-hidden rounded bg-surface-container">
           {item.exactMatch ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={item.exactMatch.imageUrl}
-              alt=""
-              aria-hidden="true"
-              className="h-full w-full object-cover"
-            />
+            <ProductImage src={item.exactMatch.imageUrl} alt="" />
           ) : (
             <span
               aria-hidden="true"
@@ -234,13 +234,7 @@ function PendingItemCard({ item }: { item: DetectedItem }) {
     <article className="flex gap-4 rounded-lg border border-outline-variant bg-surface-container-lowest p-4 opacity-60">
       <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded bg-surface-container">
         {item.exactMatch ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={item.exactMatch.imageUrl}
-            alt=""
-            aria-hidden="true"
-            className="h-full w-full object-cover grayscale"
-          />
+          <ProductImage src={item.exactMatch.imageUrl} alt="" className="grayscale" />
         ) : null}
         <span className="absolute inset-0 flex items-center justify-center bg-black/10">
           <Loader2 className="h-5 w-5 animate-spin text-primary" strokeWidth={1.5} />

@@ -25,6 +25,20 @@ export type Merchant =
 /** How close a product is to the thing we detected in the screenshot. */
 export type MatchType = "exact" | "alternative";
 
+/** Where the *products* came from, independent of which detector ran. */
+export type ProductSource = "mock" | "context-dev";
+
+/** Retailer branding resolved from a product URL's domain via the Brand API. */
+export interface BrandMetadata {
+  domain: string;
+  /** Display name, e.g. "Zara". */
+  name: string;
+  /** CDN-hosted logo, ready to render. */
+  logoUrl: string | null;
+  /** Primary brand colour, used behind the logo chip. */
+  colorHex: string | null;
+}
+
 /**
  * Normalised bounding box, all values in the 0..1 range relative to the
  * displayed image. Normalised (rather than pixel) coordinates let the overlay
@@ -54,6 +68,12 @@ export interface ProductMatch {
   /** Optional marketing flag, e.g. "Best value" / "Fast shipping". */
   tag?: string;
   inStock: boolean;
+  /** Hostname of `productUrl`, used for affiliate and brand lookups. */
+  merchantDomain: string;
+  /** True when this row came from live inventory rather than the catalogue. */
+  isLive: boolean;
+  /** Retailer branding, populated by the Brand API in live mode. */
+  brandMetadata?: BrandMetadata;
 }
 
 /** One thing the vision engine found in the screenshot. */
@@ -84,7 +104,12 @@ export type DetectionSource = "mock" | "google-vision";
 /** Full response for one analysed screenshot. */
 export interface DetectionResult {
   id: string;
+  /** Which engine found the items. */
   source: DetectionSource;
+  /** Which engine supplied the products — orthogonal to `source`. */
+  productSource: ProductSource;
+  /** How many detections carry live product data (0 when fully mocked). */
+  liveItemCount: number;
   /** ISO timestamp of when the analysis finished. */
   processedAt: string;
   /** Milliseconds spent in the detection engine. */

@@ -81,15 +81,18 @@ export async function POST(request: Request) {
       imageBase64: parsed.base64,
       mimeType: parsed.mimeType,
       exampleId,
+      // Abandon live lookups as soon as the client goes away; live product
+      // resolution is the slow part and every call costs credits.
+      signal: request.signal,
     });
 
     return NextResponse.json<DetectResponse>({ ok: true, result });
   } catch (error) {
     console.error("[detect] visual search failed:", error);
 
-    // If the live provider is down or misconfigured we still want a usable
-    // demo. The response carries `source: "mock"`, and the UI shows that as a
-    // badge, so the degraded mode is never passed off as a real detection.
+    // If the live detector is down or misconfigured we still want a usable
+    // demo. The response carries `source`/`productSource`, which the UI shows
+    // as a badge, so degraded mode is never passed off as live data.
     if (service.source !== "mock") {
       try {
         const fallback = await new MockVisualSearchService(0).analyze({

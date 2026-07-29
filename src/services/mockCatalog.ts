@@ -1,6 +1,21 @@
 import type { DetectedItem, ExampleId, ProductMatch } from "@/types";
 
 /**
+ * The catalogue stores only the *authored* product fields. `merchantDomain`,
+ * `isLive` and `brandMetadata` are derived or supplied at read time — see
+ * `hydrateProduct` — so the data below stays free of bookkeeping.
+ */
+export type CatalogProduct = Omit<
+  ProductMatch,
+  "merchantDomain" | "isLive" | "brandMetadata"
+>;
+
+export type CatalogItem = Omit<DetectedItem, "exactMatch" | "alternatives"> & {
+  exactMatch: CatalogProduct | null;
+  alternatives: CatalogProduct[];
+};
+
+/**
  * Mock product catalogue + detection scenarios.
  *
  * This module is the stand-in for two things a production system would own:
@@ -44,7 +59,7 @@ function thumb(label: string, from: string, to: string): string {
 /*  Scenario: streetwear outfit                                               */
 /* -------------------------------------------------------------------------- */
 
-const streetwearItems: DetectedItem[] = [
+const streetwearItems: CatalogItem[] = [
   {
     id: "sw-jacket",
     label: "Oversized Black Leather Biker Jacket",
@@ -404,7 +419,7 @@ const streetwearItems: DetectedItem[] = [
 /*  Scenario: glam makeup look                                                */
 /* -------------------------------------------------------------------------- */
 
-const glamMakeupItems: DetectedItem[] = [
+const glamMakeupItems: CatalogItem[] = [
   {
     id: "gm-lipstick",
     label: "Classic Red Matte Lipstick",
@@ -694,7 +709,7 @@ const glamMakeupItems: DetectedItem[] = [
 /*  Scenario: generic user upload                                             */
 /* -------------------------------------------------------------------------- */
 
-const genericItems: DetectedItem[] = [
+const genericItems: CatalogItem[] = [
   {
     id: "gen-outerwear",
     label: "Relaxed Wool Blend Coat",
@@ -918,7 +933,7 @@ const genericItems: DetectedItem[] = [
 /*  Scenario: tailored evening look ("Midnight Executive")                    */
 /* -------------------------------------------------------------------------- */
 
-const tailoringItems: DetectedItem[] = [
+const tailoringItems: CatalogItem[] = [
   {
     id: "tl-blazer",
     label: "Structured Wool Blazer",
@@ -1143,7 +1158,7 @@ const tailoringItems: DetectedItem[] = [
 /*  Scenario: soft minimalist knitwear ("Soft Minimalist")                    */
 /* -------------------------------------------------------------------------- */
 
-const softMinimalItems: DetectedItem[] = [
+const softMinimalItems: CatalogItem[] = [
   {
     id: "sm-knit",
     label: "Chunky Cable Knit Sweater",
@@ -1363,7 +1378,7 @@ const softMinimalItems: DetectedItem[] = [
 ];
 
 /** Every scenario the mock engine can return. */
-export const MOCK_SCENARIOS: Record<ExampleId | "generic", DetectedItem[]> = {
+export const MOCK_SCENARIOS: Record<ExampleId | "generic", CatalogItem[]> = {
   streetwear: streetwearItems,
   "glam-makeup": glamMakeupItems,
   tailoring: tailoringItems,
@@ -1376,7 +1391,7 @@ export const MOCK_SCENARIOS: Record<ExampleId | "generic", DetectedItem[]> = {
  * is in the image, we still need *something to buy*. Until a live product feed
  * is wired in, we resolve labels against this catalogue.
  */
-const ALL_ITEMS: DetectedItem[] = [
+const ALL_ITEMS: CatalogItem[] = [
   ...streetwearItems,
   ...glamMakeupItems,
   ...tailoringItems,
@@ -1392,13 +1407,13 @@ const ALL_ITEMS: DetectedItem[] = [
 export function findProductsForLabel(
   label: string,
   category: "clothing" | "beauty",
-): { exactMatch: ProductMatch | null; alternatives: ProductMatch[] } {
+): { exactMatch: CatalogProduct | null; alternatives: CatalogProduct[] } {
   const needles = label
     .toLowerCase()
     .split(/[^a-z]+/)
     .filter((word) => word.length > 2);
 
-  let best: DetectedItem | null = null;
+  let best: CatalogItem | null = null;
   let bestScore = 0;
 
   for (const item of ALL_ITEMS) {
@@ -1426,4 +1441,29 @@ export function findProductsForLabel(
     exactMatch: fallback.exactMatch,
     alternatives: fallback.alternatives,
   };
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Hydration                                                                 */
+/* -------------------------------------------------------------------------- */
+
+/** Fills in the derived fields a `ProductMatch` needs beyond the authored ones. */
+export function hydrateProduct(product: CatalogProduct): ProductMatch {
+  let merchantDomain = "";
+  try {
+    merchantDomain = new URL(product.productUrl).hostname.replace(/^www\./, "");
+  } catch {
+    // Catalogue URLs are all absolute; an unparseable one just loses branding.
+  }
+
+  return { ...product, merchantDomain, isLive: false };
+}
+
+/** Hydrates a whole scenario into UI-ready detections. */
+export function hydrateItems(items: CatalogItem[]): DetectedItem[] {
+  return items.map((item) => ({
+    ...item,
+    exactMatch: item.exactMatch ? hydrateProduct(item.exactMatch) : null,
+    alternatives: item.alternatives.map(hydrateProduct),
+  }));
 }

@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { ArrowUpRight, TrendingDown } from "lucide-react";
 
+import { ProductImage } from "@/components/ProductImage";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -29,6 +31,8 @@ export function ProductCard({
   variant = "row",
   detectionId,
 }: ProductCardProps) {
+  const [logoFailed, setLogoFailed] = useState(false);
+
   const href = buildAffiliateUrl(product.productUrl, product.merchant, {
     subId: `${detectionId}:${product.id}`,
   });
@@ -55,13 +59,7 @@ export function ProductCard({
           isHero ? "h-32 w-24" : "h-[84px] w-16",
         )}
       >
-        {/* Catalogue thumbnails are inline SVG data URLs. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={product.imageUrl}
-          alt={product.title}
-          className="h-full w-full object-cover"
-        />
+        <ProductImage src={product.imageUrl} alt={product.title} />
         {!product.inStock ? (
           <span className="absolute inset-0 flex items-center justify-center bg-surface/80 text-center text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">
             Sold out
@@ -72,10 +70,34 @@ export function ProductCard({
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-2">
         <div className="min-w-0">
           <div className="flex min-w-0 items-start justify-between gap-2">
-            <p className="label min-w-0 truncate text-outline">
-              {product.brand === product.merchant
-                ? product.brand
-                : `${product.brand} · ${product.merchant}`}
+            <p className="label flex min-w-0 items-center gap-1.5 text-outline">
+              {/* Retailer logo comes from the Brand API in live mode; the chip
+                  is tinted with the brand's own colour. */}
+              {product.brandMetadata?.logoUrl && !logoFailed ? (
+                <span
+                  className="flex h-4 w-4 shrink-0 items-center justify-center overflow-hidden rounded-sm"
+                  style={{
+                    backgroundColor: product.brandMetadata.colorHex ?? undefined,
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={product.brandMetadata.logoUrl}
+                    alt=""
+                    aria-hidden="true"
+                    className="h-full w-full object-contain"
+                    loading="lazy"
+                    // A dead CDN URL would otherwise leave a broken-image
+                    // glyph sitting in the retailer line.
+                    onError={() => setLogoFailed(true)}
+                  />
+                </span>
+              ) : null}
+              <span className="truncate">
+                {product.brand === product.merchant
+                  ? product.brand
+                  : `${product.brand} · ${product.brandMetadata?.name ?? product.merchant}`}
+              </span>
             </p>
             {/* The hero card sits under an "Exact match / closest look"
                 heading, so repeating the tag there just crowds the brand. */}
@@ -97,6 +119,9 @@ export function ProductCard({
 
           <p className="mt-1 text-[12px] text-on-surface-variant">
             {Math.round(product.similarity * 100)}% visual match
+            {product.isLive ? (
+              <span className="ml-1.5 text-secondary">· live price</span>
+            ) : null}
           </p>
         </div>
 

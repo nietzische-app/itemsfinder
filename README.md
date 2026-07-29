@@ -15,12 +15,15 @@ npm run dev      # http://localhost:3000
 ## How it works
 
 ```
-screenshot ──▶ /api/detect ──▶ VisualSearchService ──▶ DetectionResult
-                                   │                        │
-                     Google Vision │ or │ Mock              ▼
-                                                  coral hotspots on the image
-                                                  + "AI Detected Items" rail
+screenshot ─▶ /api/detect ─▶ detector ─────────▶ product provider ─▶ DetectionResult
+                             │                    │                        │
+              Google Vision  │ or │ Mock          │ Context.dev │ or │ Mock ▼
+              (what is it,   │                    │ (what to buy,          hotspots +
+               where is it)  │                    │  live price & stock)   items rail
 ```
+
+Detection and pricing are **independent** engines. Either can be live or
+mocked, and the UI names both.
 
 1. **Home** (`/`) — hero with the upload zone, plus a staggered masonry of four
    curated demo looks. The image is held in `sessionStorage` and never leaves
@@ -56,6 +59,47 @@ model depends on white-on-off-white, which a dark inversion would lose.
 > from `text-body-md` (a size), treats them as conflicting, and silently drops
 > one.
 
+## Live product intelligence (Context.dev)
+
+With `CONTEXT_DEV_API_KEY` set and `ENABLE_CONTEXT_DEV_LIVE=true`, catalogue
+products are replaced with live inventory. `src/services/contextDevService.ts`
+wraps the official `context.dev` SDK and exposes two operations:
+
+| Method                        | Context.dev API                        | Used for |
+| ----------------------------- | -------------------------------------- | -------- |
+| `searchLiveProducts(query, category)` | `web.search` → `web.extract` | Real titles, prices, currency, stock and images |
+| `enrichBrandMetadata(domain)` | `brand.retrieveSimplified`             | Retailer logo, display name, brand colour |
+
+`searchLiveProducts` runs in two stages: a web search scoped to a retailer
+allowlist finds real product URLs, then a schema-driven extract pulls
+structured cards off the best few. Extraction is pinned to a single page
+(`maxDepth: 0`, `maxPages: 1`) and runs with `factCheck: true`, so a price on a
+card is a price that was on the page — the whole point of going live.
+
+**This is independent of the detector.** Live products work with the mock
+detector too, which matters because the mock detector is what runs without a
+Vision key — coupling the two would make `ENABLE_CONTEXT_DEV_LIVE=true`
+silently do nothing for most setups.
+
+### Failure behaviour
+
+Fallback is **per detection**, not all-or-nothing. If the jacket resolves live
+but the lipstick times out, the jacket goes live and the lipstick keeps its
+catalogue row. Three bounds keep a bad upstream from holding a scan hostage:
+
+- `CONTEXT_DEV_MAX_LIVE_ITEMS` — detections resolved live, highest confidence
+  first. Everything else stays on the catalogue.
+- `CONTEXT_DEV_DEADLINE_MS` — wall-clock budget for the whole live stage.
+- The client aborts when the browser disconnects, so abandoned scans stop
+  burning credits.
+
+Results are cached in-process per query and per domain: scans repeat the same
+labels constantly, and credits are the scarce resource.
+
+`DetectionResult` carries `productSource` and `liveItemCount`, and the engine
+badge on `/analyze` reports exactly what happened — including partial states
+("3 of 5 live"). A scan running on demo prices never looks like real inventory.
+
 ## The detection engine
 
 `src/services/visualSearch.ts` defines a single interface:
@@ -84,19 +128,26 @@ detections.
 **Bounding boxes are always normalised (0–1)**, which is what lets the overlay
 place hotspots and boxes at any image size without measuring anything.
 
-### Wiring up real products
+### Swapping the product source
 
 Vision tells you *what* is in the image; it does not tell you *what to buy*.
-That second half lives behind one function:
+That second half is the `ProductProvider` seam in
+`src/services/productProvider.ts` — `MockProductProvider` reads the catalogue,
+`ContextDevProductProvider` reads live inventory. Adding a third (a merchant
+feed, an embedding index) means implementing one method:
 
 ```ts
-findProductsForLabel(label, category) // src/services/mockCatalog.ts
+enrich(result: DetectionResult, signal?: AbortSignal): Promise<DetectionResult>
 ```
 
-Replace it with a merchant feed query or an embedding similarity search and the
-rest of the app is unchanged.
+A provider must be *total*: a detection it cannot resolve keeps the products it
+arrived with, so the UI never loses a card.
 
 ## Affiliate links
+
+Live URLs are wrapped exactly like catalogue ones: `merchantForDomain()` maps a
+live retailer domain onto a known merchant so the right tag is attached, and
+unknown retailers still get UTM parameters.
 
 `buildAffiliateUrl(originalUrl, merchant)` in `src/utils/affiliate.ts` rewrites
 a product URL into a tracked one: it preserves existing query params, is
@@ -125,12 +176,16 @@ src/
 │   ├── BoundingBoxOverlay.tsx   # Hotspots, boxes, quick-looks, scan status
 │   ├── DetectedItemsPanel.tsx   # "AI Detected Items" rail + curated dialog
 │   ├── ProductCard.tsx          # Product surface + affiliate CTA
+│   ├── ProductImage.tsx         # Thumbnail with dead-URL fallback
+│   ├── EngineBadge.tsx          # Which engines produced this result
 │   ├── ResultsSkeleton.tsx      # Loading state
 │   ├── SiteHeader.tsx           # Top app bar
 │   ├── MobileNav.tsx            # Bottom tab bar (mobile)
 │   └── ui/                      # shadcn primitives on the design tokens
 ├── services/
-│   ├── visualSearch.ts          # Interface + Mock + Google Vision
+│   ├── visualSearch.ts          # Detector interface + composition/factories
+│   ├── contextDevService.ts     # Context.dev Extract + Brand integration
+│   ├── productProvider.ts       # ProductProvider seam: mock vs live
 │   └── mockCatalog.ts           # Demo catalogue & scenarios
 ├── types/index.ts               # DetectionResult, ProductMatch, …
 └── utils/affiliate.ts           # Affiliate URL builder + formatting
@@ -157,3 +212,9 @@ src/
   always resolve through the mock path.
 - The streamed `MATCHING… → IDENTIFIED` reveal is presentational: the engine
   returns all detections in one response, and the rail paces them out.
+- Live mode costs credits per scan: roughly one web search plus
+  `CONTEXT_DEV_EXTRACTS_PER_QUERY` extracts per resolved detection. Tune
+  `CONTEXT_DEV_MAX_LIVE_ITEMS` before pointing it at a busy environment.
+- Live product and logo images are hotlinked from retailer/Context.dev CDNs.
+  `ProductImage` falls back to a neutral placeholder when one fails, since
+  retailer CDNs can rate-limit or block hotlinking.
