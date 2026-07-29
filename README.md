@@ -228,13 +228,36 @@ src/
 | `npm run lint`      | ESLint                         |
 | `npm run typecheck` | `tsc --noEmit`                 |
 
+## Swapping the demo looks for photography
+
+The four demo looks currently ship as SVG illustrations. Replacing them with
+real photography is a three-step change:
+
+1. **Drop the files in `public/examples/`** (`.jpg` or `.webp`). Portrait
+   crops around 3:4 match the layout. Use imagery you have the rights to —
+   the Unsplash and Pexels licences both permit commercial use without
+   attribution, but check the individual photo.
+2. **Point at them** in `src/lib/examples.ts` — change each entry's `src`.
+   Nothing else in the code cares about the file type.
+3. **Re-calibrate the hotspots** in `src/services/mockCatalog.ts`. Each
+   detection's `boundingBox` is normalised to the displayed image:
+   `{ x, y, width, height }` all in 0–1, measured from the top-left. So an item
+   whose box starts 30% across and 25% down and covers 40% × 30% of the frame
+   is `{ x: 0.3, y: 0.25, width: 0.4, height: 0.3 }`. The scenario keys map to
+   the `ExampleId`s: `streetwear`, `glam-makeup`, `tailoring`, `soft-minimal`.
+
+Sizing is handled for you: `prepareImage()` in `src/lib/imageSession.ts`
+downscales anything over 1600px on its longest edge and re-encodes to JPEG
+before it reaches sessionStorage. Without that, a multi-megabyte photo blows
+past the ~4–5 MB sessionStorage quota, the write fails silently and `/analyze`
+finds nothing to scan.
+
 ## Notes and limits
 
 - Product data in the mock engine is illustrative. Prices, stock and URLs are
   fabricated demo content and are not live merchant data.
-- The demo looks are SVG illustrations bundled in `public/examples`; the mock
-  bounding boxes are hand-tuned to them, so changing an illustration means
-  re-checking the boxes for its scenario id in `mockCatalog.ts`.
+- The demo looks are placeholder SVG illustrations bundled in `public/examples`,
+  pending real photography — see below.
 - Google Cloud Vision does not accept SVG input, so the bundled demo looks
   always resolve through the mock path.
 - The streamed `MATCHING… → IDENTIFIED` reveal is presentational: the engine

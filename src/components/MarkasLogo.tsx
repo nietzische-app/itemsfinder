@@ -1,31 +1,40 @@
+import { useId } from "react";
+
 import { cn } from "@/lib/utils";
 
 interface MarkasMarkProps {
   className?: string;
-  /** Overrides the coral dot, e.g. on a coral surface. */
+  /** Overrides the coral dot, e.g. when the mark sits on a coral surface. */
   dotColor?: string;
   /**
-   * `full` is the complete mark — tag with its hole and string — for large
-   * display. `compact` drops those two details, which fall below a pixel or
-   * two at UI sizes and only muddy the silhouette, and opens the tag up in
-   * their place. Use it anywhere under ~48px.
+   * `full` is the complete mark — the tag's hole, string and the glow around
+   * the dot. `compact` drops those, which fall below a pixel or two at UI
+   * sizes and only muddy the silhouette. Use it anywhere under ~48px.
    */
   variant?: "full" | "compact";
 }
 
 /**
- * The Markas mark: a camera focus frame around a tag, with the signature
- * coral dot. Detection (the frame) and the thing detected (the tag) in one
- * glyph.
+ * The Markas mark.
  *
- * Strokes use `currentColor` so the mark inherits the surrounding text colour
+ * Geometry follows the official logo: a visual-search focus frame of four
+ * corner brackets, an angled clothing tag filling most of that frame, and the
+ * signature coral dot low on the tag face with a soft glow behind it.
+ *
+ * Strokes use `currentColor`, so the mark inherits the surrounding text colour
  * and works on any surface; only the dot is fixed to the brand coral.
+ *
+ * Note the stroke weights are heavier than the source artwork's. The original
+ * is drawn for large display; at 32–40px in the header those hairlines
+ * disappear, so they are scaled up to hold their shape in the UI.
  */
 export function MarkasMark({
   className,
   dotColor = "#E05638",
   variant = "full",
 }: MarkasMarkProps) {
+  // Unique per instance: several marks can share a page (header, footer, OG).
+  const glowId = useId();
   const isCompact = variant === "compact";
 
   return (
@@ -36,55 +45,57 @@ export function MarkasMark({
       aria-hidden="true"
       focusable="false"
     >
+      {!isCompact ? (
+        <defs>
+          <radialGradient id={glowId}>
+            <stop offset="0%" stopColor={dotColor} stopOpacity={0.4} />
+            <stop offset="100%" stopColor={dotColor} stopOpacity={0} />
+          </radialGradient>
+        </defs>
+      ) : null}
+
       {/* Focus frame */}
       <g
         stroke="currentColor"
-        strokeWidth={isCompact ? 4.2 : 3.6}
+        strokeWidth={isCompact ? 4 : 3.4}
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d="M10 23v-6a7 7 0 0 1 7-7h6" />
-        <path d="M41 10h6a7 7 0 0 1 7 7v6" />
-        <path d="M54 41v6a7 7 0 0 1-7 7h-6" />
-        <path d="M23 54h-6a7 7 0 0 1-7-7v-6" />
+        <path d="M12 22v-3.5A6.5 6.5 0 0 1 18.5 12H22" />
+        <path d="M42 12h3.5a6.5 6.5 0 0 1 6.5 6.5V22" />
+        <path d="M52 42v3.5a6.5 6.5 0 0 1-6.5 6.5H42" />
+        <path d="M22 52h-3.5A6.5 6.5 0 0 1 12 45.5V42" />
       </g>
 
       {/* Tag */}
-      <g transform="rotate(-19 32 34)">
-        {isCompact ? (
+      <g transform="translate(-1 0.6) rotate(-20 32 33)">
+        <path
+          d="M24.4 18.4H37l6.6 6.6v18.6a4 4 0 0 1-4 4H24.4a4 4 0 0 1-4-4V22.4a4 4 0 0 1 4-4Z"
+          stroke="currentColor"
+          strokeWidth={isCompact ? 3.8 : 3}
+          strokeLinejoin="round"
+        />
+
+        {!isCompact ? (
           <>
-            <path
-              d="M24.5 21h9l8 8v15a3.5 3.5 0 0 1-3.5 3.5H24.5A3.5 3.5 0 0 1 21 44V24.5A3.5 3.5 0 0 1 24.5 21Z"
-              stroke="currentColor"
-              strokeWidth={3.8}
-              strokeLinejoin="round"
-            />
-            <circle cx="31" cy="38.5" r="4.4" fill={dotColor} />
-          </>
-        ) : (
-          <>
-            <path
-              d="M25.5 21.5h8.2l7.3 7.3V43a3.5 3.5 0 0 1-3.5 3.5H25.5A3.5 3.5 0 0 1 22 43V25a3.5 3.5 0 0 1 3.5-3.5Z"
-              stroke="currentColor"
-              strokeWidth={3}
-              strokeLinejoin="round"
-            />
             <circle
-              cx="35.8"
-              cy="28.4"
-              r="2.4"
+              cx="38"
+              cy="26.4"
+              r="2.2"
               stroke="currentColor"
               strokeWidth={2.6}
             />
             <path
-              d="M37.6 26.4c1.6-4.6 5.6-7 7.5-5.2 1.9 1.8-.3 5.6-3.9 7"
+              d="M40.1 24.4c1.4-3.7 4.8-5.6 6.4-4.1 1.6 1.5-.1 4.6-3 5.8"
               stroke="currentColor"
               strokeWidth={2.8}
               strokeLinecap="round"
             />
-            <circle cx="30.6" cy="39" r="3.8" fill={dotColor} />
+            <circle cx="32" cy="41" r="6.6" fill={`url(#${glowId})`} />
           </>
-        )}
+        ) : null}
+
+        <circle cx="32" cy="41" r={isCompact ? 4 : 3.5} fill={dotColor} />
       </g>
     </svg>
   );
@@ -96,7 +107,11 @@ interface MarkasLogoProps {
   size?: "sm" | "md";
 }
 
-/** Mark + wordmark lockup, used in the app header. */
+/**
+ * Mark + wordmark lockup. The wordmark is Plus Jakarta Sans (the display
+ * face, `font-display`) at extra-bold with tightened tracking, matching the
+ * geometric weight of the mark.
+ */
 export function MarkasLogo({ className, size = "md" }: MarkasLogoProps) {
   return (
     <span className={cn("flex items-center gap-2.5", className)}>
