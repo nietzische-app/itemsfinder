@@ -37,8 +37,8 @@ export function ImageUploader({ onImageReady }: ImageUploaderProps) {
         const reason = rejections[0]?.errors[0]?.code;
         setError(
           reason === "file-too-large"
-            ? "That screenshot is over 8 MB. Try a smaller export."
-            : "Screenshots only, please — JPG, PNG or WebP.",
+            ? "Bu görsel 8 MB'ın üzerinde. Daha küçük bir dosya dene."
+            : "Yalnızca görsel yükleyebilirsin — JPG, PNG veya WEBP.",
         );
         return;
       }
@@ -51,7 +51,7 @@ export function ImageUploader({ onImageReady }: ImageUploaderProps) {
         setPreview(dataUrl);
         onImageReady({ dataUrl, fileName: file.name });
       } catch {
-        setError("We couldn't read that file. Try another screenshot.");
+        setError("Bu dosyayı okuyamadık. Başka bir görsel dene.");
       }
     },
     [onImageReady],
@@ -69,18 +69,19 @@ export function ImageUploader({ onImageReady }: ImageUploaderProps) {
       <div
         {...getRootProps()}
         className={cn(
-          "group relative flex h-[340px] cursor-pointer flex-col items-center justify-center gap-6 overflow-hidden rounded-md border-2 border-dashed border-outline-variant bg-surface-container-lowest p-12 text-center shadow-ambient transition-all hover:border-primary sm:h-[400px]",
-          isDragActive && "border-primary bg-surface-container-low",
+          "group relative flex h-[340px] cursor-pointer flex-col items-center justify-center gap-6 overflow-hidden rounded-3xl border border-dashed border-outline-variant/70 bg-surface-container-lowest/80 p-12 text-center shadow-ambient backdrop-blur-sm transition-all duration-300 hover:border-secondary hover:shadow-[0_0_0_4px_rgba(224,86,56,0.08),0_12px_36px_rgba(0,0,0,0.08)] sm:h-[400px]",
+          isDragActive &&
+            "border-secondary bg-secondary/[0.03] shadow-[0_0_0_6px_rgba(224,86,56,0.12),0_12px_36px_rgba(0,0,0,0.10)]",
         )}
       >
-        <input {...getInputProps()} aria-label="Upload a screenshot" />
+        <input {...getInputProps()} aria-label="Ekran görüntüsü yükle" />
 
         {preview ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={preview}
-            alt="Selected screenshot preview"
-            className="max-h-full w-auto rounded object-contain"
+            alt="Seçilen görselin önizlemesi"
+            className="max-h-full w-auto rounded-2xl object-contain"
           />
         ) : (
           <>
@@ -101,14 +102,14 @@ export function ImageUploader({ onImageReady }: ImageUploaderProps) {
 
             <div>
               <p className="mb-2 font-display text-headline-md text-primary">
-                {isDragActive ? "Drop it right here" : "Drop your inspiration here"}
+                {isDragActive ? "Bırak yeter" : "Ekran görüntüsünü buraya sürükle"}
               </p>
               <p className="text-on-surface-variant">
-                Drag and drop an image, or click to browse files
+                Sürükleyip bırak veya dosya seç
               </p>
             </div>
 
-            <p className="label text-outline-variant">JPG • PNG • WEBP</p>
+            <p className="label text-outline-variant">JPG • PNG • WEBP · en fazla 8 MB</p>
 
             {/* Decorative depth, per the design's upload zone. */}
             <span

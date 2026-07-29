@@ -25,16 +25,19 @@ const body = Inter({
   display: "swap",
 });
 
+const DESCRIPTION =
+  "Instagram veya TikTok'ta beğendiğin kombin ve makyaj görsellerini yükle; " +
+  "yapay zeka tam muadillerini ve en uygun fiyatlı seçeneklerini anında bulsun.";
+
 export const metadata: Metadata = {
-  title: "Markas — Visual Search & Outfit Matcher",
-  description:
-    "Upload any outfit or makeup screenshot. Markas finds exact items and budget-friendly alternatives with live buy links.",
+  title: "Markas — Görsel Stil ve Kombin Arama Motoru",
+  description: DESCRIPTION,
   applicationName: "Markas",
   openGraph: {
     siteName: "Markas",
-    title: "Markas — Visual Search & Outfit Matcher",
-    description:
-      "Upload any outfit or makeup screenshot. Markas finds exact items and budget-friendly alternatives with live buy links.",
+    title: "Markas — Görsel Stil ve Kombin Arama Motoru",
+    description: DESCRIPTION,
+    locale: "tr_TR",
     type: "website",
   },
 };
@@ -59,7 +62,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    <html lang="tr" className={`${display.variable} ${body.variable}`}>
       <body>
         <div className="flex min-h-dvh flex-col">
           <SiteHeader />

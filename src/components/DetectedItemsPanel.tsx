@@ -30,8 +30,8 @@ interface DetectedItemsPanelProps {
 }
 
 const SECTION_TITLES: Record<ItemCategory, string> = {
-  clothing: "Clothing & Accessories",
-  beauty: "Beauty & Cosmetics",
+  clothing: "Giyim ve Aksesuar",
+  beauty: "Güzellik ve Kozmetik",
 };
 
 /**
@@ -51,11 +51,11 @@ export function DetectedItemsPanel({
   return (
     <div className="flex h-full flex-col">
       <header className="border-b border-outline-variant p-gutter">
-        <h2 className="font-display text-headline-md text-primary">AI Detected Items</h2>
+        <h2 className="font-display text-headline-md text-primary">Tespit Edilen Parçalar</h2>
         <p className="mt-1 text-[14px] text-on-surface-variant">
           {pending
-            ? "Refining visual matches across our retailer index."
-            : `${identified.length} item${identified.length === 1 ? "" : "s"} matched — tap one to see alternatives.`}
+            ? "Mağaza kataloglarında görsel eşleşmeler taranıyor…"
+            : `${identified.length} parça eşleşti — muadillerini görmek için birine dokun.`}
         </p>
         <EngineBadge result={result} className="mt-3" />
       </header>
@@ -86,7 +86,7 @@ export function DetectedItemsPanel({
 
         {identified.length === 0 && !pending ? (
           <p className="py-12 text-center text-on-surface-variant">
-            No shoppable items found in this image. Try a clearer, closer shot.
+            Bu görselde satın alınabilir bir parça bulamadık. Daha net ve yakın bir kare dene.
           </p>
         ) : null}
       </div>
@@ -95,7 +95,7 @@ export function DetectedItemsPanel({
         <footer className="space-y-3 border-t border-outline-variant bg-surface p-gutter">
           <CuratedLookDialog items={identified} />
           <p className="label text-center text-[10px] text-outline">
-            Matches refreshed from our retailer index
+            Eşleşmeler mağaza kataloglarından güncellenir
           </p>
         </footer>
       ) : null}
@@ -116,7 +116,7 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
     <article
       id={`item-${item.id}`}
       className={cn(
-        "scroll-mt-4 overflow-hidden rounded-lg border bg-surface-container-lowest transition-all",
+        "scroll-mt-4 overflow-hidden rounded-2xl border bg-surface-container-lowest transition-all",
         isActive
           ? "border-primary shadow-ambient"
           : "border-outline-variant hover:border-primary",
@@ -128,7 +128,7 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
         onClick={() => onSelect(isActive ? null : item.id)}
         className="flex w-full min-w-0 gap-4 p-4 text-left"
       >
-        <span className="h-24 w-20 shrink-0 overflow-hidden rounded bg-surface-container">
+        <span className="h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-surface-container">
           {item.exactMatch ? (
             <ProductImage src={item.exactMatch.imageUrl} alt="" />
           ) : (
@@ -143,7 +143,7 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
         <span className="flex min-w-0 flex-1 flex-col justify-between">
           <span className="min-w-0">
             <span className="mb-1 flex items-center justify-between gap-2">
-              <span className="label text-[10px] text-secondary-deep">Identified</span>
+              <span className="label text-[10px] text-secondary-deep">Tespit edildi</span>
               <CheckCircle2 className="h-4 w-4 shrink-0 text-success" strokeWidth={2} />
             </span>
             <span className="block font-display text-[16px] font-semibold leading-tight text-primary">
@@ -167,12 +167,12 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
               )}
             >
               {isActive ? (
-                "Hide"
+                "Gizle"
               ) : (
                 <>
-                  {/* The rail is ~340px on phones — drop the verb so the price
+                  {/* The rail is ~340px on phones — drop the noun so the price
                       beside it never has to truncate. */}
-                  <span className="hidden sm:inline">Find&nbsp;</span>Matches
+                  Eşleşme<span className="hidden sm:inline">leri gör</span>
                 </>
               )}
               <ChevronDown
@@ -192,7 +192,7 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
 
           {item.exactMatch ? (
             <div className="space-y-2">
-              <h4 className="label text-outline">Exact match / closest look</h4>
+              <h4 className="label text-outline">Birebir Eşleşme</h4>
               <ProductCard
                 product={item.exactMatch}
                 detectionId={item.id}
@@ -201,13 +201,13 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
             </div>
           ) : (
             <p className="rounded bg-surface-container p-3 text-[14px] text-on-surface-variant">
-              No confident exact match yet — here are the closest things we found.
+              Henüz güvenli bir birebir eşleşme yok — bulabildiğimiz en yakınları aşağıda.
             </p>
           )}
 
           {item.alternatives.length > 0 ? (
             <div className="space-y-2">
-              <h4 className="label text-outline">Budget-friendly alternatives</h4>
+              <h4 className="label text-outline">Bütçe Dostu Muadiller</h4>
               <div className="space-y-2">
                 {item.alternatives.map((product) => (
                   <ProductCard
@@ -231,8 +231,8 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
 /** The detection currently being matched — greyed out with a spinner. */
 function PendingItemCard({ item }: { item: DetectedItem }) {
   return (
-    <article className="flex gap-4 rounded-lg border border-outline-variant bg-surface-container-lowest p-4 opacity-60">
-      <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded bg-surface-container">
+    <article className="flex gap-4 rounded-2xl border border-outline-variant bg-surface-container-lowest p-4 opacity-60">
+      <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-surface-container">
         {item.exactMatch ? (
           <ProductImage src={item.exactMatch.imageUrl} alt="" className="grayscale" />
         ) : null}
@@ -243,7 +243,7 @@ function PendingItemCard({ item }: { item: DetectedItem }) {
 
       <div className="flex min-w-0 flex-1 flex-col justify-between">
         <div className="min-w-0">
-          <p className="label mb-1 text-[10px] text-outline">Matching…</p>
+          <p className="label mb-1 text-[10px] text-outline">Eşleştiriliyor…</p>
           <p className="font-display text-[16px] font-semibold leading-tight text-primary">
             {item.label}
           </p>
@@ -252,7 +252,7 @@ function PendingItemCard({ item }: { item: DetectedItem }) {
         <div className="mt-2 flex items-center justify-between gap-2">
           <span className="h-4 w-16 animate-pulse rounded bg-surface-container-high" />
           <span className="inline-flex h-8 cursor-not-allowed items-center rounded-full bg-outline px-4 text-label-sm uppercase tracking-[0.05em] text-on-primary">
-            Wait…
+            Bekle…
           </span>
         </div>
       </div>
@@ -283,20 +283,19 @@ function CuratedLookDialog({ items }: { items: DetectedItem[] }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="coral" size="block">
+        <Button size="block">
           <ShoppingBasket strokeWidth={1.5} />
-          View curated look
+          Tüm kombini gör
         </Button>
       </DialogTrigger>
 
       <DialogContent className="max-h-[85dvh] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>The full look</DialogTitle>
+          <DialogTitle>Kombinin tamamı</DialogTitle>
           <DialogDescription>
-            {matches.length} exact match{matches.length === 1 ? "" : "es"} —{" "}
-            {formatPrice(exactTotal, currency)} to buy as-is, or{" "}
-            {formatPrice(budgetTotal, currency)} taking the cheapest option for each
-            item.
+            {matches.length} birebir eşleşme — olduğu gibi almak{" "}
+            {formatPrice(exactTotal, currency)}, her parçanın en uygun seçeneğiyle{" "}
+            {formatPrice(budgetTotal, currency)}.
           </DialogDescription>
         </DialogHeader>
 

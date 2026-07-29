@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRight, TrendingDown } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, TrendingDown } from "lucide-react";
 
 import { ProductImage } from "@/components/ProductImage";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +12,7 @@ import type { ProductMatch } from "@/types";
 
 interface ProductCardProps {
   product: ProductMatch;
-  /** Price of the exact match, used to show "% less" on alternatives. */
+  /** Price of the exact match, used to show "% daha uygun" on alternatives. */
   referencePrice?: number;
   /** `hero` is the exact match; `row` is a compact alternative. */
   variant?: "hero" | "row";
@@ -21,9 +21,9 @@ interface ProductCardProps {
 }
 
 /**
- * Product surface: portrait imagery (3:4, industry standard), left-aligned
- * type, bold price. The coral CTA is reserved for the exact match — the
- * design system keeps coral for conversion moments only.
+ * Product surface: rounded image container, retailer badge, bold price and a
+ * matte-black pill CTA. The exact match additionally carries a coral verified
+ * ring, so "birebir eşleşme" reads at a glance without extra copy.
  */
 export function ProductCard({
   product,
@@ -43,26 +43,28 @@ export function ProductCard({
       : 0;
 
   const isHero = variant === "hero";
+  const retailer = product.brandMetadata?.name ?? product.merchant;
 
   return (
     <article
       className={cn(
-        "flex min-w-0 gap-4 rounded-lg border p-4 transition-all",
+        "flex min-w-0 gap-4 rounded-2xl border p-4 transition-all",
         isHero
-          ? "border-primary/15 bg-surface-container-lowest shadow-ambient"
-          : "border-outline-variant bg-surface hover:border-primary",
+          ? // Verified ring: coral hairline plus a soft halo.
+            "border-secondary/35 bg-surface-container-lowest shadow-[0_0_0_3px_rgba(224,86,56,0.06),0_4px_20px_rgba(0,0,0,0.05)]"
+          : "border-outline-variant/70 bg-surface hover:border-primary hover:shadow-ambient",
       )}
     >
       <div
         className={cn(
-          "relative shrink-0 overflow-hidden rounded bg-surface-container",
+          "relative shrink-0 overflow-hidden rounded-2xl bg-surface-container",
           isHero ? "h-32 w-24" : "h-[84px] w-16",
         )}
       >
         <ProductImage src={product.imageUrl} alt={product.title} />
         {!product.inStock ? (
-          <span className="absolute inset-0 flex items-center justify-center bg-surface/80 text-center text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">
-            Sold out
+          <span className="absolute inset-0 flex items-center justify-center bg-surface/85 text-center text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">
+            Tükendi
           </span>
         ) : null}
       </div>
@@ -70,12 +72,12 @@ export function ProductCard({
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-2">
         <div className="min-w-0">
           <div className="flex min-w-0 items-start justify-between gap-2">
-            <p className="label flex min-w-0 items-center gap-1.5 text-outline">
-              {/* Retailer logo comes from the Brand API in live mode; the chip
-                  is tinted with the brand's own colour. */}
+            {/* Retailer badge — the Brand API supplies the logo and its colour
+                in live mode; otherwise the merchant name stands alone. */}
+            <span className="label flex min-w-0 items-center gap-1.5 rounded-full border border-outline-variant/70 bg-surface-container-lowest px-2 py-0.5 text-on-surface-variant">
               {product.brandMetadata?.logoUrl && !logoFailed ? (
                 <span
-                  className="flex h-4 w-4 shrink-0 items-center justify-center overflow-hidden rounded-sm"
+                  className="flex h-3.5 w-3.5 shrink-0 items-center justify-center overflow-hidden rounded-[3px]"
                   style={{
                     backgroundColor: product.brandMetadata.colorHex ?? undefined,
                   }}
@@ -87,21 +89,21 @@ export function ProductCard({
                     aria-hidden="true"
                     className="h-full w-full object-contain"
                     loading="lazy"
-                    // A dead CDN URL would otherwise leave a broken-image
-                    // glyph sitting in the retailer line.
+                    // A dead CDN URL would otherwise leave a broken-image glyph
+                    // sitting inside the badge.
                     onError={() => setLogoFailed(true)}
                   />
                 </span>
               ) : null}
-              <span className="truncate">
-                {product.brand === product.merchant
-                  ? product.brand
-                  : `${product.brand} · ${product.brandMetadata?.name ?? product.merchant}`}
+              <span className="truncate">{retailer}</span>
+            </span>
+
+            {isHero ? (
+              <span className="label flex shrink-0 items-center gap-1 text-secondary-deep">
+                <BadgeCheck className="h-3.5 w-3.5" strokeWidth={2} />
+                Birebir
               </span>
-            </p>
-            {/* The hero card sits under an "Exact match / closest look"
-                heading, so repeating the tag there just crowds the brand. */}
-            {product.tag && !isHero ? (
+            ) : product.tag ? (
               <Badge variant="muted" className="shrink-0 text-[10px]">
                 {product.tag}
               </Badge>
@@ -110,7 +112,7 @@ export function ProductCard({
 
           <h4
             className={cn(
-              "mt-1 font-display font-semibold leading-tight text-primary",
+              "mt-1.5 font-display font-semibold leading-tight text-primary",
               isHero ? "text-[18px]" : "text-[15px]",
             )}
           >
@@ -118,9 +120,9 @@ export function ProductCard({
           </h4>
 
           <p className="mt-1 text-[12px] text-on-surface-variant">
-            {Math.round(product.similarity * 100)}% visual match
+            %{Math.round(product.similarity * 100)} görsel benzerlik
             {product.isLive ? (
-              <span className="ml-1.5 text-secondary-deep">· live price</span>
+              <span className="ml-1.5 text-secondary-deep">· canlı fiyat</span>
             ) : null}
           </p>
         </div>
@@ -128,27 +130,24 @@ export function ProductCard({
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-baseline gap-2">
             <span
-              className={cn("font-bold text-primary", isHero ? "text-[20px]" : "text-body-md")}
+              className={cn(
+                "font-display font-bold tracking-tight text-primary",
+                isHero ? "text-[22px]" : "text-[17px]",
+              )}
             >
               {formatPrice(product.price, product.currency)}
             </span>
             {savings > 0 ? (
               <Badge variant="success" className="text-[10px]">
-                <TrendingDown className="h-3 w-3" strokeWidth={2} />
-                {savings}% less
+                <TrendingDown className="h-3 w-3" strokeWidth={2} />%{savings} daha uygun
               </Badge>
             ) : null}
           </div>
 
-          <Button
-            asChild
-            variant={isHero ? "coral" : "outline"}
-            size="sm"
-            className="shrink-0"
-          >
+          <Button asChild size="sm" className="shrink-0 shadow-sm hover:shadow-md">
             {/* Affiliate links are third-party: never leak the opener. */}
             <a href={href} target="_blank" rel="noopener noreferrer sponsored nofollow">
-              {isHero ? "Get this item" : "Shop"}
+              {isHero ? "Ürüne git" : "İncele"}
               <ArrowUpRight strokeWidth={1.5} />
             </a>
           </Button>

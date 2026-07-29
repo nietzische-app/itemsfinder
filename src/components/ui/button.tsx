@@ -14,7 +14,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         /** Matte black — primary navigation and core CTAs. */
-        primary: "bg-primary text-on-primary hover:opacity-90",
+        primary: "bg-primary text-on-primary shadow-sm hover:bg-black hover:shadow-md",
         /** Coral — conversion points only ("Buy", "View curated look"). */
         coral: "bg-secondary text-on-secondary hover:opacity-90",
         outline:

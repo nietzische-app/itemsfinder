@@ -62,7 +62,7 @@ export default function AnalyzePage() {
       setResult(payload.result);
       setStatus("done");
     } catch {
-      setError("We couldn't reach the detection service. Check your connection.");
+      setError("Analiz servisine ulaşamadık. Bağlantını kontrol et.");
       setStatus("error");
     }
   }, []);
@@ -107,14 +107,14 @@ export default function AnalyzePage() {
           <ImageOff className="h-7 w-7 text-outline" strokeWidth={1.5} />
         </span>
         <h1 className="mt-6 font-display text-headline-md text-primary">
-          No screenshot yet
+          Henüz bir görsel yok
         </h1>
         <p className="mt-2 max-w-sm text-on-surface-variant">
-          Upload a look — or pick one of our demo looks — and we&apos;ll break down
-          every item in it.
+          Bir kombin yükle ya da hazır tarzlardan birini seç; içindeki her parçayı
+          tek tek çıkaralım.
         </p>
         <Button asChild size="lg" className="mt-8">
-          <Link href="/">Back to upload</Link>
+          <Link href="/">Yüklemeye dön</Link>
         </Button>
       </div>
     );
@@ -149,7 +149,7 @@ export default function AnalyzePage() {
           <div className="p-gutter">
             <p className="flex items-center gap-2 font-display text-[18px] font-semibold text-error">
               <AlertCircle className="h-5 w-5" strokeWidth={1.5} />
-              Something went wrong
+              Bir şeyler ters gitti
             </p>
             <p className="mt-2 text-on-surface-variant">{error}</p>
             <Button
@@ -158,7 +158,7 @@ export default function AnalyzePage() {
               onClick={() => image && runDetection(image)}
             >
               <RotateCcw strokeWidth={1.5} />
-              Try again
+              Tekrar dene
             </Button>
           </div>
         ) : result && (status === "done" || revealedCount > 0) ? (
@@ -173,10 +173,10 @@ export default function AnalyzePage() {
           <>
             <header className="border-b border-outline-variant p-gutter">
               <h2 className="font-display text-headline-md text-primary">
-                AI Detected Items
+                Tespit Edilen Parçalar
               </h2>
               <p className="mt-1 text-[14px] text-on-surface-variant">
-                Refining visual matches across our retailer index.
+                Görsel analiz ediliyor…
               </p>
             </header>
             <ResultsSkeleton />

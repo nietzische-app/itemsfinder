@@ -16,6 +16,75 @@ interface BoundingBoxOverlayProps {
   isScanning: boolean;
 }
 
+/** Minimum gap between two hotspots, in percent of the image. */
+const MIN_HOTSPOT_GAP = 7;
+
+/**
+ * Places one hotspot per detection, nudging any that would land on top of
+ * each other.
+ *
+ * Boxes nest all the time — a crop top sits inside the jacket's box, and both
+ * centres can land on the exact same pixel, leaving the item underneath
+ * impossible to click. Smaller boxes are placed first and keep their true
+ * centre; larger ones move, because a large box has room to spare and its dot
+ * still lands on the garment.
+ */
+function placeHotspots(items: DetectedItem[]): Map<string, { x: number; y: number }> {
+  const area = (item: DetectedItem) =>
+    item.boundingBox.width * item.boundingBox.height;
+
+  const placed: Array<{ x: number; y: number }> = [];
+  const positions = new Map<string, { x: number; y: number }>();
+
+  for (const item of [...items].sort((a, b) => area(a) - area(b))) {
+    const box = item.boundingBox;
+    let x = (box.x + box.width / 2) * 100;
+    let y = (box.y + box.height / 2) * 100;
+
+    // A handful of passes is plenty; the loop is bounded either way.
+    for (let pass = 0; pass < 8; pass += 1) {
+      const clash = placed.find(
+        (other) => Math.hypot(other.x - x, other.y - y) < MIN_HOTSPOT_GAP,
+      );
+      if (!clash) break;
+
+      let dx = x - clash.x;
+      let dy = y - clash.y;
+      const distance = Math.hypot(dx, dy);
+
+      // Exactly coincident centres have no direction to push along; send the
+      // larger box's dot upward, towards the part of it that is still visible.
+      if (distance < 0.001) {
+        dx = 0;
+        dy = -1;
+      } else {
+        dx /= distance;
+        dy /= distance;
+      }
+
+      x += dx * MIN_HOTSPOT_GAP;
+      y += dy * MIN_HOTSPOT_GAP;
+
+      // Never let a dot leave the item it belongs to.
+      const insetX = Math.min(3, (box.width * 100) / 3);
+      const insetY = Math.min(3, (box.height * 100) / 3);
+      x = Math.min(
+        Math.max(x, box.x * 100 + insetX),
+        (box.x + box.width) * 100 - insetX,
+      );
+      y = Math.min(
+        Math.max(y, box.y * 100 + insetY),
+        (box.y + box.height) * 100 - insetY,
+      );
+    }
+
+    placed.push({ x, y });
+    positions.set(item.id, { x, y });
+  }
+
+  return positions;
+}
+
 /**
  * The uploaded screenshot with interactive hotspots.
  *
@@ -33,6 +102,7 @@ export function BoundingBoxOverlay({
   isScanning,
 }: BoundingBoxOverlayProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const hotspots = placeHotspots(items);
 
   return (
     <div className="relative inline-block max-w-full overflow-hidden rounded-xl shadow-ambient-lg">
@@ -40,7 +110,7 @@ export function BoundingBoxOverlay({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={imageUrl}
-        alt="Your uploaded look, with detected items marked"
+        alt="Yüklediğin görsel, tespit edilen parçalar işaretli"
         className="block max-h-[62vh] w-auto max-w-full select-none lg:max-h-[74vh]"
         draggable={false}
       />
@@ -54,8 +124,9 @@ export function BoundingBoxOverlay({
       {items.map((item) => {
         const isActive = activeItemId === item.id;
         const isOpen = isActive || hoveredId === item.id;
-        const centerX = (item.boundingBox.x + item.boundingBox.width / 2) * 100;
-        const centerY = (item.boundingBox.y + item.boundingBox.height / 2) * 100;
+        const spot = hotspots.get(item.id);
+        const centerX = spot?.x ?? (item.boundingBox.x + item.boundingBox.width / 2) * 100;
+        const centerY = spot?.y ?? (item.boundingBox.y + item.boundingBox.height / 2) * 100;
 
         return (
           <div key={item.id}>
@@ -80,7 +151,7 @@ export function BoundingBoxOverlay({
             <button
               type="button"
               aria-pressed={isActive}
-              aria-label={`${item.label} — ${Math.round(item.confidence * 100)}% confidence`}
+              aria-label={`${item.label} — %${Math.round(item.confidence * 100)} güven`}
               onClick={() => onSelect(isActive ? null : item.id)}
               onMouseEnter={() => setHoveredId(item.id)}
               onMouseLeave={() => setHoveredId(null)}
@@ -130,8 +201,20 @@ export function BoundingBoxOverlay({
         );
       })}
 
-      {/* Floating status indicator */}
-      <div className="glassmorphism absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-4 rounded-full px-6 py-3 shadow-ambient-lg sm:gap-6 sm:px-8 sm:py-4">
+      {/* Floating status indicator.
+          `pointer-events-none` is load-bearing: this pill sits over the
+          bottom-centre of the image, which is exactly where footwear lands in
+          a full-body shot. Without it the pill swallows those clicks and the
+          hotspot underneath can never be selected. It also shrinks once the
+          scan is done, so it stops competing with the result it announces. */}
+      <div
+        className={cn(
+          "glassmorphism pointer-events-none absolute left-1/2 z-30 flex -translate-x-1/2 items-center rounded-full shadow-ambient-lg transition-all duration-500",
+          isScanning
+            ? "bottom-6 gap-4 px-6 py-3 sm:gap-6 sm:px-8 sm:py-4"
+            : "bottom-3 gap-3 px-5 py-2 opacity-80 sm:gap-4 sm:px-6",
+        )}
+      >
         <span className="flex items-center gap-3">
           <span className="relative flex h-3 w-3">
             {isScanning ? (
@@ -145,7 +228,7 @@ export function BoundingBoxOverlay({
             />
           </span>
           <span className="label whitespace-nowrap text-primary">
-            {isScanning ? "AI scanning…" : "Scan complete"}
+            {isScanning ? "Görsel analiz ediliyor…" : "Analiz tamamlandı"}
           </span>
         </span>
 
@@ -156,7 +239,7 @@ export function BoundingBoxOverlay({
             <Sparkles className="h-3.5 w-3.5 text-primary" strokeWidth={1.5} />
           </span>
           <span className="label whitespace-nowrap text-on-surface-variant">
-            {items.length} item{items.length === 1 ? "" : "s"} found
+            {items.length} parça bulundu
           </span>
         </span>
       </div>

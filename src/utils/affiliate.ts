@@ -120,10 +120,14 @@ export function hasAffiliateProgram(merchant: Merchant): boolean {
   return AFFILIATE_CONFIG[merchant] !== null;
 }
 
-/** Formats a price for display, falling back to a plain suffix on bad input. */
+/**
+ * Formats a price in Turkish convention — "₺3.599,90". The currency comes from
+ * the product, not the locale: live results may be priced in USD or GBP by a
+ * foreign retailer, and showing those as lira would be a lie.
+ */
 export function formatPrice(amount: number, currency: string): string {
   try {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat("tr-TR", {
       style: "currency",
       currency,
       maximumFractionDigits: amount % 1 === 0 ? 0 : 2,

@@ -49,24 +49,24 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as DetectRequestBody;
   } catch {
-    return fail("Request body must be JSON.", 400);
+    return fail("İstek gövdesi JSON olmalı.", 400);
   }
 
   if (typeof body?.image !== "string" || body.image.length === 0) {
-    return fail("No image provided.", 400);
+    return fail("Görsel gönderilmedi.", 400);
   }
 
   const parsed = parseDataUrl(body.image);
   if (!parsed) {
-    return fail("Image must be a base64 data URL.", 400);
+    return fail("Görsel base64 data URL olmalı.", 400);
   }
 
   if (!ALLOWED_MIME_TYPES.has(parsed.mimeType)) {
-    return fail("Unsupported image format. Use JPG, PNG or WebP.", 415);
+    return fail("Desteklenmeyen görsel formatı. JPG, PNG veya WEBP kullan.", 415);
   }
 
   if (parsed.base64.length > MAX_BASE64_LENGTH) {
-    return fail("That image is too large. Keep screenshots under 10 MB.", 413);
+    return fail("Görsel çok büyük. 10 MB altında tut.", 413);
   }
 
   // Only trust `exampleId` when it names a demo image we actually ship.
@@ -107,6 +107,6 @@ export async function POST(request: Request) {
       }
     }
 
-    return fail("We couldn't analyse that image. Please try again.", 502);
+    return fail("Görseli analiz edemedik. Lütfen tekrar dene.", 502);
   }
 }

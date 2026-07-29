@@ -12,7 +12,7 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        coral: "rounded-full bg-secondary px-4 py-1 text-on-secondary",
+        coral: "rounded-full bg-secondary-deep px-4 py-1 text-on-secondary",
         dark: "rounded-full bg-primary px-4 py-1 text-on-primary",
         outline:
           "rounded-full border border-outline-variant px-3 py-1 text-on-surface-variant",

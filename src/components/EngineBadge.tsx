@@ -21,11 +21,11 @@ export function EngineBadge({ result, className }: EngineBadgeProps) {
 
   const label = isLiveProducts
     ? isLiveDetection
-      ? "Live Engine (Vision + Context.dev)"
-      : "Live Engine (Context.dev products)"
+      ? "Canlı Motor (Vision + Context.dev)"
+      : "Canlı Motor (Context.dev ürünleri)"
     : isLiveDetection
-      ? "Vision detection · demo products"
-      : "Demo Engine (Mock Data)";
+      ? "Vision tespiti · örnek ürünler"
+      : "Demo Modu (Örnek Veri)";
 
   // When only some detections resolved live, say which — the rest are demo
   // rows sitting in the same list.
@@ -50,7 +50,7 @@ export function EngineBadge({ result, className }: EngineBadgeProps) {
       <span>{label}</span>
       {isPartial ? (
         <span className="font-normal normal-case tracking-normal opacity-80">
-          · {result.liveItemCount} of {result.items.length} live
+          · {result.items.length} parçanın {result.liveItemCount} tanesi canlı
         </span>
       ) : null}
     </span>

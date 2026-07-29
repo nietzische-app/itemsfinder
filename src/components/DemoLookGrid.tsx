@@ -28,7 +28,7 @@ export function DemoLookGrid({ onImageReady }: DemoLookGridProps) {
       const dataUrl = await exampleToDataUrl(src);
       onImageReady({ dataUrl, fileName: `${title}.svg`, exampleId: id });
     } catch {
-      setError("We couldn't load that look. Check your connection and retry.");
+      setError("Bu tarzı yükleyemedik. Bağlantını kontrol edip tekrar dene.");
       setBusy(null);
     }
   }
@@ -43,7 +43,7 @@ export function DemoLookGrid({ onImageReady }: DemoLookGridProps) {
             disabled={busy !== null}
             onClick={() => handlePick(example.id, example.src, example.title)}
             className={cn(
-              "group flex min-w-0 flex-col overflow-hidden rounded-lg bg-surface-container-lowest text-left shadow-ambient transition-all duration-300 hover:-translate-y-2 hover:shadow-ambient-lg disabled:cursor-wait disabled:opacity-70",
+              "group flex min-w-0 flex-col overflow-hidden rounded-2xl bg-surface-container-lowest text-left shadow-ambient transition-all duration-300 hover:-translate-y-2 hover:shadow-ambient-lg disabled:cursor-wait disabled:opacity-70",
               // Stagger the row so the grid reads organic rather than uniform.
               example.tall ? "lg:mt-0" : "lg:mt-10",
             )}
@@ -77,7 +77,7 @@ export function DemoLookGrid({ onImageReady }: DemoLookGridProps) {
 
               <span className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 to-transparent p-6 opacity-0 transition-opacity group-hover:opacity-100">
                 <span className="label rounded-full border border-white/40 px-4 py-2 text-white backdrop-blur-sm">
-                  {busy === example.id ? "Loading…" : "Try this look"}
+                  {busy === example.id ? "Yükleniyor…" : "Bu tarzı dene"}
                 </span>
               </span>
 

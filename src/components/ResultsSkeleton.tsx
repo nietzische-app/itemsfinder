@@ -9,12 +9,12 @@ interface ResultsSkeletonProps {
 export function ResultsSkeleton({ count = 3 }: ResultsSkeletonProps) {
   return (
     <div className="space-y-3 p-gutter" aria-busy="true" aria-live="polite">
-      <span className="sr-only">Analysing your look…</span>
+      <span className="sr-only">Görsel analiz ediliyor…</span>
 
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
-          className="flex gap-4 rounded-lg border border-outline-variant bg-surface-container-lowest p-4"
+          className="flex gap-4 rounded-2xl border border-outline-variant bg-surface-container-lowest p-4"
         >
           <Skeleton className="h-24 w-20 shrink-0" />
           <div className="flex flex-1 flex-col justify-between gap-2">

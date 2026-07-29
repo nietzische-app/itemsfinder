@@ -8,6 +8,11 @@ budget-friendly alternatives with live buy links.
 This is the MVP: a complete, clickable product built on a swappable detection
 engine. It runs out of the box with **no API keys**.
 
+The interface is Turkish (`lang="tr"`), prices render in Turkish convention
+(`₺3.599,90`) via `formatPrice`, and the demo catalogue is priced in TRY.
+Live results keep whatever currency the retailer quotes — showing a US-dollar
+listing as lira would be a lie. Code, comments and identifiers stay English.
+
 ```bash
 npm install
 npm run dev      # http://localhost:3000
@@ -255,7 +260,9 @@ finds nothing to scan.
 ## Notes and limits
 
 - Product data in the mock engine is illustrative. Prices, stock and URLs are
-  fabricated demo content and are not live merchant data.
+  fabricated demo content and are not live merchant data. The TRY figures were
+  converted from the original USD placeholders at a nominal rate and rounded to
+  plausible retail price points — they track no real exchange rate.
 - The demo looks are placeholder SVG illustrations bundled in `public/examples`,
   pending real photography — see below.
 - Google Cloud Vision does not accept SVG input, so the bundled demo looks
