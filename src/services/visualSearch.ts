@@ -409,12 +409,23 @@ class ComposedVisualSearchService implements VisualSearchService {
 /*  Factories                                                                 */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * Reads the Cloud Vision credential.
+ *
+ * `GOOGLE_VISION_API_KEY` is accepted as an alias for
+ * `GOOGLE_CLOUD_VISION_API_KEY` so either spelling works.
+ */
+function readVisionApiKey(): string | undefined {
+  return (
+    process.env.GOOGLE_CLOUD_VISION_API_KEY?.trim() ||
+    process.env.GOOGLE_VISION_API_KEY?.trim() ||
+    undefined
+  );
+}
+
 /** True when real credentials are present and mocking is not forced on. */
 export function isVisionConfigured(): boolean {
-  return (
-    Boolean(process.env.GOOGLE_CLOUD_VISION_API_KEY) &&
-    process.env.USE_MOCK_VISION !== "true"
-  );
+  return Boolean(readVisionApiKey()) && process.env.USE_MOCK_VISION !== "true";
 }
 
 /** True when live product intelligence is both enabled and credentialled. */
@@ -425,24 +436,50 @@ export function isContextDevConfigured(): boolean {
   );
 }
 
-/** Which detector to use for this request. */
+/**
+ * Selects the detector — the engine that decides *what is in the image*.
+ *
+ * **Google Cloud Vision is the primary engine and always takes precedence
+ * when credentialled.** It is the only thing in this codebase that produces
+ * bounding boxes, object coordinates and labels from pixels. Context.dev does
+ * no detection whatsoever; it runs afterwards, on the labels Vision produced,
+ * purely to attach live prices and retailer branding.
+ *
+ * The mock detector exists as a development fallback only, so a fresh clone
+ * runs without credentials. It is never chosen over a configured Vision key.
+ */
 function getDetector(): VisualSearchService {
-  const apiKey = process.env.GOOGLE_CLOUD_VISION_API_KEY;
+  const apiKey = readVisionApiKey();
 
   if (apiKey && process.env.USE_MOCK_VISION !== "true") {
     return new GoogleVisionSearchService(apiKey);
+  }
+
+  if (apiKey && process.env.USE_MOCK_VISION === "true") {
+    console.warn(
+      "[detect] A Vision key is present but USE_MOCK_VISION=true is forcing the " +
+        "mock detector. Unset it to run real detection.",
+    );
+  } else if (isContextDevConfigured()) {
+    // Live prices on mock bounding boxes is a demo configuration, not a
+    // production one — say so loudly rather than letting it look complete.
+    console.warn(
+      "[detect] Live products are enabled but no Cloud Vision key is set, so " +
+        "detection is running on the mock engine. Set GOOGLE_VISION_API_KEY " +
+        "for real detection.",
+    );
   }
 
   return new MockVisualSearchService();
 }
 
 /**
- * Which product provider to use.
+ * Selects the product provider — the engine that decides *what to buy* for
+ * labels the detector has already produced. This is a strictly secondary,
+ * post-detection enrichment layer.
  *
- * Note this is independent of the detector: live product data works with the
- * mock detector too. That matters, because the mock detector is what runs
- * without a Vision key — tying the two together would make
- * `ENABLE_CONTEXT_DEV_LIVE=true` silently do nothing for most setups.
+ * It is chosen independently of the detector so live pricing can be exercised
+ * in development without a Vision key; in production both should be live.
  */
 function getProductProvider(): ProductProvider {
   const apiKey = process.env.CONTEXT_DEV_API_KEY;

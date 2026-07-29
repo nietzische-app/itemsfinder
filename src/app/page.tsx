@@ -32,16 +32,15 @@ export default function HomePage() {
       <section className="mb-24 grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
         <div className="flex min-w-0 flex-col gap-8">
           <div className="space-y-4">
-            <Badge variant="coral">AI powered looks</Badge>
+            <Badge variant="coral">Spot the look. Mark as yours.</Badge>
 
             <h1 className="font-display text-display-lg-mobile leading-tight text-primary md:text-display-lg">
               Find any outfit or makeup look in seconds
             </h1>
 
             <p className="max-w-xl text-body-lg text-on-surface-variant">
-              Upload a screenshot from Instagram or TikTok. Our visual search
-              identifies the exact items and suggests the perfect alternatives within
-              your budget.
+              Upload any outfit or makeup screenshot. Markas finds the exact items and
+              budget-friendly alternatives with live buy links.
             </p>
           </div>
 
@@ -111,7 +110,7 @@ export default function HomePage() {
             },
           ].map((item) => (
             <li key={item.step} className="min-w-0 border-t border-primary pt-5">
-              <span className="label text-secondary">{item.step}</span>
+              <span className="label text-secondary-deep">{item.step}</span>
               <h3 className="mt-3 font-display text-[20px] font-semibold text-primary">
                 {item.title}
               </h3>
@@ -124,7 +123,7 @@ export default function HomePage() {
           Matches across Zara · Trendyol · Sephora · Amazon · Mango · H&amp;M · ASOS
         </p>
         <p className="mt-3 text-center text-body-md text-outline">
-          Product matches are illustrative demo data unless a live vision provider is
+          Markas — product matches are illustrative demo data unless live engines are
           configured. Some outbound links are affiliate links.
         </p>
       </section>

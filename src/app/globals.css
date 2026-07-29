@@ -38,7 +38,7 @@
   /* The sweep that travels down the image while the engine is running. */
   .scanner-line {
     height: 2px;
-    background: linear-gradient(90deg, transparent, #ad3217, transparent);
+    background: linear-gradient(90deg, transparent, #e05638, transparent);
   }
 }
 

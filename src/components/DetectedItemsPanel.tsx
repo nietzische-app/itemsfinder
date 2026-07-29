@@ -143,7 +143,7 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
         <span className="flex min-w-0 flex-1 flex-col justify-between">
           <span className="min-w-0">
             <span className="mb-1 flex items-center justify-between gap-2">
-              <span className="label text-[10px] text-secondary">Identified</span>
+              <span className="label text-[10px] text-secondary-deep">Identified</span>
               <CheckCircle2 className="h-4 w-4 shrink-0 text-success" strokeWidth={2} />
             </span>
             <span className="block font-display text-[16px] font-semibold leading-tight text-primary">

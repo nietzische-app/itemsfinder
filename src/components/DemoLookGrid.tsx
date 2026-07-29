@@ -89,7 +89,7 @@ export function DemoLookGrid({ onImageReady }: DemoLookGridProps) {
             </span>
 
             <span className="block min-w-0 p-6">
-              <span className="label block text-secondary">{example.category}</span>
+              <span className="label block text-secondary-deep">{example.category}</span>
               <span className="mt-1 block font-display text-headline-md text-primary">
                 {example.title}
               </span>

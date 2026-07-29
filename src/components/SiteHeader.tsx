@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Plus, Share2, User } from "lucide-react";
 
+import { MarkasLogo } from "@/components/MarkasLogo";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -30,10 +31,8 @@ export function SiteHeader() {
           <Menu className="h-6 w-6" strokeWidth={1.5} />
         </button>
 
-        <Link href="/" className="min-w-0">
-          <span className="block truncate font-display text-[26px] font-extrabold leading-none tracking-tighter text-primary sm:text-[34px]">
-            GET THE LOOK <span aria-hidden="true">✨</span>
-          </span>
+        <Link href="/" className="min-w-0 text-primary" aria-label="Markas — home">
+          <MarkasLogo />
         </Link>
       </div>
 

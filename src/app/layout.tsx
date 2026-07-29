@@ -26,19 +26,21 @@ const body = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Get The Look — Find any outfit or makeup look in seconds",
+  title: "Markas — Visual Search & Outfit Matcher",
   description:
-    "Upload a screenshot from Instagram or TikTok and instantly find the exact items — plus budget-friendly alternatives you can actually buy.",
+    "Upload any outfit or makeup screenshot. Markas finds exact items and budget-friendly alternatives with live buy links.",
+  applicationName: "Markas",
   openGraph: {
-    title: "Get The Look",
+    siteName: "Markas",
+    title: "Markas — Visual Search & Outfit Matcher",
     description:
-      "Screenshot any outfit or makeup look and shop the exact items or cheaper dupes.",
+      "Upload any outfit or makeup screenshot. Markas finds exact items and budget-friendly alternatives with live buy links.",
     type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fcf9f8",
+  themeColor: "#fafafa",
   width: "device-width",
   initialScale: 1,
 };

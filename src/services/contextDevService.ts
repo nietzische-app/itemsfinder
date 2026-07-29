@@ -173,7 +173,7 @@ export class ContextDevService {
           includeDomains: RETAILER_DOMAINS[category],
           numResults: 10,
           timeoutMS: this.requestTimeoutMs,
-          tags: ["getthelook", "product-search"],
+          tags: ["markas", "product-search"],
         },
         { signal },
       );
@@ -234,7 +234,7 @@ export class ContextDevService {
           // The UI is light-only, so ask for assets picked for a light surface.
           theme: "light",
           timeoutMS: this.requestTimeoutMs,
-          tags: ["getthelook", "brand"],
+          tags: ["markas", "brand"],
         },
         { signal },
       );
@@ -290,7 +290,7 @@ export class ContextDevService {
         maxPages: 1,
         stopAfterMs: this.extractBudgetMs,
         timeoutMS: this.requestTimeoutMs,
-        tags: ["getthelook", "product-extract"],
+        tags: ["markas", "product-extract"],
       },
       { signal },
     );

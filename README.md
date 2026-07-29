@@ -1,8 +1,9 @@
-# Get The Look
+# Markas
 
-Upload a screenshot of an outfit or a makeup look from Instagram/TikTok, and
-get back the exact items — plus budget-friendly alternatives with affiliate
-purchase links.
+**Spot the look. Mark as yours.**
+
+Upload any outfit or makeup screenshot. Markas finds the exact items and
+budget-friendly alternatives with live buy links.
 
 This is the MVP: a complete, clickable product built on a swappable detection
 engine. It runs out of the box with **no API keys**.
@@ -22,8 +23,16 @@ screenshot ─▶ /api/detect ─▶ detector ─────────▶ pro
                where is it)  │                    │  live price & stock)   items rail
 ```
 
-Detection and pricing are **independent** engines. Either can be live or
-mocked, and the UI names both.
+**Google Cloud Vision is the primary engine.** It is the only thing that turns
+pixels into bounding boxes, object coordinates and labels, and it always takes
+precedence when `GOOGLE_VISION_API_KEY` (or `GOOGLE_CLOUD_VISION_API_KEY`) is
+set. The mock detector is a development fallback so a fresh clone runs — it is
+never chosen over a configured key.
+
+**Context.dev is a secondary enrichment layer.** It performs no detection. It
+runs after Vision, on the labels Vision produced, to attach live prices, stock
+and retailer branding. Configuring it without a Vision key is a demo
+configuration and logs a warning on startup.
 
 1. **Home** (`/`) — hero with the upload zone, plus a staggered masonry of four
    curated demo looks. The image is held in `sessionStorage` and never leaves
@@ -40,13 +49,30 @@ mocked, and the UI names both.
    Cosmetics**; the footer opens the whole curated look with both an as-is and
    a cheapest-route total.
 
-## Design system
+## Brand & design system
+
+**Markas** — the mark is a camera focus frame around a tag with the signature
+coral dot: detection and the thing detected in one glyph. It lives in
+`src/components/MarkasLogo.tsx` (`MarkasMark` for the icon, `MarkasLogo` for
+the lockup) and in `src/app/icon.svg` as the favicon. The mark's strokes use
+`currentColor`, so it inherits the surrounding text colour on any surface.
+
+| Token       | Hex       | Used for                                  |
+| ----------- | --------- | ----------------------------------------- |
+| Matte black | `#111111` | Navigation, core CTAs, the logo mark      |
+| Off-white   | `#FAFAFA` | The page canvas                           |
+| Coral       | `#E05638` | Scan hotspots, active states, conversion  |
 
 The interface implements the Stitch design in [`design/DESIGN.md`](design/DESIGN.md)
-(reference renders alongside it): editorial "quiet luxury" — a warm off-white
-canvas with pure-white cards lifting off it, matte black for navigation and
-core CTAs, and a single coral accent reserved for hotspots and conversion.
-Plus Jakarta Sans for headlines, Inter for body, on an 8px baseline.
+(reference renders alongside it): editorial "quiet luxury" — pure-white cards
+lifting off the off-white canvas, matte black for navigation and core CTAs, and
+the coral reserved for hotspots and conversion. Plus Jakarta Sans for
+headlines, Inter for body, on an 8px baseline.
+
+> Accessibility note: brand coral on the off-white canvas is 3.8:1, which is
+> fine for graphics and large type but too low for the 10–12px labels this
+> system uses. `secondary-deep` (`#C0451F`, 5.1:1) carries small coral **text**;
+> `secondary` stays exactly on-brand for hotspots, dots and filled CTAs.
 
 Its tokens are the Tailwind theme, using the same names as the design doc
 (`surface`, `on-surface-variant`, `outline`, `secondary`, `label-sm` …) so the
@@ -113,10 +139,10 @@ interface VisualSearchService {
 
 Two implementations ship with the app, chosen by `getVisualSearchService()`:
 
-| Implementation                | Used when                                    |
-| ----------------------------- | -------------------------------------------- |
-| `MockVisualSearchService`     | No API key, or `USE_MOCK_VISION=true`        |
-| `GoogleVisionSearchService`   | `GOOGLE_CLOUD_VISION_API_KEY` is set         |
+| Implementation                | Used when                                              |
+| ----------------------------- | ------------------------------------------------------ |
+| `GoogleVisionSearchService`   | `GOOGLE_VISION_API_KEY` / `GOOGLE_CLOUD_VISION_API_KEY` is set — **takes precedence** |
+| `MockVisualSearchService`     | No key, or `USE_MOCK_VISION=true` (development fallback) |
 
 The Google implementation calls `images:annotate` with `OBJECT_LOCALIZATION`
 (what and where), `WEB_DETECTION` (brand-aware naming, so "Outerwear" becomes
@@ -178,6 +204,7 @@ src/
 │   ├── ProductCard.tsx          # Product surface + affiliate CTA
 │   ├── ProductImage.tsx         # Thumbnail with dead-URL fallback
 │   ├── EngineBadge.tsx          # Which engines produced this result
+│   ├── MarkasLogo.tsx           # Brand mark + wordmark lockup
 │   ├── ResultsSkeleton.tsx      # Loading state
 │   ├── SiteHeader.tsx           # Top app bar
 │   ├── MobileNav.tsx            # Bottom tab bar (mobile)

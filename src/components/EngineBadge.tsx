@@ -37,7 +37,7 @@ export function EngineBadge({ result, className }: EngineBadgeProps) {
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-label-sm uppercase tracking-[0.05em]",
         isLiveProducts
-          ? "border-secondary/30 bg-secondary/5 text-secondary"
+          ? "border-secondary/30 bg-secondary/5 text-secondary-deep"
           : "border-outline-variant bg-surface-container text-on-surface-variant",
         className,
       )}

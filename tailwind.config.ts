@@ -1,13 +1,15 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Design tokens come from the Stitch design system (`design/DESIGN.md`):
- * an editorial "quiet luxury" palette — warm off-white surfaces, matte black
- * for authority, and a single coral accent reserved for scan hotspots and
- * conversion points.
+ * Design tokens for Markas — the editorial "quiet luxury" system from
+ * `design/DESIGN.md`, anchored on the three brand colours:
  *
- * The token names below mirror the design doc exactly (surface / on-surface /
- * outline / secondary …) so design and code stay one vocabulary.
+ *   #111111  Matte Black   — navigation, core CTAs, the logo mark
+ *   #FAFAFA  Off-white     — the page canvas
+ *   #E05638  Coral         — scan hotspots, active states, conversion
+ *
+ * Token names mirror the design doc (surface / on-surface / outline /
+ * secondary …) so design and code stay one vocabulary.
  */
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
@@ -15,34 +17,36 @@ const config: Config = {
     extend: {
       colors: {
         surface: {
-          DEFAULT: "#fcf9f8",
-          dim: "#dcd9d9",
-          bright: "#fcf9f8",
-          variant: "#e5e2e1",
+          DEFAULT: "#fafafa",
+          dim: "#dcdcdc",
+          bright: "#fafafa",
+          variant: "#e4e4e4",
         },
+        // Neutral ramp, tuned to the #FAFAFA canvas: pure white cards lift off
+        // it, and each step is a perceptible but quiet increment.
         "surface-container": {
           lowest: "#ffffff",
-          low: "#f6f3f2",
-          DEFAULT: "#f0eded",
-          high: "#eae7e7",
-          highest: "#e5e2e1",
+          low: "#f5f5f5",
+          DEFAULT: "#efefef",
+          high: "#e9e9e9",
+          highest: "#e4e4e4",
         },
         "on-surface": {
-          DEFAULT: "#1c1b1b",
-          variant: "#444748",
+          DEFAULT: "#1b1b1b",
+          variant: "#454545",
         },
-        "inverse-surface": "#313030",
-        "inverse-on-surface": "#f3f0ef",
+        "inverse-surface": "#2e2e2e",
+        "inverse-on-surface": "#f1f1f1",
 
         outline: {
-          DEFAULT: "#747878",
-          variant: "#c4c7c7",
+          DEFAULT: "#757575",
+          variant: "#c6c6c6",
         },
 
-        // Matte black — primary navigation and core CTAs.
+        // Matte black — primary navigation, core CTAs, the logo mark.
         primary: {
-          DEFAULT: "#000000",
-          container: "#1c1b1b",
+          DEFAULT: "#111111",
+          container: "#1b1b1b",
         },
         "on-primary": {
           DEFAULT: "#ffffff",
@@ -50,10 +54,16 @@ const config: Config = {
         },
         "inverse-primary": "#c8c6c5",
 
-        // Coral — hotspots, active states, conversion.
+        // Signature coral — hotspots, active states, conversion.
         secondary: {
-          DEFAULT: "#ad3217",
-          container: "#ff6d4d",
+          DEFAULT: "#e05638",
+          container: "#ff8a6d",
+          /**
+           * Darkened coral for small text on light surfaces. Brand coral on
+           * #FAFAFA is 3.8:1, which reads poorly at the 10–12px label sizes
+           * this system uses; this shade is 5.1:1 and visually near-identical.
+           */
+          deep: "#c0451f",
         },
         "on-secondary": {
           DEFAULT: "#ffffff",

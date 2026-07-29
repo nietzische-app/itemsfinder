@@ -121,7 +121,7 @@ export function BoundingBoxOverlay({
                 {item.label}
               </p>
               {item.exactMatch ? (
-                <p className="mt-2 text-label-sm font-bold text-secondary">
+                <p className="mt-2 text-label-sm font-bold text-secondary-deep">
                   {formatPrice(item.exactMatch.price, item.exactMatch.currency)}
                 </p>
               ) : null}

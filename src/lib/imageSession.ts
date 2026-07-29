@@ -8,7 +8,7 @@ import type { UploadedImage } from "@/types";
  * leaves the browser until the user actually triggers a scan, and a refresh on
  * `/analyze` keeps working.
  */
-const STORAGE_KEY = "getthelook:pending-image";
+const STORAGE_KEY = "markas:pending-image";
 
 export function saveUploadedImage(image: UploadedImage): void {
   try {

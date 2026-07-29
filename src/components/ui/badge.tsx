@@ -18,7 +18,7 @@ const badgeVariants = cva(
           "rounded-full border border-outline-variant px-3 py-1 text-on-surface-variant",
         success: "rounded-full bg-success/10 px-3 py-1 text-success",
         /** Bare text label, e.g. the category eyebrow above a card title. */
-        text: "text-secondary",
+        text: "text-secondary-deep",
         muted: "text-outline",
       },
     },

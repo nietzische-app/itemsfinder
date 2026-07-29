@@ -120,7 +120,7 @@ export function ProductCard({
           <p className="mt-1 text-[12px] text-on-surface-variant">
             {Math.round(product.similarity * 100)}% visual match
             {product.isLive ? (
-              <span className="ml-1.5 text-secondary">· live price</span>
+              <span className="ml-1.5 text-secondary-deep">· live price</span>
             ) : null}
           </p>
         </div>

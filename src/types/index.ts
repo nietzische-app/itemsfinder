@@ -1,5 +1,5 @@
 /**
- * Shared domain types for "Get The Look".
+ * Shared domain types for Markas.
  *
  * The whole app is built around one flow:
  *   image -> DetectionResult -> DetectedItem[] -> ProductMatch[]

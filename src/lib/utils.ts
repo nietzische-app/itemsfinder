@@ -31,6 +31,7 @@ const COLORS = [
   "inverse-primary",
   "secondary",
   "secondary-container",
+  "secondary-deep",
   "on-secondary",
   "on-secondary-container",
   "error",

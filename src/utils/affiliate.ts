@@ -5,7 +5,7 @@ import type { Merchant } from "@/types";
  *
  * `param` is the query parameter the network expects; `value` reads from an
  * env var so tags can be rotated without a code change. Everything falls back
- * to a `gettthelook`-prefixed placeholder so links stay clickable in dev.
+ * to a `markas`-prefixed placeholder so links stay clickable in dev.
  */
 interface AffiliateConfig {
   param: string;
@@ -14,7 +14,7 @@ interface AffiliateConfig {
   extra?: Record<string, string>;
 }
 
-const FALLBACK_TAG = "getthelook-mvp";
+const FALLBACK_TAG = "markas-mvp";
 
 /**
  * Env vars are read at module scope on purpose: in the Next.js server runtime
@@ -61,7 +61,7 @@ const AFFILIATE_CONFIG: Record<Merchant, AffiliateConfig | null> = {
 
 /** Params we always attach so analytics can attribute the click back to us. */
 const BASE_UTM: Record<string, string> = {
-  utm_source: "getthelook",
+  utm_source: "markas",
   utm_content: "visual-search",
 };
 
