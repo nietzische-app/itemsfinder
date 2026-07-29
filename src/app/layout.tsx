@@ -3,6 +3,8 @@ import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 
 import { Suspense } from "react";
 
+import { CookieBanner } from "@/components/CookieBanner";
+import { Footer } from "@/components/Footer";
 import { MobileNav } from "@/components/MobileNav";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ToastProvider } from "@/components/ui/toast";
@@ -68,16 +70,18 @@ export default function RootLayout({
     <html lang="tr" className={`${display.variable} ${body.variable}`}>
       <body>
         <ToastProvider>
-          <div className="flex min-h-dvh flex-col">
+          <div className="flex min-h-dvh flex-col pb-20 md:pb-0">
             {/* The header reads `?kategori=` via useSearchParams, which needs a
                 boundary so the static shell can still be prerendered. */}
             <Suspense fallback={<div className="h-16 md:h-[72px]" />}>
               <SiteHeader />
             </Suspense>
-            <main className="flex-1 pb-20 md:pb-0">{children}</main>
+            <main className="flex-1">{children}</main>
+            <Footer />
           </div>
 
           <MobileNav />
+          <CookieBanner />
         </ToastProvider>
 
         {/* Subtle paper grain over the whole canvas. */}

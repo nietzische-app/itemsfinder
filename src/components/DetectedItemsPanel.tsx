@@ -8,6 +8,7 @@ import {
   ShoppingBasket,
 } from "lucide-react";
 
+import { AffiliateNotice } from "@/components/AffiliateNotice";
 import { EngineBadge } from "@/components/EngineBadge";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductImage } from "@/components/ProductImage";
@@ -118,9 +119,7 @@ export function DetectedItemsPanel({
       {identified.length > 0 ? (
         <footer className="space-y-3 border-t border-outline-variant bg-surface p-gutter">
           <CuratedLookDialog items={identified} />
-          <p className="label text-center text-[10px] text-outline">
-            Eşleşmeler mağaza kataloglarından güncellenir
-          </p>
+          <AffiliateNotice variant="inline" className="text-center" />
         </footer>
       ) : null}
     </div>

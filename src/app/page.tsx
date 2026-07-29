@@ -5,6 +5,7 @@ import { Suspense, useCallback, useMemo } from "react";
 import { ArrowRight, MoveRight } from "lucide-react";
 
 import { DemoLookGrid } from "@/components/DemoLookGrid";
+import { FaqSection } from "@/components/FaqSection";
 import { ImageUploader } from "@/components/ImageUploader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -103,7 +104,7 @@ function HomeContent() {
                 <ArrowRight strokeWidth={1.5} />
               </Button>
               <Button asChild variant="outline" size="lg">
-                <a href="#how-it-works">Nasıl çalışır?</a>
+                <a href="#nasil-calisir">Nasıl çalışır?</a>
               </Button>
             </div>
           </div>
@@ -127,7 +128,7 @@ function HomeContent() {
               </p>
             </div>
             <a
-              href="#how-it-works"
+              href="#nasil-calisir"
               className="label flex items-center gap-1 text-primary hover:underline"
             >
               Eşleştirme nasıl çalışır
@@ -140,7 +141,7 @@ function HomeContent() {
 
         {/* How it works */}
         <section
-          id="how-it-works"
+          id="nasil-calisir"
           className="scroll-mt-28 border-t border-outline-variant pt-16"
         >
           <h2 className="font-display text-headline-md text-primary">
@@ -162,14 +163,14 @@ function HomeContent() {
             ))}
           </ol>
 
-          <p className="label mt-16 border-t border-outline-variant pt-8 text-center text-outline">
+          <p className="label mt-16 text-center text-outline">
             Zara · Trendyol · Sephora · Amazon · Mango · H&amp;M · ASOS
           </p>
-          <p className="mt-3 text-center text-body-md text-outline">
-            Markas — canlı motorlar yapılandırılmadığı sürece ürün eşleşmeleri örnek
-            veridir. Bazı bağlantılar iş ortaklığı bağlantısıdır.
-          </p>
         </section>
+
+        <div className="mt-24">
+          <FaqSection />
+        </div>
       </div>
     </div>
   );
