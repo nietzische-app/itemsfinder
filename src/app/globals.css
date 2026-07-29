@@ -2,85 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * The design system is deliberately light-only: the editorial aesthetic is
+ * built around a warm off-white canvas (#fcf9f8) with pure-white cards lifting
+ * off it. A dark inversion would lose that relationship, so there is no dark
+ * variant to maintain.
+ */
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 6%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 6%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 6%;
-
-    --primary: 340 82% 52%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 240 5% 96%;
-    --secondary-foreground: 240 6% 12%;
-
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
-
-    --accent: 265 84% 60%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 340 82% 52%;
-
-    --radius: 0.9rem;
-  }
-
-  .dark {
-    --background: 240 10% 4%;
-    --foreground: 0 0% 98%;
-
-    --card: 240 8% 8%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 240 8% 8%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 340 82% 58%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 240 5% 14%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 240 5% 14%;
-    --muted-foreground: 240 5% 65%;
-
-    --accent: 265 84% 66%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 62% 45%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 5% 18%;
-    --input: 240 5% 18%;
-    --ring: 340 82% 58%;
-  }
-
-  * {
-    @apply border-border;
+  html {
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
-    -webkit-tap-highlight-color: transparent;
+    @apply bg-surface font-sans text-body-md text-on-surface antialiased;
+  }
+
+  ::selection {
+    @apply bg-secondary-container text-on-secondary-container;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-surface;
+  }
+}
+
+@layer components {
+  /* Frosted panels used for the scan status pill and hotspot quick-looks. */
+  .glassmorphism {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+  }
+
+  /* The sweep that travels down the image while the engine is running. */
+  .scanner-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ad3217, transparent);
   }
 }
 
 @layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
-  }
-
-  /* Pinterest-style masonry columns for the results grid on wide screens. */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -88,5 +50,10 @@
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Uppercase utility/metadata text — "NEW ARRIVALS", "IDENTIFIED", … */
+  .label {
+    @apply text-label-sm uppercase tracking-[0.05em];
   }
 }

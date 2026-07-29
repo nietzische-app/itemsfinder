@@ -3,31 +3,37 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Utility/metadata labels. Per the design system these are uppercase Inter
+ * with widened tracking — "AI POWERED LOOKS", "IDENTIFIED", "STREETWEAR".
+ */
 const badgeVariants = cva(
-  "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none",
+  "inline-flex items-center gap-1.5 text-label-sm uppercase tracking-[0.05em]",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-primary text-primary-foreground",
-        secondary: "border-transparent bg-secondary text-secondary-foreground",
-        accent: "border-transparent bg-accent text-accent-foreground",
-        success: "border-transparent bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
-        destructive: "border-transparent bg-destructive text-destructive-foreground",
-        outline: "text-foreground",
+        coral: "rounded-full bg-secondary px-4 py-1 text-on-secondary",
+        dark: "rounded-full bg-primary px-4 py-1 text-on-primary",
+        outline:
+          "rounded-full border border-outline-variant px-3 py-1 text-on-surface-variant",
+        success: "rounded-full bg-success/10 px-3 py-1 text-success",
+        /** Bare text label, e.g. the category eyebrow above a card title. */
+        text: "text-secondary",
+        muted: "text-outline",
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: "coral",
     },
   },
 );
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {}
 
 function Badge({ className, variant, ...props }: BadgeProps) {
-  return <div className={cn(badgeVariants({ variant }), className)} {...props} />;
+  return <span className={cn(badgeVariants({ variant }), className)} {...props} />;
 }
 
 export { Badge, badgeVariants };

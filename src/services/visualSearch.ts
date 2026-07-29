@@ -329,6 +329,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
         label,
         itemType: name,
         category,
+        attributes: `${name} • ${Math.round((object.score ?? 0) * 100)}% match`,
         description: `Detected as "${name}" with ${Math.round((object.score ?? 0) * 100)}% confidence.`,
         confidence: object.score ?? 0,
         boundingBox,

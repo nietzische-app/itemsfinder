@@ -1,27 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ScanLine, Shirt, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { Sparkles } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { formatPrice } from "@/utils/affiliate";
 import type { DetectedItem } from "@/types";
 
 interface BoundingBoxOverlayProps {
   imageUrl: string;
+  /** Items to draw. During a scan this grows as detections stream in. */
   items: DetectedItem[];
   activeItemId: string | null;
   onSelect: (itemId: string | null) => void;
   isScanning: boolean;
-  /** Labels cycled through in the scanning caption, e.g. ["Jacket", "Jeans"]. */
-  scanningLabels?: string[];
 }
 
 /**
- * The uploaded screenshot with clickable hotspots over every detected item.
+ * The uploaded screenshot with interactive hotspots.
  *
- * Boxes are positioned with percentages taken straight from the normalised
- * `boundingBox`, so the overlay tracks the image at any container width with
- * no resize observer or pixel maths.
+ * Resting state is a pulsing coral dot at the centre of each detection; the
+ * bounding box itself is revealed on hover or selection, together with a
+ * frosted "quick look" card. Everything is positioned from the normalised
+ * `boundingBox`, so the overlay tracks the image at any size — the wrapper
+ * shrink-wraps the image, which keeps `inset-0` exactly on the pixels.
  */
 export function BoundingBoxOverlay({
   imageUrl,
@@ -29,138 +31,135 @@ export function BoundingBoxOverlay({
   activeItemId,
   onSelect,
   isScanning,
-  scanningLabels = [],
 }: BoundingBoxOverlayProps) {
-  const [captionIndex, setCaptionIndex] = useState(0);
-
-  useEffect(() => {
-    if (!isScanning || scanningLabels.length === 0) return;
-
-    const timer = setInterval(() => {
-      setCaptionIndex((index) => (index + 1) % scanningLabels.length);
-    }, 900);
-
-    return () => clearInterval(timer);
-  }, [isScanning, scanningLabels.length]);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
-    <figure className="relative overflow-hidden rounded-[1.75rem] border bg-card shadow-sm">
-      <div className="relative">
-        {/* Plain <img>: the source is a client-side data URL, which next/image
-            cannot optimise anyway. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={imageUrl}
-          alt="Your uploaded look, with detected items highlighted"
-          className="block h-auto w-full select-none"
-          draggable={false}
-        />
+    <div className="relative inline-block max-w-full overflow-hidden rounded-xl shadow-ambient-lg">
+      {/* Client-side data URL — nothing for next/image to optimise. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={imageUrl}
+        alt="Your uploaded look, with detected items marked"
+        className="block max-h-[62vh] w-auto max-w-full select-none lg:max-h-[74vh]"
+        draggable={false}
+      />
 
-        {isScanning ? (
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-transparent to-background/30" />
-            <div className="absolute left-0 h-1 w-full animate-scan-sweep bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_24px_6px_hsl(var(--primary)/0.55)]" />
-            <div className="absolute inset-x-3 bottom-3 flex items-center gap-2 rounded-2xl bg-background/85 px-3.5 py-2.5 backdrop-blur">
-              <ScanLine className="h-4 w-4 shrink-0 animate-pulse text-primary" />
-              <p className="truncate text-sm font-medium">
-                Detecting items
-                {scanningLabels.length > 0 ? (
-                  <span className="text-muted-foreground">
-                    {": "}
-                    <span key={captionIndex} className="animate-fade-up text-foreground">
-                      {scanningLabels[captionIndex]}
-                    </span>
-                  </span>
-                ) : null}
-                <span className="text-muted-foreground">…</span>
-              </p>
-            </div>
-          </div>
-        ) : null}
+      {isScanning ? (
+        <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+          <div className="scanner-line absolute left-0 w-full animate-scan-move" />
+        </div>
+      ) : null}
 
-        {!isScanning &&
-          items.map((item, index) => {
-            const isActive = activeItemId === item.id;
-            const isDimmed = activeItemId !== null && !isActive;
+      {items.map((item) => {
+        const isActive = activeItemId === item.id;
+        const isOpen = isActive || hoveredId === item.id;
+        const centerX = (item.boundingBox.x + item.boundingBox.width / 2) * 100;
+        const centerY = (item.boundingBox.y + item.boundingBox.height / 2) * 100;
 
-            return (
-              <button
-                key={item.id}
-                type="button"
-                aria-pressed={isActive}
-                aria-label={`${item.label}, ${Math.round(item.confidence * 100)}% confidence`}
-                onClick={() => onSelect(isActive ? null : item.id)}
-                style={{
-                  left: `${item.boundingBox.x * 100}%`,
-                  top: `${item.boundingBox.y * 100}%`,
-                  width: `${item.boundingBox.width * 100}%`,
-                  height: `${item.boundingBox.height * 100}%`,
-                  animationDelay: `${index * 70}ms`,
-                }}
-                className={cn(
-                  "group absolute animate-pop-in rounded-xl border-2 transition-all duration-200 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/40",
-                  isActive
-                    ? "z-20 border-primary bg-primary/15 shadow-[0_0_0_9999px_hsl(var(--background)/0.55)]"
-                    : "z-10 border-white/85 bg-white/5 hover:z-20 hover:border-primary hover:bg-primary/10",
-                  isDimmed && "opacity-40",
-                )}
-              >
-                {/* Corner ticks give the box a "camera focus" feel. */}
-                <span className="pointer-events-none absolute -left-[3px] -top-[3px] h-3 w-3 rounded-tl-lg border-l-[3px] border-t-[3px] border-primary opacity-0 transition-opacity group-hover:opacity-100 group-aria-pressed:opacity-100" />
-                <span className="pointer-events-none absolute -bottom-[3px] -right-[3px] h-3 w-3 rounded-br-lg border-b-[3px] border-r-[3px] border-primary opacity-0 transition-opacity group-hover:opacity-100 group-aria-pressed:opacity-100" />
+        return (
+          <div key={item.id}>
+            {/* Bounding box — revealed on hover / selection. */}
+            <div
+              aria-hidden="true"
+              style={{
+                left: `${item.boundingBox.x * 100}%`,
+                top: `${item.boundingBox.y * 100}%`,
+                width: `${item.boundingBox.width * 100}%`,
+                height: `${item.boundingBox.height * 100}%`,
+              }}
+              className={cn(
+                "pointer-events-none absolute rounded border-2 transition-all duration-200",
+                isOpen
+                  ? "border-secondary opacity-100"
+                  : "border-transparent opacity-0",
+                isActive && "bg-secondary/10",
+              )}
+            />
 
-                {/* Boxes cluster tightly on close-up shots (a face has five
-                    hotspots in a small area), so the resting state is a numbered
-                    pin — matching the number on the item's result card — and the
-                    full label only appears for the hovered or selected box. */}
-                <span
-                  className={cn(
-                    "pointer-events-none absolute -left-2.5 -top-2.5 flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold shadow-md transition-all group-hover:scale-0 group-hover:opacity-0",
-                    isActive
-                      ? "scale-0 opacity-0"
-                      : "bg-primary text-primary-foreground",
-                  )}
-                >
-                  {index + 1}
-                </span>
-
-                <span
-                  className={cn(
-                    "pointer-events-none absolute -top-3 left-1/2 flex min-w-max -translate-x-1/2 scale-90 items-center gap-1 whitespace-nowrap rounded-full px-2 py-1 text-[11px] font-semibold opacity-0 shadow-md transition-all group-hover:scale-100 group-hover:opacity-100",
-                    isActive
-                      ? "scale-100 bg-primary text-primary-foreground opacity-100"
-                      : "bg-background text-foreground",
-                  )}
-                >
-                  {item.category === "beauty" ? (
-                    <Sparkles className="h-3 w-3 shrink-0" />
-                  ) : (
-                    <Shirt className="h-3 w-3 shrink-0" />
-                  )}
-                  {item.itemType}
-                </span>
-              </button>
-            );
-          })}
-      </div>
-
-      {!isScanning ? (
-        <figcaption className="flex items-center justify-between gap-3 border-t px-4 py-3 text-xs text-muted-foreground">
-          <span>
-            {items.length} item{items.length === 1 ? "" : "s"} detected — tap a
-            numbered box to filter the matches
-          </span>
-          {activeItemId ? (
             <button
               type="button"
-              onClick={() => onSelect(null)}
-              className="shrink-0 font-semibold text-primary hover:underline"
+              aria-pressed={isActive}
+              aria-label={`${item.label} — ${Math.round(item.confidence * 100)}% confidence`}
+              onClick={() => onSelect(isActive ? null : item.id)}
+              onMouseEnter={() => setHoveredId(item.id)}
+              onMouseLeave={() => setHoveredId(null)}
+              onFocus={() => setHoveredId(item.id)}
+              onBlur={() => setHoveredId(null)}
+              style={{ left: `${centerX}%`, top: `${centerY}%` }}
+              className="absolute z-20 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 animate-pop-in items-center justify-center"
             >
-              Clear filter
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "absolute h-5 w-5 rounded-full bg-secondary",
+                  isActive ? "opacity-40" : "animate-pulse-ring",
+                )}
+              />
+              <span
+                aria-hidden="true"
+                className={cn(
+                  // A thin white ring keeps the coral dot legible on dark
+                  // garments as well as light backgrounds.
+                  "relative rounded-full bg-secondary shadow-hotspot ring-white/70 transition-all",
+                  isOpen ? "h-4 w-4 ring-2" : "h-3 w-3 ring-1",
+                )}
+              />
             </button>
-          ) : null}
-        </figcaption>
-      ) : null}
-    </figure>
+
+            {/* Quick look card */}
+            <div
+              aria-hidden="true"
+              style={{ left: `${centerX}%`, top: `${centerY}%` }}
+              className={cn(
+                "glassmorphism pointer-events-none absolute z-30 w-48 -translate-x-1/2 -translate-y-[calc(100%+28px)] rounded-md p-3 shadow-ambient-lg transition-opacity duration-200",
+                isOpen ? "opacity-100" : "opacity-0",
+              )}
+            >
+              <p className="label text-[10px] text-primary">{item.itemType}</p>
+              <p className="mt-1 font-display text-[14px] font-semibold leading-tight text-primary">
+                {item.label}
+              </p>
+              {item.exactMatch ? (
+                <p className="mt-2 text-label-sm font-bold text-secondary">
+                  {formatPrice(item.exactMatch.price, item.exactMatch.currency)}
+                </p>
+              ) : null}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Floating status indicator */}
+      <div className="glassmorphism absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-4 rounded-full px-6 py-3 shadow-ambient-lg sm:gap-6 sm:px-8 sm:py-4">
+        <span className="flex items-center gap-3">
+          <span className="relative flex h-3 w-3">
+            {isScanning ? (
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-secondary opacity-75" />
+            ) : null}
+            <span
+              className={cn(
+                "relative inline-flex h-3 w-3 rounded-full",
+                isScanning ? "bg-secondary" : "bg-success",
+              )}
+            />
+          </span>
+          <span className="label whitespace-nowrap text-primary">
+            {isScanning ? "AI scanning…" : "Scan complete"}
+          </span>
+        </span>
+
+        <span aria-hidden="true" className="h-4 w-px bg-outline-variant" />
+
+        <span className="flex items-center gap-2">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
+            <Sparkles className="h-3.5 w-3.5 text-primary" strokeWidth={1.5} />
+          </span>
+          <span className="label whitespace-nowrap text-on-surface-variant">
+            {items.length} item{items.length === 1 ? "" : "s"} found
+          </span>
+        </span>
+      </div>
+    </div>
   );
 }

@@ -21,7 +21,12 @@ const ALLOWED_MIME_TYPES = new Set([
 /** ~10 MB of decoded image; base64 inflates by roughly 4/3. */
 const MAX_BASE64_LENGTH = Math.ceil((10 * 1024 * 1024 * 4) / 3);
 
-const VALID_EXAMPLE_IDS: ExampleId[] = ["streetwear", "glam-makeup"];
+const VALID_EXAMPLE_IDS: ExampleId[] = [
+  "streetwear",
+  "glam-makeup",
+  "tailoring",
+  "soft-minimal",
+];
 
 function fail(message: string, status: number) {
   return NextResponse.json<DetectResponse>({ ok: false, error: message }, { status });

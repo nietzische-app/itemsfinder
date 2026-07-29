@@ -2,26 +2,17 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  AlertCircle,
-  ArrowLeft,
-  Cpu,
-  ImageOff,
-  RotateCcw,
-  Timer,
-  Wand2,
-} from "lucide-react";
+import { AlertCircle, ImageOff, RotateCcw } from "lucide-react";
 
 import { BoundingBoxOverlay } from "@/components/BoundingBoxOverlay";
-import { DetectionResults } from "@/components/DetectionResults";
+import { DetectedItemsPanel } from "@/components/DetectedItemsPanel";
 import { ResultsSkeleton } from "@/components/ResultsSkeleton";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { clearUploadedImage, readUploadedImage } from "@/lib/imageSession";
+import { readUploadedImage } from "@/lib/imageSession";
 import type { DetectResponse, DetectionResult, UploadedImage } from "@/types";
 
-/** Captions cycled while scanning, before we know what is actually in frame. */
-const TEASER_LABELS = ["Jacket", "Top", "Jeans", "Sneakers", "Lipstick", "Earrings"];
+/** Delay between detections appearing in the rail, in milliseconds. */
+const REVEAL_INTERVAL_MS = 550;
 
 type Status = "loading-image" | "no-image" | "scanning" | "done" | "error";
 
@@ -31,18 +22,18 @@ export default function AnalyzePage() {
   const [status, setStatus] = useState<Status>("loading-image");
   const [error, setError] = useState<string | null>(null);
   const [activeItemId, setActiveItemId] = useState<string | null>(null);
+  /** How many detections have finished "matching" and are on screen. */
+  const [revealedCount, setRevealedCount] = useState(0);
 
   /** Guards against a duplicate scan from React 18 StrictMode double-effects. */
   const scannedDataUrl = useRef<string | null>(null);
 
   useEffect(() => {
     const stored = readUploadedImage();
-
     if (!stored) {
       setStatus("no-image");
       return;
     }
-
     setImage(stored);
   }, []);
 
@@ -50,6 +41,8 @@ export default function AnalyzePage() {
     setStatus("scanning");
     setError(null);
     setActiveItemId(null);
+    setResult(null);
+    setRevealedCount(0);
 
     try {
       const response = await fetch("/api/detect", {
@@ -76,18 +69,30 @@ export default function AnalyzePage() {
 
   useEffect(() => {
     if (!image || scannedDataUrl.current === image.dataUrl) return;
-
     scannedDataUrl.current = image.dataUrl;
     void runDetection(image);
   }, [image, runDetection]);
 
-  /** Selecting a box on the image scrolls its matches into view. */
+  /**
+   * Detections land in one response, but the engine genuinely resolves them
+   * one at a time — so the rail reveals them in sequence rather than snapping
+   * a full list into place.
+   */
+  useEffect(() => {
+    if (status !== "done" || !result) return;
+    if (revealedCount >= result.items.length) return;
+
+    const timer = setTimeout(
+      () => setRevealedCount((count) => count + 1),
+      REVEAL_INTERVAL_MS,
+    );
+    return () => clearTimeout(timer);
+  }, [status, result, revealedCount]);
+
   const handleSelect = useCallback((itemId: string | null) => {
     setActiveItemId(itemId);
-
     if (!itemId) return;
 
-    // Wait a frame so the filtered list is in the DOM before scrolling.
     requestAnimationFrame(() => {
       document
         .getElementById(`item-${itemId}`)
@@ -95,153 +100,88 @@ export default function AnalyzePage() {
     });
   }, []);
 
-  function handleStartOver() {
-    clearUploadedImage();
-  }
-
   if (status === "no-image") {
     return (
-      <div className="container flex min-h-[60dvh] flex-col items-center justify-center py-16 text-center">
-        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary">
-          <ImageOff className="h-6 w-6 text-muted-foreground" />
+      <div className="mx-auto flex min-h-[60dvh] max-w-shell flex-col items-center justify-center px-margin-mobile py-16 text-center">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-surface-container">
+          <ImageOff className="h-7 w-7 text-outline" strokeWidth={1.5} />
         </span>
-        <h1 className="mt-5 text-2xl font-bold tracking-tight">No screenshot yet</h1>
-        <p className="mt-2 max-w-sm text-muted-foreground">
-          Upload a look — or try one of our examples — and we&apos;ll break down every
-          item in it.
+        <h1 className="mt-6 font-display text-headline-md text-primary">
+          No screenshot yet
+        </h1>
+        <p className="mt-2 max-w-sm text-on-surface-variant">
+          Upload a look — or pick one of our demo looks — and we&apos;ll break down
+          every item in it.
         </p>
-        <Button asChild variant="gradient" size="lg" className="mt-6">
-          <Link href="/">
-            <ArrowLeft className="h-4 w-4" />
-            Back to upload
-          </Link>
+        <Button asChild size="lg" className="mt-8">
+          <Link href="/">Back to upload</Link>
         </Button>
       </div>
     );
   }
 
-  const isScanning = status === "scanning" || status === "loading-image";
+  const items = result?.items ?? [];
+  const isStreaming = status === "done" && revealedCount < items.length;
+  const isScanning = status === "scanning" || status === "loading-image" || isStreaming;
+  const identified = items.slice(0, revealedCount);
+  const pending = isStreaming ? (items[revealedCount] ?? null) : null;
 
   return (
-    <div className="container py-8 lg:py-12">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="min-w-0">
-          <h1 className="text-balance text-2xl font-bold tracking-tight sm:text-3xl">
-            {isScanning ? "Analysing your look" : "Here's the look, broken down"}
-          </h1>
-          {image ? (
-            <p className="mt-1 truncate text-sm text-muted-foreground">
-              {image.fileName}
+    <div className="mx-auto flex max-w-shell flex-col lg:h-[calc(100dvh-5rem)] lg:flex-row">
+      {/* Scanning workspace */}
+      <section className="flex min-h-0 flex-1 items-center justify-center bg-surface-container-low p-gutter">
+        {image ? (
+          <BoundingBoxOverlay
+            imageUrl={image.dataUrl}
+            items={identified}
+            activeItemId={activeItemId}
+            onSelect={handleSelect}
+            isScanning={isScanning}
+          />
+        ) : (
+          <div className="h-[60vh] w-full max-w-md animate-pulse rounded-xl bg-surface-container" />
+        )}
+      </section>
+
+      {/* Detected items rail */}
+      <aside className="flex w-full shrink-0 flex-col border-outline-variant bg-surface-container-lowest lg:h-full lg:w-[420px] lg:border-l">
+        {status === "error" ? (
+          <div className="p-gutter">
+            <p className="flex items-center gap-2 font-display text-[18px] font-semibold text-error">
+              <AlertCircle className="h-5 w-5" strokeWidth={1.5} />
+              Something went wrong
             </p>
-          ) : null}
-        </div>
-
-        <Button asChild variant="outline" onClick={handleStartOver}>
-          <Link href="/">
-            <RotateCcw className="h-4 w-4" />
-            New screenshot
-          </Link>
-        </Button>
-      </div>
-
-      <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:gap-10">
-        {/* Left: the screenshot with interactive hotspots */}
-        <div className="min-w-0 lg:sticky lg:top-24 lg:self-start">
-          {image ? (
-            <BoundingBoxOverlay
-              imageUrl={image.dataUrl}
-              items={result?.items ?? []}
-              activeItemId={activeItemId}
-              onSelect={handleSelect}
-              isScanning={isScanning}
-              scanningLabels={
-                result?.items.map((item) => item.itemType) ?? TEASER_LABELS
-              }
-            />
-          ) : (
-            <div className="aspect-[3/4] animate-pulse rounded-[1.75rem] bg-muted" />
-          )}
-
-          {result ? (
-            <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
-              <Badge variant="secondary" className="gap-1.5">
-                <Cpu className="h-3 w-3" />
-                {result.source === "google-vision"
-                  ? "Google Cloud Vision"
-                  : "Demo engine (mock data)"}
-              </Badge>
-              <Badge variant="secondary" className="gap-1.5">
-                <Timer className="h-3 w-3" />
-                {(result.durationMs / 1000).toFixed(1)}s
-              </Badge>
-            </div>
-          ) : null}
-        </div>
-
-        {/* Right: matched products */}
-        <div className="min-w-0">
-          {isScanning ? <ResultsSkeleton /> : null}
-
-          {status === "error" ? (
-            <div className="rounded-[1.5rem] border border-destructive/30 bg-destructive/5 p-6">
-              <p className="flex items-center gap-2 font-semibold text-destructive">
-                <AlertCircle className="h-5 w-5" />
-                Something went wrong
+            <p className="mt-2 text-on-surface-variant">{error}</p>
+            <Button
+              variant="outline"
+              className="mt-6"
+              onClick={() => image && runDetection(image)}
+            >
+              <RotateCcw strokeWidth={1.5} />
+              Try again
+            </Button>
+          </div>
+        ) : status === "done" || revealedCount > 0 ? (
+          <DetectedItemsPanel
+            identified={identified}
+            pending={pending}
+            activeItemId={activeItemId}
+            onSelect={handleSelect}
+          />
+        ) : (
+          <>
+            <header className="border-b border-outline-variant p-gutter">
+              <h2 className="font-display text-headline-md text-primary">
+                AI Detected Items
+              </h2>
+              <p className="mt-1 text-[14px] text-on-surface-variant">
+                Refining visual matches across our retailer index.
               </p>
-              <p className="mt-2 text-sm text-muted-foreground">{error}</p>
-              <Button
-                className="mt-4"
-                variant="outline"
-                onClick={() => image && runDetection(image)}
-              >
-                <RotateCcw className="h-4 w-4" />
-                Try again
-              </Button>
-            </div>
-          ) : null}
-
-          {status === "done" && result ? (
-            result.items.length === 0 ? (
-              <div className="rounded-[1.5rem] border bg-card p-6 text-center">
-                <Wand2 className="mx-auto h-6 w-6 text-muted-foreground" />
-                <p className="mt-3 font-semibold">
-                  We couldn&apos;t find anything shoppable here
-                </p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Try a clearer, closer shot of the outfit or face.
-                </p>
-                <Button asChild variant="gradient" className="mt-5">
-                  <Link href="/">Upload another screenshot</Link>
-                </Button>
-              </div>
-            ) : (
-              <>
-                <div className="mb-6 flex flex-wrap items-center gap-2">
-                  <p className="text-sm text-muted-foreground">
-                    Found <strong className="text-foreground">{result.items.length}</strong>{" "}
-                    items.
-                  </p>
-                  {activeItemId ? (
-                    <button
-                      type="button"
-                      onClick={() => setActiveItemId(null)}
-                      className="text-sm font-semibold text-primary hover:underline"
-                    >
-                      Showing 1 of {result.items.length} — show all
-                    </button>
-                  ) : null}
-                </div>
-
-                <DetectionResults
-                  result={result}
-                  activeItemId={activeItemId}
-                  onSelect={handleSelect}
-                />
-              </>
-            )
-          ) : null}
-        </div>
-      </div>
+            </header>
+            <ResultsSkeleton />
+          </>
+        )}
+      </aside>
     </div>
   );
 }

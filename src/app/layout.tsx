@@ -1,8 +1,29 @@
 import type { Metadata, Viewport } from "next";
-import Link from "next/link";
-import { Camera } from "lucide-react";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+
+import { MobileNav } from "@/components/MobileNav";
+import { SiteHeader } from "@/components/SiteHeader";
 
 import "./globals.css";
+
+/**
+ * Plus Jakarta Sans for headlines (geometric, editorial), Inter for body
+ * (legible at small sizes). Both are self-hosted by `next/font` at build time,
+ * so there is no runtime request to Google.
+ */
+const display = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const body = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-body",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Get The Look — Find any outfit or makeup look in seconds",
@@ -17,55 +38,40 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#fcf9f8",
   width: "device-width",
   initialScale: 1,
 };
+
+/** Inline paper-grain noise — adds tactility without an external asset. */
+const GRAIN =
+  "data:image/svg+xml;charset=utf-8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+      <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter>
+      <rect width="160" height="160" filter="url(#n)"/>
+    </svg>`,
+  );
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="font-sans">
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
+      <body>
         <div className="flex min-h-dvh flex-col">
-          <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-md">
-            <div className="container flex h-16 items-center justify-between">
-              <Link href="/" className="flex items-center gap-2.5">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-md shadow-primary/25">
-                  <Camera className="h-5 w-5" />
-                </span>
-                <span className="text-lg font-bold tracking-tight">
-                  Get The <span className="text-gradient">Look</span>
-                </span>
-              </Link>
-
-              <nav className="flex items-center gap-1 text-sm font-medium text-muted-foreground">
-                <a href="/#how-it-works" className="rounded-full px-3 py-2 hover:text-foreground">
-                  How it works
-                </a>
-                <Link href="/analyze" className="rounded-full px-3 py-2 hover:text-foreground">
-                  Analyze
-                </Link>
-              </nav>
-            </div>
-          </header>
-
-          <main className="flex-1">{children}</main>
-
-          <footer className="border-t py-8">
-            <div className="container flex flex-col items-center gap-2 text-center text-xs text-muted-foreground">
-              <p>
-                Get The Look — MVP. Product matches are illustrative demo data unless a
-                live vision provider is configured.
-              </p>
-              <p>
-                Some outbound links are affiliate links; we may earn a commission from
-                qualifying purchases.
-              </p>
-            </div>
-          </footer>
+          <SiteHeader />
+          <main className="flex-1 pb-20 md:pb-0">{children}</main>
         </div>
+
+        <MobileNav />
+
+        {/* Subtle paper grain over the whole canvas. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-[100] opacity-[0.035]"
+          style={{ backgroundImage: `url("${GRAIN}")` }}
+        />
       </body>
     </html>
   );

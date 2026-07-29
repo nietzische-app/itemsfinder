@@ -64,6 +64,8 @@ export interface DetectedItem {
   /** Coarse type used for chips and copy, e.g. "Jacket", "Lipstick". */
   itemType: string;
   category: ItemCategory;
+  /** Short attribute line for the compact panel card, e.g. "Matte Grey • Heavyweight". */
+  attributes: string;
   description: string;
   /** 0..1 detector confidence. */
   confidence: number;
@@ -103,14 +105,19 @@ export type DetectResponse =
   | { ok: true; result: DetectionResult }
   | { ok: false; error: string };
 
-/** Built-in demo images shipped in `public/examples`. */
-export type ExampleId = "streetwear" | "glam-makeup";
+/** Built-in demo looks shipped in `public/examples`. */
+export type ExampleId = "streetwear" | "glam-makeup" | "tailoring" | "soft-minimal";
 
 export interface ExampleImage {
   id: ExampleId;
-  label: string;
+  /** Editorial name shown on the card, e.g. "Modern Nomad". */
+  title: string;
+  /** Uppercase eyebrow above the title, e.g. "STREETWEAR". */
+  category: string;
   description: string;
   src: string;
+  /** Renders taller in the masonry grid, for a staggered Pinterest rhythm. */
+  tall?: boolean;
 }
 
 /** The image the user is currently analysing, persisted across navigation. */
