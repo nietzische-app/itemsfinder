@@ -1,0 +1,962 @@
+import type { DetectedItem, ExampleId, ProductMatch } from "@/types";
+
+/**
+ * Mock product catalogue + detection scenarios.
+ *
+ * This module is the stand-in for two things a production system would own:
+ *  1. a product feed (merchant catalogues, prices, stock);
+ *  2. a visual similarity index over that feed.
+ *
+ * Keeping it isolated means `visualSearch.ts` can swap in a real backend
+ * without any component needing to change.
+ */
+
+/**
+ * Builds a self-contained SVG thumbnail so the app has product imagery with
+ * zero network access and no binary assets in the repo.
+ */
+function thumb(label: string, from: string, to: string): string {
+  const initials = label
+    .split(/\s+/)
+    .filter((word) => /^[A-Za-z]/.test(word))
+    .slice(0, 2)
+    .map((word) => word[0]!.toUpperCase())
+    .join("");
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="${from}"/>
+      <stop offset="100%" stop-color="${to}"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#g)"/>
+  <circle cx="200" cy="215" r="96" fill="#ffffff" fill-opacity="0.16"/>
+  <text x="200" y="248" font-family="Inter, Helvetica, Arial, sans-serif" font-size="86"
+        font-weight="700" fill="#ffffff" fill-opacity="0.9" text-anchor="middle">${initials}</text>
+  <rect x="0" y="392" width="400" height="108" fill="#000000" fill-opacity="0.22"/>
+</svg>`;
+
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Scenario: streetwear outfit                                               */
+/* -------------------------------------------------------------------------- */
+
+const streetwearItems: DetectedItem[] = [
+  {
+    id: "sw-jacket",
+    label: "Oversized Black Leather Biker Jacket",
+    itemType: "Jacket",
+    category: "clothing",
+    description:
+      "Cropped moto silhouette with asymmetric zip, wide notch lapels and a matte finish.",
+    confidence: 0.96,
+    boundingBox: { x: 0.278, y: 0.233, width: 0.444, height: 0.317 },
+    colorHex: "#1b1b1f",
+    exactMatch: {
+      id: "sw-jacket-exact",
+      title: "Oversized Faux Leather Biker Jacket",
+      brand: "Zara",
+      merchant: "Zara",
+      price: 89.95,
+      currency: "USD",
+      productUrl: "https://www.zara.com/us/en/oversized-biker-jacket-p04387042.html",
+      imageUrl: thumb("Biker Jacket", "#2a2a31", "#0d0d10"),
+      matchType: "exact",
+      similarity: 0.94,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "sw-jacket-alt-1",
+        title: "Faux Leather Moto Jacket",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 34.99,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/faux-leather-moto-jacket-p-84920113",
+        imageUrl: thumb("Moto Jacket", "#3a3a44", "#16161b"),
+        matchType: "alternative",
+        similarity: 0.87,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "sw-jacket-alt-2",
+        title: "Cropped Vegan Leather Jacket",
+        brand: "H&M",
+        merchant: "H&M",
+        price: 49.99,
+        currency: "USD",
+        productUrl: "https://www2.hm.com/en_us/productpage.1163055001.html",
+        imageUrl: thumb("Cropped Jacket", "#45454f", "#1d1d22"),
+        matchType: "alternative",
+        similarity: 0.83,
+        inStock: true,
+      },
+      {
+        id: "sw-jacket-alt-3",
+        title: "Classic Zip Biker Jacket",
+        brand: "Amazon Essentials",
+        merchant: "Amazon",
+        price: 58.4,
+        currency: "USD",
+        productUrl: "https://www.amazon.com/dp/B08XYZ4321",
+        imageUrl: thumb("Zip Jacket", "#33333c", "#111115"),
+        matchType: "alternative",
+        similarity: 0.79,
+        tag: "Fast shipping",
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "sw-top",
+    label: "Ribbed White Crop Top",
+    itemType: "Top",
+    category: "clothing",
+    description: "Fitted square-neck rib knit in off-white, cropped at the waist.",
+    confidence: 0.91,
+    boundingBox: { x: 0.422, y: 0.35, width: 0.156, height: 0.083 },
+    colorHex: "#f4f1ea",
+    exactMatch: {
+      id: "sw-top-exact",
+      title: "Ribbed Square-Neck Crop Top",
+      brand: "Mango",
+      merchant: "Mango",
+      price: 25.99,
+      currency: "USD",
+      productUrl: "https://shop.mango.com/us/women/tops-t-shirts/ribbed-top_17095718.html",
+      imageUrl: thumb("Crop Top", "#f7f4ee", "#d8d2c6"),
+      matchType: "exact",
+      similarity: 0.9,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "sw-top-alt-1",
+        title: "Basic Rib Knit Crop Tee",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 9.99,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/rib-knit-crop-tee-p-33110284",
+        imageUrl: thumb("Rib Tee", "#fbf9f5", "#ded8cc"),
+        matchType: "alternative",
+        similarity: 0.85,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "sw-top-alt-2",
+        title: "Seamless Cropped Tank",
+        brand: "H&M",
+        merchant: "H&M",
+        price: 14.99,
+        currency: "USD",
+        productUrl: "https://www2.hm.com/en_us/productpage.1201441002.html",
+        imageUrl: thumb("Cropped Tank", "#f2eee6", "#cfc8ba"),
+        matchType: "alternative",
+        similarity: 0.8,
+        inStock: false,
+      },
+    ],
+  },
+  {
+    id: "sw-jeans",
+    label: "High-Waisted Straight-Leg Jeans",
+    itemType: "Jeans",
+    category: "clothing",
+    description: "Mid-blue rigid denim with a high rise, straight leg and raw hem.",
+    confidence: 0.94,
+    boundingBox: { x: 0.333, y: 0.533, width: 0.333, height: 0.35 },
+    colorHex: "#4a6ea0",
+    exactMatch: {
+      id: "sw-jeans-exact",
+      title: "High-Rise Straight Leg Jeans",
+      brand: "Zara",
+      merchant: "Zara",
+      price: 59.9,
+      currency: "USD",
+      productUrl: "https://www.zara.com/us/en/high-rise-straight-jeans-p05252043.html",
+      imageUrl: thumb("Straight Jeans", "#5b7fb2", "#2f4a74"),
+      matchType: "exact",
+      similarity: 0.92,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "sw-jeans-alt-1",
+        title: "Mom Fit Straight Denim",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 27.5,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/mom-fit-straight-denim-p-71204558",
+        imageUrl: thumb("Mom Denim", "#6d8fbe", "#38527a"),
+        matchType: "alternative",
+        similarity: 0.86,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "sw-jeans-alt-2",
+        title: "Wide High-Waist Jeans",
+        brand: "Mango",
+        merchant: "Mango",
+        price: 39.99,
+        currency: "USD",
+        productUrl: "https://shop.mango.com/us/women/jeans/wide-high-waist-jeans_17004032.html",
+        imageUrl: thumb("Wide Jeans", "#658ab9", "#334d74"),
+        matchType: "alternative",
+        similarity: 0.81,
+        inStock: true,
+      },
+      {
+        id: "sw-jeans-alt-3",
+        title: "Classic Straight Jean",
+        brand: "Amazon Essentials",
+        merchant: "Amazon",
+        price: 32.9,
+        currency: "USD",
+        productUrl: "https://www.amazon.com/dp/B07QRS8891",
+        imageUrl: thumb("Classic Jean", "#7396c4", "#3c5680"),
+        matchType: "alternative",
+        similarity: 0.77,
+        tag: "Fast shipping",
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "sw-sneakers",
+    label: "Chunky Platform Sneakers",
+    itemType: "Sneakers",
+    category: "clothing",
+    description: "Off-white leather trainers on an exaggerated ridged platform sole.",
+    confidence: 0.89,
+    boundingBox: { x: 0.311, y: 0.883, width: 0.378, height: 0.083 },
+    colorHex: "#e8e4dc",
+    exactMatch: {
+      id: "sw-sneakers-exact",
+      title: "Chunky Platform Trainers",
+      brand: "Zara",
+      merchant: "Zara",
+      price: 69.9,
+      currency: "USD",
+      productUrl: "https://www.zara.com/us/en/chunky-platform-trainers-p12203320.html",
+      imageUrl: thumb("Platform Trainers", "#eeeae1", "#b9b2a5"),
+      matchType: "exact",
+      similarity: 0.88,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "sw-sneakers-alt-1",
+        title: "Platform Sole Sneakers",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 29.9,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/platform-sole-sneakers-p-59183042",
+        imageUrl: thumb("Platform Sneaker", "#f1ede5", "#c2bbae"),
+        matchType: "alternative",
+        similarity: 0.83,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "sw-sneakers-alt-2",
+        title: "Retro Court Platform Shoe",
+        brand: "ASOS",
+        merchant: "ASOS",
+        price: 45.0,
+        currency: "USD",
+        productUrl: "https://www.asos.com/us/retro-court-platform-shoe/prd/204418822",
+        imageUrl: thumb("Court Shoe", "#e6e1d7", "#ada596"),
+        matchType: "alternative",
+        similarity: 0.78,
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "sw-necklace",
+    label: "Gold Layered Chain Necklace",
+    itemType: "Necklace",
+    category: "clothing",
+    description: "Two-row curb and figaro chain set in polished gold tone.",
+    confidence: 0.82,
+    boundingBox: { x: 0.411, y: 0.208, width: 0.178, height: 0.058 },
+    colorHex: "#d9b155",
+    exactMatch: {
+      id: "sw-necklace-exact",
+      title: "Layered Chain Necklace Set",
+      brand: "Mango",
+      merchant: "Mango",
+      price: 29.99,
+      currency: "USD",
+      productUrl: "https://shop.mango.com/us/women/jewellery/layered-chain-necklace_17093771.html",
+      imageUrl: thumb("Chain Necklace", "#e6c574", "#9c7b2c"),
+      matchType: "exact",
+      similarity: 0.86,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "sw-necklace-alt-1",
+        title: "Gold Tone Multi-Row Chain",
+        brand: "Amazon Collection",
+        merchant: "Amazon",
+        price: 12.99,
+        currency: "USD",
+        productUrl: "https://www.amazon.com/dp/B09KLM1122",
+        imageUrl: thumb("Multi Chain", "#efd28c", "#a9863a"),
+        matchType: "alternative",
+        similarity: 0.8,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "sw-necklace-alt-2",
+        title: "Stacked Curb Chain Necklace",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 16.5,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/stacked-curb-chain-necklace-p-40028117",
+        imageUrl: thumb("Curb Chain", "#e9c982", "#a07f33"),
+        matchType: "alternative",
+        similarity: 0.76,
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "sw-lip",
+    label: "Nude Matte Lip Liner",
+    itemType: "Lip liner",
+    category: "beauty",
+    description: "Soft brown-nude matte lip with a slightly overdrawn edge.",
+    confidence: 0.74,
+    boundingBox: { x: 0.463, y: 0.135, width: 0.074, height: 0.026 },
+    colorHex: "#b57a66",
+    exactMatch: {
+      id: "sw-lip-exact",
+      title: "Lip Cheat Lip Liner — Pillow Talk",
+      brand: "Charlotte Tilbury",
+      merchant: "Sephora",
+      price: 25.0,
+      currency: "USD",
+      productUrl: "https://www.sephora.com/product/lip-cheat-lip-liner-P398918",
+      imageUrl: thumb("Lip Liner", "#c98d78", "#8a4f3e"),
+      matchType: "exact",
+      similarity: 0.85,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "sw-lip-alt-1",
+        title: "Colour Sensational Shaping Lip Liner",
+        brand: "Maybelline",
+        merchant: "Amazon",
+        price: 6.49,
+        currency: "USD",
+        productUrl: "https://www.amazon.com/dp/B01N5PQ903",
+        imageUrl: thumb("Shaping Liner", "#d69c86", "#96594a"),
+        matchType: "alternative",
+        similarity: 0.79,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "sw-lip-alt-2",
+        title: "Precision Nude Lip Pencil",
+        brand: "Flormar",
+        merchant: "Trendyol",
+        price: 4.9,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/precision-nude-lip-pencil-p-28841190",
+        imageUrl: thumb("Lip Pencil", "#cf9583", "#8e5344"),
+        matchType: "alternative",
+        similarity: 0.74,
+        inStock: true,
+      },
+    ],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  Scenario: glam makeup look                                                */
+/* -------------------------------------------------------------------------- */
+
+const glamMakeupItems: DetectedItem[] = [
+  {
+    id: "gm-lipstick",
+    label: "Classic Red Matte Lipstick",
+    itemType: "Lipstick",
+    category: "beauty",
+    description: "True blue-red in a velvet matte finish with a sharply defined edge.",
+    confidence: 0.97,
+    boundingBox: { x: 0.411, y: 0.629, width: 0.178, height: 0.058 },
+    colorHex: "#c1122b",
+    exactMatch: {
+      id: "gm-lipstick-exact",
+      title: "Rouge Allure Velvet — Rouge Feu",
+      brand: "Chanel",
+      merchant: "Sephora",
+      price: 46.0,
+      currency: "USD",
+      productUrl: "https://www.sephora.com/product/rouge-allure-velvet-P433900",
+      imageUrl: thumb("Red Lipstick", "#d61b34", "#7c0a1c"),
+      matchType: "exact",
+      similarity: 0.95,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gm-lipstick-alt-1",
+        title: "SuperStay Matte Ink — Pioneer",
+        brand: "Maybelline",
+        merchant: "Amazon",
+        price: 8.99,
+        currency: "USD",
+        productUrl: "https://www.amazon.com/dp/B074N1LMDN",
+        imageUrl: thumb("Matte Ink", "#e02840", "#8d1024"),
+        matchType: "alternative",
+        similarity: 0.89,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "gm-lipstick-alt-2",
+        title: "Velvet Matte Lipstick — Classic Red",
+        brand: "Golden Rose",
+        merchant: "Trendyol",
+        price: 6.2,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/velvet-matte-lipstick-p-19928374",
+        imageUrl: thumb("Velvet Matte", "#cf1c33", "#75091a"),
+        matchType: "alternative",
+        similarity: 0.84,
+        inStock: true,
+      },
+      {
+        id: "gm-lipstick-alt-3",
+        title: "Soft Matte Lip Cream — Red",
+        brand: "NYX",
+        merchant: "Sephora",
+        price: 9.0,
+        currency: "USD",
+        productUrl: "https://www.sephora.com/product/soft-matte-lip-cream-P278266",
+        imageUrl: thumb("Lip Cream", "#d92339", "#82101f"),
+        matchType: "alternative",
+        similarity: 0.82,
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "gm-eyeshadow",
+    label: "Warm Bronze Smokey Eyeshadow",
+    itemType: "Eyeshadow",
+    category: "beauty",
+    description: "Copper-bronze lid with a diffused warm brown crease and gold shimmer.",
+    confidence: 0.93,
+    boundingBox: { x: 0.29, y: 0.365, width: 0.19, height: 0.075 },
+    colorHex: "#a5673a",
+    exactMatch: {
+      id: "gm-eyeshadow-exact",
+      title: "Naked Heat Eyeshadow Palette",
+      brand: "Urban Decay",
+      merchant: "Sephora",
+      price: 54.0,
+      currency: "USD",
+      productUrl: "https://www.sephora.com/product/naked-heat-palette-P485834",
+      imageUrl: thumb("Heat Palette", "#c07f47", "#6d3c1c"),
+      matchType: "exact",
+      similarity: 0.93,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gm-eyeshadow-alt-1",
+        title: "Nude Heat Eyeshadow Palette",
+        brand: "Makeup Revolution",
+        merchant: "Amazon",
+        price: 11.99,
+        currency: "USD",
+        productUrl: "https://www.amazon.com/dp/B07D6HKQ12",
+        imageUrl: thumb("Nude Heat", "#cb8b52", "#75421f"),
+        matchType: "alternative",
+        similarity: 0.87,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "gm-eyeshadow-alt-2",
+        title: "Bronze Goals 18-Shade Palette",
+        brand: "Note Cosmetics",
+        merchant: "Trendyol",
+        price: 14.4,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/bronze-goals-palette-p-63771205",
+        imageUrl: thumb("Bronze Goals", "#b87840", "#663817"),
+        matchType: "alternative",
+        similarity: 0.81,
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "gm-eyeliner",
+    label: "Liquid Winged Eyeliner",
+    itemType: "Eyeliner",
+    category: "beauty",
+    description: "Jet-black liquid liner drawn into a sharp extended wing.",
+    confidence: 0.9,
+    boundingBox: { x: 0.53, y: 0.405, width: 0.16, height: 0.032 },
+    colorHex: "#101014",
+    exactMatch: {
+      id: "gm-eyeliner-exact",
+      title: "Tattoo Liner — Trooper Black",
+      brand: "Kat Von D Beauty",
+      merchant: "Sephora",
+      price: 26.0,
+      currency: "USD",
+      productUrl: "https://www.sephora.com/product/tattoo-liner-P385901",
+      imageUrl: thumb("Tattoo Liner", "#2b2b33", "#0a0a0d"),
+      matchType: "exact",
+      similarity: 0.91,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gm-eyeliner-alt-1",
+        title: "Hyper Precise All Day Liner",
+        brand: "Maybelline",
+        merchant: "Amazon",
+        price: 7.49,
+        currency: "USD",
+        productUrl: "https://www.amazon.com/dp/B07TG7C5H1",
+        imageUrl: thumb("Precise Liner", "#33333c", "#0e0e12"),
+        matchType: "alternative",
+        similarity: 0.86,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "gm-eyeliner-alt-2",
+        title: "Ultra Black Felt Tip Liner",
+        brand: "Pastel",
+        merchant: "Trendyol",
+        price: 5.3,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/ultra-black-felt-tip-liner-p-51190338",
+        imageUrl: thumb("Felt Liner", "#3a3a44", "#111116"),
+        matchType: "alternative",
+        similarity: 0.8,
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "gm-highlighter",
+    label: "Champagne Glow Highlighter",
+    itemType: "Highlighter",
+    category: "beauty",
+    description: "Wet-look champagne sheen across the cheekbone and brow bone.",
+    confidence: 0.86,
+    boundingBox: { x: 0.29, y: 0.51, width: 0.13, height: 0.06 },
+    colorHex: "#e7cba0",
+    exactMatch: {
+      id: "gm-highlighter-exact",
+      title: "Soft Glow Highlighter — Moonstone",
+      brand: "Rare Beauty",
+      merchant: "Sephora",
+      price: 25.0,
+      currency: "USD",
+      productUrl: "https://www.sephora.com/product/soft-glow-highlighter-P470926",
+      imageUrl: thumb("Soft Glow", "#f0d7ae", "#b08c56"),
+      matchType: "exact",
+      similarity: 0.88,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gm-highlighter-alt-1",
+        title: "Shimmer Strips Glow Palette",
+        brand: "Physicians Formula",
+        merchant: "Amazon",
+        price: 10.95,
+        currency: "USD",
+        productUrl: "https://www.amazon.com/dp/B002QVXKQ4",
+        imageUrl: thumb("Shimmer Strips", "#f4dfbb", "#bb9862"),
+        matchType: "alternative",
+        similarity: 0.82,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "gm-highlighter-alt-2",
+        title: "Liquid Glow Drops",
+        brand: "Flormar",
+        merchant: "Trendyol",
+        price: 8.7,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/liquid-glow-drops-p-44529017",
+        imageUrl: thumb("Glow Drops", "#eed3a6", "#ad8850"),
+        matchType: "alternative",
+        similarity: 0.77,
+        inStock: false,
+      },
+    ],
+  },
+  {
+    id: "gm-earrings",
+    label: "Chunky Gold Hoop Earrings",
+    itemType: "Earrings",
+    category: "clothing",
+    description: "Thick 40mm polished hoops in gold tone.",
+    confidence: 0.84,
+    boundingBox: { x: 0.17, y: 0.5, width: 0.08, height: 0.09 },
+    colorHex: "#dcb45c",
+    exactMatch: {
+      id: "gm-earrings-exact",
+      title: "Chunky Gold-Plated Hoops",
+      brand: "Mango",
+      merchant: "Mango",
+      price: 27.99,
+      currency: "USD",
+      productUrl: "https://shop.mango.com/us/women/jewellery/chunky-hoop-earrings_17090240.html",
+      imageUrl: thumb("Gold Hoops", "#e8c877", "#9d7c2e"),
+      matchType: "exact",
+      similarity: 0.89,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gm-earrings-alt-1",
+        title: "14K Gold Plated Chunky Hoops",
+        brand: "PAVOI",
+        merchant: "Amazon",
+        price: 13.95,
+        currency: "USD",
+        productUrl: "https://www.amazon.com/dp/B07H4TVJQ9",
+        imageUrl: thumb("Plated Hoops", "#f0d68f", "#aa8836"),
+        matchType: "alternative",
+        similarity: 0.85,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "gm-earrings-alt-2",
+        title: "Thick Statement Hoop Earrings",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 9.4,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/thick-statement-hoops-p-38810245",
+        imageUrl: thumb("Statement Hoops", "#e5c471", "#9a7930"),
+        matchType: "alternative",
+        similarity: 0.79,
+        inStock: true,
+      },
+    ],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  Scenario: generic user upload                                             */
+/* -------------------------------------------------------------------------- */
+
+const genericItems: DetectedItem[] = [
+  {
+    id: "gen-outerwear",
+    label: "Relaxed Wool Blend Coat",
+    itemType: "Coat",
+    category: "clothing",
+    description: "Oversized double-breasted coat in a warm camel wool blend.",
+    confidence: 0.88,
+    boundingBox: { x: 0.24, y: 0.18, width: 0.5, height: 0.36 },
+    colorHex: "#b5895a",
+    exactMatch: {
+      id: "gen-outerwear-exact",
+      title: "Oversized Wool Blend Coat",
+      brand: "Mango",
+      merchant: "Mango",
+      price: 129.99,
+      currency: "USD",
+      productUrl: "https://shop.mango.com/us/women/coats/oversized-wool-coat_17015901.html",
+      imageUrl: thumb("Wool Coat", "#c69a68", "#7d5a31"),
+      matchType: "exact",
+      similarity: 0.86,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gen-outerwear-alt-1",
+        title: "Longline Double Breasted Coat",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 54.9,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/longline-double-breasted-coat-p-77401182",
+        imageUrl: thumb("Longline Coat", "#d0a674", "#87613a"),
+        matchType: "alternative",
+        similarity: 0.81,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "gen-outerwear-alt-2",
+        title: "Belted Camel Overcoat",
+        brand: "H&M",
+        merchant: "H&M",
+        price: 79.99,
+        currency: "USD",
+        productUrl: "https://www2.hm.com/en_us/productpage.1187745003.html",
+        imageUrl: thumb("Camel Overcoat", "#c99d6a", "#7f5b33"),
+        matchType: "alternative",
+        similarity: 0.78,
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "gen-bag",
+    label: "Structured Shoulder Bag",
+    itemType: "Bag",
+    category: "clothing",
+    description: "Compact top-handle bag in smooth black leather with gold hardware.",
+    confidence: 0.85,
+    boundingBox: { x: 0.6, y: 0.48, width: 0.22, height: 0.16 },
+    colorHex: "#25232a",
+    exactMatch: {
+      id: "gen-bag-exact",
+      title: "Structured Top-Handle Bag",
+      brand: "Zara",
+      merchant: "Zara",
+      price: 49.9,
+      currency: "USD",
+      productUrl: "https://www.zara.com/us/en/structured-top-handle-bag-p11304610.html",
+      imageUrl: thumb("Handle Bag", "#3a3742", "#141319"),
+      matchType: "exact",
+      similarity: 0.87,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gen-bag-alt-1",
+        title: "Mini Shoulder Baguette Bag",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 21.9,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/mini-shoulder-baguette-bag-p-66129930",
+        imageUrl: thumb("Baguette Bag", "#45414e", "#1a181f"),
+        matchType: "alternative",
+        similarity: 0.8,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "gen-bag-alt-2",
+        title: "Faux Leather Crossbody",
+        brand: "Amazon",
+        merchant: "Amazon",
+        price: 29.99,
+        currency: "USD",
+        productUrl: "https://www.amazon.com/dp/B08NW7RJ55",
+        imageUrl: thumb("Crossbody", "#403d49", "#17161c"),
+        matchType: "alternative",
+        similarity: 0.75,
+        tag: "Fast shipping",
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "gen-boots",
+    label: "Knee-High Leather Boots",
+    itemType: "Boots",
+    category: "clothing",
+    description: "Sleek knee-high boots with an almond toe and block heel.",
+    confidence: 0.83,
+    boundingBox: { x: 0.33, y: 0.72, width: 0.3, height: 0.2 },
+    colorHex: "#1f1c22",
+    exactMatch: {
+      id: "gen-boots-exact",
+      title: "Knee-High Block Heel Boots",
+      brand: "Zara",
+      merchant: "Zara",
+      price: 99.9,
+      currency: "USD",
+      productUrl: "https://www.zara.com/us/en/knee-high-block-heel-boots-p12112620.html",
+      imageUrl: thumb("Knee Boots", "#34313b", "#121016"),
+      matchType: "exact",
+      similarity: 0.84,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gen-boots-alt-1",
+        title: "Faux Leather Tall Boots",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 42.5,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/faux-leather-tall-boots-p-70318844",
+        imageUrl: thumb("Tall Boots", "#3d3a45", "#151319"),
+        matchType: "alternative",
+        similarity: 0.79,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "gen-boots-alt-2",
+        title: "Riding Boot With Stretch Panel",
+        brand: "ASOS",
+        merchant: "ASOS",
+        price: 68.0,
+        currency: "USD",
+        productUrl: "https://www.asos.com/us/riding-boot/prd/205512004",
+        imageUrl: thumb("Riding Boot", "#37343e", "#131117"),
+        matchType: "alternative",
+        similarity: 0.74,
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "gen-lip",
+    label: "Berry Tinted Lip Balm",
+    itemType: "Lip tint",
+    category: "beauty",
+    description: "Sheer berry wash on the lips with a natural satin finish.",
+    confidence: 0.72,
+    boundingBox: { x: 0.45, y: 0.09, width: 0.09, height: 0.035 },
+    colorHex: "#a63b57",
+    exactMatch: {
+      id: "gen-lip-exact",
+      title: "Lip Glowy Balm — Berry",
+      brand: "Rare Beauty",
+      merchant: "Sephora",
+      price: 22.0,
+      currency: "USD",
+      productUrl: "https://www.sephora.com/product/soft-pinch-tinted-lip-oil-P503457",
+      imageUrl: thumb("Glowy Balm", "#c25370", "#732239"),
+      matchType: "exact",
+      similarity: 0.83,
+      tag: "Closest look",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gen-lip-alt-1",
+        title: "Tinted Lip Oil — Wild Berry",
+        brand: "e.l.f.",
+        merchant: "Amazon",
+        price: 8.0,
+        currency: "USD",
+        productUrl: "https://www.amazon.com/dp/B0BXQ1M8V9",
+        imageUrl: thumb("Lip Oil", "#cd6580", "#7e2941"),
+        matchType: "alternative",
+        similarity: 0.78,
+        tag: "Best value",
+        inStock: true,
+      },
+      {
+        id: "gen-lip-alt-2",
+        title: "Juicy Lip Tint Balm",
+        brand: "Flormar",
+        merchant: "Trendyol",
+        price: 5.6,
+        currency: "USD",
+        productUrl: "https://www.trendyol.com/en/juicy-lip-tint-balm-p-49022187",
+        imageUrl: thumb("Tint Balm", "#c65c78", "#78253c"),
+        matchType: "alternative",
+        similarity: 0.73,
+        inStock: true,
+      },
+    ],
+  },
+];
+
+/** Every scenario the mock engine can return. */
+export const MOCK_SCENARIOS: Record<ExampleId | "generic", DetectedItem[]> = {
+  streetwear: streetwearItems,
+  "glam-makeup": glamMakeupItems,
+  generic: genericItems,
+};
+
+/**
+ * Flat product index used by the real-API path: once Vision has told us *what*
+ * is in the image, we still need *something to buy*. Until a live product feed
+ * is wired in, we resolve labels against this catalogue.
+ */
+const ALL_ITEMS: DetectedItem[] = [
+  ...streetwearItems,
+  ...glamMakeupItems,
+  ...genericItems,
+];
+
+/**
+ * Finds catalogue products for a free-text label coming from a vision API.
+ * Scores on shared significant words and falls back to the closest item in the
+ * same category so the UI always has something to show.
+ */
+export function findProductsForLabel(
+  label: string,
+  category: "clothing" | "beauty",
+): { exactMatch: ProductMatch | null; alternatives: ProductMatch[] } {
+  const needles = label
+    .toLowerCase()
+    .split(/[^a-z]+/)
+    .filter((word) => word.length > 2);
+
+  let best: DetectedItem | null = null;
+  let bestScore = 0;
+
+  for (const item of ALL_ITEMS) {
+    if (item.category !== category) continue;
+
+    const haystack = `${item.label} ${item.itemType} ${item.description}`.toLowerCase();
+    const score = needles.reduce(
+      (total, needle) => total + (haystack.includes(needle) ? 1 : 0),
+      0,
+    );
+
+    if (score > bestScore) {
+      bestScore = score;
+      best = item;
+    }
+  }
+
+  const fallback = best ?? ALL_ITEMS.find((item) => item.category === category) ?? null;
+
+  if (!fallback) {
+    return { exactMatch: null, alternatives: [] };
+  }
+
+  return {
+    exactMatch: fallback.exactMatch,
+    alternatives: fallback.alternatives,
+  };
+}
