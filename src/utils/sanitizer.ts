@@ -118,6 +118,8 @@ const CATEGORY_WHITELIST: Record<PrimaryCategory, string[]> = {
     "kalem",
     "fondoten",
     "bronzer",
+    "rouge",
+    "lip",
   ],
   DRESS: ["elbise", "dress", "tulum", "jumpsuit", "gown"],
   ACCESSORIES: [

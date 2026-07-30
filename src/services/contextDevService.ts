@@ -4,7 +4,7 @@ import ContextDev from "context.dev";
 
 import type { BrandMetadata, ItemCategory } from "@/types";
 import { isDirectProductUrl } from "@/services/productUrls";
-import { isBlockedHost, retailerRank } from "@/services/retailers";
+import { isBlockedHost, compareLiveMerchants, retailerRank } from "@/services/retailers";
 
 import {
   LIVE_EXTRACT_BUDGET_MS,
@@ -217,11 +217,13 @@ export class ContextDevService {
         outcome.status === "fulfilled" ? outcome.value : [],
       );
 
-      const deduped = dedupeByUrl(products).filter(
-        (product) =>
-          isDirectProductUrl(product.productUrl) &&
-          !isBlockedHost(product.merchantDomain),
-      );
+      const deduped = dedupeByUrl(products)
+        .filter(
+          (product) =>
+            isDirectProductUrl(product.productUrl) &&
+            !isBlockedHost(product.merchantDomain),
+        )
+        .sort(compareLiveMerchants);
       this.writeCache(this.productCache, cacheKey, deduped);
       return deduped;
     } catch (error) {

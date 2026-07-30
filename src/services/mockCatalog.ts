@@ -129,7 +129,7 @@ const streetwearItems: CatalogItem[] = [
       imageUrl: thumb("Biker Jacket", "#2a2a31", "#0d0d10"),
       matchType: "exact",
       similarity: 0.94,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -144,7 +144,7 @@ const streetwearItems: CatalogItem[] = [
         imageUrl: thumb("Moto Jacket", "#3a3a44", "#16161b"),
         matchType: "alternative",
         similarity: 0.87,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -198,7 +198,7 @@ const streetwearItems: CatalogItem[] = [
       imageUrl: thumb("Crop Top", "#f7f4ee", "#d8d2c6"),
       matchType: "exact",
       similarity: 0.9,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -213,7 +213,7 @@ const streetwearItems: CatalogItem[] = [
         imageUrl: thumb("Rib Tee", "#fbf9f5", "#ded8cc"),
         matchType: "alternative",
         similarity: 0.85,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -253,7 +253,7 @@ const streetwearItems: CatalogItem[] = [
       imageUrl: thumb("Straight Jeans", "#5b7fb2", "#2f4a74"),
       matchType: "exact",
       similarity: 0.92,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -268,7 +268,7 @@ const streetwearItems: CatalogItem[] = [
         imageUrl: thumb("Mom Denim", "#6d8fbe", "#38527a"),
         matchType: "alternative",
         similarity: 0.86,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -322,7 +322,7 @@ const streetwearItems: CatalogItem[] = [
       imageUrl: thumb("Platform Trainers", "#eeeae1", "#b9b2a5"),
       matchType: "exact",
       similarity: 0.88,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -337,7 +337,7 @@ const streetwearItems: CatalogItem[] = [
         imageUrl: thumb("Platform Sneaker", "#f1ede5", "#c2bbae"),
         matchType: "alternative",
         similarity: 0.83,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -377,7 +377,7 @@ const streetwearItems: CatalogItem[] = [
       imageUrl: thumb("Chain Necklace", "#e6c574", "#9c7b2c"),
       matchType: "exact",
       similarity: 0.86,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -392,7 +392,7 @@ const streetwearItems: CatalogItem[] = [
         imageUrl: thumb("Multi Chain", "#efd28c", "#a9863a"),
         matchType: "alternative",
         similarity: 0.8,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -432,7 +432,7 @@ const streetwearItems: CatalogItem[] = [
       imageUrl: thumb("Lip Liner", "#c98d78", "#8a4f3e"),
       matchType: "exact",
       similarity: 0.85,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -447,7 +447,7 @@ const streetwearItems: CatalogItem[] = [
         imageUrl: thumb("Shaping Liner", "#d69c86", "#96594a"),
         matchType: "alternative",
         similarity: 0.79,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -494,7 +494,7 @@ const glamMakeupItems: CatalogItem[] = [
       imageUrl: thumb("Red Lipstick", "#d61b34", "#7c0a1c"),
       matchType: "exact",
       similarity: 0.95,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -509,7 +509,7 @@ const glamMakeupItems: CatalogItem[] = [
         imageUrl: thumb("Matte Ink", "#e02840", "#8d1024"),
         matchType: "alternative",
         similarity: 0.89,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -562,7 +562,7 @@ const glamMakeupItems: CatalogItem[] = [
       imageUrl: thumb("Heat Palette", "#c07f47", "#6d3c1c"),
       matchType: "exact",
       similarity: 0.93,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -577,7 +577,7 @@ const glamMakeupItems: CatalogItem[] = [
         imageUrl: thumb("Nude Heat", "#cb8b52", "#75421f"),
         matchType: "alternative",
         similarity: 0.87,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -617,7 +617,7 @@ const glamMakeupItems: CatalogItem[] = [
       imageUrl: thumb("Tattoo Liner", "#2b2b33", "#0a0a0d"),
       matchType: "exact",
       similarity: 0.91,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -632,7 +632,7 @@ const glamMakeupItems: CatalogItem[] = [
         imageUrl: thumb("Precise Liner", "#33333c", "#0e0e12"),
         matchType: "alternative",
         similarity: 0.86,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -672,7 +672,7 @@ const glamMakeupItems: CatalogItem[] = [
       imageUrl: thumb("Soft Glow", "#f0d7ae", "#b08c56"),
       matchType: "exact",
       similarity: 0.88,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -687,7 +687,7 @@ const glamMakeupItems: CatalogItem[] = [
         imageUrl: thumb("Shimmer Strips", "#f4dfbb", "#bb9862"),
         matchType: "alternative",
         similarity: 0.82,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -727,7 +727,7 @@ const glamMakeupItems: CatalogItem[] = [
       imageUrl: thumb("Gold Hoops", "#e8c877", "#9d7c2e"),
       matchType: "exact",
       similarity: 0.89,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -742,7 +742,7 @@ const glamMakeupItems: CatalogItem[] = [
         imageUrl: thumb("Plated Hoops", "#f0d68f", "#aa8836"),
         matchType: "alternative",
         similarity: 0.85,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -789,7 +789,7 @@ const genericItems: CatalogItem[] = [
       imageUrl: thumb("Wool Coat", "#c69a68", "#7d5a31"),
       matchType: "exact",
       similarity: 0.86,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -804,7 +804,7 @@ const genericItems: CatalogItem[] = [
         imageUrl: thumb("Longline Coat", "#d0a674", "#87613a"),
         matchType: "alternative",
         similarity: 0.81,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -844,7 +844,7 @@ const genericItems: CatalogItem[] = [
       imageUrl: thumb("Handle Bag", "#3a3742", "#141319"),
       matchType: "exact",
       similarity: 0.87,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -859,7 +859,7 @@ const genericItems: CatalogItem[] = [
         imageUrl: thumb("Baguette Bag", "#45414e", "#1a181f"),
         matchType: "alternative",
         similarity: 0.8,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -900,7 +900,7 @@ const genericItems: CatalogItem[] = [
       imageUrl: thumb("Knee Boots", "#34313b", "#121016"),
       matchType: "exact",
       similarity: 0.84,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -915,7 +915,7 @@ const genericItems: CatalogItem[] = [
         imageUrl: thumb("Tall Boots", "#3d3a45", "#151319"),
         matchType: "alternative",
         similarity: 0.79,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -955,7 +955,7 @@ const genericItems: CatalogItem[] = [
       imageUrl: thumb("Glowy Balm", "#c25370", "#732239"),
       matchType: "exact",
       similarity: 0.83,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -970,7 +970,7 @@ const genericItems: CatalogItem[] = [
         imageUrl: thumb("Lip Oil", "#cd6580", "#7e2941"),
         matchType: "alternative",
         similarity: 0.78,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1017,7 +1017,7 @@ const tailoringItems: CatalogItem[] = [
       imageUrl: thumb("Wool Blazer", "#39405a", "#161a26"),
       matchType: "exact",
       similarity: 0.93,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1032,7 +1032,7 @@ const tailoringItems: CatalogItem[] = [
         imageUrl: thumb("Tailored Blazer", "#434a66", "#1b1f2d"),
         matchType: "alternative",
         similarity: 0.86,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1072,7 +1072,7 @@ const tailoringItems: CatalogItem[] = [
       imageUrl: thumb("Pleated Trousers", "#333a52", "#151824"),
       matchType: "exact",
       similarity: 0.9,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1087,7 +1087,7 @@ const tailoringItems: CatalogItem[] = [
         imageUrl: thumb("Pleated Pants", "#3c435e", "#181c28"),
         matchType: "alternative",
         similarity: 0.84,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1127,7 +1127,7 @@ const tailoringItems: CatalogItem[] = [
       imageUrl: thumb("Chelsea Boot", "#4a3b30", "#231a14"),
       matchType: "exact",
       similarity: 0.89,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1142,7 +1142,7 @@ const tailoringItems: CatalogItem[] = [
         imageUrl: thumb("Chunky Chelsea", "#544437", "#291f18"),
         matchType: "alternative",
         similarity: 0.83,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1183,7 +1183,7 @@ const tailoringItems: CatalogItem[] = [
       imageUrl: thumb("Leather Tote", "#4d3c2e", "#241b14"),
       matchType: "exact",
       similarity: 0.87,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1198,7 +1198,7 @@ const tailoringItems: CatalogItem[] = [
         imageUrl: thumb("Top Handle", "#57432f", "#2a2016"),
         matchType: "alternative",
         similarity: 0.81,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1245,7 +1245,7 @@ const softMinimalItems: CatalogItem[] = [
       imageUrl: thumb("Cable Knit", "#eadcc7", "#bda88c"),
       matchType: "exact",
       similarity: 0.92,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1260,7 +1260,7 @@ const softMinimalItems: CatalogItem[] = [
         imageUrl: thumb("Knit Pullover", "#efe2cf", "#c4b096"),
         matchType: "alternative",
         similarity: 0.85,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1300,7 +1300,7 @@ const softMinimalItems: CatalogItem[] = [
       imageUrl: thumb("Silk Scarf", "#eeb9a6", "#b47660"),
       matchType: "exact",
       similarity: 0.88,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1315,7 +1315,7 @@ const softMinimalItems: CatalogItem[] = [
         imageUrl: thumb("Neckerchief", "#f2c3b1", "#bc7f69"),
         matchType: "alternative",
         similarity: 0.82,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1355,7 +1355,7 @@ const softMinimalItems: CatalogItem[] = [
       imageUrl: thumb("Pearl Drop", "#f6f1e8", "#cbbfa8"),
       matchType: "exact",
       similarity: 0.85,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1370,7 +1370,7 @@ const softMinimalItems: CatalogItem[] = [
         imageUrl: thumb("Pearl Earring", "#f8f4ed", "#d3c7b1"),
         matchType: "alternative",
         similarity: 0.8,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1410,7 +1410,7 @@ const softMinimalItems: CatalogItem[] = [
       imageUrl: thumb("Lip Oil", "#d1918b", "#8d4d47"),
       matchType: "exact",
       similarity: 0.84,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1425,7 +1425,7 @@ const softMinimalItems: CatalogItem[] = [
         imageUrl: thumb("Butter Gloss", "#dba09a", "#95564f"),
         matchType: "alternative",
         similarity: 0.79,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1480,7 +1480,7 @@ const pinkOutfitItems: CatalogItem[] = [
       imageUrl: thumb("Pink Cardigan", "#f6b9c8", "#d9829a"),
       matchType: "exact",
       similarity: 0.94,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1496,7 +1496,7 @@ const pinkOutfitItems: CatalogItem[] = [
         imageUrl: thumb("Knit Cardigan", "#f9c9d5", "#dd93a7"),
         matchType: "alternative",
         similarity: 0.86,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1551,7 +1551,7 @@ const pinkOutfitItems: CatalogItem[] = [
       imageUrl: thumb("Leather Shorts", "#2a2a31", "#0d0d10"),
       matchType: "exact",
       similarity: 0.89,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1567,7 +1567,7 @@ const pinkOutfitItems: CatalogItem[] = [
         imageUrl: thumb("Faux Shorts", "#35353d", "#131317"),
         matchType: "alternative",
         similarity: 0.84,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1623,7 +1623,7 @@ const pinkOutfitItems: CatalogItem[] = [
       imageUrl: thumb("High Top", "#f2f2f2", "#1b1b1b"),
       matchType: "exact",
       similarity: 0.91,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1639,7 +1639,7 @@ const pinkOutfitItems: CatalogItem[] = [
         imageUrl: thumb("Ankle Sneaker", "#e8e8e8", "#26262a"),
         matchType: "alternative",
         similarity: 0.83,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1700,7 +1700,7 @@ const bikerLookItems: CatalogItem[] = [
       imageUrl: thumb("Biker Jacket", "#2a2a31", "#0d0d10"),
       matchType: "exact",
       similarity: 0.93,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1715,7 +1715,7 @@ const bikerLookItems: CatalogItem[] = [
         imageUrl: thumb("Faux Biker", "#35353d", "#131317"),
         matchType: "alternative",
         similarity: 0.86,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1754,7 +1754,7 @@ const bikerLookItems: CatalogItem[] = [
       imageUrl: thumb("Strap Body", "#26262b", "#0f0f12"),
       matchType: "exact",
       similarity: 0.88,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1769,7 +1769,7 @@ const bikerLookItems: CatalogItem[] = [
         imageUrl: thumb("Basic Body", "#2f2f35", "#131316"),
         matchType: "alternative",
         similarity: 0.83,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1808,7 +1808,7 @@ const bikerLookItems: CatalogItem[] = [
       imageUrl: thumb("Skinny Jean", "#3d5578", "#1d2c44"),
       matchType: "exact",
       similarity: 0.9,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1823,7 +1823,7 @@ const bikerLookItems: CatalogItem[] = [
         imageUrl: thumb("High Jean", "#46618a", "#22334d"),
         matchType: "alternative",
         similarity: 0.85,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1862,7 +1862,7 @@ const bikerLookItems: CatalogItem[] = [
       imageUrl: thumb("Sunglasses", "#9a9aa2", "#5c5c63"),
       matchType: "exact",
       similarity: 0.79,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1877,7 +1877,7 @@ const bikerLookItems: CatalogItem[] = [
         imageUrl: thumb("Rect Sunglasses", "#a5a5ad", "#66666d"),
         matchType: "alternative",
         similarity: 0.75,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
     ],
@@ -1908,7 +1908,7 @@ const longCoatItems: CatalogItem[] = [
       imageUrl: thumb("Long Coat", "#282830", "#0c0c11"),
       matchType: "exact",
       similarity: 0.92,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1923,7 +1923,7 @@ const longCoatItems: CatalogItem[] = [
         imageUrl: thumb("Duster Coat", "#32323c", "#121217"),
         matchType: "alternative",
         similarity: 0.85,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1962,7 +1962,7 @@ const longCoatItems: CatalogItem[] = [
       imageUrl: thumb("Knit Beanie", "#e8e6df", "#b8b5ab"),
       matchType: "exact",
       similarity: 0.84,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1977,7 +1977,7 @@ const longCoatItems: CatalogItem[] = [
         imageUrl: thumb("Beanie Hat", "#efede7", "#c2bfb5"),
         matchType: "alternative",
         similarity: 0.79,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
     ],
@@ -2003,7 +2003,7 @@ const longCoatItems: CatalogItem[] = [
       imageUrl: thumb("Ripped Jean", "#7a9ac0", "#41618a"),
       matchType: "exact",
       similarity: 0.89,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -2018,7 +2018,7 @@ const longCoatItems: CatalogItem[] = [
         imageUrl: thumb("Baggy Jean", "#84a3c8", "#4a6a92"),
         matchType: "alternative",
         similarity: 0.84,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -2057,7 +2057,7 @@ const longCoatItems: CatalogItem[] = [
       imageUrl: thumb("Block Sandal", "#2c2c33", "#101014"),
       matchType: "exact",
       similarity: 0.87,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -2102,7 +2102,7 @@ const blackBlazerItems: CatalogItem[] = [
       imageUrl: thumb("Oversized Blazer", "#2a2a32", "#0d0d11"),
       matchType: "exact",
       similarity: 0.94,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -2117,7 +2117,7 @@ const blackBlazerItems: CatalogItem[] = [
         imageUrl: thumb("Blazer Jacket", "#33333c", "#131318"),
         matchType: "alternative",
         similarity: 0.88,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -2156,7 +2156,7 @@ const blackBlazerItems: CatalogItem[] = [
       imageUrl: thumb("Matte Lipstick", "#d94356", "#8e1524"),
       matchType: "exact",
       similarity: 0.86,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -2171,7 +2171,7 @@ const blackBlazerItems: CatalogItem[] = [
         imageUrl: thumb("Red Lipstick", "#e05064", "#9c1b2c"),
         matchType: "alternative",
         similarity: 0.81,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -2210,7 +2210,7 @@ const blackBlazerItems: CatalogItem[] = [
       imageUrl: thumb("Strappy Heel", "#2e2e35", "#101014"),
       matchType: "exact",
       similarity: 0.88,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -2225,7 +2225,7 @@ const blackBlazerItems: CatalogItem[] = [
         imageUrl: thumb("Thin Strap Sandal", "#38383f", "#141418"),
         matchType: "alternative",
         similarity: 0.83,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
     ],

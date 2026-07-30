@@ -10,6 +10,7 @@ import {
 import type { PrimaryCategory } from "@/lib/primaryCategory";
 import { passesWhitelistSanitizer } from "@/utils/sanitizer";
 import { isDirectProductUrl } from "@/services/productUrls";
+import { compareLiveMerchants } from "@/services/retailers";
 
 /**
  * Two-stage Google Lens–inspired match pipeline.
@@ -50,18 +51,20 @@ function sanitizeCards(
   colorHex?: string,
   colorName?: string | null,
 ): LiveProductCard[] {
-  return cards.filter((card) => {
-    if (!isDirectProductUrl(card.productUrl)) return false;
-    return passesWhitelistSanitizer(
-      primary,
-      {
-        title: card.title,
-        productUrl: card.productUrl,
-        brand: card.brand,
-      },
-      { colorHex, colorName, enforceColor: true },
-    );
-  });
+  return cards
+    .filter((card) => {
+      if (!isDirectProductUrl(card.productUrl)) return false;
+      return passesWhitelistSanitizer(
+        primary,
+        {
+          title: card.title,
+          productUrl: card.productUrl,
+          brand: card.brand,
+        },
+        { colorHex, colorName, enforceColor: true },
+      );
+    })
+    .sort(compareLiveMerchants);
 }
 
 /**
@@ -129,7 +132,12 @@ export async function getBudgetAlternatives(
   const cheaper = pool
     .filter((card) => card.productUrl !== input.primaryProduct.productUrl)
     .filter((card) => card.price < input.primaryProduct.price)
-    .sort((a, b) => a.price - b.price)
+    .sort((a, b) => {
+      // Budget lane: cheapest first, then priority merchant for price ties.
+      const priceDelta = a.price - b.price;
+      if (priceDelta !== 0) return priceDelta;
+      return compareLiveMerchants(a, b);
+    })
     .filter(
       (card, index, list) =>
         list.findIndex((other) => other.productUrl === card.productUrl) === index,

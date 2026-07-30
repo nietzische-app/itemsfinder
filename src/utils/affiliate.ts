@@ -129,19 +129,31 @@ export function hasAffiliateProgram(merchant: Merchant): boolean {
 }
 
 /**
- * Formats a price in Turkish convention — "₺3.599,90". The currency comes from
- * the product, not the locale: live results may be priced in USD or GBP by a
- * foreign retailer, and showing those as lira would be a lie.
+ * Formats a price for Turkish storefront cards — always `₺3.599,90` for TRY/TL.
+ * Foreign ISO codes keep their own currency symbol so a GBP/ASOS hit is not
+ * mislabelled as lira.
  */
 export function formatPrice(amount: number, currency: string): string {
+  const code = (currency || "TRY").trim().toUpperCase();
+  const safeAmount = Number.isFinite(amount) ? amount : 0;
+  const fractionDigits = Number.isInteger(safeAmount) ? 0 : 2;
+
+  if (code === "TRY" || code === "TL") {
+    const body = new Intl.NumberFormat("tr-TR", {
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+    }).format(safeAmount);
+    return `₺${body}`;
+  }
+
   try {
     return new Intl.NumberFormat("tr-TR", {
       style: "currency",
-      currency,
-      maximumFractionDigits: amount % 1 === 0 ? 0 : 2,
-    }).format(amount);
+      currency: code,
+      maximumFractionDigits: fractionDigits,
+    }).format(safeAmount);
   } catch {
-    return `${amount} ${currency}`;
+    return `${safeAmount} ${code}`;
   }
 }
 

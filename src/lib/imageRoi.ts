@@ -5,10 +5,13 @@ import sharp from "sharp";
 import type { BoundingBox } from "@/types";
 
 /** Pad around a Vision box so edge features (sole, cuff, strap) stay in frame. */
-const ROI_PAD = 0.04;
+const ROI_PAD = 0.06;
+
+/** Extra pad for tiny boxes (shoes / makeup) under low-contrast crops. */
+const ROI_PAD_SMALL = 0.1;
 
 /** Smallest useful crop edge — below this we keep the full frame. */
-const MIN_ROI_EDGE = 0.06;
+const MIN_ROI_EDGE = 0.05;
 
 export interface CroppedRoi {
   /** Raw base64 (no data-URL prefix) ready for Vision / Context.dev. */
@@ -40,10 +43,13 @@ export async function cropNormalizedRoi(
     const imgH = meta.height ?? 0;
     if (imgW < 8 || imgH < 8) return null;
 
-    const x0 = Math.max(0, box.x - ROI_PAD);
-    const y0 = Math.max(0, box.y - ROI_PAD);
-    const x1 = Math.min(1, box.x + box.width + ROI_PAD);
-    const y1 = Math.min(1, box.y + box.height + ROI_PAD);
+    const isSmall = box.width < 0.18 || box.height < 0.18;
+    const pad = isSmall ? ROI_PAD_SMALL : ROI_PAD;
+
+    const x0 = Math.max(0, box.x - pad);
+    const y0 = Math.max(0, box.y - pad);
+    const x1 = Math.min(1, box.x + box.width + pad);
+    const y1 = Math.min(1, box.y + box.height + pad);
 
     const left = Math.max(0, Math.floor(x0 * imgW));
     const top = Math.max(0, Math.floor(y0 * imgH));

@@ -169,20 +169,42 @@ export function colorBucketQueryToken(bucket: ColorBucket): string {
 /**
  * True when the product title names a primary colour that conflicts with the
  * Vision-derived bucket. Titles with no colour word are allowed through.
+ *
+ * Multi-tone / patterned apparel (e.g. "bej siyah desenli") is kept when the
+ * Vision bucket is one of the pattern neutrals named in the title, or when
+ * every named tone is a compatible neutral pair — so valid multi-colour items
+ * are not dropped by a single dominant-crop reading.
  */
 export function colorsConflict(expected: ColorBucket, title: string): boolean {
   const found = detectBucketsInText(title);
   if (found.length === 0) return false;
   if (found.includes(expected)) return false;
 
+  const patternNeutrals: ColorBucket[] = [
+    "Siyah",
+    "Beyaz",
+    "Krem/Bej",
+    "Gri",
+    "Kahverengi",
+  ];
+
+  // Patterned multi-tone titles: two+ neutrals without a loud conflicting hue.
+  if (
+    found.length >= 2 &&
+    found.every((bucket) => patternNeutrals.includes(bucket)) &&
+    patternNeutrals.includes(expected)
+  ) {
+    return false;
+  }
+
   const compatible: Partial<Record<ColorBucket, ColorBucket[]>> = {
-    Kahverengi: ["Krem/Bej", "Sarı", "Turuncu"],
-    "Krem/Bej": ["Kahverengi", "Beyaz", "Sarı"],
+    Kahverengi: ["Krem/Bej", "Sarı", "Turuncu", "Siyah"],
+    "Krem/Bej": ["Kahverengi", "Beyaz", "Sarı", "Siyah", "Gri"],
     Lacivert: ["Mavi", "Siyah"],
     Mavi: ["Lacivert"],
-    Siyah: ["Gri", "Lacivert"],
-    Gri: ["Siyah", "Beyaz"],
-    Beyaz: ["Krem/Bej", "Gri"],
+    Siyah: ["Gri", "Lacivert", "Krem/Bej", "Beyaz", "Kahverengi"],
+    Gri: ["Siyah", "Beyaz", "Krem/Bej"],
+    Beyaz: ["Krem/Bej", "Gri", "Siyah"],
     Pembe: ["Kırmızı", "Mor"],
     Kırmızı: ["Pembe", "Turuncu"],
     Turuncu: ["Kırmızı", "Sarı", "Kahverengi"],
