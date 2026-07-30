@@ -136,6 +136,14 @@ export interface DetectedItem {
    * Stage 1 exact-match query so brand/style phrasing survives into search.
    */
   webEntity?: string;
+  /** WEB_DETECTION entity confidence 0..1 when available. */
+  webEntityScore?: number;
+  /** LOGO_DETECTION brand inside the ROI (Nike, Zara, …). */
+  brandLogo?: string;
+  /** Texture / material descriptors extracted from ROI analysis. */
+  materials?: string[];
+  /** Pattern descriptors extracted from ROI analysis. */
+  patterns?: string[];
   /** Highest-confidence match; null when nothing crossed the threshold. */
   exactMatch: ProductMatch | null;
   /** Cheaper look-alikes, ordered by price ascending. */

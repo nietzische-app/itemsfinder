@@ -15,6 +15,7 @@ import { normalizeTr } from "@/lib/itemFamily";
  *
  * Strict e-commerce phrasing for Trendyol, Zara, LCW, DeFacto, H&M, Amazon TR.
  * Vague filler and literal English Vision labels are normalised before ranking.
+ * LOGO_DETECTION brands are prepended; textures/patterns are mandatory when seen.
  */
 
 export interface ExactQueryInput {
@@ -32,6 +33,75 @@ export interface ExactQueryInput {
   attributes?: string | null;
   /** Full detection label as a fallback phrase source. */
   label?: string | null;
+  /** LOGO_DETECTION brand (Nike, Zara, …) — prepended when present. */
+  brandLogo?: string | null;
+  /** Explicit material descriptors extracted from ROI analysis. */
+  materials?: string[] | null;
+  /** Explicit pattern descriptors extracted from ROI analysis. */
+  patterns?: string[] | null;
+}
+
+/** Texture / weave / material tokens (Turkish display form). */
+const TEXTURE_RULES: Array<{ display: string; aliases: string[] }> = [
+  { display: "Triko", aliases: ["triko", "knit", "knitted"] },
+  { display: "Örgü", aliases: ["orgu", "örgü", "crochet"] },
+  { display: "Fitilli", aliases: ["fitilli", "ribbed", "rib"] },
+  { display: "Peluş", aliases: ["pelus", "peluş", "fleece", "plush", "sherpa"] },
+  { display: "Kapitone", aliases: ["kapitone", "quilted", "quilt"] },
+  { display: "Saten", aliases: ["saten", "satin"] },
+  { display: "Deri", aliases: ["deri", "leather", "faux leather", "vegan leather"] },
+  { display: "Süet", aliases: ["suet", "süet", "suede", "nubuck", "nubuk"] },
+  { display: "Kot", aliases: ["kot", "denim", "jean", "jeans"] },
+  { display: "Kadife", aliases: ["kadife", "velvet", "corduroy", "fitilli kadife"] },
+];
+
+/** Pattern tokens (Turkish display form). */
+const PATTERN_RULES: Array<{ display: string; aliases: string[] }> = [
+  { display: "Ekose", aliases: ["ekose", "plaid", "check", "checked", "tartan", "gingham"] },
+  { display: "Çizgili", aliases: ["cizgili", "çizgili", "stripe", "striped", "stripes"] },
+  { display: "Çiçekli", aliases: ["cicekli", "çiçekli", "floral", "flower"] },
+  { display: "Leopar", aliases: ["leopar", "leopard", "animal print"] },
+  { display: "Baskılı", aliases: ["baskili", "baskılı", "print", "printed", "graphic"] },
+  { display: "Düz", aliases: ["duz", "düz", "solid", "plain"] },
+];
+
+/**
+ * Pulls texture and pattern descriptors from WEB_DETECTION / attribute text.
+ * Returns Turkish display tokens ready for mandatory query inclusion.
+ */
+export function extractMaterialsAndPatterns(text: string | null | undefined): {
+  materials: string[];
+  patterns: string[];
+} {
+  if (!text?.trim()) return { materials: [], patterns: [] };
+
+  const haystack = normalizeTr(normalizeFashionQuery(text) + " " + text);
+  const materials: string[] = [];
+  const patterns: string[] = [];
+  const seenMat = new Set<string>();
+  const seenPat = new Set<string>();
+
+  for (const rule of TEXTURE_RULES) {
+    if (rule.aliases.some((alias) => haystack.includes(normalizeTr(alias)))) {
+      const key = normalizeTr(rule.display);
+      if (!seenMat.has(key)) {
+        seenMat.add(key);
+        materials.push(rule.display);
+      }
+    }
+  }
+
+  for (const rule of PATTERN_RULES) {
+    if (rule.aliases.some((alias) => haystack.includes(normalizeTr(alias)))) {
+      const key = normalizeTr(rule.display);
+      if (!seenPat.has(key)) {
+        seenPat.add(key);
+        patterns.push(rule.display);
+      }
+    }
+  }
+
+  return { materials, patterns };
 }
 
 /** Multi-word English → Turkish fashion phrases (order: longer first). */
@@ -210,6 +280,20 @@ const STYLE_KEEP = new Set([
   "suet",
   "likit",
   "ruj",
+  "peluş",
+  "pelus",
+  "kapitone",
+  "saten",
+  "ekose",
+  "çizgili",
+  "cizgili",
+  "çiçekli",
+  "cicekli",
+  "leopar",
+  "baskılı",
+  "baskili",
+  "düz",
+  "duz",
 ]);
 
 /**
@@ -275,18 +359,47 @@ function resolveColor(input: ExactQueryInput): string | null {
   return null;
 }
 
+function resolveMaterialsAndPatterns(input: ExactQueryInput): {
+  materials: string[];
+  patterns: string[];
+} {
+  if (input.materials?.length || input.patterns?.length) {
+    return {
+      materials: input.materials ?? [],
+      patterns: input.patterns ?? [],
+    };
+  }
+
+  return extractMaterialsAndPatterns(
+    [input.webEntity, input.attributes, input.label, input.itemType]
+      .filter(Boolean)
+      .join(" "),
+  );
+}
+
 /**
  * Stage 1 — Exact visual match query.
  *
- * Shape: `[Color] + [Brand/Style from WEB_DETECTION] + [PrimaryCategory label]`
- * Example: "Taba Deri Kadın Sandalet" / "Fermuarlı Triko Hırka"
+ * Shape: `[Brand?] + [Color] + [Texture/Pattern] + [WEB_DETECTION style] + [Category]`
+ * Example: "Nike Siyah Yüksek Taban Sneaker" / "Fermuarlı Triko Hırka"
  */
 export function buildExactMatchQuery(input: ExactQueryInput): string {
   const tokens: string[] = [];
   const seen = new Set<string>();
 
+  // LOGO_DETECTION brand always leads the query when present.
+  if (input.brandLogo?.trim()) {
+    pushToken(tokens, seen, input.brandLogo.trim());
+  }
+
   const color = resolveColor(input);
   pushToken(tokens, seen, color);
+
+  const { materials, patterns } = resolveMaterialsAndPatterns(input);
+  // Mandatory texture / pattern descriptors from ROI analysis.
+  for (const material of materials) pushToken(tokens, seen, material);
+  for (const pattern of patterns) pushToken(tokens, seen, pattern);
+
   pushToken(tokens, seen, input.webEntity);
   pushToken(tokens, seen, input.attributes);
   pushToken(tokens, seen, input.label);
@@ -316,10 +429,19 @@ export function buildExactMatchQuery(input: ExactQueryInput): string {
 
   // Colour bucket is mandatory when Vision supplied one.
   if (color && !tokens.some((token) => normalizeTr(token) === normalizeTr(color))) {
-    tokens.unshift(color);
+    const brandOffset = input.brandLogo?.trim() ? 1 : 0;
+    tokens.splice(brandOffset, 0, color);
   }
 
-  return tokens.slice(0, 6).join(" ");
+  // Re-assert mandatory materials/patterns near the front if squeezed out.
+  for (const mandatory of [...materials, ...patterns]) {
+    if (!tokens.some((token) => normalizeTr(token) === normalizeTr(mandatory))) {
+      const insertAt = Math.min(tokens.length, input.brandLogo?.trim() ? 2 : 1);
+      tokens.splice(insertAt, 0, mandatory);
+    }
+  }
+
+  return tokens.slice(0, 7).join(" ");
 }
 
 /**
@@ -333,8 +455,16 @@ export function buildBudgetAlternativeQuery(input: ExactQueryInput): string {
   const tokens: string[] = [];
   const seen = new Set<string>();
 
+  if (input.brandLogo?.trim()) {
+    pushToken(tokens, seen, input.brandLogo.trim());
+  }
+
   const color = resolveColor(input);
   pushToken(tokens, seen, color);
+
+  const { materials, patterns } = resolveMaterialsAndPatterns(input);
+  for (const material of materials) pushToken(tokens, seen, material);
+  for (const pattern of patterns) pushToken(tokens, seen, pattern);
 
   // Keep only concrete style/material words from attributes.
   if (input.attributes) {
@@ -365,7 +495,7 @@ export function buildBudgetAlternativeQuery(input: ExactQueryInput): string {
     );
   });
 
-  const query = compact.slice(0, 5).join(" ");
+  const query = compact.slice(0, 6).join(" ");
   return query ? `${query} muadili` : `${categoryLabel || "ürün"} muadili`;
 }
 
