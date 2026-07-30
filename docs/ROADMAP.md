@@ -17,9 +17,27 @@ siyah şortu aylarca "pudra" etiketledi ve bunu bir ekran görüntüsü yakalaya
 
 Bunlar yapılmadan canlıya çıkmak, faturayı bir yabancının eline vermek demek.
 
-### 0.1 `/api/detect` için hız sınırı ve kötüye kullanım kontrolü
+### 0.1 `/api/detect` için hız sınırı ve kötüye kullanım kontrolü — ✅ tamamlandı
 
-**Durum: yok.** Kimlik doğrulama yok, hız sınırı yok, `middleware.ts` yok.
+**Durum: kapatıldı.** 39 kontrolle doğrulandı (31 birim + 8 gerçek HTTP).
+
+İki kademe (dakika + gün) istemci başına, artı istemciden bağımsız günlük bütçe
+tavanı. Sayaçlar bir arayüzün arkasında: geliştirme için bellek içi, üretim için
+Upstash Redis (REST). Sağlayıcı seçimi kodun geri kalanını ilgilendirmiyor.
+
+Bütçenin %80'inde **ücretli aşamalar kendiliğinden kapanıyor** — tarama gerçek
+kalıyor (tespit + katalog), model öznitelik geçişi ve canlı ürün araması duruyor.
+Tavan dolunca 503; sessizce demo veriye düşmek yok, çünkü o kullanıcıya yalan
+söylemek olurdu.
+
+Sayaç deposu erişilemezse **açık kalıyor**: bir Redis kesintisinin ürünü
+durdurması, bir saat sınırsız trafikten kötü bir arıza olurdu — ve faturayı asıl
+bağlayan şey günlük tavan. Kesinti loglanıyor.
+
+Aşağıdaki kayıt tarihsel.
+
+**Bulunduğu andaki hâli:** kimlik doğrulama yok, hız sınırı yok, `middleware.ts`
+yok.
 
 Endpoint tamamen açık ve her çağrı **para harcıyor**: 1 Cloud Vision çağrısı +
 `VLM_MAX_ITEMS` kadar Claude çağrısı (varsayılan 4) + 1 Context.dev araması + 3
@@ -38,8 +56,15 @@ etmenin bir yolu yok.
   canlı aşamaları kapat, kataloğa düş, ve logla. Kredinin ortasında kesilmek
   yerine kontrollü degrade.
 
-**Bitti ölçütü:** sınırın üstünde `429` döndüğünü, altında normal çalıştığını ve
-sayaçların instance'lar arası paylaşıldığını gösteren bir test.
+**Bitti ölçütü (karşılandı):** sınıra kadar `200`, sonra `429` + `Retry-After`;
+başka IP etkilenmiyor; reddedilen istek sessizce sonuç döndürmüyor; sınırlı
+istemcinin dev gövdesi **okunmadan** reddediliyor; bütçenin %80'inde degrade,
+%100'ünde 503; depo çökerse açık kalıyor; TTL kendini ileri itmiyor; Upstash REST
+şekli yerel bir stub'a karşı doğrulandı.
+
+**Kalan tek şey senin kararın:** `UPSTASH_REDIS_REST_URL` / `_TOKEN`. Onlar
+olmadan sayaçlar süreç-yerel kalıyor — sunucusuz ortamda instance başına, yani
+gerçek bir sınır değil. Uygulama üretimde bunu açılışta hata olarak logluyor.
 
 ### 0.2 Görsel yükleme sertleştirmesi — ✅ tamamlandı
 

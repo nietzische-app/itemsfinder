@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { inspectUpload } from "@/services/imageDecode";
+import { checkRateLimit, rateLimitMessage } from "@/services/rateLimit";
 import {
   MockVisualSearchService,
   getVisualSearchService,
@@ -45,8 +46,8 @@ const VALID_EXAMPLE_IDS: ExampleId[] = [
   "soft-minimal",
 ];
 
-function fail(message: string, status: number) {
-  return NextResponse.json<DetectResponse>({ ok: false, error: message }, { status });
+function fail(message: string, status: number, headers?: HeadersInit) {
+  return NextResponse.json<DetectResponse>({ ok: false, error: message }, { status, headers });
 }
 
 /**
@@ -61,6 +62,26 @@ function parseDataUrl(value: string): { mimeType: string; base64: string } | nul
 }
 
 export async function POST(request: Request) {
+  /*
+   * Before the body is read, so an abusive client is refused without us buying the
+   * bandwidth for its 10 MB payload first.
+   *
+   * A refusal is a refusal — not a silent fall back to the mock engine. Serving
+   * demo data under the badge of a real scan would be lying to a user who did
+   * nothing wrong except arrive on a busy day.
+   */
+  const limit = await checkRateLimit(request.headers);
+
+  if (!limit.allowed) {
+    return fail(
+      rateLimitMessage(limit.reason),
+      // A per-client refusal is the client's to retry; an exhausted budget is
+      // ours, and 503 is the honest code for "this service, not you".
+      limit.reason === "budget" ? 503 : 429,
+      { "retry-after": String(limit.retryAfterSeconds) },
+    );
+  }
+
   let body: DetectRequestBody;
 
   try {
@@ -115,6 +136,7 @@ export async function POST(request: Request) {
       imageBase64: parsed.base64,
       mimeType: parsed.mimeType,
       exampleId,
+      budgetConstrained: limit.degraded,
       // Abandon live lookups as soon as the client goes away; live product
       // resolution is the slow part and every call costs credits.
       signal: request.signal,

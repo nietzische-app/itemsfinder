@@ -50,6 +50,15 @@ export interface VisualSearchInput {
   exampleId?: ExampleId;
   /** Cancels in-flight work when the caller gives up on the request. */
   signal?: AbortSignal;
+  /**
+   * Run without the paid enrichment stages.
+   *
+   * Set when the daily budget is nearly spent (`rateLimit.ts`). Detection still
+   * runs and the answer is real; the model attribute pass and the live product
+   * lookup — where most of the per-scan cost is — are skipped, so the last scans
+   * of a day are cheap rather than the ceiling arriving with no warning.
+   */
+  budgetConstrained?: boolean;
 }
 
 /**
@@ -425,7 +434,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
      * every item that fails to be described keeps the measured colour and Vision's
      * class, which is exactly what shipped before this stage existed.
      */
-    const extractor = getAttributeExtractor();
+    const extractor = input.budgetConstrained ? null : getAttributeExtractor();
     const attributes =
       extractor && size
         ? await extractor.extract(
@@ -605,6 +614,12 @@ class ComposedVisualSearchService implements VisualSearchService {
 
   async analyze(input: VisualSearchInput): Promise<DetectionResult> {
     const detected = await this.detector.analyze(input);
+
+    // Budget-constrained scans keep their catalogue products: the live lookup is a
+    // search plus several extracts per detection, which is the expensive half.
+    if (input.budgetConstrained) {
+      return { ...detected, productSource: "mock", liveItemCount: 0 };
+    }
 
     try {
       /*

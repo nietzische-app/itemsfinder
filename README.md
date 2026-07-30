@@ -296,6 +296,35 @@ never lands without someone having seen it.
 The next phase of work — what is missing, in what order, and what has to turn
 green for each item to count as done — is in [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
+## Rate limiting and the daily budget
+
+`/api/detect` is unauthenticated and every call spends money — a Vision request,
+up to `VLM_MAX_ITEMS` model calls, a Context.dev search plus extracts, and a few
+product-image fetches. `src/services/rateLimit.ts` puts two per-client tiers
+(minute and day) and a client-independent daily ceiling in front of it, checked
+*before* the request body is read so an abusive client does not cost bandwidth
+first.
+
+At 80% of `SCAN_DAILY_BUDGET` the paid enrichment stages switch off by
+themselves: the scan still returns a real answer from detection and the
+catalogue, without the model attribute pass or the live product lookup. Past the
+ceiling the endpoint answers 503 — it does not quietly serve demo data under the
+badge of a real scan.
+
+Counters live behind `RateLimitStore`: in-memory for development, Upstash Redis
+over REST for production. Without `UPSTASH_REDIS_REST_URL` / `_TOKEN` the
+counters are process-local, which in a serverless deployment means per-instance —
+i.e. not a limit. The app logs that as an error on startup in production rather
+than letting it pass silently.
+
+It fails **open**: if the counter store is unreachable the scan is allowed and
+the outage is logged. A Redis outage taking the product down would be the worse
+failure, and the daily ceiling is what actually bounds the bill.
+
+This is not authentication. Client IPs come from `x-forwarded-for`, which an
+attacker with an address pool walks around; it is a speed bump on casual abuse
+plus a ceiling that does not care whose address it is.
+
 ## Tools
 
 `tools/box-editor.html` — ground-truth box editor for the eval set. Open the file
