@@ -402,9 +402,38 @@ düzelir ve VLM çağrısı isteğe bağlı hâle gelir.
 **Maliyet:** model çalışma zamanı + barındırma. Sunucusuz bir fonksiyonda soğuk
 başlangıç ciddi bir problem; ayrı bir çıkarım servisi gerekebilir.
 
-**Karar noktası:** VLM çağrısının maliyeti (tarama başına 4 çağrı) bir çıkarım
-servisinin maliyetini geçtiğinde bu yol kendini finanse eder. Şu an trafik yok,
-yani bu bir "sonra" maddesi — ama hangi eşikte açılacağı şimdiden yazılmalı.
+**Karar noktası — eşik, sonra hatırlamak yerine şimdi yazıldı.**
+
+Değişken maliyet: tarama başına `VLM_MAX_ITEMS` (varsayılan 4) model çağrısı.
+Her çağrı bir kırpım (~640px kenar, birkaç yüz token görsel) artı kısa bir JSON
+yanıtı. Kaba hesapla parça başına ~1500 girdi + ~150 çıktı token'ı, yani
+`claude-opus-5` fiyatlarıyla (girdi $5/M, çıktı $25/M) parça başına ~$0.011,
+**tarama başına ~$0.045**.
+
+Sabit maliyet: kendi çıkarım servisi. Bir DeepFashion2 dedektörünü sıcak tutan
+en küçük GPU'suz örnek aylık **~$25–40** bandında (küçük bir konteyner + sürekli
+çalışma); CPU'da soğuk başlangıç sunucusuz için kabul edilemez olduğu için
+"sıcak tutmak" bu kalemin tamamı.
+
+Başabaş: `$30 / $0.045 ≈ 670 tarama/ay` — günde ~22 tarama.
+
+Yani eşik şu: **aylık tarama sayısı istikrarlı biçimde 1000'i geçtiğinde** (bir
+miktar pay bırakarak) kendi dedektörü kendini finanse etmeye başlar. Bunun
+altında VLM çağrısı hem daha ucuz hem de bakımı yok.
+
+Bu sayı 3.2 ile ölçülebilir hâle geldi: `[scan]` logu tarama başına bir satır
+yazıyor, saymak için ayrı bir iş gerekmiyor.
+
+İki uyarı, sayının kendisinden önemli:
+
+1. **Doğruluk eşitliği varsayılmamalı.** Yukarıdaki hesap iki yolun aynı sonucu
+   verdiğini varsayıyor. VLM aşamasının doğruluk kazancı 1.3 ile ölçülecek; bir
+   dedektörünki ölçülmedi. Ucuz olan yol daha kötüyse başabaş noktası anlamsız.
+2. **Ölçek, kararı tersine de çevirebilir.** Trafik yeterince büyürse dedektör
+   sabit maliyetli, VLM doğrusal maliyetli kalır — yani makas açılmaya devam
+   eder. Ama o noktada 2.3'ün (öğrenilmiş embedding) önkoşulu olan ürün beslemesi
+   de muhtemelen vardır, ve ikisi aynı çıkarım altyapısını paylaşır. O yüzden bu
+   madde 2.3'ten **önce** değil, onunla **birlikte** değerlendirilmeli.
 
 ### 2.3 Öğrenilmiş embedding ve vektör indeksi
 
@@ -428,7 +457,7 @@ Arayüz hazır — `describeImage` ve `visualSimilarity` değişir, üstündeki 
 
 ## Katman 3 — ürün ve işletme
 
-### 3.1 Önbellek ve idempotanlık
+### 3.1 Önbellek ve idempotanlık — ✅ tamamlandı
 
 Aynı fotoğraf iki kez taranırsa iki kez ödeniyor. Görselin hash'iyle
 anahtarlanan bir sonuç önbelleği hem parayı hem gecikmeyi düşürür, hem de
@@ -438,7 +467,7 @@ Dikkat: kullanıcı fotoğrafını saklamak KVKK meselesi. Hash'i ve **sonucu**
 saklamak, fotoğrafı saklamaktan farklı; bu ayrım yazılı olmalı ve gizlilik
 politikasıyla tutarlı olmalı.
 
-### 3.2 Gözlemlenebilirlik
+### 3.2 Gözlemlenebilirlik — ✅ tamamlandı
 
 Şu an elimizde `console.warn` var. Bir taramanın neden kötü sonuç verdiğini
 üretimde anlamanın yolu yok.
@@ -451,7 +480,7 @@ politikasıyla tutarlı olmalı.
 - Bir "tarama teşhisi" görünümü: kutular, aileler, puanlar, elenen satırlar.
   Bu aynı zamanda 1.1'deki etiketleme işini hızlandırır.
 
-### 3.3 Bozulma anında kullanıcı deneyimi
+### 3.3 Bozulma anında kullanıcı deneyimi — ✅ tamamlandı
 
 Vision düşerse route mock'a düşüyor ve arayüz bir rozet gösteriyor. Ama:
 Context.dev süre aşımına düşerse kullanıcı ne görüyor? VLM reddederse? Hız
@@ -459,7 +488,7 @@ sınırına takılırsa? Bunların hiçbiri arayüzde denenmedi.
 
 Her degrade yolu için ekranda ne yazdığını gösteren bir tarayıcı testi.
 
-### 3.4 Erişilebilirlik ve performans denetimi
+### 3.4 Erişilebilirlik ve performans denetimi — ✅ tamamlandı
 
 Hiç yapılmadı. Klavye gezinmesi, odak tuzakları, kontrast oranları, ekran
 okuyucu etiketleri; Lighthouse / axe koşumu. Hotspot'lar `aria-label` taşıyor ve
@@ -467,17 +496,55 @@ okuyucu etiketleri; Lighthouse / axe koşumu. Hotspot'lar `aria-label` taşıyor
 
 ---
 
+---
+
+## Şu an nerede duruyoruz
+
+Kodla kapatılabilecek her madde kapandı. Kalanların hepsi **sende olan bir şeyi**
+bekliyor — anahtar, fotoğraf, veri ya da bir hesap:
+
+| Madde | Bekleyen |
+| --- | --- |
+| 0.1 | `UPSTASH_REDIS_REST_URL` / `_TOKEN` — onlarsız sayaçlar süreç-yerel |
+| 0.3 | `VERIFIED_PDP_URLS` (elle doğrulanmış bağlantılar), sonra `npm run fetch:images` |
+| 1.1 | 30–50 çeşitli fotoğraf + elle ölçülmüş kutular (`tools/box-editor.html` hazır) |
+| 1.2 | `GOOGLE_CLOUD_VISION_API_KEY=... npm run eval:record` |
+| 1.3 | `ANTHROPIC_API_KEY=... npm run eval:record-attrs` |
+| 2.1b | Ağı açık bir makine — model ağırlıkları buradan indirilemiyor |
+| 2.2 | Aylık 1000+ tarama (bkz. yukarıdaki eşik hesabı) |
+| 2.3 | Bir ürün beslemesi anlaşması ya da kendi crawl'ımız |
+| Yasal | `/yasal-bildirim` içindeki veri sorumlusu kimliği; `iletisim@` ve `destek@` kutularının izlendiğinin teyidi |
+
+Ölçülen durum:
+
+```
+Bölge rengi      86%  (12/14)   taban 80%
+Sorgu token'ı   100%  (14/14)   taban 90%
+Vision sınıfı   100%  (14/14)   taban 100%
+Görsel erişim    86%  (12/14)   taban 70%, şans %7
+Aile tutarlılığı 100%  (14/14)   taban 90%
+Erişilebilirlik  61/61 kontrol, altı sayfa
+Bozulma yolları  20/20 kontrol
+```
+
+Ve bu tablonun en önemli satırı **14**: her yüzde bu kadar küçük bir sete karşı
+ölçülüyor. 1.1 olmadan bu sayılar yön gösterir, büyüklük göstermez.
+
 ## Sıralama önerisi
 
-1. ~~**0.2** (görsel sertleştirme)~~ — ✅ tamamlandı.
-2. **0.1** (hız sınırı) — kalıcı depo seçimi gerektiriyor, o yüzden ikinci.
-3. **1.1** (eval seti) — en yüksek kaldıraç, ve senin fotoğraf toplamana bağlı.
-4. ~~**1.2 + 1.3** (fixture'lar)~~ — kod tarafı bitti; kalan iş anahtarları
-   verip iki komutu çalıştırmak, tek oturum.
-5. **0.3** (bağlantı + fotoğraf) — veri işi, paralel yürüyebilir.
-6. **3.2** (gözlemlenebilirlik) — 1.1'i hızlandırdığı için buraya alındı.
-7. **2.1** (segmentasyon) — ölçüm temeli oturduktan sonra.
-8. Gerisi trafik ve ticari koşullara bağlı.
+1. ~~**0.2** (görsel sertleştirme)~~ — ✅
+2. ~~**0.1** (hız sınırı)~~ — ✅ kod; yalnızca Upstash kimlikleri kaldı.
+3. **1.1** (eval seti) — **sıradaki en yüksek kaldıraç ve tek gerçek engel.**
+   Diğer her ölçüm 14 parçaya bakıyor; bu sayı büyümeden ne 1.2/1.3'ün tabanları
+   ne de 2.1'in sabitleri güvenilir biçimde ayarlanabilir.
+4. ~~**1.2 + 1.3** (fixture'lar)~~ — ✅ kod; anahtarlar verilince tek oturum.
+5. **0.3** (bağlantı + fotoğraf) — veri işi, paralel yürüyebilir; ürünü
+   "satın alınabilir" yapan tek madde.
+6. ~~**3.2** (gözlemlenebilirlik)~~ — ✅, ve 1.1'i hızlandırıyor: canlı bir
+   taramanın kutularını teşhis panelinden okumak elle geçirmekten hızlı.
+7. ~~**2.1a** (eleme yoluyla ön plan)~~ — ✅ %71 → %86.
+8. **2.1b / 2.2 / 2.3** — trafik ve ticari koşullara bağlı; eşikleri yukarıda
+   yazılı, tahmin gerektirmiyorlar.
 
 Bu sırada tek bir kural var: **Katman 1 bitmeden Katman 2'ye geçilmiyor.** Bu
 projede ölçmeden ayarlamanın ne ürettiğini biliyoruz.
