@@ -1,8 +1,16 @@
 import "server-only";
 
 import { ContextDevService, type LiveProductCard } from "@/services/contextDevService";
-import { buildSearchQuery } from "@/lib/searchQuery";
+import { getBudgetAlternatives, getExactMatches } from "@/services/matchPipeline";
+import { colorNameFromHex } from "@/lib/searchQueryColors";
+import {
+  familyFromPrimary,
+  passesCategoryGuard,
+  primaryCategoryOf,
+  type PrimaryCategory,
+} from "@/lib/primaryCategory";
 import { hydrateProduct } from "@/services/mockCatalog";
+import { isDirectProductUrl, resolveVerifiedPdp } from "@/services/productUrls";
 import type {
   BrandMetadata,
   DetectedItem,
@@ -15,12 +23,12 @@ import type {
 /**
  * Product resolution — the stage that decides *what to buy* for each detection.
  *
- * This is deliberately separate from detection. Which engine found the items
- * (mock or Cloud Vision) and which engine priced them (mock catalogue or
- * Context.dev) are independent choices, and the UI reports both.
+ * Live path uses a Google Lens–inspired two-stage pipeline:
+ *   Stage 1 `getExactMatches`     → locked PrimaryCategory + colour PDPs
+ *   Stage 2 `getBudgetAlternatives` → cheaper same-category lookalikes only
  *
- * Every provider must be total: a detection that cannot be resolved keeps the
- * products it arrived with, so the UI never loses a card.
+ * Every card is re-validated by `passesCategoryGuard` so a FOOTWEAR detection
+ * can never surface bedding, home textiles, or any other primary.
  */
 export interface ProductProvider {
   readonly source: ProductSource;
@@ -33,14 +41,19 @@ export interface ProductProvider {
 /* -------------------------------------------------------------------------- */
 
 /**
- * No-op provider: detections already arrive carrying catalogue products, so
- * there is nothing to fetch. Exists so the composition has a uniform shape.
+ * Sanitises catalogue products already attached at detection time. Drops any
+ * exact/alternative card that violates the locked PrimaryCategory.
  */
 export class MockProductProvider implements ProductProvider {
   readonly source: ProductSource = "mock";
 
   async enrich(result: DetectionResult): Promise<DetectionResult> {
-    return { ...result, productSource: "mock", liveItemCount: 0 };
+    return {
+      ...result,
+      productSource: "mock",
+      liveItemCount: 0,
+      items: result.items.map(sanitizeDetectedItem),
+    };
   }
 }
 
@@ -63,12 +76,10 @@ export interface ContextDevProductProviderOptions {
 }
 
 /**
- * Replaces catalogue products with live inventory from Context.dev.
+ * Replaces catalogue products with live inventory via the two-stage pipeline.
  *
- * Fallback is per-detection, not all-or-nothing: if the jacket resolves live
- * but the lipstick times out, the jacket goes live and the lipstick keeps its
- * catalogue row. `liveItemCount` reports exactly how many went live so the UI
- * can tell the truth rather than claiming a blanket "live".
+ * Fallback is per-detection: if Stage 1 returns nothing usable, the catalogue
+ * row (already category-sanitised) is kept.
  */
 export class ContextDevProductProvider implements ProductProvider {
   readonly source: ProductSource = "context-dev";
@@ -93,15 +104,12 @@ export class ContextDevProductProvider implements ProductProvider {
       return { ...result, productSource: "mock", liveItemCount: 0 };
     }
 
-    // A deadline for the stage as a whole. Individual SDK calls have their own
-    // timeouts; this stops a slow tail from holding the whole scan hostage.
     const controller = new AbortController();
     const abortOnOuter = () => controller.abort();
     signal?.addEventListener("abort", abortOnOuter, { once: true });
     const deadline = setTimeout(() => controller.abort(), this.deadlineMs);
 
     try {
-      // Spend the budget on the detections the user is most likely to act on.
       const priority = [...result.items]
         .sort((a, b) => b.confidence - a.confidence)
         .slice(0, this.maxLiveItems);
@@ -116,7 +124,9 @@ export class ContextDevProductProvider implements ProductProvider {
         if (live) resolved.set(item.id, live);
       });
 
-      const items = result.items.map((item) => resolved.get(item.id) ?? item);
+      const items = result.items.map(
+        (item) => resolved.get(item.id) ?? sanitizeDetectedItem(item),
+      );
       const liveItemCount = items.filter((item) =>
         targetIds.has(item.id) && resolved.has(item.id) ? true : false,
       ).length;
@@ -124,7 +134,6 @@ export class ContextDevProductProvider implements ProductProvider {
       return {
         ...result,
         items,
-        // Claiming "live" with zero live rows would be a lie; say mock instead.
         productSource: liveItemCount > 0 ? "context-dev" : "mock",
         liveItemCount,
       };
@@ -134,47 +143,50 @@ export class ContextDevProductProvider implements ProductProvider {
     }
   }
 
-  /** Resolves one detection, or `null` to keep its catalogue products. */
+  /**
+   * Two-stage resolution for one detection.
+   *
+   * Stage 1 must return a validated primary product before Stage 2 runs.
+   * Stage 2 inherits PrimaryCategory + colour and never mutates them.
+   */
   private async resolveItem(
     item: DetectedItem,
     signal: AbortSignal,
   ): Promise<DetectedItem | null> {
-    // Search on the enriched query — colour plus descriptors plus type —
-    // rather than the bare label, which is often too generic to rank well.
-    const query = buildSearchQuery({
-      itemType: item.itemType,
-      label: item.label,
+    const primary =
+      item.primaryCategory && item.primaryCategory !== "UNKNOWN"
+        ? item.primaryCategory
+        : primaryCategoryOf(`${item.itemType} ${item.label} ${item.attributes}`);
+
+    if (primary === "UNKNOWN") return null;
+
+    const stageInput = {
+      primaryCategory: primary,
+      itemCategory: item.category,
       colorHex: item.colorHex,
+      colorName: colorNameFromHex(item.colorHex),
+      webEntity: item.webEntity ?? null,
+      itemType: item.itemType,
       attributes: item.attributes,
-    });
-
-    const cards = await this.context.searchLiveProducts(
-      query || item.label,
-      item.category,
+      label: item.label,
       signal,
-    );
+    };
 
-    if (cards.length === 0) return null;
-
-    // The best-matching product is the exact match; everything cheaper than it
-    // becomes a budget alternative, cheapest first. If nothing is cheaper we
-    // still show the rest as alternatives — they are real options either way.
-    const [best, ...rest] = cards;
+    // --- Stage 1: Exact visual match ---------------------------------------
+    const exact = await getExactMatches(this.context, stageInput);
+    const best = exact.cards[0];
     if (!best) return null;
 
-    const cheaper = rest
-      .filter((card) => card.price < best.price)
-      .sort((a, b) => a.price - b.price);
-    const others = rest
-      .filter((card) => card.price >= best.price)
-      .sort((a, b) => a.price - b.price);
+    // --- Stage 2: Budget alternatives (only after Stage 1) -----------------
+    const budget = await getBudgetAlternatives(this.context, {
+      ...stageInput,
+      primaryProduct: best,
+      maxAlternatives: this.maxAlternatives,
+    });
 
-    const alternatives = [...cheaper, ...others].slice(0, this.maxAlternatives);
-
-    // One brand lookup per distinct retailer in this detection's result set.
     const domains = Array.from(
       new Set(
-        [best, ...alternatives].map((card) => card.merchantDomain).filter(Boolean),
+        [best, ...budget.cards].map((card) => card.merchantDomain).filter(Boolean),
       ),
     );
     const brands = new Map<string, BrandMetadata | null>();
@@ -185,35 +197,82 @@ export class ContextDevProductProvider implements ProductProvider {
       }),
     );
 
-    return {
-      ...item,
-      exactMatch: toProductMatch(best, {
-        id: `${item.id}-live-exact`,
-        matchType: "exact",
-        // Live results carry no similarity score of their own; rank order from
-        // the search is the only signal, so state it conservatively.
-        similarity: 0.9,
-        tag: "Canlı",
-        brand: brands.get(best.merchantDomain) ?? null,
-      }),
-      alternatives: alternatives.map((card, index) =>
+    const exactMatch = toProductMatch(best, {
+      id: `${item.id}-live-exact`,
+      matchType: "exact",
+      similarity: 0.9,
+      tag: "Canlı",
+      brand: brands.get(best.merchantDomain) ?? null,
+      lockedPrimary: primary,
+    });
+
+    // Final guard — if the exact card somehow fails, abort live enrichment.
+    if (!exactMatch) return null;
+
+    const alternatives = budget.cards
+      .map((card, index) =>
         toProductMatch(card, {
           id: `${item.id}-live-alt-${index}`,
           matchType: "alternative",
           similarity: Math.max(0.6, 0.86 - index * 0.05),
-          tag: index === 0 && card.price < best.price ? "En uygun" : undefined,
+          tag: index === 0 ? "En uygun" : "Muadil",
           brand: brands.get(card.merchantDomain) ?? null,
+          lockedPrimary: primary,
         }),
-      ),
+      )
+      .filter((product): product is ProductMatch => product !== null);
+
+    return {
+      ...item,
+      primaryCategory: primary,
+      exactMatch,
+      alternatives,
     };
   }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Sanitisation                                                              */
+/* -------------------------------------------------------------------------- */
+
+/** Drops catalogue cards that violate the locked primary category. */
+export function sanitizeDetectedItem(item: DetectedItem): DetectedItem {
+  const primary =
+    item.primaryCategory && item.primaryCategory !== "UNKNOWN"
+      ? item.primaryCategory
+      : primaryCategoryOf(`${item.itemType} ${item.label} ${item.attributes}`);
+
+  const exactMatch =
+    item.exactMatch &&
+    passesCategoryGuard(primary, {
+      title: item.exactMatch.title,
+      productUrl: item.exactMatch.productUrl,
+      brand: item.exactMatch.brand,
+    })
+      ? item.exactMatch
+      : null;
+
+  const alternatives = item.alternatives.filter((product) =>
+    passesCategoryGuard(primary, {
+      title: product.title,
+      productUrl: product.productUrl,
+      brand: product.brand,
+    }),
+  );
+
+  return {
+    ...item,
+    primaryCategory: primary,
+    exactMatch,
+    alternatives,
+  };
 }
 
 /* -------------------------------------------------------------------------- */
 /*  Mapping                                                                   */
 /* -------------------------------------------------------------------------- */
 
-/** Domains we have an affiliate programme for, mapped to their `Merchant`. */
+/** Domains we recognise, mapped to their `Merchant` for badges + affiliates. */
 const DOMAIN_TO_MERCHANT: Array<[RegExp, Merchant]> = [
   [/(^|\.)zara\.com$/, "Zara"],
   [/(^|\.)trendyol\.com$/, "Trendyol"],
@@ -222,12 +281,22 @@ const DOMAIN_TO_MERCHANT: Array<[RegExp, Merchant]> = [
   [/(^|\.)amazon\./, "Amazon"],
   [/(^|\.)hm\.com$/, "H&M"],
   [/(^|\.)asos\.com$/, "ASOS"],
+  [/(^|\.)lcwaikiki\.com$/, "LC Waikiki"],
+  [/(^|\.)defacto\.com/, "DeFacto"],
+  [/(^|\.)lefties\.com$/, "Lefties"],
+  [/(^|\.)pullandbear\.com$/, "Pull&Bear"],
+  [/(^|\.)stradivarius\.com$/, "Stradivarius"],
+  [/(^|\.)bershka\.com$/, "Bershka"],
+  [/(^|\.)koton\.com$/, "Koton"],
+  [/(^|\.)mavi\.com$/, "Mavi"],
+  [/(^|\.)boyner\.com/, "Boyner"],
+  [/(^|\.)hepsiburada\.com$/, "Hepsiburada"],
+  [/(^|\.)n11\.com$/, "N11"],
 ];
 
 /**
  * Maps a live domain onto a known merchant so `buildAffiliateUrl` can attach
- * the right tracking tag. Unknown retailers fall through to `Other`, which
- * still gets UTM parameters — just no affiliate tag.
+ * the right tracking tag. Unknown retailers fall through to `Other`.
  */
 export function merchantForDomain(domain: string): Merchant {
   for (const [pattern, merchant] of DOMAIN_TO_MERCHANT) {
@@ -242,6 +311,7 @@ interface ProductMatchOverrides {
   similarity: number;
   tag?: string;
   brand: BrandMetadata | null;
+  lockedPrimary: PrimaryCategory;
 }
 
 /** Absolute http(s) only — never hand the CTA anything else. */
@@ -254,12 +324,46 @@ function isSafeHttpUrl(value: string): boolean {
   }
 }
 
+/**
+ * Maps a live card to a ProductMatch, or `null` when it fails the category
+ * guard or lacks a usable PDP URL.
+ */
 function toProductMatch(
   card: LiveProductCard,
   overrides: ProductMatchOverrides,
-): ProductMatch {
+): ProductMatch | null {
+  if (
+    !passesCategoryGuard(overrides.lockedPrimary, {
+      title: card.title,
+      productUrl: card.productUrl,
+      brand: card.brand,
+    })
+  ) {
+    return null;
+  }
+
   const merchant = merchantForDomain(card.merchantDomain);
-  const isUsableUrl = isSafeHttpUrl(card.productUrl);
+
+  let productUrl = isDirectProductUrl(card.productUrl) ? card.productUrl : "";
+  if (!productUrl) {
+    const family = familyFromPrimary(overrides.lockedPrimary);
+    productUrl = resolveVerifiedPdp(merchant, family) ?? "";
+  }
+
+  // Re-check after PDP fallback — curated URLs must still agree with primary.
+  if (
+    productUrl &&
+    !passesCategoryGuard(overrides.lockedPrimary, {
+      title: card.title,
+      productUrl,
+      brand: card.brand,
+    })
+  ) {
+    return null;
+  }
+
+  const isUsableUrl = Boolean(productUrl) && isSafeHttpUrl(productUrl);
+  if (!isUsableUrl) return null;
 
   return {
     id: overrides.id,
@@ -268,17 +372,13 @@ function toProductMatch(
     merchant,
     price: card.price,
     currency: card.currency,
-    productUrl: isUsableUrl ? card.productUrl : "",
-    // Live rows are real product pages, not storefront searches.
-    urlKind: "product",
-    // Live listings without an image fall back to the neutral placeholder the
-    // catalogue uses, so cards never render an empty box.
+    productUrl,
+    urlKind: isDirectProductUrl(productUrl) ? "product" : "search",
     imageUrl: card.imageUrl ?? placeholderImage(card.title),
     matchType: overrides.matchType,
     similarity: overrides.similarity,
     tag: overrides.tag,
-    // A row we cannot link to is not buyable, whatever the page claimed.
-    inStock: card.inStock && isUsableUrl,
+    inStock: card.inStock,
     merchantDomain: card.merchantDomain,
     isLive: true,
     brandMetadata: overrides.brand ?? undefined,
@@ -321,8 +421,6 @@ async function runWithConcurrency<T>(
       try {
         await worker(item);
       } catch (error) {
-        // A single failed detection must not abort the others; it simply keeps
-        // its catalogue products.
         console.warn("[products] live resolution failed:", error);
       }
     }
