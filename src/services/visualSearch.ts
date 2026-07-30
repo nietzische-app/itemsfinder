@@ -1,12 +1,21 @@
 import "server-only";
 
 import type {
+  BoundingBox,
   DetectedItem,
   DetectionResult,
   DetectionSource,
   ExampleId,
   ItemCategory,
 } from "@/types";
+import {
+  boxArea,
+  bodyPosition,
+  dedupeDetections,
+  familyFitsBody,
+  intersectionArea,
+  type DetectionCandidate,
+} from "@/lib/detectionFilter";
 import { familyOf } from "@/lib/itemFamily";
 import { buildSearchQuery, colorNameFromHex } from "@/lib/searchQuery";
 import {
@@ -17,6 +26,7 @@ import {
   retargetSearchQuery,
 } from "@/services/mockCatalog";
 import { ContextDevService } from "@/services/contextDevService";
+import { imageSize, regionDominantColor } from "@/services/regionColor";
 import {
   ContextDevProductProvider,
   MockProductProvider,
@@ -308,14 +318,94 @@ export class GoogleVisionSearchService implements VisualSearchService {
       throw new Error(`Vision API error: ${annotation.error.message}`);
     }
 
-    const dominantHex = toHex(
+    const imageDominantHex = toHex(
       annotation?.imagePropertiesAnnotation?.dominantColors?.colors?.[0]?.color,
     );
 
-    /**
-     * Web entities give us fashion-savvy phrasing ("biker jacket") that object
-     * localisation alone lacks ("Outerwear"). We pair the highest-scoring
-     * entity that shares a category with each detected object.
+    const objects = annotation?.localizedObjectAnnotations ?? [];
+
+    /*
+     * The "Person" box used to be discarded. It is a free geometric prior: a
+     * garment's height relative to the person tells us head / upper / lower /
+     * feet, which is enough to throw out contradictions like a "Top" detected at
+     * ankle height.
+     */
+    const personBox = objects
+      .filter((object) => /person|human|woman|man|girl|boy/i.test(object.name ?? ""))
+      .map((object) => toBoundingBox(object.boundingPoly?.normalizedVertices))
+      .filter((box): box is BoundingBox => box !== null)
+      .sort((a, b) => boxArea(b) - boxArea(a))[0] ?? null;
+
+    /*
+     * Raw detections -> shoppable candidates.
+     *
+     * Vision reports the same garment at several granularities and each shoe of a
+     * pair separately, so a three-piece outfit arrived as eight-plus hotspots.
+     * `dedupeDetections` applies a confidence floor, suppresses nested and
+     * overlapping boxes, merges same-family neighbours (the two shoes) and caps
+     * the result.
+     */
+    const candidates: DetectionCandidate[] = [];
+
+    for (const object of objects) {
+      const name = object.name?.trim();
+      if (!name) continue;
+
+      // Person, furniture, plants: not shoppable, and Person has already been
+      // harvested above as the geometric frame.
+      if (!categorizeLabel(name)) continue;
+
+      const box = toBoundingBox(object.boundingPoly?.normalizedVertices);
+      if (!box) continue;
+
+      const family = familyOf(name);
+
+      // A garment cannot be where the body says it is not.
+      if (!familyFitsBody(family, bodyPosition(box, personBox))) continue;
+
+      candidates.push({ name, score: object.score ?? 0, box, family });
+    }
+
+    const detections = dedupeDetections(candidates, { maxItems: this.maxItems });
+
+    /*
+     * Per-region colour.
+     *
+     * IMAGE_PROPERTIES describes the whole frame, so applying its dominant colour
+     * to every detection made the black shorts and the monochrome sneakers both
+     * "pudra" on a photo dominated by a pink cardigan — and colour leads the
+     * generated query, so every lookup inherited the error. Each box is sampled
+     * locally instead, from bytes we already have.
+     */
+    const imageBuffer = Buffer.from(input.imageBase64, "base64");
+    const size = await imageSize(imageBuffer);
+    const regionColors = await Promise.all(
+      detections.map((detection) =>
+        size
+          ? regionDominantColor(imageBuffer, detection.box, {
+              size,
+              // Garments occlude each other; exclude the neighbours that overlap
+              // this box so the sample is this item and not the one on top of it.
+              exclude: detections
+                .filter(
+                  (other) =>
+                    other !== detection && intersectionArea(other.box, detection.box) > 0,
+                )
+                .map((other) => other.box),
+            })
+          : Promise.resolve(null),
+      ),
+    );
+
+    /*
+     * WEB_DETECTION entities describe the *photograph*, not one garment in it —
+     * "street fashion", "photo shoot", sometimes a real product name. They used
+     * to be handed out first-come-first-served to whichever detection shared a
+     * category, which is how "biker jacket" could end up naming a shoe.
+     *
+     * An entity is now only used when it names the same family as the detection
+     * it is attached to. That keeps the genuinely useful case ("biker jacket" on
+     * outerwear) and drops the rest instead of inventing a label.
      */
     const webEntities = (annotation?.webDetection?.webEntities ?? [])
       .filter((entity): entity is Required<VisionWebEntity> =>
@@ -326,50 +416,39 @@ export class GoogleVisionSearchService implements VisualSearchService {
     const items: DetectedItem[] = [];
     const usedEntities = new Set<string>();
 
-    for (const object of annotation?.localizedObjectAnnotations ?? []) {
-      if (items.length >= this.maxItems) break;
-
-      const name = object.name?.trim();
-      if (!name) continue;
-
+    for (const detection of detections) {
+      const { name, box, family } = detection;
       const category = categorizeLabel(name);
       if (!category) continue;
-
-      const boundingBox = toBoundingBox(object.boundingPoly?.normalizedVertices);
-      if (!boundingBox) continue;
 
       const entity = webEntities.find(
         (candidate) =>
           !usedEntities.has(candidate.description) &&
-          categorizeLabel(candidate.description) === category,
+          familyOf(candidate.description) === family &&
+          family !== "unknown",
       );
-
       if (entity) usedEntities.add(entity.description);
 
-      // Vision gives three weak signals; combined they make a query a shopper
-      // would actually type. "Cosmetics" alone is useless, "Kırmızı Mat Ruj"
-      // is not.
+      const colorHex = regionColors[items.length] ?? imageDominantHex;
       const phrase = entity?.description;
-      const colorName = colorNameFromHex(dominantHex);
+      const colorName = colorNameFromHex(colorHex);
       const label = [colorName, phrase ?? name].filter(Boolean).join(" ");
       const searchQuery = buildSearchQuery({
         itemType: name,
         label: phrase,
-        colorHex: dominantHex,
+        colorHex,
       });
 
       /*
        * Family comes from Vision's object class, which is the reliable signal
        * for what kind of garment this is; the descriptive phrase and the query
        * only pick the best row *within* that family. The chosen rows then get
-       * their storefront search repointed at this detection, so the link lands
-       * on what the user actually pointed at rather than on the catalogue
-       * stand-in's own title.
+       * their text search repointed at this detection.
        */
       const { exactMatch, alternatives } = findProductsForLabel(
         `${phrase ?? name} ${searchQuery}`,
         category,
-        familyOf(name),
+        family,
       );
 
       items.push({
@@ -380,11 +459,11 @@ export class GoogleVisionSearchService implements VisualSearchService {
         attributes: [colorName, name].filter(Boolean).join(" • "),
         description:
           `Görselde "${name}" olarak tespit edildi ` +
-          `(%${Math.round((object.score ?? 0) * 100)} güven). ` +
+          `(%${Math.round(detection.score * 100)} güven). ` +
           `Arama sorgusu: "${searchQuery}".`,
-        confidence: object.score ?? 0,
-        boundingBox,
-        colorHex: dominantHex,
+        confidence: detection.score,
+        boundingBox: box,
+        colorHex,
         exactMatch: exactMatch
           ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery))
           : null,

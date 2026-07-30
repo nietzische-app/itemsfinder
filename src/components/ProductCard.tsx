@@ -138,8 +138,15 @@ export function ProductCard({
             {product.title}
           </h4>
 
+          {/*
+            "eşleşme puanı", not "görsel benzerlik": this number is not a measured
+            visual similarity. Catalogue rows carry authored constants and live rows
+            are scored by rank position (productProvider.ts), so calling it visual
+            similarity would overstate what the pipeline knows. It becomes a real
+            measurement when image embeddings land.
+          */}
           <p className="mt-1 text-[12px] text-on-surface-variant">
-            %{Math.round(product.similarity * 100)} görsel benzerlik
+            %{Math.round(product.similarity * 100)} eşleşme puanı
             {product.isLive ? (
               <span className="ml-1.5 text-secondary-deep">· canlı fiyat</span>
             ) : null}

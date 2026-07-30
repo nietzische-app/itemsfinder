@@ -179,6 +179,53 @@ A provider must be *total*: a detection it cannot resolve keeps the products it
 arrived with, so the UI never loses a card.
 
 
+## Detection cleanup
+
+Vision's OBJECT_LOCALIZATION is generous. A three-piece outfit came back as eight
+or more boxes, because it reports the same garment at several granularities
+("Clothing" over "Outerwear" over "Top" on one cardigan) and each shoe of a pair
+separately — and every one of those became a hotspot.
+
+`src/lib/detectionFilter.ts` reduces them: a 0.65 confidence floor, suppression of
+nested boxes (containment ≥ 0.7) and overlapping ones (IoU ≥ 0.4), a merge of
+same-family neighbours so a pair of shoes is one hotspot, and a cap of 4.
+
+Ordering is the subtle part: candidates are ranked by **specificity before
+confidence**. Vision scores the generic "Clothing" box *higher* than the
+"Outerwear" box inside it, so plain score order keeps the useless one and
+suppresses both real garments. A named family always outranks `unknown`.
+
+The "Person" box, previously discarded, is now the frame of reference.
+`familyFitsBody` rejects the physically impossible — shoes at chest height, a top
+at ankle height — with deliberately one-sided, generous bounds: Vision sometimes
+returns a half-body crop, and tight bands would silently drop real detections,
+which is worse than letting noise through.
+
+### Per-region colour
+
+IMAGE_PROPERTIES describes the **whole frame**. Applying its dominant colour to
+every detection meant that on a photo dominated by a pink cardigan, the black
+shorts and the monochrome sneakers were both labelled "pudra" — and colour leads
+the generated search query, so every lookup inherited the error.
+
+`src/services/regionColor.ts` samples each box locally with `sharp`, from bytes
+the request already has (no extra Vision calls). Two details earn their keep:
+
+- It returns the mean of the **largest colour bucket**, not the mean of all
+  pixels. Averaging a black-and-white sneaker gives grey — a colour the shoe does
+  not contain and a word nobody searches.
+- It **excludes overlapping detections** while sampling. The box is not the
+  garment: on the reference photo the cardigan hangs over 69% of the shorts box,
+  so sampling the box alone still returned pink for the shorts.
+
+Measured on `look-pink-knit.jpg`: cardigan `#efb8c9` (Pudra), shorts `#333046`
+(Antrasit), sneakers `#352a32` (Antrasit) — three distinct colours where all three
+were previously "Pudra".
+
+> `sharp` is a native dependency and adds to the serverless bundle. It is only
+> imported by `regionColor.ts`, which is `server-only`, so it never reaches the
+> client; Vercel supports it natively.
+
 ## Product links: PDP or nothing
 
 A product CTA navigates to a product detail page or it does not navigate at all.
