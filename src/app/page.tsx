@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { ArrowRight } from "lucide-react";
 
 import { FaqSection } from "@/components/FaqSection";
@@ -32,10 +32,18 @@ const STEPS = [
 
 export default function HomePage() {
   const router = useRouter();
+  const [handoffError, setHandoffError] = useState<string | null>(null);
 
   const handleImageReady = useCallback(
     (image: UploadedImage) => {
-      saveUploadedImage(image);
+      setHandoffError(null);
+      const saved = saveUploadedImage(image);
+      if (!saved) {
+        setHandoffError(
+          "Görsel tarayıcıya kaydedilemedi. Gizli sekmede depolama kapalı olabilir — normal sekmede tekrar dene.",
+        );
+        return;
+      }
       router.push("/analyze");
     },
     [router],
@@ -46,7 +54,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="relative">
+    <div className="relative overflow-x-clip">
       {/* Ambient warmth behind the hero — keeps the canvas from reading as
           flat clinical white without introducing a hard colour block. */}
       <div
@@ -113,6 +121,12 @@ export default function HomePage() {
             </div>
 
             <ImageUploader onImageReady={handleImageReady} />
+
+            {handoffError ? (
+              <p role="alert" className="mt-3 text-center text-body-md text-error">
+                {handoffError}
+              </p>
+            ) : null}
           </div>
         </section>
 
