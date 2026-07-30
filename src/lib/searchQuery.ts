@@ -80,6 +80,20 @@ export interface SearchQueryParts {
   label?: string;
   /** Dominant colour of the region as hex. */
   colorHex?: string;
+  /**
+   * Colour name to use instead of the one derived from `colorHex`.
+   *
+   * The hex is a *measurement* of a rectangle; when a vision model has looked at
+   * the crop and named the garment's own colour, its word is the better one — the
+   * measurement is the background whenever the garment is a minority of its box.
+   */
+  colorName?: string;
+  /**
+   * Ordered descriptors placed between the colour and the garment noun — pattern,
+   * material, visible details, fit. This is the order a Turkish shopper types
+   * ("pembe fermuarlı triko ceket") and the order storefront relevance rewards.
+   */
+  descriptors?: Array<string | null | undefined>;
   /** Free-text attributes, e.g. "Gerçek Kırmızı • Kadife Mat". */
   attributes?: string;
 }
@@ -97,20 +111,31 @@ const NOISE = new Set([
   "kozmetik",
   "ürün",
   "parça",
+  // "Plain" is the default for most garments, so as a search token it narrows
+  // nothing while consuming one of the few slots a search box respects.
+  "düz",
+  "sade",
+  "desensiz",
 ]);
+
+/** Storefront search boxes degrade past a handful of words. */
+const MAX_TOKENS = 6;
 
 /**
  * Builds a descriptive, de-duplicated search query.
  *
- * Order matters: colour first, then the descriptive phrase, then the object
- * type — that is the order Turkish shoppers type ("kırmızı mat ruj"), and it
- * is the order storefront relevance ranking rewards.
+ * Order matters: colour first, then the descriptors, then the descriptive
+ * phrase, then the object type — that is the order Turkish shoppers type
+ * ("kırmızı mat ruj"), and it is the order storefront relevance ranking
+ * rewards. The object type is placed last but reserved first, so it survives
+ * the token cap.
  */
 export function buildSearchQuery(parts: SearchQueryParts): string {
   const tokens: string[] = [];
+  const noun: string[] = [];
   const seen = new Set<string>();
 
-  const push = (value: string | undefined) => {
+  const push = (value: string | undefined, into: string[] = tokens) => {
     if (!value) return;
 
     // Attribute lines are bullet-separated; split them into words.
@@ -122,15 +147,19 @@ export function buildSearchQuery(parts: SearchQueryParts): string {
       if (seen.has(key) || NOISE.has(key)) continue;
 
       seen.add(key);
-      tokens.push(clean);
+      into.push(clean);
     }
   };
 
-  if (parts.colorHex) push(colorNameFromHex(parts.colorHex) ?? undefined);
+  push(parts.colorName ?? (parts.colorHex ? colorNameFromHex(parts.colorHex) ?? undefined : undefined));
+  for (const descriptor of parts.descriptors ?? []) push(descriptor ?? undefined);
   push(parts.label);
   push(parts.attributes);
-  push(parts.itemType);
+  // The garment noun is collected separately: it is the one token a search box
+  // cannot do without, and it used to sit last, so a rich set of attributes
+  // truncated it away — "pudra düz triko fermuarlı yüksek yaka" is a query with
+  // no product in it. Room is reserved for it instead of hoping it fits.
+  push(parts.itemType, noun);
 
-  // Storefront search boxes degrade past a handful of words.
-  return tokens.slice(0, 6).join(" ");
+  return [...tokens.slice(0, Math.max(1, MAX_TOKENS - noun.length)), ...noun].join(" ");
 }

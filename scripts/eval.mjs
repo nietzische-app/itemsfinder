@@ -73,6 +73,8 @@ const fmt = (v) => `${(v * 100).toFixed(0)}%`;
 let colorHits = 0;
 let colorTotal = 0;
 const colorMisses = [];
+/** Per-item outcome, so the VLM section can be scored on the same items. */
+const regionHitById = new Map();
 
 for (const testCase of cases) {
   const path = `${ROOT}public${testCase.image}`;
@@ -95,6 +97,8 @@ for (const testCase of cases) {
     colorTotal += 1;
 
     const bucket = hex ? colorBucketOf(hex) : null;
+    regionHitById.set(item.id, { hit: bucket === item.color, bucket, hex });
+
     if (bucket === item.color) {
       colorHits += 1;
       if (VERBOSE) {
@@ -102,6 +106,86 @@ for (const testCase of cases) {
       }
     } else {
       colorMisses.push({ id: item.id, want: item.color, got: bucket, hex });
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  1b. VLM attributes, replayed from fixtures                                */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * The measured colour above describes a *rectangle*; these describe the garment
+ * inside it. The four standing colour failures are all cases where those are not
+ * the same thing, so this is the metric that says whether the attribute stage
+ * earns its API call — scored on the same items, against the same labels.
+ *
+ * No fixtures means the stage has never been recorded; the section stays silent
+ * rather than reporting a zero that would read as a regression.
+ */
+const attrDir = `${ROOT}eval/fixtures/attrs`;
+const attrFixtures = existsSync(attrDir)
+  ? readdirSync(attrDir).filter((name) => name.endsWith(".json"))
+  : [];
+
+let vlmColorHits = 0;
+let vlmColorTotal = 0;
+let vlmDescribed = 0;
+let vlmNounHits = 0;
+/**
+ * Region-colour hits on exactly the items the VLM was recorded for.
+ *
+ * The overall region score covers all fourteen items; fixtures may cover four.
+ * Comparing 3/4 against 10/14 would be comparing two different questions, and the
+ * gate below is only meaningful on a like-for-like subset.
+ */
+let regionHitsOnVlmItems = 0;
+const vlmColorMisses = [];
+const vlmNounMisses = [];
+
+for (const name of attrFixtures) {
+  const exampleId = name.replace(/\.json$/, "");
+  const truth = cases.find((entry) => entry.exampleId === exampleId);
+  if (!truth) continue;
+
+  const recorded = JSON.parse(readFileSync(`${attrDir}/${name}`, "utf8"));
+
+  for (const item of truth.items) {
+    vlmColorTotal += 1;
+    if (regionHitById.get(item.id)?.hit) regionHitsOnVlmItems += 1;
+
+    const attrs = recorded[item.id];
+
+    // An item the model declined to describe scores as a miss, not as an absence:
+    // in the pipeline it falls back to the measured colour, and the point of the
+    // comparison is what the user actually ends up with.
+    if (!attrs) {
+      vlmColorMisses.push({ id: item.id, want: item.color, got: "betimlenmedi" });
+      vlmNounMisses.push({ id: item.id, want: item.queryToken, got: "betimlenmedi" });
+      continue;
+    }
+
+    vlmDescribed += 1;
+
+    const bucket = colorBucketOf(attrs.colorHex);
+    if (bucket === item.color) {
+      vlmColorHits += 1;
+      if (VERBOSE) {
+        console.log(
+          `    ✓ ${item.id.padEnd(16)} ${attrs.colorHex} ${bucket} («${attrs.colorName}» ${attrs.garmentType})`,
+        );
+      }
+    } else {
+      vlmColorMisses.push({ id: item.id, want: item.color, got: bucket, hex: attrs.colorHex });
+    }
+
+    // The garment noun is what the query is actually built around, so it is held
+    // to the same expected token as the query metric below.
+    const noun = String(attrs.garmentType ?? "").toLocaleLowerCase("tr");
+    if (noun.includes(item.queryToken.toLocaleLowerCase("tr"))) {
+      vlmNounHits += 1;
+    } else {
+      vlmNounMisses.push({ id: item.id, want: item.queryToken, got: attrs.garmentType });
     }
   }
 }
@@ -244,8 +328,23 @@ const queryScore = pct(queryHits, queryTotal);
 const familyScore = pct(familyHits, familyTotal);
 const hotspotScore = pct(hotspotHits, hotspotCases);
 
+const vlmColorScore = pct(vlmColorHits, vlmColorTotal);
+const vlmNounScore = pct(vlmNounHits, vlmColorTotal);
+const regionSubsetScore = pct(regionHitsOnVlmItems, vlmColorTotal);
+
 console.log(`\n${cases.length} kombin / ${colorTotal} parça\n`);
 console.log(`  Bölge rengi      ${fmt(colorScore)}  (${colorHits}/${colorTotal})   taban ${fmt(FLOORS.color)}`);
+if (vlmColorTotal > 0) {
+  console.log(
+    `  VLM rengi        ${fmt(vlmColorScore)}  (${vlmColorHits}/${vlmColorTotal})   taban ${fmt(regionSubsetScore)} (aynı parçalarda ölçülen renk)`,
+  );
+  console.log(`  VLM ürün adı     ${fmt(vlmNounScore)}  (${vlmNounHits}/${vlmColorTotal})`);
+  console.log(`      ${vlmDescribed}/${vlmColorTotal} parça betimlendi`);
+} else {
+  console.log(
+    `  VLM rengi        —      (fixture yok; «npm run eval:record-attrs» bir ANTHROPIC_API_KEY ister)`,
+  );
+}
 console.log(`  Sorgu token'ı    ${fmt(queryScore)}  (${queryHits}/${queryTotal})   taban ${fmt(FLOORS.query)}`);
 console.log(`  Aile tutarlılığı ${fmt(familyScore)}  (${familyHits}/${familyTotal})   taban ${fmt(FLOORS.family)}`);
 
@@ -271,6 +370,18 @@ if (colorMisses.length) {
     console.log(`    ${miss.id.padEnd(16)} beklenen ${miss.want}, ölçülen ${miss.got} ${miss.hex ?? ""}`);
   }
 }
+if (vlmColorMisses.length) {
+  console.log("\n  VLM renk sapmaları:");
+  for (const miss of vlmColorMisses) {
+    console.log(`    ${miss.id.padEnd(16)} beklenen ${miss.want}, ölçülen ${miss.got} ${miss.hex ?? ""}`);
+  }
+}
+if (vlmNounMisses.length) {
+  console.log("\n  VLM ürün adı sapmaları:");
+  for (const miss of vlmNounMisses) {
+    console.log(`    ${miss.id.padEnd(16)} «${miss.want}» yok -> "${miss.got}"`);
+  }
+}
 if (queryMisses.length) {
   console.log("\n  Sorgu sapmaları:");
   for (const miss of queryMisses) {
@@ -291,6 +402,17 @@ const failures = [
   fixtures.length > 0 &&
     hotspotScore < FLOORS.hotspotCount &&
     `hotspot ${fmt(hotspotScore)} < ${fmt(FLOORS.hotspotCount)}`,
+  /*
+   * A relative floor rather than an absolute one. Picking a number for a stage
+   * that has never been measured would be aspirational — permanently red or
+   * trivially green, and either way uninformative. What is not negotiable is the
+   * direction: the pipeline prefers the model's colour over the measured one, so
+   * if the model's colour is the worse of the two, that preference is wrong and
+   * this has to fail.
+   */
+  vlmColorTotal > 0 &&
+    vlmColorScore < regionSubsetScore &&
+    `VLM rengi ${fmt(vlmColorScore)} < aynı parçalarda ölçülen renk ${fmt(regionSubsetScore)}`,
 ].filter(Boolean);
 
 if (failures.length) {

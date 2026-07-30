@@ -29,7 +29,14 @@ export function colorBucketOf(hex: string): ColorBucket {
    * label.
    */
   if (lightness < 0.28 && saturation < 0.55) return "koyu";
-  if (lightness > 0.86 && saturation < 0.25) return "beyaz";
+  /*
+   * Near white, HSL saturation stops meaning anything: its denominator collapses
+   * as lightness approaches 1, so cream (#f2efe6) reports 0.32 saturation off a
+   * channel spread of twelve units out of 255 and came out "sari". Nobody shops
+   * for a yellow beanie because it is off-white. Above this lightness the raw
+   * channel spread is the honest measure of whether there is a hue at all.
+   */
+  if (lightness > 0.86 && delta < 0.12) return "beyaz";
   // Metal frames and washed greys sit around 0.15 saturation; 0.12 was too tight.
   if (saturation < 0.2) return lightness < 0.6 ? "gri" : "beyaz";
 

@@ -26,6 +26,10 @@ import {
   retargetSearchQuery,
 } from "@/services/mockCatalog";
 import { ContextDevService } from "@/services/contextDevService";
+import {
+  getAttributeExtractor,
+  type GarmentAttributes,
+} from "@/services/attributeExtractor";
 import { imageSize, regionDominantColor } from "@/services/regionColor";
 import {
   ContextDevProductProvider,
@@ -155,6 +159,20 @@ export function categorizeLabel(label: string): ItemCategory | null {
 
   // Anything else (Person, Furniture, Plant, ...) is not shoppable for us.
   return null;
+}
+
+/** Human-readable one-liner for the detail panel, e.g. "pudra triko fermuarlı ceket". */
+function describeAttributes(attrs: GarmentAttributes): string {
+  return [
+    attrs.colorName,
+    attrs.pattern,
+    attrs.material,
+    ...attrs.details,
+    attrs.fit,
+    attrs.garmentType,
+  ]
+    .filter(Boolean)
+    .join(" ");
 }
 
 /* -------------------------------------------------------------------------- */
@@ -398,6 +416,33 @@ export class GoogleVisionSearchService implements VisualSearchService {
     );
 
     /*
+     * Garment attributes from the crops.
+     *
+     * The measured colour above is a property of a *rectangle*; this is a
+     * description of the garment inside it. Where the two disagree — the beanie
+     * whose box is mostly studio wall — the model's answer is the one a shopper
+     * would recognise. Off unless `ENABLE_VLM_ATTRIBUTES=true` and a key is set;
+     * every item that fails to be described keeps the measured colour and Vision's
+     * class, which is exactly what shipped before this stage existed.
+     */
+    const extractor = getAttributeExtractor();
+    const attributes =
+      extractor && size
+        ? await extractor.extract(
+            imageBuffer,
+            // In `dedupeDetections`' own order — named families before "unknown",
+            // then confidence — so if the item budget truncates the list it drops
+            // the least identifiable detections rather than an arbitrary slice.
+            detections.map((detection, index) => ({
+              key: String(index),
+              box: detection.box,
+              itemType: detection.name,
+            })),
+            { size, signal: input.signal },
+          )
+        : new Map<string, GarmentAttributes>();
+
+    /*
      * WEB_DETECTION entities describe the *photograph*, not one garment in it —
      * "street fashion", "photo shoot", sometimes a real product name. They used
      * to be handed out first-come-first-served to whichever detection shared a
@@ -416,50 +461,102 @@ export class GoogleVisionSearchService implements VisualSearchService {
     const items: DetectedItem[] = [];
     const usedEntities = new Set<string>();
 
-    for (const detection of detections) {
-      const { name, box, family } = detection;
+    /*
+     * Indexed rather than pushed-and-counted: `regionColors` is built from
+     * `detections`, so reading it at `items.length` only worked because nothing in
+     * this loop can `continue`. That is a coincidence one guard away from silently
+     * shifting every colour by one.
+     */
+    for (const [index, detection] of Array.from(detections.entries())) {
+      const { name, box } = detection;
       const category = categorizeLabel(name);
       if (!category) continue;
 
-      const entity = webEntities.find(
-        (candidate) =>
-          !usedEntities.has(candidate.description) &&
-          familyOf(candidate.description) === family &&
-          family !== "unknown",
-      );
+      const attrs = attributes.get(String(index)) ?? null;
+
+      /*
+       * Family stays Vision's, with one exception: when Vision could only manage a
+       * generic class ("Clothing") and the model named something specific, the
+       * specific name is adopted — but only if it is not physically contradicted by
+       * where the box sits on the body. A *conflict* between the two is resolved in
+       * Vision's favour, because the family gates which catalogue rows are eligible
+       * and Vision's class is tied to the box it drew.
+       */
+      const attrFamily = attrs ? familyOf(attrs.garmentType) : "unknown";
+      const family =
+        detection.family === "unknown" &&
+        attrFamily !== "unknown" &&
+        familyFitsBody(attrFamily, bodyPosition(box, personBox))
+          ? attrFamily
+          : detection.family;
+
+      /*
+       * The web entity is only consulted when the crop was not described. It names
+       * the photograph, not the garment; once something has actually looked at this
+       * region, that reading wins.
+       */
+      const entity = attrs
+        ? undefined
+        : webEntities.find(
+            (candidate) =>
+              !usedEntities.has(candidate.description) &&
+              familyOf(candidate.description) === family &&
+              family !== "unknown",
+          );
       if (entity) usedEntities.add(entity.description);
 
-      const colorHex = regionColors[items.length] ?? imageDominantHex;
+      // Measured colour is the fallback; the crop reading is preferred, because the
+      // measurement describes the rectangle and this describes the garment.
+      const colorHex = attrs?.colorHex ?? regionColors[index] ?? imageDominantHex;
+      const colorName = attrs?.colorName ?? colorNameFromHex(colorHex);
       const phrase = entity?.description;
-      const colorName = colorNameFromHex(colorHex);
-      const label = [colorName, phrase ?? name].filter(Boolean).join(" ");
+      const itemName = attrs?.garmentType ?? name;
+
+      /*
+       * Descriptor order is the order a Turkish shopper types: pattern, then the
+       * visible details, then the material sitting right before the noun —
+       * "pudra fermuarlı triko ceket". Material last of the three because
+       * "triko ceket" is itself a category name on Turkish storefronts.
+       */
+      const descriptors = attrs
+        ? [attrs.pattern, ...attrs.details, attrs.material, attrs.fit]
+        : undefined;
+
+      const label = [colorName, attrs?.garmentType ?? phrase ?? name]
+        .filter(Boolean)
+        .join(" ");
+
       const searchQuery = buildSearchQuery({
-        itemType: name,
+        itemType: itemName,
         label: phrase,
+        colorName: colorName ?? undefined,
         colorHex,
+        descriptors,
       });
 
       /*
-       * Family comes from Vision's object class, which is the reliable signal
-       * for what kind of garment this is; the descriptive phrase and the query
-       * only pick the best row *within* that family. The chosen rows then get
-       * their text search repointed at this detection.
+       * The descriptive phrase and the query only pick the best row *within* the
+       * family; the family itself is the gate. The chosen rows then get their text
+       * search repointed at this detection.
        */
       const { exactMatch, alternatives } = findProductsForLabel(
-        `${phrase ?? name} ${searchQuery}`,
+        `${attrs?.garmentType ?? phrase ?? name} ${searchQuery}`,
         category,
         family,
       );
 
       items.push({
-        id: `gv-${items.length}-${name.toLowerCase().replace(/\s+/g, "-")}`,
+        id: `gv-${index}-${name.toLowerCase().replace(/\s+/g, "-")}`,
         label,
-        itemType: name,
+        itemType: itemName,
         category,
-        attributes: [colorName, name].filter(Boolean).join(" • "),
+        attributes: [colorName, attrs?.material, attrs?.pattern, itemName]
+          .filter(Boolean)
+          .join(" • "),
         description:
           `Görselde "${name}" olarak tespit edildi ` +
           `(%${Math.round(detection.score * 100)} güven). ` +
+          (attrs ? `Kırpım analizi: ${describeAttributes(attrs)}. ` : "") +
           `Arama sorgusu: "${searchQuery}".`,
         confidence: detection.score,
         boundingBox: box,
@@ -623,5 +720,35 @@ function readInt(value: string | undefined, fallback: number): number {
  * fresh clone produces a complete, clickable experience.
  */
 export function getVisualSearchService(): VisualSearchService {
+  warnIfOverBudget();
   return new ComposedVisualSearchService(getDetector(), getProductProvider());
+}
+
+/**
+ * Vercel kills `/api/detect` at `maxDuration = 60`, and the stages are
+ * sequential: Vision, then the attribute pass, then live products. Each has its
+ * own deadline, and each deadline produces a *working* page — a platform kill
+ * produces an error page. So the sum has to stay under the limit, and the
+ * attribute stage arriving after the Context.dev budget was set means the two can
+ * now add up past it without anyone noticing until a scan dies in production.
+ */
+function warnIfOverBudget(): void {
+  if (process.env.ENABLE_VLM_ATTRIBUTES !== "true") return;
+
+  const vlm = readInt(process.env.VLM_DEADLINE_MS, 15_000);
+  const products = isContextDevConfigured()
+    ? readInt(process.env.CONTEXT_DEV_DEADLINE_MS, 45_000)
+    : 0;
+
+  // ~15s of headroom for Vision itself plus serialising the response.
+  const budget = 45_000;
+
+  if (vlm + products > budget) {
+    console.warn(
+      `[detect] VLM_DEADLINE_MS (${vlm}) + CONTEXT_DEV_DEADLINE_MS (${products}) = ` +
+        `${vlm + products}ms, which leaves too little of the 60s function budget for ` +
+        "Vision. Lower CONTEXT_DEV_DEADLINE_MS, or a slow scan will be killed by the " +
+        "platform instead of degrading gracefully.",
+    );
+  }
 }

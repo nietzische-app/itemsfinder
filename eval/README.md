@@ -4,6 +4,7 @@
 npm run eval                 # renk, sorgu, aile — anahtar gerekmez
 npm run eval -- --verbose    # parça parça detay
 npm run eval:record          # gerçek Vision yanıtlarını kaydet (anahtar ister)
+npm run eval:record-attrs    # gerçek VLM özniteliklerini kaydet (anahtar ister)
 ```
 
 Çıkış kodu, metriklerden biri tabanın altına düştüğünde sıfırdan farklı olur —
@@ -34,9 +35,19 @@ alır.
 | Metrik | Ne ölçüyor | Taban |
 | --- | --- | --- |
 | Bölge rengi | Ölçülen baskın rengin, insanın adlandıracağı renk ailesiyle eşleşmesi | %70 |
+| VLM rengi | Kırpıma bakan modelin verdiği rengin aynı eşleşmeyi tutması (fixture ister) | aynı parçalarda ölçülen renk |
+| VLM ürün adı | Modelin verdiği Türkçe ürün adının beklenen token'ı taşıması (fixture ister) | — |
 | Sorgu token'ı | Üretilen aramanın, parçayı bulmaya yetecek Türkçe kelimeyi taşıması | %90 |
 | Aile tutarlılığı | Sınıflandırıcının kataloğu kendi içinde tutarlı etiketlemesi | %90 |
 | Hotspot sayısı | Temizlenmiş tespit sayısının beklenene ±1 yakınlığı (fixture ister) | %75 |
+
+VLM renginin tabanı **göreli**: hiç ölçülmemiş bir aşamaya mutlak bir sayı
+koymak ya kalıcı kırmızı ya da bedava yeşil olurdu. Tartışılmaz olan yön:
+boru hattı modelin rengini ölçülen renge **tercih ediyor**, dolayısıyla model
+rengi aynı parçalarda ölçülenden kötüyse bu tercih yanlıştır ve eval kırmızıya
+düşer. Karşılaştırma yalnızca fixture'ı olan parçalar üzerinde yapılıyor —
+14 parçalık skoru 4 parçalık skorla kıyaslamak iki farklı soruyu kıyaslamak
+olurdu.
 
 Aile metriği **doğruluk değil tutarlılık** ölçüyor: referans aileler de aynı
 sınıflandırıcıdan türetiliyor. Bir kural değişikliğinin kataloğun yarısını
@@ -49,6 +60,7 @@ yüzden var.
 ```
 4 kombin / 14 parça
   Bölge rengi      71%  (10/14)
+  VLM rengi        —     (fixture yok)
   Sorgu token'ı   100%  (14/14)
   Aile tutarlılığı 100%  (14/14)
   Hotspot sayısı   —     (fixture yok)
@@ -75,3 +87,24 @@ Bu set üzerinde ölçülüp **reddedilen** üç çözüm:
 
 Bunları düzeltecek olan gerçek bir maske: segmentasyon ya da kırpıma bakan bir
 görsel dil modeli. Yeni bir sabit değil. O iş girdiğinde taban yükseltilmeli.
+
+## VLM öznitelik aşaması — durum
+
+Aşamanın kendisi yazıldı (`src/services/attributeExtractor.ts`) ve boru hattına
+bağlandı; yerel bir stub'a karşı 58 kontrolle doğrulandı: kırpma, şema
+doğrulaması, etiket/renk/sorgu/aile birleştirmesi ve her başarısızlık modunun
+(bozuk JSON, ret, HTTP 500, süre aşımı, şemaya uyan ama kullanılamaz içerik)
+ölçülen renge geri düşmesi.
+
+**Doğruluk kazancı henüz ölçülmedi.** Bunun için gerçek bir model çağrısı
+gerekiyor:
+
+```bash
+ANTHROPIC_API_KEY=... npm run eval:record-attrs
+npm run eval
+```
+
+Bu, `eval/fixtures/attrs/` altına yanıtları yazar ve eval bundan sonra "VLM
+rengi" ile "VLM ürün adı" satırlarını da raporlar. Yukarıdaki dört sapmanın
+gerçekten kapandığını gösterecek olan o çalıştırma; o rakam gelene kadar bu
+aşamanın kazandığı tek şey doğrulanmış bir boru hattıdır.
