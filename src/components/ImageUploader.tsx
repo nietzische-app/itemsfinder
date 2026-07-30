@@ -109,7 +109,7 @@ export function ImageUploader({ onImageReady }: ImageUploaderProps) {
               </p>
             </div>
 
-            <p className="label text-outline-variant">JPG • PNG • WEBP · en fazla 8 MB</p>
+            <p className="label text-outline">JPG • PNG • WEBP · en fazla 8 MB</p>
 
             {/* Decorative depth, per the design's upload zone. */}
             <span

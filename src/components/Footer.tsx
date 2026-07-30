@@ -47,12 +47,12 @@ export function Footer() {
 
           {/* Support */}
           <div className="min-w-0">
-            <h3 className="label text-outline">Destek ve İletişim</h3>
+            <h2 className="label text-outline">Destek ve İletişim</h2>
             <ul className="mt-4 space-y-2.5">
               <li>
                 <Link
                   href="/#sss"
-                  className="text-body-md text-on-surface-variant transition-colors hover:text-primary"
+                  className="inline-flex min-h-[24px] items-center text-body-md text-on-surface-variant transition-colors hover:text-primary"
                 >
                   Sıkça Sorulan Sorular
                 </Link>
@@ -60,7 +60,7 @@ export function Footer() {
               <li>
                 <a
                   href={`mailto:${SUPPORT_EMAIL}`}
-                  className="flex items-center gap-1.5 text-body-md text-on-surface-variant transition-colors hover:text-primary"
+                  className="inline-flex min-h-[24px] items-center gap-1.5 text-body-md text-on-surface-variant transition-colors hover:text-primary"
                 >
                   <Mail className="h-4 w-4 shrink-0" strokeWidth={1.75} />
                   {SUPPORT_EMAIL}
@@ -69,7 +69,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/yasal-bildirim"
-                  className="text-body-md text-on-surface-variant transition-colors hover:text-primary"
+                  className="inline-flex min-h-[24px] items-center text-body-md text-on-surface-variant transition-colors hover:text-primary"
                 >
                   Yasal bildirim
                 </Link>
@@ -100,13 +100,13 @@ function FooterColumn({
 }) {
   return (
     <div className="min-w-0">
-      <h3 className="label text-outline">{title}</h3>
+      <h2 className="label text-outline">{title}</h2>
       <ul className="mt-4 space-y-2.5">
         {links.map((link) => (
           <li key={`${link.href}-${link.label}`}>
             <Link
               href={link.href}
-              className="text-body-md text-on-surface-variant transition-colors hover:text-primary"
+              className="inline-flex min-h-[24px] items-center text-body-md text-on-surface-variant transition-colors hover:text-primary"
             >
               {link.label}
             </Link>

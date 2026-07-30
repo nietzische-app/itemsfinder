@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { exampleToDataUrl } from "@/lib/imageSession";
 import { cn } from "@/lib/utils";
 import { SHOWCASE_FALLBACK, SHOWCASE_INTERVAL_MS } from "@/lib/showcase";
-import { merchantColor, merchantInitials } from "@/services/merchantSearch";
+import { merchantColor, merchantInitials, merchantTextColor } from "@/services/merchantSearch";
 import type {
   ShowcasePreviewItem,
   ShowcasePreviewLook,
@@ -284,9 +284,14 @@ export function LiveScanPreview({
               </div>
 
               <div className="min-w-0">
-                <h3 className="font-display text-[17px] font-semibold leading-snug text-primary">
+                {/*
+                  h2, not h3: this is the first heading after the page h1, and a
+                  jump from h1 to h3 is a gap in the outline a screen-reader user
+                  navigates by.
+                */}
+                <h2 className="font-display text-[17px] font-semibold leading-snug text-primary">
                   {active.label}
-                </h3>
+                </h2>
                 <p className="mt-1 flex min-w-0 items-center gap-1.5 text-[13px] text-on-surface-variant">
                   <span
                     aria-hidden="true"
@@ -311,19 +316,33 @@ export function LiveScanPreview({
           <div className="flex min-w-0 items-center gap-2">
             <div className="flex min-w-0 flex-1 items-center gap-1.5">
               {look.items.map((item, index) => (
+                /*
+                 * The bar is 6px tall; the button around it is not.
+                 *
+                 * WCAG 2.2 asks for a 24px target and these measured 70×6, with the
+                 * spacing exception unavailable because they sit 6px apart. Padding
+                 * the control and drawing the bar as an inner span keeps the design
+                 * — a thin progress rail — while giving a finger something to hit.
+                 * `-my-2` keeps the added height from moving the row.
+                 */
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => setItemIndex(index)}
                   aria-pressed={index === itemIndex}
                   aria-label={item.label}
-                  className={cn(
-                    "h-1.5 min-w-0 flex-1 rounded-full transition-colors duration-300",
-                    index === itemIndex
-                      ? "bg-secondary"
-                      : "bg-outline-variant hover:bg-outline",
-                  )}
-                />
+                  className="group -my-2.5 flex min-w-0 flex-1 items-center py-2.5"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "h-1.5 w-full rounded-full transition-colors duration-300",
+                      index === itemIndex
+                        ? "bg-secondary"
+                        : "bg-outline-variant group-hover:bg-outline",
+                    )}
+                  />
+                </button>
               ))}
             </div>
 
@@ -395,8 +414,11 @@ function ProductBlock({
         <span className="flex min-w-0 items-center gap-1.5 rounded-full border border-outline-variant/70 px-2 py-0.5 text-[11px] font-semibold uppercase text-on-surface-variant">
           <span
             aria-hidden="true"
-            className="flex h-4 shrink-0 items-center justify-center rounded-[4px] px-1 text-[9px] font-bold leading-none text-white"
-            style={{ backgroundColor: merchantColor(match.merchant) }}
+            className="flex h-4 shrink-0 items-center justify-center rounded-[4px] px-1 text-[9px] font-bold leading-none"
+            style={{
+                    backgroundColor: merchantColor(match.merchant),
+                    color: merchantTextColor(match.merchant),
+                  }}
           >
             {merchantInitials(match.merchant)}
           </span>

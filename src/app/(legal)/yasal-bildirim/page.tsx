@@ -60,7 +60,14 @@ export default function LegalNoticePage() {
               <strong>E-posta</strong>
             </td>
             <td>
-              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+              {/*
+                Alone in a cell, so WCAG 2.5.8's "in a block of text" exception
+                does not cover it and 17px was under the 24px minimum. The links
+                inside the paragraphs below are exempt and left alone.
+              */}
+              <a className="inline-flex min-h-[24px] items-center" href={`mailto:${CONTACT_EMAIL}`}>
+                {CONTACT_EMAIL}
+              </a>
             </td>
           </tr>
         </tbody>

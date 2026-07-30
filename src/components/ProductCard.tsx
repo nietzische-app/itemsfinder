@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { useSavedProducts } from "@/lib/savedItems";
-import { merchantColor, merchantInitials } from "@/services/merchantSearch";
+import { merchantColor, merchantInitials, merchantTextColor } from "@/services/merchantSearch";
 import { cn } from "@/lib/utils";
 import { buildAffiliateUrl, formatPrice, savingsPercent } from "@/utils/affiliate";
 import type { ProductMatch } from "@/types";
@@ -105,8 +105,11 @@ export function ProductCard({
                 // makes the store recognisable at a glance.
                 <span
                   aria-hidden="true"
-                  className="flex h-4 shrink-0 items-center justify-center rounded-[4px] px-1 text-[9px] font-bold leading-none text-white"
-                  style={{ backgroundColor: merchantColor(product.merchant) }}
+                  className="flex h-4 shrink-0 items-center justify-center rounded-[4px] px-1 text-[9px] font-bold leading-none"
+                  style={{
+                    backgroundColor: merchantColor(product.merchant),
+                    color: merchantTextColor(product.merchant),
+                  }}
                 >
                   {merchantInitials(product.merchant)}
                 </span>

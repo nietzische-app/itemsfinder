@@ -38,8 +38,20 @@ const config: Config = {
         "inverse-surface": "#2e2e2e",
         "inverse-on-surface": "#f1f1f1",
 
+        /*
+         * Muted text and hairlines.
+         *
+         * `#757575` measured 4.61:1 on white and only 4.01:1 on the tinted
+         * surfaces it is actually used on — under the 4.5:1 AA floor for body
+         * text, which the first accessibility audit caught on five pages. `#676767`
+         * clears it on every surface in this palette down to
+         * `surface-container.highest` (4.45:1 there, 5.66:1 on white).
+         *
+         * `variant` is hairlines and dividers, not text; 3:1 non-text contrast is
+         * the relevant bar and it is not used for anything readable.
+         */
         outline: {
-          DEFAULT: "#757575",
+          DEFAULT: "#676767",
           variant: "#c6c6c6",
         },
 
