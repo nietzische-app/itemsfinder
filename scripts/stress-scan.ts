@@ -12,6 +12,7 @@
 
 import {
   buildExactMatchQuery,
+  extractMaterialsAndPatterns,
   normalizeFashionQuery,
 } from "../src/lib/searchQueryBuilder";
 import {
@@ -26,6 +27,12 @@ import {
   merchantPriority,
   retailerRank,
 } from "../src/services/retailers";
+import {
+  EXACT_MATCH_THRESHOLD,
+  pickExactAndRest,
+  scoreCandidate,
+} from "../src/services/reRanker";
+import { canonicalizeBrand, parseLogoAnnotations } from "../src/lib/brandLogos";
 import { MOCK_SCENARIOS, hydrateItems } from "../src/services/mockCatalog";
 
 type Check = { name: string; ok: boolean; detail?: string };
@@ -318,6 +325,162 @@ function archetypeLowContrastRoiHints(): Check[] {
   ];
 }
 
+function archetypePrecisionLogoTextureRerank(): Check[] {
+  const checks: Check[] = [];
+
+  checks.push(
+    assert("logo canonicalize Nike", canonicalizeBrand("Nike, Inc.") === "Nike"),
+  );
+  checks.push(
+    assert("logo canonicalize Zara", canonicalizeBrand("ZARA") === "Zara"),
+  );
+  checks.push(
+    assert(
+      "logo parse picks best known brand",
+      parseLogoAnnotations([
+        { description: "Unknown Corp", score: 0.99 },
+        { description: "Adidas", score: 0.82 },
+        { description: "Nike", score: 0.91 },
+      ])[0]?.brand === "Nike",
+    ),
+  );
+
+  const nikeQuery = buildExactMatchQuery({
+    primaryCategory: "FOOTWEAR",
+    brandLogo: "Nike",
+    colorName: "Siyah",
+    webEntity: "High Top Sneakers",
+    materials: ["Deri"],
+  });
+  checks.push(
+    assert(
+      "logo prepends Nike into query",
+      /^Nike\b/i.test(nikeQuery) && /siyah/i.test(nikeQuery) && /deri/i.test(nikeQuery),
+      nikeQuery,
+    ),
+  );
+
+  const textures = extractMaterialsAndPatterns(
+    "ribbed knit leather cardigan with plaid check print",
+  );
+  checks.push(
+    assert(
+      "texture extract includes Triko/Fitilli/Deri",
+      textures.materials.includes("Triko") &&
+        textures.materials.includes("Fitilli") &&
+        textures.materials.includes("Deri"),
+      textures.materials.join(","),
+    ),
+  );
+  checks.push(
+    assert(
+      "pattern extract includes Ekose",
+      textures.patterns.includes("Ekose"),
+      textures.patterns.join(","),
+    ),
+  );
+
+  const materialQuery = buildExactMatchQuery({
+    primaryCategory: "OUTERWEAR",
+    colorName: "Siyah",
+    webEntity: "Zip Knit Cardigan",
+    materials: ["Triko"],
+    patterns: ["Ekose"],
+  });
+  checks.push(
+    assert(
+      "mandatory Triko+Ekose in query",
+      /triko/i.test(materialQuery) && /ekose/i.test(materialQuery),
+      materialQuery,
+    ),
+  );
+
+  const target = {
+    primaryCategory: "FOOTWEAR" as const,
+    colorName: "Siyah",
+    webEntity: "Nike High Top Sneaker",
+    webEntityScore: 0.92,
+    brandLogo: "Nike",
+    materials: ["Deri"],
+    patterns: [] as string[],
+  };
+
+  const ranked = pickExactAndRest(target, [
+    {
+      title: "Nike Siyah Deri Yüksek Taban Sneaker",
+      brand: "Nike",
+      productUrl: "https://www.trendyol.com/nike-siyah-deri-sneaker-p-1",
+      priorSimilarity: 0.93,
+    },
+    {
+      title: "Beyaz Keten Espadril",
+      brand: "Other",
+      productUrl: "https://www.trendyol.com/espadril-p-2",
+      priorSimilarity: 0.4,
+    },
+    {
+      title: "Siyah Deri Bot",
+      brand: "Zara",
+      productUrl: "https://www.zara.com/tr/tr/bot-p-3.html",
+      priorSimilarity: 0.7,
+    },
+  ]);
+
+  checks.push(
+    assert(
+      "re-rank exact clears 85% threshold",
+      Boolean(ranked.exact && ranked.exact.score >= EXACT_MATCH_THRESHOLD),
+      String(ranked.exact?.score),
+    ),
+  );
+  checks.push(
+    assert(
+      "re-rank exact is Nike sneaker",
+      /nike/i.test(ranked.exact?.candidate.title ?? ""),
+      ranked.exact?.candidate.title,
+    ),
+  );
+  checks.push(
+    assert(
+      "re-rank places exact first",
+      ranked.ranked[0]?.isExact === true,
+    ),
+  );
+
+  const weak = scoreCandidate(
+    { primaryCategory: "FOOTWEAR", colorName: "Siyah" },
+    {
+      title: "Çift Kişilik Nevresim",
+      productUrl: "https://www.trendyol.com/nevresim-p-9",
+    },
+  );
+  checks.push(
+    assert(
+      "cross-category scores below exact threshold",
+      weak.score < EXACT_MATCH_THRESHOLD && weak.breakdown.category < 0.5,
+      String(weak.score),
+    ),
+  );
+
+  // Street + beauty hydrations still produce birebir tags after precision wiring.
+  const street = hydrateItems(MOCK_SCENARIOS["pink-outfit"]);
+  const beauty = hydrateItems(MOCK_SCENARIOS["glam-makeup"]);
+  checks.push(
+    assert(
+      "street style still has birebir cards",
+      street.some((item) => item.exactMatch && /birebir/i.test(item.exactMatch.tag ?? "")),
+    ),
+  );
+  checks.push(
+    assert(
+      "beauty still has birebir cards",
+      beauty.some((item) => item.exactMatch && /birebir/i.test(item.exactMatch.tag ?? "")),
+    ),
+  );
+
+  return checks;
+}
+
 async function main() {
   const suites = [
     ...archetypePinkOutfit(),
@@ -325,6 +488,7 @@ async function main() {
     ...archetypeMultiTone(),
     ...archetypeRankingAndPrice(),
     ...archetypeLowContrastRoiHints(),
+    ...archetypePrecisionLogoTextureRerank(),
   ];
 
   let failed = 0;

@@ -12,7 +12,10 @@ import type {
 import { nonMaxSuppression } from "@/lib/boundingBoxNms";
 import { cropNormalizedRoi } from "@/lib/imageRoi";
 import { colorNameFromHex } from "@/lib/searchQueryColors";
-import { buildExactMatchQuery } from "@/lib/searchQueryBuilder";
+import {
+  buildExactMatchQuery,
+  extractMaterialsAndPatterns,
+} from "@/lib/searchQueryBuilder";
 import {
   familyFromPrimary,
   primaryCategoryOf,
@@ -39,6 +42,18 @@ import {
   sanitizeDetectedItem,
   type ProductProvider,
 } from "@/services/productProvider";
+import { pickExactAndRest } from "@/services/reRanker";
+import {
+  LOCALIZE_VISION_FEATURES,
+  ROI_VISION_FEATURES,
+  annotateVisionImage,
+  bestLogoBrand,
+  parseLogoAnnotations,
+  parseWebEntities,
+  toHex,
+  type VisionAnnotation,
+  type VisionWebEntity,
+} from "@/services/visionService";
 
 /** Vision score floor — below this the detection is noise, not a garment. */
 const MIN_VISION_SCORE = 0.65;
@@ -206,45 +221,6 @@ export class MockVisualSearchService implements VisualSearchService {
 /*  Google Cloud Vision implementation                                        */
 /* -------------------------------------------------------------------------- */
 
-const VISION_ENDPOINT = "https://vision.googleapis.com/v1/images:annotate";
-
-/** Minimal shape of the parts of the Vision response we consume. */
-interface VisionVertex {
-  x?: number;
-  y?: number;
-}
-
-interface VisionLocalizedObject {
-  name?: string;
-  score?: number;
-  boundingPoly?: { normalizedVertices?: VisionVertex[] };
-}
-
-interface VisionWebEntity {
-  description?: string;
-  score?: number;
-}
-
-interface VisionColorInfo {
-  color?: { red?: number; green?: number; blue?: number };
-  pixelFraction?: number;
-  score?: number;
-}
-
-interface VisionAnnotateResponse {
-  responses?: Array<{
-    localizedObjectAnnotations?: VisionLocalizedObject[];
-    webDetection?: {
-      webEntities?: VisionWebEntity[];
-      bestGuessLabels?: Array<{ label?: string }>;
-    };
-    imagePropertiesAnnotation?: {
-      dominantColors?: { colors?: VisionColorInfo[] };
-    };
-    error?: { message?: string };
-  }>;
-}
-
 type VisionCandidate = {
   name: string;
   score: number;
@@ -257,22 +233,15 @@ type RoiEnrichment = {
   webEntities: Array<Required<VisionWebEntity>>;
   bestGuess: string[];
   dominantHex: string;
+  brandLogo: string | null;
+  webEntityScore: number | null;
 };
-
-function toHex(color: VisionColorInfo["color"]): string {
-  const channel = (value: number | undefined) =>
-    Math.max(0, Math.min(255, Math.round(value ?? 0)))
-      .toString(16)
-      .padStart(2, "0");
-
-  return `#${channel(color?.red)}${channel(color?.green)}${channel(color?.blue)}`;
-}
 
 /**
  * Converts Vision's normalized vertex polygon into our `BoundingBox`.
  * Vision returns four vertices; we take the axis-aligned extent of them.
  */
-function toBoundingBox(vertices: VisionVertex[] | undefined) {
+function toBoundingBox(vertices: { x?: number; y?: number }[] | undefined) {
   if (!vertices || vertices.length === 0) return null;
 
   const xs = vertices.map((vertex) => vertex.x ?? 0);
@@ -291,25 +260,13 @@ function toBoundingBox(vertices: VisionVertex[] | undefined) {
   return { x: minX, y: minY, width, height };
 }
 
-function parseWebEntities(
-  annotation: VisionAnnotateResponse["responses"] extends (infer R)[] | undefined
-    ? R
-    : never,
-): Array<Required<VisionWebEntity>> {
-  return (annotation?.webDetection?.webEntities ?? [])
-    .filter((entity): entity is Required<VisionWebEntity> =>
-      Boolean(entity.description && entity.score),
-    )
-    .sort((a, b) => b.score - a.score);
-}
-
 /**
  * Real integration against Google Cloud Vision.
  *
  * Pipeline (hard deadline {@link VISION_DEADLINE_MS}):
  *   1. OBJECT_LOCALIZATION on the full frame → boxes + coarse labels
  *   2. Auto-crop each box ROI in memory
- *   3. WEB_DETECTION + IMAGE_PROPERTIES on each ROI → brand phrasing + colour
+ *   3. WEB_DETECTION + IMAGE_PROPERTIES + LOGO_DETECTION on each ROI
  *
  * Product resolution stays behind `findProductsForLabel` / the live provider.
  */
@@ -345,6 +302,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
         const webEntities = roi?.webEntities ?? [];
         const bestGuess = roi?.bestGuess ?? [];
         const dominantHex = roi?.dominantHex ?? fallbackColor;
+        const brandLogo = roi?.brandLogo ?? null;
 
         const entity =
           webEntities.find((candidate) => {
@@ -364,7 +322,14 @@ export class GoogleVisionSearchService implements VisualSearchService {
           undefined;
 
         const colorName = colorNameFromHex(dominantHex);
-        const label = [colorName, phrase ?? object.name].filter(Boolean).join(" ");
+        const featureSource = [phrase, object.name, bestGuess.join(" ")]
+          .filter(Boolean)
+          .join(" ");
+        const { materials, patterns } = extractMaterialsAndPatterns(featureSource);
+
+        const label = [brandLogo, colorName, phrase ?? object.name]
+          .filter(Boolean)
+          .join(" ");
 
         const searchQuery = buildExactMatchQuery({
           primaryCategory: object.primaryCategory,
@@ -373,32 +338,84 @@ export class GoogleVisionSearchService implements VisualSearchService {
           label,
           colorHex: dominantHex,
           colorName,
+          brandLogo,
+          materials,
+          patterns,
         });
 
         const { exactMatch, alternatives } = findProductsForLabel(
-          `${phrase ?? object.name} ${searchQuery}`,
+          `${brandLogo ?? ""} ${phrase ?? object.name} ${searchQuery}`,
           object.category,
           familyFromPrimary(object.primaryCategory),
         );
 
         const colorOpts = { colorHex: dominantHex, colorName, enforceColor: true };
 
-        const hydratedExact = exactMatch
-          ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery))
+        const pool = [
+          ...(exactMatch
+            ? [hydrateProduct(retargetSearchQuery(exactMatch, searchQuery))]
+            : []),
+          ...alternatives.map((product) =>
+            hydrateProduct(retargetSearchQuery(product, searchQuery)),
+          ),
+        ].filter((product) =>
+          passesWhitelistSanitizer(
+            object.primaryCategory,
+            {
+              title: product.title,
+              productUrl: product.productUrl,
+              brand: product.brand,
+            },
+            colorOpts,
+          ),
+        );
+
+        const ranked = pickExactAndRest(
+          {
+            primaryCategory: object.primaryCategory,
+            colorHex: dominantHex,
+            colorName,
+            webEntity: phrase,
+            webEntityScore: entity?.score ?? roi?.webEntityScore,
+            brandLogo,
+            attributes: [colorName, ...materials, ...patterns].filter(Boolean).join(" • "),
+            label,
+            itemType: object.name,
+            materials,
+            patterns,
+          },
+          pool.map((product) => ({
+            ...product,
+            priorSimilarity: product.similarity,
+          })),
+        );
+
+        const hydratedExact = ranked.exact
+          ? {
+              ...ranked.exact.candidate,
+              matchType: "exact" as const,
+              similarity: ranked.exact.score,
+              tag: "Birebir Eşleşme",
+            }
           : null;
-        const hydratedAlts = alternatives
-          .map((product) => hydrateProduct(retargetSearchQuery(product, searchQuery)))
-          .filter((product) =>
-            passesWhitelistSanitizer(
-              object.primaryCategory,
-              {
-                title: product.title,
-                productUrl: product.productUrl,
-                brand: product.brand,
-              },
-              colorOpts,
-            ),
-          );
+
+        const hydratedAlts = ranked.rest
+          .filter((entry) => entry.candidate.price < (hydratedExact?.price ?? Infinity))
+          .slice(0, 3)
+          .map((entry) => ({
+            ...entry.candidate,
+            matchType: "alternative" as const,
+            similarity: entry.score,
+            tag: "Bütçe Dostu Muadil",
+          }));
+
+        const attrParts = [
+          brandLogo,
+          colorName,
+          ...materials,
+          ...patterns,
+          object.name,
+        ].filter(Boolean);
 
         items.push(
           sanitizeDetectedItem({
@@ -407,28 +424,21 @@ export class GoogleVisionSearchService implements VisualSearchService {
             itemType: object.name,
             category: object.category,
             primaryCategory: object.primaryCategory,
-            attributes: [colorName, object.name].filter(Boolean).join(" • "),
+            attributes: attrParts.join(" • "),
             description:
               `Görselde "${object.name}" olarak tespit edildi ` +
-              `(%${Math.round(object.score * 100)} güven, ${object.primaryCategory}). ` +
+              `(%${Math.round(object.score * 100)} güven, ${object.primaryCategory}` +
+              `${brandLogo ? `, logo: ${brandLogo}` : ""}). ` +
               `Arama sorgusu: "${searchQuery}".`,
             confidence: object.score,
             boundingBox: object.boundingBox,
             colorHex: dominantHex,
             webEntity: phrase,
-            exactMatch:
-              hydratedExact &&
-              passesWhitelistSanitizer(
-                object.primaryCategory,
-                {
-                  title: hydratedExact.title,
-                  productUrl: hydratedExact.productUrl,
-                  brand: hydratedExact.brand,
-                },
-                colorOpts,
-              )
-                ? hydratedExact
-                : null,
+            webEntityScore: entity?.score ?? roi?.webEntityScore ?? undefined,
+            brandLogo: brandLogo ?? undefined,
+            materials,
+            patterns,
+            exactMatch: hydratedExact,
             alternatives: hydratedAlts,
           }),
         );
@@ -445,9 +455,10 @@ export class GoogleVisionSearchService implements VisualSearchService {
     input: VisualSearchInput,
     signal: AbortSignal,
   ): Promise<VisionCandidate[]> {
-    const annotation = await this.annotate(
+    const annotation = await annotateVisionImage(
+      this.apiKey,
       input.imageBase64,
-      [{ type: "OBJECT_LOCALIZATION", maxResults: 20 }],
+      LOCALIZE_VISION_FEATURES,
       signal,
     );
 
@@ -486,7 +497,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
   }
 
   /**
-   * Pass 2 — crop each box and run WEB_DETECTION + IMAGE_PROPERTIES on the ROI.
+   * Pass 2 — crop each box and run WEB_DETECTION + IMAGE_PROPERTIES + LOGO_DETECTION.
    * Falls back to empty enrichment (caller uses coarse label + grey) on timeout.
    */
   private async enrichRois(
@@ -510,29 +521,16 @@ export class GoogleVisionSearchService implements VisualSearchService {
           );
           const content = cropped?.base64 ?? input.imageBase64;
 
-          const annotation = await this.annotate(
+          const annotation = await annotateVisionImage(
+            this.apiKey,
             content,
-            [
-              { type: "WEB_DETECTION", maxResults: 10 },
-              { type: "IMAGE_PROPERTIES" },
-            ],
+            ROI_VISION_FEATURES,
             signal,
           );
 
           if (!annotation) return null;
 
-          const dominantHex = toHex(
-            annotation.imagePropertiesAnnotation?.dominantColors?.colors?.[0]?.color,
-          );
-
-          return {
-            webEntities: parseWebEntities(annotation),
-            bestGuess:
-              annotation.webDetection?.bestGuessLabels
-                ?.map((entry) => entry.label?.trim())
-                .filter((label): label is string => Boolean(label)) ?? [],
-            dominantHex,
-          };
+          return this.parseRoiAnnotation(annotation);
         } catch (error) {
           if (signal.aborted) return null;
           console.warn("[vision] ROI enrichment failed:", error);
@@ -542,42 +540,22 @@ export class GoogleVisionSearchService implements VisualSearchService {
     );
   }
 
-  private async annotate(
-    imageBase64: string,
-    features: Array<{ type: string; maxResults?: number }>,
-    signal: AbortSignal,
-  ): Promise<NonNullable<VisionAnnotateResponse["responses"]>[number] | null> {
-    if (signal.aborted) return null;
+  private parseRoiAnnotation(annotation: VisionAnnotation): RoiEnrichment {
+    const webEntities = parseWebEntities(annotation);
+    const logos = parseLogoAnnotations(annotation.logoAnnotations);
 
-    const response = await fetch(`${VISION_ENDPOINT}?key=${this.apiKey}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        requests: [
-          {
-            image: { content: imageBase64 },
-            features,
-          },
-        ],
-      }),
-      signal,
-    });
-
-    if (!response.ok) {
-      const detail = await response.text().catch(() => "");
-      throw new Error(
-        `Vision API responded ${response.status}${detail ? `: ${detail.slice(0, 200)}` : ""}`,
-      );
-    }
-
-    const payload = (await response.json()) as VisionAnnotateResponse;
-    const annotation = payload.responses?.[0];
-
-    if (annotation?.error?.message) {
-      throw new Error(`Vision API error: ${annotation.error.message}`);
-    }
-
-    return annotation ?? null;
+    return {
+      webEntities,
+      bestGuess:
+        annotation.webDetection?.bestGuessLabels
+          ?.map((entry) => entry.label?.trim())
+          .filter((label): label is string => Boolean(label)) ?? [],
+      dominantHex: toHex(
+        annotation.imagePropertiesAnnotation?.dominantColors?.colors?.[0]?.color,
+      ),
+      brandLogo: bestLogoBrand(logos),
+      webEntityScore: webEntities[0]?.score ?? null,
+    };
   }
 }
 

@@ -167,18 +167,22 @@ export class ContextDevProductProvider implements ProductProvider {
       colorHex: item.colorHex,
       colorName: colorNameFromHex(item.colorHex),
       webEntity: item.webEntity ?? null,
+      webEntityScore: item.webEntityScore ?? null,
+      brandLogo: item.brandLogo ?? null,
       itemType: item.itemType,
       attributes: item.attributes,
       label: item.label,
+      materials: item.materials ?? null,
+      patterns: item.patterns ?? null,
       signal,
     };
 
-    // --- Stage 1: Exact visual match ---------------------------------------
+    // --- Stage 1: Exact visual match (re-ranked, ≥85% for Birebir) ----------
     const exact = await getExactMatches(this.context, stageInput);
-    const best = exact.cards[0];
+    const best = exact.cards.find((card) => card.isExact) ?? null;
     if (!best) return null;
 
-    // --- Stage 2: Budget alternatives (only after Stage 1) -----------------
+    // --- Stage 2: Budget alternatives (only after Stage 1 Exact Match) -----
     const budget = await getBudgetAlternatives(this.context, {
       ...stageInput,
       primaryProduct: best,
@@ -201,7 +205,7 @@ export class ContextDevProductProvider implements ProductProvider {
     const exactMatch = toProductMatch(best, {
       id: `${item.id}-live-exact`,
       matchType: "exact",
-      similarity: 0.9,
+      similarity: best.matchScore,
       tag: "Birebir Eşleşme",
       brand: brands.get(best.merchantDomain) ?? null,
       lockedPrimary: primary,
@@ -217,8 +221,7 @@ export class ContextDevProductProvider implements ProductProvider {
         toProductMatch(card, {
           id: `${item.id}-live-alt-${index}`,
           matchType: "alternative",
-          similarity: Math.max(0.6, 0.86 - index * 0.05),
-          // Price disparity vs exact is guaranteed by Stage 2's cheaper filter.
+          similarity: card.matchScore,
           tag: "Bütçe Dostu Muadil",
           brand: brands.get(card.merchantDomain) ?? null,
           lockedPrimary: primary,
