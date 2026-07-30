@@ -3,6 +3,12 @@ import "server-only";
 import { ContextDevService, type LiveProductCard } from "@/services/contextDevService";
 import { productUrlOrEmpty } from "@/lib/productUrl";
 import { familyOf } from "@/lib/itemFamily";
+import {
+  ALTERNATIVE_FLOOR,
+  EXACT_MATCH_FLOOR,
+  expectedAttributesOf,
+  scoreTitleAgreement,
+} from "@/lib/attributeMatch";
 import { rejectProductTitle } from "@/lib/retailVocabulary";
 import { buildSearchQuery } from "@/lib/searchQuery";
 import { hydrateProduct } from "@/services/mockCatalog";
@@ -189,25 +195,66 @@ export class ContextDevProductProvider implements ProductProvider {
     // The catalogue row is a worse price but a correct product.
     if (usable.length === 0) return null;
 
-    // The best-matching product is the exact match; everything cheaper than it
-    // becomes a budget alternative, cheapest first. If nothing is cheaper we
-    // still show the rest as alternatives — they are real options either way.
-    const [best, ...rest] = usable;
-    if (!best) return null;
+    /*
+     * Rank by measured attribute agreement, not by what the search engine ranked
+     * first. The family gate says a row is the right *kind* of product; it still
+     * leaves a beige linen blazer eligible for a black leather blazer, and search
+     * rank has no opinion about that. `scoreTitleAgreement` does, and the number it
+     * returns is the one shown on the card — so the match percentage finally
+     * corresponds to something instead of being a constant.
+     */
+    const expected = expectedAttributesOf(item);
+    const ranked = usable
+      .map((card) => ({ card, agreement: scoreTitleAgreement(card.title, expected) }))
+      .sort(
+        (a, b) => b.agreement.score - a.agreement.score || a.card.price - b.card.price,
+      );
 
-    const cheaper = rest
-      .filter((card) => card.price < best.price)
-      .sort((a, b) => a.price - b.price);
-    const others = rest
-      .filter((card) => card.price >= best.price)
-      .sort((a, b) => a.price - b.price);
+    const leader = ranked[0];
+    if (!leader) return null;
 
-    const alternatives = [...cheaper, ...others].slice(0, this.maxAlternatives);
+    /*
+     * The exact-match slot is a promise. A row only holds it if it clears the floor
+     * *and* does not contradict the detected colour — a shopper who scanned a black
+     * jacket and is shown a beige one as the "birebir eşleşme" has been lied to,
+     * however well the rest of the words line up. Otherwise the catalogue row keeps
+     * the slot: a worse price for a product that is actually what they scanned, and
+     * the live rows are still offered as alternatives.
+     */
+    const leaderQualifies =
+      leader.agreement.score >= EXACT_MATCH_FLOOR && leader.agreement.color !== "conflict";
+
+    if (!leaderQualifies) {
+      console.warn(
+        `[products] «${item.itemType}» için canlı birebir eşleşme yok: en iyi satır ` +
+          `"${leader.card.title}" %${Math.round(leader.agreement.score * 100)} ` +
+          `(${leader.agreement.reason}); katalog satırı korunuyor`,
+      );
+    }
+
+    const best = leaderQualifies ? leader : null;
+    const rest = leaderQualifies ? ranked.slice(1) : ranked;
+
+    // Alternatives keep agreement order too — a cheaper row that is the wrong
+    // colour is not a better deal, it is a different product. Rows below the
+    // alternative floor are dropped rather than shown under a near-zero score.
+    const alternatives = rest
+      .filter((entry) => entry.agreement.score >= ALTERNATIVE_FLOOR)
+      .slice(0, this.maxAlternatives);
+
+    // Nothing survived either floor, so there is no live data for this detection.
+    if (!best && alternatives.length === 0) return null;
+    const cheapest = alternatives.reduce<number>(
+      (min, entry) => Math.min(min, entry.card.price),
+      Number.POSITIVE_INFINITY,
+    );
 
     // One brand lookup per distinct retailer in this detection's result set.
     const domains = Array.from(
       new Set(
-        [best, ...alternatives].map((card) => card.merchantDomain).filter(Boolean),
+        [...(best ? [best] : []), ...alternatives]
+          .map((entry) => entry.card.merchantDomain)
+          .filter(Boolean),
       ),
     );
     const brands = new Map<string, BrandMetadata | null>();
@@ -220,22 +267,23 @@ export class ContextDevProductProvider implements ProductProvider {
 
     return {
       ...item,
-      exactMatch: toProductMatch(best, {
-        id: `${item.id}-live-exact`,
-        matchType: "exact",
-        // Live results carry no similarity score of their own; rank order from
-        // the search is the only signal, so state it conservatively.
-        similarity: 0.9,
-        tag: "Canlı",
-        brand: brands.get(best.merchantDomain) ?? null,
-      }),
-      alternatives: alternatives.map((card, index) =>
-        toProductMatch(card, {
+      exactMatch: best
+        ? toProductMatch(best.card, {
+            id: `${item.id}-live-exact`,
+            matchType: "exact",
+            // The measured agreement, not a constant. This is what the card shows.
+            similarity: best.agreement.score,
+            tag: "Canlı",
+            brand: brands.get(best.card.merchantDomain) ?? null,
+          })
+        : item.exactMatch,
+      alternatives: alternatives.map((entry, index) =>
+        toProductMatch(entry.card, {
           id: `${item.id}-live-alt-${index}`,
           matchType: "alternative",
-          similarity: Math.max(0.6, 0.86 - index * 0.05),
-          tag: index === 0 && card.price < best.price ? "En uygun" : undefined,
-          brand: brands.get(card.merchantDomain) ?? null,
+          similarity: entry.agreement.score,
+          tag: entry.card.price === cheapest ? "En uygun" : undefined,
+          brand: brands.get(entry.card.merchantDomain) ?? null,
         }),
       ),
     };

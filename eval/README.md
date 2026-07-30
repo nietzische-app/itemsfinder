@@ -104,6 +104,21 @@ Bu set üzerinde ölçülüp **reddedilen** üç çözüm:
 Bunları düzeltecek olan gerçek bir maske: segmentasyon ya da kırpıma bakan bir
 görsel dil modeli. Yeni bir sabit değil. O iş girdiğinde taban yükseltilmeli.
 
+## Renk ailesi mantığı nerede yaşıyor
+
+`colorBucketOf` artık burada değil: `src/lib/colorFamily.ts`'ye taşındı, çünkü
+canlı ürün aşaması da aynı cevaba ihtiyaç duyuyor — bir mağaza başlığındaki renk
+kelimesinin ölçülen renkle çelişip çelişmediğini bilmesi gerekiyor. Eval'in iki
+kez düzelttiği bir kuralın iki kopyası zamanla ayrışırdı. `eval/colorBucket.ts`
+artık yalnızca yeniden ihraç ediyor.
+
+Çelişki kuralı **kasten cimri**: gerçek, stokta bir ürünü birebir eşleşme
+yuvasından düşürüyor, o yüzden yanlış bir çelişki alışveriş yapana sayfadaki en
+iyi satıra mal oluyor. Uyumlu çiftler tek tek sayılmış (lacivert/siyah,
+krem/beyaz, camel/bej…) ve **gri tamamen muaf** — ölçüm hatasının düştüğü yer o:
+bu sette yıkanmış indigo jean `#596564`, siyah sandalet `#4e5857` ölçülüyor,
+ikisi de gri.
+
 ## VLM öznitelik aşaması — durum
 
 Aşamanın kendisi yazıldı (`src/services/attributeExtractor.ts`) ve boru hattına

@@ -10,8 +10,13 @@ import { toTurkishRetailTerms } from "@/lib/retailVocabulary";
  * query a shopper would actually type: "Kırmızı Mat Likit Ruj".
  */
 
-/** Named Turkish colours with their reference RGB, used for nearest-match. */
-const COLOR_NAMES: Array<{ name: string; rgb: [number, number, number] }> = [
+/**
+ * Named Turkish colours with their reference RGB, used for nearest-match.
+ *
+ * Exported because the live product stage reads colour words out of retailer
+ * titles and has to place them on the same scale the pipeline measures on.
+ */
+export const COLOR_NAMES: Array<{ name: string; rgb: [number, number, number] }> = [
   { name: "Siyah", rgb: [17, 17, 17] },
   { name: "Antrasit", rgb: [60, 62, 68] },
   { name: "Gri", rgb: [140, 140, 142] },

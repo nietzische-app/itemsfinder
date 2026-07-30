@@ -315,6 +315,56 @@ const TERMS: Record<string, string> = {
 /** Longest phrase we bother looking for, in tokens. */
 const MAX_PHRASE_TOKENS = 3;
 
+/* -------------------------------------------------------------------------- */
+/*  Materials                                                                 */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Turkish material words a retailer puts in a title.
+ *
+ * Used to tell whether a listing contradicts a detected material. Synonyms are
+ * folded to one group below — "denim" and "kot" are the same cloth, and treating
+ * them as different would invent a conflict on half the jeans in Turkey.
+ */
+export const TURKISH_MATERIALS = [
+  "deri",
+  "süet",
+  "triko",
+  "denim",
+  "kot",
+  "yün",
+  "pamuk",
+  "ipek",
+  "saten",
+  "keten",
+  "kaşmir",
+  "kadife",
+  "tüvit",
+  "dantel",
+  "şifon",
+  "polyester",
+  "viskon",
+  "örme",
+  "jarse",
+] as const;
+
+/** Materials that are the same cloth under two names. */
+const MATERIAL_GROUPS: Record<string, string> = {
+  kot: "denim",
+  denim: "denim",
+  örme: "triko",
+  triko: "triko",
+  jarse: "örme-kumaş",
+  süet: "deri",
+  deri: "deri",
+};
+
+/** Canonical group for a material word, or the word itself. */
+export function materialGroupOf(material: string): string {
+  const key = normalizeTr(material);
+  return MATERIAL_GROUPS[key] ?? key;
+}
+
 /** Word separator, matching the one `buildSearchQuery` uses. */
 const SEPARATOR = /[^0-9A-Za-zÀ-ÿĞğİıŞşÇçÖöÜü]+/;
 

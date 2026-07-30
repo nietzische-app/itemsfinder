@@ -22,19 +22,15 @@ import type { ItemFamily } from "@/lib/itemFamily";
  * expectations below. `npm run eval` picks it up automatically.
  */
 
-/** Coarse colour families — tolerant on purpose, hue names are not the point. */
-export type ColorBucket =
-  | "pembe"
-  | "kirmizi"
-  | "koyu"
-  | "beyaz"
-  | "mavi"
-  | "yesil"
-  | "kahve"
-  | "bej"
-  | "gri"
-  | "sari"
-  | "mor";
+/**
+ * Coarse colour families — tolerant on purpose, hue names are not the point.
+ *
+ * Re-exported from the app rather than declared here: the live product stage needs
+ * the same taxonomy to tell whether a listing's colour word contradicts what was
+ * measured, and a second copy would drift.
+ */
+export type { ColorBucket } from "./colorBucket";
+import type { ColorBucket } from "./colorBucket";
 
 export interface ItemExpectation {
   /** Catalogue item id, which is also the showcase item id. */

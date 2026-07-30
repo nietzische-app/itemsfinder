@@ -67,7 +67,18 @@ export interface ProductMatch {
   productUrl: string;
   imageUrl: string;
   matchType: MatchType;
-  /** 0..1 visual similarity score. */
+  /**
+   * 0..1 match score.
+   *
+   * **Attribute agreement, not visual similarity** — nothing in this codebase
+   * compares pixels between the photo and the product image. For live rows it is
+   * measured by `scoreTitleAgreement`: how much of the detected colour, garment
+   * noun and material the listing actually claims. For catalogue rows it is a
+   * curated editorial value. The old name promised a visual comparison and the
+   * live path filled it with the constant 0.9, which was worse than either.
+   *
+   * A real visual score needs an embedding index over a product feed.
+   */
   similarity: number;
   /** Optional marketing flag, e.g. "Best value" / "Fast shipping". */
   tag?: string;
