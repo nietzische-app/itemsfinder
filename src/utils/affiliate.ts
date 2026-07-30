@@ -6,6 +6,9 @@ import type { Merchant } from "@/types";
  * `param` is the query parameter the network expects; `value` reads from an
  * env var so tags can be rotated without a code change. Everything falls back
  * to a `markas`-prefixed placeholder so links stay clickable in dev.
+ *
+ * Merchants without a dedicated programme still get UTM tagging via the
+ * `Other`/null path in `buildAffiliateUrl`.
  */
 interface AffiliateConfig {
   param: string;
@@ -15,6 +18,12 @@ interface AffiliateConfig {
 }
 
 const FALLBACK_TAG = "markas-mvp";
+
+const utmCampaign = (env: string | undefined): AffiliateConfig => ({
+  param: "utm_campaign",
+  value: env ?? FALLBACK_TAG,
+  extra: { utm_medium: "affiliate" },
+});
 
 /**
  * Env vars are read at module scope on purpose: in the Next.js server runtime
@@ -32,29 +41,28 @@ const AFFILIATE_CONFIG: Record<Merchant, AffiliateConfig | null> = {
     value: process.env.NEXT_PUBLIC_TRENDYOL_AFFILIATE_ID ?? FALLBACK_TAG,
     extra: { utm_medium: "affiliate" },
   },
-  Zara: {
-    param: "utm_campaign",
-    value: process.env.NEXT_PUBLIC_ZARA_AFFILIATE_ID ?? FALLBACK_TAG,
-    extra: { utm_medium: "affiliate" },
-  },
+  Zara: utmCampaign(process.env.NEXT_PUBLIC_ZARA_AFFILIATE_ID),
   Sephora: {
     param: "om_mmc",
     value: process.env.NEXT_PUBLIC_SEPHORA_AFFILIATE_ID ?? FALLBACK_TAG,
   },
-  Mango: {
-    param: "utm_campaign",
-    value: process.env.NEXT_PUBLIC_MANGO_AFFILIATE_ID ?? FALLBACK_TAG,
-    extra: { utm_medium: "affiliate" },
-  },
-  "H&M": {
-    param: "utm_campaign",
-    value: process.env.NEXT_PUBLIC_HM_AFFILIATE_ID ?? FALLBACK_TAG,
-    extra: { utm_medium: "affiliate" },
-  },
+  Mango: utmCampaign(process.env.NEXT_PUBLIC_MANGO_AFFILIATE_ID),
+  "H&M": utmCampaign(process.env.NEXT_PUBLIC_HM_AFFILIATE_ID),
   ASOS: {
     param: "affid",
     value: process.env.NEXT_PUBLIC_ASOS_AFFILIATE_ID ?? FALLBACK_TAG,
   },
+  "LC Waikiki": utmCampaign(process.env.NEXT_PUBLIC_LCW_AFFILIATE_ID),
+  DeFacto: utmCampaign(process.env.NEXT_PUBLIC_DEFACTO_AFFILIATE_ID),
+  Lefties: utmCampaign(process.env.NEXT_PUBLIC_LEFTIES_AFFILIATE_ID),
+  "Pull&Bear": utmCampaign(process.env.NEXT_PUBLIC_PULLANDBEAR_AFFILIATE_ID),
+  Stradivarius: utmCampaign(process.env.NEXT_PUBLIC_STRADIVARIUS_AFFILIATE_ID),
+  Bershka: utmCampaign(process.env.NEXT_PUBLIC_BERSHKA_AFFILIATE_ID),
+  Koton: utmCampaign(process.env.NEXT_PUBLIC_KOTON_AFFILIATE_ID),
+  Mavi: utmCampaign(process.env.NEXT_PUBLIC_MAVI_AFFILIATE_ID),
+  Boyner: utmCampaign(process.env.NEXT_PUBLIC_BOYNER_AFFILIATE_ID),
+  Hepsiburada: utmCampaign(process.env.NEXT_PUBLIC_HEPSIBURADA_AFFILIATE_ID),
+  N11: utmCampaign(process.env.NEXT_PUBLIC_N11_AFFILIATE_ID),
   // Unknown merchants get UTM tagging only — see `buildAffiliateUrl`.
   Other: null,
 };
@@ -121,19 +129,31 @@ export function hasAffiliateProgram(merchant: Merchant): boolean {
 }
 
 /**
- * Formats a price in Turkish convention — "₺3.599,90". The currency comes from
- * the product, not the locale: live results may be priced in USD or GBP by a
- * foreign retailer, and showing those as lira would be a lie.
+ * Formats a price for Turkish storefront cards — always `₺3.599,90` for TRY/TL.
+ * Foreign ISO codes keep their own currency symbol so a GBP/ASOS hit is not
+ * mislabelled as lira.
  */
 export function formatPrice(amount: number, currency: string): string {
+  const code = (currency || "TRY").trim().toUpperCase();
+  const safeAmount = Number.isFinite(amount) ? amount : 0;
+  const fractionDigits = Number.isInteger(safeAmount) ? 0 : 2;
+
+  if (code === "TRY" || code === "TL") {
+    const body = new Intl.NumberFormat("tr-TR", {
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+    }).format(safeAmount);
+    return `₺${body}`;
+  }
+
   try {
     return new Intl.NumberFormat("tr-TR", {
       style: "currency",
-      currency,
-      maximumFractionDigits: amount % 1 === 0 ? 0 : 2,
-    }).format(amount);
+      currency: code,
+      maximumFractionDigits: fractionDigits,
+    }).format(safeAmount);
   } catch {
-    return `${amount} ${currency}`;
+    return `${safeAmount} ${code}`;
   }
 }
 

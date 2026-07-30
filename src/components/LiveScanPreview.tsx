@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
+  ArrowUpRight,
   BadgeCheck,
   Loader2,
   Pause,
   Play,
   ScanLine,
-  Search,
   Sparkles,
 } from "lucide-react";
 
@@ -22,6 +22,7 @@ import {
   type ShowcaseItem,
 } from "@/lib/showcase";
 import { merchantColor, merchantInitials } from "@/services/merchantSearch";
+import { isDirectProductUrl } from "@/services/productUrls";
 import type { UploadedImage } from "@/types";
 import { buildAffiliateUrl, formatPrice } from "@/utils/affiliate";
 
@@ -53,10 +54,13 @@ export function LiveScanPreview({
   const [autoPlay, setAutoPlay] = useState(true);
   /** Hover or keyboard focus anywhere in the frame suspends the cycle. */
   const [engaged, setEngaged] = useState(false);
+  /** Manual hotspot selection resets the autoplay tick so the card isn't swapped mid-read. */
+  const [cycleKey, setCycleKey] = useState(0);
   const [imageFailed, setImageFailed] = useState(false);
   const [opening, setOpening] = useState(false);
   const [openError, setOpenError] = useState<string | null>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+  const engageTimeoutRef = useRef<number | null>(null);
 
   const look = SHOWCASE_LOOKS[lookIndex]!;
   const active = look.items[itemIndex] ?? look.items[0]!;
@@ -71,6 +75,14 @@ export function LiveScanPreview({
   }, []);
 
   useEffect(() => {
+    return () => {
+      if (engageTimeoutRef.current !== null) {
+        window.clearTimeout(engageTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (!autoPlay || engaged) return;
 
     const id = window.setInterval(
@@ -78,7 +90,22 @@ export function LiveScanPreview({
       SHOWCASE_INTERVAL_MS,
     );
     return () => window.clearInterval(id);
-  }, [autoPlay, engaged, look.items.length]);
+  }, [autoPlay, engaged, look.items.length, cycleKey]);
+
+  function selectItem(index: number) {
+    setItemIndex(index);
+    // Pause autoplay while the visitor inspects a hotspot (critical on touch,
+    // where hover never fires `engaged`).
+    setEngaged(true);
+    setCycleKey((key) => key + 1);
+    if (engageTimeoutRef.current !== null) {
+      window.clearTimeout(engageTimeoutRef.current);
+    }
+    engageTimeoutRef.current = window.setTimeout(() => {
+      setEngaged(false);
+      engageTimeoutRef.current = null;
+    }, SHOWCASE_INTERVAL_MS);
+  }
 
   /**
    * The `<img>` is server-rendered, so the browser starts fetching before React
@@ -111,6 +138,9 @@ export function LiveScanPreview({
         fileName: imageSrc.split("/").pop() ?? "ornek-kombin.jpg",
         exampleId: look.exampleId,
       });
+      // Parent navigates on success; clear busy state if navigation is blocked
+      // (e.g. sessionStorage quota) so the CTA is not stuck on "Açılıyor…".
+      setOpening(false);
     } catch {
       setOpenError("Örnek taramayı açamadık. Tekrar dene.");
       setOpening(false);
@@ -164,6 +194,12 @@ export function LiveScanPreview({
               key={look.id}
               src={imageSrc}
               alt={imageFailed ? SHOWCASE_FALLBACK.alt : look.alt}
+              width={look.width}
+              height={look.height}
+              decoding="async"
+              fetchPriority={lookIndex === 0 ? "high" : "auto"}
+              // Frame aspectRatio matches intrinsic size — cover fills without
+              // cropping, so hotspots stay locked to garments.
               className="absolute inset-0 h-full w-full object-cover"
               onError={() => setImageFailed(true)}
             />
@@ -199,7 +235,7 @@ export function LiveScanPreview({
                   }}
                   aria-pressed={isActive}
                   aria-label={`${item.label} — eşleşmeyi göster`}
-                  onClick={() => setItemIndex(index)}
+                  onClick={() => selectItem(index)}
                   onMouseEnter={() => setItemIndex(index)}
                   onFocus={() => setItemIndex(index)}
                 >
@@ -319,7 +355,7 @@ export function LiveScanPreview({
                   <span className="font-display text-[20px] font-bold tracking-tight text-primary">
                     {formatPrice(active.match.price, active.match.currency)}
                   </span>
-                  {active.match.url ? (
+                  {active.match.url && isDirectProductUrl(active.match.url) ? (
                     <Button asChild size="sm">
                       <a
                         href={buildAffiliateUrl(active.match.url, active.match.merchant, {
@@ -328,8 +364,8 @@ export function LiveScanPreview({
                         target="_blank"
                         rel="noopener noreferrer sponsored nofollow"
                       >
-                        <Search strokeWidth={1.75} />
-                        Mağazada bul
+                        Ürüne git
+                        <ArrowUpRight strokeWidth={1.5} />
                       </a>
                     </Button>
                   ) : null}
@@ -349,7 +385,7 @@ export function LiveScanPreview({
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => setItemIndex(index)}
+                  onClick={() => selectItem(index)}
                   aria-pressed={index === itemIndex}
                   aria-label={item.label}
                   className={cn(

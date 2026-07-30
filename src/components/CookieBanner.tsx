@@ -26,7 +26,7 @@ export function CookieBanner() {
     <div
       role="region"
       aria-label="Çerez ve depolama bildirimi"
-      className="fixed bottom-24 left-4 right-4 z-[105] animate-fade-up md:bottom-6 md:right-auto md:max-w-[420px]"
+      className="fixed bottom-24 left-4 right-4 z-[90] animate-fade-up md:bottom-6 md:right-auto md:max-w-[420px]"
     >
       <div className="rounded-2xl border border-outline-variant/70 bg-surface-container-lowest/90 p-4 shadow-ambient-lg backdrop-blur-md">
         <div className="flex items-start gap-3">

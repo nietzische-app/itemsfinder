@@ -1,7 +1,13 @@
 import type { DetectedItem, ExampleId, ProductMatch } from "@/types";
 import { familyOf, normalizeTr, tokenize, type ItemFamily } from "@/lib/itemFamily";
+import { primaryCategoryOf } from "@/lib/primaryCategory";
+import { passesWhitelistSanitizer } from "@/utils/sanitizer";
 import { showcaseBox } from "@/lib/showcase";
-import { buildMerchantSearchUrl } from "@/services/merchantSearch";
+import {
+  isDirectProductUrl,
+  PINK_OUTFIT_PDPS,
+  resolveVerifiedPdp,
+} from "@/services/productUrls";
 
 
 /**
@@ -14,17 +20,26 @@ export type CatalogProduct = Omit<
   "merchantDomain" | "isLive" | "brandMetadata" | "urlKind" | "productUrl"
 > & {
   /**
-   * Words to search the merchant's storefront for. The catalogue deliberately
-   * stores a query rather than a URL: a hand-written product path is a
-   * guaranteed 404 the moment the retailer rotates its catalogue, whereas a
-   * search always resolves.
+   * Direct product-detail page when known. Preferred over `searchQuery` so the
+   * CTA lands on a buyable page rather than a storefront search grid.
+   */
+  productUrl?: string;
+  /**
+   * Words to search the merchant's storefront for when no direct PDP is
+   * available. Also used by the Vision path to retarget catalogue stand-ins
+   * toward the detected label.
    */
   searchQuery: string;
 };
 
-export type CatalogItem = Omit<DetectedItem, "exactMatch" | "alternatives"> & {
+export type CatalogItem = Omit<
+  DetectedItem,
+  "exactMatch" | "alternatives" | "primaryCategory" | "webEntity"
+> & {
   exactMatch: CatalogProduct | null;
   alternatives: CatalogProduct[];
+  /** Optional override; otherwise derived from itemType + label at hydrate time. */
+  primaryCategory?: DetectedItem["primaryCategory"];
 };
 
 /**
@@ -113,7 +128,7 @@ const streetwearItems: CatalogItem[] = [
       imageUrl: thumb("Biker Jacket", "#2a2a31", "#0d0d10"),
       matchType: "exact",
       similarity: 0.94,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -128,7 +143,7 @@ const streetwearItems: CatalogItem[] = [
         imageUrl: thumb("Moto Jacket", "#3a3a44", "#16161b"),
         matchType: "alternative",
         similarity: 0.87,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -182,7 +197,7 @@ const streetwearItems: CatalogItem[] = [
       imageUrl: thumb("Crop Top", "#f7f4ee", "#d8d2c6"),
       matchType: "exact",
       similarity: 0.9,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -197,7 +212,7 @@ const streetwearItems: CatalogItem[] = [
         imageUrl: thumb("Rib Tee", "#fbf9f5", "#ded8cc"),
         matchType: "alternative",
         similarity: 0.85,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -237,7 +252,7 @@ const streetwearItems: CatalogItem[] = [
       imageUrl: thumb("Straight Jeans", "#5b7fb2", "#2f4a74"),
       matchType: "exact",
       similarity: 0.92,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -252,7 +267,7 @@ const streetwearItems: CatalogItem[] = [
         imageUrl: thumb("Mom Denim", "#6d8fbe", "#38527a"),
         matchType: "alternative",
         similarity: 0.86,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -306,7 +321,7 @@ const streetwearItems: CatalogItem[] = [
       imageUrl: thumb("Platform Trainers", "#eeeae1", "#b9b2a5"),
       matchType: "exact",
       similarity: 0.88,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -321,7 +336,7 @@ const streetwearItems: CatalogItem[] = [
         imageUrl: thumb("Platform Sneaker", "#f1ede5", "#c2bbae"),
         matchType: "alternative",
         similarity: 0.83,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -361,7 +376,7 @@ const streetwearItems: CatalogItem[] = [
       imageUrl: thumb("Chain Necklace", "#e6c574", "#9c7b2c"),
       matchType: "exact",
       similarity: 0.86,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -376,7 +391,7 @@ const streetwearItems: CatalogItem[] = [
         imageUrl: thumb("Multi Chain", "#efd28c", "#a9863a"),
         matchType: "alternative",
         similarity: 0.8,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -416,7 +431,7 @@ const streetwearItems: CatalogItem[] = [
       imageUrl: thumb("Lip Liner", "#c98d78", "#8a4f3e"),
       matchType: "exact",
       similarity: 0.85,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -431,7 +446,7 @@ const streetwearItems: CatalogItem[] = [
         imageUrl: thumb("Shaping Liner", "#d69c86", "#96594a"),
         matchType: "alternative",
         similarity: 0.79,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -478,7 +493,7 @@ const glamMakeupItems: CatalogItem[] = [
       imageUrl: thumb("Red Lipstick", "#d61b34", "#7c0a1c"),
       matchType: "exact",
       similarity: 0.95,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -493,7 +508,7 @@ const glamMakeupItems: CatalogItem[] = [
         imageUrl: thumb("Matte Ink", "#e02840", "#8d1024"),
         matchType: "alternative",
         similarity: 0.89,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -546,7 +561,7 @@ const glamMakeupItems: CatalogItem[] = [
       imageUrl: thumb("Heat Palette", "#c07f47", "#6d3c1c"),
       matchType: "exact",
       similarity: 0.93,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -561,7 +576,7 @@ const glamMakeupItems: CatalogItem[] = [
         imageUrl: thumb("Nude Heat", "#cb8b52", "#75421f"),
         matchType: "alternative",
         similarity: 0.87,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -601,7 +616,7 @@ const glamMakeupItems: CatalogItem[] = [
       imageUrl: thumb("Tattoo Liner", "#2b2b33", "#0a0a0d"),
       matchType: "exact",
       similarity: 0.91,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -616,7 +631,7 @@ const glamMakeupItems: CatalogItem[] = [
         imageUrl: thumb("Precise Liner", "#33333c", "#0e0e12"),
         matchType: "alternative",
         similarity: 0.86,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -656,7 +671,7 @@ const glamMakeupItems: CatalogItem[] = [
       imageUrl: thumb("Soft Glow", "#f0d7ae", "#b08c56"),
       matchType: "exact",
       similarity: 0.88,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -671,7 +686,7 @@ const glamMakeupItems: CatalogItem[] = [
         imageUrl: thumb("Shimmer Strips", "#f4dfbb", "#bb9862"),
         matchType: "alternative",
         similarity: 0.82,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -711,7 +726,7 @@ const glamMakeupItems: CatalogItem[] = [
       imageUrl: thumb("Gold Hoops", "#e8c877", "#9d7c2e"),
       matchType: "exact",
       similarity: 0.89,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -726,7 +741,7 @@ const glamMakeupItems: CatalogItem[] = [
         imageUrl: thumb("Plated Hoops", "#f0d68f", "#aa8836"),
         matchType: "alternative",
         similarity: 0.85,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -773,7 +788,7 @@ const genericItems: CatalogItem[] = [
       imageUrl: thumb("Wool Coat", "#c69a68", "#7d5a31"),
       matchType: "exact",
       similarity: 0.86,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -788,7 +803,7 @@ const genericItems: CatalogItem[] = [
         imageUrl: thumb("Longline Coat", "#d0a674", "#87613a"),
         matchType: "alternative",
         similarity: 0.81,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -828,7 +843,7 @@ const genericItems: CatalogItem[] = [
       imageUrl: thumb("Handle Bag", "#3a3742", "#141319"),
       matchType: "exact",
       similarity: 0.87,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -843,7 +858,7 @@ const genericItems: CatalogItem[] = [
         imageUrl: thumb("Baguette Bag", "#45414e", "#1a181f"),
         matchType: "alternative",
         similarity: 0.8,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -884,7 +899,7 @@ const genericItems: CatalogItem[] = [
       imageUrl: thumb("Knee Boots", "#34313b", "#121016"),
       matchType: "exact",
       similarity: 0.84,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -899,7 +914,7 @@ const genericItems: CatalogItem[] = [
         imageUrl: thumb("Tall Boots", "#3d3a45", "#151319"),
         matchType: "alternative",
         similarity: 0.79,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -939,7 +954,7 @@ const genericItems: CatalogItem[] = [
       imageUrl: thumb("Glowy Balm", "#c25370", "#732239"),
       matchType: "exact",
       similarity: 0.83,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -954,7 +969,7 @@ const genericItems: CatalogItem[] = [
         imageUrl: thumb("Lip Oil", "#cd6580", "#7e2941"),
         matchType: "alternative",
         similarity: 0.78,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1001,7 +1016,7 @@ const tailoringItems: CatalogItem[] = [
       imageUrl: thumb("Wool Blazer", "#39405a", "#161a26"),
       matchType: "exact",
       similarity: 0.93,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1016,7 +1031,7 @@ const tailoringItems: CatalogItem[] = [
         imageUrl: thumb("Tailored Blazer", "#434a66", "#1b1f2d"),
         matchType: "alternative",
         similarity: 0.86,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1056,7 +1071,7 @@ const tailoringItems: CatalogItem[] = [
       imageUrl: thumb("Pleated Trousers", "#333a52", "#151824"),
       matchType: "exact",
       similarity: 0.9,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1071,7 +1086,7 @@ const tailoringItems: CatalogItem[] = [
         imageUrl: thumb("Pleated Pants", "#3c435e", "#181c28"),
         matchType: "alternative",
         similarity: 0.84,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1111,7 +1126,7 @@ const tailoringItems: CatalogItem[] = [
       imageUrl: thumb("Chelsea Boot", "#4a3b30", "#231a14"),
       matchType: "exact",
       similarity: 0.89,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1126,7 +1141,7 @@ const tailoringItems: CatalogItem[] = [
         imageUrl: thumb("Chunky Chelsea", "#544437", "#291f18"),
         matchType: "alternative",
         similarity: 0.83,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1167,7 +1182,7 @@ const tailoringItems: CatalogItem[] = [
       imageUrl: thumb("Leather Tote", "#4d3c2e", "#241b14"),
       matchType: "exact",
       similarity: 0.87,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1182,7 +1197,7 @@ const tailoringItems: CatalogItem[] = [
         imageUrl: thumb("Top Handle", "#57432f", "#2a2016"),
         matchType: "alternative",
         similarity: 0.81,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1229,7 +1244,7 @@ const softMinimalItems: CatalogItem[] = [
       imageUrl: thumb("Cable Knit", "#eadcc7", "#bda88c"),
       matchType: "exact",
       similarity: 0.92,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1244,7 +1259,7 @@ const softMinimalItems: CatalogItem[] = [
         imageUrl: thumb("Knit Pullover", "#efe2cf", "#c4b096"),
         matchType: "alternative",
         similarity: 0.85,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1284,7 +1299,7 @@ const softMinimalItems: CatalogItem[] = [
       imageUrl: thumb("Silk Scarf", "#eeb9a6", "#b47660"),
       matchType: "exact",
       similarity: 0.88,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1299,7 +1314,7 @@ const softMinimalItems: CatalogItem[] = [
         imageUrl: thumb("Neckerchief", "#f2c3b1", "#bc7f69"),
         matchType: "alternative",
         similarity: 0.82,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1339,7 +1354,7 @@ const softMinimalItems: CatalogItem[] = [
       imageUrl: thumb("Pearl Drop", "#f6f1e8", "#cbbfa8"),
       matchType: "exact",
       similarity: 0.85,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1354,7 +1369,7 @@ const softMinimalItems: CatalogItem[] = [
         imageUrl: thumb("Pearl Earring", "#f8f4ed", "#d3c7b1"),
         matchType: "alternative",
         similarity: 0.8,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1394,7 +1409,7 @@ const softMinimalItems: CatalogItem[] = [
       imageUrl: thumb("Lip Oil", "#d1918b", "#8d4d47"),
       matchType: "exact",
       similarity: 0.84,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1409,7 +1424,7 @@ const softMinimalItems: CatalogItem[] = [
         imageUrl: thumb("Butter Gloss", "#dba09a", "#95564f"),
         matchType: "alternative",
         similarity: 0.79,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1460,35 +1475,38 @@ const pinkOutfitItems: CatalogItem[] = [
       price: 549.0,
       currency: "TRY",
       searchQuery: "pembe fermuarlı triko ceket",
+      productUrl: PINK_OUTFIT_PDPS.cardigan,
       imageUrl: thumb("Pink Cardigan", "#f6b9c8", "#d9829a"),
       matchType: "exact",
       similarity: 0.94,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
       {
         id: "po-cardigan-alt-1",
-        title: "Fermuarlı Örgü Hırka",
-        brand: "H&M",
-        merchant: "H&M",
+        title: "Pembe Fermuarlı Triko Hırka",
+        brand: "LC Waikiki",
+        merchant: "LC Waikiki",
         price: 299.9,
         currency: "TRY",
-        searchQuery: "pembe fermuarlı örgü hırka",
+        searchQuery: "pembe fermuarlı triko hırka",
+        productUrl: PINK_OUTFIT_PDPS.cardiganLcw,
         imageUrl: thumb("Knit Cardigan", "#f9c9d5", "#dd93a7"),
         matchType: "alternative",
         similarity: 0.86,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
         id: "po-cardigan-alt-2",
-        title: "Yüksek Yaka Fermuarlı Hırka",
-        brand: "Mango",
-        merchant: "Mango",
-        price: 429.9,
+        title: "Fermuarlı Örgü Hırka",
+        brand: "DeFacto",
+        merchant: "DeFacto",
+        price: 349.9,
         currency: "TRY",
-        searchQuery: "yüksek yaka fermuarlı pembe kazak",
+        searchQuery: "pembe fermuarlı triko hırka",
+        productUrl: PINK_OUTFIT_PDPS.cardiganDefacto,
         imageUrl: thumb("Zip Sweater", "#f4aebe", "#cf7690"),
         matchType: "alternative",
         similarity: 0.82,
@@ -1496,12 +1514,13 @@ const pinkOutfitItems: CatalogItem[] = [
       },
       {
         id: "po-cardigan-alt-3",
-        title: "Ribbed Zip-Through Cardigan",
-        brand: "ASOS",
-        merchant: "ASOS",
-        price: 499.9,
+        title: "Yüksek Yaka Fermuarlı Hırka",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 429.9,
         currency: "TRY",
-        searchQuery: "pembe fermuarlı triko üst",
+        searchQuery: "yüksek yaka fermuarlı pembe hırka",
+        productUrl: PINK_OUTFIT_PDPS.cardiganAlt,
         imageUrl: thumb("Ribbed Knit", "#f7c2cf", "#d5889d"),
         matchType: "alternative",
         similarity: 0.79,
@@ -1523,39 +1542,42 @@ const pinkOutfitItems: CatalogItem[] = [
       id: "po-shorts-exact",
       title: "Deri Görünümlü Yüksek Bel Mini Şort",
       brand: "Zara",
-      merchant: "Zara",
+      merchant: "Trendyol",
       price: 899.0,
       currency: "TRY",
-      searchQuery: "deri görünümlü mini şort",
+      searchQuery: "siyah deri mini şort",
+      productUrl: PINK_OUTFIT_PDPS.shorts,
       imageUrl: thumb("Leather Shorts", "#2a2a31", "#0d0d10"),
       matchType: "exact",
       similarity: 0.89,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
       {
         id: "po-shorts-alt-1",
         title: "Suni Deri Yüksek Bel Şort",
-        brand: "Trendyol",
-        merchant: "Trendyol",
+        brand: "Lefties",
+        merchant: "Lefties",
         price: 249.9,
         currency: "TRY",
-        searchQuery: "suni deri yüksek bel şort",
+        searchQuery: "siyah deri mini şort",
+        productUrl: PINK_OUTFIT_PDPS.shortsLefties,
         imageUrl: thumb("Faux Shorts", "#35353d", "#131317"),
         matchType: "alternative",
         similarity: 0.84,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
         id: "po-shorts-alt-2",
-        title: "Coated Mini Shorts",
-        brand: "H&M",
-        merchant: "H&M",
-        price: 449.9,
+        title: "Mat Deri Mini Şort",
+        brand: "DeFacto",
+        merchant: "DeFacto",
+        price: 279.9,
         currency: "TRY",
-        searchQuery: "siyah kaplamalı mini şort",
+        searchQuery: "siyah deri görünümlü mini şort",
+        productUrl: PINK_OUTFIT_PDPS.shortsAlt,
         imageUrl: thumb("Coated Shorts", "#3d3d46", "#17171c"),
         matchType: "alternative",
         similarity: 0.8,
@@ -1563,16 +1585,17 @@ const pinkOutfitItems: CatalogItem[] = [
       },
       {
         id: "po-shorts-alt-3",
-        title: "Faux Leather Tailored Short",
-        brand: "ASOS",
-        merchant: "ASOS",
-        price: 629.9,
+        title: "Suni Deri Tailored Şort",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 329.9,
         currency: "TRY",
-        searchQuery: "siyah deri görünümlü şort",
+        searchQuery: "siyah suni deri mini şort",
+        productUrl: PINK_OUTFIT_PDPS.shortsAlt,
         imageUrl: thumb("Tailored Short", "#30303a", "#101014"),
         matchType: "alternative",
         similarity: 0.76,
-        inStock: false,
+        inStock: true,
       },
     ],
   },
@@ -1595,35 +1618,38 @@ const pinkOutfitItems: CatalogItem[] = [
       price: 2499.0,
       currency: "TRY",
       searchQuery: "siyah beyaz bilekli sneaker",
+      productUrl: PINK_OUTFIT_PDPS.sneakers,
       imageUrl: thumb("High Top", "#f2f2f2", "#1b1b1b"),
       matchType: "exact",
       similarity: 0.91,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
       {
         id: "po-sneakers-alt-1",
         title: "Bilekli Spor Ayakkabı",
-        brand: "Trendyol",
-        merchant: "Trendyol",
+        brand: "DeFacto",
+        merchant: "DeFacto",
         price: 899.9,
         currency: "TRY",
-        searchQuery: "bilekli siyah beyaz spor ayakkabı",
+        searchQuery: "siyah beyaz bilekli sneaker",
+        productUrl: PINK_OUTFIT_PDPS.sneakersDefacto,
         imageUrl: thumb("Ankle Sneaker", "#e8e8e8", "#26262a"),
         matchType: "alternative",
         similarity: 0.83,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
         id: "po-sneakers-alt-2",
         title: "Panelli Yüksek Bilek Sneaker",
-        brand: "H&M",
-        merchant: "H&M",
-        price: 1299.9,
+        brand: "LC Waikiki",
+        merchant: "LC Waikiki",
+        price: 999.9,
         currency: "TRY",
-        searchQuery: "yüksek bilek panelli sneaker",
+        searchQuery: "bilekli siyah beyaz spor ayakkabı",
+        productUrl: PINK_OUTFIT_PDPS.sneakersAlt,
         imageUrl: thumb("Panel Sneaker", "#ededed", "#2f2f34"),
         matchType: "alternative",
         similarity: 0.8,
@@ -1632,11 +1658,12 @@ const pinkOutfitItems: CatalogItem[] = [
       {
         id: "po-sneakers-alt-3",
         title: "Retro Hi-Top Trainer",
-        brand: "ASOS",
-        merchant: "ASOS",
-        price: 1799.9,
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 1199.9,
         currency: "TRY",
         searchQuery: "retro yüksek bilek sneaker",
+        productUrl: PINK_OUTFIT_PDPS.sneakersAlt,
         imageUrl: thumb("Hi Top", "#f5f5f5", "#1f1f23"),
         matchType: "alternative",
         similarity: 0.77,
@@ -1672,7 +1699,7 @@ const bikerLookItems: CatalogItem[] = [
       imageUrl: thumb("Biker Jacket", "#2a2a31", "#0d0d10"),
       matchType: "exact",
       similarity: 0.93,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1687,7 +1714,7 @@ const bikerLookItems: CatalogItem[] = [
         imageUrl: thumb("Faux Biker", "#35353d", "#131317"),
         matchType: "alternative",
         similarity: 0.86,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1726,7 +1753,7 @@ const bikerLookItems: CatalogItem[] = [
       imageUrl: thumb("Strap Body", "#26262b", "#0f0f12"),
       matchType: "exact",
       similarity: 0.88,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1741,7 +1768,7 @@ const bikerLookItems: CatalogItem[] = [
         imageUrl: thumb("Basic Body", "#2f2f35", "#131316"),
         matchType: "alternative",
         similarity: 0.83,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1780,7 +1807,7 @@ const bikerLookItems: CatalogItem[] = [
       imageUrl: thumb("Skinny Jean", "#3d5578", "#1d2c44"),
       matchType: "exact",
       similarity: 0.9,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1795,7 +1822,7 @@ const bikerLookItems: CatalogItem[] = [
         imageUrl: thumb("High Jean", "#46618a", "#22334d"),
         matchType: "alternative",
         similarity: 0.85,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1834,7 +1861,7 @@ const bikerLookItems: CatalogItem[] = [
       imageUrl: thumb("Sunglasses", "#9a9aa2", "#5c5c63"),
       matchType: "exact",
       similarity: 0.79,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1849,7 +1876,7 @@ const bikerLookItems: CatalogItem[] = [
         imageUrl: thumb("Rect Sunglasses", "#a5a5ad", "#66666d"),
         matchType: "alternative",
         similarity: 0.75,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
     ],
@@ -1880,7 +1907,7 @@ const longCoatItems: CatalogItem[] = [
       imageUrl: thumb("Long Coat", "#282830", "#0c0c11"),
       matchType: "exact",
       similarity: 0.92,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1895,7 +1922,7 @@ const longCoatItems: CatalogItem[] = [
         imageUrl: thumb("Duster Coat", "#32323c", "#121217"),
         matchType: "alternative",
         similarity: 0.85,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -1934,7 +1961,7 @@ const longCoatItems: CatalogItem[] = [
       imageUrl: thumb("Knit Beanie", "#e8e6df", "#b8b5ab"),
       matchType: "exact",
       similarity: 0.84,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1949,7 +1976,7 @@ const longCoatItems: CatalogItem[] = [
         imageUrl: thumb("Beanie Hat", "#efede7", "#c2bfb5"),
         matchType: "alternative",
         similarity: 0.79,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
     ],
@@ -1975,7 +2002,7 @@ const longCoatItems: CatalogItem[] = [
       imageUrl: thumb("Ripped Jean", "#7a9ac0", "#41618a"),
       matchType: "exact",
       similarity: 0.89,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -1990,7 +2017,7 @@ const longCoatItems: CatalogItem[] = [
         imageUrl: thumb("Baggy Jean", "#84a3c8", "#4a6a92"),
         matchType: "alternative",
         similarity: 0.84,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -2029,7 +2056,7 @@ const longCoatItems: CatalogItem[] = [
       imageUrl: thumb("Block Sandal", "#2c2c33", "#101014"),
       matchType: "exact",
       similarity: 0.87,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -2074,7 +2101,7 @@ const blackBlazerItems: CatalogItem[] = [
       imageUrl: thumb("Oversized Blazer", "#2a2a32", "#0d0d11"),
       matchType: "exact",
       similarity: 0.94,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -2089,7 +2116,7 @@ const blackBlazerItems: CatalogItem[] = [
         imageUrl: thumb("Blazer Jacket", "#33333c", "#131318"),
         matchType: "alternative",
         similarity: 0.88,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -2128,7 +2155,7 @@ const blackBlazerItems: CatalogItem[] = [
       imageUrl: thumb("Matte Lipstick", "#d94356", "#8e1524"),
       matchType: "exact",
       similarity: 0.86,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -2143,7 +2170,7 @@ const blackBlazerItems: CatalogItem[] = [
         imageUrl: thumb("Red Lipstick", "#e05064", "#9c1b2c"),
         matchType: "alternative",
         similarity: 0.81,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
       {
@@ -2182,7 +2209,7 @@ const blackBlazerItems: CatalogItem[] = [
       imageUrl: thumb("Strappy Heel", "#2e2e35", "#101014"),
       matchType: "exact",
       similarity: 0.88,
-      tag: "Birebir eşleşme",
+      tag: "Birebir Eşleşme",
       inStock: true,
     },
     alternatives: [
@@ -2197,7 +2224,7 @@ const blackBlazerItems: CatalogItem[] = [
         imageUrl: thumb("Thin Strap Sandal", "#38383f", "#141418"),
         matchType: "alternative",
         similarity: 0.83,
-        tag: "En uygun",
+        tag: "Bütçe Dostu Muadil",
         inStock: true,
       },
     ],
@@ -2323,12 +2350,22 @@ export function retargetSearchQuery(
 /* -------------------------------------------------------------------------- */
 
 /**
- * Turns an authored catalogue row into a UI-ready `ProductMatch`, resolving its
- * `searchQuery` into a live storefront search URL.
+ * Turns an authored catalogue row into a UI-ready `ProductMatch`.
+ *
+ * Resolution order (search URLs are banned):
+ *  1. Explicit `productUrl` when it is a direct PDP
+ *  2. Curated family-matched PDP for the merchant
+ *  3. Empty URL + out-of-stock — never a `/search?searchTerm=` dump
  */
 export function hydrateProduct(product: CatalogProduct): ProductMatch {
-  const { searchQuery, ...rest } = product;
-  const productUrl = buildMerchantSearchUrl(product.merchant, searchQuery);
+  const { searchQuery, productUrl: authoredUrl, ...rest } = product;
+  const family = familyOf(`${product.title} ${product.brand} ${searchQuery}`);
+
+  const direct =
+    (authoredUrl && isDirectProductUrl(authoredUrl) ? authoredUrl : null) ??
+    resolveVerifiedPdp(product.merchant, family);
+
+  const productUrl = direct && isDirectProductUrl(direct) ? direct : "";
 
   let merchantDomain = "";
   if (productUrl) {
@@ -2341,21 +2378,51 @@ export function hydrateProduct(product: CatalogProduct): ProductMatch {
 
   return {
     ...rest,
-    // A merchant with no search endpoint would leave the CTA dead, so the card
-    // is marked out of stock rather than shipped with nowhere to go.
-    productUrl: productUrl ?? "",
-    urlKind: "search",
+    productUrl,
+    urlKind: "product",
     inStock: productUrl ? product.inStock : false,
     merchantDomain,
     isLive: false,
   };
 }
 
-/** Hydrates a whole scenario into UI-ready detections. */
+/** Hydrates a whole scenario into UI-ready detections with category locking. */
 export function hydrateItems(items: CatalogItem[]): DetectedItem[] {
-  return items.map((item) => ({
-    ...item,
-    exactMatch: item.exactMatch ? hydrateProduct(item.exactMatch) : null,
-    alternatives: item.alternatives.map(hydrateProduct),
-  }));
+  return items.map((item) => {
+    const primary =
+      item.primaryCategory ??
+      primaryCategoryOf(`${item.itemType} ${item.label} ${item.attributes}`);
+
+    const exactMatch = item.exactMatch ? hydrateProduct(item.exactMatch) : null;
+    const alternatives = item.alternatives.map(hydrateProduct);
+
+    return {
+      ...item,
+      primaryCategory: primary,
+      exactMatch:
+        exactMatch &&
+        passesWhitelistSanitizer(
+          primary,
+          {
+            title: exactMatch.title,
+            productUrl: exactMatch.productUrl,
+            brand: exactMatch.brand,
+          },
+          { colorHex: item.colorHex, enforceColor: false },
+        )
+          ? exactMatch
+          : null,
+      alternatives: alternatives.filter((product) =>
+        passesWhitelistSanitizer(
+          primary,
+          {
+            title: product.title,
+            productUrl: product.productUrl,
+            brand: product.brand,
+          },
+          { colorHex: item.colorHex, enforceColor: false },
+        ),
+      ),
+    };
+  });
 }

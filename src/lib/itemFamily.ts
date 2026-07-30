@@ -136,6 +136,12 @@ const RULES: FamilyRule[] = [
       "jewellery",
       "accessory",
       "saat",
+      "hoop",
+      "hoops",
+      "chain",
+      "chains",
+      "zincir",
+      "halka",
     ],
   },
   {
@@ -208,7 +214,7 @@ const RULES: FamilyRule[] = [
   {
     family: "lips",
     stems: ["ruj", "dudak"],
-    words: ["lip", "lips", "lipstick", "gloss", "balm"],
+    words: ["lip", "lips", "lipstick", "gloss", "balm", "rouge", "ink"],
   },
   {
     family: "eyes",
@@ -224,11 +230,12 @@ const RULES: FamilyRule[] = [
       "brow",
       "brows",
       "liner",
+      "palette",
     ],
   },
   {
     family: "face",
-    stems: ["fondöten", "kapatıc", "allık", "pudra", "aydınlatıc", "bronz"],
+    stems: ["fondöten", "kapatıc", "allık", "pudra", "aydınlatıc", "bronz", "ışılt"],
     words: [
       "foundation",
       "blush",
@@ -238,6 +245,9 @@ const RULES: FamilyRule[] = [
       "highlighter",
       "bronzer",
       "primer",
+      "glow",
+      "serum",
+      "damla",
     ],
   },
 ];

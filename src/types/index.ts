@@ -11,7 +11,24 @@
 /** Top-level grouping used to split the results pane into two sections. */
 export type ItemCategory = "clothing" | "beauty";
 
-/** Retailers we currently know how to build affiliate links for. */
+/**
+ * Locked primary category for a detection. Set once by Vision and enforced
+ * against every product card — see `lib/primaryCategory.ts`.
+ */
+export type PrimaryCategory =
+  | "FOOTWEAR"
+  | "OUTERWEAR"
+  | "TOPS"
+  | "BOTTOMS"
+  | "DRESS"
+  | "BEAUTY"
+  | "ACCESSORIES"
+  | "UNKNOWN";
+
+/**
+ * Retailers we recognise for badges, search fallbacks and affiliate tags.
+ * Live search itself is web-wide — unknown shops still surface as `Other`.
+ */
 export type Merchant =
   | "Trendyol"
   | "Zara"
@@ -20,6 +37,17 @@ export type Merchant =
   | "Mango"
   | "H&M"
   | "ASOS"
+  | "LC Waikiki"
+  | "DeFacto"
+  | "Lefties"
+  | "Pull&Bear"
+  | "Stradivarius"
+  | "Bershka"
+  | "Koton"
+  | "Mavi"
+  | "Boyner"
+  | "Hepsiburada"
+  | "N11"
   | "Other";
 
 /** How close a product is to the thing we detected in the screenshot. */
@@ -71,9 +99,8 @@ export interface ProductMatch {
   /** Hostname of `productUrl`, used for affiliate and brand lookups. */
   merchantDomain: string;
   /**
-   * Whether `productUrl` is a specific product page or a storefront search.
-   * The CTA wording follows this — promising "go to product" and landing on a
-   * results page is a small lie the UI should not tell.
+   * Whether `productUrl` is a specific product page. Search URLs are banned —
+   * this field stays `"product"` whenever a CTA is rendered.
    */
   urlKind: "product" | "search";
   /** True when this row came from live inventory rather than the catalogue. */
@@ -90,6 +117,11 @@ export interface DetectedItem {
   /** Coarse type used for chips and copy, e.g. "Jacket", "Lipstick". */
   itemType: string;
   category: ItemCategory;
+  /**
+   * Non-negotiable primary category locked at detection time. Every product
+   * match must share this tag or it is discarded before reaching the UI.
+   */
+  primaryCategory: PrimaryCategory;
   /** Short attribute line for the compact panel card, e.g. "Matte Grey • Heavyweight". */
   attributes: string;
   description: string;
@@ -98,6 +130,19 @@ export interface DetectedItem {
   boundingBox: BoundingBox;
   /** Dominant colour of the region, used for the swatch dot. */
   colorHex: string;
+  /**
+   * Best WEB_DETECTION entity for this region, when available. Fed into the
+   * Stage 1 exact-match query so brand/style phrasing survives into search.
+   */
+  webEntity?: string;
+  /** WEB_DETECTION entity confidence 0..1 when available. */
+  webEntityScore?: number;
+  /** LOGO_DETECTION brand inside the ROI (Nike, Zara, …). */
+  brandLogo?: string;
+  /** Texture / material descriptors extracted from ROI analysis. */
+  materials?: string[];
+  /** Pattern descriptors extracted from ROI analysis. */
+  patterns?: string[];
   /** Highest-confidence match; null when nothing crossed the threshold. */
   exactMatch: ProductMatch | null;
   /** Cheaper look-alikes, ordered by price ascending. */

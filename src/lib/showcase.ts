@@ -1,4 +1,5 @@
-import { buildMerchantSearchUrl } from "@/services/merchantSearch";
+import { isDirectProductUrl, PINK_OUTFIT_PDPS, resolveVerifiedPdp } from "@/services/productUrls";
+import { familyOf } from "@/lib/itemFamily";
 import type { BoundingBox, ExampleId, Merchant } from "@/types";
 
 /**
@@ -20,7 +21,7 @@ export interface ShowcaseMatch {
   merchant: Merchant;
   price: number;
   currency: string;
-  /** Storefront search URL — a real, resolvable link, not an invented product id. */
+  /** Direct product-detail page only — never a storefront search URL. */
   url: string;
   /** 0..1 visual similarity, shown as a percentage. */
   similarity: number;
@@ -72,9 +73,13 @@ export interface ShowcaseLook {
   items: ShowcaseItem[];
 }
 
-/** Search URL or empty string — the CTA degrades to a disabled state on "". */
-function searchUrl(merchant: Merchant, query: string): string {
-  return buildMerchantSearchUrl(merchant, query) ?? "";
+/** Direct PDP only — never emits `/search?searchTerm=` or similar. */
+function productUrl(merchant: Merchant, query: string, preferred?: string): string {
+  if (preferred && isDirectProductUrl(preferred)) return preferred;
+  const family = familyOf(query);
+  const verified = resolveVerifiedPdp(merchant, family);
+  if (verified && isDirectProductUrl(verified)) return verified;
+  return "";
 }
 
 export const SHOWCASE_LOOKS: ShowcaseLook[] = [
@@ -101,7 +106,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "Trendyol",
           price: 549,
           currency: "TRY",
-          url: searchUrl("Trendyol", "pembe fermuarlı triko ceket"),
+          url: productUrl("Trendyol", "pembe fermuarlı triko ceket", PINK_OUTFIT_PDPS.cardigan),
           similarity: 0.94,
           alternativeCount: 12,
         },
@@ -116,10 +121,10 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
         box: { x: 0.353, y: 0.506, width: 0.247, height: 0.08 },
         match: {
           title: "Deri Görünümlü Yüksek Bel Mini Şort",
-          merchant: "Zara",
+          merchant: "Trendyol",
           price: 899,
           currency: "TRY",
-          url: searchUrl("Zara", "deri görünümlü mini şort"),
+          url: productUrl("Trendyol", "deri görünümlü mini şort", PINK_OUTFIT_PDPS.shorts),
           similarity: 0.89,
           alternativeCount: 9,
         },
@@ -137,7 +142,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "Amazon",
           price: 2499,
           currency: "TRY",
-          url: searchUrl("Amazon", "siyah beyaz bilekli sneaker"),
+          url: productUrl("Amazon", "siyah beyaz bilekli sneaker", PINK_OUTFIT_PDPS.sneakers),
           similarity: 0.91,
           alternativeCount: 15,
         },
@@ -167,7 +172,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "Zara",
           price: 3599,
           currency: "TRY",
-          url: searchUrl("Zara", "deri biker ceket"),
+          url: productUrl("Zara", "deri biker ceket"),
           similarity: 0.93,
           alternativeCount: 14,
         },
@@ -185,7 +190,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "Mango",
           price: 799,
           currency: "TRY",
-          url: searchUrl("Mango", "kalp yaka askılı body"),
+          url: productUrl("Mango", "kalp yaka askılı body"),
           similarity: 0.88,
           alternativeCount: 11,
         },
@@ -203,7 +208,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "H&M",
           price: 899,
           currency: "TRY",
-          url: searchUrl("H&M", "yüksek bel skinny jean"),
+          url: productUrl("H&M", "yüksek bel skinny jean"),
           similarity: 0.9,
           alternativeCount: 18,
         },
@@ -221,7 +226,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "Trendyol",
           price: 349,
           currency: "TRY",
-          url: searchUrl("Trendyol", "ince metal çerçeve dikdörtgen güneş gözlüğü"),
+          url: productUrl("Trendyol", "ince metal çerçeve dikdörtgen güneş gözlüğü"),
           similarity: 0.79,
           alternativeCount: 8,
         },
@@ -251,7 +256,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "Mango",
           price: 2799,
           currency: "TRY",
-          url: searchUrl("Mango", "uzun siyah kuşaklı kaban"),
+          url: productUrl("Mango", "uzun siyah kuşaklı kaban"),
           similarity: 0.92,
           alternativeCount: 10,
         },
@@ -269,7 +274,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "H&M",
           price: 299,
           currency: "TRY",
-          url: searchUrl("H&M", "desenli örgü bere"),
+          url: productUrl("H&M", "desenli örgü bere"),
           similarity: 0.84,
           alternativeCount: 7,
         },
@@ -287,7 +292,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "ASOS",
           price: 1199,
           currency: "TRY",
-          url: searchUrl("ASOS", "yırtık boyfriend jean"),
+          url: productUrl("ASOS", "yırtık boyfriend jean"),
           similarity: 0.89,
           alternativeCount: 16,
         },
@@ -305,7 +310,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "Trendyol",
           price: 649,
           currency: "TRY",
-          url: searchUrl("Trendyol", "kalın topuklu bilekten bantlı sandalet"),
+          url: productUrl("Trendyol", "kalın topuklu bilekten bantlı sandalet"),
           similarity: 0.87,
           alternativeCount: 13,
         },
@@ -335,7 +340,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "Zara",
           price: 2299,
           currency: "TRY",
-          url: searchUrl("Zara", "oversize siyah blazer"),
+          url: productUrl("Zara", "oversize siyah blazer"),
           similarity: 0.94,
           alternativeCount: 17,
         },
@@ -353,7 +358,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "Sephora",
           price: 459,
           currency: "TRY",
-          url: searchUrl("Sephora", "kırmızı mat ruj"),
+          url: productUrl("Sephora", "kırmızı mat ruj"),
           similarity: 0.86,
           alternativeCount: 21,
         },
@@ -371,7 +376,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
           merchant: "Mango",
           price: 1299,
           currency: "TRY",
-          url: searchUrl("Mango", "ince bantlı blok topuklu sandalet"),
+          url: productUrl("Mango", "ince bantlı blok topuklu sandalet"),
           similarity: 0.88,
           alternativeCount: 12,
         },

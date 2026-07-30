@@ -3,6 +3,13 @@ import "server-only";
 import ContextDev from "context.dev";
 
 import type { BrandMetadata, ItemCategory } from "@/types";
+import { isDirectProductUrl } from "@/services/productUrls";
+import { isBlockedHost, compareLiveMerchants, retailerRank } from "@/services/retailers";
+
+import {
+  LIVE_EXTRACT_BUDGET_MS,
+  LIVE_REQUEST_TIMEOUT_MS,
+} from "@/lib/timeouts";
 
 /**
  * Context.dev integration — live product intelligence and retailer branding.
@@ -33,25 +40,16 @@ export interface LiveProductCard {
 }
 
 /**
- * Retailers we search. Scoping the search to an allowlist keeps results
- * shoppable (no blogs, no marketplaces we can't attribute) and keeps the
- * affiliate mapping in `utils/affiliate.ts` meaningful.
+ * Soft preference list for ranking only — live search is deliberately
+ * *not* scoped with `includeDomains`, so LCW / DeFacto / Lefties / any other
+ * shoppable host can surface. Blocked social/blog hosts are filtered after
+ * the fact; fashion domains are just ranked higher.
  */
-const RETAILER_DOMAINS: Record<ItemCategory, string[]> = {
-  clothing: [
-    "zara.com",
-    "trendyol.com",
-    "shop.mango.com",
-    "hm.com",
-    "asos.com",
-    "amazon.com",
-  ],
-  beauty: ["sephora.com", "trendyol.com", "amazon.com", "lookfantastic.com"],
-};
+const PREFERRED_EXTRACT_COUNT = 5;
 
 /** Fallback currency per retailer TLD, used when extraction omits it. */
 const DOMAIN_CURRENCY: Array<[RegExp, string]> = [
-  [/\.com\.tr$|trendyol\.com/, "TRY"],
+  [/\.com\.tr$|trendyol\.com|lcwaikiki\.com|defacto\.com|hepsiburada\.com|n11\.com|boyner\.com|koton\.com|mavi\.com/, "TRY"],
   [/\.co\.uk$|asos\.com/, "GBP"],
   [/\.de$|\.fr$|\.es$|\.it$/, "EUR"],
 ];
@@ -134,8 +132,8 @@ export class ContextDevService {
 
   constructor(apiKey: string, options: ContextDevServiceOptions = {}) {
     this.extractsPerQuery = options.extractsPerQuery ?? 3;
-    this.requestTimeoutMs = options.requestTimeoutMs ?? 20_000;
-    this.extractBudgetMs = options.extractBudgetMs ?? 15_000;
+    this.requestTimeoutMs = options.requestTimeoutMs ?? LIVE_REQUEST_TIMEOUT_MS;
+    this.extractBudgetMs = options.extractBudgetMs ?? LIVE_EXTRACT_BUDGET_MS;
     this.cacheTtlMs = options.cacheTtlMs ?? 30 * 60_000;
 
     this.client = new ContextDev({
@@ -150,10 +148,10 @@ export class ContextDevService {
   /**
    * Finds live, buyable products for a detection label.
    *
-   * Two stages: `web.search` scoped to our retailer allowlist finds real
-   * product URLs, then `web.extract` pulls structured cards off the best few.
-   * Extraction is pinned to a single page (`maxDepth: 0`, `maxPages: 1`) so
-   * latency and credit cost stay predictable.
+   * Search is web-wide (no `includeDomains` whitelist) so any fashion retailer
+   * — LCW, DeFacto, Lefties, Pull&Bear, marketplaces, etc. — can rank. We then
+   * keep only direct PDPs, drop blocked hosts, and prefer known fashion domains
+   * when picking extract targets.
    *
    * Resolves to `[]` on any failure — callers fall back to the catalogue.
    */
@@ -169,40 +167,63 @@ export class ContextDevService {
     try {
       const search = await this.client.web.search(
         {
-          query: `${query} buy price`,
-          includeDomains: RETAILER_DOMAINS[category],
-          numResults: 10,
+          // Open web: omit includeDomains so the query is not trapped in a
+          // small merchant allowlist. PDP + blocked-host filters keep CTAs
+          // shoppable.
+          query: `${query} satın al ürün`,
+          numResults: 15,
           timeoutMS: this.requestTimeoutMs,
-          tags: ["markas", "product-search"],
+          tags: ["markas", "product-search", "web-wide"],
         },
         { signal },
       );
 
-      // One page per retailer: a spread across merchants beats three near
-      // identical listings from whichever store ranked best.
       const candidates: string[] = [];
       const seenHosts = new Set<string>();
 
-      for (const result of search.results ?? []) {
-        const host = safeHostname(result.url);
-        if (!host || seenHosts.has(host)) continue;
+      const ranked = [...(search.results ?? [])]
+        .map((result) => {
+          const host = safeHostname(result.url) ?? "";
+          return {
+            url: result.url,
+            host,
+            rank: retailerRank(host, isDirectProductUrl(result.url)),
+          };
+        })
+        .filter((entry) => entry.host && !isBlockedHost(entry.host))
+        .sort((a, b) => a.rank - b.rank);
 
-        seenHosts.add(host);
+      for (const result of ranked) {
+        if (!isDirectProductUrl(result.url)) continue;
+        if (seenHosts.has(result.host)) continue;
+
+        seenHosts.add(result.host);
         candidates.push(result.url);
-        if (candidates.length >= this.extractsPerQuery) break;
+        if (candidates.length >= Math.max(this.extractsPerQuery, PREFERRED_EXTRACT_COUNT)) {
+          break;
+        }
       }
 
+      // No PDP in the search results — refuse to extract from search pages
+      // (those produce search CTAs). Caller falls back to verified catalogue PDPs.
       if (candidates.length === 0) return [];
 
+      const extractLimit = Math.max(this.extractsPerQuery, PREFERRED_EXTRACT_COUNT);
       const extracted = await Promise.allSettled(
-        candidates.map((url) => this.extractProducts(url, signal)),
+        candidates.slice(0, extractLimit).map((url) => this.extractProducts(url, signal)),
       );
 
       const products = extracted.flatMap((outcome) =>
         outcome.status === "fulfilled" ? outcome.value : [],
       );
 
-      const deduped = dedupeByUrl(products);
+      const deduped = dedupeByUrl(products)
+        .filter(
+          (product) =>
+            isDirectProductUrl(product.productUrl) &&
+            !isBlockedHost(product.merchantDomain),
+        )
+        .sort(compareLiveMerchants);
       this.writeCache(this.productCache, cacheKey, deduped);
       return deduped;
     } catch (error) {
@@ -343,14 +364,22 @@ function normalizeProduct(
   const price = toPositiveNumber(raw.price);
   if (price === null) return null;
 
-  // An extracted product URL is only trusted if it stays on the page's host —
-  // otherwise a scraped ad or cross-sell could redirect our CTA off-site.
+  // An extracted product URL is only trusted if it stays on the page's host and
+  // is a direct PDP — otherwise a scraped ad, cross-sell, or search page could
+  // redirect our CTA off a buyable product.
   const extractedUrl = typeof raw.productUrl === "string" ? raw.productUrl : "";
-  const productUrl =
-    isHttpUrl(extractedUrl) && safeHostname(extractedUrl) === host
+  const preferred =
+    isHttpUrl(extractedUrl) &&
+    safeHostname(extractedUrl) === host &&
+    isDirectProductUrl(extractedUrl)
       ? extractedUrl
-      : pageUrl;
+      : isDirectProductUrl(pageUrl)
+        ? pageUrl
+        : null;
 
+  if (!preferred) return null;
+
+  const productUrl = preferred;
   const currency =
     typeof raw.currency === "string" && /^[A-Za-z]{3}$/.test(raw.currency.trim())
       ? raw.currency.trim().toUpperCase()

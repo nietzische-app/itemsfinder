@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRight, BadgeCheck, Bookmark, Search, TrendingDown } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Bookmark, TrendingDown } from "lucide-react";
 
 import { ProductImage } from "@/components/ProductImage";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { useSavedProducts } from "@/lib/savedItems";
 import { merchantColor, merchantInitials } from "@/services/merchantSearch";
+import { isDirectProductUrl } from "@/services/productUrls";
 import { cn } from "@/lib/utils";
 import { buildAffiliateUrl, formatPrice, savingsPercent } from "@/utils/affiliate";
 import type { ProductMatch } from "@/types";
@@ -39,10 +40,6 @@ export function ProductCard({
   const { isSaved, toggle } = useSavedProducts();
   const saved = isSaved(product.id);
 
-  const href = buildAffiliateUrl(product.productUrl, product.merchant, {
-    subId: `${detectionId}:${product.id}`,
-  });
-
   const savings =
     referencePrice && product.matchType === "alternative"
       ? savingsPercent(referencePrice, product.price)
@@ -50,6 +47,16 @@ export function ProductCard({
 
   const isHero = variant === "hero";
   const retailer = product.brandMetadata?.name ?? product.merchant;
+  // Absolute ban: never render a storefront search URL on the CTA.
+  const pdpUrl =
+    product.productUrl && isDirectProductUrl(product.productUrl)
+      ? product.productUrl
+      : "";
+  const href = pdpUrl
+    ? buildAffiliateUrl(pdpUrl, product.merchant, {
+        subId: `${detectionId}:${product.id}`,
+      })
+    : "";
 
   return (
     <article
@@ -116,11 +123,12 @@ export function ProductCard({
 
             {isHero ? (
               <span
-                className="shrink-0 text-secondary-deep"
-                title="Birebir eşleşme"
-                aria-label="Birebir eşleşme"
+                className="inline-flex shrink-0 items-center gap-1 rounded-full bg-secondary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-secondary-deep"
+                title="Birebir Eşleşme"
+                aria-label="Birebir Eşleşme"
               >
-                <BadgeCheck className="h-4 w-4" strokeWidth={2} />
+                <BadgeCheck className="h-3.5 w-3.5" strokeWidth={2} />
+                Birebir Eşleşme
               </span>
             ) : product.tag ? (
               <Badge variant="muted" className="shrink-0 text-[10px]">
@@ -189,7 +197,7 @@ export function ProductCard({
               />
             </button>
 
-            {product.productUrl ? (
+            {pdpUrl ? (
               <Button asChild size="sm">
                 {/* Affiliate links are third-party: never leak the opener. */}
                 <a
@@ -197,19 +205,8 @@ export function ProductCard({
                   target="_blank"
                   rel="noopener noreferrer sponsored nofollow"
                 >
-                  {/* A storefront search is not a product page — the label says
-                      which one the user is about to land on. */}
-                  {product.urlKind === "search" ? (
-                    <>
-                      <Search strokeWidth={1.75} />
-                      Mağazada bul
-                    </>
-                  ) : (
-                    <>
-                      {isHero ? "Ürüne git" : "İncele"}
-                      <ArrowUpRight strokeWidth={1.5} />
-                    </>
-                  )}
+                  {isHero ? "Ürüne git" : "İncele"}
+                  <ArrowUpRight strokeWidth={1.5} />
                 </a>
               </Button>
             ) : (

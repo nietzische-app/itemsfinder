@@ -6,6 +6,7 @@ import { ArrowUpRight, Bookmark, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { useSavedProducts } from "@/lib/savedItems";
+import { isDirectProductUrl } from "@/services/productUrls";
 import { formatPrice } from "@/utils/affiliate";
 
 /** The "Kaydet" list. Local to the browser — there is no account system. */
@@ -93,7 +94,7 @@ export default function SavedPage() {
                   >
                     <Trash2 className="h-4 w-4" strokeWidth={1.75} />
                   </button>
-                  {product.productUrl ? (
+                  {product.productUrl && isDirectProductUrl(product.productUrl) ? (
                     <Button asChild size="sm">
                       <a
                         href={product.productUrl}

@@ -10,11 +10,17 @@ import type { UploadedImage } from "@/types";
  */
 const STORAGE_KEY = "markas:pending-image";
 
-export function saveUploadedImage(image: UploadedImage): void {
+/**
+ * Persists the pending image. Returns `false` when sessionStorage rejects the
+ * write (quota / private mode) so the caller can surface an error instead of
+ * navigating to an empty `/analyze`.
+ */
+export function saveUploadedImage(image: UploadedImage): boolean {
   try {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(image));
+    return true;
   } catch {
-    // Private-mode / quota errors: /analyze will show its empty state instead.
+    return false;
   }
 }
 
@@ -52,6 +58,12 @@ export function clearUploadedImage(): void {
  */
 const MAX_DIMENSION = 1600;
 
+/** Progressive downscale steps when a single pass still exceeds quota. */
+const DIMENSION_LADDER = [1600, 1280, 1024, 800, 640] as const;
+
+/** JPEG quality ladder — prefer sharper when it still fits. */
+const QUALITY_LADDER = [0.82, 0.7, 0.55, 0.4] as const;
+
 /**
  * Data-URL length ceiling. sessionStorage caps out between 4 and 5 MB, and the
  * payload also has to survive a JSON round-trip, so this leaves headroom.
@@ -76,37 +88,13 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
-/**
- * Shrinks an image so it fits in sessionStorage and travels cheaply to the
- * detection API.
- *
- * A real photo — the demo looks, or a phone screenshot — is routinely 3–8 MB,
- * which as base64 blows past the sessionStorage quota. The write then fails
- * silently and `/analyze` finds nothing to scan. Downscaling here keeps the
- * whole flow well inside budget, and also cuts what we upload to Cloud Vision.
- *
- * Returns the input unchanged if it is already small enough, is an SVG, or if
- * anything about the canvas round-trip fails: shipping the original is always
- * better than losing the image.
- */
-export async function prepareImage(dataUrl: string): Promise<string> {
-  // Bundled illustrations are a few KB; nothing to gain, and rasterising them
-  // would only lose fidelity.
-  if (dataUrl.startsWith("data:image/svg+xml")) return dataUrl;
-
-  let image: HTMLImageElement;
-  try {
-    image = await loadImage(dataUrl);
-  } catch {
-    return dataUrl;
-  }
-
+function encodeJpeg(
+  image: HTMLImageElement,
+  maxEdge: number,
+  quality: number,
+): string | null {
   const longestEdge = Math.max(image.naturalWidth, image.naturalHeight);
-  if (longestEdge <= MAX_DIMENSION && dataUrl.length <= MAX_DATA_URL_CHARS) {
-    return dataUrl;
-  }
-
-  const scale = Math.min(1, MAX_DIMENSION / longestEdge);
+  const scale = Math.min(1, maxEdge / longestEdge);
   const width = Math.max(1, Math.round(image.naturalWidth * scale));
   const height = Math.max(1, Math.round(image.naturalHeight * scale));
 
@@ -116,16 +104,69 @@ export async function prepareImage(dataUrl: string): Promise<string> {
     canvas.height = height;
 
     const context = canvas.getContext("2d");
-    if (!context) return dataUrl;
+    if (!context) return null;
 
     context.drawImage(image, 0, 0, width, height);
-    const encoded = canvas.toDataURL("image/jpeg", 0.82);
-
-    // Guard against a pathological re-encode coming out larger.
-    return encoded.length < dataUrl.length ? encoded : dataUrl;
+    return canvas.toDataURL("image/jpeg", quality);
   } catch {
-    return dataUrl;
+    return null;
   }
+}
+
+/**
+ * Shrinks an image so it fits in sessionStorage and travels cheaply to the
+ * detection API.
+ *
+ * A real photo — the demo looks, or a phone screenshot — is routinely 3–8 MB,
+ * which as base64 blows past the sessionStorage quota. The write then fails
+ * silently and `/analyze` finds nothing to scan. Downscaling here keeps the
+ * whole flow well inside budget, and also cuts what we upload to Cloud Vision.
+ *
+ * Throws when the image cannot be compressed under the storage ceiling so the
+ * upload UI can show a recoverable error instead of an empty analyze screen.
+ */
+export async function prepareImage(dataUrl: string): Promise<string> {
+  // Bundled illustrations are a few KB; nothing to gain, and rasterising them
+  // would only lose fidelity.
+  if (dataUrl.startsWith("data:image/svg+xml")) return dataUrl;
+
+  if (dataUrl.length <= MAX_DATA_URL_CHARS) {
+    // Still decode to confirm dimensions — oversized pixels with a small payload
+    // are rare, but Vision benefits from the dimension cap.
+    try {
+      const image = await loadImage(dataUrl);
+      const longestEdge = Math.max(image.naturalWidth, image.naturalHeight);
+      if (longestEdge <= MAX_DIMENSION) return dataUrl;
+    } catch {
+      return dataUrl;
+    }
+  }
+
+  let image: HTMLImageElement;
+  try {
+    image = await loadImage(dataUrl);
+  } catch {
+    if (dataUrl.length <= MAX_DATA_URL_CHARS) return dataUrl;
+    throw new Error("Görsel okunamadı. Daha küçük bir dosya dene.");
+  }
+
+  let best: string | null = null;
+
+  for (const maxEdge of DIMENSION_LADDER) {
+    for (const quality of QUALITY_LADDER) {
+      const encoded = encodeJpeg(image, maxEdge, quality);
+      if (!encoded) continue;
+
+      if (!best || encoded.length < best.length) best = encoded;
+      if (encoded.length <= MAX_DATA_URL_CHARS) return encoded;
+    }
+  }
+
+  if (best && best.length <= MAX_DATA_URL_CHARS) return best;
+
+  throw new Error(
+    "Görsel tarayıcı belleğine sığmadı. Daha küçük bir ekran görüntüsü dene.",
+  );
 }
 
 /** Reads a `File` from the dropzone into a size-bounded data URL. */
