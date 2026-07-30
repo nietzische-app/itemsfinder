@@ -1,8 +1,8 @@
 import "server-only";
 
 import { ContextDevService, type LiveProductCard } from "@/services/contextDevService";
-import { buildSearchQuery } from "@/lib/searchQuery";
-import { familyOf } from "@/lib/itemFamily";
+import { buildSearchQuery, generateAlternativeQuery } from "@/lib/searchQuery";
+import { familyOf, type ItemFamily } from "@/lib/itemFamily";
 import { hydrateProduct } from "@/services/mockCatalog";
 import { isDirectProductUrl, resolveVerifiedPdp } from "@/services/productUrls";
 import type {
@@ -141,37 +141,49 @@ export class ContextDevProductProvider implements ProductProvider {
     item: DetectedItem,
     signal: AbortSignal,
   ): Promise<DetectedItem | null> {
-    // Search on the enriched query — colour plus descriptors plus type —
-    // rather than the bare label, which is often too generic to rank well.
-    const query = buildSearchQuery({
+    const queryParts = {
       itemType: item.itemType,
       label: item.label,
       colorHex: item.colorHex,
       attributes: item.attributes,
-    });
+    };
 
-    const cards = await this.context.searchLiveProducts(
-      query || item.label,
-      item.category,
-      signal,
+    // Exact match uses the descriptive query; budget alternatives use a
+    // calibrated query that forces category + colour + style tokens so the
+    // "Muadilini Gör" rail cannot drift into unrelated garments.
+    const exactQuery = buildSearchQuery(queryParts) || item.label;
+    const altQuery = generateAlternativeQuery(queryParts) || exactQuery;
+
+    const wantedFamily = familyOf(`${item.itemType} ${item.label} ${item.attributes}`);
+
+    const [exactCards, altCards] = await Promise.all([
+      this.context.searchLiveProducts(exactQuery, item.category, signal),
+      altQuery === exactQuery
+        ? Promise.resolve([] as LiveProductCard[])
+        : this.context.searchLiveProducts(altQuery, item.category, signal),
+    ]);
+
+    const exactPool = exactCards.filter((card) =>
+      matchesGarmentFamily(card, wantedFamily),
+    );
+    const altPool = [...altCards, ...exactCards].filter((card) =>
+      matchesGarmentFamily(card, wantedFamily),
     );
 
-    if (cards.length === 0) return null;
-
-    // The best-matching product is the exact match; everything cheaper than it
-    // becomes a budget alternative, cheapest first. If nothing is cheaper we
-    // still show the rest as alternatives — they are real options either way.
-    const [best, ...rest] = cards;
+    const best = exactPool[0] ?? altPool[0];
     if (!best) return null;
 
-    const cheaper = rest
-      .filter((card) => card.price < best.price)
-      .sort((a, b) => a.price - b.price);
-    const others = rest
-      .filter((card) => card.price >= best.price)
-      .sort((a, b) => a.price - b.price);
-
-    const alternatives = [...cheaper, ...others].slice(0, this.maxAlternatives);
+    // Budget alternatives: same garment family, cheaper first, never the exact
+    // SKU, never a different subtype (sneaker ≠ jacket).
+    const alternatives = altPool
+      .filter((card) => card.productUrl !== best.productUrl)
+      .filter((card) => card.price < best.price || altCards.includes(card))
+      .sort((a, b) => a.price - b.price)
+      .filter(
+        (card, index, list) =>
+          list.findIndex((other) => other.productUrl === card.productUrl) === index,
+      )
+      .slice(0, this.maxAlternatives);
 
     // One brand lookup per distinct retailer in this detection's result set.
     const domains = Array.from(
@@ -203,7 +215,7 @@ export class ContextDevProductProvider implements ProductProvider {
           id: `${item.id}-live-alt-${index}`,
           matchType: "alternative",
           similarity: Math.max(0.6, 0.86 - index * 0.05),
-          tag: index === 0 && card.price < best.price ? "En uygun" : undefined,
+          tag: index === 0 && card.price < best.price ? "En uygun" : "Muadil",
           brand: brands.get(card.merchantDomain) ?? null,
         }),
       ),
@@ -211,11 +223,22 @@ export class ContextDevProductProvider implements ProductProvider {
   }
 }
 
+/**
+ * Budget alternatives must share the detected garment family. A shoe search
+ * that ranked a jacket must not appear under "Bütçe Dostu Muadiller".
+ */
+function matchesGarmentFamily(card: LiveProductCard, wanted: ItemFamily): boolean {
+  if (wanted === "unknown") return true;
+  // Strict: alternatives must resolve to the same family. "unknown" titles are
+  // rejected so a vaguely named listing cannot sneak into the muadil rail.
+  return familyOf(`${card.title} ${card.brand ?? ""}`) === wanted;
+}
+
 /* -------------------------------------------------------------------------- */
 /*  Mapping                                                                   */
 /* -------------------------------------------------------------------------- */
 
-/** Domains we have an affiliate programme for, mapped to their `Merchant`. */
+/** Domains we recognise, mapped to their `Merchant` for badges + affiliates. */
 const DOMAIN_TO_MERCHANT: Array<[RegExp, Merchant]> = [
   [/(^|\.)zara\.com$/, "Zara"],
   [/(^|\.)trendyol\.com$/, "Trendyol"],
@@ -224,6 +247,17 @@ const DOMAIN_TO_MERCHANT: Array<[RegExp, Merchant]> = [
   [/(^|\.)amazon\./, "Amazon"],
   [/(^|\.)hm\.com$/, "H&M"],
   [/(^|\.)asos\.com$/, "ASOS"],
+  [/(^|\.)lcwaikiki\.com$/, "LC Waikiki"],
+  [/(^|\.)defacto\.com/, "DeFacto"],
+  [/(^|\.)lefties\.com$/, "Lefties"],
+  [/(^|\.)pullandbear\.com$/, "Pull&Bear"],
+  [/(^|\.)stradivarius\.com$/, "Stradivarius"],
+  [/(^|\.)bershka\.com$/, "Bershka"],
+  [/(^|\.)koton\.com$/, "Koton"],
+  [/(^|\.)mavi\.com$/, "Mavi"],
+  [/(^|\.)boyner\.com/, "Boyner"],
+  [/(^|\.)hepsiburada\.com$/, "Hepsiburada"],
+  [/(^|\.)n11\.com$/, "N11"],
 ];
 
 /**

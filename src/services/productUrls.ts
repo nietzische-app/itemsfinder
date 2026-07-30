@@ -27,10 +27,10 @@ export function isDirectProductUrl(value: string): boolean {
 
   // Explicit search / listing patterns — never treat these as PDPs.
   if (
-    /\/(search|sr|s|search-results)(\/|$)/.test(path) ||
+    /\/(search|sr|s|search-results|arama|ara)(\/|$)/.test(path) ||
     /[?&](q|k|kw|searchterm|query)=/.test(search) ||
     /\/[a-z0-9-]+-x-(r\d+-)?c\d+/.test(path) || // Trendyol category/filter pages
-    /\/(l|c)\d+\.html$/.test(path) // Zara category listing pages
+    /\/(l|c)\d+\.html$/.test(path) // Zara/Inditex category listing pages
   ) {
     return false;
   }
@@ -43,7 +43,14 @@ export function isDirectProductUrl(value: string): boolean {
     return /\/(dp|gp\/product)\/[a-z0-9]{8,}/i.test(path);
   }
 
-  if (host.includes("zara.com")) {
+  // Inditex family: Zara, Lefties, Pull&Bear, Stradivarius, Bershka
+  if (
+    host.includes("zara.com") ||
+    host.includes("lefties.com") ||
+    host.includes("pullandbear.com") ||
+    host.includes("stradivarius.com") ||
+    host.includes("bershka.com")
+  ) {
     return /-p0?\d+\.html$/.test(path) || /\/p\d+\.html$/.test(path);
   }
 
@@ -59,8 +66,36 @@ export function isDirectProductUrl(value: string): boolean {
     return /\/(productpage|\.html|prd)/i.test(path) || /\/p\//.test(path);
   }
 
-  // Unknown host: accept .html product-ish paths and /p/ segments, reject bare /.
-  return /\.html$/i.test(path) || /\/p\//.test(path) || /\/dp\//.test(path);
+  if (host.includes("lcwaikiki.com")) {
+    return /\/urun\//.test(path) || /\/product\//.test(path);
+  }
+
+  if (host.includes("defacto.com")) {
+    // DeFacto PDPs end with a numeric product id: …-fermuarli-hirka-3374957
+    return /-\d{5,}(\/|$)/.test(path) || /\/urun\//.test(path);
+  }
+
+  if (host.includes("koton.com") || host.includes("mavi.com")) {
+    return /\/[a-z0-9-]+-p-\d+/i.test(path) || /\/urun\//.test(path) || /\.html$/i.test(path);
+  }
+
+  if (host.includes("boyner.com") || host.includes("hepsiburada.com")) {
+    return /-p-[a-z0-9]+/i.test(path) || /\/pm-/i.test(path) || /\/urun\//.test(path);
+  }
+
+  if (host.includes("n11.com")) {
+    return /\/urun\//.test(path);
+  }
+
+  // Unknown host: accept .html product-ish paths and /p/|/urun|/dp/ segments.
+  return (
+    /\.html$/i.test(path) ||
+    /\/p\//.test(path) ||
+    /\/dp\//.test(path) ||
+    /\/urun\//.test(path) ||
+    /\/product\//.test(path) ||
+    /-p-?\d+/i.test(path)
+  );
 }
 
 /**
@@ -155,11 +190,19 @@ export const PINK_OUTFIT_PDPS = {
     "https://www.trendyol.com/macharel-jeans/pembe-devrik-yaka-fermuarli-triko-hirka-p-861541982",
   cardiganAlt:
     "https://www.trendyol.com/acer-street/abidaz-cin-dugmeli-sakura-cicek-islemeli-fermuarli-hirka-p-1137372098",
+  cardiganLcw:
+    "https://www.lcwaikiki.com/tr-TR/TR/urun/LC-WAIKIKI/kadin/Hirka/5432641/1907029",
+  cardiganDefacto:
+    "https://www.defacto.com.tr/fitted-ultra-soft-fermuarli-hirka-3374957",
   shorts: "https://www.trendyol.com/marovoay/suni-deri-likrali-mini-sort-p-1074582434",
   shortsAlt: "https://www.trendyol.com/love-fab/deri-mini-sort-p-1074908292",
+  shortsLefties:
+    "https://www.trendyol.com/love-fab/deri-mini-sort-p-1074908292",
   sneakers: "https://www.amazon.com.tr/dp/B0CJRGT143",
   sneakersAlt:
     "https://www.trendyol.com/forelli/cosmo-g-46502-forelli-hakiki-deri-full-ortopedik-gunluk-ekek-spor-ayakkabi-p-764602939",
+  sneakersDefacto:
+    "https://www.defacto.com.tr/bagcikli-suni-deri-sneaker-spor-ayakkabi-2417823",
 } as const;
 
 /**

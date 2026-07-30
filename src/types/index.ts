@@ -11,7 +11,10 @@
 /** Top-level grouping used to split the results pane into two sections. */
 export type ItemCategory = "clothing" | "beauty";
 
-/** Retailers we currently know how to build affiliate links for. */
+/**
+ * Retailers we recognise for badges, search fallbacks and affiliate tags.
+ * Live search itself is web-wide — unknown shops still surface as `Other`.
+ */
 export type Merchant =
   | "Trendyol"
   | "Zara"
@@ -20,6 +23,17 @@ export type Merchant =
   | "Mango"
   | "H&M"
   | "ASOS"
+  | "LC Waikiki"
+  | "DeFacto"
+  | "Lefties"
+  | "Pull&Bear"
+  | "Stradivarius"
+  | "Bershka"
+  | "Koton"
+  | "Mavi"
+  | "Boyner"
+  | "Hepsiburada"
+  | "N11"
   | "Other";
 
 /** How close a product is to the thing we detected in the screenshot. */

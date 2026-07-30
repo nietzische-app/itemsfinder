@@ -7,7 +7,8 @@ import type { Merchant } from "@/types";
  * kept so a merchant with no verified PDP still yields a clickable CTA rather
  * than a dead button, but the UI labels them as "Mağazada bul".
  *
- * Turkish storefronts, because the app is Turkish.
+ * Turkish storefronts first — the app is Turkish — with global Inditex /
+ * marketplace coverage for the expanded retailer set.
  */
 type SearchUrlBuilder = (query: string) => string;
 
@@ -19,6 +20,17 @@ const SEARCH_URLS: Record<Merchant, SearchUrlBuilder | null> = {
   Mango: (q) => `https://shop.mango.com/tr/search?kw=${q}`,
   "H&M": (q) => `https://www2.hm.com/tr_tr/search-results.html?q=${q}`,
   ASOS: (q) => `https://www.asos.com/search/?q=${q}`,
+  "LC Waikiki": (q) => `https://www.lcwaikiki.com/tr-TR/TR/arama?q=${q}`,
+  DeFacto: (q) => `https://www.defacto.com.tr/arama?q=${q}`,
+  Lefties: (q) => `https://www.lefties.com/tr/tr/search?searchTerm=${q}`,
+  "Pull&Bear": (q) => `https://www.pullandbear.com/tr/tr/search?searchTerm=${q}`,
+  Stradivarius: (q) => `https://www.stradivarius.com/tr/tr/search?searchTerm=${q}`,
+  Bershka: (q) => `https://www.bershka.com/tr/tr/search?searchTerm=${q}`,
+  Koton: (q) => `https://www.koton.com/tr/search?q=${q}`,
+  Mavi: (q) => `https://www.mavi.com/search?q=${q}`,
+  Boyner: (q) => `https://www.boyner.com.tr/search?q=${q}`,
+  Hepsiburada: (q) => `https://www.hepsiburada.com/ara?q=${q}`,
+  N11: (q) => `https://www.n11.com/arama?q=${q}`,
   // No storefront we can address — the caller keeps whatever URL it had.
   Other: null,
 };
@@ -38,7 +50,7 @@ export function buildMerchantSearchUrl(
   return build(encodeURIComponent(trimmed));
 }
 
-/** True when we can produce a search URL for this merchant. */
+/** True when we can produce a search URL for that merchant. */
 export function hasSearchUrl(merchant: Merchant): boolean {
   return SEARCH_URLS[merchant] !== null;
 }
@@ -56,6 +68,17 @@ const MERCHANT_COLORS: Record<Merchant, string> = {
   Mango: "#000000",
   "H&M": "#e50010",
   ASOS: "#2d2d2d",
+  "LC Waikiki": "#0054a6",
+  DeFacto: "#1a1a1a",
+  Lefties: "#e30613",
+  "Pull&Bear": "#000000",
+  Stradivarius: "#000000",
+  Bershka: "#000000",
+  Koton: "#000000",
+  Mavi: "#0033a0",
+  Boyner: "#e30613",
+  Hepsiburada: "#ff6000",
+  N11: "#7b1fa2",
   Other: "#757575",
 };
 
@@ -66,5 +89,8 @@ export function merchantColor(merchant: Merchant): string {
 /** Short badge text — the first letters of the merchant name. */
 export function merchantInitials(merchant: Merchant): string {
   if (merchant === "H&M") return "H&M";
+  if (merchant === "LC Waikiki") return "LCW";
+  if (merchant === "Pull&Bear") return "P&B";
+  if (merchant === "Hepsiburada") return "HB";
   return merchant.slice(0, 2).toUpperCase();
 }
