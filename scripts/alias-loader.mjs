@@ -10,6 +10,16 @@ import { pathToFileURL } from "node:url";
 const SRC = new URL("../src/", import.meta.url).pathname;
 
 export async function resolve(specifier, context, next) {
+  /*
+   * `server-only` throws unless it is resolved under a bundler's react-server
+   * condition, which plain `node` does not set. Stubbing it here lets scripts
+   * import server modules (`regionColor.ts` pulls in sharp) without weakening
+   * the guard in the app itself — the guard still holds for every real build.
+   */
+  if (specifier === "server-only") {
+    return { url: "data:text/javascript,export{}", format: "module", shortCircuit: true };
+  }
+
   if (specifier.startsWith("@/")) {
     const base = SRC + specifier.slice(2);
     for (const candidate of [base, `${base}.ts`, `${base}.tsx`, `${base}/index.ts`]) {

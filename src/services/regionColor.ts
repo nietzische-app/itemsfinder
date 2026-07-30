@@ -66,6 +66,7 @@ export interface RegionColorOptions {
 /** Fraction of sampled pixels that must survive exclusion for it to be trusted. */
 const MIN_SURVIVING = 0.12;
 
+
 export async function regionDominantColor(
   imageBuffer: Buffer,
   box: BoundingBox,
@@ -154,11 +155,12 @@ export async function regionDominantColor(
         }
       }
 
-      return { buckets, enough: total > 0 && sampled / total >= MIN_SURVIVING };
+      return { buckets, sampled, enough: total > 0 && sampled / total >= MIN_SURVIVING };
     };
 
     const filtered = collect(true);
-    const buckets = filtered.enough ? filtered.buckets : collect(false).buckets;
+    const chosen = filtered.enough ? filtered : collect(false);
+    const buckets = chosen.buckets;
 
     // Array.from rather than iterating the Map directly: the build target
     // predates downlevel iteration of map iterators.
@@ -168,6 +170,15 @@ export async function regionDominantColor(
     }
     if (!best) return null;
 
+    /*
+     * No abstention threshold here, deliberately. When a garment is a minority of
+     * its own box — thin sandal straps over a grey floor, a small beanie against a
+     * studio wall — the modal colour is the background, and it is *indistinguishable
+     * by share* from a garment that genuinely fills its box. A dominance floor was
+     * measured against the eval set and cost two correct answers while recovering
+     * none. Recovering those cases needs a real mask (segmentation or a VLM
+     * attribute pass), not a threshold.
+     */
     return toHex(best.r / best.count, best.g / best.count, best.b / best.count);
   } catch {
     // A corrupt or unsupported payload should degrade to the whole-image colour,

@@ -226,6 +226,28 @@ were previously "Pudra".
 > imported by `regionColor.ts`, which is `server-only`, so it never reaches the
 > client; Vercel supports it natively.
 
+## Measuring detection accuracy
+
+```bash
+npm run eval          # colour, query and family metrics; no API key needed
+npm run eval:record   # capture real Vision responses as fixtures (needs a key)
+```
+
+Every earlier round of accuracy work was judged by looking at a screenshot, which
+is how a whole-image dominant colour survived long enough to label black shorts
+"pudra". [`eval/`](eval/README.md) replaces that with numbers: four labelled
+photographs, fourteen items, and a non-zero exit code when a metric drops below
+its floor — so it gates a change the way `tsc` does.
+
+It is a smoke test, not a benchmark, and the point is the direction the score
+moves rather than its absolute value. Its first run took colour accuracy from 57%
+to 71% by exposing two colour-*classification* bugs, and it rejected three
+plausible-sounding fixes for the rest (a larger sampling inset, background-colour
+rejection, and a dominance abstention threshold) by measuring that each one made
+things worse. The remaining four failures are one documented class — the garment
+is a minority of its own bounding box — which needs a real mask, not another
+constant. `eval/README.md` records all of that.
+
 ## Product links: PDP or nothing
 
 A product CTA navigates to a product detail page or it does not navigate at all.

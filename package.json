@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "check:pdp": "node --experimental-transform-types scripts/check-pdp.mjs"
+    "check:pdp": "node --experimental-transform-types scripts/check-pdp.mjs",
+    "eval": "node --experimental-transform-types scripts/eval.mjs",
+    "eval:record": "node --experimental-transform-types scripts/eval-record.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",
