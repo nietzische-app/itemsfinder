@@ -6,6 +6,11 @@ import type { BrandMetadata, ItemCategory } from "@/types";
 import { isDirectProductUrl } from "@/services/productUrls";
 import { isBlockedHost, retailerRank } from "@/services/retailers";
 
+import {
+  LIVE_EXTRACT_BUDGET_MS,
+  LIVE_REQUEST_TIMEOUT_MS,
+} from "@/lib/timeouts";
+
 /**
  * Context.dev integration — live product intelligence and retailer branding.
  *
@@ -127,8 +132,8 @@ export class ContextDevService {
 
   constructor(apiKey: string, options: ContextDevServiceOptions = {}) {
     this.extractsPerQuery = options.extractsPerQuery ?? 3;
-    this.requestTimeoutMs = options.requestTimeoutMs ?? 20_000;
-    this.extractBudgetMs = options.extractBudgetMs ?? 15_000;
+    this.requestTimeoutMs = options.requestTimeoutMs ?? LIVE_REQUEST_TIMEOUT_MS;
+    this.extractBudgetMs = options.extractBudgetMs ?? LIVE_EXTRACT_BUDGET_MS;
     this.cacheTtlMs = options.cacheTtlMs ?? 30 * 60_000;
 
     this.client = new ContextDev({

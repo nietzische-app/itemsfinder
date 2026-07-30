@@ -5,10 +5,11 @@ import { getBudgetAlternatives, getExactMatches } from "@/services/matchPipeline
 import { colorNameFromHex } from "@/lib/searchQueryColors";
 import {
   familyFromPrimary,
-  passesCategoryGuard,
   primaryCategoryOf,
   type PrimaryCategory,
 } from "@/lib/primaryCategory";
+import { passesWhitelistSanitizer } from "@/utils/sanitizer";
+import { LIVE_EXTRACT_DEADLINE_MS } from "@/lib/timeouts";
 import { hydrateProduct } from "@/services/mockCatalog";
 import { isDirectProductUrl, resolveVerifiedPdp } from "@/services/productUrls";
 import type {
@@ -27,8 +28,8 @@ import type {
  *   Stage 1 `getExactMatches`     → locked PrimaryCategory + colour PDPs
  *   Stage 2 `getBudgetAlternatives` → cheaper same-category lookalikes only
  *
- * Every card is re-validated by `passesCategoryGuard` so a FOOTWEAR detection
- * can never surface bedding, home textiles, or any other primary.
+ * Every card is re-validated by the mandatory category whitelist sanitizer so
+ * a FOOTWEAR detection can never surface bedding, home textiles, or wrong colours.
  */
 export interface ProductProvider {
   readonly source: ProductSource;
@@ -95,7 +96,7 @@ export class ContextDevProductProvider implements ProductProvider {
   ) {
     this.maxLiveItems = options.maxLiveItems ?? 4;
     this.concurrency = options.concurrency ?? 2;
-    this.deadlineMs = options.deadlineMs ?? 45_000;
+    this.deadlineMs = options.deadlineMs ?? LIVE_EXTRACT_DEADLINE_MS;
     this.maxAlternatives = options.maxAlternatives ?? 3;
   }
 
@@ -204,6 +205,8 @@ export class ContextDevProductProvider implements ProductProvider {
       tag: "Canlı",
       brand: brands.get(best.merchantDomain) ?? null,
       lockedPrimary: primary,
+      colorHex: item.colorHex,
+      colorName: stageInput.colorName,
     });
 
     // Final guard — if the exact card somehow fails, abort live enrichment.
@@ -218,6 +221,8 @@ export class ContextDevProductProvider implements ProductProvider {
           tag: index === 0 ? "En uygun" : "Muadil",
           brand: brands.get(card.merchantDomain) ?? null,
           lockedPrimary: primary,
+          colorHex: item.colorHex,
+          colorName: stageInput.colorName,
         }),
       )
       .filter((product): product is ProductMatch => product !== null);
@@ -235,29 +240,43 @@ export class ContextDevProductProvider implements ProductProvider {
 /*  Sanitisation                                                              */
 /* -------------------------------------------------------------------------- */
 
-/** Drops catalogue cards that violate the locked primary category. */
+/** Drops catalogue cards that fail the whitelist / colour sanitizer. */
 export function sanitizeDetectedItem(item: DetectedItem): DetectedItem {
   const primary =
     item.primaryCategory && item.primaryCategory !== "UNKNOWN"
       ? item.primaryCategory
       : primaryCategoryOf(`${item.itemType} ${item.label} ${item.attributes}`);
 
+  const colorOpts = {
+    colorHex: item.colorHex,
+    colorName: colorNameFromHex(item.colorHex),
+    enforceColor: true as const,
+  };
+
   const exactMatch =
     item.exactMatch &&
-    passesCategoryGuard(primary, {
-      title: item.exactMatch.title,
-      productUrl: item.exactMatch.productUrl,
-      brand: item.exactMatch.brand,
-    })
+    passesWhitelistSanitizer(
+      primary,
+      {
+        title: item.exactMatch.title,
+        productUrl: item.exactMatch.productUrl,
+        brand: item.exactMatch.brand,
+      },
+      colorOpts,
+    )
       ? item.exactMatch
       : null;
 
   const alternatives = item.alternatives.filter((product) =>
-    passesCategoryGuard(primary, {
-      title: product.title,
-      productUrl: product.productUrl,
-      brand: product.brand,
-    }),
+    passesWhitelistSanitizer(
+      primary,
+      {
+        title: product.title,
+        productUrl: product.productUrl,
+        brand: product.brand,
+      },
+      colorOpts,
+    ),
   );
 
   return {
@@ -312,6 +331,8 @@ interface ProductMatchOverrides {
   tag?: string;
   brand: BrandMetadata | null;
   lockedPrimary: PrimaryCategory;
+  colorHex?: string;
+  colorName?: string | null;
 }
 
 /** Absolute http(s) only — never hand the CTA anything else. */
@@ -332,12 +353,22 @@ function toProductMatch(
   card: LiveProductCard,
   overrides: ProductMatchOverrides,
 ): ProductMatch | null {
+  const colorOpts = {
+    colorHex: overrides.colorHex,
+    colorName: overrides.colorName,
+    enforceColor: Boolean(overrides.colorHex || overrides.colorName),
+  };
+
   if (
-    !passesCategoryGuard(overrides.lockedPrimary, {
-      title: card.title,
-      productUrl: card.productUrl,
-      brand: card.brand,
-    })
+    !passesWhitelistSanitizer(
+      overrides.lockedPrimary,
+      {
+        title: card.title,
+        productUrl: card.productUrl,
+        brand: card.brand,
+      },
+      colorOpts,
+    )
   ) {
     return null;
   }
@@ -353,11 +384,15 @@ function toProductMatch(
   // Re-check after PDP fallback — curated URLs must still agree with primary.
   if (
     productUrl &&
-    !passesCategoryGuard(overrides.lockedPrimary, {
-      title: card.title,
-      productUrl,
-      brand: card.brand,
-    })
+    !passesWhitelistSanitizer(
+      overrides.lockedPrimary,
+      {
+        title: card.title,
+        productUrl,
+        brand: card.brand,
+      },
+      colorOpts,
+    )
   ) {
     return null;
   }

@@ -7,10 +7,8 @@ import {
   buildExactMatchQuery,
   type ExactQueryInput,
 } from "@/lib/searchQueryBuilder";
-import {
-  passesCategoryGuard,
-  type PrimaryCategory,
-} from "@/lib/primaryCategory";
+import type { PrimaryCategory } from "@/lib/primaryCategory";
+import { passesWhitelistSanitizer } from "@/utils/sanitizer";
 import { isDirectProductUrl } from "@/services/productUrls";
 
 /**
@@ -49,14 +47,20 @@ function toQueryInput(input: MatchStageInput): ExactQueryInput {
 function sanitizeCards(
   primary: PrimaryCategory,
   cards: LiveProductCard[],
+  colorHex?: string,
+  colorName?: string | null,
 ): LiveProductCard[] {
   return cards.filter((card) => {
     if (!isDirectProductUrl(card.productUrl)) return false;
-    return passesCategoryGuard(primary, {
-      title: card.title,
-      productUrl: card.productUrl,
-      brand: card.brand,
-    });
+    return passesWhitelistSanitizer(
+      primary,
+      {
+        title: card.title,
+        productUrl: card.productUrl,
+        brand: card.brand,
+      },
+      { colorHex, colorName, enforceColor: true },
+    );
   });
 }
 
@@ -79,7 +83,15 @@ export async function getExactMatches(
     input.signal,
   );
 
-  return { query, cards: sanitizeCards(input.primaryCategory, raw) };
+  return {
+    query,
+    cards: sanitizeCards(
+      input.primaryCategory,
+      raw,
+      input.colorHex,
+      input.colorName,
+    ),
+  };
 }
 
 /**
@@ -107,7 +119,12 @@ export async function getBudgetAlternatives(
 
   // Also reconsider Stage 1 leftovers that were same-category but not chosen,
   // so we do not burn an extra extract when cheaper siblings already exist.
-  const pool = sanitizeCards(input.primaryCategory, raw);
+  const pool = sanitizeCards(
+    input.primaryCategory,
+    raw,
+    input.colorHex,
+    input.colorName,
+  );
 
   const cheaper = pool
     .filter((card) => card.productUrl !== input.primaryProduct.productUrl)

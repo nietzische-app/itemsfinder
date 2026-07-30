@@ -1,6 +1,7 @@
 import type { DetectedItem, ExampleId, ProductMatch } from "@/types";
 import { familyOf, normalizeTr, tokenize, type ItemFamily } from "@/lib/itemFamily";
-import { passesCategoryGuard, primaryCategoryOf } from "@/lib/primaryCategory";
+import { primaryCategoryOf } from "@/lib/primaryCategory";
+import { passesWhitelistSanitizer } from "@/utils/sanitizer";
 import { showcaseBox } from "@/lib/showcase";
 import { buildMerchantSearchUrl } from "@/services/merchantSearch";
 import {
@@ -2406,19 +2407,27 @@ export function hydrateItems(items: CatalogItem[]): DetectedItem[] {
       primaryCategory: primary,
       exactMatch:
         exactMatch &&
-        passesCategoryGuard(primary, {
-          title: exactMatch.title,
-          productUrl: exactMatch.productUrl,
-          brand: exactMatch.brand,
-        })
+        passesWhitelistSanitizer(
+          primary,
+          {
+            title: exactMatch.title,
+            productUrl: exactMatch.productUrl,
+            brand: exactMatch.brand,
+          },
+          { colorHex: item.colorHex, enforceColor: false },
+        )
           ? exactMatch
           : null,
       alternatives: alternatives.filter((product) =>
-        passesCategoryGuard(primary, {
-          title: product.title,
-          productUrl: product.productUrl,
-          brand: product.brand,
-        }),
+        passesWhitelistSanitizer(
+          primary,
+          {
+            title: product.title,
+            productUrl: product.productUrl,
+            brand: product.brand,
+          },
+          { colorHex: item.colorHex, enforceColor: false },
+        ),
       ),
     };
   });

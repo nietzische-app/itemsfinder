@@ -1,4 +1,9 @@
-import { colorNameFromHex } from "@/lib/searchQueryColors";
+import {
+  colorBucketFromHex,
+  colorBucketFromName,
+  colorBucketQueryToken,
+  colorNameFromHex,
+} from "@/lib/searchQueryColors";
 import {
   PRIMARY_CATEGORY_QUERY_LABEL,
   type PrimaryCategory,
@@ -6,17 +11,16 @@ import {
 import { normalizeTr } from "@/lib/itemFamily";
 
 /**
- * Google Lens–inspired query builder.
+ * Google Lens–inspired query builder with a Turkish Fashion NLP dictionary.
  *
- * Strict Turkish e-commerce phrasing. Vague filler words ("Fabric", "Material",
- * "Style", Vision's "Clothing"/"Footwear") are stripped so storefronts receive
- * shoppable queries like "Taba Deri Bantlı Sandalet".
+ * Strict e-commerce phrasing for Trendyol, Zara, LCW, DeFacto, H&M, Amazon TR.
+ * Vague filler and literal English Vision labels are normalised before ranking.
  */
 
 export interface ExactQueryInput {
   /** Locked primary category — always forced into the query. */
   primaryCategory: PrimaryCategory;
-  /** Dominant colour hex from IMAGE_PROPERTIES. */
+  /** Dominant colour hex from IMAGE_PROPERTIES (ROI when available). */
   colorHex?: string;
   /** Explicit colour name override (e.g. from attributes). */
   colorName?: string | null;
@@ -29,6 +33,98 @@ export interface ExactQueryInput {
   /** Full detection label as a fallback phrase source. */
   label?: string | null;
 }
+
+/** Multi-word English → Turkish fashion phrases (order: longer first). */
+const FASHION_PHRASES: Array<[RegExp, string]> = [
+  [/\bzip\s*knit\s*cardigan\b/gi, "Fermuarlı Triko Hırka"],
+  [/\bknit\s*cardigan\b/gi, "Triko Hırka"],
+  [/\bzip\s*cardigan\b/gi, "Fermuarlı Hırka"],
+  [/\bleather\s*shorts?\b/gi, "Deri Şort"],
+  [/\bhigh[\s-]*top\s*sneakers?\b/gi, "Yüksek Taban Sneaker"],
+  [/\bchunky\s*sneakers?\b/gi, "Kalın Taban Sneaker"],
+  [/\bmatt?\s*liquid\s*lipstick\b/gi, "Mat Likit Ruj"],
+  [/\bliquid\s*lipstick\b/gi, "Likit Ruj"],
+  [/\bmatte?\s*lipstick\b/gi, "Mat Ruj"],
+  [/\bbiker\s*jacket\b/gi, "Biker Deri Ceket"],
+  [/\bleather\s*jacket\b/gi, "Deri Ceket"],
+  [/\btrench\s*coat\b/gi, "Trençkot"],
+  [/\bwide[\s-]*leg\s*(jeans?|pants?|trousers?)\b/gi, "Bol Paça Pantolon"],
+  [/\bmom\s*jeans?\b/gi, "Mom Jean"],
+  [/\bcrop(?:ped)?\s*top\b/gi, "Crop Üst"],
+  [/\bplatform\s*(sneakers?|shoes?)\b/gi, "Platform Sneaker"],
+  [/\bankle\s*boots?\b/gi, "Bilekte Bot"],
+  [/\bheeled\s*sandals?\b/gi, "Topuklu Sandalet"],
+  [/\bstrap\s*sandals?\b/gi, "Bantlı Sandalet"],
+  [/\bdenim\s*jacket\b/gi, "Kot Ceket"],
+  [/\bblazer\s*jacket\b/gi, "Blazer Ceket"],
+  [/\bhoodie\b/gi, "Kapüşonlu Sweatshirt"],
+  [/\bsweatshirt\b/gi, "Sweatshirt"],
+  [/\bt[\s-]?shirt\b/gi, "Tişört"],
+  [/\bbutton[\s-]?down\b/gi, "Gömlek"],
+];
+
+/** Single-token English / Vision labels → Turkish storefront terms. */
+const FASHION_WORDS: Record<string, string> = {
+  zip: "Fermuarlı",
+  zipper: "Fermuarlı",
+  knit: "Triko",
+  knitted: "Triko",
+  cardigan: "Hırka",
+  leather: "Deri",
+  shorts: "Şort",
+  short: "Şort",
+  "high-top": "Yüksek",
+  hightop: "Yüksek",
+  sneaker: "Sneaker",
+  sneakers: "Sneaker",
+  matt: "Mat",
+  matte: "Mat",
+  liquid: "Likit",
+  lipstick: "Ruj",
+  jacket: "Ceket",
+  coat: "Mont",
+  blazer: "Blazer",
+  trench: "Trençkot",
+  jeans: "Jean",
+  jean: "Jean",
+  trousers: "Pantolon",
+  pants: "Pantolon",
+  skirt: "Etek",
+  dress: "Elbise",
+  blouse: "Bluz",
+  shirt: "Gömlek",
+  sweater: "Kazak",
+  hoodie: "Sweatshirt",
+  boots: "Bot",
+  boot: "Bot",
+  sandals: "Sandalet",
+  sandal: "Sandalet",
+  heels: "Topuklu",
+  heel: "Topuklu",
+  loafers: "Loafer",
+  loafer: "Loafer",
+  footwear: "Ayakkabı",
+  outerwear: "Ceket",
+  clothing: "",
+  cosmetics: "Makyaj",
+  makeup: "Makyaj",
+  blush: "Allık",
+  mascara: "Maskara",
+  eyeshadow: "Far",
+  foundation: "Fondöten",
+  contour: "Kontür",
+  serum: "Serum",
+  nail: "Oje",
+  platform: "Platform",
+  chunky: "Kalın",
+  oversized: "Oversize",
+  cropped: "Crop",
+  crop: "Crop",
+  ribbed: "Fitilli",
+  velvet: "Kadife",
+  suede: "Süet",
+  denim: "Kot",
+};
 
 /** Tokens that pollute storefront ranking and must never appear in a query. */
 const VAGUE_NOISE = new Set([
@@ -112,7 +208,41 @@ const STYLE_KEEP = new Set([
   "nubuk",
   "süet",
   "suet",
+  "likit",
+  "ruj",
 ]);
+
+/**
+ * Applies the Fashion NLP dictionary: multi-word phrases first, then
+ * token-level English → Turkish rewrites tailored for TR storefronts.
+ */
+export function normalizeFashionQuery(raw: string): string {
+  let text = raw.trim();
+  if (!text) return "";
+
+  for (const [pattern, replacement] of FASHION_PHRASES) {
+    text = text.replace(pattern, replacement);
+  }
+
+  return text
+    .split(/[\s•·,/|_-]+/)
+    .map((word) => {
+      const clean = word
+        .trim()
+        .replace(
+          /^[^0-9A-Za-zÀ-ÿĞğİıŞşÇçÖöÜü]+|[^0-9A-Za-zÀ-ÿĞğİıŞşÇçÖöÜü]+$/g,
+          "",
+        );
+      if (!clean) return "";
+      const key = normalizeTr(clean);
+      if (VAGUE_NOISE.has(key)) return "";
+      const mapped = FASHION_WORDS[key];
+      if (mapped === "") return "";
+      return mapped ?? clean;
+    })
+    .filter(Boolean)
+    .join(" ");
+}
 
 function pushToken(
   tokens: string[],
@@ -121,13 +251,9 @@ function pushToken(
 ): void {
   if (!value) return;
 
-  for (const word of value.split(/[\s•·,/|_-]+/)) {
-    const clean = word
-      .trim()
-      .replace(
-        /^[^0-9A-Za-zÀ-ÿĞğİıŞşÇçÖöÜü]+|[^0-9A-Za-zÀ-ÿĞğİıŞşÇçÖöÜü]+$/g,
-        "",
-      );
+  const normalised = normalizeFashionQuery(value);
+  for (const word of normalised.split(/\s+/)) {
+    const clean = word.trim();
     if (clean.length < 2) continue;
 
     const key = normalizeTr(clean);
@@ -139,6 +265,11 @@ function pushToken(
 }
 
 function resolveColor(input: ExactQueryInput): string | null {
+  const bucket =
+    colorBucketFromName(input.colorName) ??
+    (input.colorHex ? colorBucketFromHex(input.colorHex) : null);
+  if (bucket) return colorBucketQueryToken(bucket);
+
   if (input.colorName?.trim()) return input.colorName.trim();
   if (input.colorHex) return colorNameFromHex(input.colorHex);
   return null;
@@ -148,13 +279,14 @@ function resolveColor(input: ExactQueryInput): string | null {
  * Stage 1 — Exact visual match query.
  *
  * Shape: `[Color] + [Brand/Style from WEB_DETECTION] + [PrimaryCategory label]`
- * Example: "Taba Deri Kadın Sandalet"
+ * Example: "Taba Deri Kadın Sandalet" / "Fermuarlı Triko Hırka"
  */
 export function buildExactMatchQuery(input: ExactQueryInput): string {
   const tokens: string[] = [];
   const seen = new Set<string>();
 
-  pushToken(tokens, seen, resolveColor(input));
+  const color = resolveColor(input);
+  pushToken(tokens, seen, color);
   pushToken(tokens, seen, input.webEntity);
   pushToken(tokens, seen, input.attributes);
   pushToken(tokens, seen, input.label);
@@ -182,6 +314,11 @@ export function buildExactMatchQuery(input: ExactQueryInput): string {
     pushToken(tokens, seen, input.itemType);
   }
 
+  // Colour bucket is mandatory when Vision supplied one.
+  if (color && !tokens.some((token) => normalizeTr(token) === normalizeTr(color))) {
+    tokens.unshift(color);
+  }
+
   return tokens.slice(0, 6).join(" ");
 }
 
@@ -196,11 +333,13 @@ export function buildBudgetAlternativeQuery(input: ExactQueryInput): string {
   const tokens: string[] = [];
   const seen = new Set<string>();
 
-  pushToken(tokens, seen, resolveColor(input));
+  const color = resolveColor(input);
+  pushToken(tokens, seen, color);
 
   // Keep only concrete style/material words from attributes.
   if (input.attributes) {
-    for (const word of input.attributes.split(/[\s•·,/]+/)) {
+    const normalised = normalizeFashionQuery(input.attributes);
+    for (const word of normalised.split(/\s+/)) {
       const clean = word.trim();
       const key = normalizeTr(clean);
       if (!STYLE_KEEP.has(key)) continue;
