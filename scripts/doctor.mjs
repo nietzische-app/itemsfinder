@@ -1,0 +1,121 @@
+/**
+ * What is still missing, and the exact command to fix each thing.
+ *
+ *   npm run doctor
+ *
+ * `docs/ROADMAP.md` carries the same list in prose, and prose goes stale the
+ * moment someone fills something in. This reads the actual state — environment
+ * variables, recorded fixtures, verified product links — and prints only what is
+ * genuinely outstanding, so "am I done?" is a command rather than a reading
+ * comprehension exercise.
+ *
+ * Exit code is 0 when the *code* is healthy, regardless of what is missing. The
+ * missing things are inputs a person supplies, not failures; making this red would
+ * teach everyone to ignore it. `npm run eval` is the gate.
+ */
+import { register } from "node:module";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+
+register(new URL("./alias-loader.mjs", import.meta.url).href);
+
+const ROOT = new URL("..", import.meta.url).pathname;
+
+const { VERIFIED_PDP_URLS, VERIFIED_PDP_IMAGES } = await import("@/data/verifiedProductUrls");
+const { familyOf } = await import("@/lib/itemFamily");
+const { groundTruth } = await import("../eval/groundTruth.ts");
+
+const env = (name) => (process.env[name] ?? "").trim().length > 0;
+const count = (dir) =>
+  existsSync(`${ROOT}${dir}`) ? readdirSync(`${ROOT}${dir}`).filter((f) => f.endsWith(".json")).length : 0;
+
+/**
+ * Whether the legal notice still carries a placeholder for the data controller.
+ *
+ * Looks for the words a placeholder uses rather than for a specific name: any
+ * real identity will not contain them, and a check keyed to one expected string
+ * would go stale the day the company is renamed.
+ */
+function legalIdentityFilled() {
+  const path = `${ROOT}src/app/(legal)/yasal-bildirim/page.tsx`;
+  if (!existsSync(path)) return true;
+  const source = readFileSync(path, "utf8");
+  return !/(doldurulacak|belirlenecek|TODO|\[şirket|\[unvan)/i.test(source);
+}
+
+const cases = groundTruth(familyOf);
+const items = cases.reduce((n, testCase) => n + testCase.items.length, 0);
+
+const checks = [
+  {
+    id: "0.1",
+    label: "Hız sınırı sayaçları kalıcı",
+    ok: env("UPSTASH_REDIS_REST_URL") && env("UPSTASH_REDIS_REST_TOKEN"),
+    missing: "UPSTASH_REDIS_REST_URL ve UPSTASH_REDIS_REST_TOKEN",
+    why: "Onlarsız sayaçlar süreç-yerel; sunucusuz ortamda instance başına, yani gerçek bir sınır değil.",
+    fix: "Upstash'te bir Redis aç, iki değeri ortama ekle.",
+  },
+  {
+    id: "0.3",
+    label: "Ürünler satın alınabilir",
+    ok: Object.keys(VERIFIED_PDP_URLS).length > 0,
+    missing: `VERIFIED_PDP_URLS boş (${Object.keys(VERIFIED_PDP_IMAGES).length} görsel)`,
+    why: "Site tarıyor, eşleştiriyor, fiyat gösteriyor — ve «Ürüne git» hiçbir yere gitmiyor.",
+    fix: "npm run check:pdp  (mağazaya göre iş listesi) → bağlantıları doldur → npm run fetch:images",
+  },
+  {
+    id: "1.1",
+    label: "Eval seti kıyaslama boyutunda",
+    ok: cases.length >= 30,
+    missing: `${cases.length} kombin / ${items} parça (hedef 30+)`,
+    why: "Her yüzde bu sete karşı ölçülüyor. Bu boyutta sayılar yön gösterir, büyüklük göstermez.",
+    fix: "30–50 çeşitli fotoğraf; kutuları tools/box-editor.html ile ölç, eval/groundTruth.ts'ye ekle.",
+  },
+  {
+    id: "1.2",
+    label: "Kutu doğruluğu ölçüldü",
+    ok: count("eval/fixtures") > 0,
+    missing: "eval/fixtures/ boş",
+    why: "Vision'ın çizdiği kutunun gerçekten giysinin üzerinde olup olmadığı hiç ölçülmedi.",
+    fix: "GOOGLE_CLOUD_VISION_API_KEY=... npm run eval:record",
+  },
+  {
+    id: "1.3",
+    label: "VLM kazancı ölçüldü",
+    ok: count("eval/fixtures/attrs") > 0,
+    missing: "eval/fixtures/attrs/ boş",
+    why: "Boru hattı modelin rengini ölçülene tercih ediyor; bu tercihin doğru olduğunu gösteren sayı yok.",
+    fix: "ANTHROPIC_API_KEY=... npm run eval:record-attrs -- --repeat 3",
+  },
+  {
+    id: "—",
+    label: "Yasal kimlik dolduruldu",
+    ok: legalIdentityFilled(),
+    missing: "veri sorumlusu kimliği",
+    why: "KVKK bildirimi yanlış sorumluyu adlandırırsa, boş olmasından kötüdür.",
+    fix: "src/app/(legal)/yasal-bildirim/page.tsx içindeki kimlik ve adres alanlarını doldur.",
+  },
+];
+
+const done = checks.filter((c) => c.ok);
+const open = checks.filter((c) => !c.ok);
+
+console.log(`\n  ${done.length}/${checks.length} hazır\n`);
+
+for (const check of done) {
+  console.log(`  ✓ ${check.id.padEnd(4)} ${check.label}`);
+}
+
+if (open.length > 0) {
+  console.log("");
+  for (const check of open) {
+    console.log(`  ○ ${check.id.padEnd(4)} ${check.label}`);
+    console.log(`         eksik: ${check.missing}`);
+    console.log(`         neden: ${check.why}`);
+    console.log(`         yap:   ${check.fix}\n`);
+  }
+}
+
+console.log(
+  "  Kodun sağlığı bu listeden bağımsız: «npm run eval» ve test süitleri o işi\n" +
+    "  görüyor. Buradaki maddeler kod değil, girdi bekliyor.\n",
+);

@@ -523,8 +523,17 @@ okuyucu etiketleri; Lighthouse / axe koşumu. Hotspot'lar `aria-label` taşıyor
 
 ## Şu an nerede duruyoruz
 
-Kodla kapatılabilecek her madde kapandı. Kalanların hepsi **sende olan bir şeyi**
-bekliyor — anahtar, fotoğraf, veri ya da bir hesap:
+```bash
+npm run doctor    # neyin eksik olduğunu ve tam olarak ne çalıştırılacağını yazar
+```
+
+Bu tablo elle güncellenen bir liste; `npm run doctor` aynı soruyu **ortamın
+gerçek hâline bakarak** cevaplıyor (ortam değişkenleri, kayıtlı fixture'lar,
+doğrulanmış bağlantılar). Bir madde dolduğunda kendiliğinden yeşile döner, yani
+belgenin bayatlaması bir şeyi gizlemez.
+
+Kodla kapatılabilecek her madde kapandı. Kalanların hepsi **senin
+sağlayabileceğin bir girdiyi** bekliyor — anahtar, fotoğraf, veri ya da bir hesap:
 
 | Madde | Bekleyen |
 | --- | --- |

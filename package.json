@@ -13,7 +13,8 @@
     "eval:record": "node --experimental-transform-types scripts/eval-record.mjs",
     "eval:record-attrs": "node --experimental-transform-types scripts/eval-record-attrs.mjs",
     "fetch:images": "node --experimental-transform-types scripts/fetch-images.mjs",
-    "eval:sweep": "node --experimental-transform-types scripts/sweep.mjs"
+    "eval:sweep": "node --experimental-transform-types scripts/sweep.mjs",
+    "doctor": "node --experimental-transform-types scripts/doctor.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
