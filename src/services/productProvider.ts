@@ -202,7 +202,7 @@ export class ContextDevProductProvider implements ProductProvider {
       id: `${item.id}-live-exact`,
       matchType: "exact",
       similarity: 0.9,
-      tag: "Canlı",
+      tag: "Birebir Eşleşme",
       brand: brands.get(best.merchantDomain) ?? null,
       lockedPrimary: primary,
       colorHex: item.colorHex,
@@ -218,7 +218,8 @@ export class ContextDevProductProvider implements ProductProvider {
           id: `${item.id}-live-alt-${index}`,
           matchType: "alternative",
           similarity: Math.max(0.6, 0.86 - index * 0.05),
-          tag: index === 0 ? "En uygun" : "Muadil",
+          // Price disparity vs exact is guaranteed by Stage 2's cheaper filter.
+          tag: "Bütçe Dostu Muadil",
           brand: brands.get(card.merchantDomain) ?? null,
           lockedPrimary: primary,
           colorHex: item.colorHex,

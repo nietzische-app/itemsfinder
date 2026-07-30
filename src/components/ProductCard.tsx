@@ -116,11 +116,12 @@ export function ProductCard({
 
             {isHero ? (
               <span
-                className="shrink-0 text-secondary-deep"
-                title="Birebir eşleşme"
-                aria-label="Birebir eşleşme"
+                className="inline-flex shrink-0 items-center gap-1 rounded-full bg-secondary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-secondary-deep"
+                title="Birebir Eşleşme"
+                aria-label="Birebir Eşleşme"
               >
-                <BadgeCheck className="h-4 w-4" strokeWidth={2} />
+                <BadgeCheck className="h-3.5 w-3.5" strokeWidth={2} />
+                Birebir Eşleşme
               </span>
             ) : product.tag ? (
               <Badge variant="muted" className="shrink-0 text-[10px]">
