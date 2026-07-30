@@ -32,25 +32,9 @@
     <path d="M200 1880 H140 a20 20 0 0 1 -20 -20 V1800"/>
   </g>
 
-  <!-- Detection zones: drawn at exactly the coordinates in src/lib/showcase.ts,
-       so the hotspots and spotlight land correctly on this placeholder too. -->
-  <g fill="#ffffff" fill-opacity="0.42" stroke="#e05638" stroke-opacity="0.32" stroke-width="4" stroke-dasharray="18 14">
-    <rect x="473" y="600" width="333" height="540" rx="40"/>
-    <rect x="480" y="990" width="313" height="200" rx="26"/>
-    <rect x="496" y="1570" width="320" height="240" rx="30"/>
-  </g>
-
-  <g font-family="Inter, system-ui, -apple-system, sans-serif" font-size="30" font-weight="600" letter-spacing="3" fill="#111111" fill-opacity="0.32">
-    <text x="826" y="640">ÜST</text>
-    <text x="813" y="1024">ALT</text>
-    <text x="836" y="1604">AYAKKABI</text>
-  </g>
-
   <!-- Caption -->
   <g font-family="Inter, system-ui, -apple-system, sans-serif" text-anchor="middle">
     <text x="666" y="300" font-size="34" font-weight="700" letter-spacing="6" fill="#111111" fill-opacity="0.42">MARKAS · ÖRNEK TARAMA</text>
-    <!-- Kept high in the frame: the scan status pill sits over the bottom edge. -->
-    <text x="666" y="386" font-size="28" font-weight="500" fill="#111111" fill-opacity="0.34">Model fotoğrafı bekleniyor</text>
-    <text x="666" y="440" font-size="24" font-weight="400" fill="#111111" fill-opacity="0.28">public/examples/pink-outfit.jpg</text>
-  </g>
+    <text x="666" y="386" font-size="28" font-weight="500" fill="#111111" fill-opacity="0.34">Görsel yüklenemedi</text>
+      </g>
 </svg>

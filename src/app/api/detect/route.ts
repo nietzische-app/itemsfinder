@@ -38,6 +38,9 @@ const MAX_BASE64_LENGTH = Math.ceil((10 * 1024 * 1024 * 4) / 3);
 
 const VALID_EXAMPLE_IDS: ExampleId[] = [
   "pink-outfit",
+  "biker-look",
+  "long-coat",
+  "black-blazer",
   "streetwear",
   "glam-makeup",
   "tailoring",

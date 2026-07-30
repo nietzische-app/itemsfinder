@@ -1,16 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <rect width="64" height="64" rx="14" fill="#FAFAFA"/>
-  <!-- Compact mark: favicons render at 16-32px, where the tag's hole, string
-       and dot glow collapse into noise. -->
-  <g fill="none" stroke="#111111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 22v-3.5A6.5 6.5 0 0 1 18.5 12H22"/>
-    <path d="M42 12h3.5a6.5 6.5 0 0 1 6.5 6.5V22"/>
-    <path d="M52 42v3.5a6.5 6.5 0 0 1-6.5 6.5H42"/>
-    <path d="M22 52h-3.5A6.5 6.5 0 0 1 12 45.5V42"/>
+  <!-- Compact mark, kept in step with MarkasMark variant="compact": favicons
+       render at 16-32px, where the tag's hole and string collapse into noise.
+       Strokes are thickened for the same reason. -->
+  <g fill="none" stroke="#111111" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M15 24.5v-7.7A1.8 1.8 0 0 1 16.8 15H24.5"/>
+    <path d="M39.5 15h7.7A1.8 1.8 0 0 1 49 16.8v7.7"/>
+    <path d="M49 39.5v7.7a1.8 1.8 0 0 1-1.8 1.8h-7.7"/>
+    <path d="M24.5 49h-7.7A1.8 1.8 0 0 1 15 47.2v-7.7"/>
   </g>
-  <g transform="translate(-1 0.6) rotate(-20 32 33)">
-    <path d="M24.4 18.4H37l6.6 6.6v18.6a4 4 0 0 1-4 4H24.4a4 4 0 0 1-4-4V22.4a4 4 0 0 1 4-4Z"
-          fill="none" stroke="#111111" stroke-width="3.8" stroke-linejoin="round"/>
-    <circle cx="32" cy="41" r="4" fill="#E05638"/>
+  <g transform="rotate(-23 32 32)">
+    <path d="M26 22.5h8.6l4 4v13.6a2.4 2.4 0 0 1-2.4 2.4H26a2.4 2.4 0 0 1-2.4-2.4V24.9a2.4 2.4 0 0 1 2.4-2.4Z"
+          fill="none" stroke="#111111" stroke-width="2.4" stroke-linejoin="round"/>
+    <circle cx="29.9" cy="36.5" r="2.6" fill="#E05638"/>
   </g>
 </svg>

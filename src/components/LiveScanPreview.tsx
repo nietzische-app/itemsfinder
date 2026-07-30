@@ -16,11 +16,9 @@ import { Button } from "@/components/ui/button";
 import { exampleToDataUrl } from "@/lib/imageSession";
 import { cn } from "@/lib/utils";
 import {
-  SHOWCASE_ASPECT,
-  SHOWCASE_EXAMPLE_ID,
-  SHOWCASE_IMAGE,
+  SHOWCASE_FALLBACK,
   SHOWCASE_INTERVAL_MS,
-  SHOWCASE_ITEMS,
+  SHOWCASE_LOOKS,
   type ShowcaseItem,
 } from "@/lib/showcase";
 import { merchantColor, merchantInitials } from "@/services/merchantSearch";
@@ -32,10 +30,9 @@ import { buildAffiliateUrl, formatPrice } from "@/utils/affiliate";
  * sweeping the frame, pulsing hotspots on each detected garment, and an
  * adjacent card that follows the focus.
  *
- * It replaces four static illustration cards. The point is that a visitor
- * should understand the product before reading a word of copy: something is
- * being looked at, three things were found in it, and each one resolves to a
- * buyable row at a named store.
+ * The point is that a visitor should understand the product before reading a
+ * word of copy: something is being looked at, several things were found in it,
+ * and each one resolves to a buyable row at a named store.
  *
  * Focus cycles on its own every few seconds. Hovering, focusing or clicking a
  * hotspot takes over immediately, and there is an explicit pause control —
@@ -46,36 +43,24 @@ export function LiveScanPreview({
   onOpenScan,
 }: {
   /**
-   * Runs the showcase look through the real pipeline. Removing the illustration
-   * grid took away the only way to try Markas without your own screenshot;
-   * this puts it back with one look instead of four.
+   * Runs the selected look through the real pipeline, so the demo is the
+   * product rather than a second mock of it.
    */
   onOpenScan: (image: UploadedImage) => void;
 }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [lookIndex, setLookIndex] = useState(0);
+  const [itemIndex, setItemIndex] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
   /** Hover or keyboard focus anywhere in the frame suspends the cycle. */
   const [engaged, setEngaged] = useState(false);
-  const [imageSrc, setImageSrc] = useState(SHOWCASE_IMAGE.src);
+  const [imageFailed, setImageFailed] = useState(false);
   const [opening, setOpening] = useState(false);
   const [openError, setOpenError] = useState<string | null>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const active = SHOWCASE_ITEMS[activeIndex]!;
-
-  /**
-   * The `<img>` is server-rendered, so the browser starts fetching before React
-   * hydrates. A missing photo therefore fails *before* `onError` is attached and
-   * the handler never runs — the frame just sits there broken. Checking the
-   * element's own state on mount catches that case; `onError` still covers a
-   * failure that lands after hydration.
-   */
-  useEffect(() => {
-    const img = imageRef.current;
-    if (img && img.complete && img.naturalWidth === 0) {
-      setImageSrc(SHOWCASE_IMAGE.fallbackSrc);
-    }
-  }, []);
+  const look = SHOWCASE_LOOKS[lookIndex]!;
+  const active = look.items[itemIndex] ?? look.items[0]!;
+  const imageSrc = imageFailed ? SHOWCASE_FALLBACK.src : look.src;
 
   // Someone who asked their OS for less motion should not be handed a carousel
   // that advances by itself; the hotspots still work.
@@ -89,17 +74,32 @@ export function LiveScanPreview({
     if (!autoPlay || engaged) return;
 
     const id = window.setInterval(
-      () => setActiveIndex((index) => (index + 1) % SHOWCASE_ITEMS.length),
+      () => setItemIndex((index) => (index + 1) % look.items.length),
       SHOWCASE_INTERVAL_MS,
     );
     return () => window.clearInterval(id);
-  }, [autoPlay, engaged]);
+  }, [autoPlay, engaged, look.items.length]);
 
   /**
-   * Hands whichever image actually resolved to the normal upload path, tagged
-   * with the scenario id so the mock engine returns these three items with
-   * these exact boxes.
+   * The `<img>` is server-rendered, so the browser starts fetching before React
+   * hydrates. A missing file therefore fails *before* `onError` is attached and
+   * the handler never runs — the frame just sits there broken. Checking the
+   * element's own state catches that case; `onError` still covers a failure that
+   * lands after hydration.
    */
+  useEffect(() => {
+    const image = imageRef.current;
+    if (image && image.complete && image.naturalWidth === 0) setImageFailed(true);
+  }, [imageSrc]);
+
+  function selectLook(index: number) {
+    setLookIndex(index);
+    setItemIndex(0);
+    setImageFailed(false);
+    setOpenError(null);
+  }
+
+  /** Hands the active look to the normal upload path, tagged with its scenario. */
   async function openScan() {
     setOpening(true);
     setOpenError(null);
@@ -109,7 +109,7 @@ export function LiveScanPreview({
       onOpenScan({
         dataUrl,
         fileName: imageSrc.split("/").pop() ?? "ornek-kombin.jpg",
-        exampleId: SHOWCASE_EXAMPLE_ID,
+        exampleId: look.exampleId,
       });
     } catch {
       setOpenError("Örnek taramayı açamadık. Tekrar dene.");
@@ -146,98 +146,115 @@ export function LiveScanPreview({
         {/* ---------------------------------------------------------------- */}
         {/* Scan frame                                                       */}
         {/* ---------------------------------------------------------------- */}
-        <div
-          className="relative min-w-0 overflow-hidden rounded-3xl bg-surface-container shadow-ambient-lg ring-1 ring-inset ring-black/[0.06]"
-          // The aspect ratio must match the photo's: the boxes below are
-          // normalised against the whole image, so any crop would slide the
-          // hotspots off the garments.
-          style={{ aspectRatio: SHOWCASE_ASPECT }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            ref={imageRef}
-            src={imageSrc}
-            alt={
-              imageSrc === SHOWCASE_IMAGE.fallbackSrc
-                ? SHOWCASE_IMAGE.fallbackAlt
-                : SHOWCASE_IMAGE.alt
-            }
-            className="absolute inset-0 h-full w-full object-cover"
-            // Swap once, never in a loop: if the fallback itself is missing we
-            // leave the frame's own background rather than thrash.
-            onError={() => {
-              setImageSrc((current) =>
-                current === SHOWCASE_IMAGE.fallbackSrc
-                  ? current
-                  : SHOWCASE_IMAGE.fallbackSrc,
-              );
-            }}
-          />
-
-          {/* Scanning beam. */}
+        <div className="min-w-0">
           <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-0 animate-scan-move"
+            className="relative min-w-0 overflow-hidden rounded-3xl bg-surface-container shadow-ambient-lg ring-1 ring-inset ring-black/[0.06]"
+            /*
+             * Exact intrinsic ratio of this look's asset, not a rounded "2 / 3":
+             * the boxes are normalised against the whole image, so any crop from
+             * a ratio mismatch would slide every hotspot off its garment.
+             */
+            style={{ aspectRatio: `${look.width} / ${look.height}` }}
           >
-            <div className="scanner-line" />
-            <div className="h-16 bg-gradient-to-b from-[#E05638]/25 to-transparent" />
-          </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              ref={imageRef}
+              // Re-keyed per look so React swaps the element instead of
+              // reusing one that has already decoded a different photo.
+              key={look.id}
+              src={imageSrc}
+              alt={imageFailed ? SHOWCASE_FALLBACK.alt : look.alt}
+              className="absolute inset-0 h-full w-full object-cover"
+              onError={() => setImageFailed(true)}
+            />
 
-          {/* Spotlight on the focused item: a coral frame plus a vignette that
-              dims everything outside it. */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute rounded-xl border-2 border-secondary/85 shadow-[0_0_0_9999px_rgba(17,17,17,0.2)] transition-all duration-500 ease-out"
-            style={boxStyle(active)}
-          />
+            {/* Scanning beam. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 top-0 animate-scan-move"
+            >
+              <div className="scanner-line" />
+              <div className="h-16 bg-gradient-to-b from-[#E05638]/25 to-transparent" />
+            </div>
 
-          {SHOWCASE_ITEMS.map((item, index) => {
-            const isActive = index === activeIndex;
-            return (
-              <button
-                key={item.id}
-                type="button"
-                // A 32px target: the dot is 12px, which is far too small to hit
-                // on a phone.
-                className="absolute flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full"
-                style={{
-                  left: `${(item.box.x + item.box.width / 2) * 100}%`,
-                  top: `${(item.box.y + item.box.height / 2) * 100}%`,
-                }}
-                aria-pressed={isActive}
-                aria-label={`${item.label} — eşleşmeyi göster`}
-                onClick={() => setActiveIndex(index)}
-                onMouseEnter={() => setActiveIndex(index)}
-                onFocus={() => setActiveIndex(index)}
-              >
-                {isActive ? (
+            {/* Spotlight on the focused item: a coral frame plus a vignette
+                that dims everything outside it. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute rounded-xl border-2 border-secondary/85 shadow-[0_0_0_9999px_rgba(17,17,17,0.28)] transition-all duration-500 ease-out"
+              style={boxStyle(active)}
+            />
+
+            {look.items.map((item, index) => {
+              const isActive = index === itemIndex;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  // A 32px target: the dot is 12px, far too small on a phone.
+                  className="absolute flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full"
+                  style={{
+                    left: `${(item.box.x + item.box.width / 2) * 100}%`,
+                    top: `${(item.box.y + item.box.height / 2) * 100}%`,
+                  }}
+                  aria-pressed={isActive}
+                  aria-label={`${item.label} — eşleşmeyi göster`}
+                  onClick={() => setItemIndex(index)}
+                  onMouseEnter={() => setItemIndex(index)}
+                  onFocus={() => setItemIndex(index)}
+                >
+                  {isActive ? (
+                    <span
+                      aria-hidden="true"
+                      className="absolute h-3 w-3 animate-pulse-ring rounded-full bg-secondary"
+                    />
+                  ) : null}
                   <span
                     aria-hidden="true"
-                    className="absolute h-3 w-3 animate-pulse-ring rounded-full bg-secondary"
+                    className={cn(
+                      "relative rounded-full bg-secondary shadow-hotspot ring-2 ring-white transition-all duration-300",
+                      isActive ? "h-3.5 w-3.5" : "h-2.5 w-2.5 opacity-80",
+                    )}
                   />
-                ) : null}
-                <span
-                  aria-hidden="true"
-                  className={cn(
-                    "relative rounded-full bg-secondary shadow-hotspot ring-2 ring-white transition-all duration-300",
-                    isActive ? "h-3.5 w-3.5" : "h-2.5 w-2.5 opacity-80",
-                  )}
-                />
-              </button>
-            );
-          })}
+                </button>
+              );
+            })}
 
-          {/* Status pill. `pointer-events-none` is load-bearing: a glass panel
-              over the image swallows hotspot clicks underneath it. */}
-          <div className="pointer-events-none absolute inset-x-3 bottom-3 flex items-center gap-2 rounded-full px-3 py-2 glassmorphism">
-            <ScanLine className="h-4 w-4 shrink-0 text-secondary" strokeWidth={2} />
-            <span className="min-w-0 flex-1 truncate text-[12px] font-semibold text-primary">
-              {SHOWCASE_ITEMS.length} parça tespit edildi
-            </span>
-            <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.05em] text-outline">
-              Örnek tarama
-            </span>
+            {/* Status pill. `pointer-events-none` is load-bearing: a glass panel
+                over the image swallows hotspot clicks underneath it. */}
+            <div className="pointer-events-none absolute inset-x-3 bottom-3 flex items-center gap-2 rounded-full px-3 py-2 glassmorphism">
+              <ScanLine className="h-4 w-4 shrink-0 text-secondary" strokeWidth={2} />
+              <span className="min-w-0 flex-1 truncate text-[12px] font-semibold text-primary">
+                {look.items.length} parça tespit edildi
+              </span>
+              <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.05em] text-outline">
+                Örnek tarama
+              </span>
+            </div>
           </div>
+
+          {/* Look switcher. Only the active look's photo is mounted, so the
+              other three cost nothing until they are picked. */}
+          <div className="mt-3 flex min-w-0 flex-wrap items-center gap-1.5">
+            {SHOWCASE_LOOKS.map((entry, index) => (
+              <button
+                key={entry.id}
+                type="button"
+                onClick={() => selectLook(index)}
+                aria-pressed={index === lookIndex}
+                className={cn(
+                  "rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.04em] transition-all",
+                  index === lookIndex
+                    ? "border-primary bg-primary text-on-primary"
+                    : "border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary",
+                )}
+              >
+                {entry.label}
+              </button>
+            ))}
+          </div>
+
+          <p className="mt-2 text-[11px] text-outline">Fotoğraf: {look.credit}</p>
         </div>
 
         {/* ---------------------------------------------------------------- */}
@@ -247,7 +264,10 @@ export function LiveScanPreview({
           <article className="flex min-w-0 flex-col gap-3 rounded-3xl border border-outline-variant/60 bg-surface-container-lowest p-4 shadow-ambient sm:p-5">
             {/* Re-keying on the item id restarts the fade, so the swap reads as
                 a new result rather than text mutating in place. */}
-            <div key={active.id} className="flex min-w-0 animate-fade-up flex-col gap-3">
+            <div
+              key={`${look.id}-${active.id}`}
+              className="flex min-w-0 animate-fade-up flex-col gap-3"
+            >
               <div className="flex min-w-0 items-center gap-2">
                 <span className="flex min-w-0 items-center gap-1.5 rounded-full bg-secondary/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.05em] text-secondary-deep">
                   <Sparkles className="h-3 w-3 shrink-0" strokeWidth={2} />
@@ -325,16 +345,16 @@ export function LiveScanPreview({
           {/* Cycle controls: progress bars double as manual selection. */}
           <div className="flex min-w-0 items-center gap-2">
             <div className="flex min-w-0 flex-1 items-center gap-1.5">
-              {SHOWCASE_ITEMS.map((item, index) => (
+              {look.items.map((item, index) => (
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => setActiveIndex(index)}
-                  aria-pressed={index === activeIndex}
+                  onClick={() => setItemIndex(index)}
+                  aria-pressed={index === itemIndex}
                   aria-label={item.label}
                   className={cn(
                     "h-1.5 min-w-0 flex-1 rounded-full transition-colors duration-300",
-                    index === activeIndex
+                    index === itemIndex
                       ? "bg-secondary"
                       : "bg-outline-variant hover:bg-outline",
                   )}

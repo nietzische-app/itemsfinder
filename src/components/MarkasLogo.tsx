@@ -1,5 +1,3 @@
-import { useId } from "react";
-
 import { cn } from "@/lib/utils";
 
 interface MarkasMarkProps {
@@ -7,34 +5,37 @@ interface MarkasMarkProps {
   /** Overrides the coral dot, e.g. when the mark sits on a coral surface. */
   dotColor?: string;
   /**
-   * `full` is the complete mark — the tag's hole, string and the glow around
-   * the dot. `compact` drops those, which fall below a pixel or two at UI
-   * sizes and only muddy the silhouette. Use it anywhere under ~48px.
+   * `full` is the complete mark — including the tag's hole and string, which
+   * are only a pixel or two wide below ~24px and there just muddy the
+   * silhouette. `compact` drops them and thickens the strokes so the shape
+   * still reads; use it for favicons and tight chrome.
    */
   variant?: "full" | "compact";
 }
 
 /**
- * The Markas mark.
+ * The Markas mark, traced from the official artwork.
  *
- * Geometry follows the official logo: a visual-search focus frame of four
- * corner brackets, an angled clothing tag filling most of that frame, and the
- * signature coral dot low on the tag face with a soft glow behind it.
+ * A visual-search focus frame of four corner brackets, an angled clothing tag
+ * sitting inside it with its hole and string breaking the top-right corner, and
+ * the signature coral dot low on the tag face.
+ *
+ * The geometry was matched against the source PNG side by side at 300px: 1.6
+ * stroke units, a 1.8-unit bracket radius, ~9.5-unit bracket arms, the tag at
+ * roughly 60% of the frame width and rotated -23°. An earlier pass had the
+ * strokes at 3.4 with a 6.5 bracket radius and a glow behind the dot, none of
+ * which are in the original — it read as a heavier, blunter cousin of the logo.
  *
  * Strokes use `currentColor`, so the mark inherits the surrounding text colour
- * and works on any surface; only the dot is fixed to the brand coral.
- *
- * Note the stroke weights are heavier than the source artwork's. The original
- * is drawn for large display; at 32–40px in the header those hairlines
- * disappear, so they are scaled up to hold their shape in the UI.
+ * and works on any surface; only the dot is fixed to the brand coral. Being
+ * vector, it stays crisp at every size and DPI — which is exactly why the
+ * raster logo file is not used for the header, footer or favicon.
  */
 export function MarkasMark({
   className,
   dotColor = "#E05638",
   variant = "full",
 }: MarkasMarkProps) {
-  // Unique per instance: several marks can share a page (header, footer, OG).
-  const glowId = useId();
   const isCompact = variant === "compact";
 
   return (
@@ -45,57 +46,41 @@ export function MarkasMark({
       aria-hidden="true"
       focusable="false"
     >
-      {!isCompact ? (
-        <defs>
-          <radialGradient id={glowId}>
-            <stop offset="0%" stopColor={dotColor} stopOpacity={0.4} />
-            <stop offset="100%" stopColor={dotColor} stopOpacity={0} />
-          </radialGradient>
-        </defs>
-      ) : null}
-
       {/* Focus frame */}
       <g
         stroke="currentColor"
-        strokeWidth={isCompact ? 4 : 3.4}
+        strokeWidth={isCompact ? 2.6 : 1.6}
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d="M12 22v-3.5A6.5 6.5 0 0 1 18.5 12H22" />
-        <path d="M42 12h3.5a6.5 6.5 0 0 1 6.5 6.5V22" />
-        <path d="M52 42v3.5a6.5 6.5 0 0 1-6.5 6.5H42" />
-        <path d="M22 52h-3.5A6.5 6.5 0 0 1 12 45.5V42" />
+        <path d="M15 24.5v-7.7A1.8 1.8 0 0 1 16.8 15H24.5" />
+        <path d="M39.5 15h7.7A1.8 1.8 0 0 1 49 16.8v7.7" />
+        <path d="M49 39.5v7.7a1.8 1.8 0 0 1-1.8 1.8h-7.7" />
+        <path d="M24.5 49h-7.7A1.8 1.8 0 0 1 15 47.2v-7.7" />
       </g>
 
       {/* Tag */}
-      <g transform="translate(-1 0.6) rotate(-20 32 33)">
+      <g transform="rotate(-23 32 32)">
         <path
-          d="M24.4 18.4H37l6.6 6.6v18.6a4 4 0 0 1-4 4H24.4a4 4 0 0 1-4-4V22.4a4 4 0 0 1 4-4Z"
+          d="M26 22.5h8.6l4 4v13.6a2.4 2.4 0 0 1-2.4 2.4H26a2.4 2.4 0 0 1-2.4-2.4V24.9a2.4 2.4 0 0 1 2.4-2.4Z"
           stroke="currentColor"
-          strokeWidth={isCompact ? 3.8 : 3}
+          strokeWidth={isCompact ? 2.4 : 1.6}
           strokeLinejoin="round"
         />
 
         {!isCompact ? (
           <>
-            <circle
-              cx="38"
-              cy="26.4"
-              r="2.2"
-              stroke="currentColor"
-              strokeWidth={2.6}
-            />
+            <circle cx="35.3" cy="27" r="1.45" stroke="currentColor" strokeWidth={1.3} />
             <path
-              d="M40.1 24.4c1.4-3.7 4.8-5.6 6.4-4.1 1.6 1.5-.1 4.6-3 5.8"
+              d="M36.4 25.7c1.1-3.2 3.9-4.9 5.2-3.6 1.3 1.3-.2 3.9-2.5 4.8"
               stroke="currentColor"
-              strokeWidth={2.8}
+              strokeWidth={1.5}
               strokeLinecap="round"
             />
-            <circle cx="32" cy="41" r="6.6" fill={`url(#${glowId})`} />
           </>
         ) : null}
 
-        <circle cx="32" cy="41" r={isCompact ? 4 : 3.5} fill={dotColor} />
+        <circle cx="29.9" cy="36.5" r={isCompact ? 2.6 : 2} fill={dotColor} />
       </g>
     </svg>
   );

@@ -39,9 +39,12 @@ runs after Vision, on the labels Vision produced, to attach live prices, stock
 and retailer branding. Configuring it without a Vision key is a demo
 configuration and logs a warning on startup.
 
-1. **Home** (`/`) — hero with the upload zone, plus a staggered masonry of four
-   curated demo looks. The image is held in `sessionStorage` and never leaves
-   the browser until a scan is triggered.
+1. **Home** (`/`) — hero with an auto-playing live-scan showcase: a real look
+   under a sweeping coral beam, a pulsing hotspot per detected garment, and a
+   product card that follows the focus. Four looks are switchable, and "Bu
+   taramayı aç" runs the selected one through the real pipeline. Below it, the
+   upload zone; the image is held in `sessionStorage` and never leaves the
+   browser until a scan is triggered.
 2. **Analyze** (`/analyze`) — a three-column workspace: a tool rail (category
    filters, budget slider, engine badge), the canvas with zoom and a pulsing
    coral hotspot per detection, and the detections rail, which streams items in
@@ -301,42 +304,32 @@ plan. The live product stage is bounded separately by
 platform timeout returns a `504` with no result at all. If you raise one, raise
 the other.
 
-## Swapping the demo looks for photography
+## Demo photography
 
-The landing page's showcase image is read from `src/lib/showcase.ts` and expects
-`public/examples/pink-outfit.jpg` — a **2:3 portrait** shot of a full look. Drop
-the file in and the hero picks it up with no code change; until then a
-placeholder plate stands in so the hero never shows a broken image. See
-[`public/examples/README.md`](public/examples/README.md) for the requirements and
-the calibrated box coordinates.
+The landing page's showcase cycles four real looks, defined in
+`src/lib/showcase.ts` and shipped in `public/examples/look-*.jpg`. Each look
+carries its own hand-measured detection boxes and its own `exampleId`, so "Bu
+taramayı aç" runs the selected look through the real pipeline.
 
-Its boxes are defined once, in `SHOWCASE_ITEMS`, and read from there by both the
-hero preview and the `pink-outfit` scenario in `mockCatalog.ts` — so
-re-calibrating after swapping the photo is a single edit and the two views
-cannot drift apart.
+The boxes are defined once, in `SHOWCASE_LOOKS`, and read back out by
+`mockCatalog.ts` via `showcaseBox()` — so the hero hotspots and the `/analyze`
+overlay cannot drift apart, and re-calibrating after swapping a photo is a
+single edit.
 
-The four `exampleId` scenarios still ship as SVG illustrations. Replacing those
-with real photography is a three-step change:
+Two things matter when replacing a photo, both covered in
+[`public/examples/README.md`](public/examples/README.md): the frame's aspect
+ratio comes from `width`/`height` and a mismatch crops the image (sliding every
+hotspot off its garment), and the `0..1` box coordinates are specific to that
+framing and must be re-measured.
 
-1. **Drop the files in `public/examples/`** (`.jpg` or `.webp`). Portrait
-   crops around 3:4 match the layout. Use imagery you have the rights to —
-   the Unsplash and Pexels licences both permit commercial use without
-   attribution, but check the individual photo.
-2. **Point at them** in `src/lib/examples.ts` — change each entry's `src`.
-   Nothing else in the code cares about the file type.
-3. **Re-calibrate the hotspots** in `src/services/mockCatalog.ts`. Each
-   detection's `boundingBox` is normalised to the displayed image:
-   `{ x, y, width, height }` all in 0–1, measured from the top-left. So an item
-   whose box starts 30% across and 25% down and covers 40% × 30% of the frame
-   is `{ x: 0.3, y: 0.25, width: 0.4, height: 0.3 }`. The scenario keys map to
-   the `ExampleId`s: `streetwear`, `glam-makeup`, `tailoring`, `soft-minimal`
-   (plus `pink-outfit`, whose boxes come from `lib/showcase.ts` instead).
+Assets are downscaled to 1100px wide at JPEG q0.82 — 638 KB for all four, from
+22 MB of originals. `prepareImage()` in `src/lib/imageSession.ts` additionally
+downscales anything a *user* uploads over 1600px before it reaches
+sessionStorage; without that, a multi-megabyte photo blows past the ~4-5 MB
+quota, the write fails silently and `/analyze` finds nothing to scan.
 
-Sizing is handled for you: `prepareImage()` in `src/lib/imageSession.ts`
-downscales anything over 1600px on its longest edge and re-encodes to JPEG
-before it reaches sessionStorage. Without that, a multi-megabyte photo blows
-past the ~4–5 MB sessionStorage quota, the write fails silently and `/analyze`
-finds nothing to scan.
+The four older `exampleId` scenarios still ship as SVG illustrations and are
+reachable through the API, but are no longer surfaced on the landing page.
 
 ## Notes and limits
 

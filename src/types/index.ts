@@ -140,6 +140,9 @@ export type DetectResponse =
 export type ExampleId =
   /** The landing page's live-scan showcase look — see `src/lib/showcase.ts`. */
   | "pink-outfit"
+  | "biker-look"
+  | "long-coat"
+  | "black-blazer"
   | "streetwear"
   | "glam-makeup"
   | "tailoring"
