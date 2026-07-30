@@ -1,4 +1,5 @@
 import type { BoundingBox, DetectedItem, ExampleId, ProductMatch } from "@/types";
+import { familyOf, normalizeTr, tokenize, type ItemFamily } from "@/lib/itemFamily";
 import { SHOWCASE_ITEMS } from "@/lib/showcase";
 import { buildMerchantSearchUrl } from "@/services/merchantSearch";
 
@@ -575,7 +576,7 @@ const glamMakeupItems: CatalogItem[] = [
       },
       {
         id: "gm-eyeshadow-alt-2",
-        title: "Bronze Goals 18 Renk Palet",
+        title: "Bronze Goals 18 Renk Göz Farı Paleti",
         brand: "Note Cosmetics",
         merchant: "Trendyol",
         price: 579.90,
@@ -1492,7 +1493,7 @@ const pinkOutfitItems: CatalogItem[] = [
       },
       {
         id: "po-cardigan-alt-2",
-        title: "Yüksek Yaka Fermuarlı Kazak",
+        title: "Yüksek Yaka Fermuarlı Hırka",
         brand: "Mango",
         merchant: "Mango",
         price: 429.9,
@@ -1505,7 +1506,7 @@ const pinkOutfitItems: CatalogItem[] = [
       },
       {
         id: "po-cardigan-alt-3",
-        title: "Ribbed Zip-Through Knit",
+        title: "Ribbed Zip-Through Cardigan",
         brand: "ASOS",
         merchant: "ASOS",
         price: 499.9,
@@ -1687,19 +1688,32 @@ const ALL_ITEMS: CatalogItem[] = [
 export function findProductsForLabel(
   label: string,
   category: "clothing" | "beauty",
+  /**
+   * Overrides the family read off `label`. Vision's object class ("Footwear",
+   * "Outerwear") is the authoritative signal for *what kind of thing* this is,
+   * so the caller passes it rather than letting a long descriptive label — which
+   * may mention several garments — decide by keyword order.
+   */
+  familyHint?: ItemFamily,
 ): { exactMatch: CatalogProduct | null; alternatives: CatalogProduct[] } {
-  const needles = label
-    .toLowerCase()
-    .split(/[^a-z]+/)
-    .filter((word) => word.length > 2);
+  const hinted = familyHint && familyHint !== "unknown" ? familyHint : null;
+  const wanted = hinted ?? familyOf(label);
+  const needles = tokenize(label);
+
+  // Same category, and — when we could read a family off the label — the same
+  // family. This is the gate that makes "shoes showed me a jacket" impossible
+  // rather than merely unlikely.
+  const candidates = ALL_ITEMS.filter((item) => {
+    if (item.category !== category) return false;
+    if (wanted === "unknown") return true;
+    return familyOf(`${item.itemType} ${item.label}`) === wanted;
+  });
 
   let best: CatalogItem | null = null;
   let bestScore = 0;
 
-  for (const item of ALL_ITEMS) {
-    if (item.category !== category) continue;
-
-    const haystack = `${item.label} ${item.itemType} ${item.description}`.toLowerCase();
+  for (const item of candidates) {
+    const haystack = normalizeTr(`${item.label} ${item.itemType} ${item.description}`);
     const score = needles.reduce(
       (total, needle) => total + (haystack.includes(needle) ? 1 : 0),
       0,
@@ -1711,16 +1725,43 @@ export function findProductsForLabel(
     }
   }
 
-  const fallback = best ?? ALL_ITEMS.find((item) => item.category === category) ?? null;
+  /*
+   * Falling back to the first item of the right *family* is fine — a sneaker
+   * standing in for a boot is still footwear. Falling back to the first item of
+   * the right *category*, which is what this used to do, is how a detected shoe
+   * ended up showing the catalogue's first jacket: with Turkish labels the word
+   * scores are often all zero, so that branch ran far more often than it looked
+   * like it would.
+   */
+  const resolved = best ?? (wanted === "unknown" ? null : candidates[0] ?? null);
 
-  if (!fallback) {
+  if (!resolved) {
+    // Better to show a detection with no products than to point someone at the
+    // wrong garment. The panel renders this state.
     return { exactMatch: null, alternatives: [] };
   }
 
   return {
-    exactMatch: fallback.exactMatch,
-    alternatives: fallback.alternatives,
+    exactMatch: resolved.exactMatch,
+    alternatives: resolved.alternatives,
   };
+}
+
+/**
+ * Repoints a catalogue product's storefront search at what was actually
+ * detected, keeping the retailer.
+ *
+ * Without this, a shoe detection that resolves to the catalogue's platform
+ * sneaker sends you to a search for *that* sneaker's title. The family is right
+ * but the query is still someone else's: the button says "find it in the store",
+ * so the store it opens should be searching for your item.
+ */
+export function retargetSearchQuery(
+  product: CatalogProduct,
+  searchQuery: string,
+): CatalogProduct {
+  const trimmed = searchQuery.trim();
+  return trimmed ? { ...product, searchQuery: trimmed } : product;
 }
 
 /* -------------------------------------------------------------------------- */

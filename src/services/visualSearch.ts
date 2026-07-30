@@ -7,12 +7,14 @@ import type {
   ExampleId,
   ItemCategory,
 } from "@/types";
+import { familyOf } from "@/lib/itemFamily";
 import { buildSearchQuery, colorNameFromHex } from "@/lib/searchQuery";
 import {
   MOCK_SCENARIOS,
   findProductsForLabel,
   hydrateItems,
   hydrateProduct,
+  retargetSearchQuery,
 } from "@/services/mockCatalog";
 import { ContextDevService } from "@/services/contextDevService";
 import {
@@ -356,7 +358,19 @@ export class GoogleVisionSearchService implements VisualSearchService {
         colorHex: dominantHex,
       });
 
-      const { exactMatch, alternatives } = findProductsForLabel(searchQuery, category);
+      /*
+       * Family comes from Vision's object class, which is the reliable signal
+       * for what kind of garment this is; the descriptive phrase and the query
+       * only pick the best row *within* that family. The chosen rows then get
+       * their storefront search repointed at this detection, so the link lands
+       * on what the user actually pointed at rather than on the catalogue
+       * stand-in's own title.
+       */
+      const { exactMatch, alternatives } = findProductsForLabel(
+        `${phrase ?? name} ${searchQuery}`,
+        category,
+        familyOf(name),
+      );
 
       items.push({
         id: `gv-${items.length}-${name.toLowerCase().replace(/\s+/g, "-")}`,
@@ -371,8 +385,12 @@ export class GoogleVisionSearchService implements VisualSearchService {
         confidence: object.score ?? 0,
         boundingBox,
         colorHex: dominantHex,
-        exactMatch: exactMatch ? hydrateProduct(exactMatch) : null,
-        alternatives: alternatives.map(hydrateProduct),
+        exactMatch: exactMatch
+          ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery))
+          : null,
+        alternatives: alternatives.map((product) =>
+          hydrateProduct(retargetSearchQuery(product, searchQuery)),
+        ),
       });
     }
 
