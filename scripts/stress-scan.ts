@@ -34,6 +34,11 @@ import {
 } from "../src/services/reRanker";
 import { canonicalizeBrand, parseLogoAnnotations } from "../src/lib/brandLogos";
 import { MOCK_SCENARIOS, hydrateItems } from "../src/services/mockCatalog";
+import {
+  isBannedSearchUrl,
+  isDirectProductUrl,
+} from "../src/services/productUrls";
+import { buildMerchantSearchUrl } from "../src/services/merchantSearch";
 
 type Check = { name: string; ok: boolean; detail?: string };
 
@@ -325,6 +330,79 @@ function archetypeLowContrastRoiHints(): Check[] {
   ];
 }
 
+function archetypePdpOnly(): Check[] {
+  const checks: Check[] = [];
+  const banned =
+    /\/search|searchTerm=|search\?q=|sr\?q=|[?&](q|k|kw)=/i;
+
+  const scenarios = ["pink-outfit", "glam-makeup", "soft-minimal", "biker-look"] as const;
+  for (const id of scenarios) {
+    const items = hydrateItems(MOCK_SCENARIOS[id]);
+    for (const item of items) {
+      const urls = [
+        item.exactMatch?.productUrl,
+        ...item.alternatives.map((alt) => alt.productUrl),
+      ].filter(Boolean) as string[];
+
+      for (const url of urls) {
+        checks.push(
+          assert(
+            `${id} CTA is PDP [${url.slice(0, 48)}…]`,
+            isDirectProductUrl(url) && !banned.test(url) && !isBannedSearchUrl(url),
+            url,
+          ),
+        );
+      }
+
+      if (item.exactMatch) {
+        checks.push(
+          assert(
+            `${id} exact has PDP [${item.id}]`,
+            Boolean(item.exactMatch.productUrl) &&
+              isDirectProductUrl(item.exactMatch.productUrl),
+            item.exactMatch.productUrl || "(empty)",
+          ),
+        );
+      }
+    }
+  }
+
+  checks.push(
+    assert(
+      "ban Zara searchTerm URL",
+      isBannedSearchUrl(
+        "https://www.zara.com/tr/tr/search?searchTerm=siyah%20blazer",
+      ) &&
+        !isDirectProductUrl(
+          "https://www.zara.com/tr/tr/search?searchTerm=siyah%20blazer",
+        ),
+    ),
+  );
+  checks.push(
+    assert(
+      "ban Trendyol sr?q URL",
+      isBannedSearchUrl("https://www.trendyol.com/sr?q=deri%20sort") &&
+        !isDirectProductUrl("https://www.trendyol.com/sr?q=deri%20sort"),
+    ),
+  );
+  checks.push(
+    assert(
+      "allow Zara PDP",
+      isDirectProductUrl(
+        "https://www.zara.com/tr/tr/cropped-fit-distressed-jacket-p06987463.html",
+      ),
+    ),
+  );
+  checks.push(
+    assert(
+      "buildMerchantSearchUrl returns null",
+      buildMerchantSearchUrl("Zara", "blazer") === null,
+    ),
+  );
+
+  return checks;
+}
+
 function archetypePrecisionLogoTextureRerank(): Check[] {
   const checks: Check[] = [];
 
@@ -489,6 +567,7 @@ async function main() {
     ...archetypeRankingAndPrice(),
     ...archetypeLowContrastRoiHints(),
     ...archetypePrecisionLogoTextureRerank(),
+    ...archetypePdpOnly(),
   ];
 
   let failed = 0;

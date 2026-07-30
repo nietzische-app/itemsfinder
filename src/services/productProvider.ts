@@ -385,6 +385,11 @@ function toProductMatch(
     productUrl = resolveVerifiedPdp(merchant, family) ?? "";
   }
 
+  // Absolute ban — never ship a search-results URL to the CTA.
+  if (productUrl && !isDirectProductUrl(productUrl)) {
+    productUrl = "";
+  }
+
   // Re-check after PDP fallback — curated URLs must still agree with primary.
   if (
     productUrl &&
@@ -412,7 +417,7 @@ function toProductMatch(
     price: card.price,
     currency: card.currency,
     productUrl,
-    urlKind: isDirectProductUrl(productUrl) ? "product" : "search",
+    urlKind: "product",
     imageUrl: card.imageUrl ?? placeholderImage(card.title),
     matchType: overrides.matchType,
     similarity: overrides.similarity,

@@ -1,4 +1,3 @@
-import { buildMerchantSearchUrl } from "@/services/merchantSearch";
 import { isDirectProductUrl, PINK_OUTFIT_PDPS, resolveVerifiedPdp } from "@/services/productUrls";
 import { familyOf } from "@/lib/itemFamily";
 import type { BoundingBox, ExampleId, Merchant } from "@/types";
@@ -22,7 +21,7 @@ export interface ShowcaseMatch {
   merchant: Merchant;
   price: number;
   currency: string;
-  /** Storefront URL — prefer a direct PDP; search is last resort only. */
+  /** Direct product-detail page only — never a storefront search URL. */
   url: string;
   /** 0..1 visual similarity, shown as a percentage. */
   similarity: number;
@@ -74,13 +73,13 @@ export interface ShowcaseLook {
   items: ShowcaseItem[];
 }
 
-/** Direct PDP when available; otherwise a storefront search (labelled as such). */
+/** Direct PDP only — never emits `/search?searchTerm=` or similar. */
 function productUrl(merchant: Merchant, query: string, preferred?: string): string {
   if (preferred && isDirectProductUrl(preferred)) return preferred;
   const family = familyOf(query);
   const verified = resolveVerifiedPdp(merchant, family);
-  if (verified) return verified;
-  return buildMerchantSearchUrl(merchant, query) ?? "";
+  if (verified && isDirectProductUrl(verified)) return verified;
+  return "";
 }
 
 export const SHOWCASE_LOOKS: ShowcaseLook[] = [

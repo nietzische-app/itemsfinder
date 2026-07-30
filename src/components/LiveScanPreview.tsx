@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
+  ArrowUpRight,
   BadgeCheck,
   Loader2,
   Pause,
   Play,
   ScanLine,
-  Search,
   Sparkles,
 } from "lucide-react";
 
@@ -22,6 +22,7 @@ import {
   type ShowcaseItem,
 } from "@/lib/showcase";
 import { merchantColor, merchantInitials } from "@/services/merchantSearch";
+import { isDirectProductUrl } from "@/services/productUrls";
 import type { UploadedImage } from "@/types";
 import { buildAffiliateUrl, formatPrice } from "@/utils/affiliate";
 
@@ -354,7 +355,7 @@ export function LiveScanPreview({
                   <span className="font-display text-[20px] font-bold tracking-tight text-primary">
                     {formatPrice(active.match.price, active.match.currency)}
                   </span>
-                  {active.match.url ? (
+                  {active.match.url && isDirectProductUrl(active.match.url) ? (
                     <Button asChild size="sm">
                       <a
                         href={buildAffiliateUrl(active.match.url, active.match.merchant, {
@@ -363,8 +364,8 @@ export function LiveScanPreview({
                         target="_blank"
                         rel="noopener noreferrer sponsored nofollow"
                       >
-                        <Search strokeWidth={1.75} />
-                        Mağazada bul
+                        Ürüne git
+                        <ArrowUpRight strokeWidth={1.5} />
                       </a>
                     </Button>
                   ) : null}

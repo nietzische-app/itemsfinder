@@ -3,7 +3,6 @@ import { familyOf, normalizeTr, tokenize, type ItemFamily } from "@/lib/itemFami
 import { primaryCategoryOf } from "@/lib/primaryCategory";
 import { passesWhitelistSanitizer } from "@/utils/sanitizer";
 import { showcaseBox } from "@/lib/showcase";
-import { buildMerchantSearchUrl } from "@/services/merchantSearch";
 import {
   isDirectProductUrl,
   PINK_OUTFIT_PDPS,
@@ -2353,23 +2352,20 @@ export function retargetSearchQuery(
 /**
  * Turns an authored catalogue row into a UI-ready `ProductMatch`.
  *
- * Resolution order:
+ * Resolution order (search URLs are banned):
  *  1. Explicit `productUrl` when it is a direct PDP
- *  2. Curated family-matched PDP for the merchant (never a jacket for sneakers)
- *  3. Storefront search URL as a last resort (labelled `urlKind: "search"`)
+ *  2. Curated family-matched PDP for the merchant
+ *  3. Empty URL + out-of-stock — never a `/search?searchTerm=` dump
  */
 export function hydrateProduct(product: CatalogProduct): ProductMatch {
   const { searchQuery, productUrl: authoredUrl, ...rest } = product;
   const family = familyOf(`${product.title} ${product.brand} ${searchQuery}`);
 
   const direct =
-    authoredUrl && isDirectProductUrl(authoredUrl)
-      ? authoredUrl
-      : resolveVerifiedPdp(product.merchant, family);
+    (authoredUrl && isDirectProductUrl(authoredUrl) ? authoredUrl : null) ??
+    resolveVerifiedPdp(product.merchant, family);
 
-  const searchUrl = buildMerchantSearchUrl(product.merchant, searchQuery);
-  const productUrl = direct ?? searchUrl ?? "";
-  const urlKind: ProductMatch["urlKind"] = direct ? "product" : "search";
+  const productUrl = direct && isDirectProductUrl(direct) ? direct : "";
 
   let merchantDomain = "";
   if (productUrl) {
@@ -2382,10 +2378,8 @@ export function hydrateProduct(product: CatalogProduct): ProductMatch {
 
   return {
     ...rest,
-    // A merchant with no search endpoint would leave the CTA dead, so the card
-    // is marked out of stock rather than shipped with nowhere to go.
     productUrl,
-    urlKind,
+    urlKind: "product",
     inStock: productUrl ? product.inStock : false,
     merchantDomain,
     isLive: false,

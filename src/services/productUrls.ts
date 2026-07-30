@@ -4,14 +4,46 @@ import type { ItemFamily } from "@/lib/itemFamily";
 /**
  * Direct product-detail-page (PDP) URL helpers and a curated fallback catalogue.
  *
- * Search-result pages (`/search?q=…`, `/sr?q=…`) are not buy links — tapping one
- * dumps the shopper into a results grid. These helpers keep CTAs on real PDPs
- * (Trendyol `-p-123`, Zara `…-p0….html`, Amazon `/dp/…`, Mango `/p/…`, Sephora
- * `/p/…`) whenever possible.
+ * Search-result pages (`/search?q=…`, `searchTerm=…`, `/sr?q=…`) are never buy
+ * links. CTAs must only open real PDPs (Trendyol `-p-123`, Zara `…-p0….html`,
+ * Amazon `/dp/…`, LCW `/urun/…`, DeFacto `…-1234567`).
  */
+
+/** Absolute ban patterns — any match means "not a PDP". */
+const BANNED_SEARCH_PATH =
+  /\/(search|sr|s|search-results|arama|ara|katalog|category|categories|c\/)(\/|$)/i;
+const BANNED_SEARCH_QUERY =
+  /[?&](q|k|kw|searchterm|searchTerm|query|keywords|field-keywords|text|term)=/i;
+
+/**
+ * True when the URL is a storefront search / listing page and must never be
+ * rendered on a product card CTA.
+ */
+export function isBannedSearchUrl(value: string): boolean {
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return true;
+  }
+
+  const path = url.pathname;
+  const search = url.search;
+
+  if (BANNED_SEARCH_PATH.test(path)) return true;
+  if (BANNED_SEARCH_QUERY.test(search)) return true;
+  if (/searchterm=/i.test(value)) return true;
+  if (/\/search\?/i.test(value)) return true;
+  if (/[?&]sr\?/i.test(value) || /\/sr\?/i.test(value)) return true;
+
+  return false;
+}
 
 /** True when a URL looks like a retailer product page rather than a search. */
 export function isDirectProductUrl(value: string): boolean {
+  if (!value?.trim()) return false;
+  if (isBannedSearchUrl(value)) return false;
+
   let url: URL;
   try {
     url = new URL(value);
@@ -23,12 +55,9 @@ export function isDirectProductUrl(value: string): boolean {
 
   const host = url.hostname.replace(/^www\./, "").toLowerCase();
   const path = url.pathname.toLowerCase();
-  const search = url.search.toLowerCase();
 
-  // Explicit search / listing patterns — never treat these as PDPs.
+  // Category / listing shells that are not searches but also not PDPs.
   if (
-    /\/(search|sr|s|search-results|arama|ara)(\/|$)/.test(path) ||
-    /[?&](q|k|kw|searchterm|query)=/.test(search) ||
     /\/[a-z0-9-]+-x-(r\d+-)?c\d+/.test(path) || // Trendyol category/filter pages
     /\/(l|c)\d+\.html$/.test(path) // Zara/Inditex category listing pages
   ) {
@@ -116,6 +145,9 @@ const FAMILY_PDPS: Partial<Record<ItemFamily, Partial<Record<Merchant, string>>>
     "H&M": "https://www2.hm.com/tr_tr/productpage.1245586001.html",
     ASOS:
       "https://www.asos.com/tr/asos-design/asos-design-cropped-biker-jacket-in-washed-black/prd/205876697",
+    "LC Waikiki":
+      "https://www.lcwaikiki.com/tr-TR/TR/urun/LC-WAIKIKI/kadin/Hirka/5432641/1907029",
+    DeFacto: "https://www.defacto.com.tr/fitted-ultra-soft-fermuarli-hirka-3374957",
   },
   top: {
     Trendyol:
@@ -126,6 +158,8 @@ const FAMILY_PDPS: Partial<Record<ItemFamily, Partial<Record<Merchant, string>>>
     Zara: "https://www.zara.com/tr/tr/ribbed-crop-top-p03641800.html",
     ASOS:
       "https://www.asos.com/tr/asos-design/asos-design-ribbed-square-neck-top/prd/205100123",
+    "LC Waikiki":
+      "https://www.lcwaikiki.com/tr-TR/TR/urun/LC-WAIKIKI/kadin/Hirka/5432641/1907029",
   },
   bottom: {
     Trendyol: "https://www.trendyol.com/marovoay/suni-deri-likrali-mini-sort-p-1074582434",
@@ -146,6 +180,7 @@ const FAMILY_PDPS: Partial<Record<ItemFamily, Partial<Record<Merchant, string>>>
     "H&M": "https://www2.hm.com/tr_tr/productpage.1210003001.html",
     ASOS:
       "https://www.asos.com/tr/asos-design/asos-design-retro-hi-top-trainers/prd/203900456",
+    DeFacto: "https://www.defacto.com.tr/bagcikli-suni-deri-sneaker-spor-ayakkabi-2417823",
   },
   bag: {
     Trendyol:
@@ -167,14 +202,20 @@ const FAMILY_PDPS: Partial<Record<ItemFamily, Partial<Record<Merchant, string>>>
   lips: {
     Sephora: "https://www.sephora.com.tr/p/rouge-mat-lipstick-P10015955.html",
     Amazon: "https://www.amazon.com.tr/dp/B0DJZL4KC8",
+    Trendyol:
+      "https://www.trendyol.com/golden-rose/velvet-matte-lipstick-ruj-p-3765041",
   },
   eyes: {
     Sephora: "https://www.sephora.com.tr/p/rouge-mat-lipstick-P10015955.html",
     Amazon: "https://www.amazon.com.tr/dp/B0DJZL4KC8",
+    Trendyol:
+      "https://www.trendyol.com/golden-rose/velvet-matte-lipstick-ruj-p-3765041",
   },
   face: {
     Sephora: "https://www.sephora.com.tr/p/rouge-mat-lipstick-P10015955.html",
     Amazon: "https://www.amazon.com.tr/dp/B0DJZL4KC8",
+    Trendyol:
+      "https://www.trendyol.com/golden-rose/velvet-matte-lipstick-ruj-p-3765041",
   },
   dress: {
     Trendyol:
@@ -208,6 +249,7 @@ export const PINK_OUTFIT_PDPS = {
 /**
  * Resolves the best direct PDP for a merchant + garment family.
  * Prefers an exact merchant match, then Trendyol, then any available PDP.
+ * Never returns a search URL.
  */
 export function resolveVerifiedPdp(
   merchant: Merchant,
@@ -224,4 +266,26 @@ export function resolveVerifiedPdp(
     Object.values(byMerchant).find((url) => Boolean(url));
 
   return preferred && isDirectProductUrl(preferred) ? preferred : null;
+}
+
+/**
+ * Last-resort PDP when family is ambiguous — still a real product page, never
+ * a search dump. Prefer Trendyol outerwear as a generic fashion anchor.
+ */
+export function resolveAnyVerifiedPdp(merchant: Merchant): string | null {
+  const families: ItemFamily[] = [
+    "outerwear",
+    "top",
+    "bottom",
+    "footwear",
+    "accessory",
+    "lips",
+    "dress",
+    "bag",
+  ];
+  for (const family of families) {
+    const hit = resolveVerifiedPdp(merchant, family);
+    if (hit) return hit;
+  }
+  return null;
 }
