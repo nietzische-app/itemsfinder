@@ -212,6 +212,7 @@ function AnalyzeWorkspace() {
             activeItemId={activeItemId}
             onSelect={handleSelect}
             isScanning={isScanning}
+            hasFailed={status === "error"}
           />
         ) : (
           <div className="h-[60vh] w-full max-w-md animate-pulse rounded-2xl bg-surface-container" />

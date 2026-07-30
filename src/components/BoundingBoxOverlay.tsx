@@ -14,6 +14,16 @@ interface BoundingBoxOverlayProps {
   activeItemId: string | null;
   onSelect: (itemId: string | null) => void;
   isScanning: boolean;
+  /**
+   * The scan did not produce a result.
+   *
+   * Without this the strip read "Analiz tamamlandı — 0 parça bulundu" over a
+   * failed scan, which claims two untrue things at once: that the analysis
+   * finished, and that it looked and found nothing. A rate-limited request never
+   * looked at all. The panel beside it was already telling the truth; this made it
+   * argue with itself.
+   */
+  hasFailed?: boolean;
 }
 
 const ZOOM_STEPS = [1, 1.5, 2, 3] as const;
@@ -102,6 +112,7 @@ export function BoundingBoxOverlay({
   activeItemId,
   onSelect,
   isScanning,
+  hasFailed = false,
 }: BoundingBoxOverlayProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [zoomIndex, setZoomIndex] = useState(0);
@@ -283,25 +294,38 @@ export function BoundingBoxOverlay({
             <span
               className={cn(
                 "relative inline-flex h-3 w-3 rounded-full",
-                isScanning ? "bg-secondary" : "bg-success",
+                isScanning ? "bg-secondary" : hasFailed ? "bg-error" : "bg-success",
               )}
             />
           </span>
           <span className="label whitespace-nowrap text-primary">
-            {isScanning ? "Görsel analiz ediliyor…" : "Analiz tamamlandı"}
+            {isScanning
+              ? "Görsel analiz ediliyor…"
+              : hasFailed
+                ? "Analiz tamamlanamadı"
+                : "Analiz tamamlandı"}
           </span>
         </span>
 
-        <span aria-hidden="true" className="h-4 w-px bg-outline-variant" />
+        {/*
+          The count is dropped on a failure rather than shown as zero. "0 parça
+          bulundu" is a finding — it says the image was examined and held nothing —
+          and a scan that was refused never examined it.
+        */}
+        {hasFailed ? null : (
+          <>
+            <span aria-hidden="true" className="h-4 w-px bg-outline-variant" />
 
-        <span className="flex items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
-            <Sparkles className="h-3.5 w-3.5 text-primary" strokeWidth={1.5} />
-          </span>
-          <span className="label whitespace-nowrap text-on-surface-variant">
-            {items.length} parça bulundu
-          </span>
-        </span>
+            <span className="flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
+                <Sparkles className="h-3.5 w-3.5 text-primary" strokeWidth={1.5} />
+              </span>
+              <span className="label whitespace-nowrap text-on-surface-variant">
+                {items.length} parça bulundu
+              </span>
+            </span>
+          </>
+        )}
       </div>
     </div>
   );
