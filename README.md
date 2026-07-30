@@ -228,12 +228,13 @@ what each variable does.
 design/DESIGN.md                 # Source design system + reference renders
 src/
 ├── app/
-│   ├── page.tsx                 # Hero, upload zone, demo looks
+│   ├── page.tsx                 # Hero live-scan showcase, upload zone, FAQ
 │   ├── analyze/page.tsx         # Scanning workspace + detection streaming
+│   ├── (legal)/                 # Privacy, terms, KVKK notice
 │   └── api/detect/route.ts      # Image validation + engine dispatch
 ├── components/
+│   ├── LiveScanPreview.tsx      # Landing-page live scan demo (beam, hotspots)
 │   ├── ImageUploader.tsx        # react-dropzone upload zone
-│   ├── DemoLookGrid.tsx         # Staggered masonry of curated looks
 │   ├── BoundingBoxOverlay.tsx   # Hotspots, boxes, quick-looks, scan status
 │   ├── DetectedItemsPanel.tsx   # "AI Detected Items" rail + curated dialog
 │   ├── ProductCard.tsx          # Product surface + affiliate CTA
@@ -241,12 +242,18 @@ src/
 │   ├── EngineBadge.tsx          # Which engines produced this result
 │   ├── MarkasLogo.tsx           # Brand mark + wordmark lockup
 │   ├── AnalyzeSidebar.tsx       # Workspace tool rail: filters + budget
-│   ├── SiteHeader.tsx           # Header, drawer, category switcher
-│   └── ui/toast.tsx             # Toast stack for non-navigating actions
-│   ├── ResultsSkeleton.tsx      # Loading state
-│   ├── SiteHeader.tsx           # Top app bar
+│   ├── SiteHeader.tsx           # Top app bar: logo + "Görsel Yükle"
 │   ├── MobileNav.tsx            # Bottom tab bar (mobile)
+│   ├── Footer.tsx               # Four-column footer + affiliate notice
+│   ├── CookieBanner.tsx         # Consent notice, localStorage-backed
+│   ├── FaqSection.tsx           # <details> accordion
+│   ├── ResultsSkeleton.tsx      # Loading state
 │   └── ui/                      # shadcn primitives on the design tokens
+├── lib/
+│   ├── showcase.ts              # Landing-page showcase image + calibrated boxes
+│   ├── examples.ts              # Demo-scenario image fixtures
+│   ├── imageSession.ts          # Downscale + sessionStorage handoff
+│   └── searchQuery.ts           # Vision labels -> storefront search query
 ├── services/
 │   ├── visualSearch.ts          # Detector interface + composition/factories
 │   ├── contextDevService.ts     # Context.dev Extract + Brand integration
@@ -267,10 +274,44 @@ src/
 | `npm run lint`      | ESLint                         |
 | `npm run typecheck` | `tsc --noEmit`                 |
 
+## Deploying to Vercel
+
+Nothing to configure beyond environment variables — the App Router build is
+Vercel's default target.
+
+1. Import the repository at [vercel.com/new](https://vercel.com/new). Framework
+   preset is detected as Next.js; leave the build command and output directory
+   alone.
+2. **Paste the keys** under *Project → Settings → Environment Variables*, one
+   row per line in `.env.example`. Set them for Production **and** Preview, or
+   preview deployments will silently run in demo mode. Server-side keys
+   (`GOOGLE_CLOUD_VISION_API_KEY`, `CONTEXT_DEV_API_KEY`) must **not** be
+   prefixed with `NEXT_PUBLIC_` — that prefix inlines a value into the client
+   bundle, which for an API key means publishing it. The affiliate IDs are the
+   only variables that belong on the client, and they already carry the prefix.
+3. Redeploy after adding variables. Vercel injects them at build and runtime, so
+   an existing deployment does not pick them up on its own.
+
+### Function timeout
+
+`/api/detect` declares `maxDuration = 60` (seconds), the ceiling on the Hobby
+plan. The live product stage is bounded separately by
+`CONTEXT_DEV_DEADLINE_MS` (45s by default), which must stay **below**
+`maxDuration`: the deadline degrades gracefully to catalogue products, whereas a
+platform timeout returns a `504` with no result at all. If you raise one, raise
+the other.
+
 ## Swapping the demo looks for photography
 
-The four demo looks currently ship as SVG illustrations. Replacing them with
-real photography is a three-step change:
+The landing page's showcase image is read from `src/lib/showcase.ts` and expects
+`public/examples/pink-outfit.jpg` — a **2:3 portrait** shot of a full look. Drop
+the file in and the hero picks it up with no code change; until then a
+placeholder plate stands in so the hero never shows a broken image. See
+[`public/examples/README.md`](public/examples/README.md) for the requirements and
+the calibrated box coordinates.
+
+The four `exampleId` scenarios still ship as SVG illustrations. Replacing those
+with real photography is a three-step change:
 
 1. **Drop the files in `public/examples/`** (`.jpg` or `.webp`). Portrait
    crops around 3:4 match the layout. Use imagery you have the rights to —

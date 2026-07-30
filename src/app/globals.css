@@ -57,3 +57,18 @@
     @apply text-label-sm uppercase tracking-[0.05em];
   }
 }
+
+/**
+ * The scan beam and hotspot pulses loop forever, which is exactly what a
+ * reduced-motion preference is asking us not to do. The entry animations are
+ * `fill: both`, so cancelling them leaves the element at its final state — the
+ * content still shows, it just arrives without the movement.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .animate-scan-move,
+  .animate-pulse-ring,
+  .animate-fade-up,
+  .animate-pop-in {
+    animation: none !important;
+  }
+}

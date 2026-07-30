@@ -1,16 +1,14 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useMemo } from "react";
-import { ArrowRight, MoveRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import { ArrowRight } from "lucide-react";
 
-import { DemoLookGrid } from "@/components/DemoLookGrid";
 import { FaqSection } from "@/components/FaqSection";
 import { ImageUploader } from "@/components/ImageUploader";
+import { LiveScanPreview } from "@/components/LiveScanPreview";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { parseUiCategory } from "@/lib/categories";
-import { EXAMPLE_IMAGES } from "@/lib/examples";
 import { saveUploadedImage } from "@/lib/imageSession";
 import type { UploadedImage } from "@/types";
 
@@ -32,28 +30,8 @@ const STEPS = [
   },
 ];
 
-/** Which shopper-facing category each demo look belongs to. */
-const LOOK_CATEGORY: Record<string, "moda" | "guzellik" | "aksesuar"> = {
-  streetwear: "moda",
-  "glam-makeup": "guzellik",
-  tailoring: "moda",
-  "soft-minimal": "aksesuar",
-};
-
-function HomeContent() {
+export default function HomePage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const category = parseUiCategory(searchParams.get("kategori"));
-
-  // The header switcher filters the demo grid too, so the control is never a
-  // no-op on this page.
-  const looks = useMemo(
-    () =>
-      category
-        ? EXAMPLE_IMAGES.filter((look) => LOOK_CATEGORY[look.id] === category)
-        : EXAMPLE_IMAGES,
-    [category],
-  );
 
   const handleImageReady = useCallback(
     (image: UploadedImage) => {
@@ -63,8 +41,8 @@ function HomeContent() {
     [router],
   );
 
-  function scrollToDemos() {
-    document.getElementById("demo-looks")?.scrollIntoView({ behavior: "smooth" });
+  function scrollToUpload() {
+    document.getElementById("upload")?.scrollIntoView({ behavior: "smooth" });
   }
 
   return (
@@ -73,16 +51,20 @@ function HomeContent() {
           flat clinical white without introducing a hard colour block. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[720px] overflow-hidden"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[820px] overflow-hidden"
       >
-        <div className="absolute -left-40 -top-40 h-[560px] w-[560px] rounded-full bg-[#E05638]/[0.07] blur-3xl" />
+        <div className="absolute -left-40 -top-40 h-[560px] w-[560px] rounded-full bg-[#E05638]/10 blur-3xl" />
         <div className="absolute -right-32 top-10 h-[620px] w-[620px] rounded-full bg-[#D8C3A5]/25 blur-3xl" />
-        <div className="absolute left-1/3 top-40 h-[420px] w-[420px] rounded-full bg-[#E05638]/[0.04] blur-3xl" />
+        <div className="absolute left-1/3 top-40 h-[420px] w-[420px] rounded-full bg-[#E05638]/[0.06] blur-3xl" />
       </div>
 
       <div className="mx-auto max-w-shell px-margin-mobile py-12 md:px-margin-desktop">
-        {/* Hero */}
-        <section className="mb-24 grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
+        {/* Hero — copy on the left, a look being scanned on the right. The demo
+            does the explaining; the copy just names it. */}
+        <section
+          id="canli-tarama"
+          className="mb-24 grid scroll-mt-28 grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16"
+        >
           <div className="flex min-w-0 flex-col gap-8">
             <div className="space-y-5">
               <Badge variant="coral">Yapay zeka destekli stil araması</Badge>
@@ -99,44 +81,39 @@ function HomeContent() {
             </div>
 
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" onClick={scrollToDemos}>
-                Hemen başla
+              <Button size="lg" onClick={scrollToUpload}>
+                Görselini yükle
                 <ArrowRight strokeWidth={1.5} />
               </Button>
               <Button asChild variant="outline" size="lg">
                 <a href="#nasil-calisir">Nasıl çalışır?</a>
               </Button>
             </div>
+
+            <p className="label text-outline">
+              Zara · Trendyol · Sephora · Amazon · Mango · H&amp;M · ASOS
+            </p>
           </div>
 
-          <div id="upload" className="min-w-0 scroll-mt-28">
-            <ImageUploader onImageReady={handleImageReady} />
+          <div className="min-w-0">
+            <LiveScanPreview />
           </div>
         </section>
 
-        {/* Demo looks */}
-        <section id="demo-looks" className="mb-24 scroll-mt-28">
-          <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
-            <div className="min-w-0">
+        {/* Upload */}
+        <section id="upload" className="mb-24 scroll-mt-28">
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-8 text-center">
               <h2 className="font-display text-headline-md text-primary">
-                Veya örnek bir tarzı hemen dene
+                Şimdi kendi görselinle dene
               </h2>
-              <p className="text-on-surface-variant">
-                {looks.length === EXAMPLE_IMAGES.length
-                  ? "Elinde görsel yok mu? Hazır tarzlardan birini seç, nasıl çalıştığını gör."
-                  : `${looks.length} tarz gösteriliyor — tümünü görmek için üstteki «Tümü»ne dokun.`}
+              <p className="mt-1 text-on-surface-variant">
+                Ekran görüntüsünü bırak, saniyeler içinde parçalara ayıralım.
               </p>
             </div>
-            <a
-              href="#nasil-calisir"
-              className="label flex items-center gap-1 text-primary hover:underline"
-            >
-              Eşleştirme nasıl çalışır
-              <MoveRight className="h-4 w-4" strokeWidth={1.5} />
-            </a>
-          </div>
 
-          <DemoLookGrid onImageReady={handleImageReady} looks={looks} />
+            <ImageUploader onImageReady={handleImageReady} />
+          </div>
         </section>
 
         {/* How it works */}
@@ -162,10 +139,6 @@ function HomeContent() {
               </li>
             ))}
           </ol>
-
-          <p className="label mt-16 text-center text-outline">
-            Zara · Trendyol · Sephora · Amazon · Mango · H&amp;M · ASOS
-          </p>
         </section>
 
         <div className="mt-24">
@@ -173,18 +146,5 @@ function HomeContent() {
         </div>
       </div>
     </div>
-  );
-}
-
-/**
- * `useSearchParams` opts a component out of static prerendering unless it sits
- * behind a boundary, so the shell stays static and only the filtered grid waits
- * on the query string.
- */
-export default function HomePage() {
-  return (
-    <Suspense fallback={<div className="min-h-[60dvh]" />}>
-      <HomeContent />
-    </Suspense>
   );
 }

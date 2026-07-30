@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1333 2000" width="1333" height="2000" role="img" aria-label="Örnek tarama görseli için ayrılmış alan">
+  <defs>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2ece7"/>
+      <stop offset="0.55" stop-color="#e9ded6"/>
+      <stop offset="1" stop-color="#ded1c8"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.42" r="0.45">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="coral" cx="0.5" cy="0.3" r="0.5">
+      <stop offset="0" stop-color="#e05638" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#e05638" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Studio plate -->
+  <rect width="1333" height="2000" fill="url(#plate)"/>
+  <rect width="1333" height="2000" fill="url(#halo)"/>
+  <rect width="1333" height="2000" fill="url(#coral)"/>
+
+  <!-- Floor line, so the plate reads as a set rather than a flat swatch -->
+  <path d="M0 1880 H1333" stroke="#111111" stroke-opacity="0.07" stroke-width="2"/>
+  <ellipse cx="666" cy="1885" rx="300" ry="26" fill="#111111" fill-opacity="0.05"/>
+
+  <!-- Camera focus frame, echoing the Markas mark -->
+  <g stroke="#111111" stroke-opacity="0.16" stroke-width="6" stroke-linecap="round" fill="none">
+    <path d="M120 200 V140 a20 20 0 0 1 20 -20 H200"/>
+    <path d="M1133 120 H1193 a20 20 0 0 1 20 20 V200"/>
+    <path d="M1213 1800 V1860 a20 20 0 0 1 -20 20 H1133"/>
+    <path d="M200 1880 H140 a20 20 0 0 1 -20 -20 V1800"/>
+  </g>
+
+  <!-- Detection zones: drawn at exactly the coordinates in src/lib/showcase.ts,
+       so the hotspots and spotlight land correctly on this placeholder too. -->
+  <g fill="#ffffff" fill-opacity="0.42" stroke="#e05638" stroke-opacity="0.32" stroke-width="4" stroke-dasharray="18 14">
+    <rect x="473" y="600" width="333" height="540" rx="40"/>
+    <rect x="480" y="990" width="313" height="200" rx="26"/>
+    <rect x="496" y="1570" width="320" height="240" rx="30"/>
+  </g>
+
+  <g font-family="Inter, system-ui, -apple-system, sans-serif" font-size="30" font-weight="600" letter-spacing="3" fill="#111111" fill-opacity="0.32">
+    <text x="826" y="640">ÜST</text>
+    <text x="813" y="1024">ALT</text>
+    <text x="836" y="1604">AYAKKABI</text>
+  </g>
+
+  <!-- Caption -->
+  <g font-family="Inter, system-ui, -apple-system, sans-serif" text-anchor="middle">
+    <text x="666" y="300" font-size="34" font-weight="700" letter-spacing="6" fill="#111111" fill-opacity="0.42">MARKAS · ÖRNEK TARAMA</text>
+    <!-- Kept high in the frame: the scan status pill sits over the bottom edge. -->
+    <text x="666" y="386" font-size="28" font-weight="500" fill="#111111" fill-opacity="0.34">Model fotoğrafı bekleniyor</text>
+    <text x="666" y="440" font-size="24" font-weight="400" fill="#111111" fill-opacity="0.28">public/examples/pink-outfit.jpg</text>
+  </g>
+</svg>

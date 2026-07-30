@@ -10,6 +10,21 @@ import type { DetectRequestBody, DetectResponse, ExampleId } from "@/types";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+/**
+ * Vercel serverless budget for this route, in seconds.
+ *
+ * A scan is Vision (a couple of seconds) followed by the optional Context.dev
+ * stage, which is bounded by `CONTEXT_DEV_DEADLINE_MS` (45s by default). 60s
+ * leaves headroom above that; the live stage's deadline must always stay below
+ * this number, or the function is killed mid-flight and the client gets a
+ * platform error instead of the catalogue fallback the deadline exists to
+ * trigger.
+ *
+ * 60s is the ceiling on Vercel's Hobby plan. Paid plans allow more, so if
+ * `CONTEXT_DEV_DEADLINE_MS` is raised, raise this with it.
+ */
+export const maxDuration = 60;
+
 /** Formats we accept. SVG is included for the bundled example screenshots. */
 const ALLOWED_MIME_TYPES = new Set([
   "image/jpeg",

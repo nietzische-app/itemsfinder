@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 
-import { Suspense } from "react";
-
 import { CookieBanner } from "@/components/CookieBanner";
 import { Footer } from "@/components/Footer";
 import { MobileNav } from "@/components/MobileNav";
@@ -71,11 +69,7 @@ export default function RootLayout({
       <body>
         <ToastProvider>
           <div className="flex min-h-dvh flex-col pb-20 md:pb-0">
-            {/* The header reads `?kategori=` via useSearchParams, which needs a
-                boundary so the static shell can still be prerendered. */}
-            <Suspense fallback={<div className="h-16 md:h-[72px]" />}>
-              <SiteHeader />
-            </Suspense>
+            <SiteHeader />
             <main className="flex-1">{children}</main>
             <Footer />
           </div>

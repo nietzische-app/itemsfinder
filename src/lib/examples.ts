@@ -1,12 +1,14 @@
 import type { ExampleImage } from "@/types";
 
 /**
- * Curated demo looks shipped with the app. The mock detection scenarios in
- * `mockCatalog.ts` have bounding boxes hand-tuned to these exact images, so
- * changing an illustration means re-checking the boxes for its `id`.
+ * Fixtures for the mock detection scenarios in `mockCatalog.ts`, whose bounding
+ * boxes are hand-tuned to these exact images — changing an illustration means
+ * re-checking the boxes for its `id`.
  *
- * `tall` staggers the masonry grid — the design system calls for an organic,
- * Pinterest-style flow rather than a uniform row.
+ * These are no longer surfaced on the landing page: the illustration grid was
+ * replaced by the photographic live-scan showcase (`src/lib/showcase.ts`). They
+ * remain the scenario fixtures behind `exampleId`, which `/api/detect` still
+ * accepts.
  */
 export const EXAMPLE_IMAGES: ExampleImage[] = [
   {

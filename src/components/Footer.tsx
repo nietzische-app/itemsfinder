@@ -10,8 +10,10 @@ const SUPPORT_EMAIL = "destek@markas.app";
 const PRODUCT_LINKS = [
   { label: "Görsel arama", href: "/#upload" },
   { label: "Bütçe dostu muadiller", href: "/#nasil-calisir" },
-  { label: "Kombin tespiti", href: "/#demo-looks" },
-  { label: "Makyaj ve cilt tonu", href: "/#demo-looks" },
+  { label: "Canlı tarama gösterimi", href: "/#canli-tarama" },
+  // The header no longer carries a bookmark icon, so this is the desktop
+  // entry point to the saved list (mobile has it in the tab bar).
+  { label: "Kaydettiklerim", href: "/kayitlilar" },
 ];
 
 const LEGAL_LINKS = [
