@@ -7,10 +7,16 @@ import type {
   DetectionSource,
   ExampleId,
   ItemCategory,
+  PrimaryCategory,
 } from "@/types";
-import { familyOf } from "@/lib/itemFamily";
 import { nonMaxSuppression } from "@/lib/boundingBoxNms";
-import { buildSearchQuery, colorNameFromHex } from "@/lib/searchQuery";
+import { colorNameFromHex } from "@/lib/searchQueryColors";
+import { buildExactMatchQuery } from "@/lib/searchQueryBuilder";
+import {
+  familyFromPrimary,
+  passesCategoryGuard,
+  primaryCategoryOf,
+} from "@/lib/primaryCategory";
 import {
   MOCK_SCENARIOS,
   findProductsForLabel,
@@ -22,6 +28,7 @@ import { ContextDevService } from "@/services/contextDevService";
 import {
   ContextDevProductProvider,
   MockProductProvider,
+  sanitizeDetectedItem,
   type ProductProvider,
 } from "@/services/productProvider";
 
@@ -179,7 +186,7 @@ export class MockVisualSearchService implements VisualSearchService {
     const scenario = MOCK_SCENARIOS[scenarioKey] ?? MOCK_SCENARIOS.generic;
 
     return makeResult(
-      hydrateItems(scenario),
+      hydrateItems(scenario).map(sanitizeDetectedItem),
       this.source,
       startedAt,
       input.imageBase64.slice(0, 256),
@@ -210,6 +217,11 @@ interface VisionWebEntity {
   score?: number;
 }
 
+interface VisionWebImage {
+  url?: string;
+  score?: number;
+}
+
 interface VisionColorInfo {
   color?: { red?: number; green?: number; blue?: number };
   pixelFraction?: number;
@@ -219,7 +231,11 @@ interface VisionColorInfo {
 interface VisionAnnotateResponse {
   responses?: Array<{
     localizedObjectAnnotations?: VisionLocalizedObject[];
-    webDetection?: { webEntities?: VisionWebEntity[] };
+    webDetection?: {
+      webEntities?: VisionWebEntity[];
+      visuallySimilarImages?: VisionWebImage[];
+      bestGuessLabels?: Array<{ label?: string }>;
+    };
     imagePropertiesAnnotation?: {
       dominantColors?: { colors?: VisionColorInfo[] };
     };
@@ -321,15 +337,20 @@ export class GoogleVisionSearchService implements VisualSearchService {
     );
 
     /**
-     * Web entities give us fashion-savvy phrasing ("biker jacket") that object
-     * localisation alone lacks ("Outerwear"). We pair the highest-scoring
-     * entity that shares a category with each detected object.
+     * WEB_DETECTION is the Lens-style signal: webEntities give fashion-savvy
+     * phrasing ("biker jacket", "taba sandalet") and bestGuessLabels / visually
+     * similar image scores reinforce which entity to pair with each box.
      */
     const webEntities = (annotation?.webDetection?.webEntities ?? [])
       .filter((entity): entity is Required<VisionWebEntity> =>
         Boolean(entity.description && entity.score),
       )
       .sort((a, b) => b.score - a.score);
+
+    const bestGuess =
+      annotation?.webDetection?.bestGuessLabels
+        ?.map((entry) => entry.label?.trim())
+        .filter((label): label is string => Boolean(label)) ?? [];
 
     /**
      * First pass: filter to shoppable, high-confidence boxes. Vision often
@@ -341,6 +362,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
       score: number;
       boundingBox: BoundingBox;
       category: ItemCategory;
+      primaryCategory: PrimaryCategory;
     };
 
     const rawCandidates: VisionCandidate[] = [];
@@ -358,7 +380,16 @@ export class GoogleVisionSearchService implements VisualSearchService {
       const boundingBox = toBoundingBox(object.boundingPoly?.normalizedVertices);
       if (!boundingBox) continue;
 
-      rawCandidates.push({ name, score, boundingBox, category });
+      const primary = primaryCategoryOf(name);
+      if (primary === "UNKNOWN") continue;
+
+      rawCandidates.push({
+        name,
+        score,
+        boundingBox,
+        category,
+        primaryCategory: primary,
+      });
     }
 
     const candidates = nonMaxSuppression(rawCandidates, {
@@ -371,60 +402,89 @@ export class GoogleVisionSearchService implements VisualSearchService {
     const usedEntities = new Set<string>();
 
     for (const object of candidates) {
-      const entity = webEntities.find(
-        (candidate) =>
-          !usedEntities.has(candidate.description) &&
-          categorizeLabel(candidate.description) === object.category,
-      );
+      // Prefer a WEB_DETECTION entity that agrees with the locked primary.
+      const entity =
+        webEntities.find((candidate) => {
+          if (usedEntities.has(candidate.description)) return false;
+          return primaryCategoryOf(candidate.description) === object.primaryCategory;
+        }) ??
+        webEntities.find((candidate) => {
+          if (usedEntities.has(candidate.description)) return false;
+          return categorizeLabel(candidate.description) === object.category;
+        });
 
       if (entity) usedEntities.add(entity.description);
 
-      // Vision gives three weak signals; combined they make a query a shopper
-      // would actually type. "Cosmetics" alone is useless, "Kırmızı Mat Ruj"
-      // is not.
-      const phrase = entity?.description;
+      const phrase =
+        entity?.description ??
+        bestGuess.find((guess) => primaryCategoryOf(guess) === object.primaryCategory) ??
+        undefined;
+
       const colorName = colorNameFromHex(dominantHex);
       const label = [colorName, phrase ?? object.name].filter(Boolean).join(" ");
-      const searchQuery = buildSearchQuery({
+
+      // Stage 1 query shape — colour + WEB_DETECTION style + locked category.
+      const searchQuery = buildExactMatchQuery({
+        primaryCategory: object.primaryCategory,
         itemType: object.name,
-        label: phrase,
+        webEntity: phrase,
+        label,
         colorHex: dominantHex,
+        colorName,
       });
 
       /*
-       * Family comes from Vision's object class, which is the reliable signal
-       * for what kind of garment this is; the descriptive phrase and the query
-       * only pick the best row *within* that family. The chosen rows then get
-       * their storefront search repointed at this detection, so the link lands
-       * on what the user actually pointed at rather than on the catalogue
-       * stand-in's own title.
+       * Catalogue fallback is gated by the locked PrimaryCategory → ItemFamily
+       * mapping. Cards that fail the category guard are dropped before the
+       * DetectedItem is assembled.
        */
       const { exactMatch, alternatives } = findProductsForLabel(
         `${phrase ?? object.name} ${searchQuery}`,
         object.category,
-        familyOf(object.name),
+        familyFromPrimary(object.primaryCategory),
       );
 
-      items.push({
-        id: `gv-${items.length}-${object.name.toLowerCase().replace(/\s+/g, "-")}`,
-        label,
-        itemType: object.name,
-        category: object.category,
-        attributes: [colorName, object.name].filter(Boolean).join(" • "),
-        description:
-          `Görselde "${object.name}" olarak tespit edildi ` +
-          `(%${Math.round(object.score * 100)} güven). ` +
-          `Arama sorgusu: "${searchQuery}".`,
-        confidence: object.score,
-        boundingBox: object.boundingBox,
-        colorHex: dominantHex,
-        exactMatch: exactMatch
-          ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery))
-          : null,
-        alternatives: alternatives.map((product) =>
-          hydrateProduct(retargetSearchQuery(product, searchQuery)),
-        ),
-      });
+      const hydratedExact = exactMatch
+        ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery))
+        : null;
+      const hydratedAlts = alternatives
+        .map((product) => hydrateProduct(retargetSearchQuery(product, searchQuery)))
+        .filter((product) =>
+          passesCategoryGuard(object.primaryCategory, {
+            title: product.title,
+            productUrl: product.productUrl,
+            brand: product.brand,
+          }),
+        );
+
+      items.push(
+        sanitizeDetectedItem({
+          id: `gv-${items.length}-${object.name.toLowerCase().replace(/\s+/g, "-")}`,
+          label,
+          itemType: object.name,
+          category: object.category,
+          primaryCategory: object.primaryCategory,
+          attributes: [colorName, object.name].filter(Boolean).join(" • "),
+          description:
+            `Görselde "${object.name}" olarak tespit edildi ` +
+            `(%${Math.round(object.score * 100)} güven, ${object.primaryCategory}). ` +
+            `Arama sorgusu: "${searchQuery}".`,
+          confidence: object.score,
+          boundingBox: object.boundingBox,
+          colorHex: dominantHex,
+          webEntity: phrase,
+          exactMatch:
+            hydratedExact &&
+            passesCategoryGuard(object.primaryCategory, {
+              title: hydratedExact.title,
+              productUrl: hydratedExact.productUrl,
+              brand: hydratedExact.brand,
+            })
+              ? hydratedExact
+              : null,
+          alternatives: hydratedAlts,
+        }),
+      );
     }
 
     return makeResult(items, this.source, startedAt, input.imageBase64.slice(0, 256));

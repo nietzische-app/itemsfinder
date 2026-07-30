@@ -1,5 +1,6 @@
 import type { DetectedItem, ExampleId, ProductMatch } from "@/types";
 import { familyOf, normalizeTr, tokenize, type ItemFamily } from "@/lib/itemFamily";
+import { passesCategoryGuard, primaryCategoryOf } from "@/lib/primaryCategory";
 import { showcaseBox } from "@/lib/showcase";
 import { buildMerchantSearchUrl } from "@/services/merchantSearch";
 import {
@@ -31,9 +32,14 @@ export type CatalogProduct = Omit<
   searchQuery: string;
 };
 
-export type CatalogItem = Omit<DetectedItem, "exactMatch" | "alternatives"> & {
+export type CatalogItem = Omit<
+  DetectedItem,
+  "exactMatch" | "alternatives" | "primaryCategory" | "webEntity"
+> & {
   exactMatch: CatalogProduct | null;
   alternatives: CatalogProduct[];
+  /** Optional override; otherwise derived from itemType + label at hydrate time. */
+  primaryCategory?: DetectedItem["primaryCategory"];
 };
 
 /**
@@ -2385,11 +2391,35 @@ export function hydrateProduct(product: CatalogProduct): ProductMatch {
   };
 }
 
-/** Hydrates a whole scenario into UI-ready detections. */
+/** Hydrates a whole scenario into UI-ready detections with category locking. */
 export function hydrateItems(items: CatalogItem[]): DetectedItem[] {
-  return items.map((item) => ({
-    ...item,
-    exactMatch: item.exactMatch ? hydrateProduct(item.exactMatch) : null,
-    alternatives: item.alternatives.map(hydrateProduct),
-  }));
+  return items.map((item) => {
+    const primary =
+      item.primaryCategory ??
+      primaryCategoryOf(`${item.itemType} ${item.label} ${item.attributes}`);
+
+    const exactMatch = item.exactMatch ? hydrateProduct(item.exactMatch) : null;
+    const alternatives = item.alternatives.map(hydrateProduct);
+
+    return {
+      ...item,
+      primaryCategory: primary,
+      exactMatch:
+        exactMatch &&
+        passesCategoryGuard(primary, {
+          title: exactMatch.title,
+          productUrl: exactMatch.productUrl,
+          brand: exactMatch.brand,
+        })
+          ? exactMatch
+          : null,
+      alternatives: alternatives.filter((product) =>
+        passesCategoryGuard(primary, {
+          title: product.title,
+          productUrl: product.productUrl,
+          brand: product.brand,
+        }),
+      ),
+    };
+  });
 }

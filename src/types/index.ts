@@ -12,6 +12,20 @@
 export type ItemCategory = "clothing" | "beauty";
 
 /**
+ * Locked primary category for a detection. Set once by Vision and enforced
+ * against every product card — see `lib/primaryCategory.ts`.
+ */
+export type PrimaryCategory =
+  | "FOOTWEAR"
+  | "OUTERWEAR"
+  | "TOPS"
+  | "BOTTOMS"
+  | "DRESS"
+  | "BEAUTY"
+  | "ACCESSORIES"
+  | "UNKNOWN";
+
+/**
  * Retailers we recognise for badges, search fallbacks and affiliate tags.
  * Live search itself is web-wide — unknown shops still surface as `Other`.
  */
@@ -104,6 +118,11 @@ export interface DetectedItem {
   /** Coarse type used for chips and copy, e.g. "Jacket", "Lipstick". */
   itemType: string;
   category: ItemCategory;
+  /**
+   * Non-negotiable primary category locked at detection time. Every product
+   * match must share this tag or it is discarded before reaching the UI.
+   */
+  primaryCategory: PrimaryCategory;
   /** Short attribute line for the compact panel card, e.g. "Matte Grey • Heavyweight". */
   attributes: string;
   description: string;
@@ -112,6 +131,11 @@ export interface DetectedItem {
   boundingBox: BoundingBox;
   /** Dominant colour of the region, used for the swatch dot. */
   colorHex: string;
+  /**
+   * Best WEB_DETECTION entity for this region, when available. Fed into the
+   * Stage 1 exact-match query so brand/style phrasing survives into search.
+   */
+  webEntity?: string;
   /** Highest-confidence match; null when nothing crossed the threshold. */
   exactMatch: ProductMatch | null;
   /** Cheaper look-alikes, ordered by price ascending. */
