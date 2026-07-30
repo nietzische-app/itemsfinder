@@ -370,11 +370,24 @@ yapılacak iş.
 maske kalitesini 14 parçada değerlendirmek yine aynı hataya düşmek olur. 2.1a bu
 sırayı bozmuyor, çünkü kazancı zaten var olan bir metrikte ve bozulan yok.
 
-**Sıradaki ölçülebilir adım:** aynı filtreyi `visualDescriptor`'a bağlamak.
-Betimleyici de histogramını dikdörtgenden alıyor, yani aynı problem orada da var
-— ama görsel erişim metriğinde şu an kalan iki sapma anlamsal (siyah body, aynı
-ışıktaki koyu denime yeniliyor), bu yüzden kazanç kesin değil ve ölçülmeden
-bağlanmamalı.
+**Betimleyiciye bağlamak ölçüldü ve reddedildi.** Bu belge "piksel seviyesinde bir
+maske … betimleyicinin en büyük zaafını da tek hamlede çözer" diyordu; ölçüm
+tersini söyledi:
+
+```
+görsel erişim   filtresiz 12/14   filtreli 10/14
+```
+
+Piksel atmak iki histogramı da seyreltiyor ve bunu **asimetrik** yapıyor — sıkı
+kırpım ile gevşek kırpım farklı oranlarda kaybediyor, yani aynı giysinin iki
+görüntüsü birbirinden uzaklaşıyor. `describeImage` seçeneği duruyor ama boru
+hattı kullanmıyor.
+
+Dürüstlük payı: bu test aynı fotoğrafın iki kırpımını karşılaştırıyor, yani ortak
+fon aslında **ortak sinyal** — bir mağazanın beyaz stüdyo çekimine karşı olmazdı.
+Yani ölçüm filtrenin aleyhine yanlı. 0.3 gerçek ürün fotoğraflarını getirdiğinde
+ya da 1.1 seti büyüttüğünde tekrar ölçülmeli. O zamana kadar ölçülmüş cevap
+"kapalı".
 
 ### 2.2 Modaya özel dedektör
 

@@ -2,6 +2,7 @@ import "server-only";
 
 import { type Sharp } from "sharp";
 
+import { KEEP_ALL, type ForegroundFilter } from "@/services/foreground";
 import { openImage } from "@/services/imageDecode";
 
 import type { BoundingBox } from "@/types";
@@ -97,6 +98,24 @@ export interface DescribeOptions {
    * fashion matches — is measured on the garment.
    */
   exclude?: BoundingBox[];
+  /**
+   * Per-pixel foreground test — see `services/foreground.ts`.
+   *
+   * **Deliberately not enabled by the pipeline.** The roadmap predicted that a mask
+   * would fix the descriptor as well as the colour, and measurement said otherwise:
+   * retrieval on the eval set goes 12/14 -> 10/14 with it on. Removing pixels
+   * thins both histograms and does it *asymmetrically* — the tight crop and the
+   * loose one lose different proportions — so two views of the same garment end up
+   * further apart than they started.
+   *
+   * The option stays because it is the subject of that measurement, and because the
+   * measurement is biased against it: this test compares two crops of the same
+   * photograph, where the shared backdrop is shared *signal*, which it would not be
+   * against a retailer's white-studio shot. Worth re-running when 0.3 puts real
+   * product photographs in the catalogue, or when 1.1 grows the set. Until one of
+   * those says otherwise, off is the measured answer.
+   */
+  foreground?: ForegroundFilter;
 }
 
 export async function describeImage(
@@ -142,7 +161,7 @@ export async function describeImage(
       );
 
     const [histogram, hash] = await Promise.all([
-      buildHistogram(centre(), masks),
+      buildHistogram(centre(), masks, options.foreground ?? KEEP_ALL),
       buildHash(centre()),
     ]);
 
@@ -156,6 +175,7 @@ export async function describeImage(
 async function buildHistogram(
   pipeline: Sharp,
   masks: BoundingBox[] = [],
+  foreground: ForegroundFilter = KEEP_ALL,
 ): Promise<number[] | null> {
   const { data, info } = await pipeline
     .resize(HISTOGRAM_EDGE, HISTOGRAM_EDGE, { fit: "fill" })
@@ -165,7 +185,7 @@ async function buildHistogram(
 
   if (info.channels < 3) return null;
 
-  /** One pass over the sample, optionally skipping masked pixels. */
+  /** One pass over the sample, optionally skipping masked and background pixels. */
   const collect = (skipMasked: boolean) => {
     const bins = new Array<number>(HISTOGRAM_SIZE).fill(0);
     let counted = 0;
@@ -188,6 +208,8 @@ async function buildHistogram(
         );
         if (occluded) continue;
       }
+
+      if (skipMasked && !foreground.keep(data[i]!, data[i + 1]!, data[i + 2]!)) continue;
 
       const r = data[i]! / 255;
       const g = data[i + 1]! / 255;
