@@ -1,4 +1,5 @@
 import "server-only";
+import { productUrlOrEmpty } from "@/lib/productUrl";
 
 import ContextDev from "context.dev";
 
@@ -343,13 +344,25 @@ function normalizeProduct(
   const price = toPositiveNumber(raw.price);
   if (price === null) return null;
 
-  // An extracted product URL is only trusted if it stays on the page's host —
-  // otherwise a scraped ad or cross-sell could redirect our CTA off-site.
+  /*
+   * An extracted product URL is trusted only if it stays on the page's host —
+   * otherwise a scraped ad or cross-sell could redirect our CTA off-site — and
+   * only if it is a product detail page.
+   *
+   * `pageUrl` is the fallback because it is the page extraction actually ran on,
+   * but it gets the same treatment: search scoped to a retailer still lands on
+   * listing pages sometimes, and a listing is not a product. Anything that fails
+   * both checks yields "", and the caller drops the candidate rather than
+   * shipping a link to a results page.
+   */
   const extractedUrl = typeof raw.productUrl === "string" ? raw.productUrl : "";
-  const productUrl =
+  const onHost =
     isHttpUrl(extractedUrl) && safeHostname(extractedUrl) === host
       ? extractedUrl
-      : pageUrl;
+      : "";
+
+  const productUrl =
+    productUrlOrEmpty(onHost) || productUrlOrEmpty(pageUrl);
 
   const currency =
     typeof raw.currency === "string" && /^[A-Za-z]{3}$/.test(raw.currency.trim())

@@ -71,11 +71,13 @@ export interface ProductMatch {
   /** Hostname of `productUrl`, used for affiliate and brand lookups. */
   merchantDomain: string;
   /**
-   * Whether `productUrl` is a specific product page or a storefront search.
-   * The CTA wording follows this — promising "go to product" and landing on a
-   * results page is a small lie the UI should not tell.
+   * Always a product detail page. The union is deliberately a single member:
+   * storefront search URLs are banned (`src/lib/productUrl.ts`), so any code
+   * that tries to emit a "search" kind fails to compile rather than shipping a
+   * CTA that promises a product and lands on a results page. An unverifiable
+   * link yields `productUrl: ""` instead.
    */
-  urlKind: "product" | "search";
+  urlKind: "product";
   /** True when this row came from live inventory rather than the catalogue. */
   isLive: boolean;
   /** Retailer branding, populated by the Brand API in live mode. */

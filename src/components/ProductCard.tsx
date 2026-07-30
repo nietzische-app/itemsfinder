@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRight, BadgeCheck, Bookmark, Search, TrendingDown } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Bookmark, TrendingDown } from "lucide-react";
 
 import { ProductImage } from "@/components/ProductImage";
 import { Badge } from "@/components/ui/badge";
@@ -192,29 +192,25 @@ export function ProductCard({
             {product.productUrl ? (
               <Button asChild size="sm">
                 {/* Affiliate links are third-party: never leak the opener. */}
+                {/* Every link that reaches here is a verified product detail
+                    page, so the label can promise exactly that. */}
                 <a
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer sponsored nofollow"
                 >
-                  {/* A storefront search is not a product page — the label says
-                      which one the user is about to land on. */}
-                  {product.urlKind === "search" ? (
-                    <>
-                      <Search strokeWidth={1.75} />
-                      Mağazada bul
-                    </>
-                  ) : (
-                    <>
-                      {isHero ? "Ürüne git" : "İncele"}
-                      <ArrowUpRight strokeWidth={1.5} />
-                    </>
-                  )}
+                  {isHero ? "Ürüne git" : "İncele"}
+                  <ArrowUpRight strokeWidth={1.5} />
                 </a>
               </Button>
             ) : (
-              <span className="rounded-full bg-surface-container px-3 py-1.5 text-label-sm uppercase text-outline">
-                Bağlantı yok
+              // No verified product page for this row. Better an inert card than
+              // a CTA that lands on a search-results page.
+              <span
+                className="rounded-full bg-surface-container px-3 py-1.5 text-label-sm uppercase text-outline"
+                title="Bu ürün için doğrulanmış ürün sayfası bağlantısı yok"
+              >
+                Bağlantı doğrulanmadı
               </span>
             )}
           </div>

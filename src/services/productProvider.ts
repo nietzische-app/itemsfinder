@@ -1,6 +1,7 @@
 import "server-only";
 
 import { ContextDevService, type LiveProductCard } from "@/services/contextDevService";
+import { productUrlOrEmpty } from "@/lib/productUrl";
 import { buildSearchQuery } from "@/lib/searchQuery";
 import { hydrateProduct } from "@/services/mockCatalog";
 import type {
@@ -244,22 +245,17 @@ interface ProductMatchOverrides {
   brand: BrandMetadata | null;
 }
 
-/** Absolute http(s) only — never hand the CTA anything else. */
-function isSafeHttpUrl(value: string): boolean {
-  try {
-    const { protocol } = new URL(value);
-    return protocol === "http:" || protocol === "https:";
-  } catch {
-    return false;
-  }
-}
 
 function toProductMatch(
   card: LiveProductCard,
   overrides: ProductMatchOverrides,
 ): ProductMatch {
   const merchant = merchantForDomain(card.merchantDomain);
-  const isUsableUrl = isSafeHttpUrl(card.productUrl);
+  // Product detail page or no link at all — the extractor already applies this,
+  // and applying it again here means no future caller can bypass the ban by
+  // constructing a LiveProductCard directly.
+  const productUrl = productUrlOrEmpty(card.productUrl);
+  const isUsableUrl = productUrl.length > 0;
 
   return {
     id: overrides.id,
@@ -268,7 +264,7 @@ function toProductMatch(
     merchant,
     price: card.price,
     currency: card.currency,
-    productUrl: isUsableUrl ? card.productUrl : "",
+    productUrl,
     // Live rows are real product pages, not storefront searches.
     urlKind: "product",
     // Live listings without an image fall back to the neutral placeholder the

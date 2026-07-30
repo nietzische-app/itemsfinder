@@ -1,7 +1,9 @@
 import type { DetectedItem, ExampleId, ProductMatch } from "@/types";
 import { familyOf, normalizeTr, tokenize, type ItemFamily } from "@/lib/itemFamily";
 import { showcaseBox } from "@/lib/showcase";
-import { buildMerchantSearchUrl } from "@/services/merchantSearch";
+import { merchantHost } from "@/services/merchantSearch";
+import { verifiedPdpUrl } from "@/data/verifiedProductUrls";
+import { productUrlOrEmpty } from "@/lib/productUrl";
 
 
 /**
@@ -1450,7 +1452,7 @@ const pinkOutfitItems: CatalogItem[] = [
     description:
       "Yüksek yakalı, tam boy fermuarlı, ince örgü pastel pembe triko ceket.",
     confidence: 0.96,
-    boundingBox: showcaseBox("pink-outfit", "showcase-top"),
+    boundingBox: showcaseBox("pink-outfit", "po-cardigan"),
     colorHex: "#f0a0b4",
     exactMatch: {
       id: "po-cardigan-exact",
@@ -1517,7 +1519,7 @@ const pinkOutfitItems: CatalogItem[] = [
     attributes: "Mat Siyah • Deri Görünümlü",
     description: "Yüksek bel, düz kesim, mat deri görünümlü siyah mini şort.",
     confidence: 0.93,
-    boundingBox: showcaseBox("pink-outfit", "showcase-bottom"),
+    boundingBox: showcaseBox("pink-outfit", "po-shorts"),
     colorHex: "#16181c",
     exactMatch: {
       id: "po-shorts-exact",
@@ -1585,7 +1587,7 @@ const pinkOutfitItems: CatalogItem[] = [
     description:
       "Bilek yükseklikli, siyah beyaz panelli, retro basketbol siluetli deri sneaker.",
     confidence: 0.95,
-    boundingBox: showcaseBox("pink-outfit", "showcase-shoes"),
+    boundingBox: showcaseBox("pink-outfit", "po-sneakers"),
     colorHex: "#1b1b1b",
     exactMatch: {
       id: "po-sneakers-exact",
@@ -1659,7 +1661,7 @@ const bikerLookItems: CatalogItem[] = [
     description:
       "Asimetrik fermuarlı, devrik yakalı, omuzdan sarkan mat siyah deri biker ceket.",
     confidence: 0.95,
-    boundingBox: showcaseBox("biker-look", "biker-jacket"),
+    boundingBox: showcaseBox("biker-look", "bk-jacket"),
     colorHex: "#1a1a1e",
     exactMatch: {
       id: "bk-jacket-exact",
@@ -1713,7 +1715,7 @@ const bikerLookItems: CatalogItem[] = [
     attributes: "Siyah • Kalp Yaka",
     description: "Kalp yakalı, ince askılı, vücuda oturan siyah body.",
     confidence: 0.9,
-    boundingBox: showcaseBox("biker-look", "biker-body"),
+    boundingBox: showcaseBox("biker-look", "bk-body"),
     colorHex: "#17171a",
     exactMatch: {
       id: "bk-body-exact",
@@ -1767,7 +1769,7 @@ const bikerLookItems: CatalogItem[] = [
     attributes: "Koyu İndigo • Dar Kesim",
     description: "Yüksek bel, koyu indigo yıkamalı, dar kesim streç jean.",
     confidence: 0.94,
-    boundingBox: showcaseBox("biker-look", "biker-jeans"),
+    boundingBox: showcaseBox("biker-look", "bk-jeans"),
     colorHex: "#2b4468",
     exactMatch: {
       id: "bk-jeans-exact",
@@ -1821,7 +1823,7 @@ const bikerLookItems: CatalogItem[] = [
     attributes: "İnce Metal • Dikdörtgen",
     description: "İnce metal çerçeveli, dikdörtgen formlu güneş gözlüğü.",
     confidence: 0.82,
-    boundingBox: showcaseBox("biker-look", "biker-sunglasses"),
+    boundingBox: showcaseBox("biker-look", "bk-sunglasses"),
     colorHex: "#8a8a90",
     exactMatch: {
       id: "bk-sunglasses-exact",
@@ -1867,7 +1869,7 @@ const longCoatItems: CatalogItem[] = [
     attributes: "Siyah • Uzun Boy Kuşaklı",
     description: "Diz altı boyda, kuşaklı, düşük omuzlu siyah kaban.",
     confidence: 0.94,
-    boundingBox: showcaseBox("long-coat", "coat-outer"),
+    boundingBox: showcaseBox("long-coat", "lc-coat"),
     colorHex: "#14141a",
     exactMatch: {
       id: "lc-coat-exact",
@@ -1921,7 +1923,7 @@ const longCoatItems: CatalogItem[] = [
     attributes: "Kırık Beyaz • Desenli Örgü",
     description: "Kırık beyaz zemin üzerine kontrast desenli örgü bere.",
     confidence: 0.88,
-    boundingBox: showcaseBox("long-coat", "coat-beanie"),
+    boundingBox: showcaseBox("long-coat", "lc-beanie"),
     colorHex: "#d8d6cf",
     exactMatch: {
       id: "lc-beanie-exact",
@@ -1962,7 +1964,7 @@ const longCoatItems: CatalogItem[] = [
     attributes: "Orta Mavi • Yırtık Detay",
     description: "Bol kesim, dizleri yırtık, katlı paçalı orta mavi boyfriend jean.",
     confidence: 0.93,
-    boundingBox: showcaseBox("long-coat", "coat-jeans"),
+    boundingBox: showcaseBox("long-coat", "lc-jeans"),
     colorHex: "#5c7ea6",
     exactMatch: {
       id: "lc-jeans-exact",
@@ -2016,7 +2018,7 @@ const longCoatItems: CatalogItem[] = [
     attributes: "Siyah • Kalın Topuk",
     description: "Bilekten bantlı, kalın blok topuklu siyah sandalet.",
     confidence: 0.91,
-    boundingBox: showcaseBox("long-coat", "coat-sandals"),
+    boundingBox: showcaseBox("long-coat", "lc-sandals"),
     colorHex: "#17171a",
     exactMatch: {
       id: "lc-sandals-exact",
@@ -2061,7 +2063,7 @@ const blackBlazerItems: CatalogItem[] = [
     attributes: "Siyah • Oversize Tek Düğme",
     description: "Düşük omuzlu, tek düğmeli, geniş yakalı oversize siyah blazer.",
     confidence: 0.96,
-    boundingBox: showcaseBox("black-blazer", "blazer-jacket"),
+    boundingBox: showcaseBox("black-blazer", "bb-blazer"),
     colorHex: "#16161b",
     exactMatch: {
       id: "bb-blazer-exact",
@@ -2115,7 +2117,7 @@ const blackBlazerItems: CatalogItem[] = [
     attributes: "Klasik Kırmızı • Mat",
     description: "Yoğun pigmentli, uzun kalıcı, klasik kırmızı mat ruj.",
     confidence: 0.89,
-    boundingBox: showcaseBox("black-blazer", "blazer-lip"),
+    boundingBox: showcaseBox("black-blazer", "bb-lip"),
     colorHex: "#c62435",
     exactMatch: {
       id: "bb-lip-exact",
@@ -2169,7 +2171,7 @@ const blackBlazerItems: CatalogItem[] = [
     attributes: "Siyah • İnce Bant Blok Topuk",
     description: "Bilekten ince bantlı, blok topuklu siyah sandalet.",
     confidence: 0.92,
-    boundingBox: showcaseBox("black-blazer", "blazer-heels"),
+    boundingBox: showcaseBox("black-blazer", "bb-heels"),
     colorHex: "#17171a",
     exactMatch: {
       id: "bb-heels-exact",
@@ -2328,24 +2330,33 @@ export function retargetSearchQuery(
  */
 export function hydrateProduct(product: CatalogProduct): ProductMatch {
   const { searchQuery, ...rest } = product;
-  const productUrl = buildMerchantSearchUrl(product.merchant, searchQuery);
 
-  let merchantDomain = "";
+  /*
+   * A verified PDP or nothing.
+   *
+   * `searchQuery` is retained on the catalogue entry because the live path uses
+   * it as a *text query* for Context.dev — but it is never turned into a URL.
+   * That is what used to send shoppers to a results page, and it is banned:
+   * `productUrlOrEmpty` drops anything that is not a product detail page, so a
+   * bad entry here degrades to "no link" instead of a bad link.
+   */
+  const productUrl = productUrlOrEmpty(verifiedPdpUrl(product.id));
+
+  let merchantDomain = merchantHost(product.merchant);
   if (productUrl) {
     try {
       merchantDomain = new URL(productUrl).hostname.replace(/^www\./, "");
     } catch {
-      // Builders emit absolute URLs; an unparseable one only loses branding.
+      // Validated on import, so this is unreachable; keep the merchant default.
     }
   }
 
   return {
     ...rest,
-    // A merchant with no search endpoint would leave the CTA dead, so the card
-    // is marked out of stock rather than shipped with nowhere to go.
-    productUrl: productUrl ?? "",
-    urlKind: "search",
-    inStock: productUrl ? product.inStock : false,
+    productUrl,
+    // Only ever "product": the search kind no longer exists as an outcome.
+    urlKind: "product",
+    inStock: product.inStock,
     merchantDomain,
     isLive: false,
   };

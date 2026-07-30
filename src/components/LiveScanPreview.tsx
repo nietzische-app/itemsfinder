@@ -3,25 +3,24 @@
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
+  ArrowUpRight,
   BadgeCheck,
   Loader2,
   Pause,
   Play,
   ScanLine,
-  Search,
   Sparkles,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { exampleToDataUrl } from "@/lib/imageSession";
 import { cn } from "@/lib/utils";
-import {
-  SHOWCASE_FALLBACK,
-  SHOWCASE_INTERVAL_MS,
-  SHOWCASE_LOOKS,
-  type ShowcaseItem,
-} from "@/lib/showcase";
+import { SHOWCASE_FALLBACK, SHOWCASE_INTERVAL_MS } from "@/lib/showcase";
 import { merchantColor, merchantInitials } from "@/services/merchantSearch";
+import type {
+  ShowcasePreviewItem,
+  ShowcasePreviewLook,
+} from "@/services/showcasePreview";
 import type { UploadedImage } from "@/types";
 import { buildAffiliateUrl, formatPrice } from "@/utils/affiliate";
 
@@ -40,8 +39,14 @@ import { buildAffiliateUrl, formatPrice } from "@/utils/affiliate";
  * reading the card should not have it swapped out from under them.
  */
 export function LiveScanPreview({
+  looks,
   onOpenScan,
 }: {
+  /**
+   * Built on the server from the demo catalogue (`buildShowcasePreview`), so
+   * these are the exact rows `/analyze` returns for the same look.
+   */
+  looks: ShowcasePreviewLook[];
   /**
    * Runs the selected look through the real pipeline, so the demo is the
    * product rather than a second mock of it.
@@ -58,7 +63,7 @@ export function LiveScanPreview({
   const [openError, setOpenError] = useState<string | null>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const look = SHOWCASE_LOOKS[lookIndex]!;
+  const look = looks[lookIndex]!;
   const active = look.items[itemIndex] ?? look.items[0]!;
   const imageSrc = imageFailed ? SHOWCASE_FALLBACK.src : look.src;
 
@@ -236,7 +241,7 @@ export function LiveScanPreview({
           {/* Look switcher. Only the active look's photo is mounted, so the
               other three cost nothing until they are picked. */}
           <div className="mt-3 flex min-w-0 flex-wrap items-center gap-1.5">
-            {SHOWCASE_LOOKS.map((entry, index) => (
+            {looks.map((entry, index) => (
               <button
                 key={entry.id}
                 type="button"
@@ -292,53 +297,13 @@ export function LiveScanPreview({
                 </p>
               </div>
 
-              <div className="border-t border-outline-variant/60 pt-3">
-                <div className="flex min-w-0 items-center gap-2">
-                  {/* Merchant tag in the retailer's own brand colour. */}
-                  <span className="flex min-w-0 items-center gap-1.5 rounded-full border border-outline-variant/70 px-2 py-0.5 text-[11px] font-semibold uppercase text-on-surface-variant">
-                    <span
-                      aria-hidden="true"
-                      className="flex h-4 shrink-0 items-center justify-center rounded-[4px] px-1 text-[9px] font-bold leading-none text-white"
-                      style={{ backgroundColor: merchantColor(active.match.merchant) }}
-                    >
-                      {merchantInitials(active.match.merchant)}
-                    </span>
-                    <span className="truncate">{active.match.merchant}</span>
-                  </span>
-                  <span className="flex shrink-0 items-center gap-1 text-[11px] font-semibold text-secondary-deep">
-                    <BadgeCheck className="h-3.5 w-3.5" strokeWidth={2} />%
-                    {Math.round(active.match.similarity * 100)}
-                  </span>
-                </div>
-
-                <p className="mt-2 line-clamp-2 text-[14px] font-medium text-primary">
-                  {active.match.title}
+              {active.match ? (
+                <ProductBlock item={active} match={active.match} />
+              ) : (
+                <p className="border-t border-outline-variant/60 pt-3 text-[13px] text-outline">
+                  Bu parça için katalogda eşleşme yok.
                 </p>
-
-                <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
-                  <span className="font-display text-[20px] font-bold tracking-tight text-primary">
-                    {formatPrice(active.match.price, active.match.currency)}
-                  </span>
-                  {active.match.url ? (
-                    <Button asChild size="sm">
-                      <a
-                        href={buildAffiliateUrl(active.match.url, active.match.merchant, {
-                          subId: active.id,
-                        })}
-                        target="_blank"
-                        rel="noopener noreferrer sponsored nofollow"
-                      >
-                        <Search strokeWidth={1.75} />
-                        Mağazada bul
-                      </a>
-                    </Button>
-                  ) : null}
-                </div>
-
-                <p className="mt-2 text-[12px] text-outline">
-                  + {active.match.alternativeCount} uygun fiyatlı muadil bulundu
-                </p>
-              </div>
+              )}
             </div>
           </article>
 
@@ -408,8 +373,76 @@ export function LiveScanPreview({
   );
 }
 
+/**
+ * Matched product for the focused item.
+ *
+ * The CTA appears only when the catalogue has a verified product detail page for
+ * this row. Storefront search links are banned, so with no verified PDP the card
+ * shows the match and says the link is missing rather than sending someone to a
+ * results page and calling it "go to product".
+ */
+function ProductBlock({
+  item,
+  match,
+}: {
+  item: ShowcasePreviewItem;
+  match: NonNullable<ShowcasePreviewItem["match"]>;
+}) {
+  return (
+    <div className="border-t border-outline-variant/60 pt-3">
+      <div className="flex min-w-0 items-center gap-2">
+        {/* Merchant tag in the retailer's own brand colour. */}
+        <span className="flex min-w-0 items-center gap-1.5 rounded-full border border-outline-variant/70 px-2 py-0.5 text-[11px] font-semibold uppercase text-on-surface-variant">
+          <span
+            aria-hidden="true"
+            className="flex h-4 shrink-0 items-center justify-center rounded-[4px] px-1 text-[9px] font-bold leading-none text-white"
+            style={{ backgroundColor: merchantColor(match.merchant) }}
+          >
+            {merchantInitials(match.merchant)}
+          </span>
+          <span className="truncate">{match.merchant}</span>
+        </span>
+        <span className="flex shrink-0 items-center gap-1 text-[11px] font-semibold text-secondary-deep">
+          <BadgeCheck className="h-3.5 w-3.5" strokeWidth={2} />%
+          {Math.round(match.similarity * 100)}
+        </span>
+      </div>
+
+      <p className="mt-2 line-clamp-2 text-[14px] font-medium text-primary">
+        {match.title}
+      </p>
+
+      <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+        <span className="font-display text-[20px] font-bold tracking-tight text-primary">
+          {formatPrice(match.price, match.currency)}
+        </span>
+        {match.url ? (
+          <Button asChild size="sm">
+            <a
+              href={buildAffiliateUrl(match.url, match.merchant, { subId: item.id })}
+              target="_blank"
+              rel="noopener noreferrer sponsored nofollow"
+            >
+              Ürüne git
+              <ArrowUpRight strokeWidth={1.5} />
+            </a>
+          </Button>
+        ) : (
+          <span className="rounded-full bg-surface-container px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.04em] text-outline">
+            Bağlantı doğrulanmadı
+          </span>
+        )}
+      </div>
+
+      <p className="mt-2 text-[12px] text-outline">
+        + {match.alternativeCount} uygun fiyatlı muadil bulundu
+      </p>
+    </div>
+  );
+}
+
 /** Normalised box -> percentage offsets for the spotlight frame. */
-function boxStyle(item: ShowcaseItem) {
+function boxStyle(item: ShowcasePreviewItem) {
   return {
     left: `${item.box.x * 100}%`,
     top: `${item.box.y * 100}%`,

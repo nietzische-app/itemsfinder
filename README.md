@@ -178,34 +178,38 @@ enrich(result: DetectionResult, signal?: AbortSignal): Promise<DetectionResult>
 A provider must be *total*: a detection it cannot resolve keeps the products it
 arrived with, so the UI never loses a card.
 
-## Product links
 
-Catalogue rows store a `searchQuery`, not a URL, and `hydrateProduct()`
-resolves it against `src/services/merchantSearch.ts` into a real Turkish
-storefront search (`trendyol.com/sr?q=`, `amazon.com.tr/s?k=`,
-`zara.com/tr/tr/search?searchTerm=` …).
+## Product links: PDP or nothing
 
-This replaced hand-written product paths like `/dp/B08XYZ4321`, every one of
-which 404'd — an invented product id cannot resolve, and it rots the moment a
-retailer rotates its catalogue. A search always lands somewhere useful, and
-`ProductMatch.urlKind` records which kind of link it is so the CTA can say
-"Mağazada bul" rather than promising a product page it will not deliver.
+A product CTA navigates to a product detail page or it does not navigate at all.
+Storefront search URLs are **banned**, not de-prioritised — no
+`zara.com/search?searchTerm=`, no `trendyol.com/sr?q=`.
 
-Live rows from Context.dev are real product pages and are validated as absolute
-`http(s)` URLs before reaching the UI; a row we cannot link to is marked out of
-stock rather than shipped with a dead button.
+`src/lib/productUrl.ts` is the only place that decides, and everything that can
+put a link in front of a shopper routes through it: the Context.dev extractor,
+the live product provider and the demo catalogue. Search shapes are tested
+*before* PDP shapes, because `search-results.html?q=x` matches `.html` and would
+otherwise pass as a product page. `ProductMatch["urlKind"]` is a single-member
+union (`"product"`), so code trying to emit a search kind fails to compile.
 
-### Search precision
+An unverifiable link becomes `productUrl: ""` and the card renders **"Bağlantı
+doğrulanmadı"** instead of a CTA. That is deliberate: an inert card costs a
+shopper nothing, a CTA that lands on a results page costs them a tap and their
+trust.
 
-`buildSearchQuery()` in `src/lib/searchQuery.ts` combines Vision's three
-signals — dominant colour, the web-detection phrase and the object label — into
-the query a shopper would type. "Cosmetics" becomes "Kırmızı Mat Ruj". Colours
-are mapped to Turkish names by nearest RGB match, generic tokens are dropped,
-and duplicates are collapsed.
+### Filling in the demo links
 
-> Limitation worth knowing: `IMAGE_PROPERTIES` returns dominant colours for the
-> whole image, not per object, so every detection in one scan shares a colour
-> term. Per-object colour needs server-side cropping, which is not wired up.
+`src/data/verifiedProductUrls.ts` maps catalogue product ids to live PDP URLs and
+ships **empty**, so every demo CTA is currently inert. The URLs cannot be
+generated — a PDP path encodes a retailer's internal SKU (`-p-123456789`,
+`/dp/B0XXXXXXXX`), an invented id is a guaranteed 404, and verifying one means
+fetching it. Paste real URLs in and they light up; every entry is shape-validated
+on import, so a malformed or search-shaped link throws at startup rather than
+shipping.
+
+```bash
+npm run check:pdp     # lists every product still missing a link, exact matches first
+```
 
 ## Affiliate links
 

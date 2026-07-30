@@ -1,47 +1,33 @@
 import type { Merchant } from "@/types";
 
 /**
- * Real, working storefront search URLs.
+ * Retailer branding helpers.
  *
- * The catalogue used to carry invented product paths (`/dp/B08XYZ4321`,
- * `...-p04387042.html`) which every one of them 404s — a fabricated product id
- * cannot resolve. A search URL is honest about what it is and always lands the
- * user somewhere useful, so the demo catalogue points at these instead.
+ * This module used to build storefront *search* URLs as the catalogue's link
+ * fallback. Those are banned now — a product CTA goes to a product detail page
+ * or nowhere (`src/lib/productUrl.ts`) — so the builders are gone rather than
+ * left behind a flag someone could flip back on by accident. Product links come
+ * from `src/data/verifiedProductUrls.ts` in demo mode and from Context.dev
+ * extraction in live mode, both gated by `isDirectProductUrl`.
  *
- * Turkish storefronts, because the app is Turkish.
+ * Merchant *domains* still matter for affiliate tagging and brand lookups, so
+ * they stay here alongside the colours.
  */
-type SearchUrlBuilder = (query: string) => string;
 
-const SEARCH_URLS: Record<Merchant, SearchUrlBuilder | null> = {
-  Trendyol: (q) => `https://www.trendyol.com/sr?q=${q}`,
-  Amazon: (q) => `https://www.amazon.com.tr/s?k=${q}`,
-  Zara: (q) => `https://www.zara.com/tr/tr/search?searchTerm=${q}`,
-  Sephora: (q) => `https://www.sephora.com.tr/search?q=${q}`,
-  Mango: (q) => `https://shop.mango.com/tr/search?kw=${q}`,
-  "H&M": (q) => `https://www2.hm.com/tr_tr/search-results.html?q=${q}`,
-  ASOS: (q) => `https://www.asos.com/search/?q=${q}`,
-  // No storefront we can address — the caller keeps whatever URL it had.
-  Other: null,
+/** Canonical storefront host per merchant, used for domain-based lookups. */
+const MERCHANT_HOSTS: Record<Merchant, string> = {
+  Trendyol: "trendyol.com",
+  Amazon: "amazon.com.tr",
+  Zara: "zara.com",
+  Sephora: "sephora.com.tr",
+  Mango: "shop.mango.com",
+  "H&M": "www2.hm.com",
+  ASOS: "asos.com",
+  Other: "",
 };
 
-/**
- * Builds a storefront search URL for a query, or `null` when we have no search
- * endpoint for that merchant.
- */
-export function buildMerchantSearchUrl(
-  merchant: Merchant,
-  query: string,
-): string | null {
-  const build = SEARCH_URLS[merchant];
-  const trimmed = query.trim();
-  if (!build || !trimmed) return null;
-
-  return build(encodeURIComponent(trimmed));
-}
-
-/** True when we can produce a search URL for this merchant. */
-export function hasSearchUrl(merchant: Merchant): boolean {
-  return SEARCH_URLS[merchant] !== null;
+export function merchantHost(merchant: Merchant): string {
+  return MERCHANT_HOSTS[merchant];
 }
 
 /**

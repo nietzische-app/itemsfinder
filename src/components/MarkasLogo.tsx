@@ -89,7 +89,7 @@ export function MarkasMark({
 interface MarkasLogoProps {
   className?: string;
   /** Size of the mark; the wordmark scales alongside it. */
-  size?: "sm" | "md";
+  size?: "sm" | "header" | "md";
 }
 
 /**
@@ -98,17 +98,18 @@ interface MarkasLogoProps {
  * geometric weight of the mark.
  */
 export function MarkasLogo({ className, size = "md" }: MarkasLogoProps) {
+  const mark = MARK_SIZE[size];
+
   return (
-    <span className={cn("flex items-center gap-2.5", className)}>
-      {/* Header sizes sit well under the 48px threshold for the full mark. */}
-      <MarkasMark
-        variant="compact"
-        className={size === "sm" ? "h-7 w-7" : "h-9 w-9"}
-      />
+    <span className={cn("flex items-center", mark.gap, className)}>
+      {/* Every lockup size is under the ~48px threshold, so the mark uses the
+          compact variant: the tag's hole and string are sub-pixel here and only
+          smudge the silhouette. */}
+      <MarkasMark variant="compact" className={mark.icon} />
       <span
         className={cn(
           "font-display font-extrabold leading-none tracking-tight",
-          size === "sm" ? "text-[20px]" : "text-[26px] sm:text-[30px]",
+          mark.text,
         )}
       >
         MARKAS
@@ -116,3 +117,21 @@ export function MarkasLogo({ className, size = "md" }: MarkasLogoProps) {
     </span>
   );
 }
+
+/**
+ * Lockup scales.
+ *
+ * `header` is `sm` scaled up ~27% — 28px mark to 36px, 20px wordmark to 25px —
+ * which reads as the primary brand placement without crowding the 64px (mobile)
+ * / 72px (desktop) bar: 36px leaves 14px of breathing room above and below.
+ * The footer stays on `sm`, where the logo is a sign-off rather than the
+ * headline.
+ */
+const MARK_SIZE: Record<
+  NonNullable<MarkasLogoProps["size"]>,
+  { icon: string; text: string; gap: string }
+> = {
+  sm: { icon: "h-7 w-7", text: "text-[20px]", gap: "gap-2.5" },
+  header: { icon: "h-9 w-9", text: "text-[25px]", gap: "gap-3" },
+  md: { icon: "h-9 w-9", text: "text-[26px] sm:text-[30px]", gap: "gap-2.5" },
+};

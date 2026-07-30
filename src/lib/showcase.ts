@@ -1,54 +1,34 @@
-import { buildMerchantSearchUrl } from "@/services/merchantSearch";
-import type { BoundingBox, ExampleId, Merchant } from "@/types";
+import type { BoundingBox, ExampleId } from "@/types";
 
 /**
- * Data for the landing-page "Live Scan" showcase: four real street/studio looks,
- * each with hand-measured detection boxes.
+ * Geometry and asset metadata for the landing-page "Live Scan" showcase: four
+ * real looks with hand-measured detection boxes.
  *
- * Deliberately standalone rather than imported from `mockCatalog.ts`: the
- * catalogue is ~2000 lines and this runs in a client component on the landing
- * page, so pulling it in would ship the whole thing to every visitor for the
- * sake of a few cards. The catalogue reads its boxes back out of here (see
- * `showcaseBox`), so the two can never drift.
+ * This file holds **no product or label data**. Item ids here are the catalogue
+ * ids in `mockCatalog.ts`, and `showcasePreview.ts` joins the two, so the hero
+ * preview and `/analyze` render the same detections and the same products from
+ * one source. It used to carry its own copy of titles, prices and merchants;
+ * that is exactly how a preview drifts from what the scan actually returns.
  *
- * Prices and titles are illustrative, exactly like the rest of the demo data —
- * the card says so, so nobody reads them as live retailer prices.
+ * The catalogue reads its boxes back out of here via `showcaseBox`, so geometry
+ * also has a single definition.
  */
 
-export interface ShowcaseMatch {
-  title: string;
-  merchant: Merchant;
-  price: number;
-  currency: string;
-  /** Storefront search URL — a real, resolvable link, not an invented product id. */
-  url: string;
-  /** 0..1 visual similarity, shown as a percentage. */
-  similarity: number;
-  /** How many look-alikes the scan turned up for this item. */
-  alternativeCount: number;
-}
-
 export interface ShowcaseItem {
+  /** Matches the catalogue item's `id`, which is how the two are joined. */
   id: string;
-  /** Full detection label, e.g. "Pembe Fermuarlı Triko Ceket". */
-  label: string;
-  /** Coarse type for the eyebrow chip, e.g. "Ceket". */
-  itemType: string;
-  /** Attribute line under the title. */
-  attributes: string;
-  /** Dominant colour of the region — drives the swatch dot. */
-  colorHex: string;
-  /** 0..1 detector confidence. */
-  confidence: number;
   /**
    * Normalised (0..1) region, top-left origin, relative to the whole image.
    *
    * Measured off each photo at a known 600px width, so these are accurate to
    * roughly ±0.01 rather than eyeballed. Re-measure if a photo is replaced or
    * re-cropped — the numbers are meaningless against a different framing.
+   *
+   * This is the *only* per-item data that lives here. Labels, attributes,
+   * confidence and products all come from `mockCatalog.ts`, so the landing
+   * preview and `/analyze` cannot disagree about what was detected.
    */
   box: BoundingBox;
-  match: ShowcaseMatch;
 }
 
 export interface ShowcaseLook {
@@ -72,11 +52,6 @@ export interface ShowcaseLook {
   items: ShowcaseItem[];
 }
 
-/** Search URL or empty string — the CTA degrades to a disabled state on "". */
-function searchUrl(merchant: Merchant, query: string): string {
-  return buildMerchantSearchUrl(merchant, query) ?? "";
-}
-
 export const SHOWCASE_LOOKS: ShowcaseLook[] = [
   {
     id: "pink-knit",
@@ -89,58 +64,16 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
     credit: "Vivek / Unsplash",
     items: [
       {
-        id: "showcase-top",
-        label: "Pembe Fermuarlı Triko Ceket",
-        itemType: "Ceket",
-        attributes: "Pastel pembe • İnce triko • Fermuarlı",
-        colorHex: "#f0a0b4",
-        confidence: 0.96,
+        id: "po-cardigan",
         box: { x: 0.377, y: 0.292, width: 0.235, height: 0.269 },
-        match: {
-          title: "Fermuarlı Yüksek Yaka Triko Ceket",
-          merchant: "Trendyol",
-          price: 549,
-          currency: "TRY",
-          url: searchUrl("Trendyol", "pembe fermuarlı triko ceket"),
-          similarity: 0.94,
-          alternativeCount: 12,
-        },
       },
       {
-        id: "showcase-bottom",
-        label: "Siyah Deri Mini Şort",
-        itemType: "Şort",
-        attributes: "Mat siyah • Deri görünümlü • Yüksek bel",
-        colorHex: "#16181c",
-        confidence: 0.93,
+        id: "po-shorts",
         box: { x: 0.353, y: 0.506, width: 0.247, height: 0.08 },
-        match: {
-          title: "Deri Görünümlü Yüksek Bel Mini Şort",
-          merchant: "Zara",
-          price: 899,
-          currency: "TRY",
-          url: searchUrl("Zara", "deri görünümlü mini şort"),
-          similarity: 0.89,
-          alternativeCount: 9,
-        },
       },
       {
-        id: "showcase-shoes",
-        label: "Siyah Beyaz Bilekli Sneaker",
-        itemType: "Sneaker",
-        attributes: "Siyah/beyaz • Bilekli • Deri detay",
-        colorHex: "#1b1b1b",
-        confidence: 0.95,
+        id: "po-sneakers",
         box: { x: 0.393, y: 0.791, width: 0.227, height: 0.14 },
-        match: {
-          title: "Bilekli Retro Basketbol Sneaker",
-          merchant: "Amazon",
-          price: 2499,
-          currency: "TRY",
-          url: searchUrl("Amazon", "siyah beyaz bilekli sneaker"),
-          similarity: 0.91,
-          alternativeCount: 15,
-        },
       },
     ],
   },
@@ -155,76 +88,20 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
     credit: "Maks Styazhkin / Unsplash",
     items: [
       {
-        id: "biker-jacket",
-        label: "Siyah Deri Biker Ceket",
-        itemType: "Ceket",
-        attributes: "Mat siyah • Gerçek deri • Asimetrik fermuar",
-        colorHex: "#1a1a1e",
-        confidence: 0.95,
+        id: "bk-jacket",
         box: { x: 0.342, y: 0.352, width: 0.233, height: 0.423 },
-        match: {
-          title: "Asimetrik Fermuarlı Deri Biker Ceket",
-          merchant: "Zara",
-          price: 3599,
-          currency: "TRY",
-          url: searchUrl("Zara", "deri biker ceket"),
-          similarity: 0.93,
-          alternativeCount: 14,
-        },
       },
       {
-        id: "biker-body",
-        label: "Siyah İnce Askılı Body",
-        itemType: "Body",
-        attributes: "Siyah • Kalp yaka • İnce askı",
-        colorHex: "#17171a",
-        confidence: 0.9,
+        id: "bk-body",
         box: { x: 0.567, y: 0.365, width: 0.196, height: 0.275 },
-        match: {
-          title: "Kalp Yaka İnce Askılı Body",
-          merchant: "Mango",
-          price: 799,
-          currency: "TRY",
-          url: searchUrl("Mango", "kalp yaka askılı body"),
-          similarity: 0.88,
-          alternativeCount: 11,
-        },
       },
       {
-        id: "biker-jeans",
-        label: "Yüksek Bel Skinny Jean",
-        itemType: "Jean",
-        attributes: "Koyu indigo • Yüksek bel • Dar kesim",
-        colorHex: "#2b4468",
-        confidence: 0.94,
+        id: "bk-jeans",
         box: { x: 0.437, y: 0.626, width: 0.346, height: 0.364 },
-        match: {
-          title: "Yüksek Bel Skinny Jean",
-          merchant: "H&M",
-          price: 899,
-          currency: "TRY",
-          url: searchUrl("H&M", "yüksek bel skinny jean"),
-          similarity: 0.9,
-          alternativeCount: 18,
-        },
       },
       {
-        id: "biker-sunglasses",
-        label: "Metal Çerçeveli Güneş Gözlüğü",
-        itemType: "Gözlük",
-        attributes: "İnce metal çerçeve • Dikdörtgen",
-        colorHex: "#8a8a90",
-        confidence: 0.82,
+        id: "bk-sunglasses",
         box: { x: 0.328, y: 0.825, width: 0.077, height: 0.044 },
-        match: {
-          title: "İnce Metal Çerçeveli Dikdörtgen Güneş Gözlüğü",
-          merchant: "Trendyol",
-          price: 349,
-          currency: "TRY",
-          url: searchUrl("Trendyol", "ince metal çerçeve dikdörtgen güneş gözlüğü"),
-          similarity: 0.79,
-          alternativeCount: 8,
-        },
       },
     ],
   },
@@ -239,76 +116,20 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
     credit: "Behrooz / Unsplash",
     items: [
       {
-        id: "coat-outer",
-        label: "Uzun Siyah Kaban",
-        itemType: "Kaban",
-        attributes: "Siyah • Uzun boy • Kuşaklı",
-        colorHex: "#14141a",
-        confidence: 0.94,
+        id: "lc-coat",
         box: { x: 0.408, y: 0.237, width: 0.259, height: 0.339 },
-        match: {
-          title: "Uzun Kuşaklı Kaban",
-          merchant: "Mango",
-          price: 2799,
-          currency: "TRY",
-          url: searchUrl("Mango", "uzun siyah kuşaklı kaban"),
-          similarity: 0.92,
-          alternativeCount: 10,
-        },
       },
       {
-        id: "coat-beanie",
-        label: "Desenli Örgü Bere",
-        itemType: "Şapka",
-        attributes: "Kırık beyaz • Desenli • Örgü",
-        colorHex: "#d8d6cf",
-        confidence: 0.88,
+        id: "lc-beanie",
         box: { x: 0.422, y: 0.104, width: 0.128, height: 0.076 },
-        match: {
-          title: "Desenli Örgü Bere",
-          merchant: "H&M",
-          price: 299,
-          currency: "TRY",
-          url: searchUrl("H&M", "desenli örgü bere"),
-          similarity: 0.84,
-          alternativeCount: 7,
-        },
       },
       {
-        id: "coat-jeans",
-        label: "Yırtık Boyfriend Jean",
-        itemType: "Jean",
-        attributes: "Orta mavi • Yırtık detay • Bol kesim",
-        colorHex: "#5c7ea6",
-        confidence: 0.93,
+        id: "lc-jeans",
         box: { x: 0.342, y: 0.424, width: 0.338, height: 0.347 },
-        match: {
-          title: "Yırtık Detaylı Boyfriend Jean",
-          merchant: "ASOS",
-          price: 1199,
-          currency: "TRY",
-          url: searchUrl("ASOS", "yırtık boyfriend jean"),
-          similarity: 0.89,
-          alternativeCount: 16,
-        },
       },
       {
-        id: "coat-sandals",
-        label: "Siyah Kalın Topuklu Sandalet",
-        itemType: "Sandalet",
-        attributes: "Siyah • Kalın topuk • Bilekten bantlı",
-        colorHex: "#17171a",
-        confidence: 0.91,
+        id: "lc-sandals",
         box: { x: 0.325, y: 0.789, width: 0.333, height: 0.107 },
-        match: {
-          title: "Bilekten Bantlı Kalın Topuklu Sandalet",
-          merchant: "Trendyol",
-          price: 649,
-          currency: "TRY",
-          url: searchUrl("Trendyol", "kalın topuklu bilekten bantlı sandalet"),
-          similarity: 0.87,
-          alternativeCount: 13,
-        },
       },
     ],
   },
@@ -323,58 +144,16 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
     credit: "Zaven Baghdasaryan / Unsplash",
     items: [
       {
-        id: "blazer-jacket",
-        label: "Oversize Siyah Blazer",
-        itemType: "Blazer",
-        attributes: "Siyah • Oversize • Tek düğme",
-        colorHex: "#16161b",
-        confidence: 0.96,
+        id: "bb-blazer",
         box: { x: 0.353, y: 0.247, width: 0.297, height: 0.32 },
-        match: {
-          title: "Oversize Tek Düğmeli Blazer",
-          merchant: "Zara",
-          price: 2299,
-          currency: "TRY",
-          url: searchUrl("Zara", "oversize siyah blazer"),
-          similarity: 0.94,
-          alternativeCount: 17,
-        },
       },
       {
-        id: "blazer-lip",
-        label: "Kırmızı Mat Ruj",
-        itemType: "Ruj",
-        attributes: "Klasik kırmızı • Mat bitiş",
-        colorHex: "#c62435",
-        confidence: 0.89,
+        id: "bb-lip",
         box: { x: 0.487, y: 0.235, width: 0.038, height: 0.016 },
-        match: {
-          title: "Uzun Kalıcı Mat Ruj — Klasik Kırmızı",
-          merchant: "Sephora",
-          price: 459,
-          currency: "TRY",
-          url: searchUrl("Sephora", "kırmızı mat ruj"),
-          similarity: 0.86,
-          alternativeCount: 21,
-        },
       },
       {
-        id: "blazer-heels",
-        label: "İnce Bantlı Topuklu Sandalet",
-        itemType: "Sandalet",
-        attributes: "Siyah • İnce bant • Blok topuk",
-        colorHex: "#17171a",
-        confidence: 0.92,
+        id: "bb-heels",
         box: { x: 0.4, y: 0.704, width: 0.125, height: 0.216 },
-        match: {
-          title: "İnce Bantlı Blok Topuklu Sandalet",
-          merchant: "Mango",
-          price: 1299,
-          currency: "TRY",
-          url: searchUrl("Mango", "ince bantlı blok topuklu sandalet"),
-          similarity: 0.88,
-          alternativeCount: 12,
-        },
       },
     ],
   },

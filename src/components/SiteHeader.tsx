@@ -40,7 +40,7 @@ export function SiteHeader() {
           className="min-w-0 shrink-0 text-primary"
           aria-label="Markas — ana sayfa"
         >
-          <MarkasLogo size="sm" />
+          <MarkasLogo size="header" />
         </Link>
 
         <Button size="sm" className="ml-auto h-9 shrink-0 gap-1.5 px-4" onClick={goToUpload}>
