@@ -1,5 +1,6 @@
 import "server-only";
 
+import { KEEP_ALL, type ForegroundFilter } from "@/services/foreground";
 import { openImage } from "@/services/imageDecode";
 
 import type { BoundingBox } from "@/types";
@@ -61,10 +62,30 @@ export interface RegionColorOptions {
    * actually belong to this item.
    */
   exclude?: BoundingBox[];
+  /**
+   * Per-pixel foreground test — see `services/foreground.ts`.
+   *
+   * The inset above is a blunt stand-in for one: it assumes the garment is in the
+   * middle of its box, which is exactly wrong for the cases that fail. Thin sandal
+   * straps run to the edge of theirs. When a filter is supplied the inset is
+   * dropped and the whole box is sampled, because the filter can say which pixels
+   * are backdrop and the inset can only guess.
+   */
+  foreground?: ForegroundFilter;
 }
 
 /** Fraction of sampled pixels that must survive exclusion for it to be trusted. */
 const MIN_SURVIVING = 0.12;
+
+/**
+ * Fraction that must survive the foreground filter.
+ *
+ * Much lower than `MIN_SURVIVING`, because a small survivor count is the *expected*
+ * outcome for the items this is for: the sandals really are a few percent of their
+ * box. Low, but not zero — under this there is not enough left to call a modal
+ * colour, and falling back to the old answer beats reporting the colour of noise.
+ */
+const MIN_FOREGROUND = 0.02;
 
 
 export async function regionDominantColor(
@@ -74,15 +95,19 @@ export async function regionDominantColor(
 ): Promise<string | null> {
   const meta = options.size;
   const exclude = options.exclude ?? [];
+  const foreground = options.foreground ?? KEEP_ALL;
   try {
     const image = openImage(imageBuffer);
     const { width, height } = meta ?? (await image.metadata());
     if (!width || !height) return null;
 
     // Inset the box so the sample is the garment, not the boundary with whatever
-    // is behind it.
-    const insetX = box.width * INSET;
-    const insetY = box.height * INSET;
+    // is behind it. Dropped only when a backdrop model can do that job properly —
+    // skin removal cannot, and dropping it on skin alone costs the items whose box
+    // edges are pavement.
+    const inset = foreground.handlesBackground ? 0 : INSET;
+    const insetX = box.width * inset;
+    const insetY = box.height * inset;
 
     const left = Math.round(clamp01(box.x + insetX) * width);
     const top = Math.round(clamp01(box.y + insetY) * height);
@@ -106,11 +131,15 @@ export async function regionDominantColor(
     if (channels < 3) return null;
 
     /**
-     * Buckets the sampled pixels, optionally skipping those that fall inside an
-     * occluding region. Runs twice at most: if exclusion leaves too little to
-     * measure, the unfiltered pass is a better answer than none.
+     * Buckets the sampled pixels, optionally skipping occluded ones and those the
+     * foreground filter rejects.
+     *
+     * Three rungs, tried in order, each a strictly weaker claim than the one above:
+     * garment pixels only, then anything not covered by a sibling detection, then
+     * everything. Falling to a weaker rung is not a failure — it is the answer this
+     * function gave before the rung above it existed.
      */
-    const collect = (skipExcluded: boolean) => {
+    const collect = (skipExcluded: boolean, skipBackground: boolean) => {
       const buckets = new Map<number, { count: number; r: number; g: number; b: number }>();
       let sampled = 0;
       let total = 0;
@@ -139,6 +168,8 @@ export async function regionDominantColor(
         const r = data[i]!;
         const g = data[i + 1]!;
         const b = data[i + 2]!;
+
+        if (skipBackground && !foreground.keep(r, g, b)) continue;
         sampled += 1;
 
         const key =
@@ -155,11 +186,26 @@ export async function regionDominantColor(
         }
       }
 
-      return { buckets, sampled, enough: total > 0 && sampled / total >= MIN_SURVIVING };
+      const share = total === 0 ? 0 : sampled / total;
+      const floor = skipBackground ? MIN_FOREGROUND : MIN_SURVIVING;
+      return { buckets, sampled, enough: total > 0 && share >= floor };
     };
 
-    const filtered = collect(true);
-    const chosen = filtered.enough ? filtered : collect(false);
+    /*
+     * The ladder. Note the second rung re-samples with the inset *conceptually*
+     * restored — it cannot literally, since the crop was already taken, so a run
+     * that falls back keeps the wider crop. That is the honest trade: a filter that
+     * abstains gives a slightly wider sample than the no-filter path, and the
+     * alternative is decoding the region twice on every scan.
+     */
+    const foregroundPass = foreground.active ? collect(true, true) : null;
+    const occluderPass = foregroundPass?.enough ? null : collect(true, false);
+
+    const chosen = foregroundPass?.enough
+      ? foregroundPass
+      : occluderPass?.enough
+        ? occluderPass
+        : collect(false, false);
     const buckets = chosen.buckets;
 
     // Array.from rather than iterating the Map directly: the build target

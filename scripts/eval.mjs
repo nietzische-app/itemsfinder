@@ -30,6 +30,7 @@ const ROOT = new URL("..", import.meta.url).pathname;
 const { familyOf } = await import("@/lib/itemFamily");
 const { buildSearchQuery, colorNameFromHex } = await import("@/lib/searchQuery");
 const { regionDominantColor, imageSize } = await import("@/services/regionColor");
+const { learnBackdrop, foregroundFilter } = await import("@/services/foreground");
 const {
   dedupeDetections,
   bodyPosition,
@@ -51,21 +52,29 @@ const { colorBucketOf } = await import("../eval/colorBucket.ts");
  * Metric floors: set just under the measured baseline so a regression trips the
  * run, not so high that the run is aspirational and permanently red.
  *
- * Colour sits at 0.70 because four of the fourteen items are a known, documented
- * class of failure rather than a bug to tune away: lc-beanie, lc-jeans,
- * lc-sandals and bb-heels are all cases where the garment is a *minority of its
- * own bounding box* — thin sandal straps framing a grey floor, a small beanie
- * against a studio wall, a heel against a white backdrop — so the modal colour is
- * the background. Three things were measured against this set and rejected: a
- * larger sampling inset (worse), background-colour rejection (worse — it discards
- * the garment when garment and backdrop are both dark), and a dominance
- * abstention threshold (cost two correct answers, recovered none). The fix is a
- * real mask, which is the VLM/segmentation work, not another constant.
+ * Colour sat at 0.70 for as long as four of the fourteen items were a documented
+ * class of failure rather than a bug to tune away: lc-beanie, lc-jeans, lc-sandals
+ * and bb-heels are all cases where the garment is a *minority of its own bounding
+ * box* — thin sandal straps framing a grey floor, a small beanie against a studio
+ * wall, a heel against a white backdrop — so the modal colour was the background.
+ * Three things were measured against this set and rejected: a larger sampling inset
+ * (worse), background-colour rejection (worse — it discards the garment when
+ * garment and backdrop are both dark), and a dominance abstention threshold (cost
+ * two correct answers, recovered none).
  *
- * Raise the floor when that lands.
+ * `services/foreground.ts` recovered two of the four by removing what a rectangle
+ * cannot: a backdrop learned from pixels outside every box, and skin. 10/14 -> 12/14
+ * with nothing broken, so the floor moves to 0.80 — under the new measurement, above
+ * the old one, which is what a floor is for.
+ *
+ * `lc-jeans` and `bb-heels` are still wrong and are still the same class of problem:
+ * ripped denim showing more leg than cloth, and straps thin enough that almost every
+ * pixel of them is an edge blend. Colour statistics over a region have nothing left
+ * to give there — those need a real per-pixel mask (ROADMAP 2.1, the SAM option) or
+ * the model's own reading of the crop (1.3).
  */
 const FLOORS = {
-  color: 0.7,
+  color: 0.8,
   query: 0.9,
   /*
    * The coarse-class path. Set to 1.0 because unlike colour there is nothing
@@ -149,6 +158,8 @@ let colorTotal = 0;
 const colorMisses = [];
 /** Per-item outcome, so the VLM section can be scored on the same items. */
 const regionHitById = new Map();
+/** Whether the backdrop model engaged per look, and how tight the palette was. */
+const backdropDetail = [];
 
 for (const testCase of cases) {
   const path = `${ROOT}public${testCase.image}`;
@@ -160,6 +171,32 @@ for (const testCase of cases) {
   const buffer = readFileSync(path);
   const size = await imageSize(buffer);
 
+  /*
+   * Foreground separation, set up exactly as the pipeline does it.
+   *
+   * The person box is Vision's in production and is not available offline, so the
+   * union of the labelled boxes stands in. That union can only be larger than the
+   * person, never smaller, so it can only shrink the area the backdrop is learned
+   * from — the conservative direction. It cannot let skin in and call it scenery.
+   */
+  const boxes = testCase.items.map((item) => item.box);
+  const personBox = {
+    x: Math.min(...boxes.map((box) => box.x)),
+    y: Math.min(...boxes.map((box) => box.y)),
+    width:
+      Math.max(...boxes.map((box) => box.x + box.width)) - Math.min(...boxes.map((box) => box.x)),
+    height:
+      Math.max(...boxes.map((box) => box.y + box.height)) - Math.min(...boxes.map((box) => box.y)),
+  };
+  const backdrop = await learnBackdrop(buffer, { size, boxes: [...boxes, personBox] });
+  const foreground = foregroundFilter(backdrop);
+
+  backdropDetail.push({
+    exampleId: testCase.exampleId,
+    palette: backdrop?.paletteSize ?? null,
+    buckets: backdrop?.buckets.size ?? 0,
+  });
+
   for (const item of testCase.items) {
     // Occluders: the other labelled regions that overlap this one, exactly as
     // the pipeline supplies them.
@@ -167,7 +204,7 @@ for (const testCase of cases) {
       .filter((other) => other.id !== item.id)
       .map((other) => other.box);
 
-    const hex = await regionDominantColor(buffer, item.box, { size, exclude });
+    const hex = await regionDominantColor(buffer, item.box, { size, exclude, foreground });
     colorTotal += 1;
 
     const bucket = hex ? colorBucketOf(hex) : null;
@@ -715,6 +752,14 @@ const hallucinationRate = pct(hallucinations, gradedClaims);
 
 console.log(`\n${cases.length} kombin / ${colorTotal} parça\n`);
 console.log(`  Bölge rengi      ${fmt(colorScore)}  (${colorHits}/${colorTotal})   taban ${fmt(FLOORS.color)}`);
+for (const row of backdropDetail) {
+  console.log(
+    `      ${row.exampleId.padEnd(14)} ` +
+      (row.palette === null
+        ? "arka plan öğrenilmedi (sahne, fon değil) — yalnızca ten çıkarıldı"
+        : `arka plan ${row.buckets} renk, %80 kapsama ${row.palette} kovada`),
+  );
+}
 if (vlmColorTotal > 0) {
   console.log(
     `  VLM rengi        ${fmt(vlmColorScore)}  (${vlmColorHits}/${vlmColorTotal})   taban ${fmt(regionSubsetScore)} (aynı parçalarda ölçülen renk)`,

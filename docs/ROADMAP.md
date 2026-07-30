@@ -303,9 +303,78 @@ büyük zaafını da tek hamlede çözer.
 | SAM / MobileSAM, kutu prompt'uyla | En iyi maske kalitesi | Model çalışma zamanı (ONNX), ~40 MB ağırlık, GPU olmadan yavaş |
 | Kutu içinde GrabCut | Bağımlılık hafif | OpenCV gerekiyor; kalite pozla değişken |
 | VLM'den poligon istemek | Yeni altyapı yok | Görsel modeller koordinatta güvenilmez — ölçmeden kabul edilemez |
+| **Eleme: fon + ten** | Model yok, ek gecikme ~yok | Kaba; ince yapılarda ve solmuş kumaşta yetersiz |
 
-Öneri: MobileSAM'i bir seçenek olarak ölç, ama **önce** 1.1'i bitir — maske
-kalitesini 14 parçada değerlendirmek yine aynı hataya düşmek olur.
+#### 2.1a Eleme yoluyla ön plan — ✅ tamamlandı, %71 → %86
+
+**Durum: yazıldı, 54 kontrolle doğrulandı, ölçülen kazanç 10/14 → 12/14, bozulan
+yok.** Öğrenilmiş bir segmentasyon modeli **değil**; onun yerini almıyor, ona
+gerek kalmadan alınabilecek kısmı alıyor.
+
+`src/services/foreground.ts` iki şeyi eliyor — ikisi de kanıtla, tahminle değil:
+
+- **Fon**, her tespit kutusunun *ve* kişinin dışında kalan piksellerden
+  öğreniliyor. O pikseller varsayımla değil **tanımı gereği** arka plan.
+- **Ten**, standart kromatiklik kurallarıyla (Kovač RGB + YCbCr aralığı).
+  Ölçümün kaçırdığı dört parçanın **dördünde de** kutunun içinde ten var:
+  sandaleti çerçeveleyen bacaklar, eşarbın altındaki yüz, yırtıktan görünen diz.
+
+Eleme, "kutunun baskın rengini reddet" fikrinin yeniden denenmesi değil — o
+ölçülüp reddedilmişti. Fark bilgi kaynağında: fon, arka planın **bilindiği**
+yerden öğreniliyor.
+
+**Kritik güvenlik: fon bir palet, sahne değil.** İlk sürüm siyah deri ceketi
+bozdu — biker fotoğrafının "dışarısı" bir cam ofis cephesi ve koyu bantları
+ceketle aynı kovaya düşüyor. Yani reddedilmiş yaklaşımın hatası, başka bir yoldan
+geri geldi. Çözüm: dışarıdaki alanın %80'ini kaç rengin kapladığına bak.
+
+```
+stüdyo:  long-coat 3 kova,  black-blazer 5
+sokak:   pink-outfit 11,    biker-look 11
+```
+
+Sekiz bu boşlukta. Dürüst olmak gerekirse dört fotoğrafta altı ile on arası her
+sayı aynı çizgiyi çizerdi; keyfi olmaktan çıkaran şey bir anlam taşıması —
+512 renkli ızgaranın %1.5'i, bir duvarın gradyanıyla ve gölgesiyle sığdığı, bir
+sokağın sığmadığı yer. **1.1 geldiğinde ilk yeniden ölçülecek sabit bu.**
+
+Çekimserlik bedava: fon öğrenilemediğinde iki sokak fotoğrafının **renk
+sonuçları hiç değişmiyor** (kova bazında birebir, hex birkaç birim kayıyor,
+çünkü ten çıkarma orada da çalışıyor). Kutu içi kırpma payı da yalnızca fon
+modeli varken kaldırılıyor — yalnız tene güvenip payı kaldırmak `po-shorts`'a
+mal oldu, ölçüldü, geri alındı.
+
+**Kalan iki sapma ve neden burada durulduğu.** `lc-jeans` ve `bb-heels` hâlâ
+yanlış. Maskeleri render edip bakıldı: `bb-heels`'in maskesi **doğru** — bantlar
+ve topuk korunuyor — ama 48×48 örneklemede iki piksel genişliğindeki bir bandın
+her pikseli kenar karışımı. `lc-jeans`'te ise solmuş denim gerçekten fonla aynı
+kovaya düşüyor ve kumaşın bir kısmı eleniyor.
+
+Örnekleme çözünürlüğü (48/64/96/128) × kova genişliği (16/32) ızgarası tarandı:
+**hiçbir kombinasyon 12/14'ü geçmiyor**, yalnızca hangi ikisinin kaçtığı
+değişiyor (`lc-beanie` ile `bb-heels` yer değiştiriyor). Yani bu iki sapma bu iki
+sabitle ulaşılabilir değil — tam olarak yol haritasının baştan söylediği şey.
+Sabitler olduğu gibi bırakıldı; bir maddeyi kurtarmak için sayı oynatmak, dört
+fotoğrafa uydurmak olurdu.
+
+#### 2.1b Gerçek maske — açık
+
+Yukarıdakinin kapatmadığı yer: ince yapılar ve fonla aynı renkteki kumaş. Onun
+için hâlâ piksel seviyesinde bir maske gerekiyor.
+
+Bu ortamda ağırlık indirilemiyor (Hugging Face ve npm CDN'leri erişime kapalı),
+yani MobileSAM'i **ölçmek** bile burada mümkün değil. Ağı açık bir makinede
+yapılacak iş.
+
+Öneri değişmedi: MobileSAM'i bir seçenek olarak ölç, ama **önce** 1.1'i bitir —
+maske kalitesini 14 parçada değerlendirmek yine aynı hataya düşmek olur. 2.1a bu
+sırayı bozmuyor, çünkü kazancı zaten var olan bir metrikte ve bozulan yok.
+
+**Sıradaki ölçülebilir adım:** aynı filtreyi `visualDescriptor`'a bağlamak.
+Betimleyici de histogramını dikdörtgenden alıyor, yani aynı problem orada da var
+— ama görsel erişim metriğinde şu an kalan iki sapma anlamsal (siyah body, aynı
+ışıktaki koyu denime yeniliyor), bu yüzden kazanç kesin değil ve ölçülmeden
+bağlanmamalı.
 
 ### 2.2 Modaya özel dedektör
 

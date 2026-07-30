@@ -30,6 +30,7 @@ import {
   getAttributeExtractor,
   type GarmentAttributes,
 } from "@/services/attributeExtractor";
+import { foregroundFilter, learnBackdrop } from "@/services/foreground";
 import { imageSize, regionDominantColor } from "@/services/regionColor";
 import {
   ContextDevProductProvider,
@@ -408,11 +409,38 @@ export class GoogleVisionSearchService implements VisualSearchService {
      */
     const imageBuffer = Buffer.from(input.imageBase64, "base64");
     const size = await imageSize(imageBuffer);
+
+    /*
+     * Foreground separation — see `services/foreground.ts`.
+     *
+     * The backdrop is learned from pixels lying outside every detection *and*
+     * outside the person, which makes them background by construction rather than
+     * by assumption; skin comes from the standard chrominance rules. Both are what
+     * a rectangle cannot tell apart from the garment inside it, and both are why
+     * four items on the eval set were measuring the studio wall.
+     *
+     * It abstains rather than guesses: on a street photograph the area outside the
+     * boxes is a scene and not a backdrop, and treating a scene's colours as
+     * removable deletes a black jacket that matches the wall behind it. Measured on
+     * the eval set the two street looks come back bit-identical, which is the point.
+     */
+    const backdrop = size
+      ? await learnBackdrop(imageBuffer, {
+          size,
+          boxes: [
+            ...detections.map((detection) => detection.box),
+            ...(personBox ? [personBox] : []),
+          ],
+        })
+      : null;
+    const foreground = foregroundFilter(backdrop);
+
     const regionColors = await Promise.all(
       detections.map((detection) =>
         size
           ? regionDominantColor(imageBuffer, detection.box, {
               size,
+              foreground,
               // Garments occlude each other; exclude the neighbours that overlap
               // this box so the sample is this item and not the one on top of it.
               exclude: detections

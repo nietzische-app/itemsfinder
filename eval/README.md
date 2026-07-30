@@ -35,7 +35,7 @@ alır.
 
 | Metrik | Ne ölçüyor | Taban |
 | --- | --- | --- |
-| Bölge rengi | Ölçülen baskın rengin, insanın adlandıracağı renk ailesiyle eşleşmesi | %70 |
+| Bölge rengi | Ölçülen baskın rengin, insanın adlandıracağı renk ailesiyle eşleşmesi (fon + ten elenerek) | %80 |
 | VLM rengi | Kırpıma bakan modelin verdiği rengin aynı eşleşmeyi tutması (fixture ister) | aynı parçalarda ölçülen renk |
 | VLM ürün adı | Modelin verdiği Türkçe ürün adının beklenen token'ı taşıması (fixture ister) | — |
 | VLM sorgusu | Modelin gördüklerinden kurulan **tam sorgunun** spesifik token'ı taşıması (fixture ister) | aynı parçalarda Vision sınıfı |
@@ -111,7 +111,11 @@ yüzden var.
 
 ```
 4 kombin / 14 parça
-  Bölge rengi      71%  (10/14)
+  Bölge rengi      86%  (12/14)
+      pink-outfit    arka plan öğrenilmedi (sahne, fon değil) — yalnızca ten çıkarıldı
+      biker-look     arka plan öğrenilmedi (sahne, fon değil) — yalnızca ten çıkarıldı
+      long-coat      arka plan 6 renk, %80 kapsama 3 kovada
+      black-blazer   arka plan 7 renk, %80 kapsama 5 kovada
   VLM rengi        —     (fixture yok)
   Sorgu token'ı   100%  (14/14)
   Vision sınıfı   100%  (14/14)
@@ -141,6 +145,27 @@ Bu set üzerinde ölçülüp **reddedilen** üç çözüm:
 
 Bunları düzeltecek olan gerçek bir maske: segmentasyon ya da kırpıma bakan bir
 görsel dil modeli. Yeni bir sabit değil. O iş girdiğinde taban yükseltilmeli.
+
+### Eleme yoluyla ön plan (2.1a) — %71 → %86
+
+O iş kısmen girdi. `src/services/foreground.ts` dikdörtgenin içinden iki şeyi
+eliyor: her kutunun *ve* kişinin dışında kalan piksellerden **öğrenilen** fon, ve
+standart kromatiklik kurallarıyla **ten**. Dört sapmanın dördünde de kutunun
+içinde ten var; ikisi (`lc-beanie`, `lc-sandals`) böylece kurtarıldı ve **hiçbir
+şey bozulmadı**, o yüzden taban %70'ten %80'e çıktı.
+
+Bu, yukarıdaki 2. maddenin tekrarı değil: fon, arka planın *bilindiği* yerden
+öğreniliyor. Ama aynı tuzağa başka yoldan düşüyor — ilk sürüm siyah deri ceketi
+bozdu, çünkü biker fotoğrafının dışarısı bir cam cephe, fon değil. Bu yüzden model
+yalnızca **dışarısı dar bir palet olduğunda** devreye giriyor (stüdyoda %80
+kapsama 3–5 kova, sokakta 11). Devreye girmediğinde renk sonuçları kova bazında
+birebir değişmeden kalıyor — çekimserlik gerçekten bedava, ve bu test edilerek
+iddia ediliyor.
+
+Kalan iki sapma (`lc-jeans`, `bb-heels`) için örnekleme çözünürlüğü × kova
+genişliği ızgarası tarandı: **hiçbir kombinasyon 12/14'ü geçmiyor**, yalnızca
+hangi ikisinin kaçtığı değişiyor. Bu iki sabitle ulaşılabilir değiller — hâlâ
+gerçek bir maske ya da modelin kırpımı okuması gerekiyor.
 
 ## Kutu doğruluğu — hiç sorulmamış soru
 
