@@ -12,6 +12,7 @@ import {
 import { rejectProductTitle } from "@/lib/retailVocabulary";
 import { buildSearchQuery } from "@/lib/searchQuery";
 import { cropRegion } from "@/services/imageCrop";
+import { productThumbnail } from "@/lib/productThumbnail";
 import { hydrateProduct } from "@/services/mockCatalog";
 import { fetchRemoteImage } from "@/services/remoteImage";
 import { describeImage, visualSimilarity } from "@/services/visualDescriptor";
@@ -411,6 +412,7 @@ export class ContextDevProductProvider implements ProductProvider {
             similarity: best.score,
             tag: "Canlı",
             brand: brands.get(best.card.merchantDomain) ?? null,
+            colorHex: item.colorHex,
           })
         : item.exactMatch,
       alternatives: alternatives.map((entry, index) =>
@@ -420,6 +422,7 @@ export class ContextDevProductProvider implements ProductProvider {
           similarity: entry.score,
           tag: entry.card.price === cheapest ? "En uygun" : undefined,
           brand: brands.get(entry.card.merchantDomain) ?? null,
+          colorHex: item.colorHex,
         }),
       ),
     };
@@ -459,6 +462,8 @@ interface ProductMatchOverrides {
   similarity: number;
   tag?: string;
   brand: BrandMetadata | null;
+  /** The detection's colour, used when the retailer supplied no image. */
+  colorHex: string;
 }
 
 
@@ -485,7 +490,7 @@ function toProductMatch(
     urlKind: "product",
     // Live listings without an image fall back to the neutral placeholder the
     // catalogue uses, so cards never render an empty box.
-    imageUrl: card.imageUrl ?? placeholderImage(card.title),
+    imageUrl: card.imageUrl ?? placeholderImage(card.title, overrides.colorHex),
     matchType: overrides.matchType,
     similarity: overrides.similarity,
     tag: overrides.tag,
@@ -497,22 +502,16 @@ function toProductMatch(
   };
 }
 
-/** Mirrors the catalogue's inline SVG thumbnail for live rows with no image. */
-function placeholderImage(title: string): string {
-  const initials = title
-    .split(/\s+/)
-    .filter((word) => /^[A-Za-z]/.test(word))
-    .slice(0, 2)
-    .map((word) => word[0]!.toUpperCase())
-    .join("");
-
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
-  <rect width="400" height="500" fill="#eae7e7"/>
-  <text x="200" y="272" font-family="Inter, Helvetica, Arial, sans-serif" font-size="86"
-        font-weight="700" fill="#747878" text-anchor="middle">${initials}</text>
-</svg>`;
-
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+/**
+ * Fallback for a live row whose retailer supplied no image.
+ *
+ * Uses the same silhouette the catalogue draws, in the *detected* colour — this row
+ * is an answer to a specific detection, so its colour is known even when its picture
+ * is not. The previous version stamped two initials on a grey box, which read as a
+ * broken image rather than as a product.
+ */
+function placeholderImage(title: string, colorHex: string): string {
+  return productThumbnail(title, colorHex);
 }
 
 /* -------------------------------------------------------------------------- */

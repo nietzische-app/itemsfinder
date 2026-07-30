@@ -11,7 +11,8 @@
     "check:pdp": "node --experimental-transform-types scripts/check-pdp.mjs",
     "eval": "node --experimental-transform-types scripts/eval.mjs",
     "eval:record": "node --experimental-transform-types scripts/eval-record.mjs",
-    "eval:record-attrs": "node --experimental-transform-types scripts/eval-record-attrs.mjs"
+    "eval:record-attrs": "node --experimental-transform-types scripts/eval-record-attrs.mjs",
+    "fetch:images": "node --experimental-transform-types scripts/fetch-images.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",

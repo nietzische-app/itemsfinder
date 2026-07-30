@@ -75,3 +75,63 @@ for (const [productId, url] of Object.entries(VERIFIED_PDP_URLS)) {
 export function verifiedPdpUrl(productId: string): string {
   return VERIFIED_PDP_URLS[productId] ?? "";
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Product photographs                                                      */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Real product images, keyed by the same product ids.
+ *
+ * Ships empty for the same reason as the URLs above: the catalogue's products are
+ * authored, so there is nothing to photograph, and a retailer's image URL cannot be
+ * derived any more than its SKU can. Until an entry exists, `productThumbnail`
+ * draws a garment silhouette in the product's colour — not a photograph, and not
+ * pretending to be one.
+ *
+ * **Hotlinked, not copied.** The value is the retailer's own CDN URL. That is the
+ * normal arrangement for a page that links to the product it is showing; copying
+ * the file into `public/` would be republishing someone else's photograph.
+ *
+ * A PDP's canonical image is usually its `og:image`, so this can be collected
+ * mechanically once the URLs above exist:
+ *
+ *   npm run fetch:images
+ *
+ * which reads each verified PDP, pulls its `og:image`, and prints a paste-ready
+ * block. It needs a network route to the retailers, so it runs on your machine
+ * rather than in CI.
+ */
+export const VERIFIED_PDP_IMAGES: Readonly<Record<string, string>> = {};
+
+/**
+ * Validated on import, like the URLs.
+ *
+ * Only the shape can be checked here — that it is an https URL, and that it is not
+ * obviously a page rather than an image. Whether it depicts the right garment is
+ * something only a human looking at it can say.
+ */
+for (const [productId, url] of Object.entries(VERIFIED_PDP_IMAGES)) {
+  let parsed: URL | null = null;
+  try {
+    parsed = new URL(url);
+  } catch {
+    parsed = null;
+  }
+
+  if (!parsed || parsed.protocol !== "https:") {
+    throw new Error(
+      `verifiedProductUrls: image for "${productId}" must be an https URL: ${url}`,
+    );
+  }
+  if (/\.(html?|php|aspx?)($|[?#])/i.test(parsed.pathname)) {
+    throw new Error(
+      `verifiedProductUrls: image for "${productId}" points at a page, not an image: ${url}`,
+    );
+  }
+}
+
+/** Verified photograph for a catalogue product, or "" when none has been supplied. */
+export function verifiedProductImage(productId: string): string {
+  return VERIFIED_PDP_IMAGES[productId] ?? "";
+}

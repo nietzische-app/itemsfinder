@@ -276,12 +276,25 @@ fetching it. Paste real URLs in and they light up; every entry is shape-validate
 on import, so a malformed or search-shaped link throws at startup rather than
 shipping.
 
+Product **photographs** work the same way: `VERIFIED_PDP_IMAGES` in the same file
+holds the retailer's own image URL per product, hotlinked rather than copied.
+Until an entry exists, `src/lib/productThumbnail.ts` draws a garment silhouette in
+the product's colour — not a photograph, and it does not pretend to be one.
+
 ```bash
 npm run check:pdp                     # grouped by retailer, exact matches first
 npm run check:pdp -- --exact          # only the rows a shopper sees before expanding
 npm run check:pdp -- --merchant=Zara  # one store at a time
 npm run check:pdp -- --paste          # just the code block to paste
+npm run fetch:images                  # og:image per verified PDP (needs network)
 ```
+
+`fetch:images` runs on your machine, not in CI: it needs a route to the retailers.
+It prints a block to paste rather than writing the file, so a wrong-looking image
+never lands without someone having seen it.
+
+The next phase of work — what is missing, in what order, and what has to turn
+green for each item to count as done — is in [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 Grouped by **retailer** rather than by look, because that is how the work
 actually goes: open one store, find its products, move on. Each row carries a
