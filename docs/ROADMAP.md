@@ -172,9 +172,27 @@ skor 14 puan zıplıyor.
 **Bitti ölçütü:** `npm run eval` en az 30 kombin raporluyor ve tabanlar yeni,
 daha geniş sete göre yeniden ayarlanmış.
 
-### 1.2 Vision fixture'ları ve kutu doğruluğu
+### 1.2 Vision fixture'ları ve kutu doğruluğu — ✅ kod hazır, ölçüm anahtarı bekliyor
 
-**Durum: fixture yok, çünkü Vision anahtarı gerekiyor.** "Hotspot sayısı"
+**Durum: ölçüm altyapısı yazıldı ve 28 kontrolle doğrulandı.** Metrikler fixture
+gelir gelmez rapora düşüyor; anahtar olmadan sessiz kalıyorlar.
+
+Yazılanlar:
+
+- `eval/boxMatch.ts` — **bire-bir** eşleştirme (açgözlü, en yüksek örtüşmeden
+  başlayarak), kaçan ve fazladan tespit muhasebesi, medyan ve eşik üstü oranı.
+- `eval/replay.ts` — kaydedilmiş Vision yanıtını boru hattından geçiren ortak
+  modül. Eval ve tarama **aynı** kodu kullanıyor.
+- Yeni metrikler: kutu bulma, kutu isabeti, medyan IoU.
+- `npm run eval:sweep` — 1080 kombinasyonluk ızgara taraması, mevcut değerlerin
+  sıralamadaki yeriyle birlikte.
+
+Anahtar olmadığı için doğrulama, referans verisinden üretilen **sentetik**
+fixture'larla yapıldı: bu, ölçümün doğru çalıştığını kanıtlar; Vision'ın kutuları
+ne kadar iyi çizdiği hakkında hiçbir şey söylemez. Sentetik fixture'lar
+commit'lenmedi.
+
+**Bulunduğu andaki hâli:** fixture yok, çünkü Vision anahtarı gerekiyor. "Hotspot sayısı"
 metriği hiç çalışmadı, ve daha önemlisi **kutu doğruluğu hiç ölçülmedi.**
 
 Şu an bilmediğimiz şey: Vision'ın çizdiği kutu gerçekten giysinin üzerinde mi?
@@ -194,8 +212,9 @@ GOOGLE_CLOUD_VISION_API_KEY=... npm run eval:record
   ölçülerek seçilmedi.
 - Kaçırılan parça oranını ölç: referansta olup hiçbir tespitle örtüşmeyen.
 
-**Bitti ölçütü:** "kutu IoU" ve "kaçırılan parça" metrikleri raporlanıyor;
-NMS sabitleri taranmış ve seçim gerekçesi yazılmış.
+**Bitti ölçütü (kod tarafı karşılandı):** metrikler raporlanıyor, tarama çalışıyor.
+**Kalan:** `GOOGLE_CLOUD_VISION_API_KEY=... npm run eval:record`, sonra taban
+değerlerini o çalıştırmanın bastığı sayıların biraz altına koymak.
 
 ### 1.3 VLM öznitelik kazancını kanıtlamak
 

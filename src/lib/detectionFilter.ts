@@ -45,7 +45,12 @@ export interface DedupeOptions {
   maxItems?: number;
 }
 
-const DEFAULTS: Required<DedupeOptions> = {
+/**
+ * Exported so the parameter sweep can report where the shipped values land in the
+ * grid it searches. A sweep that cannot say "and here is what we use today" only
+ * tells you a maximum, not whether moving is worth it.
+ */
+export const DEDUPE_DEFAULTS: Required<DedupeOptions> = {
   minScore: 0.65,
   maxIou: 0.4,
   maxContainment: 0.7,
@@ -115,7 +120,7 @@ export function dedupeDetections(
   options: DedupeOptions = {},
 ): DetectionCandidate[] {
   const { minScore, maxIou, maxContainment, mergeGap, maxItems } = {
-    ...DEFAULTS,
+    ...DEDUPE_DEFAULTS,
     ...options,
   };
 

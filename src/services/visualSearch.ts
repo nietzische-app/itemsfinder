@@ -16,7 +16,7 @@ import {
   intersectionArea,
   type DetectionCandidate,
 } from "@/lib/detectionFilter";
-import { familyOf } from "@/lib/itemFamily";
+import { familyOf, tokenize, type ItemFamily } from "@/lib/itemFamily";
 import { buildSearchQuery, colorNameFromHex } from "@/lib/searchQuery";
 import {
   MOCK_SCENARIOS,
@@ -105,68 +105,70 @@ function makeResult(
   };
 }
 
-/** Keyword buckets used to route a vision label into one of our two sections. */
-const BEAUTY_KEYWORDS = [
-  "lip",
-  "lipstick",
-  "eye",
-  "eyeshadow",
-  "eyeliner",
-  "mascara",
-  "brow",
-  "blush",
-  "highlighter",
-  "foundation",
-  "makeup",
+/**
+ * Families that belong to each section of the results pane.
+ *
+ * The routing is delegated to `familyOf` rather than kept as a second keyword
+ * list, because there was a second keyword list and it matched on **substrings**:
+ *
+ *     "Chair"      -> contains "hair"  -> beauty
+ *     "Flip-flops" -> contains "lip"   -> beauty
+ *     "Eyewear"    -> contains "eye"   -> beauty
+ *
+ * A room photograph produced a cosmetics hotspot on a chair. This is the same
+ * defect that was fixed in `itemFamily.ts` — "coated" reading as coat, "crossbody"
+ * as a bodysuit — and this function was simply missed in that pass. One taxonomy,
+ * token-aware, is the fix for both.
+ */
+const BEAUTY_FAMILIES = new Set<ItemFamily>(["lips", "eyes", "face"]);
+
+const CLOTHING_FAMILIES = new Set<ItemFamily>([
+  "footwear",
+  "outerwear",
+  "top",
+  "bottom",
+  "dress",
+  "bag",
+  "accessory",
+]);
+
+/**
+ * Whole-token fallbacks for labels the family classifier has no opinion on.
+ *
+ * Vision's coarse classes ("Clothing") and the person-attribute labels ("Hair",
+ * "Skin") are not garments, so they have no family — but they are still the right
+ * section, and the generic ones have to survive as candidates for
+ * `dedupeDetections` to suppress against the specific boxes inside them.
+ */
+const GENERIC_BEAUTY = new Set([
+  "cosmetics",
   "cosmetic",
-  "nail",
+  "makeup",
   "skin",
   "hair",
-];
+  "nail",
+  "nails",
+]);
 
-const CLOTHING_KEYWORDS = [
-  "jacket",
-  "coat",
-  "shirt",
-  "top",
-  "dress",
-  "skirt",
-  "trousers",
-  "pants",
-  "jeans",
-  "shorts",
-  "shoe",
-  "sneaker",
-  "boot",
-  "bag",
-  "handbag",
-  "hat",
-  "glasses",
-  "sunglasses",
-  "necklace",
-  "earring",
-  "jewelry",
-  "jewellery",
-  "watch",
-  "belt",
-  "scarf",
-  "outerwear",
-  "footwear",
+const GENERIC_CLOTHING = new Set([
   "clothing",
-];
+  "apparel",
+  "garment",
+  "outfit",
+  "swimwear",
+  "underwear",
+]);
 
 export function categorizeLabel(label: string): ItemCategory | null {
-  const normalized = label.toLowerCase();
+  const family = familyOf(label);
+  if (BEAUTY_FAMILIES.has(family)) return "beauty";
+  if (CLOTHING_FAMILIES.has(family)) return "clothing";
 
-  if (BEAUTY_KEYWORDS.some((keyword) => normalized.includes(keyword))) {
-    return "beauty";
-  }
+  const tokens = new Set(tokenize(label));
+  for (const word of Array.from(GENERIC_BEAUTY)) if (tokens.has(word)) return "beauty";
+  for (const word of Array.from(GENERIC_CLOTHING)) if (tokens.has(word)) return "clothing";
 
-  if (CLOTHING_KEYWORDS.some((keyword) => normalized.includes(keyword))) {
-    return "clothing";
-  }
-
-  // Anything else (Person, Furniture, Plant, ...) is not shoppable for us.
+  // Furniture, plants, people, everything else: not shoppable for us.
   return null;
 }
 

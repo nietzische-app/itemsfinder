@@ -76,6 +76,9 @@ const RULES: FamilyRule[] = [
       "slipper",
       "slippers",
       "platform",
+      // "Flip-flops" tokenises to flip + flops; "flip" alone is too generic to
+      // claim, "flops" is not a word anything else uses.
+      "flops",
     ],
   },
   {

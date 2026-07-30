@@ -5,6 +5,7 @@ npm run eval                 # renk, sorgu, aile — anahtar gerekmez
 npm run eval -- --verbose    # parça parça detay
 npm run eval:record          # gerçek Vision yanıtlarını kaydet (anahtar ister)
 npm run eval:record-attrs    # gerçek VLM özniteliklerini kaydet (anahtar ister)
+npm run eval:sweep           # NMS sabitlerini ızgarada tara (fixture ister)
 ```
 
 Çıkış kodu, metriklerden biri tabanın altına düştüğünde sıfırdan farklı olur —
@@ -42,6 +43,9 @@ alır.
 | Görsel erişim | Bir parçanın sıkı kırpımının, 14 gevşek kırpım arasından kendi eşini bulması | %70 (şans %7) |
 | Aile tutarlılığı | Sınıflandırıcının kataloğu kendi içinde tutarlı etiketlemesi | %90 |
 | Hotspot sayısı | Temizlenmiş tespit sayısının beklenene ±1 yakınlığı (fixture ister) | %75 |
+| Kutu bulma | Etiketli parçaların kaçının bir tespitçe IoU ≥ 0.5 ile sahiplenildiği, **bire-bir** (fixture ister) | henüz yok |
+| Kutu isabeti | Tespitlerin kaçının gerçek bir parçaya oturduğu (fixture ister) | henüz yok |
+| Kutu IoU | Eşleşen çiftlerin medyan örtüşmesi — "kaç tane" değil "ne kadar iyi çerçevelendi" (fixture ister) | henüz yok |
 
 VLM renginin tabanı **göreli**: hiç ölçülmemiş bir aşamaya mutlak bir sayı
 koymak ya kalıcı kırmızı ya da bedava yeşil olurdu. Tartışılmaz olan yön:
@@ -105,6 +109,41 @@ Bu set üzerinde ölçülüp **reddedilen** üç çözüm:
 
 Bunları düzeltecek olan gerçek bir maske: segmentasyon ya da kırpıma bakan bir
 görsel dil modeli. Yeni bir sabit değil. O iş girdiğinde taban yükseltilmeli.
+
+## Kutu doğruluğu — hiç sorulmamış soru
+
+Boru hattındaki her aşama Vision'ın dikdörtgeninin **giysinin üzerinde** olduğunu
+varsayıyor: renk onun içinde ölçülüyor, modele giden kırpım ondan kesiliyor,
+görsel betimleyici onu ürün fotoğrafıyla karşılaştırıyor. Kutu üçte bir kaymışsa
+bunların hepsi yanlış pikselleri çok hassas biçimde ölçüyor — ve mevcut hiçbir
+metrik bunu fark etmiyordu. "Hotspot sayısı" yalnızca *kaç tane* diye soruyordu.
+
+Eşleştirme **bire-bir** (`eval/boxMatch.ts`). Her referans parçaya bağımsız olarak
+"en çok örtüşen tespit hangisi" diye sormak, tek bir dev "Clothing" kutusunun
+ceketi, üstü ve pantolonu aynı anda bulmuş sayılmasına izin verir — tek bir şey
+bulmuş bir dedektör için kusursuz bulma oranı raporlar.
+
+Medyan yanında **eşik üstü oranı** da raporlanıyor, çünkü 0.05 ile 0.95 aynı
+ortalamayı iki 0.5 ile paylaşır ve bunlar aynı dedektör değildir.
+
+Taban **henüz yok**: bu hiç ölçülmedi, o yüzden buraya konacak her sayı kapı
+kılığında bir tahmin olurdu. İlk gerçek kayıttan sonra, o çalıştırmanın bastığı
+değerin biraz altına konmalı.
+
+## NMS sabitlerinin taranması
+
+`dedupeDetections`'ın dört sayısı — güven tabanı, IoU eşiği, içerme eşiği, birleşme
+boşluğu — hepsi bir ekran görüntüsüne bakılıp seçildi. `npm run eval:sweep` ızgarayı
+kaydedilmiş yanıtlara karşı puanlıyor ve **mevcut değerlerin sıralamada nerede
+durduğunu** söylüyor; yalnızca bir maksimum veren tablo, kıpırdamanın değip
+değmeyeceğini söylemez.
+
+Tarama `eval/replay.ts` üzerinden koşuyor — eval'in kullandığı modülün aynısı.
+Yayına çıkandan biraz farklı bir filtreyi optimize eden bir tarama, hiç taramamaktan
+kötüdür: kimsenin koşmadığı kod için otoriter sayılar üretir.
+
+Küçük bir farkı kovalamak dört fotoğrafa aşırı uydurmaktır. Bu tablo, set büyüdükten
+sonra anlam kazanır.
 
 ## Renk ailesi mantığı nerede yaşıyor
 

@@ -37,6 +37,10 @@ const {
   iou,
 } = await import("@/lib/detectionFilter");
 const { groundTruth } = await import("../eval/groundTruth.ts");
+const { replayVisionFixture } = await import("../eval/replay.ts");
+const { matchBoxes, bestOverlaps, median, fractionAtLeast } = await import(
+  "../eval/boxMatch.ts"
+);
 const { colorBucketOf } = await import("../eval/colorBucket.ts");
 
 /**
@@ -85,7 +89,22 @@ const FLOORS = {
   visualRetrieval: 0.7,
   family: 0.9,
   hotspotCount: 0.75,
+  /*
+   * Box accuracy. No floor yet — nothing has ever measured this, so any number
+   * put here would be a guess dressed as a gate. It is reported and left ungated
+   * until the first recorded run says what the detector actually does; the value
+   * to set it just under is the one that run prints.
+   *
+   * `boxRecall` is the fraction of labelled garments a detection actually claimed
+   * at IoU >= 0.5, matched one-to-one. `boxIou` is the median overlap on the ones
+   * it did claim — "how well framed", separate from "how many found".
+   */
+  boxRecall: null,
+  boxIou: null,
 };
+
+/** Overlap at which a detection counts as having found a garment. */
+const IOU_MATCH = 0.5;
 
 const cases = groundTruth(familyOf);
 const pct = (n, d) => (d === 0 ? 0 : n / d);
@@ -421,6 +440,26 @@ let matchedFamilyHits = 0;
 let matchedFamilyTotal = 0;
 const hotspotDetail = [];
 
+/*
+ * Box accuracy — the assumption nothing had ever checked.
+ *
+ * Every stage downstream trusts that Vision's rectangle sits on the garment: the
+ * colour is sampled inside it, the crop sent to the model is cut from it, the
+ * visual descriptor compares it against a product photo. A box that is off by a
+ * third measures the wrong pixels very precisely, and no existing metric would
+ * notice — "hotspot count" only ever asked *how many*.
+ *
+ * Matching is one-to-one (`eval/boxMatch.ts`). Asking each truth item for its best
+ * overlap independently lets one sprawling "Clothing" box claim to have found the
+ * jacket, the top and the trousers at once, which reports perfect recall for a
+ * detector that found one thing.
+ */
+const overlapSamples = [];
+let boxMatched = 0;
+let boxTruthTotal = 0;
+let boxDetectionTotal = 0;
+const boxDetail = [];
+
 const fixtures = existsSync(fixtureDir)
   ? readdirSync(fixtureDir).filter((name) => name.endsWith(".json"))
   : [];
@@ -431,60 +470,44 @@ for (const name of fixtures) {
   if (!truth) continue;
 
   const raw = JSON.parse(readFileSync(`${fixtureDir}/${name}`, "utf8"));
-  const objects = raw?.responses?.[0]?.localizedObjectAnnotations ?? [];
-
-  const toBox = (vertices = []) => {
-    const xs = vertices.map((v) => v.x ?? 0);
-    const ys = vertices.map((v) => v.y ?? 0);
-    const x = Math.max(0, Math.min(...xs));
-    const y = Math.max(0, Math.min(...ys));
-    return {
-      x,
-      y,
-      width: Math.min(1, Math.max(...xs)) - x,
-      height: Math.min(1, Math.max(...ys)) - y,
-    };
-  };
-
-  const person = objects
-    .filter((o) => /person|human|woman|man|girl|boy/i.test(o.name ?? ""))
-    .map((o) => toBox(o.boundingPoly?.normalizedVertices))
-    .sort((a, b) => b.width * b.height - a.width * a.height)[0] ?? null;
-
-  const candidates = objects
-    .filter((o) => o.name && !/person|human|woman|man|girl|boy/i.test(o.name))
-    .map((o) => ({
-      name: o.name,
-      score: o.score ?? 0,
-      box: toBox(o.boundingPoly?.normalizedVertices),
-      family: familyOf(o.name),
-    }))
-    .filter((c) => c.box.width > 0.01 && c.box.height > 0.01)
-    .filter((c) => familyFitsBody(c.family, bodyPosition(c.box, person)));
-
-  const detections = dedupeDetections(candidates);
+  const { detections, rawCount, droppedByBody } = replayVisionFixture(raw);
 
   hotspotCases += 1;
   const expectedCount = truth.items.length;
-  const withinOne = Math.abs(detections.length - expectedCount) <= 1;
-  if (withinOne) hotspotHits += 1;
+  if (Math.abs(detections.length - expectedCount) <= 1) hotspotHits += 1;
 
   hotspotDetail.push({
     exampleId,
-    raw: objects.length,
+    raw: rawCount,
     kept: detections.length,
     expected: expectedCount,
+    droppedByBody,
   });
 
-  // Family agreement on boxes that actually overlap a labelled item.
-  for (const item of truth.items) {
-    const best = detections
-      .map((d) => ({ d, overlap: iou(d.box, item.box) }))
-      .sort((a, b) => b.overlap - a.overlap)[0];
+  // --- box accuracy -------------------------------------------------------
+  const truthBoxes = truth.items.map((item) => item.box);
+  const detectionBoxes = detections.map((detection) => detection.box);
 
-    if (best && best.overlap >= 0.3) {
-      matchedFamilyTotal += 1;
-      if (best.d.family === item.family) matchedFamilyHits += 1;
+  const { matches, missedTruth, spuriousDetections } = matchBoxes(truthBoxes, detectionBoxes);
+  boxMatched += matches.length;
+  boxTruthTotal += truthBoxes.length;
+  boxDetectionTotal += detectionBoxes.length;
+  overlapSamples.push(...bestOverlaps(truthBoxes, detectionBoxes));
+
+  boxDetail.push({
+    exampleId,
+    matched: matches.length,
+    truth: truthBoxes.length,
+    missed: missedTruth.map((index) => truth.items[index].id),
+    spurious: spuriousDetections.length,
+    medianIou: median(matches.map((match) => match.iou)),
+  });
+
+  // Family agreement on the *assigned* pairs, not on whatever overlapped most.
+  for (const match of matches) {
+    matchedFamilyTotal += 1;
+    if (detections[match.detectionIndex].family === truth.items[match.truthIndex].family) {
+      matchedFamilyHits += 1;
     }
   }
 }
@@ -499,6 +522,10 @@ const familyScore = pct(familyHits, familyTotal);
 const visionQueryScore = pct(visionQueryHits, visionQueryTotal);
 const retrievalScore = pct(retrievalHits, tight.length);
 const hotspotScore = pct(hotspotHits, hotspotCases);
+const boxRecall = pct(boxMatched, boxTruthTotal);
+const boxPrecision = pct(boxMatched, boxDetectionTotal);
+const boxMedianIou = median(overlapSamples);
+const boxHalfRate = fractionAtLeast(overlapSamples, IOU_MATCH);
 
 const vlmColorScore = pct(vlmColorHits, vlmColorTotal);
 const vlmNounScore = pct(vlmNounHits, vlmColorTotal);
@@ -534,7 +561,24 @@ if (fixtures.length === 0) {
     );
   }
   for (const row of hotspotDetail) {
-    console.log(`      ${row.exampleId.padEnd(14)} ${row.raw} ham -> ${row.kept} hotspot (beklenen ${row.expected})`);
+    console.log(
+      `      ${row.exampleId.padEnd(14)} ${row.raw} ham -> ${row.kept} hotspot ` +
+        `(beklenen ${row.expected}${row.droppedByBody ? `, ${row.droppedByBody} vücut kuralıyla elendi` : ""})`,
+    );
+  }
+
+  console.log("");
+  console.log(`  Kutu bulma       ${fmt(boxRecall)}  (${boxMatched}/${boxTruthTotal})   IoU >= ${IOU_MATCH}, bire-bir`);
+  console.log(`  Kutu isabeti     ${fmt(boxPrecision)}  (${boxMatched}/${boxDetectionTotal})   tespitlerin kaçı bir parçaya oturdu`);
+  console.log(`  Kutu IoU (medyan) ${boxMedianIou.toFixed(3)}        ${fmt(boxHalfRate)} parça IoU >= ${IOU_MATCH}`);
+
+  for (const row of boxDetail) {
+    console.log(
+      `      ${row.exampleId.padEnd(14)} ${row.matched}/${row.truth} eşleşti, ` +
+        `medyan IoU ${row.medianIou.toFixed(3)}` +
+        `${row.spurious ? `, ${row.spurious} fazladan tespit` : ""}` +
+        `${row.missed.length ? `, kaçan: ${row.missed.join(", ")}` : ""}`,
+    );
   }
 }
 
@@ -592,6 +636,14 @@ const failures = [
   tight.length > 0 &&
     retrievalScore < FLOORS.visualRetrieval &&
     `görsel erişim ${fmt(retrievalScore)} < ${fmt(FLOORS.visualRetrieval)}`,
+  fixtures.length > 0 &&
+    FLOORS.boxRecall !== null &&
+    boxRecall < FLOORS.boxRecall &&
+    `kutu bulma ${fmt(boxRecall)} < ${fmt(FLOORS.boxRecall)}`,
+  fixtures.length > 0 &&
+    FLOORS.boxIou !== null &&
+    boxMedianIou < FLOORS.boxIou &&
+    `kutu IoU ${boxMedianIou.toFixed(3)} < ${FLOORS.boxIou}`,
   fixtures.length > 0 &&
     hotspotScore < FLOORS.hotspotCount &&
     `hotspot ${fmt(hotspotScore)} < ${fmt(FLOORS.hotspotCount)}`,
