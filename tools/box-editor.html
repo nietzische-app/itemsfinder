@@ -177,6 +177,27 @@
       <label style="flex:1"><span>Vision token'ı</span>
         <input id="f-vtoken" placeholder="ceket"></label>
     </div>
+    <div class="row">
+      <label style="flex:1"><span>malzeme (görünmüyorsa boş)</span>
+        <input id="f-material" list="materials" placeholder="deri"></label>
+      <label style="flex:1"><span>desen (düz / leopar / …)</span>
+        <input id="f-pattern" list="patterns" placeholder="düz"></label>
+    </div>
+    <p class="hint">
+      Malzeme ve desen <strong>boş bırakılabilir</strong> ve çoğu zaman
+      bırakılmalı: eval bunları yalnızca yazdığında derecelendirir. Fotoğraftan
+      söyleyemediğin bir kumaşı yazmak, sonuç uydurmak olur.
+    </p>
+    <datalist id="materials">
+      <option>deri</option><option>süet</option><option>triko</option><option>denim</option>
+      <option>kot</option><option>yün</option><option>pamuk</option><option>ipek</option>
+      <option>saten</option><option>keten</option><option>kaşmir</option><option>kadife</option>
+      <option>tüvit</option><option>dantel</option><option>şifon</option>
+    </datalist>
+    <datalist id="patterns">
+      <option>düz</option><option>çizgili</option><option>ekose</option><option>leopar</option>
+      <option>puantiyeli</option><option>çiçekli</option><option>kareli</option>
+    </datalist>
     <datalist id="vclasses">
       <option>Outerwear</option><option>Jacket</option><option>Coat</option><option>Top</option>
       <option>Shirt</option><option>Dress</option><option>Skirt</option><option>Shorts</option>
@@ -214,7 +235,7 @@ const state = {
   natural: { w: 0, h: 0 },
   exampleId: "",
   src: "",
-  boxes: [],         // { id, label, itemType, color, token, vclass, vtoken, x, y, w, h }  normalised
+  boxes: [],         // { id, label, itemType, color, token, vclass, vtoken, material, pattern, x, y, w, h }
   sel: -1,
   tab: "showcase",
 };
@@ -340,7 +361,7 @@ document.addEventListener("pointerup", () => {
     if (w > 0.008 && h > 0.008) {
       state.boxes.push({
         id: "", label: "", itemType: "", color: "koyu", token: "",
-        vclass: "", vtoken: "", x, y, w, h,
+        vclass: "", vtoken: "", material: "", pattern: "", x, y, w, h,
       });
       state.sel = state.boxes.length - 1;
     }
@@ -409,6 +430,7 @@ function render() {
     $("f-id").value = b.id; $("f-label").value = b.label; $("f-type").value = b.itemType;
     $("f-color").value = b.color; $("f-token").value = b.token;
     $("f-vclass").value = b.vclass; $("f-vtoken").value = b.vtoken;
+    $("f-material").value = b.material ?? ""; $("f-pattern").value = b.pattern ?? "";
     $("coords").textContent =
       `x ${b.x.toFixed(3)} · y ${b.y.toFixed(3)} · w ${b.w.toFixed(3)} · h ${b.h.toFixed(3)}` +
       `  (${Math.round(b.x * state.natural.w)}, ${Math.round(b.y * state.natural.h)} px)`;
@@ -433,6 +455,7 @@ const bind = (elId, key) =>
 bind("f-id", "id"); bind("f-label", "label"); bind("f-type", "itemType");
 bind("f-color", "color"); bind("f-token", "token");
 bind("f-vclass", "vclass"); bind("f-vtoken", "vtoken");
+bind("f-material", "material"); bind("f-pattern", "pattern");
 
 $("exampleId").addEventListener("input", (e) => { state.exampleId = e.target.value; render(); });
 $("src").addEventListener("input", (e) => { state.src = e.target.value; render(); });
@@ -507,7 +530,12 @@ function truthCode() {
     `    { id: ${JSON.stringify(b.id || "TODO")}, color: ${JSON.stringify(b.color)}, ` +
     `queryToken: ${JSON.stringify(b.token || "TODO")}, ` +
     `visionClass: ${JSON.stringify(b.vclass || "TODO")}, ` +
-    `visionToken: ${JSON.stringify(b.vtoken || b.token || "TODO")} },`
+    `visionToken: ${JSON.stringify(b.vtoken || b.token || "TODO")}, ` +
+    // Required by `ItemExpectation`, and `null` rather than "" on purpose: an
+    // empty field means the photograph does not settle it, which is "ungraded".
+    // Emitting "" would make the eval grade an answer nobody can check.
+    `material: ${b.material ? JSON.stringify(b.material) : "null"}, ` +
+    `pattern: ${b.pattern ? JSON.stringify(b.pattern) : "null"} },`
   ).join("\n");
 
   return `  ${JSON.stringify(state.exampleId || "TODO")}: [\n${rows}\n  ],`;
@@ -563,6 +591,7 @@ $("load").addEventListener("click", () => {
     state.boxes = (data.boxes ?? []).map((b) => ({
       id: b.id ?? "", label: b.label ?? "", itemType: b.itemType ?? "",
       color: b.color ?? "koyu", token: b.token ?? "", vclass: b.vclass ?? "", vtoken: b.vtoken ?? "",
+      material: b.material ?? "", pattern: b.pattern ?? "",
       // Accepts either this tool's {w,h} or the app's {width,height}.
       x: b.x, y: b.y, w: b.w ?? b.width, h: b.h ?? b.height,
     }));

@@ -31,6 +31,17 @@ Vaka eklemek: fotoğrafı `public/examples/`'a koy, ölçülmüş kutularla bir
 içindeki `EXPECTATIONS`'a parça beklentilerini yaz. `npm run eval` otomatik
 alır.
 
+Kutuları elle ölçmek yerine `tools/box-editor.html`'i tarayıcıda aç: fotoğrafı
+sürükle, kutuları çiz, ok tuşlarıyla piksel piksel düzelt, sonra **groundTruth.ts**
+sekmesindeki bloğu kopyala. Editörün ürettiği satır `ItemExpectation` şemasına
+birebir uyuyor ve bu bir testle korunuyor (`editor` süiti, 13 kontrol) — şema
+değişip editör geride kaldığında, yapıştırılan kod derlenmediği için değil,
+test kırmızıya döndüğü için haberimiz olur.
+
+Malzeme ve desen alanlarını **boş bırakmak normaldir**: editör onları `null`
+olarak yazar ve eval `null` olanı derecelendirmez. Fotoğraftan söyleyemediğin bir
+kumaşı yazmak, ölçüme cevap uydurmaktır.
+
 ## Metrikler
 
 | Metrik | Ne ölçüyor | Taban |
