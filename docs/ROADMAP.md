@@ -137,9 +137,12 @@ skor 14 puan zıplıyor.
   durumlar (ince bantlı sandalet, küçük bere), koyu-üstüne-koyu, örtüşen
   giysiler. Şu anki dört sapmanın hepsi bu sınıftan ve setin dörtte biri
   ediyor — gerçek dağılımı yansıtıyor mu bilmiyoruz.
-- Kutu ölçmeyi kolaylaştıracak küçük bir araç: fotoğrafı tarayıcıda aç, kutuları
-  sürükle, normalize koordinatları yazdır. Elle piksel sayarak 50 fotoğraf
-  ölçmek sürdürülemez.
+- ~~Kutu ölçmeyi kolaylaştıracak küçük bir araç~~ — ✅ `tools/box-editor.html`.
+  Tarayıcıda aç, fotoğrafı sürükle, kutuları çiz, `showcase.ts` ve
+  `groundTruth.ts` girdilerini kopyala. Sunucu yok, derleme yok, uygulamaya
+  eklenen rota yok; henüz `public/examples/`'a taşınmamış fotoğraflarda da
+  çalışıyor. Ok tuşlarıyla 1px, Shift+ok ile 10px hassas kaydırma var, çünkü bir
+  kutunun son iki pikseli işin bütünü. Çalışma localStorage'da saklanıyor.
 
 **Bitti ölçütü:** `npm run eval` en az 30 kombin raporluyor ve tabanlar yeni,
 daha geniş sete göre yeniden ayarlanmış.

@@ -296,6 +296,20 @@ never lands without someone having seen it.
 The next phase of work — what is missing, in what order, and what has to turn
 green for each item to count as done — is in [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
+## Tools
+
+`tools/box-editor.html` — ground-truth box editor for the eval set. Open the file
+in a browser, drag a photo onto it, draw boxes, fill in the per-item expectations,
+and copy out the `SHOWCASE_LOOKS` and `EXPECTATIONS` entries. Standalone: no
+server, no build step, no route added to the app, and it works on photos that are
+still in your downloads folder. Arrow keys nudge the selected box by one pixel
+(Shift for ten) because the last two pixels of a box are the whole point; work in
+progress is autosaved per image.
+
+It exists because the eval has to grow from four photos to thirty or more, and
+measuring fifty photographs by counting pixels in an image viewer is not something
+anyone finishes.
+
 Grouped by **retailer** rather than by look, because that is how the work
 actually goes: open one store, find its products, move on. Each row carries a
 search link for that store so the product page is one click away, and the run

@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Markas — kutu ölçüm aracı</title>
+<!--
+  Ground-truth box editor for the detection eval.
+
+  Standalone on purpose: open the file, drag a photo onto it, draw boxes, copy the
+  generated entries into `src/lib/showcase.ts` and `eval/groundTruth.ts`. No server,
+  no build step, no route added to the app — and it works on photos that are still
+  sitting in your downloads folder rather than in `public/examples/`.
+
+  It exists because the eval set has to grow from four photos to thirty or more
+  (docs/ROADMAP.md, 1.1) and measuring fifty photographs by counting pixels in an
+  image viewer is not something anyone finishes.
+
+  Work in progress is kept in localStorage per image, so closing the tab does not
+  cost you the session.
+-->
+<style>
+  :root {
+    --bg: #14120f;
+    --panel: #1e1b17;
+    --line: #322c25;
+    --text: #f2ede6;
+    --muted: #a99f92;
+    --coral: #e05638;
+    --ok: #4ea172;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 13px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    display: grid; grid-template-columns: 1fr 340px; height: 100vh; overflow: hidden;
+  }
+
+  /* ---- stage ---------------------------------------------------------- */
+  #stage {
+    position: relative; display: flex; align-items: center; justify-content: center;
+    padding: 16px; overflow: hidden;
+  }
+  #drop {
+    position: absolute; inset: 16px; border: 2px dashed var(--line); border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; color: var(--muted); text-align: center; padding: 24px;
+  }
+  #drop.hide { display: none; }
+  #drop strong { color: var(--text); font-size: 15px; }
+  #drop.over { border-color: var(--coral); background: #e0563812; }
+
+  #frame { position: relative; line-height: 0; }
+  #photo { max-height: calc(100vh - 32px); max-width: 100%; display: block; user-select: none; }
+  #overlay { position: absolute; inset: 0; cursor: crosshair; }
+
+  .box {
+    position: absolute; border: 2px solid var(--coral); background: #e0563818;
+    cursor: move;
+  }
+  .box.sel { border-color: #fff; background: #ffffff1f; box-shadow: 0 0 0 1px #000a; }
+  .box .tag {
+    position: absolute; top: -20px; left: -2px; font-size: 11px; line-height: 16px;
+    padding: 0 5px; background: var(--coral); color: #fff; border-radius: 3px;
+    white-space: nowrap; font-weight: 600;
+  }
+  .box.sel .tag { background: #fff; color: #111; }
+  .h {
+    position: absolute; width: 10px; height: 10px; background: #fff;
+    border: 1px solid #111; border-radius: 2px;
+  }
+  .h.nw { left: -5px; top: -5px; cursor: nwse-resize; }
+  .h.ne { right: -5px; top: -5px; cursor: nesw-resize; }
+  .h.sw { left: -5px; bottom: -5px; cursor: nesw-resize; }
+  .h.se { right: -5px; bottom: -5px; cursor: nwse-resize; }
+  .h.n { left: 50%; top: -5px; margin-left: -5px; cursor: ns-resize; }
+  .h.s { left: 50%; bottom: -5px; margin-left: -5px; cursor: ns-resize; }
+  .h.w { left: -5px; top: 50%; margin-top: -5px; cursor: ew-resize; }
+  .h.e { right: -5px; top: 50%; margin-top: -5px; cursor: ew-resize; }
+
+  /* ---- panel ---------------------------------------------------------- */
+  #panel {
+    background: var(--panel); border-left: 1px solid var(--line);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  #panel section { padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  #panel h2 {
+    margin: 0 0 8px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700;
+  }
+  label { display: block; margin-bottom: 7px; }
+  label span { display: block; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+  input, select, textarea, button {
+    font: inherit; width: 100%; background: #14120f; color: var(--text);
+    border: 1px solid var(--line); border-radius: 6px; padding: 5px 7px;
+  }
+  textarea { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px; resize: vertical; }
+  button { cursor: pointer; background: #2a251f; }
+  button:hover { background: #373028; }
+  button.primary { background: var(--coral); border-color: var(--coral); color: #fff; font-weight: 600; }
+  button.danger { background: #3a1e1a; border-color: #5a2d26; }
+  .row { display: flex; gap: 6px; }
+  #list { max-height: 190px; overflow: auto; margin-bottom: 8px; }
+  #list .item {
+    display: flex; justify-content: space-between; gap: 6px; padding: 4px 6px;
+    border-radius: 5px; cursor: pointer; font-size: 12px;
+  }
+  #list .item:hover { background: #ffffff0d; }
+  #list .item.sel { background: #ffffff1a; }
+  #list .item code { color: var(--muted); font-size: 11px; }
+  #out { flex: 1; display: flex; flex-direction: column; padding: 12px 14px; min-height: 0; }
+  #out textarea { flex: 1; min-height: 120px; }
+  .hint { color: var(--muted); font-size: 11px; margin: 6px 0 0; }
+  kbd {
+    background: #14120f; border: 1px solid var(--line); border-bottom-width: 2px;
+    border-radius: 4px; padding: 0 4px; font-size: 11px; font-family: inherit;
+  }
+  .saved { color: var(--ok); }
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <div id="drop">
+    <strong>Fotoğrafı buraya sürükle</strong>
+    <div>ya da <label style="display:inline"><input type="file" id="file" accept="image/*" style="width:auto;display:inline"></label></div>
+    <div style="max-width:380px">
+      Kutu çizmek için sürükle. Seçili kutuyu <kbd>←↑→↓</kbd> ile 1px,
+      <kbd>Shift</kbd>+ok ile 10px kaydır. <kbd>Delete</kbd> siler.
+    </div>
+  </div>
+  <div id="frame" hidden>
+    <img id="photo" alt="">
+    <div id="overlay"></div>
+  </div>
+</div>
+
+<div id="panel">
+  <section>
+    <h2>Kombin</h2>
+    <label><span>exampleId (kod içinde kullanılacak anahtar)</span>
+      <input id="exampleId" placeholder="ör. street-denim"></label>
+    <label><span>public/ altındaki yol</span>
+      <input id="src" placeholder="/examples/street-denim.jpg"></label>
+    <p class="hint" id="dims">—</p>
+  </section>
+
+  <section>
+    <h2>Kutular (<span id="count">0</span>)</h2>
+    <div id="list"></div>
+    <div class="row">
+      <button id="dup">Kopyala</button>
+      <button id="del" class="danger">Sil</button>
+    </div>
+  </section>
+
+  <section id="fields" hidden>
+    <h2>Seçili parça</h2>
+    <label><span>id — katalog/showcase parça kimliği</span>
+      <input id="f-id" placeholder="sd-jacket"></label>
+    <label><span>label — insanın okuduğu ad</span>
+      <input id="f-label" placeholder="Mavi Oversize Kot Ceket"></label>
+    <label><span>itemType — kısa tür</span>
+      <input id="f-type" placeholder="Kot ceket"></label>
+    <div class="row">
+      <label style="flex:1"><span>renk ailesi</span>
+        <select id="f-color">
+          <option>koyu</option><option>beyaz</option><option>gri</option><option>bej</option>
+          <option>kahve</option><option>kirmizi</option><option>pembe</option><option>mor</option>
+          <option>mavi</option><option>yesil</option><option>sari</option>
+        </select></label>
+      <label style="flex:1"><span>sorgu token'ı</span>
+        <input id="f-token" placeholder="ceket"></label>
+    </div>
+    <div class="row">
+      <label style="flex:1"><span>Vision sınıfı</span>
+        <input id="f-vclass" list="vclasses" placeholder="Outerwear"></label>
+      <label style="flex:1"><span>Vision token'ı</span>
+        <input id="f-vtoken" placeholder="ceket"></label>
+    </div>
+    <datalist id="vclasses">
+      <option>Outerwear</option><option>Jacket</option><option>Coat</option><option>Top</option>
+      <option>Shirt</option><option>Dress</option><option>Skirt</option><option>Shorts</option>
+      <option>Trousers</option><option>Jeans</option><option>Footwear</option><option>Shoe</option>
+      <option>Boot</option><option>Sandal</option><option>High heels</option><option>Hat</option>
+      <option>Sunglasses</option><option>Glasses</option><option>Handbag</option><option>Backpack</option>
+      <option>Belt</option><option>Watch</option><option>Necklace</option><option>Earrings</option>
+      <option>Scarf</option><option>Lipstick</option><option>Mascara</option>
+    </datalist>
+    <p class="hint" id="coords">—</p>
+  </section>
+
+  <div id="out">
+    <h2>Çıktı</h2>
+    <div class="row" style="margin-bottom:6px">
+      <button id="tab-showcase" class="primary">showcase.ts</button>
+      <button id="tab-truth">groundTruth.ts</button>
+      <button id="tab-json">JSON</button>
+    </div>
+    <textarea id="code" readonly spellcheck="false"></textarea>
+    <div class="row" style="margin-top:6px">
+      <button id="copy" class="primary">Kopyala</button>
+      <button id="load">JSON yükle</button>
+    </div>
+    <p class="hint" id="status">Çalışma otomatik olarak tarayıcıda saklanıyor.</p>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+const $ = (id) => document.getElementById(id);
+const state = {
+  name: "",          // file name, used as the localStorage key
+  natural: { w: 0, h: 0 },
+  exampleId: "",
+  src: "",
+  boxes: [],         // { id, label, itemType, color, token, vclass, vtoken, x, y, w, h }  normalised
+  sel: -1,
+  tab: "showcase",
+};
+
+/* ---------------------------------------------------------------- image */
+
+function loadFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => showImage(reader.result, file.name);
+  reader.readAsDataURL(file);
+}
+
+function showImage(dataUrl, name) {
+  const img = $("photo");
+  img.onload = () => {
+    state.natural = { w: img.naturalWidth, h: img.naturalHeight };
+    state.name = name;
+    $("drop").classList.add("hide");
+    $("frame").hidden = false;
+    $("dims").textContent =
+      `${img.naturalWidth}×${img.naturalHeight} · oran ${(img.naturalWidth / img.naturalHeight).toFixed(3)}`;
+
+    const stem = name.replace(/\.[^.]+$/, "");
+    if (!state.exampleId) { state.exampleId = stem; $("exampleId").value = stem; }
+    if (!state.src) { state.src = `/examples/${name}`; $("src").value = state.src; }
+
+    restore();
+    render();
+  };
+  img.src = dataUrl;
+}
+
+$("file").addEventListener("change", (e) => e.target.files[0] && loadFile(e.target.files[0]));
+
+for (const type of ["dragenter", "dragover"]) {
+  document.addEventListener(type, (e) => { e.preventDefault(); $("drop").classList.add("over"); });
+}
+document.addEventListener("dragleave", () => $("drop").classList.remove("over"));
+document.addEventListener("drop", (e) => {
+  e.preventDefault();
+  $("drop").classList.remove("over");
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith("image/")) loadFile(file);
+});
+
+/* ------------------------------------------------------------- drawing */
+
+const overlay = $("overlay");
+let drag = null;
+
+function rect() { return overlay.getBoundingClientRect(); }
+function toNorm(clientX, clientY) {
+  const r = rect();
+  return {
+    x: Math.min(1, Math.max(0, (clientX - r.left) / r.width)),
+    y: Math.min(1, Math.max(0, (clientY - r.top) / r.height)),
+  };
+}
+
+overlay.addEventListener("pointerdown", (e) => {
+  if (e.target !== overlay) return;         // handles and boxes manage themselves
+  const p = toNorm(e.clientX, e.clientY);
+  drag = { mode: "new", ox: p.x, oy: p.y };
+  overlay.setPointerCapture(e.pointerId);
+});
+
+function startBoxDrag(e, index, mode) {
+  e.stopPropagation();
+  const p = toNorm(e.clientX, e.clientY);
+  const b = state.boxes[index];
+  drag = { mode, index, ox: p.x, oy: p.y, start: { ...b } };
+  state.sel = index;
+  overlay.setPointerCapture(e.pointerId);
+  render();
+}
+
+document.addEventListener("pointermove", (e) => {
+  if (!drag) return;
+  const p = toNorm(e.clientX, e.clientY);
+
+  if (drag.mode === "new") {
+    drag.cur = p;
+    renderDraft();
+    return;
+  }
+
+  const b = state.boxes[drag.index];
+  const s = drag.start;
+  const dx = p.x - drag.ox;
+  const dy = p.y - drag.oy;
+
+  if (drag.mode === "move") {
+    b.x = Math.min(1 - s.w, Math.max(0, s.x + dx));
+    b.y = Math.min(1 - s.h, Math.max(0, s.y + dy));
+  } else {
+    let left = s.x, top = s.y, right = s.x + s.w, bottom = s.y + s.h;
+    if (drag.mode.includes("w")) left = Math.min(right - 0.004, Math.max(0, s.x + dx));
+    if (drag.mode.includes("e")) right = Math.max(left + 0.004, Math.min(1, s.x + s.w + dx));
+    if (drag.mode.includes("n")) top = Math.min(bottom - 0.004, Math.max(0, s.y + dy));
+    if (drag.mode.includes("s")) bottom = Math.max(top + 0.004, Math.min(1, s.y + s.h + dy));
+    b.x = left; b.y = top; b.w = right - left; b.h = bottom - top;
+  }
+  render();
+});
+
+document.addEventListener("pointerup", () => {
+  /*
+   * Only re-render when a drag actually happened. This listener is on the document,
+   * so it fires for every click anywhere — including a click on a row in the box
+   * list, whose handler is a `click` and therefore runs *after* pointerup. Rendering
+   * here replaced the list's DOM, so the clicked row was detached before its handler
+   * could run and selecting from the list silently did nothing.
+   */
+  if (!drag) return;
+
+  if (drag.mode === "new" && drag.cur) {
+    const x = Math.min(drag.ox, drag.cur.x);
+    const y = Math.min(drag.oy, drag.cur.y);
+    const w = Math.abs(drag.cur.x - drag.ox);
+    const h = Math.abs(drag.cur.y - drag.oy);
+
+    // A click, not a drag. Ignore rather than creating a zero-area box.
+    if (w > 0.008 && h > 0.008) {
+      state.boxes.push({
+        id: "", label: "", itemType: "", color: "koyu", token: "",
+        vclass: "", vtoken: "", x, y, w, h,
+      });
+      state.sel = state.boxes.length - 1;
+    }
+  }
+  drag = null;
+  render();
+});
+
+/* -------------------------------------------------------------- render */
+
+function renderDraft() {
+  let el = $("draft");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "draft";
+    el.className = "box";
+    overlay.appendChild(el);
+  }
+  const x = Math.min(drag.ox, drag.cur.x), y = Math.min(drag.oy, drag.cur.y);
+  el.style.cssText =
+    `left:${x * 100}%;top:${y * 100}%;width:${Math.abs(drag.cur.x - drag.ox) * 100}%;` +
+    `height:${Math.abs(drag.cur.y - drag.oy) * 100}%`;
+}
+
+function render() {
+  overlay.innerHTML = "";
+
+  state.boxes.forEach((b, i) => {
+    const el = document.createElement("div");
+    el.className = "box" + (i === state.sel ? " sel" : "");
+    el.style.cssText =
+      `left:${b.x * 100}%;top:${b.y * 100}%;width:${b.w * 100}%;height:${b.h * 100}%`;
+    el.addEventListener("pointerdown", (e) => startBoxDrag(e, i, "move"));
+
+    const tag = document.createElement("div");
+    tag.className = "tag";
+    tag.textContent = b.id || b.label || `#${i + 1}`;
+    el.appendChild(tag);
+
+    if (i === state.sel) {
+      for (const dir of ["nw", "n", "ne", "e", "se", "s", "sw", "w"]) {
+        const h = document.createElement("div");
+        h.className = "h " + dir;
+        h.addEventListener("pointerdown", (e) => startBoxDrag(e, i, dir));
+        el.appendChild(h);
+      }
+    }
+    overlay.appendChild(el);
+  });
+
+  // list
+  $("count").textContent = state.boxes.length;
+  $("list").innerHTML = "";
+  state.boxes.forEach((b, i) => {
+    const row = document.createElement("div");
+    row.className = "item" + (i === state.sel ? " sel" : "");
+    row.innerHTML = `<span>${b.id || b.label || "(adsız)"}</span><code>${fmt(b)}</code>`;
+    row.addEventListener("click", () => { state.sel = i; render(); });
+    $("list").appendChild(row);
+  });
+
+  // fields
+  const b = state.boxes[state.sel];
+  $("fields").hidden = !b;
+  if (b) {
+    $("f-id").value = b.id; $("f-label").value = b.label; $("f-type").value = b.itemType;
+    $("f-color").value = b.color; $("f-token").value = b.token;
+    $("f-vclass").value = b.vclass; $("f-vtoken").value = b.vtoken;
+    $("coords").textContent =
+      `x ${b.x.toFixed(3)} · y ${b.y.toFixed(3)} · w ${b.w.toFixed(3)} · h ${b.h.toFixed(3)}` +
+      `  (${Math.round(b.x * state.natural.w)}, ${Math.round(b.y * state.natural.h)} px)`;
+  }
+
+  renderCode();
+  persist();
+}
+
+const fmt = (b) => `${b.x.toFixed(3)} ${b.y.toFixed(3)} ${b.w.toFixed(3)} ${b.h.toFixed(3)}`;
+
+/* --------------------------------------------------------------- fields */
+
+const bind = (elId, key) =>
+  $(elId).addEventListener("input", (e) => {
+    const b = state.boxes[state.sel];
+    if (!b) return;
+    b[key] = e.target.value;
+    render();
+  });
+
+bind("f-id", "id"); bind("f-label", "label"); bind("f-type", "itemType");
+bind("f-color", "color"); bind("f-token", "token");
+bind("f-vclass", "vclass"); bind("f-vtoken", "vtoken");
+
+$("exampleId").addEventListener("input", (e) => { state.exampleId = e.target.value; render(); });
+$("src").addEventListener("input", (e) => { state.src = e.target.value; render(); });
+
+$("del").addEventListener("click", () => {
+  if (state.sel < 0) return;
+  state.boxes.splice(state.sel, 1);
+  state.sel = Math.min(state.sel, state.boxes.length - 1);
+  render();
+});
+
+$("dup").addEventListener("click", () => {
+  const b = state.boxes[state.sel];
+  if (!b) return;
+  state.boxes.push({ ...b, id: b.id + "-2", x: Math.min(0.9, b.x + 0.02), y: Math.min(0.9, b.y + 0.02) });
+  state.sel = state.boxes.length - 1;
+  render();
+});
+
+/* Nudging beats redrawing: the last two pixels of a box are the whole point. */
+document.addEventListener("keydown", (e) => {
+  if (/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)) return;
+  const b = state.boxes[state.sel];
+  if (!b) return;
+
+  if (e.key === "Delete" || e.key === "Backspace") {
+    e.preventDefault();
+    $("del").click();
+    return;
+  }
+
+  const step = (e.shiftKey ? 10 : 1);
+  const dx = step / state.natural.w;
+  const dy = step / state.natural.h;
+  const grow = e.altKey;   // Alt resizes from the bottom-right instead of moving
+
+  const moves = {
+    ArrowLeft:  () => grow ? (b.w = Math.max(0.004, b.w - dx)) : (b.x = Math.max(0, b.x - dx)),
+    ArrowRight: () => grow ? (b.w = Math.min(1 - b.x, b.w + dx)) : (b.x = Math.min(1 - b.w, b.x + dx)),
+    ArrowUp:    () => grow ? (b.h = Math.max(0.004, b.h - dy)) : (b.y = Math.max(0, b.y - dy)),
+    ArrowDown:  () => grow ? (b.h = Math.min(1 - b.y, b.h + dy)) : (b.y = Math.min(1 - b.h, b.y + dy)),
+  };
+  if (moves[e.key]) { e.preventDefault(); moves[e.key](); render(); }
+});
+
+/* ---------------------------------------------------------------- output */
+
+const n3 = (v) => Number(v.toFixed(3));
+
+function showcaseCode() {
+  const items = state.boxes.map((b) =>
+    `      {\n` +
+    `        id: ${JSON.stringify(b.id || "TODO")},\n` +
+    `        label: ${JSON.stringify(b.label || "TODO")},\n` +
+    `        box: { x: ${n3(b.x)}, y: ${n3(b.y)}, width: ${n3(b.w)}, height: ${n3(b.h)} },\n` +
+    `      },`
+  ).join("\n");
+
+  return (
+    `  {\n` +
+    `    exampleId: ${JSON.stringify(state.exampleId || "TODO")},\n` +
+    `    src: ${JSON.stringify(state.src || "TODO")},\n` +
+    `    width: ${state.natural.w},\n` +
+    `    height: ${state.natural.h},\n` +
+    `    items: [\n${items}\n    ],\n` +
+    `  },`
+  );
+}
+
+function truthCode() {
+  const rows = state.boxes.map((b) =>
+    `    { id: ${JSON.stringify(b.id || "TODO")}, color: ${JSON.stringify(b.color)}, ` +
+    `queryToken: ${JSON.stringify(b.token || "TODO")}, ` +
+    `visionClass: ${JSON.stringify(b.vclass || "TODO")}, ` +
+    `visionToken: ${JSON.stringify(b.vtoken || b.token || "TODO")} },`
+  ).join("\n");
+
+  return `  ${JSON.stringify(state.exampleId || "TODO")}: [\n${rows}\n  ],`;
+}
+
+function jsonCode() {
+  return JSON.stringify(
+    {
+      exampleId: state.exampleId,
+      src: state.src,
+      width: state.natural.w,
+      height: state.natural.h,
+      boxes: state.boxes.map((b) => ({ ...b, x: n3(b.x), y: n3(b.y), w: n3(b.w), h: n3(b.h) })),
+    },
+    null,
+    2,
+  );
+}
+
+function renderCode() {
+  $("code").value =
+    state.tab === "showcase" ? showcaseCode() :
+    state.tab === "truth" ? truthCode() : jsonCode();
+}
+
+for (const [id, tab] of [["tab-showcase", "showcase"], ["tab-truth", "truth"], ["tab-json", "json"]]) {
+  $(id).addEventListener("click", () => {
+    state.tab = tab;
+    for (const other of ["tab-showcase", "tab-truth", "tab-json"]) {
+      $(other).classList.toggle("primary", other === id);
+    }
+    renderCode();
+  });
+}
+
+$("copy").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText($("code").value);
+    flash("Kopyalandı.");
+  } catch {
+    $("code").select();
+    flash("Kopyalanamadı — metin seçildi, Ctrl/Cmd+C.");
+  }
+});
+
+$("load").addEventListener("click", () => {
+  const raw = prompt("Daha önce kaydedilmiş JSON'u yapıştır:");
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    state.exampleId = data.exampleId ?? "";
+    state.src = data.src ?? "";
+    state.boxes = (data.boxes ?? []).map((b) => ({
+      id: b.id ?? "", label: b.label ?? "", itemType: b.itemType ?? "",
+      color: b.color ?? "koyu", token: b.token ?? "", vclass: b.vclass ?? "", vtoken: b.vtoken ?? "",
+      // Accepts either this tool's {w,h} or the app's {width,height}.
+      x: b.x, y: b.y, w: b.w ?? b.width, h: b.h ?? b.height,
+    }));
+    $("exampleId").value = state.exampleId;
+    $("src").value = state.src;
+    state.sel = -1;
+    render();
+    flash("Yüklendi.");
+  } catch (error) {
+    flash("Geçersiz JSON: " + error.message);
+  }
+});
+
+let flashTimer;
+function flash(message) {
+  const el = $("status");
+  el.textContent = message;
+  el.classList.add("saved");
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(() => {
+    el.classList.remove("saved");
+    el.textContent = "Çalışma otomatik olarak tarayıcıda saklanıyor.";
+  }, 2200);
+}
+
+/* --------------------------------------------------------------- persist */
+
+const key = () => "markas:boxes:" + state.name;
+
+function persist() {
+  if (!state.name) return;
+  try {
+    localStorage.setItem(key(), jsonCode());
+  } catch {
+    // Quota or private mode. Losing the autosave is survivable; the code panel
+    // is still on screen and can be copied out.
+  }
+}
+
+function restore() {
+  try {
+    const raw = localStorage.getItem(key());
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (!Array.isArray(data.boxes) || data.boxes.length === 0) return;
+
+    state.boxes = data.boxes;
+    state.exampleId = data.exampleId || state.exampleId;
+    state.src = data.src || state.src;
+    $("exampleId").value = state.exampleId;
+    $("src").value = state.src;
+    flash(`Önceki oturumdan ${data.boxes.length} kutu geri yüklendi.`);
+  } catch {
+    // Corrupt autosave: start clean rather than refusing to open the image.
+  }
+}
+
+render();
+</script>
+</body>
+</html>
