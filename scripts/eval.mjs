@@ -36,10 +36,14 @@ const {
   familyFitsBody,
   iou,
 } = await import("@/lib/detectionFilter");
-const { groundTruth } = await import("../eval/groundTruth.ts");
+const { attributeSearchQuery } = await import("@/lib/searchQuery");
+const { groundTruth, HARD_COLOR_ITEMS } = await import("../eval/groundTruth.ts");
 const { replayVisionFixture } = await import("../eval/replay.ts");
 const { matchBoxes, bestOverlaps, median, fractionAtLeast } = await import(
   "../eval/boxMatch.ts"
+);
+const { materialVerdict, patternVerdict, tally, containsToken } = await import(
+  "../eval/attributeScore.ts"
 );
 const { colorBucketOf } = await import("../eval/colorBucket.ts");
 
@@ -101,6 +105,32 @@ const FLOORS = {
    */
   boxRecall: null,
   boxIou: null,
+  /*
+   * How many of the four background-dominated items the attribute stage has to
+   * recover to be worth its API call.
+   *
+   * Unlike the box floors above, this is not a guess about an unmeasured quantity
+   * — it is the stage's stated purpose. `lc-beanie`, `lc-jeans`, `lc-sandals` and
+   * `bb-heels` are the items whose bounding box is mostly backdrop, three
+   * different thresholds were measured against them and rejected, and "look at the
+   * crop instead" was the remaining idea. If looking at the crop fixes fewer than
+   * three of them, the stage costs a call per item and buys something else; that
+   * is a decision to reopen, and it should arrive as a red run rather than as a
+   * paragraph in a document.
+   *
+   * Only judged when the recording covers all four. A partial run says nothing.
+   */
+  vlmHardColors: 3,
+  /*
+   * Rate of asserted attributes the photograph contradicts.
+   *
+   * Reported, ungated, for the same reason as the box floors: nothing has measured
+   * it, so any number here would be a guess wearing a gate's clothes. It is the
+   * metric to watch, though — an abstention costs nothing, while a wrong material
+   * carries `MATERIAL_CONFLICT` and pushes correct products down the ranking. Set
+   * this just above whatever the first real recording prints.
+   */
+  vlmHallucination: null,
 };
 
 /** Overlap at which a detection counts as having found a garment. */
@@ -155,86 +185,6 @@ for (const testCase of cases) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  1b. VLM attributes, replayed from fixtures                                */
-/* -------------------------------------------------------------------------- */
-
-/*
- * The measured colour above describes a *rectangle*; these describe the garment
- * inside it. The four standing colour failures are all cases where those are not
- * the same thing, so this is the metric that says whether the attribute stage
- * earns its API call — scored on the same items, against the same labels.
- *
- * No fixtures means the stage has never been recorded; the section stays silent
- * rather than reporting a zero that would read as a regression.
- */
-const attrDir = `${ROOT}eval/fixtures/attrs`;
-const attrFixtures = existsSync(attrDir)
-  ? readdirSync(attrDir).filter((name) => name.endsWith(".json"))
-  : [];
-
-let vlmColorHits = 0;
-let vlmColorTotal = 0;
-let vlmDescribed = 0;
-let vlmNounHits = 0;
-/**
- * Region-colour hits on exactly the items the VLM was recorded for.
- *
- * The overall region score covers all fourteen items; fixtures may cover four.
- * Comparing 3/4 against 10/14 would be comparing two different questions, and the
- * gate below is only meaningful on a like-for-like subset.
- */
-let regionHitsOnVlmItems = 0;
-const vlmColorMisses = [];
-const vlmNounMisses = [];
-
-for (const name of attrFixtures) {
-  const exampleId = name.replace(/\.json$/, "");
-  const truth = cases.find((entry) => entry.exampleId === exampleId);
-  if (!truth) continue;
-
-  const recorded = JSON.parse(readFileSync(`${attrDir}/${name}`, "utf8"));
-
-  for (const item of truth.items) {
-    vlmColorTotal += 1;
-    if (regionHitById.get(item.id)?.hit) regionHitsOnVlmItems += 1;
-
-    const attrs = recorded[item.id];
-
-    // An item the model declined to describe scores as a miss, not as an absence:
-    // in the pipeline it falls back to the measured colour, and the point of the
-    // comparison is what the user actually ends up with.
-    if (!attrs) {
-      vlmColorMisses.push({ id: item.id, want: item.color, got: "betimlenmedi" });
-      vlmNounMisses.push({ id: item.id, want: item.queryToken, got: "betimlenmedi" });
-      continue;
-    }
-
-    vlmDescribed += 1;
-
-    const bucket = colorBucketOf(attrs.colorHex);
-    if (bucket === item.color) {
-      vlmColorHits += 1;
-      if (VERBOSE) {
-        console.log(
-          `    ✓ ${item.id.padEnd(16)} ${attrs.colorHex} ${bucket} («${attrs.colorName}» ${attrs.garmentType})`,
-        );
-      }
-    } else {
-      vlmColorMisses.push({ id: item.id, want: item.color, got: bucket, hex: attrs.colorHex });
-    }
-
-    // The garment noun is what the query is actually built around, so it is held
-    // to the same expected token as the query metric below.
-    const noun = String(attrs.garmentType ?? "").toLocaleLowerCase("tr");
-    if (noun.includes(item.queryToken.toLocaleLowerCase("tr"))) {
-      vlmNounHits += 1;
-    } else {
-      vlmNounMisses.push({ id: item.id, want: item.queryToken, got: attrs.garmentType });
-    }
-  }
-}
-
-/* -------------------------------------------------------------------------- */
 /*  2. Query tokens                                                           */
 /* -------------------------------------------------------------------------- */
 
@@ -276,40 +226,267 @@ for (const testCase of cases) {
  * says "Footwear", not "sneaker", and no vocabulary table recovers a detail the
  * detector never saw.
  */
+/**
+ * The coarse-path query for one item, and whether it works.
+ *
+ * A function rather than inline code because the VLM section below needs the same
+ * answer on its own subset of items: "the model's query is 93% accurate" means
+ * nothing without "and the path it replaces was 57% on those same items".
+ */
+function visionQueryOutcome(item) {
+  const query = buildSearchQuery({ itemType: item.visionClass, colorHex: "#111111" });
+  const lower = query.toLocaleLowerCase("tr");
+
+  // Two conditions, both required: the Turkish term has to be there, and the
+  // English class must be gone. A query carrying both would score as a pass
+  // while still shipping an English word to a Turkish search box.
+  const hasTurkish = containsToken(query, item.visionToken);
+  const englishLeft = item.visionClass
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((word) => word.length > 2)
+    .some((word) => lower.includes(word) && !item.visionToken.toLowerCase().includes(word));
+
+  return {
+    query,
+    ok: hasTurkish && !englishLeft,
+    note: englishLeft ? "İngilizce kelime kaldı" : "Türkçe terim yok",
+  };
+}
+
 let visionQueryHits = 0;
 let visionQueryTotal = 0;
 const visionQueryMisses = [];
+/** Per-item outcome, so the VLM arm can be compared like for like. */
+const visionQueryById = new Map();
 
 for (const testCase of cases) {
   for (const item of testCase.items) {
     visionQueryTotal += 1;
 
-    const query = buildSearchQuery({ itemType: item.visionClass, colorHex: "#111111" });
-    const lower = query.toLocaleLowerCase("tr");
+    const outcome = visionQueryOutcome(item);
+    visionQueryById.set(item.id, outcome.ok);
 
-    // Two conditions, both required: the Turkish term has to be there, and the
-    // English class must be gone. A query carrying both would score as a pass
-    // while still shipping an English word to a Turkish search box.
-    const hasTurkish = lower.includes(item.visionToken.toLocaleLowerCase("tr"));
-    const englishLeft = item.visionClass
-      .toLowerCase()
-      .split(/\s+/)
-      .filter((word) => word.length > 2)
-      .some((word) => lower.includes(word) && !item.visionToken.toLowerCase().includes(word));
-
-    if (hasTurkish && !englishLeft) {
+    if (outcome.ok) {
       visionQueryHits += 1;
-      if (VERBOSE) console.log(`    ✓ ${item.id.padEnd(16)} ${item.visionClass} -> "${query}"`);
+      if (VERBOSE) {
+        console.log(`    ✓ ${item.id.padEnd(16)} ${item.visionClass} -> "${outcome.query}"`);
+      }
     } else {
       visionQueryMisses.push({
         id: item.id,
         want: item.visionToken,
-        query,
-        note: englishLeft ? "İngilizce kelime kaldı" : "Türkçe terim yok",
+        query: outcome.query,
+        note: outcome.note,
       });
     }
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/*  2c. VLM attributes, replayed from fixtures                                */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * Does looking at the crop beat measuring the box?
+ *
+ * The measured colour above describes a *rectangle*; these describe the garment
+ * inside it. The four standing colour failures are all cases where those are not
+ * the same thing — which is the entire argument for spending an API call per item.
+ * This section is where that argument gets a number.
+ *
+ * Four questions, in increasing order of how much they matter:
+ *
+ *   colour   — the bucket, against the same labels the measured colour is scored on
+ *   noun     — the garment word the query is built around
+ *   query    — the whole query, built by the *shipped* assembly, against the
+ *              specific token; compared against the coarse path on the same items
+ *   claims   — material and pattern, scored three ways, because a hallucinated
+ *              material is not a neutral miss: it carries a negative weight in
+ *              `scoreTitleAgreement` and demotes correct products
+ *
+ * It sits after the coarse arm because it needs it as a baseline. No fixtures
+ * means the stage has never been recorded; the section stays silent rather than
+ * reporting a zero that would read as a regression.
+ */
+const attrDir = `${ROOT}eval/fixtures/attrs`;
+const attrFixtures = existsSync(attrDir)
+  ? readdirSync(attrDir).filter((name) => name.endsWith(".json"))
+  : [];
+
+/**
+ * Reads a recording into `id -> samples[]`.
+ *
+ * The current recorder writes `{ items: { id: { samples: [...] } } }`; a flat
+ * `id -> attributes` map was the earlier shape and is still accepted, so an
+ * existing fixture directory keeps working instead of silently scoring zero.
+ */
+function readAttrFixture(raw) {
+  if (raw && typeof raw === "object" && raw.items) {
+    return {
+      repeat: raw.repeat ?? 1,
+      samples: new Map(
+        Object.entries(raw.items).map(([id, entry]) => [id, entry?.samples ?? []]),
+      ),
+    };
+  }
+  return {
+    repeat: 1,
+    samples: new Map(Object.entries(raw ?? {}).map(([id, attrs]) => [id, [attrs ?? null]])),
+  };
+}
+
+let vlmColorHits = 0;
+let vlmColorTotal = 0;
+let vlmDescribed = 0;
+let vlmNounHits = 0;
+let vlmQueryHits = 0;
+/**
+ * Baselines on exactly the items the VLM was recorded for.
+ *
+ * The overall region score covers all fourteen items; fixtures may cover four.
+ * Comparing 3/4 against 10/14 would be comparing two different questions, and the
+ * gates below are only meaningful on a like-for-like subset.
+ */
+let regionHitsOnVlmItems = 0;
+let visionQueryHitsOnVlmItems = 0;
+const vlmColorMisses = [];
+const vlmNounMisses = [];
+const vlmQueryMisses = [];
+const materialVerdicts = [];
+const patternVerdicts = [];
+/** Asserted attributes the photograph contradicts — the expensive kind of error. */
+const attributeLapses = [];
+/** id -> did the model's colour land on the right bucket, for the hard four. */
+const hardOutcome = new Map();
+let repeatRounds = 1;
+let stabilityItems = 0;
+let stabilityColorAgreed = 0;
+let stabilityTokenAgreed = 0;
+
+for (const name of attrFixtures) {
+  const exampleId = name.replace(/\.json$/, "");
+  const truth = cases.find((entry) => entry.exampleId === exampleId);
+  if (!truth) continue;
+
+  const recorded = readAttrFixture(JSON.parse(readFileSync(`${attrDir}/${name}`, "utf8")));
+  repeatRounds = Math.max(repeatRounds, recorded.repeat);
+
+  for (const item of truth.items) {
+    vlmColorTotal += 1;
+    if (regionHitById.get(item.id)?.hit) regionHitsOnVlmItems += 1;
+    if (visionQueryById.get(item.id)) visionQueryHitsOnVlmItems += 1;
+
+    const samples = recorded.samples.get(item.id) ?? [];
+    // Production makes one call. Scoring a majority vote across repeats would
+    // report an accuracy no user ever receives; the repeats are for the agreement
+    // measure below, not for a better answer.
+    const attrs = samples[0] ?? null;
+
+    /*
+     * A declined item is not a zero — it is a fallback.
+     *
+     * With the stage on and the model refusing, the pipeline keeps the measured
+     * colour and builds the query from Vision's class, which is exactly the
+     * without-the-stage behaviour. Scoring the refusal as a flat miss would model
+     * something the code does not do and would understate the stage; scoring it as
+     * absent would drop the item from the denominator and overstate it. Both
+     * headline numbers are therefore "what the shopper ends up with, stage on",
+     * which is the only comparison the API call can be judged by.
+     *
+     * The cost of a refusal is real — a call spent for no gain — and it is
+     * reported separately as the described count, not smuggled into the accuracy.
+     */
+    if (!attrs) {
+      const fellBackToRegion = regionHitById.get(item.id)?.hit ?? false;
+      const fellBackToVision = visionQueryById.get(item.id) ?? false;
+
+      if (fellBackToRegion) vlmColorHits += 1;
+      else vlmColorMisses.push({ id: item.id, want: item.color, got: "betimlenmedi, ölçülene düşüldü" });
+
+      if (fellBackToVision) vlmQueryHits += 1;
+      else vlmQueryMisses.push({ id: item.id, want: item.queryToken, query: "betimlenmedi, Vision sınıfına düşüldü" });
+
+      // The noun metric asks what the *model* named, so a refusal is a miss there
+      // with no fallback to inherit: Vision's class is not a garment noun.
+      vlmNounMisses.push({ id: item.id, want: item.queryToken, got: "betimlenmedi" });
+      if (HARD_COLOR_ITEMS.includes(item.id)) hardOutcome.set(item.id, fellBackToRegion);
+      continue;
+    }
+
+    vlmDescribed += 1;
+
+    // --- colour -----------------------------------------------------------
+    const bucket = colorBucketOf(attrs.colorHex);
+    const colorOk = bucket === item.color;
+    if (HARD_COLOR_ITEMS.includes(item.id)) hardOutcome.set(item.id, colorOk);
+
+    if (colorOk) {
+      vlmColorHits += 1;
+      if (VERBOSE) {
+        console.log(
+          `    ✓ ${item.id.padEnd(16)} ${attrs.colorHex} ${bucket} («${attrs.colorName}» ${attrs.garmentType})`,
+        );
+      }
+    } else {
+      vlmColorMisses.push({ id: item.id, want: item.color, got: bucket, hex: attrs.colorHex });
+    }
+
+    // --- garment noun -----------------------------------------------------
+    if (containsToken(String(attrs.garmentType ?? ""), item.queryToken)) {
+      vlmNounHits += 1;
+    } else {
+      vlmNounMisses.push({ id: item.id, want: item.queryToken, got: attrs.garmentType });
+    }
+
+    // --- the whole query, as the pipeline assembles it ---------------------
+    // Built by the shipped function, not by a copy of it here: a metric that
+    // measures its own re-implementation reports on code nobody runs.
+    const query = attributeSearchQuery(attrs);
+    if (containsToken(query, item.queryToken)) {
+      vlmQueryHits += 1;
+      if (VERBOSE) console.log(`    ✓ ${item.id.padEnd(16)} -> "${query}"`);
+    } else {
+      vlmQueryMisses.push({ id: item.id, want: item.queryToken, query });
+    }
+
+    // --- asserted attributes ----------------------------------------------
+    const material = materialVerdict(item.material, attrs.material);
+    const pattern = patternVerdict(item.pattern, attrs.pattern);
+    materialVerdicts.push(material);
+    patternVerdicts.push(pattern);
+
+    if (material === "wrong") {
+      attributeLapses.push({ id: item.id, field: "malzeme", want: item.material, got: attrs.material });
+    }
+    if (pattern === "wrong") {
+      attributeLapses.push({ id: item.id, field: "desen", want: item.pattern, got: attrs.pattern });
+    }
+
+    // --- agreement across repeats -----------------------------------------
+    /*
+     * Not accuracy — consistency. A model that answers "pembe" on one draw and
+     * "bej" on the next is unreliable in a way a single recording cannot show, and
+     * on fourteen items one unlucky draw moves the headline score by seven points.
+     * Worth knowing before anyone reads the score as settled.
+     */
+    if (samples.length > 1) {
+      stabilityItems += 1;
+      const buckets = new Set(samples.map((sample) => (sample ? colorBucketOf(sample.colorHex) : null)));
+      const tokens = new Set(
+        samples.map((sample) => (sample ? containsToken(attributeSearchQuery(sample), item.queryToken) : null)),
+      );
+      if (buckets.size === 1) stabilityColorAgreed += 1;
+      if (tokens.size === 1) stabilityTokenAgreed += 1;
+    }
+  }
+}
+
+const materialTally = tally(materialVerdicts);
+const patternTally = tally(patternVerdicts);
+/** Hard items the recording actually covered — a partial run cannot be judged. */
+const hardCovered = HARD_COLOR_ITEMS.filter((id) => hardOutcome.has(id));
+const hardRecovered = hardCovered.filter((id) => hardOutcome.get(id));
 
 /* -------------------------------------------------------------------------- */
 /*  2c. Visual descriptor retrieval                                            */
@@ -529,7 +706,12 @@ const boxHalfRate = fractionAtLeast(overlapSamples, IOU_MATCH);
 
 const vlmColorScore = pct(vlmColorHits, vlmColorTotal);
 const vlmNounScore = pct(vlmNounHits, vlmColorTotal);
+const vlmQueryScore = pct(vlmQueryHits, vlmColorTotal);
 const regionSubsetScore = pct(regionHitsOnVlmItems, vlmColorTotal);
+const visionQuerySubsetScore = pct(visionQueryHitsOnVlmItems, vlmColorTotal);
+const hallucinations = materialTally.wrong + patternTally.wrong;
+const gradedClaims = materialTally.graded + patternTally.graded;
+const hallucinationRate = pct(hallucinations, gradedClaims);
 
 console.log(`\n${cases.length} kombin / ${colorTotal} parça\n`);
 console.log(`  Bölge rengi      ${fmt(colorScore)}  (${colorHits}/${colorTotal})   taban ${fmt(FLOORS.color)}`);
@@ -538,7 +720,42 @@ if (vlmColorTotal > 0) {
     `  VLM rengi        ${fmt(vlmColorScore)}  (${vlmColorHits}/${vlmColorTotal})   taban ${fmt(regionSubsetScore)} (aynı parçalarda ölçülen renk)`,
   );
   console.log(`  VLM ürün adı     ${fmt(vlmNounScore)}  (${vlmNounHits}/${vlmColorTotal})`);
+  console.log(
+    `  VLM sorgusu      ${fmt(vlmQueryScore)}  (${vlmQueryHits}/${vlmColorTotal})   taban ${fmt(visionQuerySubsetScore)} (aynı parçalarda Vision sınıfı)`,
+  );
   console.log(`      ${vlmDescribed}/${vlmColorTotal} parça betimlendi`);
+
+  /*
+   * The reason the stage exists, item by item. A single percentage would let three
+   * easy recoveries hide the fact that the sandals — the case the stage was
+   * designed around — still reads the floor.
+   */
+  if (hardCovered.length > 0) {
+    const marks = hardCovered
+      .map((id) => `${id} ${hardOutcome.get(id) ? "✓" : "✗"}`)
+      .join("   ");
+    const partial = hardCovered.length < HARD_COLOR_ITEMS.length;
+    console.log(
+      `      Zor parçalar: ${marks}` +
+        `   ${hardRecovered.length}/${hardCovered.length} kurtarıldı` +
+        (partial
+          ? `  (kayıt ${HARD_COLOR_ITEMS.length} parçanın ${hardCovered.length}'ini kapsıyor, değerlendirilmiyor)`
+          : `  (gereken ${FLOORS.vlmHardColors})`),
+    );
+  }
+
+  const claimRow = (name, counts) =>
+    `      ${name.padEnd(9)} ${counts.correct} doğru, ${counts.abstained} çekimser, ` +
+    `${counts.wrong} uydurma  (${counts.graded} dereceli)`;
+  console.log(claimRow("Malzeme:", materialTally));
+  console.log(claimRow("Desen:", patternTally));
+
+  if (stabilityItems > 0) {
+    console.log(
+      `      Kararlılık (${repeatRounds} örnek): renk ${stabilityColorAgreed}/${stabilityItems}, ` +
+        `sorgu ${stabilityTokenAgreed}/${stabilityItems} parçada örnekler birbiriyle aynı`,
+    );
+  }
 } else {
   console.log(
     `  VLM rengi        —      (fixture yok; «npm run eval:record-attrs» bir ANTHROPIC_API_KEY ister)`,
@@ -600,6 +817,20 @@ if (vlmNounMisses.length) {
     console.log(`    ${miss.id.padEnd(16)} «${miss.want}» yok -> "${miss.got}"`);
   }
 }
+if (vlmQueryMisses.length) {
+  console.log("\n  VLM sorgu sapmaları:");
+  for (const miss of vlmQueryMisses) {
+    console.log(`    ${miss.id.padEnd(16)} «${miss.want}» yok -> "${miss.query}"`);
+  }
+}
+if (attributeLapses.length) {
+  console.log("\n  Uydurulan öznitelikler (ürün eşleşmesini aktif olarak bozar):");
+  for (const lapse of attributeLapses) {
+    console.log(
+      `    ${lapse.id.padEnd(16)} ${lapse.field}: fotoğrafta «${lapse.want}» -> model «${lapse.got}»`,
+    );
+  }
+}
 if (queryMisses.length) {
   console.log("\n  Sorgu sapmaları:");
   for (const miss of queryMisses) {
@@ -658,6 +889,28 @@ const failures = [
   vlmColorTotal > 0 &&
     vlmColorScore < regionSubsetScore &&
     `VLM rengi ${fmt(vlmColorScore)} < aynı parçalarda ölçülen renk ${fmt(regionSubsetScore)}`,
+  /*
+   * Same shape, one level up: the colour gate says the model beats the
+   * measurement, this says the *query built from everything it saw* beats the
+   * query built from the detector's class alone. That is the comparison the API
+   * call is actually paid for — a stage that describes colours beautifully and
+   * still produces a worse search string has not earned it.
+   */
+  vlmColorTotal > 0 &&
+    vlmQueryScore < visionQuerySubsetScore &&
+    `VLM sorgusu ${fmt(vlmQueryScore)} < aynı parçalarda Vision sınıfı ${fmt(visionQuerySubsetScore)}`,
+  /*
+   * The stage's stated purpose. Judged only on a recording that covers all four
+   * hard items — a run that skipped one has not asked the question.
+   */
+  hardCovered.length === HARD_COLOR_ITEMS.length &&
+    hardRecovered.length < FLOORS.vlmHardColors &&
+    `zor parçalar ${hardRecovered.length}/${HARD_COLOR_ITEMS.length} < ${FLOORS.vlmHardColors} ` +
+      `— aşama eklenme gerekçesini karşılamıyor`,
+  FLOORS.vlmHallucination !== null &&
+    gradedClaims > 0 &&
+    hallucinationRate > FLOORS.vlmHallucination &&
+    `uydurulan öznitelik ${fmt(hallucinationRate)} > ${fmt(FLOORS.vlmHallucination)}`,
 ].filter(Boolean);
 
 if (failures.length) {

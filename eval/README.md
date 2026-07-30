@@ -38,6 +38,9 @@ alır.
 | Bölge rengi | Ölçülen baskın rengin, insanın adlandıracağı renk ailesiyle eşleşmesi | %70 |
 | VLM rengi | Kırpıma bakan modelin verdiği rengin aynı eşleşmeyi tutması (fixture ister) | aynı parçalarda ölçülen renk |
 | VLM ürün adı | Modelin verdiği Türkçe ürün adının beklenen token'ı taşıması (fixture ister) | — |
+| VLM sorgusu | Modelin gördüklerinden kurulan **tam sorgunun** spesifik token'ı taşıması (fixture ister) | aynı parçalarda Vision sınıfı |
+| Zor parçalar | Kutusu ağırlıklı arka plan olan dört parçadan kaçının kurtarıldığı (fixture ister) | 4'te 3 |
+| Malzeme / Desen | Modelin öne sürdüğü özniteliklerin fotoğrafla tutması — doğru / çekimser / **uydurma** (fixture ister) | henüz yok |
 | Sorgu token'ı | Üretilen aramanın, parçayı bulmaya yetecek Türkçe kelimeyi taşıması | %90 |
 | Vision sınıfı | **Yalnızca** Vision'ın İngilizce sınıfından üretilen sorgunun Türkçe terimi taşıması ve İngilizce kelime bırakmaması | %100 |
 | Görsel erişim | Bir parçanın sıkı kırpımının, 14 gevşek kırpım arasından kendi eşini bulması | %70 (şans %7) |
@@ -54,6 +57,35 @@ rengi aynı parçalarda ölçülenden kötüyse bu tercih yanlıştır ve eval k
 düşer. Karşılaştırma yalnızca fixture'ı olan parçalar üzerinde yapılıyor —
 14 parçalık skoru 4 parçalık skorla kıyaslamak iki farklı soruyu kıyaslamak
 olurdu.
+
+"VLM sorgusu" aynı mantığın bir üst katı. Renk metriği aşamanın bir alanını
+ölçüyor; API çağrısının **parası** ise kullanıcıya giden arama dizesi için
+ödeniyor. Bu yüzden sorgu, boru hattının kendi birleştiricisiyle
+(`attributeSearchQuery`) kuruluyor ve kaba yolla — aynı parçalarda Vision'ın
+sınıfından üretilen sorguyla — kıyaslanıyor. Renkleri kusursuz betimleyip daha
+kötü bir arama dizesi üreten bir aşama, çağrısını hak etmemiştir; bunu yalnızca
+sorgu metriği yakalar.
+
+**Betimlenmeyen parça sıfır değil, geri düşüştür.** Model bir kırpımı
+reddettiğinde boru hattı ölçülen rengi ve Vision'ın sınıfını kullanmaya devam
+ediyor — yani aşama kapalıyken ne oluyorsa o. Reddi düz bir kayıp saymak,
+kodun yapmadığı bir şeyi ölçmek olurdu. İki manşet sayı da bu yüzden
+"kullanıcının eline ne geçiyor" sorusunun cevabı; reddin bedeli ayrıca
+"kaç parça betimlendi" satırında duruyor.
+
+**Malzeme ve desen iki değil üç sonuçlu.** `scoreTitleAgreement` içinde eşleşen
+malzeme artı puan, çelişen malzeme **eksi** puan taşıyor. Yani hiçbir şey
+söylemeyen model sıralamayı olduğu gibi bırakırken, keten cekete "deri" diyen
+model doğru ürünleri aşağı itiyor. Bu ikisini tek bir "doğruluk" oranında
+toplamak, kullanıcıya sonuç kaybettiren tek hata türünü gizlerdi. Referansta
+malzeme yalnızca beş parçada var: kalanlarda kumaşı fotoğraftan kimse
+söyleyemez, ve söylenemeyen bir şeyi puanlamak sonuç uydurmak olur.
+
+`--repeat N` ile kaydedilen turlar **doğruluk değil kararlılık** ölçüyor. Puan
+her zaman **ilk** örnekten geliyor, çünkü üretimde tek çağrı var; çoğunluk oyunu
+puanlamak hiçbir kullanıcının almadığı bir doğruluğu raporlamak olurdu.
+Kararlılık satırı ayrı bir soruya cevap veriyor: 14 parçada tek bir şanssız
+çekiliş manşeti yedi puan oynatır, ve tek kayıt bunu göstermez.
 
 "Vision sınıfı" metriği, "Sorgu token'ı" metriğinin kendini kandırdığı yeri
 kapatıyor: o metrik elle yazılmış **Türkçe** etiketle besleniyor, dolayısıyla
@@ -196,15 +228,32 @@ doğrulaması, etiket/renk/sorgu/aile birleştirmesi ve her başarısızlık mod
 (bozuk JSON, ret, HTTP 500, süre aşımı, şemaya uyan ama kullanılamaz içerik)
 ölçülen renge geri düşmesi.
 
-**Doğruluk kazancı henüz ölçülmedi.** Bunun için gerçek bir model çağrısı
-gerekiyor:
+**Ölçüm altyapısı yazıldı; doğruluk kazancının kendisi hâlâ ölçülmedi.** Bunun
+için gerçek bir model çağrısı gerekiyor:
 
 ```bash
 ANTHROPIC_API_KEY=... npm run eval:record-attrs
+ANTHROPIC_API_KEY=... npm run eval:record-attrs -- --repeat 3   # kararlılık da ölçülsün
 npm run eval
 ```
 
-Bu, `eval/fixtures/attrs/` altına yanıtları yazar ve eval bundan sonra "VLM
-rengi" ile "VLM ürün adı" satırlarını da raporlar. Yukarıdaki dört sapmanın
-gerçekten kapandığını gösterecek olan o çalıştırma; o rakam gelene kadar bu
-aşamanın kazandığı tek şey doğrulanmış bir boru hattıdır.
+Bu, `eval/fixtures/attrs/` altına yanıtları yazar ve eval bundan sonra dört
+soruyu birden cevaplar:
+
+- **renk** — model rengi, aynı parçalarda ölçülen rengi geçiyor mu,
+- **sorgu** — modelin gördüklerinden kurulan tam arama dizesi, Vision'ın
+  sınıfından kurulanı geçiyor mu (çağrının parası bunun için ödeniyor),
+- **zor parçalar** — aşamanın eklenme gerekçesi olan dört parçanın kaçı
+  kurtarıldı; dörtte üçün altı kırmızı,
+- **öne sürülen öznitelikler** — malzeme ve desen, doğru / çekimser / uydurma.
+
+Ölçümün kendisi 51 birim kontrolü ve `npm run eval`'e karşı 51 uçtan uca
+kontrolle doğrulandı: kusursuz model, ölçümden kötü model, sorguyu bozan model,
+uyduran model, çekimser model, reddeden model, kararsız model, kısmi kayıt ve
+eski fixture biçimi. Bu kontroller **sentetik** kayıtlarla yapıldı — ölçümün
+çalıştığını kanıtlar, gerçek modelin ne yaptığı hakkında hiçbir şey söylemez.
+Gerçek kayıt sanılmasınlar diye commit edilmediler.
+
+Yukarıdaki dört sapmanın gerçekten kapandığını gösterecek olan yalnızca
+anahtarlı çalıştırma; o rakam gelene kadar bu aşamanın kazandığı tek şey
+doğrulanmış bir boru hattı ve onu yargılayacak bir terazidir.

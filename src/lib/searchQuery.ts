@@ -178,3 +178,45 @@ export function buildSearchQuery(parts: SearchQueryParts): string {
 
   return [...tokens.slice(0, Math.max(1, MAX_TOKENS - noun.length)), ...noun].join(" ");
 }
+
+/**
+ * The attribute fields a described garment contributes to a query.
+ *
+ * Declared structurally rather than imported from `attributeExtractor`, which is
+ * `server-only`: this module is reached from client bundles and from the eval, and
+ * neither should be pulling a server module in to name a shape.
+ */
+export interface GarmentAttributeLike {
+  garmentType: string;
+  colorName: string;
+  colorHex: string;
+  material: string | null;
+  pattern: string | null;
+  details: string[];
+  fit: string | null;
+}
+
+/**
+ * The query the pipeline builds once something has actually looked at the crop.
+ *
+ * Exported so the eval scores **this** rather than its own re-assembly of the same
+ * fields. The ordering below is a real decision — pattern, then details, then
+ * material immediately before the noun, because "triko ceket" is itself a category
+ * name on Turkish storefronts — and a second copy of it in the eval would quietly
+ * drift until the measured query was one no user ever receives.
+ *
+ * No `label`: the web entity names the photograph, not the garment, and the
+ * pipeline stops consulting it the moment a crop has been described.
+ *
+ * `normalizeAttributes` guarantees `garmentType`, `colorName` and `colorHex` are
+ * non-empty — an object missing any of them is rejected as unusable rather than
+ * returned — so there is no fallback to thread through here.
+ */
+export function attributeSearchQuery(attrs: GarmentAttributeLike): string {
+  return buildSearchQuery({
+    itemType: attrs.garmentType,
+    colorName: attrs.colorName,
+    colorHex: attrs.colorHex,
+    descriptors: [attrs.pattern, ...attrs.details, attrs.material, attrs.fit],
+  });
+}

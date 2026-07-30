@@ -216,23 +216,63 @@ GOOGLE_CLOUD_VISION_API_KEY=... npm run eval:record
 **Kalan:** `GOOGLE_CLOUD_VISION_API_KEY=... npm run eval:record`, sonra taban
 değerlerini o çalıştırmanın bastığı sayıların biraz altına koymak.
 
-### 1.3 VLM öznitelik kazancını kanıtlamak
+### 1.3 VLM öznitelik kazancını kanıtlamak — ✅ kod hazır, ölçüm anahtarı bekliyor
 
-**Durum: aşama yazıldı ve 58 kontrolle doğrulandı, ama doğruluk kazancı
-ölçülmedi.** Boru hattı modelin rengini ölçülen renge tercih ediyor — bu tercihin
-doğru olduğunu gösteren bir sayı henüz yok.
+**Durum: ölçüm altyapısı yazıldı, 102 kontrolle doğrulandı.** Metrikler fixture
+gelir gelmez rapora düşüyor; anahtar olmadan sessiz kalıyorlar.
+
+Aşama zaten yazılıydı (58 kontrol) — eksik olan onu **yargılayacak terazi**ydi.
+Eldeki tek karşılaştırma "VLM rengi vs ölçülen renk"ti, ve o aşamanın bir
+alanını ölçüyor; API çağrısının parası ise kullanıcıya giden **arama dizesi**
+için ödeniyor.
+
+Yazılanlar:
+
+- `src/lib/searchQuery.ts` → `attributeSearchQuery` — öznitelikten sorgu kurma
+  işi tek yere alındı, boru hattı ve eval **aynı** fonksiyonu çağırıyor. Sorgu
+  metriğinin kendi yeniden-kurgusunu ölçmesi, kimsenin çalıştırmadığı kod için
+  otoriter sayı üretmek olurdu (1.2'de `eval/replay.ts` ile aynı ders).
+- **VLM sorgusu** metriği — tam sorgu, spesifik token'a karşı, tabanı aynı
+  parçalarda Vision sınıfından kurulan sorgu. Renkleri kusursuz betimleyip daha
+  kötü arama dizesi üreten bir aşamayı yalnızca bu yakalar.
+- **Zor parçalar** satırı ve kapısı — `HARD_COLOR_ITEMS` (lc-beanie, lc-jeans,
+  lc-sandals, bb-heels) parça parça raporlanıyor; dörtte üçün altı kırmızı.
+  Aşamanın eklenme gerekçesi bu dört parça, o yüzden bu kapı bir tahmin değil.
+- `eval/attributeScore.ts` — malzeme ve desen için **üç** sonuç: doğru,
+  çekimser, uydurma. `scoreTitleAgreement` içinde çelişen malzeme eksi puan
+  taşıdığı için, uydurulan bir "deri" doğru ürünleri aktif olarak aşağı itiyor;
+  susan model ise sıralamayı olduğu gibi bırakıyor. İkisini tek orana toplamak,
+  kullanıcıya sonuç kaybettiren tek hata türünü gizlerdi.
+- Referansa elle ölçülmüş malzeme (5 parça) ve desen (9 parça) beklentileri.
+  Kumaşı fotoğraftan söylenemeyen parçalar bilerek **derecelendirilmiyor** —
+  söylenemeyen bir şeyi puanlamak sonuç uydurmak olur.
+- `--repeat N` — model örneklenerek çalışıyor ve 14 parçada tek şanssız çekiliş
+  manşeti yedi puan oynatıyor. Puan her zaman ilk örnekten (üretimde tek çağrı
+  var); tekrarlar ayrı bir **kararlılık** satırı üretiyor.
+- Betimlenmeyen parça artık sıfır değil **geri düşüş** olarak puanlanıyor, çünkü
+  boru hattı reddi aldığında ölçülen renge ve Vision sınıfına dönüyor. Düz kayıp
+  saymak, kodun yapmadığı bir şeyi ölçmek olurdu.
+
+Yol boyunca bir ölçüm hatası da çıktı: token araması düz alt-dize karşılaştırması
+yapıyordu, Türkçe'de son ünsüz yumuşadığı için "güneş gözlüğü" içinde "gözlük"
+bulunamıyordu. Yani metrik, kusursuz bir cevabı kayıp sayıp çalışan kodun
+değiştirilmesini savunacaktı — bir metriğin yanılabileceği en kötü yön.
+
+Doğrulama **sentetik** kayıtlarla yapıldı ve commit edilmedi; ölçümün doğru
+çalıştığını kanıtlar, gerçek modelin ne yaptığı hakkında hiçbir şey söylemez.
 
 ```bash
-ANTHROPIC_API_KEY=... npm run eval:record-attrs
+ANTHROPIC_API_KEY=... npm run eval:record-attrs           # ya da -- --repeat 3
 npm run eval
 ```
 
-Eval bundan sonra "VLM rengi"ni aynı parçalar üzerinde ölçülen renkle
-karşılaştırıyor ve model kötü olan taraftaysa **kırmızıya düşüyor**.
-
-**Bitti ölçütü:** VLM rengi, dört bilinen renk sapmasının en az üçünü kapatıyor
-ve eval taban kontrolünü geçiyor. Kapatmıyorsa aşama kalmalı mı sorusu
-yeniden açılır — bu bir olasılık, temenni değil.
+**Bitti ölçütü (kod tarafı karşılandı):** metrikler raporlanıyor, kapılar
+sentetik senaryolarda doğru yerlerde ateşliyor.
+**Kalan:** anahtarlı kayıt. VLM rengi ve VLM sorgusu kendi tabanlarını geçmeli,
+zor dört parçanın en az üçü kurtarılmalı. Kurtarılmazsa aşama kalmalı mı sorusu
+yeniden açılır — bu bir olasılık, temenni değil, ve artık bir paragraf değil
+kırmızı bir çalıştırma olarak geliyor. Uydurma oranı ilk gerçek kayıttan sonra
+`FLOORS.vlmHallucination`'a yazılacak.
 
 ---
 
@@ -350,7 +390,8 @@ okuyucu etiketleri; Lighthouse / axe koşumu. Hotspot'lar `aria-label` taşıyor
 1. ~~**0.2** (görsel sertleştirme)~~ — ✅ tamamlandı.
 2. **0.1** (hız sınırı) — kalıcı depo seçimi gerektiriyor, o yüzden ikinci.
 3. **1.1** (eval seti) — en yüksek kaldıraç, ve senin fotoğraf toplamana bağlı.
-4. **1.2 + 1.3** (fixture'lar) — anahtarlar elinde olduğu anda, tek oturum.
+4. ~~**1.2 + 1.3** (fixture'lar)~~ — kod tarafı bitti; kalan iş anahtarları
+   verip iki komutu çalıştırmak, tek oturum.
 5. **0.3** (bağlantı + fotoğraf) — veri işi, paralel yürüyebilir.
 6. **3.2** (gözlemlenebilirlik) — 1.1'i hızlandırdığı için buraya alındı.
 7. **2.1** (segmentasyon) — ölçüm temeli oturduktan sonra.

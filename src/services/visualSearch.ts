@@ -17,7 +17,7 @@ import {
   type DetectionCandidate,
 } from "@/lib/detectionFilter";
 import { familyOf, tokenize, type ItemFamily } from "@/lib/itemFamily";
-import { buildSearchQuery, colorNameFromHex } from "@/lib/searchQuery";
+import { attributeSearchQuery, buildSearchQuery, colorNameFromHex } from "@/lib/searchQuery";
 import {
   MOCK_SCENARIOS,
   findProductsForLabel,
@@ -523,27 +523,25 @@ export class GoogleVisionSearchService implements VisualSearchService {
       const phrase = entity?.description;
       const itemName = attrs?.garmentType ?? name;
 
-      /*
-       * Descriptor order is the order a Turkish shopper types: pattern, then the
-       * visible details, then the material sitting right before the noun —
-       * "pudra fermuarlı triko ceket". Material last of the three because
-       * "triko ceket" is itself a category name on Turkish storefronts.
-       */
-      const descriptors = attrs
-        ? [attrs.pattern, ...attrs.details, attrs.material, attrs.fit]
-        : undefined;
-
       const label = [colorName, attrs?.garmentType ?? phrase ?? name]
         .filter(Boolean)
         .join(" ");
 
-      const searchQuery = buildSearchQuery({
-        itemType: itemName,
-        label: phrase,
-        colorName: colorName ?? undefined,
-        colorHex,
-        descriptors,
-      });
+      /*
+       * Two paths, because they are genuinely different questions. With a described
+       * crop the query is built from what was seen in it — that assembly lives in
+       * `attributeSearchQuery` so the eval can score the query the user actually
+       * gets. Without one, all there is to work with is the detector's class, the
+       * web entity and a measured colour.
+       */
+      const searchQuery = attrs
+        ? attributeSearchQuery(attrs)
+        : buildSearchQuery({
+            itemType: itemName,
+            label: phrase,
+            colorName: colorName ?? undefined,
+            colorHex,
+          });
 
       /*
        * The descriptive phrase and the query only pick the best row *within* the
