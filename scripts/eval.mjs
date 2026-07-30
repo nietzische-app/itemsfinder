@@ -20,6 +20,7 @@
  */
 import { register } from "node:module";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
+import sharp from "sharp";
 
 register(new URL("./alias-loader.mjs", import.meta.url).href);
 
@@ -65,6 +66,23 @@ const FLOORS = {
    * is a fix, not a limitation.
    */
   visionQuery: 1,
+  /*
+   * Descriptor retrieval, measured at 86% (12/14) against a chance rate of 7%.
+   *
+   * The floor sits below that because the two misses are the descriptor's real
+   * limit, not a tuning gap: `bk-body` (a black bodysuit) loses to `bk-jeans` (dark
+   * denim in the same photo, same light), and `bk-sunglasses` — a crop that is
+   * mostly face — loses to `lc-coat`. A colour histogram plus 64 bits of structure
+   * has nothing left to distinguish those with; separating them needs semantics,
+   * which means a learned embedding.
+   *
+   * **This test is easier than the job.** Both crops come from the same photograph
+   * under the same light, so 86% here does not predict 86% against real studio
+   * product shots. Its value is regression detection: the number was a trivial 100%
+   * until the loose crop was mirrored and re-exposed, which would have stayed green
+   * straight through a broken descriptor.
+   */
+  visualRetrieval: 0.7,
   family: 0.9,
   hotspotCount: 0.75,
 };
@@ -275,6 +293,101 @@ for (const testCase of cases) {
 }
 
 /* -------------------------------------------------------------------------- */
+/*  2c. Visual descriptor retrieval                                            */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * Can the visual descriptor actually find the right garment?
+ *
+ * There are no product photographs to retrieve against — the catalogue ships
+ * generated SVG thumbnails, and the live feed is not running here. So the test is
+ * built out of the images that do exist: every labelled region is cropped twice, at
+ * a tight padding and a loose one, which is a fair analogue of the real job (the
+ * same garment framed differently, against more or less background). For each tight
+ * crop, the nearest loose crop among **all fourteen** must be its own.
+ *
+ * Chance is 1/14, so this is a real test rather than a formality — and it is the
+ * thing that would catch a descriptor broken by a refactor, which a smoke check on
+ * one image pair would not.
+ */
+const { describeImage, visualSimilarity } = await import("@/services/visualDescriptor");
+const { cropRegion } = await import("@/services/imageCrop");
+
+const tight = [];
+const loose = [];
+
+for (const testCase of cases) {
+  const path = `${ROOT}public${testCase.image}`;
+  if (!existsSync(path)) continue;
+
+  const buffer = readFileSync(path);
+  const size = await imageSize(buffer);
+
+  for (const item of testCase.items) {
+    // The pipeline masks the neighbouring garments out of the crop, so the eval has
+    // to as well — measuring an unmasked crop would be scoring code that does not
+    // run. It is also worth a lot here: unmasked, the shorts crop on the reference
+    // photo is 69% pink cardigan.
+    const occluders = testCase.items
+      .filter((other) => other.id !== item.id)
+      .map((other) => other.box);
+
+    for (const [padding, into] of [
+      [0.02, tight],
+      [0.16, loose],
+    ]) {
+      const crop = await cropRegion(buffer, item.box, { size, padding, exclude: occluders });
+      if (!crop) continue;
+
+      let bytes = Buffer.from(crop.base64, "base64");
+
+      /*
+       * The loose crop is mirrored and re-exposed before it is described. Without
+       * that the two crops share most of their pixels and retrieval is trivially
+       * 100% — a number that would keep reading as green through a broken
+       * descriptor. Mirroring and a brightness shift are the two things that
+       * genuinely differ between a studio product shot and a photo of someone
+       * wearing the garment, and they hit the two halves of the descriptor
+       * differently: the histogram is exactly mirror-invariant, the difference hash
+       * is not, while the hash tolerates exposure and the histogram less so.
+       */
+      if (into === loose) {
+        bytes = await sharp(bytes).flop().modulate({ brightness: 1.18 }).jpeg().toBuffer();
+      }
+
+      const descriptor = await describeImage(bytes, { exclude: crop.masks });
+      if (descriptor) into.push({ id: item.id, descriptor });
+    }
+  }
+}
+
+let retrievalHits = 0;
+const retrievalMisses = [];
+
+for (const query of tight) {
+  const ranked = loose
+    .map((candidate) => ({
+      id: candidate.id,
+      score: visualSimilarity(query.descriptor, candidate.descriptor),
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  const winner = ranked[0];
+  if (winner?.id === query.id) {
+    retrievalHits += 1;
+    if (VERBOSE) console.log(`    ✓ ${query.id.padEnd(16)} ${winner.score.toFixed(3)}`);
+  } else {
+    const own = ranked.findIndex((entry) => entry.id === query.id);
+    retrievalMisses.push({
+      id: query.id,
+      got: winner?.id ?? "—",
+      gotScore: winner?.score ?? 0,
+      rank: own + 1,
+    });
+  }
+}
+
+/* -------------------------------------------------------------------------- */
 /*  3. Family classification                                                  */
 /* -------------------------------------------------------------------------- */
 
@@ -384,6 +497,7 @@ const colorScore = pct(colorHits, colorTotal);
 const queryScore = pct(queryHits, queryTotal);
 const familyScore = pct(familyHits, familyTotal);
 const visionQueryScore = pct(visionQueryHits, visionQueryTotal);
+const retrievalScore = pct(retrievalHits, tight.length);
 const hotspotScore = pct(hotspotHits, hotspotCases);
 
 const vlmColorScore = pct(vlmColorHits, vlmColorTotal);
@@ -405,6 +519,7 @@ if (vlmColorTotal > 0) {
 }
 console.log(`  Sorgu token'ı    ${fmt(queryScore)}  (${queryHits}/${queryTotal})   taban ${fmt(FLOORS.query)}`);
 console.log(`  Vision sınıfı    ${fmt(visionQueryScore)}  (${visionQueryHits}/${visionQueryTotal})   taban ${fmt(FLOORS.visionQuery)}`);
+console.log(`  Görsel erişim    ${fmt(retrievalScore)}  (${retrievalHits}/${tight.length})   taban ${fmt(FLOORS.visualRetrieval)}, şans %7`);
 console.log(`  Aile tutarlılığı ${fmt(familyScore)}  (${familyHits}/${familyTotal})   taban ${fmt(FLOORS.family)}`);
 
 if (fixtures.length === 0) {
@@ -453,6 +568,14 @@ if (visionQueryMisses.length) {
     console.log(`    ${miss.id.padEnd(16)} «${miss.want}» — ${miss.note} -> "${miss.query}"`);
   }
 }
+if (retrievalMisses.length) {
+  console.log("\n  Görsel erişim sapmaları:");
+  for (const miss of retrievalMisses) {
+    console.log(
+      `    ${miss.id.padEnd(16)} en yakın «${miss.got}» (${miss.gotScore.toFixed(3)}); kendi sırası ${miss.rank}`,
+    );
+  }
+}
 if (familyMisses.length) {
   console.log("\n  Aile sapmaları:");
   for (const miss of familyMisses) {
@@ -466,6 +589,9 @@ const failures = [
   familyScore < FLOORS.family && `aile ${fmt(familyScore)} < ${fmt(FLOORS.family)}`,
   visionQueryScore < FLOORS.visionQuery &&
     `Vision sınıfı ${fmt(visionQueryScore)} < ${fmt(FLOORS.visionQuery)}`,
+  tight.length > 0 &&
+    retrievalScore < FLOORS.visualRetrieval &&
+    `görsel erişim ${fmt(retrievalScore)} < ${fmt(FLOORS.visualRetrieval)}`,
   fixtures.length > 0 &&
     hotspotScore < FLOORS.hotspotCount &&
     `hotspot ${fmt(hotspotScore)} < ${fmt(FLOORS.hotspotCount)}`,

@@ -139,11 +139,15 @@ export function ProductCard({
           </h4>
 
           {/*
-            "eşleşme puanı", not "görsel benzerlik": this number is not a measured
-            visual similarity. Catalogue rows carry authored constants and live rows
-            are scored by rank position (productProvider.ts), so calling it visual
-            similarity would overstate what the pipeline knows. It becomes a real
-            measurement when image embeddings land.
+            Still "eşleşme puanı" rather than "görsel benzerlik", because the two
+            kinds of row mean different things by it and one label has to cover
+            both. A live row's score is measured: attribute agreement against the
+            detection, blended with a pixel comparison between the scanned region
+            and the retailer's photo when one could be fetched (attributeMatch.ts,
+            visualDescriptor.ts). A catalogue row's is an authored constant — the
+            catalogue ships generated SVG thumbnails, so there is no photograph to
+            compare and nothing to measure. Calling the pair "visual similarity"
+            would be true of one and false of the other.
           */}
           <p className="mt-1 text-[12px] text-on-surface-variant">
             %{Math.round(product.similarity * 100)} eşleşme puanı

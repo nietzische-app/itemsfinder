@@ -607,7 +607,17 @@ class ComposedVisualSearchService implements VisualSearchService {
     const detected = await this.detector.analyze(input);
 
     try {
-      return await this.products.enrich(detected, input.signal);
+      /*
+       * The pixels travel with the detections. Product resolution compares a
+       * retailer's photo against the region that was actually scanned, so it needs
+       * the upload — decoded once here rather than in each stage.
+       */
+      const buffer = Buffer.from(input.imageBase64, "base64");
+
+      return await this.products.enrich(detected, {
+        signal: input.signal,
+        image: { buffer, size: (await imageSize(buffer)) ?? undefined },
+      });
     } catch (error) {
       // The provider is written not to throw, but a bug there must never cost
       // the user their detections — the catalogue products are already valid.
@@ -707,6 +717,10 @@ function getProductProvider(): ProductProvider {
     {
       maxLiveItems: readInt(process.env.CONTEXT_DEV_MAX_LIVE_ITEMS, 4),
       deadlineMs: readInt(process.env.CONTEXT_DEV_DEADLINE_MS, 45_000),
+      visualCandidates: readInt(process.env.VISUAL_RERANK_CANDIDATES, 4),
+      // On by default: it costs no credits, only a few small image fetches, and
+      // without it the match score on a live card is text agreement alone.
+      visualRerank: process.env.VISUAL_RERANK !== "false",
     },
   );
 }

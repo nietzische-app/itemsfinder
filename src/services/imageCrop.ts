@@ -41,6 +41,16 @@ export interface Crop {
   mediaType: "image/jpeg";
   width: number;
   height: number;
+  /**
+   * Occluding regions, expressed in this crop's own normalised coordinates.
+   *
+   * The box is not the garment: on the reference photo the cardigan hangs over 69%
+   * of the shorts box, so a crop of "the shorts" is mostly pink knit. `regionColor`
+   * already solves this for a single measurement by skipping occluded pixels;
+   * anything measuring the crop needs the same information, and only the cropper
+   * knows how to map the neighbours into the cut-out's frame.
+   */
+  masks: BoundingBox[];
 }
 
 export interface CropOptions {
@@ -49,6 +59,8 @@ export interface CropOptions {
   padding?: number;
   maxEdge?: number;
   minEdge?: number;
+  /** Other detections' boxes, in whole-image normalised coordinates. */
+  exclude?: BoundingBox[];
 }
 
 function clamp01(value: number): number {
@@ -108,11 +120,36 @@ export async function cropRegion(
       .jpeg({ quality: 82 })
       .toBuffer({ resolveWithObject: true });
 
+    // Occluders, from whole-image fractions into this crop's own fractions. Scale
+    // is irrelevant to the transform, so the resize above does not affect it.
+    const masks: BoundingBox[] = [];
+    for (const region of options.exclude ?? []) {
+      const x = (region.x * width - left) / cropWidth;
+      const y = (region.y * height - top) / cropHeight;
+      const w = (region.width * width) / cropWidth;
+      const h = (region.height * height) / cropHeight;
+
+      const clippedX = Math.max(0, x);
+      const clippedY = Math.max(0, y);
+      const clippedRight = Math.min(1, x + w);
+      const clippedBottom = Math.min(1, y + h);
+
+      if (clippedRight <= clippedX || clippedBottom <= clippedY) continue;
+
+      masks.push({
+        x: clippedX,
+        y: clippedY,
+        width: clippedRight - clippedX,
+        height: clippedBottom - clippedY,
+      });
+    }
+
     return {
       base64: data.toString("base64"),
       mediaType: "image/jpeg",
       width: info.width,
       height: info.height,
+      masks,
     };
   } catch {
     return null;

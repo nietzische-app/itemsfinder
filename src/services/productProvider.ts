@@ -11,8 +11,12 @@ import {
 } from "@/lib/attributeMatch";
 import { rejectProductTitle } from "@/lib/retailVocabulary";
 import { buildSearchQuery } from "@/lib/searchQuery";
+import { cropRegion } from "@/services/imageCrop";
 import { hydrateProduct } from "@/services/mockCatalog";
+import { fetchRemoteImage } from "@/services/remoteImage";
+import { describeImage, visualSimilarity } from "@/services/visualDescriptor";
 import type {
+  BoundingBox,
   BrandMetadata,
   DetectedItem,
   DetectionResult,
@@ -31,10 +35,25 @@ import type {
  * Every provider must be total: a detection that cannot be resolved keeps the
  * products it arrived with, so the UI never loses a card.
  */
+/**
+ * What the product stage gets besides the detections.
+ *
+ * The image is here because comparing a product photo against the thing that was
+ * actually scanned needs the pixels, and this is the only stage that has a reason
+ * to look at a *retailer's* image. Carrying a descriptor on `DetectedItem` instead
+ * would have put a 36-float vector per item onto the wire for a client that never
+ * reads it.
+ */
+export interface EnrichContext {
+  signal?: AbortSignal;
+  /** Decoded upload, for measuring a detection crop against product photos. */
+  image?: { buffer: Buffer; size?: { width: number; height: number } };
+}
+
 export interface ProductProvider {
   readonly source: ProductSource;
   /** Returns the result with products filled in, plus provenance counters. */
-  enrich(result: DetectionResult, signal?: AbortSignal): Promise<DetectionResult>;
+  enrich(result: DetectionResult, context?: EnrichContext): Promise<DetectionResult>;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -69,6 +88,13 @@ export interface ContextDevProductProviderOptions {
   deadlineMs?: number;
   /** Alternatives kept per detection. */
   maxAlternatives?: number;
+  /**
+   * Product photos fetched and measured per detection. Each is one outbound image
+   * request inside the shared function budget, so it is bounded rather than "all".
+   */
+  visualCandidates?: number;
+  /** Kill switch for the visual comparison. */
+  visualRerank?: boolean;
 }
 
 /**
@@ -86,6 +112,8 @@ export class ContextDevProductProvider implements ProductProvider {
   private readonly concurrency: number;
   private readonly deadlineMs: number;
   private readonly maxAlternatives: number;
+  private readonly visualCandidates: number;
+  private readonly visualRerank: boolean;
 
   constructor(
     private readonly context: ContextDevService,
@@ -95,9 +123,13 @@ export class ContextDevProductProvider implements ProductProvider {
     this.concurrency = options.concurrency ?? 2;
     this.deadlineMs = options.deadlineMs ?? 45_000;
     this.maxAlternatives = options.maxAlternatives ?? 3;
+    this.visualCandidates = options.visualCandidates ?? 4;
+    this.visualRerank = options.visualRerank ?? true;
   }
 
-  async enrich(result: DetectionResult, signal?: AbortSignal): Promise<DetectionResult> {
+  async enrich(result: DetectionResult, context: EnrichContext = {}): Promise<DetectionResult> {
+    const signal = context.signal;
+
     if (result.items.length === 0) {
       return { ...result, productSource: "mock", liveItemCount: 0 };
     }
@@ -121,7 +153,23 @@ export class ContextDevProductProvider implements ProductProvider {
       await runWithConcurrency(priority, this.concurrency, async (item) => {
         if (controller.signal.aborted) return;
 
-        const live = await this.resolveItem(item, controller.signal);
+        /*
+         * Sibling boxes travel with the item so the visual comparison can skip the
+         * garments hanging over this one. Without it a crop of "the shorts" is 69%
+         * pink cardigan on the reference photo, and the pixel comparison then
+         * prefers pink shorts — the same occlusion error `regionColor` already
+         * fixed for the colour measurement.
+         */
+        const siblings = result.items
+          .filter((other) => other.id !== item.id)
+          .map((other) => other.boundingBox);
+
+        const live = await this.resolveItem(
+          item,
+          controller.signal,
+          context.image,
+          siblings,
+        );
         if (live) resolved.set(item.id, live);
       });
 
@@ -143,10 +191,64 @@ export class ContextDevProductProvider implements ProductProvider {
     }
   }
 
+  /**
+   * Visual similarity between the detection's crop and each candidate's photo.
+   *
+   * Keyed by `productUrl`; a key is absent when there was nothing to measure —
+   * no upload, no product image, an undecodable one, or a row outside the budget.
+   * Absent means "no visual evidence", which is treated differently from a low
+   * score: the caller falls back to attribute agreement alone.
+   *
+   * Bounded to `visualCandidates` rows, chosen by attribute agreement, because each
+   * one is an outbound image fetch inside a shared 60-second budget.
+   */
+  private async measureVisualSimilarity(
+    scored: Array<{ card: LiveProductCard; agreement: { score: number } }>,
+    item: DetectedItem,
+    signal: AbortSignal,
+    image?: EnrichContext["image"],
+    siblings: BoundingBox[] = [],
+  ): Promise<Map<string, number>> {
+    const measured = new Map<string, number>();
+    if (!image || !this.visualRerank) return measured;
+
+    const crop = await cropRegion(image.buffer, item.boundingBox, {
+      size: image.size,
+      exclude: siblings,
+    });
+    if (!crop) return measured;
+
+    const reference = await describeImage(Buffer.from(crop.base64, "base64"), {
+      exclude: crop.masks,
+    });
+    if (!reference) return measured;
+
+    const candidates = [...scored]
+      .sort((a, b) => b.agreement.score - a.agreement.score)
+      .slice(0, this.visualCandidates)
+      .filter((entry) => Boolean(entry.card.imageUrl));
+
+    await Promise.all(
+      candidates.map(async (entry) => {
+        const bytes = await fetchRemoteImage(entry.card.imageUrl!, { signal });
+        if (!bytes) return;
+
+        const descriptor = await describeImage(bytes);
+        if (!descriptor) return;
+
+        measured.set(entry.card.productUrl, visualSimilarity(reference, descriptor));
+      }),
+    );
+
+    return measured;
+  }
+
   /** Resolves one detection, or `null` to keep its catalogue products. */
   private async resolveItem(
     item: DetectedItem,
     signal: AbortSignal,
+    image?: EnrichContext["image"],
+    siblings: BoundingBox[] = [],
   ): Promise<DetectedItem | null> {
     // Search on the enriched query — colour plus descriptors plus type —
     // rather than the bare label, which is often too generic to rank well.
@@ -204,11 +306,42 @@ export class ContextDevProductProvider implements ProductProvider {
      * corresponds to something instead of being a constant.
      */
     const expected = expectedAttributesOf(item);
-    const ranked = usable
-      .map((card) => ({ card, agreement: scoreTitleAgreement(card.title, expected) }))
-      .sort(
-        (a, b) => b.agreement.score - a.agreement.score || a.card.price - b.card.price,
-      );
+    const scored = usable.map((card) => ({
+      card,
+      agreement: scoreTitleAgreement(card.title, expected),
+    }));
+
+    /*
+     * Visual measurement, where there is anything to measure.
+     *
+     * Titles are a claim about a product; the photograph is the product. Two rows
+     * that both say "Siyah Deri Ceket" are indistinguishable to the scorer above,
+     * and one of them looks like what the user scanned. Bounded to the top few by
+     * agreement, so this costs a handful of small image fetches, and it degrades to
+     * `null` per row rather than failing the detection.
+     */
+    const visual = await this.measureVisualSimilarity(scored, item, signal, image, siblings);
+
+    const ranked = scored
+      .map((entry) => {
+        const seen = visual.get(entry.card.productUrl);
+        return {
+          ...entry,
+          visual: seen ?? null,
+          /*
+           * Blended for *ranking and display*. The gate below still tests the
+           * attribute agreement alone: a correct row can look unlike the photo for
+           * honest reasons — studio lighting, a flat-lay, a different pose — and
+           * demoting it out of the exact-match slot for that would be trading a
+           * reliable signal for a noisy one.
+           */
+          score:
+            seen === undefined
+              ? entry.agreement.score
+              : Math.round((0.6 * entry.agreement.score + 0.4 * seen) * 100) / 100,
+        };
+      })
+      .sort((a, b) => b.score - a.score || a.card.price - b.card.price);
 
     const leader = ranked[0];
     if (!leader) return null;
@@ -228,7 +361,9 @@ export class ContextDevProductProvider implements ProductProvider {
       console.warn(
         `[products] «${item.itemType}» için canlı birebir eşleşme yok: en iyi satır ` +
           `"${leader.card.title}" %${Math.round(leader.agreement.score * 100)} ` +
-          `(${leader.agreement.reason}); katalog satırı korunuyor`,
+          `(${leader.agreement.reason}` +
+          `${leader.visual === null ? "" : `; görsel %${Math.round(leader.visual * 100)}`}` +
+          `); katalog satırı korunuyor`,
       );
     }
 
@@ -239,7 +374,7 @@ export class ContextDevProductProvider implements ProductProvider {
     // colour is not a better deal, it is a different product. Rows below the
     // alternative floor are dropped rather than shown under a near-zero score.
     const alternatives = rest
-      .filter((entry) => entry.agreement.score >= ALTERNATIVE_FLOOR)
+      .filter((entry) => entry.score >= ALTERNATIVE_FLOOR)
       .slice(0, this.maxAlternatives);
 
     // Nothing survived either floor, so there is no live data for this detection.
@@ -271,8 +406,9 @@ export class ContextDevProductProvider implements ProductProvider {
         ? toProductMatch(best.card, {
             id: `${item.id}-live-exact`,
             matchType: "exact",
-            // The measured agreement, not a constant. This is what the card shows.
-            similarity: best.agreement.score,
+            // Measured: attribute agreement, blended with visual similarity where
+            // a product photo was available. Never a constant.
+            similarity: best.score,
             tag: "Canlı",
             brand: brands.get(best.card.merchantDomain) ?? null,
           })
@@ -281,7 +417,7 @@ export class ContextDevProductProvider implements ProductProvider {
         toProductMatch(entry.card, {
           id: `${item.id}-live-alt-${index}`,
           matchType: "alternative",
-          similarity: entry.agreement.score,
+          similarity: entry.score,
           tag: entry.card.price === cheapest ? "En uygun" : undefined,
           brand: brands.get(entry.card.merchantDomain) ?? null,
         }),

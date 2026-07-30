@@ -39,6 +39,7 @@ alır.
 | VLM ürün adı | Modelin verdiği Türkçe ürün adının beklenen token'ı taşıması (fixture ister) | — |
 | Sorgu token'ı | Üretilen aramanın, parçayı bulmaya yetecek Türkçe kelimeyi taşıması | %90 |
 | Vision sınıfı | **Yalnızca** Vision'ın İngilizce sınıfından üretilen sorgunun Türkçe terimi taşıması ve İngilizce kelime bırakmaması | %100 |
+| Görsel erişim | Bir parçanın sıkı kırpımının, 14 gevşek kırpım arasından kendi eşini bulması | %70 (şans %7) |
 | Aile tutarlılığı | Sınıflandırıcının kataloğu kendi içinde tutarlı etiketlemesi | %90 |
 | Hotspot sayısı | Temizlenmiş tespit sayısının beklenene ±1 yakınlığı (fixture ister) | %75 |
 
@@ -78,6 +79,7 @@ yüzden var.
   VLM rengi        —     (fixture yok)
   Sorgu token'ı   100%  (14/14)
   Vision sınıfı   100%  (14/14)
+  Görsel erişim    86%  (12/14)
   Aile tutarlılığı 100%  (14/14)
   Hotspot sayısı   —     (fixture yok)
 ```
@@ -118,6 +120,34 @@ iyi satıra mal oluyor. Uyumlu çiftler tek tek sayılmış (lacivert/siyah,
 krem/beyaz, camel/bej…) ve **gri tamamen muaf** — ölçüm hatasının düştüğü yer o:
 bu sette yıkanmış indigo jean `#596564`, siyah sandalet `#4e5857` ölçülüyor,
 ikisi de gri.
+
+## Görsel betimleyici — ne ölçüyor, ne ölçmüyor
+
+Erişim testi elimizdeki gerçek görsellerden kuruluyor: her etiketli bölge iki kez
+kırpılıyor (sıkı ve gevşek pay), gevşek olan **aynalanıp pozlaması değiştiriliyor**,
+sonra her sıkı kırpımın en yakın komşusunun 14 aday arasında kendi eşi olması
+bekleniyor. Şans %7.
+
+Aynalama ve pozlama şart: onlar olmadan iki kırpım piksellerinin çoğunu paylaşıyor
+ve skor gereksiz yere %100 çıkıyor — bozuk bir betimleyicinin içinden yeşil
+görünmeye devam edecek bir sayı. İkisi betimleyicinin iki yarısını farklı vuruyor:
+histogram aynalamaya tam bağışık, fark hash'i değil; hash pozlamaya dayanıklı,
+histogram daha az.
+
+**Bu test işin kendisinden kolay.** İki kırpım da aynı fotoğraftan, aynı ışıkta.
+Yani %86, gerçek stüdyo ürün fotoğraflarına karşı %86 anlamına gelmez. Değeri
+regresyon yakalamak.
+
+Kalan iki sapma betimleyicinin gerçek sınırı: `bk-body` (siyah body) aynı
+fotoğraftaki `bk-jeans`'e (koyu denim) yeniliyor, `bk-sunglasses` — çoğu yüz olan
+bir kırpım — `lc-coat`'a yeniliyor. Renk histogramı + 64 bit yapının bunları
+ayıracak bilgisi yok; ayırmak için anlam gerekiyor, yani öğrenilmiş bir embedding.
+
+Kırpımlar boru hattıyla aynı şekilde **maskeleniyor**: komşu parçaların kutuları
+histogramdan çıkarılıyor. Bu ölçülmüş bir gerek, süs değil — maskesiz hâlde
+referans fotoğraftaki şort kırpımı %69 pembe triko oluyor ve şort, pembe hırkaya
+siyah sneaker'dan daha yakın ölçülüyor (0.559 vs 0.353). Maskelemeyle pembe çekimi
+0.066'ya düşüyor ve sıralama düzeliyor.
 
 ## VLM öznitelik aşaması — durum
 
