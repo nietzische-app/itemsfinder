@@ -1,6 +1,7 @@
 import "server-only";
 
 import type {
+  BoundingBox,
   DetectedItem,
   DetectionResult,
   DetectionSource,
@@ -8,6 +9,7 @@ import type {
   ItemCategory,
 } from "@/types";
 import { familyOf } from "@/lib/itemFamily";
+import { nonMaxSuppression } from "@/lib/boundingBoxNms";
 import { buildSearchQuery, colorNameFromHex } from "@/lib/searchQuery";
 import {
   MOCK_SCENARIOS,
@@ -23,6 +25,11 @@ import {
   type ProductProvider,
 } from "@/services/productProvider";
 
+/** Vision score floor — below this the detection is noise, not a garment. */
+const MIN_VISION_SCORE = 0.65;
+
+/** Cap after NMS so a 3-piece look stays a 3–4 hotspot scan. */
+const MAX_DETECTIONS = 4;
 /* -------------------------------------------------------------------------- */
 /*  Service contract                                                          */
 /* -------------------------------------------------------------------------- */
@@ -269,7 +276,8 @@ export class GoogleVisionSearchService implements VisualSearchService {
 
   constructor(
     private readonly apiKey: string,
-    private readonly maxItems = 8,
+    private readonly maxItems = MAX_DETECTIONS,
+    private readonly minScore = MIN_VISION_SCORE,
   ) {}
 
   async analyze(input: VisualSearchInput): Promise<DetectionResult> {
@@ -323,14 +331,26 @@ export class GoogleVisionSearchService implements VisualSearchService {
       )
       .sort((a, b) => b.score - a.score);
 
-    const items: DetectedItem[] = [];
-    const usedEntities = new Set<string>();
+    /**
+     * First pass: filter to shoppable, high-confidence boxes. Vision often
+     * emits several overlapping labels for one garment ("Top" + "Outerwear" +
+     * "Clothing"); NMS collapses those before we spend product lookups.
+     */
+    type VisionCandidate = {
+      name: string;
+      score: number;
+      boundingBox: BoundingBox;
+      category: ItemCategory;
+    };
+
+    const rawCandidates: VisionCandidate[] = [];
 
     for (const object of annotation?.localizedObjectAnnotations ?? []) {
-      if (items.length >= this.maxItems) break;
-
       const name = object.name?.trim();
       if (!name) continue;
+
+      const score = object.score ?? 0;
+      if (score < this.minScore) continue;
 
       const category = categorizeLabel(name);
       if (!category) continue;
@@ -338,10 +358,23 @@ export class GoogleVisionSearchService implements VisualSearchService {
       const boundingBox = toBoundingBox(object.boundingPoly?.normalizedVertices);
       if (!boundingBox) continue;
 
+      rawCandidates.push({ name, score, boundingBox, category });
+    }
+
+    const candidates = nonMaxSuppression(rawCandidates, {
+      iouThreshold: 0.4,
+      centerRadius: 0.08,
+      maxItems: this.maxItems,
+    });
+
+    const items: DetectedItem[] = [];
+    const usedEntities = new Set<string>();
+
+    for (const object of candidates) {
       const entity = webEntities.find(
         (candidate) =>
           !usedEntities.has(candidate.description) &&
-          categorizeLabel(candidate.description) === category,
+          categorizeLabel(candidate.description) === object.category,
       );
 
       if (entity) usedEntities.add(entity.description);
@@ -351,9 +384,9 @@ export class GoogleVisionSearchService implements VisualSearchService {
       // is not.
       const phrase = entity?.description;
       const colorName = colorNameFromHex(dominantHex);
-      const label = [colorName, phrase ?? name].filter(Boolean).join(" ");
+      const label = [colorName, phrase ?? object.name].filter(Boolean).join(" ");
       const searchQuery = buildSearchQuery({
-        itemType: name,
+        itemType: object.name,
         label: phrase,
         colorHex: dominantHex,
       });
@@ -367,23 +400,23 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * stand-in's own title.
        */
       const { exactMatch, alternatives } = findProductsForLabel(
-        `${phrase ?? name} ${searchQuery}`,
-        category,
-        familyOf(name),
+        `${phrase ?? object.name} ${searchQuery}`,
+        object.category,
+        familyOf(object.name),
       );
 
       items.push({
-        id: `gv-${items.length}-${name.toLowerCase().replace(/\s+/g, "-")}`,
+        id: `gv-${items.length}-${object.name.toLowerCase().replace(/\s+/g, "-")}`,
         label,
-        itemType: name,
-        category,
-        attributes: [colorName, name].filter(Boolean).join(" • "),
+        itemType: object.name,
+        category: object.category,
+        attributes: [colorName, object.name].filter(Boolean).join(" • "),
         description:
-          `Görselde "${name}" olarak tespit edildi ` +
-          `(%${Math.round((object.score ?? 0) * 100)} güven). ` +
+          `Görselde "${object.name}" olarak tespit edildi ` +
+          `(%${Math.round(object.score * 100)} güven). ` +
           `Arama sorgusu: "${searchQuery}".`,
-        confidence: object.score ?? 0,
-        boundingBox,
+        confidence: object.score,
+        boundingBox: object.boundingBox,
         colorHex: dominantHex,
         exactMatch: exactMatch
           ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery))

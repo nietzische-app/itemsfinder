@@ -2,6 +2,11 @@ import type { DetectedItem, ExampleId, ProductMatch } from "@/types";
 import { familyOf, normalizeTr, tokenize, type ItemFamily } from "@/lib/itemFamily";
 import { showcaseBox } from "@/lib/showcase";
 import { buildMerchantSearchUrl } from "@/services/merchantSearch";
+import {
+  isDirectProductUrl,
+  PINK_OUTFIT_PDPS,
+  resolveVerifiedPdp,
+} from "@/services/productUrls";
 
 
 /**
@@ -14,10 +19,14 @@ export type CatalogProduct = Omit<
   "merchantDomain" | "isLive" | "brandMetadata" | "urlKind" | "productUrl"
 > & {
   /**
-   * Words to search the merchant's storefront for. The catalogue deliberately
-   * stores a query rather than a URL: a hand-written product path is a
-   * guaranteed 404 the moment the retailer rotates its catalogue, whereas a
-   * search always resolves.
+   * Direct product-detail page when known. Preferred over `searchQuery` so the
+   * CTA lands on a buyable page rather than a storefront search grid.
+   */
+  productUrl?: string;
+  /**
+   * Words to search the merchant's storefront for when no direct PDP is
+   * available. Also used by the Vision path to retarget catalogue stand-ins
+   * toward the detected label.
    */
   searchQuery: string;
 };
@@ -1460,6 +1469,7 @@ const pinkOutfitItems: CatalogItem[] = [
       price: 549.0,
       currency: "TRY",
       searchQuery: "pembe fermuarlı triko ceket",
+      productUrl: PINK_OUTFIT_PDPS.cardigan,
       imageUrl: thumb("Pink Cardigan", "#f6b9c8", "#d9829a"),
       matchType: "exact",
       similarity: 0.94,
@@ -1475,6 +1485,7 @@ const pinkOutfitItems: CatalogItem[] = [
         price: 299.9,
         currency: "TRY",
         searchQuery: "pembe fermuarlı örgü hırka",
+        productUrl: PINK_OUTFIT_PDPS.cardiganAlt,
         imageUrl: thumb("Knit Cardigan", "#f9c9d5", "#dd93a7"),
         matchType: "alternative",
         similarity: 0.86,
@@ -1489,6 +1500,7 @@ const pinkOutfitItems: CatalogItem[] = [
         price: 429.9,
         currency: "TRY",
         searchQuery: "yüksek yaka fermuarlı pembe kazak",
+        productUrl: PINK_OUTFIT_PDPS.cardiganAlt,
         imageUrl: thumb("Zip Sweater", "#f4aebe", "#cf7690"),
         matchType: "alternative",
         similarity: 0.82,
@@ -1502,6 +1514,7 @@ const pinkOutfitItems: CatalogItem[] = [
         price: 499.9,
         currency: "TRY",
         searchQuery: "pembe fermuarlı triko üst",
+        productUrl: PINK_OUTFIT_PDPS.cardiganAlt,
         imageUrl: thumb("Ribbed Knit", "#f7c2cf", "#d5889d"),
         matchType: "alternative",
         similarity: 0.79,
@@ -1523,10 +1536,11 @@ const pinkOutfitItems: CatalogItem[] = [
       id: "po-shorts-exact",
       title: "Deri Görünümlü Yüksek Bel Mini Şort",
       brand: "Zara",
-      merchant: "Zara",
+      merchant: "Trendyol",
       price: 899.0,
       currency: "TRY",
       searchQuery: "deri görünümlü mini şort",
+      productUrl: PINK_OUTFIT_PDPS.shorts,
       imageUrl: thumb("Leather Shorts", "#2a2a31", "#0d0d10"),
       matchType: "exact",
       similarity: 0.89,
@@ -1542,6 +1556,7 @@ const pinkOutfitItems: CatalogItem[] = [
         price: 249.9,
         currency: "TRY",
         searchQuery: "suni deri yüksek bel şort",
+        productUrl: PINK_OUTFIT_PDPS.shortsAlt,
         imageUrl: thumb("Faux Shorts", "#35353d", "#131317"),
         matchType: "alternative",
         similarity: 0.84,
@@ -1556,6 +1571,7 @@ const pinkOutfitItems: CatalogItem[] = [
         price: 449.9,
         currency: "TRY",
         searchQuery: "siyah kaplamalı mini şort",
+        productUrl: PINK_OUTFIT_PDPS.shortsAlt,
         imageUrl: thumb("Coated Shorts", "#3d3d46", "#17171c"),
         matchType: "alternative",
         similarity: 0.8,
@@ -1569,6 +1585,7 @@ const pinkOutfitItems: CatalogItem[] = [
         price: 629.9,
         currency: "TRY",
         searchQuery: "siyah deri görünümlü şort",
+        productUrl: PINK_OUTFIT_PDPS.shortsAlt,
         imageUrl: thumb("Tailored Short", "#30303a", "#101014"),
         matchType: "alternative",
         similarity: 0.76,
@@ -1595,6 +1612,7 @@ const pinkOutfitItems: CatalogItem[] = [
       price: 2499.0,
       currency: "TRY",
       searchQuery: "siyah beyaz bilekli sneaker",
+      productUrl: PINK_OUTFIT_PDPS.sneakers,
       imageUrl: thumb("High Top", "#f2f2f2", "#1b1b1b"),
       matchType: "exact",
       similarity: 0.91,
@@ -1610,6 +1628,7 @@ const pinkOutfitItems: CatalogItem[] = [
         price: 899.9,
         currency: "TRY",
         searchQuery: "bilekli siyah beyaz spor ayakkabı",
+        productUrl: PINK_OUTFIT_PDPS.sneakersAlt,
         imageUrl: thumb("Ankle Sneaker", "#e8e8e8", "#26262a"),
         matchType: "alternative",
         similarity: 0.83,
@@ -1624,6 +1643,7 @@ const pinkOutfitItems: CatalogItem[] = [
         price: 1299.9,
         currency: "TRY",
         searchQuery: "yüksek bilek panelli sneaker",
+        productUrl: PINK_OUTFIT_PDPS.sneakersAlt,
         imageUrl: thumb("Panel Sneaker", "#ededed", "#2f2f34"),
         matchType: "alternative",
         similarity: 0.8,
@@ -1637,6 +1657,7 @@ const pinkOutfitItems: CatalogItem[] = [
         price: 1799.9,
         currency: "TRY",
         searchQuery: "retro yüksek bilek sneaker",
+        productUrl: PINK_OUTFIT_PDPS.sneakersAlt,
         imageUrl: thumb("Hi Top", "#f5f5f5", "#1f1f23"),
         matchType: "alternative",
         similarity: 0.77,
@@ -2323,12 +2344,25 @@ export function retargetSearchQuery(
 /* -------------------------------------------------------------------------- */
 
 /**
- * Turns an authored catalogue row into a UI-ready `ProductMatch`, resolving its
- * `searchQuery` into a live storefront search URL.
+ * Turns an authored catalogue row into a UI-ready `ProductMatch`.
+ *
+ * Resolution order:
+ *  1. Explicit `productUrl` when it is a direct PDP
+ *  2. Curated family-matched PDP for the merchant (never a jacket for sneakers)
+ *  3. Storefront search URL as a last resort (labelled `urlKind: "search"`)
  */
 export function hydrateProduct(product: CatalogProduct): ProductMatch {
-  const { searchQuery, ...rest } = product;
-  const productUrl = buildMerchantSearchUrl(product.merchant, searchQuery);
+  const { searchQuery, productUrl: authoredUrl, ...rest } = product;
+  const family = familyOf(`${product.title} ${product.brand} ${searchQuery}`);
+
+  const direct =
+    authoredUrl && isDirectProductUrl(authoredUrl)
+      ? authoredUrl
+      : resolveVerifiedPdp(product.merchant, family);
+
+  const searchUrl = buildMerchantSearchUrl(product.merchant, searchQuery);
+  const productUrl = direct ?? searchUrl ?? "";
+  const urlKind: ProductMatch["urlKind"] = direct ? "product" : "search";
 
   let merchantDomain = "";
   if (productUrl) {
@@ -2343,8 +2377,8 @@ export function hydrateProduct(product: CatalogProduct): ProductMatch {
     ...rest,
     // A merchant with no search endpoint would leave the CTA dead, so the card
     // is marked out of stock rather than shipped with nowhere to go.
-    productUrl: productUrl ?? "",
-    urlKind: "search",
+    productUrl,
+    urlKind,
     inStock: productUrl ? product.inStock : false,
     merchantDomain,
     isLive: false,

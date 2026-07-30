@@ -1,12 +1,11 @@
 import type { Merchant } from "@/types";
 
 /**
- * Real, working storefront search URLs.
+ * Storefront search URL builders — last-resort fallback only.
  *
- * The catalogue used to carry invented product paths (`/dp/B08XYZ4321`,
- * `...-p04387042.html`) which every one of them 404s — a fabricated product id
- * cannot resolve. A search URL is honest about what it is and always lands the
- * user somewhere useful, so the demo catalogue points at these instead.
+ * Prefer a direct product-detail page (see `productUrls.ts`). Search URLs are
+ * kept so a merchant with no verified PDP still yields a clickable CTA rather
+ * than a dead button, but the UI labels them as "Mağazada bul".
  *
  * Turkish storefronts, because the app is Turkish.
  */

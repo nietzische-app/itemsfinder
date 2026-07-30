@@ -2,7 +2,9 @@ import "server-only";
 
 import { ContextDevService, type LiveProductCard } from "@/services/contextDevService";
 import { buildSearchQuery } from "@/lib/searchQuery";
+import { familyOf } from "@/lib/itemFamily";
 import { hydrateProduct } from "@/services/mockCatalog";
+import { isDirectProductUrl, resolveVerifiedPdp } from "@/services/productUrls";
 import type {
   BrandMetadata,
   DetectedItem,
@@ -259,7 +261,17 @@ function toProductMatch(
   overrides: ProductMatchOverrides,
 ): ProductMatch {
   const merchant = merchantForDomain(card.merchantDomain);
-  const isUsableUrl = isSafeHttpUrl(card.productUrl);
+
+  // Live extraction must yield a PDP. If it somehow handed us a search URL,
+  // swap in a curated family-matched affiliate PDP rather than shipping a
+  // search CTA labelled as "live".
+  let productUrl = isDirectProductUrl(card.productUrl) ? card.productUrl : "";
+  if (!productUrl) {
+    const family = familyOf(card.title);
+    productUrl = resolveVerifiedPdp(merchant, family) ?? "";
+  }
+
+  const isUsableUrl = Boolean(productUrl) && isSafeHttpUrl(productUrl);
 
   return {
     id: overrides.id,
@@ -268,9 +280,9 @@ function toProductMatch(
     merchant,
     price: card.price,
     currency: card.currency,
-    productUrl: isUsableUrl ? card.productUrl : "",
-    // Live rows are real product pages, not storefront searches.
-    urlKind: "product",
+    productUrl: isUsableUrl ? productUrl : "",
+    // Only claim "product" when the URL is actually a PDP.
+    urlKind: isUsableUrl && isDirectProductUrl(productUrl) ? "product" : "search",
     // Live listings without an image fall back to the neutral placeholder the
     // catalogue uses, so cards never render an empty box.
     imageUrl: card.imageUrl ?? placeholderImage(card.title),

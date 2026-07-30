@@ -3,6 +3,7 @@ import "server-only";
 import ContextDev from "context.dev";
 
 import type { BrandMetadata, ItemCategory } from "@/types";
+import { isDirectProductUrl } from "@/services/productUrls";
 
 /**
  * Context.dev integration — live product intelligence and retailer branding.
@@ -178,12 +179,21 @@ export class ContextDevService {
         { signal },
       );
 
-      // One page per retailer: a spread across merchants beats three near
-      // identical listings from whichever store ranked best.
+      // Prefer direct product pages over search/listing hits. One page per
+      // retailer: a spread across merchants beats three near-identical listings
+      // from whichever store ranked best.
       const candidates: string[] = [];
       const seenHosts = new Set<string>();
 
-      for (const result of search.results ?? []) {
+      const ranked = [...(search.results ?? [])].sort((a, b) => {
+        const aPdp = isDirectProductUrl(a.url) ? 0 : 1;
+        const bPdp = isDirectProductUrl(b.url) ? 0 : 1;
+        return aPdp - bPdp;
+      });
+
+      for (const result of ranked) {
+        if (!isDirectProductUrl(result.url)) continue;
+
         const host = safeHostname(result.url);
         if (!host || seenHosts.has(host)) continue;
 
@@ -192,6 +202,8 @@ export class ContextDevService {
         if (candidates.length >= this.extractsPerQuery) break;
       }
 
+      // No PDP in the search results — refuse to extract from search pages
+      // (those produce search CTAs). Caller falls back to verified catalogue PDPs.
       if (candidates.length === 0) return [];
 
       const extracted = await Promise.allSettled(
@@ -202,7 +214,9 @@ export class ContextDevService {
         outcome.status === "fulfilled" ? outcome.value : [],
       );
 
-      const deduped = dedupeByUrl(products);
+      const deduped = dedupeByUrl(products).filter((product) =>
+        isDirectProductUrl(product.productUrl),
+      );
       this.writeCache(this.productCache, cacheKey, deduped);
       return deduped;
     } catch (error) {
@@ -343,14 +357,22 @@ function normalizeProduct(
   const price = toPositiveNumber(raw.price);
   if (price === null) return null;
 
-  // An extracted product URL is only trusted if it stays on the page's host —
-  // otherwise a scraped ad or cross-sell could redirect our CTA off-site.
+  // An extracted product URL is only trusted if it stays on the page's host and
+  // is a direct PDP — otherwise a scraped ad, cross-sell, or search page could
+  // redirect our CTA off a buyable product.
   const extractedUrl = typeof raw.productUrl === "string" ? raw.productUrl : "";
-  const productUrl =
-    isHttpUrl(extractedUrl) && safeHostname(extractedUrl) === host
+  const preferred =
+    isHttpUrl(extractedUrl) &&
+    safeHostname(extractedUrl) === host &&
+    isDirectProductUrl(extractedUrl)
       ? extractedUrl
-      : pageUrl;
+      : isDirectProductUrl(pageUrl)
+        ? pageUrl
+        : null;
 
+  if (!preferred) return null;
+
+  const productUrl = preferred;
   const currency =
     typeof raw.currency === "string" && /^[A-Za-z]{3}$/.test(raw.currency.trim())
       ? raw.currency.trim().toUpperCase()
