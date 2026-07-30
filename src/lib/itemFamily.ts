@@ -14,6 +14,7 @@ export type ItemFamily =
   | "bottom"
   | "dress"
   | "bag"
+  | "headwear"
   | "accessory"
   | "lips"
   | "eyes"
@@ -97,6 +98,22 @@ const RULES: FamilyRule[] = [
       "shopper",
     ],
   },
+  /*
+   * Headwear is split out of `accessory` for one reason: `familyFitsBody`.
+   *
+   * Belts, bags, socks and jewellery legitimately appear anywhere on a body, so
+   * `accessory` has to be positionally unconstrained — and that unconstrained rule
+   * was covering hats too. A hat detected at ankle height passed the body check,
+   * which is precisely the impossibility that check exists to catch.
+   *
+   * Before `accessory`, because "şapka" and "bere" are in both lists and the first
+   * matching rule wins.
+   */
+  {
+    family: "headwear",
+    stems: ["şapka", "bere", "kasket", "bandana", "başlık"],
+    words: ["hat", "hats", "cap", "caps", "beanie", "beret", "headband", "headscarf", "fedora"],
+  },
   {
     family: "accessory",
     stems: [
@@ -106,8 +123,6 @@ const RULES: FamilyRule[] = [
       "yüzük",
       "fular",
       "kemer",
-      "şapka",
-      "bere",
       "gözlü",
       "eldiven",
       "çorap",
@@ -124,9 +139,6 @@ const RULES: FamilyRule[] = [
       "rings",
       "scarf",
       "belt",
-      "hat",
-      "cap",
-      "beanie",
       "sunglasses",
       "glasses",
       "eyewear",

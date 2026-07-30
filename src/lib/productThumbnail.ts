@@ -131,6 +131,7 @@ const SHAPE_BY_FAMILY: Record<ItemFamily, Shape> = {
   dress: "dress",
   footwear: "sneaker",
   bag: "bag",
+  headwear: "hat",
   accessory: "jewellery",
   lips: "lipstick",
   eyes: "wand",

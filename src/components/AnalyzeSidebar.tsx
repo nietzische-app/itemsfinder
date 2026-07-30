@@ -3,6 +3,7 @@
 import { Bookmark, Filter, RotateCcw, Shirt, Sparkles, Watch } from "lucide-react";
 
 import { EngineBadge } from "@/components/EngineBadge";
+import { ScanDiagnostics } from "@/components/ScanDiagnostics";
 import { cn } from "@/lib/utils";
 import { UI_CATEGORIES, type UiCategory } from "@/lib/categories";
 import { formatPrice } from "@/utils/affiliate";
@@ -156,6 +157,12 @@ export function AnalyzeSidebar({
 
       <div className="mt-auto hidden lg:block">
         <EngineBadge result={result} />
+        {/*
+          Below the badge, collapsed. The badge says *what* ran; this says what it
+          did and how long each part took. Renders nothing at all when the response
+          carries no trace, so nothing appears on paths that predate it.
+        */}
+        <ScanDiagnostics result={result} />
       </div>
     </aside>
   );

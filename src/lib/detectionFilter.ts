@@ -260,6 +260,17 @@ export function familyFitsBody(family: ItemFamily, t: number | null): boolean {
     case "outerwear":
     case "dress":
       return t < 0.88;
+    /*
+     * A hat is on a head. This is the family that was folded into `accessory` and
+     * therefore unconstrained, so a hat detected at ankle height passed — the exact
+     * impossibility this function exists to reject.
+     *
+     * 0.35 rather than something tighter because the box is the *hat*, measured
+     * against the person's full height, and a wide-brimmed hat or a headscarf worn
+     * low sits further down than a beanie.
+     */
+    case "headwear":
+      return t < 0.35;
     // Belts, bags, socks and jewellery legitimately appear anywhere on a body.
     default:
       return true;

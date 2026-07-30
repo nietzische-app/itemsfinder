@@ -513,6 +513,7 @@ const REJECT_PHRASES = [
 const FAMILY_REJECTS: Partial<Record<ItemFamily, string[]>> = {
   footwear: ["bağcık", "bağcığı", "tabanlık", "çekecek", "boyası", "cilası"],
   bag: ["organizer", "düzenleyic"],
+  headwear: ["standı", "kutusu", "askısı"],
   accessory: ["standı", "kutusu", "tutucu"],
   lips: ["fırça", "sünger", "kalemtıraş", "çantası"],
   eyes: ["fırça", "sünger", "kalemtıraş", "çantası", "cımbız"],

@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
 
+import {
+  createTrace,
+  logScanTrace,
+  scanDetailEnabled,
+  type TraceCollector,
+} from "@/lib/scanTrace";
 import { inspectUpload } from "@/services/imageDecode";
 import { checkRateLimit, rateLimitMessage } from "@/services/rateLimit";
 import {
   MockVisualSearchService,
   getVisualSearchService,
 } from "@/services/visualSearch";
-import type { DetectRequestBody, DetectResponse, ExampleId } from "@/types";
+import type { DetectRequestBody, DetectResponse, DetectionResult, ExampleId } from "@/types";
 
 /** Vision calls are outbound HTTP, so this must not be statically evaluated. */
 export const runtime = "nodejs";
@@ -130,6 +136,7 @@ export async function POST(request: Request) {
     : undefined;
 
   const service = getVisualSearchService();
+  const trace = createTrace();
 
   try {
     const result = await service.analyze({
@@ -140,11 +147,16 @@ export async function POST(request: Request) {
       // Abandon live lookups as soon as the client goes away; live product
       // resolution is the slow part and every call costs credits.
       signal: request.signal,
+      trace,
     });
 
-    return NextResponse.json<DetectResponse>({ ok: true, result });
+    return NextResponse.json<DetectResponse>({
+      ok: true,
+      result: withTrace(result, trace, service.source),
+    });
   } catch (error) {
     console.error("[detect] visual search failed:", error);
+    trace.degrade("vision", `dedektör hata verdi: ${errorLabel(error)}`);
 
     // If the live detector is down or misconfigured we still want a usable
     // demo. The response carries `source`/`productSource`, which the UI shows
@@ -157,12 +169,44 @@ export async function POST(request: Request) {
           exampleId,
         });
 
-        return NextResponse.json<DetectResponse>({ ok: true, result: fallback });
+        return NextResponse.json<DetectResponse>({
+          ok: true,
+          result: withTrace(fallback, trace, "mock-fallback"),
+        });
       } catch (fallbackError) {
         console.error("[detect] mock fallback failed:", fallbackError);
+        trace.degrade("total", "mock yedeği de başarısız");
       }
     }
 
+    logScanTrace(trace.snapshot(), { id: "-", source: service.source });
     return fail("Görseli analiz edemedik. Lütfen tekrar dene.", 502);
   }
+}
+
+/** The class of failure, without leaking a stack trace or a URL into the log. */
+function errorLabel(error: unknown): string {
+  if (error instanceof Error) return error.name === "Error" ? error.message.slice(0, 80) : error.name;
+  return "bilinmeyen";
+}
+
+/**
+ * Logs the trace and attaches the part of it the client should see.
+ *
+ * Timings and degradation always travel: they are a handful of numbers and short
+ * strings, and they are what turns "the scan was slow" or "why is this a catalogue
+ * price" into an answerable question. The box-by-box detail is behind
+ * `ENABLE_SCAN_DETAIL` because it is kilobytes and only means anything to someone
+ * reading it.
+ */
+function withTrace(result: DetectionResult, trace: TraceCollector, source: string): DetectionResult {
+  const snapshot = trace.snapshot();
+  logScanTrace(snapshot, { id: result.id, source });
+
+  return {
+    ...result,
+    trace: scanDetailEnabled()
+      ? snapshot
+      : { ...snapshot, dropped: [], rejected: [] },
+  };
 }

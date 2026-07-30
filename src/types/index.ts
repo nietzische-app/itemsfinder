@@ -133,6 +133,8 @@ export interface DetectedItem {
   alternatives: ProductMatch[];
 }
 
+import type { ScanTrace } from "@/lib/scanTrace";
+
 /** Where a given result came from — surfaced in the UI as a small badge. */
 export type DetectionSource = "mock" | "google-vision";
 
@@ -150,6 +152,15 @@ export interface DetectionResult {
   /** Milliseconds spent in the detection engine. */
   durationMs: number;
   items: DetectedItem[];
+  /**
+   * What happened during the scan — see `lib/scanTrace.ts`.
+   *
+   * Optional because every offline path (the eval, the mock engine used directly,
+   * the fixtures) produces a result without one. Timings and degradation notes
+   * always travel when the API produced it; the box-by-box detail only when
+   * `ENABLE_SCAN_DETAIL` is on.
+   */
+  trace?: ScanTrace;
 }
 
 /** Payload accepted by `POST /api/detect`. */

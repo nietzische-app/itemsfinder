@@ -30,6 +30,7 @@ import {
   getAttributeExtractor,
   type GarmentAttributes,
 } from "@/services/attributeExtractor";
+import { createTrace, type TraceCollector } from "@/lib/scanTrace";
 import { foregroundFilter, learnBackdrop } from "@/services/foreground";
 import { imageSize, regionDominantColor } from "@/services/regionColor";
 import {
@@ -60,6 +61,13 @@ export interface VisualSearchInput {
    * of a day are cheap rather than the ceiling arriving with no warning.
    */
   budgetConstrained?: boolean;
+  /**
+   * Where this scan records what it did — see `lib/scanTrace.ts`.
+   *
+   * Optional so every existing caller (the eval, the tests, the mock engine)
+   * keeps working untouched; a scan with no collector simply is not observed.
+   */
+  trace?: TraceCollector;
 }
 
 /**
@@ -130,6 +138,7 @@ const CLOTHING_FAMILIES = new Set<ItemFamily>([
   "bottom",
   "dress",
   "bag",
+  "headwear",
   "accessory",
 ]);
 
@@ -314,25 +323,30 @@ export class GoogleVisionSearchService implements VisualSearchService {
 
   async analyze(input: VisualSearchInput): Promise<DetectionResult> {
     const startedAt = Date.now();
+    // A collector is always present inside the method so the instrumentation reads
+    // straight-line; a caller that supplied none just never asks for the result.
+    const trace = input.trace ?? createTrace({ detail: false });
 
-    const response = await fetch(`${VISION_ENDPOINT}?key=${this.apiKey}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        requests: [
-          {
-            image: { content: input.imageBase64 },
-            features: [
-              { type: "OBJECT_LOCALIZATION", maxResults: 20 },
-              { type: "WEB_DETECTION", maxResults: 10 },
-              { type: "IMAGE_PROPERTIES" },
-            ],
-          },
-        ],
+    const response = await trace.stage("vision", () =>
+      fetch(`${VISION_ENDPOINT}?key=${this.apiKey}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          requests: [
+            {
+              image: { content: input.imageBase64 },
+              features: [
+                { type: "OBJECT_LOCALIZATION", maxResults: 20 },
+                { type: "WEB_DETECTION", maxResults: 10 },
+                { type: "IMAGE_PROPERTIES" },
+              ],
+            },
+          ],
+        }),
+        // Vision is a slow-ish call; fail fast rather than hanging the request.
+        signal: AbortSignal.timeout(20_000),
       }),
-      // Vision is a slow-ish call; fail fast rather than hanging the request.
-      signal: AbortSignal.timeout(20_000),
-    });
+    );
 
     if (!response.ok) {
       const detail = await response.text().catch(() => "");
@@ -381,22 +395,58 @@ export class GoogleVisionSearchService implements VisualSearchService {
       const name = object.name?.trim();
       if (!name) continue;
 
-      // Person, furniture, plants: not shoppable, and Person has already been
-      // harvested above as the geometric frame.
-      if (!categorizeLabel(name)) continue;
-
       const box = toBoundingBox(object.boundingPoly?.normalizedVertices);
       if (!box) continue;
+
+      const score = object.score ?? 0;
+
+      // Person, furniture, plants: not shoppable, and Person has already been
+      // harvested above as the geometric frame.
+      if (!categorizeLabel(name)) {
+        trace.drop({ name, score, box, reason: "alışverişlik sınıf değil" });
+        continue;
+      }
 
       const family = familyOf(name);
 
       // A garment cannot be where the body says it is not.
-      if (!familyFitsBody(family, bodyPosition(box, personBox))) continue;
+      if (!familyFitsBody(family, bodyPosition(box, personBox))) {
+        trace.drop({
+          name,
+          score,
+          box,
+          reason: `vücut kuralı: ${family} parçası ${bodyPosition(box, personBox)} bölgesinde olamaz`,
+        });
+        continue;
+      }
 
-      candidates.push({ name, score: object.score ?? 0, box, family });
+      candidates.push({ name, score, box, family });
     }
 
     const detections = dedupeDetections(candidates, { maxItems: this.maxItems });
+
+    /*
+     * What the cleanup removed, by difference.
+     *
+     * `dedupeDetections` does not report reasons and should not have to — it is a
+     * pure function over boxes, and threading a log through it would make it harder
+     * to test than the thing it explains. Diffing its input against its output says
+     * which candidates went, which is the question anyone reading this actually has.
+     */
+    const kept = new Set(detections.map((detection) => detection.box));
+    for (const candidate of candidates) {
+      if (!kept.has(candidate.box)) {
+        trace.drop({
+          name: candidate.name,
+          score: candidate.score,
+          box: candidate.box,
+          reason: "temizlikte elendi (güven eşiği, örtüşme, içerme ya da parça sınırı)",
+        });
+      }
+    }
+
+    trace.count("rawDetections", objects.length);
+    trace.count("keptDetections", detections.length);
 
     /*
      * Per-region colour.
@@ -425,17 +475,26 @@ export class GoogleVisionSearchService implements VisualSearchService {
      * the eval set the two street looks come back bit-identical, which is the point.
      */
     const backdrop = size
-      ? await learnBackdrop(imageBuffer, {
-          size,
-          boxes: [
-            ...detections.map((detection) => detection.box),
-            ...(personBox ? [personBox] : []),
-          ],
-        })
+      ? await trace.stage("foreground", () =>
+          learnBackdrop(imageBuffer, {
+            size,
+            boxes: [
+              ...detections.map((detection) => detection.box),
+              ...(personBox ? [personBox] : []),
+            ],
+          }),
+        )
       : null;
     const foreground = foregroundFilter(backdrop);
 
-    const regionColors = await Promise.all(
+    if (!backdrop) {
+      // Not a failure — the abstention is the feature. Recorded because "the wall
+      // was not removed" explains a colour that reads as background, and that is
+      // the first thing to check when a swatch looks wrong.
+      trace.degrade("foreground", "fon öğrenilemedi (sahne, fon değil) — yalnızca ten çıkarıldı");
+    }
+
+    const regionColors = await trace.stage("regionColor", () => Promise.all(
       detections.map((detection) =>
         size
           ? regionDominantColor(imageBuffer, detection.box, {
@@ -452,7 +511,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
             })
           : Promise.resolve(null),
       ),
-    );
+    ));
 
     /*
      * Garment attributes from the crops.
@@ -465,21 +524,36 @@ export class GoogleVisionSearchService implements VisualSearchService {
      * class, which is exactly what shipped before this stage existed.
      */
     const extractor = input.budgetConstrained ? null : getAttributeExtractor();
+    if (input.budgetConstrained) {
+      trace.degrade("vlm", "günlük bütçe eşiğinde — ücretli aşama atlandı");
+    }
+
     const attributes =
       extractor && size
-        ? await extractor.extract(
-            imageBuffer,
-            // In `dedupeDetections`' own order — named families before "unknown",
-            // then confidence — so if the item budget truncates the list it drops
-            // the least identifiable detections rather than an arbitrary slice.
-            detections.map((detection, index) => ({
-              key: String(index),
-              box: detection.box,
-              itemType: detection.name,
-            })),
-            { size, signal: input.signal },
+        ? await trace.stage("vlm", () =>
+            extractor.extract(
+              imageBuffer,
+              // In `dedupeDetections`' own order — named families before "unknown",
+              // then confidence — so if the item budget truncates the list it drops
+              // the least identifiable detections rather than an arbitrary slice.
+              detections.map((detection, index) => ({
+                key: String(index),
+                box: detection.box,
+                itemType: detection.name,
+              })),
+              { size, signal: input.signal },
+            ),
           )
         : new Map<string, GarmentAttributes>();
+
+    trace.count("describedItems", attributes.size);
+    if (extractor && attributes.size < detections.length) {
+      trace.degrade(
+        "vlm",
+        `${detections.length - attributes.size}/${detections.length} parça betimlenemedi — ` +
+          "ölçülen renge ve Vision sınıfına düşüldü",
+      );
+    }
 
     /*
      * WEB_DETECTION entities describe the *photograph*, not one garment in it —
@@ -646,6 +720,7 @@ class ComposedVisualSearchService implements VisualSearchService {
     // Budget-constrained scans keep their catalogue products: the live lookup is a
     // search plus several extracts per detection, which is the expensive half.
     if (input.budgetConstrained) {
+      input.trace?.degrade("products", "günlük bütçe eşiğinde — canlı ürün araması atlandı");
       return { ...detected, productSource: "mock", liveItemCount: 0 };
     }
 
@@ -657,14 +732,34 @@ class ComposedVisualSearchService implements VisualSearchService {
        */
       const buffer = Buffer.from(input.imageBase64, "base64");
 
-      return await this.products.enrich(detected, {
-        signal: input.signal,
-        image: { buffer, size: (await imageSize(buffer)) ?? undefined },
-      });
+      const image = { buffer, size: (await imageSize(buffer)) ?? undefined };
+      const enrich = () =>
+        this.products.enrich(detected, { signal: input.signal, image, trace: input.trace });
+
+      const enriched = input.trace
+        ? await input.trace.stage("products", enrich)
+        : await enrich();
+
+      /*
+       * Only a degradation when a live provider was actually asked. The mock
+       * provider returning catalogue rows is the design, not a fallback, and
+       * logging it as one would make every offline scan look broken — which is the
+       * fastest way to teach everyone to ignore the field.
+       */
+      if (
+        this.products.source !== "mock" &&
+        enriched.liveItemCount === 0 &&
+        detected.items.length > 0
+      ) {
+        input.trace?.degrade("products", "canlı satır bulunamadı — katalog fiyatlarında kalındı");
+      }
+
+      return enriched;
     } catch (error) {
       // The provider is written not to throw, but a bug there must never cost
       // the user their detections — the catalogue products are already valid.
       console.error("[products] provider threw, keeping catalogue products:", error);
+      input.trace?.degrade("products", "sağlayıcı hata verdi — katalog ürünleri korundu");
       return { ...detected, productSource: "mock", liveItemCount: 0 };
     }
   }

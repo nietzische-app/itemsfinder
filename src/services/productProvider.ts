@@ -10,6 +10,7 @@ import {
   scoreTitleAgreement,
 } from "@/lib/attributeMatch";
 import { rejectProductTitle } from "@/lib/retailVocabulary";
+import type { TraceCollector } from "@/lib/scanTrace";
 import { buildSearchQuery } from "@/lib/searchQuery";
 import { cropRegion } from "@/services/imageCrop";
 import { productThumbnail } from "@/lib/productThumbnail";
@@ -49,6 +50,16 @@ export interface EnrichContext {
   signal?: AbortSignal;
   /** Decoded upload, for measuring a detection crop against product photos. */
   image?: { buffer: Buffer; size?: { width: number; height: number } };
+  /**
+   * Where this stage records the rows it refused — see `lib/scanTrace.ts`.
+   *
+   * The reasons already exist and are already written for a human to read;
+   * `rejectProductTitle` returns "kılıf değil, çanta arıyoruz" and not a code.
+   * They were going to `console.warn` and nowhere else, which meant the answer to
+   * "why is this product missing" lived in a log line nobody could correlate with
+   * a scan.
+   */
+  trace?: TraceCollector;
 }
 
 export interface ProductProvider {
@@ -170,6 +181,7 @@ export class ContextDevProductProvider implements ProductProvider {
           controller.signal,
           context.image,
           siblings,
+          context.trace,
         );
         if (live) resolved.set(item.id, live);
       });
@@ -250,6 +262,7 @@ export class ContextDevProductProvider implements ProductProvider {
     signal: AbortSignal,
     image?: EnrichContext["image"],
     siblings: BoundingBox[] = [],
+    trace?: TraceCollector,
   ): Promise<DetectedItem | null> {
     // Search on the enriched query — colour plus descriptors plus type —
     // rather than the bare label, which is often too generic to rank well.
@@ -282,7 +295,10 @@ export class ContextDevProductProvider implements ProductProvider {
     const rejected: string[] = [];
     const usable = cards.filter((card) => {
       const reason = rejectProductTitle(card.title, family);
-      if (reason) rejected.push(`"${card.title}" (${reason})`);
+      if (reason) {
+        rejected.push(`"${card.title}" (${reason})`);
+        trace?.reject({ itemId: item.id, title: card.title, reason });
+      }
       return reason === null;
     });
 
