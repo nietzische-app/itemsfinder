@@ -277,8 +277,21 @@ on import, so a malformed or search-shaped link throws at startup rather than
 shipping.
 
 ```bash
-npm run check:pdp     # lists every product still missing a link, exact matches first
+npm run check:pdp                     # grouped by retailer, exact matches first
+npm run check:pdp -- --exact          # only the rows a shopper sees before expanding
+npm run check:pdp -- --merchant=Zara  # one store at a time
+npm run check:pdp -- --paste          # just the code block to paste
 ```
+
+Grouped by **retailer** rather than by look, because that is how the work
+actually goes: open one store, find its products, move on. Each row carries a
+search link for that store so the product page is one click away, and the run
+ends with a paste-ready block of ids for `VERIFIED_PDP_URLS`. Those search links
+are a research aid, not product URLs — pasting one in by mistake throws on
+import.
+
+Partial is fine. A product with no entry renders inert; it does not fall back to
+anything.
 
 ## Affiliate links
 
@@ -318,7 +331,7 @@ src/
 │   ├── EngineBadge.tsx          # Which engines produced this result
 │   ├── MarkasLogo.tsx           # Brand mark + wordmark lockup
 │   ├── AnalyzeSidebar.tsx       # Workspace tool rail: filters + budget
-│   ├── SiteHeader.tsx           # Top app bar: logo + "Görsel Yükle"
+│   ├── SiteHeader.tsx           # Top app bar: logo + "Görsel Yükle" (+ saved count when non-empty)
 │   ├── MobileNav.tsx            # Bottom tab bar (mobile)
 │   ├── Footer.tsx               # Four-column footer + affiliate notice
 │   ├── CookieBanner.tsx         # Consent notice, localStorage-backed

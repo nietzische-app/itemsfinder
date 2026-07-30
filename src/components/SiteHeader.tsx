@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Upload } from "lucide-react";
+import { Bookmark, Upload } from "lucide-react";
 
 import { MarkasLogo } from "@/components/MarkasLogo";
 import { Button } from "@/components/ui/button";
+import { useSavedProducts } from "@/lib/savedItems";
 
 /**
  * Deliberately two elements: the logo and the one action that starts a scan.
@@ -19,10 +20,19 @@ import { Button } from "@/components/ui/button";
  *
  * Nothing here reads the query string, so the header no longer needs a Suspense
  * boundary to stay statically prerenderable.
+ *
+ * A third control appears **only once something is saved**. An always-visible empty
+ * bookmark would add chrome to a two-element header for a list that has nothing in
+ * it, and the footer already links there for the empty case; showing it the moment
+ * the list stops being empty puts the affordance exactly where it starts to mean
+ * something. `useSavedProducts` reads localStorage in an effect, so the server
+ * renders the two-element header and the link arrives on the client — no hydration
+ * mismatch, and the prerender stays static.
  */
 export function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
+  const { count } = useSavedProducts();
 
   function goToUpload() {
     if (pathname === "/") {
@@ -43,7 +53,22 @@ export function SiteHeader() {
           <MarkasLogo size="header" />
         </Link>
 
-        <Button size="sm" className="ml-auto h-9 shrink-0 gap-1.5 px-4" onClick={goToUpload}>
+        {count > 0 ? (
+          <Link
+            href="/kayitlilar"
+            aria-label={`Kaydedilenler — ${count} ürün`}
+            className="ml-auto flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-primary transition-colors hover:bg-surface-container-high focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
+          >
+            <Bookmark strokeWidth={1.75} className="h-[18px] w-[18px]" />
+            <span className="text-[13px] font-semibold tabular-nums">{count}</span>
+          </Link>
+        ) : null}
+
+        <Button
+          size="sm"
+          className={`h-9 shrink-0 gap-1.5 px-4 ${count > 0 ? "" : "ml-auto"}`}
+          onClick={goToUpload}
+        >
           <Upload strokeWidth={1.75} />
           <span className="hidden sm:inline">Görsel Yükle</span>
           <span className="sm:hidden">Yükle</span>
