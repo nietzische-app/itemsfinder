@@ -96,7 +96,7 @@ export default function HomePage() {
           </div>
 
           <div className="min-w-0">
-            <LiveScanPreview />
+            <LiveScanPreview onOpenScan={handleImageReady} />
           </div>
         </section>
 

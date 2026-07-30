@@ -310,6 +310,11 @@ placeholder plate stands in so the hero never shows a broken image. See
 [`public/examples/README.md`](public/examples/README.md) for the requirements and
 the calibrated box coordinates.
 
+Its boxes are defined once, in `SHOWCASE_ITEMS`, and read from there by both the
+hero preview and the `pink-outfit` scenario in `mockCatalog.ts` — so
+re-calibrating after swapping the photo is a single edit and the two views
+cannot drift apart.
+
 The four `exampleId` scenarios still ship as SVG illustrations. Replacing those
 with real photography is a three-step change:
 
@@ -324,7 +329,8 @@ with real photography is a three-step change:
    `{ x, y, width, height }` all in 0–1, measured from the top-left. So an item
    whose box starts 30% across and 25% down and covers 40% × 30% of the frame
    is `{ x: 0.3, y: 0.25, width: 0.4, height: 0.3 }`. The scenario keys map to
-   the `ExampleId`s: `streetwear`, `glam-makeup`, `tailoring`, `soft-minimal`.
+   the `ExampleId`s: `streetwear`, `glam-makeup`, `tailoring`, `soft-minimal`
+   (plus `pink-outfit`, whose boxes come from `lib/showcase.ts` instead).
 
 Sizing is handled for you: `prepareImage()` in `src/lib/imageSession.ts`
 downscales anything over 1600px on its longest edge and re-encodes to JPEG

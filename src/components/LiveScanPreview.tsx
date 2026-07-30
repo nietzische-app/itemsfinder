@@ -1,18 +1,30 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BadgeCheck, Pause, Play, ScanLine, Search, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  Loader2,
+  Pause,
+  Play,
+  ScanLine,
+  Search,
+  Sparkles,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { exampleToDataUrl } from "@/lib/imageSession";
 import { cn } from "@/lib/utils";
 import {
   SHOWCASE_ASPECT,
+  SHOWCASE_EXAMPLE_ID,
   SHOWCASE_IMAGE,
   SHOWCASE_INTERVAL_MS,
   SHOWCASE_ITEMS,
   type ShowcaseItem,
 } from "@/lib/showcase";
 import { merchantColor, merchantInitials } from "@/services/merchantSearch";
+import type { UploadedImage } from "@/types";
 import { buildAffiliateUrl, formatPrice } from "@/utils/affiliate";
 
 /**
@@ -30,12 +42,23 @@ import { buildAffiliateUrl, formatPrice } from "@/utils/affiliate";
  * motion that cannot be stopped is an accessibility problem, and a visitor
  * reading the card should not have it swapped out from under them.
  */
-export function LiveScanPreview() {
+export function LiveScanPreview({
+  onOpenScan,
+}: {
+  /**
+   * Runs the showcase look through the real pipeline. Removing the illustration
+   * grid took away the only way to try Markas without your own screenshot;
+   * this puts it back with one look instead of four.
+   */
+  onOpenScan: (image: UploadedImage) => void;
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
   /** Hover or keyboard focus anywhere in the frame suspends the cycle. */
   const [engaged, setEngaged] = useState(false);
   const [imageSrc, setImageSrc] = useState(SHOWCASE_IMAGE.src);
+  const [opening, setOpening] = useState(false);
+  const [openError, setOpenError] = useState<string | null>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
   const active = SHOWCASE_ITEMS[activeIndex]!;
@@ -71,6 +94,28 @@ export function LiveScanPreview() {
     );
     return () => window.clearInterval(id);
   }, [autoPlay, engaged]);
+
+  /**
+   * Hands whichever image actually resolved to the normal upload path, tagged
+   * with the scenario id so the mock engine returns these three items with
+   * these exact boxes.
+   */
+  async function openScan() {
+    setOpening(true);
+    setOpenError(null);
+
+    try {
+      const dataUrl = await exampleToDataUrl(imageSrc);
+      onOpenScan({
+        dataUrl,
+        fileName: imageSrc.split("/").pop() ?? "ornek-kombin.jpg",
+        exampleId: SHOWCASE_EXAMPLE_ID,
+      });
+    } catch {
+      setOpenError("Örnek taramayı açamadık. Tekrar dene.");
+      setOpening(false);
+    }
+  }
 
   return (
     <div className="relative min-w-0">
@@ -311,6 +356,32 @@ export function LiveScanPreview() {
               )}
             </button>
           </div>
+
+          <Button
+            variant="outline"
+            size="block"
+            onClick={openScan}
+            disabled={opening}
+            className="mt-1"
+          >
+            {opening ? (
+              <>
+                <Loader2 className="animate-spin" strokeWidth={1.75} />
+                Açılıyor…
+              </>
+            ) : (
+              <>
+                Bu taramayı aç
+                <ArrowRight strokeWidth={1.5} />
+              </>
+            )}
+          </Button>
+
+          {openError ? (
+            <p role="alert" className="text-[13px] text-error">
+              {openError}
+            </p>
+          ) : null}
         </div>
       </div>
     </div>

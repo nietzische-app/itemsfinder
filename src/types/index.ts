@@ -137,7 +137,13 @@ export type DetectResponse =
   | { ok: false; error: string };
 
 /** Built-in demo looks shipped in `public/examples`. */
-export type ExampleId = "streetwear" | "glam-makeup" | "tailoring" | "soft-minimal";
+export type ExampleId =
+  /** The landing page's live-scan showcase look — see `src/lib/showcase.ts`. */
+  | "pink-outfit"
+  | "streetwear"
+  | "glam-makeup"
+  | "tailoring"
+  | "soft-minimal";
 
 export interface ExampleImage {
   id: ExampleId;

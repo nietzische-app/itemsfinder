@@ -37,6 +37,7 @@ const ALLOWED_MIME_TYPES = new Set([
 const MAX_BASE64_LENGTH = Math.ceil((10 * 1024 * 1024 * 4) / 3);
 
 const VALID_EXAMPLE_IDS: ExampleId[] = [
+  "pink-outfit",
   "streetwear",
   "glam-makeup",
   "tailoring",

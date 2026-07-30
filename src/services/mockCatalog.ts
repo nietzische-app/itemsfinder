@@ -1,5 +1,17 @@
-import type { DetectedItem, ExampleId, ProductMatch } from "@/types";
+import type { BoundingBox, DetectedItem, ExampleId, ProductMatch } from "@/types";
+import { SHOWCASE_ITEMS } from "@/lib/showcase";
 import { buildMerchantSearchUrl } from "@/services/merchantSearch";
+
+/**
+ * Reads a box off the landing-page showcase config so the hero preview and the
+ * `/analyze` overlay stay calibrated together. Throws rather than falling back:
+ * a silently misplaced hotspot is harder to notice than a failed build.
+ */
+function showcaseBox(id: string): BoundingBox {
+  const item = SHOWCASE_ITEMS.find((entry) => entry.id === id);
+  if (!item) throw new Error(`Unknown showcase item id: ${id}`);
+  return item.box;
+}
 
 /**
  * The catalogue stores only the *authored* product fields. `merchantDomain`,
@@ -74,6 +86,8 @@ function thumb(label: string, from: string, to: string): string {
  *
  * Swapping a demo look's artwork means re-measuring its boxes:
  *
+ *   pink-outfit  -> public/examples/pink-outfit.jpg  (boxes live in lib/showcase.ts,
+ *                   shared with the landing-page preview so the two cannot drift)
  *   streetwear   -> public/examples/streetwear.svg
  *   glam-makeup  -> public/examples/glam-makeup.svg
  *   tailoring    -> public/examples/tailoring.svg
@@ -1424,8 +1438,226 @@ const softMinimalItems: CatalogItem[] = [
   },
 ];
 
+/* --- Scenario: pink-outfit (the landing page showcase) --------------------- */
+
+/**
+ * The look the landing page scans. Its boxes are read straight off
+ * `SHOWCASE_ITEMS` rather than copied, so the hotspots in the hero preview and
+ * the hotspots on `/analyze` can never drift apart — re-calibrating the photo
+ * is a one-place edit.
+ *
+ * Each `exactMatch` mirrors the product the hero card shows for that item, so
+ * opening the scan confirms what the preview promised instead of replacing it.
+ */
+const pinkOutfitItems: CatalogItem[] = [
+  {
+    id: "po-cardigan",
+    label: "Pembe Fermuarlı Triko Ceket",
+    itemType: "Ceket",
+    category: "clothing",
+    attributes: "Pastel Pembe • İnce Triko",
+    description:
+      "Yüksek yakalı, tam boy fermuarlı, ince örgü pastel pembe triko ceket.",
+    confidence: 0.96,
+    boundingBox: showcaseBox("showcase-top"),
+    colorHex: "#f0a0b4",
+    exactMatch: {
+      id: "po-cardigan-exact",
+      title: "Fermuarlı Yüksek Yaka Triko Ceket",
+      brand: "Trendyol Milla",
+      merchant: "Trendyol",
+      price: 549.0,
+      currency: "TRY",
+      searchQuery: "pembe fermuarlı triko ceket",
+      imageUrl: thumb("Pink Cardigan", "#f6b9c8", "#d9829a"),
+      matchType: "exact",
+      similarity: 0.94,
+      tag: "Birebir eşleşme",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "po-cardigan-alt-1",
+        title: "Fermuarlı Örgü Hırka",
+        brand: "H&M",
+        merchant: "H&M",
+        price: 299.9,
+        currency: "TRY",
+        searchQuery: "pembe fermuarlı örgü hırka",
+        imageUrl: thumb("Knit Cardigan", "#f9c9d5", "#dd93a7"),
+        matchType: "alternative",
+        similarity: 0.86,
+        tag: "En uygun",
+        inStock: true,
+      },
+      {
+        id: "po-cardigan-alt-2",
+        title: "Yüksek Yaka Fermuarlı Kazak",
+        brand: "Mango",
+        merchant: "Mango",
+        price: 429.9,
+        currency: "TRY",
+        searchQuery: "yüksek yaka fermuarlı pembe kazak",
+        imageUrl: thumb("Zip Sweater", "#f4aebe", "#cf7690"),
+        matchType: "alternative",
+        similarity: 0.82,
+        inStock: true,
+      },
+      {
+        id: "po-cardigan-alt-3",
+        title: "Ribbed Zip-Through Knit",
+        brand: "ASOS",
+        merchant: "ASOS",
+        price: 499.9,
+        currency: "TRY",
+        searchQuery: "pembe fermuarlı triko üst",
+        imageUrl: thumb("Ribbed Knit", "#f7c2cf", "#d5889d"),
+        matchType: "alternative",
+        similarity: 0.79,
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "po-shorts",
+    label: "Siyah Deri Mini Şort",
+    itemType: "Şort",
+    category: "clothing",
+    attributes: "Mat Siyah • Deri Görünümlü",
+    description: "Yüksek bel, düz kesim, mat deri görünümlü siyah mini şort.",
+    confidence: 0.93,
+    boundingBox: showcaseBox("showcase-bottom"),
+    colorHex: "#16181c",
+    exactMatch: {
+      id: "po-shorts-exact",
+      title: "Deri Görünümlü Yüksek Bel Mini Şort",
+      brand: "Zara",
+      merchant: "Zara",
+      price: 899.0,
+      currency: "TRY",
+      searchQuery: "deri görünümlü mini şort",
+      imageUrl: thumb("Leather Shorts", "#2a2a31", "#0d0d10"),
+      matchType: "exact",
+      similarity: 0.89,
+      tag: "Birebir eşleşme",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "po-shorts-alt-1",
+        title: "Suni Deri Yüksek Bel Şort",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 249.9,
+        currency: "TRY",
+        searchQuery: "suni deri yüksek bel şort",
+        imageUrl: thumb("Faux Shorts", "#35353d", "#131317"),
+        matchType: "alternative",
+        similarity: 0.84,
+        tag: "En uygun",
+        inStock: true,
+      },
+      {
+        id: "po-shorts-alt-2",
+        title: "Coated Mini Shorts",
+        brand: "H&M",
+        merchant: "H&M",
+        price: 449.9,
+        currency: "TRY",
+        searchQuery: "siyah kaplamalı mini şort",
+        imageUrl: thumb("Coated Shorts", "#3d3d46", "#17171c"),
+        matchType: "alternative",
+        similarity: 0.8,
+        inStock: true,
+      },
+      {
+        id: "po-shorts-alt-3",
+        title: "Faux Leather Tailored Short",
+        brand: "ASOS",
+        merchant: "ASOS",
+        price: 629.9,
+        currency: "TRY",
+        searchQuery: "siyah deri görünümlü şort",
+        imageUrl: thumb("Tailored Short", "#30303a", "#101014"),
+        matchType: "alternative",
+        similarity: 0.76,
+        inStock: false,
+      },
+    ],
+  },
+  {
+    id: "po-sneakers",
+    label: "Siyah Beyaz Bilekli Sneaker",
+    itemType: "Sneaker",
+    category: "clothing",
+    attributes: "Siyah/Beyaz • Bilekli",
+    description:
+      "Bilek yükseklikli, siyah beyaz panelli, retro basketbol siluetli deri sneaker.",
+    confidence: 0.95,
+    boundingBox: showcaseBox("showcase-shoes"),
+    colorHex: "#1b1b1b",
+    exactMatch: {
+      id: "po-sneakers-exact",
+      title: "Bilekli Retro Basketbol Sneaker",
+      brand: "Amazon",
+      merchant: "Amazon",
+      price: 2499.0,
+      currency: "TRY",
+      searchQuery: "siyah beyaz bilekli sneaker",
+      imageUrl: thumb("High Top", "#f2f2f2", "#1b1b1b"),
+      matchType: "exact",
+      similarity: 0.91,
+      tag: "Birebir eşleşme",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "po-sneakers-alt-1",
+        title: "Bilekli Spor Ayakkabı",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 899.9,
+        currency: "TRY",
+        searchQuery: "bilekli siyah beyaz spor ayakkabı",
+        imageUrl: thumb("Ankle Sneaker", "#e8e8e8", "#26262a"),
+        matchType: "alternative",
+        similarity: 0.83,
+        tag: "En uygun",
+        inStock: true,
+      },
+      {
+        id: "po-sneakers-alt-2",
+        title: "Panelli Yüksek Bilek Sneaker",
+        brand: "H&M",
+        merchant: "H&M",
+        price: 1299.9,
+        currency: "TRY",
+        searchQuery: "yüksek bilek panelli sneaker",
+        imageUrl: thumb("Panel Sneaker", "#ededed", "#2f2f34"),
+        matchType: "alternative",
+        similarity: 0.8,
+        inStock: true,
+      },
+      {
+        id: "po-sneakers-alt-3",
+        title: "Retro Hi-Top Trainer",
+        brand: "ASOS",
+        merchant: "ASOS",
+        price: 1799.9,
+        currency: "TRY",
+        searchQuery: "retro yüksek bilek sneaker",
+        imageUrl: thumb("Hi Top", "#f5f5f5", "#1f1f23"),
+        matchType: "alternative",
+        similarity: 0.77,
+        inStock: true,
+      },
+    ],
+  },
+];
+
 /** Every scenario the mock engine can return. */
 export const MOCK_SCENARIOS: Record<ExampleId | "generic", CatalogItem[]> = {
+  "pink-outfit": pinkOutfitItems,
   streetwear: streetwearItems,
   "glam-makeup": glamMakeupItems,
   tailoring: tailoringItems,
@@ -1439,6 +1671,7 @@ export const MOCK_SCENARIOS: Record<ExampleId | "generic", CatalogItem[]> = {
  * is wired in, we resolve labels against this catalogue.
  */
 const ALL_ITEMS: CatalogItem[] = [
+  ...pinkOutfitItems,
   ...streetwearItems,
   ...glamMakeupItems,
   ...tailoringItems,

@@ -1,5 +1,5 @@
 import { buildMerchantSearchUrl } from "@/services/merchantSearch";
-import type { BoundingBox, Merchant } from "@/types";
+import type { BoundingBox, ExampleId, Merchant } from "@/types";
 
 /**
  * Data for the landing-page "Live Scan" showcase.
@@ -15,6 +15,12 @@ import type { BoundingBox, Merchant } from "@/types";
 
 /** Aspect ratio the showcase frame is built for: portrait 2:3 (e.g. 1333x2000). */
 export const SHOWCASE_ASPECT = "2 / 3";
+
+/**
+ * Scenario this look maps to in `mockCatalog.ts`. Opening the scan sends this
+ * id to `/api/detect`, which returns the three items below with these boxes.
+ */
+export const SHOWCASE_EXAMPLE_ID: ExampleId = "pink-outfit";
 
 export const SHOWCASE_IMAGE = {
   /**
