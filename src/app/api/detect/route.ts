@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { inspectUpload } from "@/services/imageDecode";
 import {
   MockVisualSearchService,
   getVisualSearchService,
@@ -25,15 +26,12 @@ export const dynamic = "force-dynamic";
  */
 export const maxDuration = 60;
 
-/** Formats we accept. SVG is included for the bundled example screenshots. */
-const ALLOWED_MIME_TYPES = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/svg+xml",
-]);
-
-/** ~10 MB of decoded image; base64 inflates by roughly 4/3. */
+/**
+ * ~10 MB of encoded image; base64 inflates by roughly 4/3.
+ *
+ * This bounds the *transfer*, and nothing else. It does not bound pixels: a
+ * 9000×9000 PNG is 248 KB. `inspectUpload` is what stops that one.
+ */
 const MAX_BASE64_LENGTH = Math.ceil((10 * 1024 * 1024 * 4) / 3);
 
 const VALID_EXAMPLE_IDS: ExampleId[] = [
@@ -80,12 +78,29 @@ export async function POST(request: Request) {
     return fail("Görsel base64 data URL olmalı.", 400);
   }
 
-  if (!ALLOWED_MIME_TYPES.has(parsed.mimeType)) {
-    return fail("Desteklenmeyen görsel formatı. JPG, PNG veya WEBP kullan.", 415);
-  }
-
   if (parsed.base64.length > MAX_BASE64_LENGTH) {
     return fail("Görsel çok büyük. 10 MB altında tut.", 413);
+  }
+
+  /*
+   * Everything above this point trusted the request's own description of itself.
+   * `inspectUpload` reads the bytes: what format they actually are, whether that
+   * matches what was claimed, and how many pixels they decode to. The last of
+   * those is the one that mattered — the size check above passes an 81-megapixel
+   * PNG at 248 KB, and the pipeline decodes each upload several times over.
+   */
+  const buffer = Buffer.from(parsed.base64, "base64");
+  const inspected = await inspectUpload(buffer, parsed.mimeType);
+
+  if (!inspected.ok) {
+    // Logged with the reason, answered without it: the caller does not need to be
+    // told which check caught them.
+    console.warn(`[detect] upload rejected (${inspected.reason}): ${inspected.detail}`);
+
+    if (inspected.reason === "too-many-pixels") {
+      return fail("Görselin çözünürlüğü çok yüksek. 50 megapikselin altında olmalı.", 413);
+    }
+    return fail("Desteklenmeyen görsel formatı. JPG, PNG veya WEBP kullan.", 415);
   }
 
   // Only trust `exampleId` when it names a demo image we actually ship.

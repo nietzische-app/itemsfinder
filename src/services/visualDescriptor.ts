@@ -1,6 +1,8 @@
 import "server-only";
 
-import sharp, { type Sharp } from "sharp";
+import { type Sharp } from "sharp";
+
+import { openImage } from "@/services/imageDecode";
 
 import type { BoundingBox } from "@/types";
 
@@ -102,7 +104,7 @@ export async function describeImage(
   options: DescribeOptions = {},
 ): Promise<VisualDescriptor | null> {
   try {
-    const image = sharp(imageBuffer, { failOn: "none" });
+    const image = openImage(imageBuffer);
     const { width, height } = await image.metadata();
     if (!width || !height || width < 8 || height < 8) return null;
 
@@ -112,7 +114,7 @@ export async function describeImage(
     const cropHeight = Math.max(8, height - top * 2);
 
     const centre = () =>
-      sharp(imageBuffer, { failOn: "none" }).extract({
+      openImage(imageBuffer).extract({
         left,
         top,
         width: cropWidth,

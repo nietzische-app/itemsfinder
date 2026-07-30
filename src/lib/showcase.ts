@@ -161,7 +161,7 @@ export const SHOWCASE_LOOKS: ShowcaseLook[] = [
 
 /** Fallback plate, so a missing asset never renders as a broken hero image. */
 export const SHOWCASE_FALLBACK = {
-  src: "/examples/showcase-fallback.svg",
+  src: "/examples/showcase-fallback.jpg",
   alt: "Örnek tarama görseli yüklenemedi",
 };
 

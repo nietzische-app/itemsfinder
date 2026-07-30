@@ -16,14 +16,14 @@ export const EXAMPLE_IMAGES: ExampleImage[] = [
     category: "Sokak Stili",
     title: "Şehirli Göçebe",
     description: "Deri ceket, crop üst, düz paça jean, platform sneaker",
-    src: "/examples/streetwear.svg",
+    src: "/examples/streetwear.jpg",
   },
   {
     id: "glam-makeup",
     category: "Güzellik",
     title: "Mercan Işıltı",
     description: "Kırmızı mat ruj, bronz smokey göz, kanatlı eyeliner, halka küpe",
-    src: "/examples/glam-makeup.svg",
+    src: "/examples/glam-makeup.jpg",
     tall: true,
   },
   {
@@ -31,14 +31,14 @@ export const EXAMPLE_IMAGES: ExampleImage[] = [
     category: "Terzi Kesim",
     title: "Gece Zarafeti",
     description: "Yün blazer, pileli pantolon, chelsea bot, deri çanta",
-    src: "/examples/tailoring.svg",
+    src: "/examples/tailoring.jpg",
   },
   {
     id: "soft-minimal",
     category: "Dokular",
     title: "Yumuşak Minimalizm",
     description: "Saç örgü kazak, ipek fular, inci küpe, gül ağacı ruj",
-    src: "/examples/soft-minimal.svg",
+    src: "/examples/soft-minimal.jpg",
     tall: true,
   },
 ];

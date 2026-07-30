@@ -41,9 +41,17 @@ etmenin bir yolu yok.
 **Bitti ölçütü:** sınırın üstünde `429` döndüğünü, altında normal çalıştığını ve
 sayaçların instance'lar arası paylaşıldığını gösteren bir test.
 
-### 0.2 Görsel yükleme sertleştirmesi
+### 0.2 Görsel yükleme sertleştirmesi — ✅ tamamlandı
 
-**Durum: iki somut açık, ikisi de ölçüldü.**
+**Durum: kapatıldı.** Aşağıdaki üç açık da giderildi; 16 kontrolle doğrulandı
+(`upload.mjs`, gerçek HTTP üzerinden üretim derlemesine karşı).
+
+Özet: her decode tek bir kapıdan (`openImage`, 50 MP tavanı) geçiyor;
+`inspectUpload` baytları kokluyor, beyanla karşılaştırıyor ve boyutu ölçüyor;
+SVG kabul listesinden çıktı ve onu tek kullanan dört demo örneği JPG'ye
+rasterleştirildi. Aşağıdaki kayıt tarihsel — neyin neden kırıldığını anlatıyor.
+
+**Bulunduğu andaki hâli:**
 
 **Piksel bombası.** Route 10 MB base64 sınırı koyuyor ama piksel sayısına
 bakmıyor ve `sharp` çağrılarının hiçbirinde `limitInputPixels` yok. Ölçtüm:
@@ -78,8 +86,9 @@ gerçekte yok.
 - Decode edilmiş piksel sayısını bir kez ölç, bir kez logla; boru hattı zaten
   `imageSize`'ı paylaşıyor, aynı şeyi tavan kontrolü için de kullan.
 
-**Bitti ölçütü:** 81 MP bombasının `413` ile reddedildiği, sahte MIME'ın
-reddedildiği ve SVG yüklemenin kabul edilmediği testler.
+**Bitti ölçütü (karşılandı):** 81 MP bombası `413`; PNG diyip JPEG göndermek
+`415`; SVG hem kendi MIME'ıyla hem PNG kılığında `415`; 13000×10 (yalnızca
+0.13 MP) kenar sınırıyla `413`; GIF ve TIFF tanınıyor ama kabul edilmiyor.
 
 ### 0.3 Satın alınabilirlik: bağlantı + fotoğraf
 
@@ -291,7 +300,7 @@ okuyucu etiketleri; Lighthouse / axe koşumu. Hotspot'lar `aria-label` taşıyor
 
 ## Sıralama önerisi
 
-1. **0.2** (görsel sertleştirme) — en küçük iş, en somut açık, bugün kapanır.
+1. ~~**0.2** (görsel sertleştirme)~~ — ✅ tamamlandı.
 2. **0.1** (hız sınırı) — kalıcı depo seçimi gerektiriyor, o yüzden ikinci.
 3. **1.1** (eval seti) — en yüksek kaldıraç, ve senin fotoğraf toplamana bağlı.
 4. **1.2 + 1.3** (fixture'lar) — anahtarlar elinde olduğu anda, tek oturum.

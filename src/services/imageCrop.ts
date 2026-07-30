@@ -1,6 +1,6 @@
 import "server-only";
 
-import sharp from "sharp";
+import { openImage } from "@/services/imageDecode";
 
 import type { BoundingBox } from "@/types";
 
@@ -83,7 +83,7 @@ export async function cropRegion(
   const minEdge = options.minEdge ?? MIN_EDGE;
 
   try {
-    const image = sharp(imageBuffer, { failOn: "none" });
+    const image = openImage(imageBuffer);
     const { width, height } = options.size ?? (await image.metadata());
     if (!width || !height) return null;
 

@@ -85,15 +85,15 @@ function loadImage(src: string): Promise<HTMLImageElement> {
  * silently and `/analyze` finds nothing to scan. Downscaling here keeps the
  * whole flow well inside budget, and also cuts what we upload to Cloud Vision.
  *
- * Returns the input unchanged if it is already small enough, is an SVG, or if
- * anything about the canvas round-trip fails: shipping the original is always
- * better than losing the image.
+ * Returns the input unchanged if it is already small enough, or if anything about
+ * the canvas round-trip fails: shipping the original is always better than losing
+ * the image.
+ *
+ * Downscaling here is a convenience, not a control. The API enforces its own pixel
+ * ceiling (`inspectUpload`) because nothing that arrives at a server was
+ * necessarily produced by its own client.
  */
 export async function prepareImage(dataUrl: string): Promise<string> {
-  // Bundled illustrations are a few KB; nothing to gain, and rasterising them
-  // would only lose fidelity.
-  if (dataUrl.startsWith("data:image/svg+xml")) return dataUrl;
-
   let image: HTMLImageElement;
   try {
     image = await loadImage(dataUrl);

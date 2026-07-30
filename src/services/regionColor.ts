@@ -1,6 +1,6 @@
 import "server-only";
 
-import sharp from "sharp";
+import { openImage } from "@/services/imageDecode";
 
 import type { BoundingBox } from "@/types";
 
@@ -75,7 +75,7 @@ export async function regionDominantColor(
   const meta = options.size;
   const exclude = options.exclude ?? [];
   try {
-    const image = sharp(imageBuffer, { failOn: "none" });
+    const image = openImage(imageBuffer);
     const { width, height } = meta ?? (await image.metadata());
     if (!width || !height) return null;
 
@@ -192,7 +192,7 @@ export async function imageSize(
   imageBuffer: Buffer,
 ): Promise<{ width: number; height: number } | null> {
   try {
-    const { width, height } = await sharp(imageBuffer, { failOn: "none" }).metadata();
+    const { width, height } = await openImage(imageBuffer).metadata();
     return width && height ? { width, height } : null;
   } catch {
     return null;
