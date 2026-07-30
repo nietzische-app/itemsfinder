@@ -7,6 +7,7 @@ import {
   type TraceCollector,
 } from "@/lib/scanTrace";
 import { inspectUpload } from "@/services/imageDecode";
+import { readCachedScan, scanCacheKey, writeCachedScan } from "@/services/scanCache";
 import { checkRateLimit, rateLimitMessage } from "@/services/rateLimit";
 import {
   MockVisualSearchService,
@@ -138,6 +139,27 @@ export async function POST(request: Request) {
   const service = getVisualSearchService();
   const trace = createTrace();
 
+  /*
+   * Same photograph, same answer — and paid for once.
+   *
+   * The key is a hash of the decoded bytes. The photograph itself is never
+   * stored; see `services/scanCache.ts` for why that distinction is the whole
+   * KVKK argument.
+   */
+  const cacheKey = scanCacheKey(buffer, exampleId);
+  const hit = await readCachedScan(cacheKey);
+
+  if (hit) {
+    trace.degrade("total", "önbellekten döndü — yeni çağrı yapılmadı");
+    logScanTrace(trace.snapshot(), { id: hit.id, source: `${service.source}+cache` });
+    return NextResponse.json<DetectResponse>(
+      { ok: true, result: hit },
+      // Visible to whoever is debugging, and honest about where the answer came
+      // from without dressing it up in the UI as something different.
+      { headers: { "x-markas-cache": "hit" } },
+    );
+  }
+
   try {
     const result = await service.analyze({
       imageBase64: parsed.base64,
@@ -150,10 +172,17 @@ export async function POST(request: Request) {
       trace,
     });
 
-    return NextResponse.json<DetectResponse>({
-      ok: true,
-      result: withTrace(result, trace, service.source),
+    await writeCachedScan(cacheKey, result, {
+      // A scan that ran without the paid stages, or that fell back to the mock
+      // engine, is a snapshot of a bad moment. Keeping it for a day would make a
+      // temporary degradation permanent for this photograph.
+      degraded: limit.degraded || service.source === "mock",
     });
+
+    return NextResponse.json<DetectResponse>(
+      { ok: true, result: withTrace(result, trace, service.source) },
+      { headers: { "x-markas-cache": "miss" } },
+    );
   } catch (error) {
     console.error("[detect] visual search failed:", error);
     trace.degrade("vision", `dedektör hata verdi: ${errorLabel(error)}`);
