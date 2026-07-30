@@ -14,7 +14,7 @@
   }
 
   body {
-    @apply bg-surface font-sans text-body-md text-on-surface antialiased;
+    @apply overflow-x-clip bg-surface font-sans text-body-md text-on-surface antialiased;
   }
 
   ::selection {

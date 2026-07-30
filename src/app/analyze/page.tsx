@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlertCircle, ImageOff, RotateCcw } from "lucide-react";
 
@@ -22,6 +22,7 @@ type Status = "loading-image" | "no-image" | "scanning" | "done" | "error";
 
 function AnalyzeWorkspace() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const { count: savedCount } = useSavedProducts();
 
   const [image, setImage] = useState<UploadedImage | null>(null);
@@ -36,12 +37,17 @@ function AnalyzeWorkspace() {
   /** Guards against a duplicate scan from React 18 StrictMode double-effects. */
   const scannedDataUrl = useRef<string | null>(null);
 
-  // The category filter lives in the URL so the header switcher drives it too.
+  // URL seeds the initial category; local state owns subsequent toggles so
+  // "Tümü" / reset can clear a `?kategori=` deep link without fighting the URL.
   const urlCategory = parseUiCategory(searchParams.get("kategori"));
-  const [localCategory, setLocalCategory] = useState<UiCategory | null>(null);
-  const category = localCategory ?? urlCategory;
+  const [category, setCategory] = useState<UiCategory | null>(urlCategory);
+  const categorySeeded = useRef(false);
 
-  useEffect(() => setLocalCategory(urlCategory), [urlCategory]);
+  useEffect(() => {
+    if (categorySeeded.current) return;
+    categorySeeded.current = true;
+    setCategory(urlCategory);
+  }, [urlCategory]);
 
   useEffect(() => {
     const stored = readUploadedImage();
@@ -147,10 +153,19 @@ function AnalyzeWorkspace() {
   const pending = isStreaming ? (items[revealedCount] ?? null) : null;
   const isFiltered = category !== null || maxPrice !== null;
 
+  const clearCategoryFromUrl = useCallback(() => {
+    if (!searchParams.has("kategori")) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("kategori");
+    const query = params.toString();
+    router.replace(query ? `/analyze?${query}` : "/analyze", { scroll: false });
+  }, [router, searchParams]);
+
   const resetFilters = useCallback(() => {
-    setLocalCategory(null);
+    setCategory(null);
     setMaxPrice(null);
-  }, []);
+    clearCategoryFromUrl();
+  }, [clearCategoryFromUrl]);
 
   // A filter can hide the item that is currently selected; drop the selection
   // rather than leaving a highlight pointing at nothing.
@@ -162,7 +177,7 @@ function AnalyzeWorkspace() {
 
   if (status === "no-image") {
     return (
-      <div className="mx-auto flex min-h-[60dvh] max-w-shell flex-col items-center justify-center px-margin-mobile py-16 text-center">
+      <div className="mx-auto flex min-h-[60dvh] max-w-shell flex-col items-center justify-center overflow-x-clip px-margin-mobile py-16 text-center">
         <span className="flex h-16 w-16 items-center justify-center rounded-full bg-surface-container">
           <ImageOff className="h-7 w-7 text-outline" strokeWidth={1.5} />
         </span>
@@ -184,15 +199,16 @@ function AnalyzeWorkspace() {
   const currency = items[0]?.exactMatch?.currency ?? "TRY";
 
   return (
-    <div className="mx-auto flex max-w-shell flex-col lg:h-[calc(100dvh-72px)] lg:flex-row">
+    <div className="mx-auto flex max-w-shell flex-col overflow-x-clip lg:h-[calc(100dvh-72px)] lg:flex-row">
       {/* Tool rail */}
       {result && revealedCount > 0 ? (
         <AnalyzeSidebar
           result={result}
           filters={filters}
           onFiltersChange={(next) => {
-            setLocalCategory(next.category);
+            setCategory(next.category);
             setMaxPrice(next.maxPrice);
+            if (next.category === null) clearCategoryFromUrl();
           }}
           categoryCounts={categoryCounts}
           priceCeiling={priceCeiling}
@@ -204,7 +220,7 @@ function AnalyzeWorkspace() {
       ) : null}
 
       {/* Canvas */}
-      <section className="flex min-h-0 flex-1 items-center justify-center bg-surface-container-low p-gutter">
+      <section className="flex min-h-0 min-w-0 flex-1 items-center justify-center bg-surface-container-low p-gutter">
         {image ? (
           <BoundingBoxOverlay
             imageUrl={image.dataUrl}
@@ -219,7 +235,7 @@ function AnalyzeWorkspace() {
       </section>
 
       {/* Detections rail */}
-      <aside className="flex w-full shrink-0 flex-col border-outline-variant bg-surface-container-lowest lg:h-full lg:w-[400px] lg:border-l">
+      <aside className="flex w-full min-w-0 shrink-0 flex-col border-outline-variant bg-surface-container-lowest lg:h-full lg:w-[400px] lg:border-l">
         {status === "error" ? (
           <div className="p-gutter">
             <p className="flex items-center gap-2 font-display text-[18px] font-semibold text-error">

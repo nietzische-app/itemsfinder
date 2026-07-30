@@ -99,20 +99,24 @@ interface MarkasLogoProps {
  */
 export function MarkasLogo({ className, size = "md" }: MarkasLogoProps) {
   return (
-    <span className={cn("flex items-center gap-3", className)}>
+    <span className={cn("flex min-w-0 max-w-full items-center gap-2.5 sm:gap-3", className)}>
       {/*
         Compact mark stays crisp below ~48px. Sizes sit ~25–30% above the
         previous lockup so the brand reads as a hero signal in the 64/72px
-        header without overflowing it.
+        header without overflowing it. overflow-hidden + shrink-0 keep SVG
+        strokes from clipping against neighbouring chrome.
       */}
       <MarkasMark
         variant="compact"
-        className={size === "sm" ? "h-9 w-9" : "h-11 w-11"}
+        className={cn(
+          "shrink-0 overflow-visible",
+          size === "sm" ? "h-9 w-9" : "h-11 w-11",
+        )}
       />
       <span
         className={cn(
-          "font-display font-extrabold leading-none tracking-tight",
-          size === "sm" ? "text-[26px]" : "text-[32px] sm:text-[36px]",
+          "min-w-0 truncate font-display font-extrabold leading-none tracking-tight",
+          size === "sm" ? "text-[22px] sm:text-[26px]" : "text-[28px] sm:text-[36px]",
         )}
       >
         MARKAS
