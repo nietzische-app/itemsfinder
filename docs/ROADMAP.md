@@ -172,6 +172,29 @@ skor 14 puan zıplıyor.
 **Bitti ölçütü:** `npm run eval` en az 30 kombin raporluyor ve tabanlar yeni,
 daha geniş sete göre yeniden ayarlanmış.
 
+**Neden eldeki dört ek örnek bunu karşılamıyor.** `public/examples/` altında dört
+görsel daha var (`streetwear`, `glam-makeup`, `tailoring`, `soft-minimal`) ve
+`MOCK_SCENARIOS` içinde karşılıkları duruyor. Eval setine eklemek cazip görünüyor
+ama **yanlış olurdu**: dördü de düz vektör çizim — ışık yok, doku yok, giysi
+başına tek dolgu. Böyle bir görselde renk ölçmek neredeyse tanım gereği doğru
+çıkar, yani her metrik yükselir ve bu yükseliş fotoğraflar hakkında hiçbir şey
+söylemez. Bu belgenin başındaki uyarının ta kendisi.
+
+Onun yerine ayrı bir koruma yazıldı (`demos` süiti, 72 kontrol): sekiz demo
+görünümünün kutuları kadraj içinde mi, birbirinin üstüne binmiyor mu, her bölgeden
+renk ölçülebiliyor mu, ve **etikette yazan renk ölçülenle uyuşuyor mu**. Bu bir
+doğruluk metriği değil; kullanıcının ilk tıkladığı yüzeyin bozulmadığını
+gösteren bir regresyon koruması.
+
+O koruma bir kusur da buldu: `sw-top` ("Fitilli **Beyaz** Crop Üst") kutusu o
+kadar cömertti ki piksellerinin ~%60'ı üstteki ceketti — yani beyaz bir giysinin
+renk örneği siyah ölçülüyordu. Kutu, beyaz dolgunun gerçek sınırlarına
+(x 0.444–0.554, y 0.378–0.435) çekildi.
+
+Yani bu madde hâlâ **fotoğraf bekliyor** ve bu, bu ortamda kapatılamayacak tek
+teknik madde: stok fotoğraf sağlayıcıları ağ politikasınca kapalı (403), ve
+referans veriyi uydurmak bu projenin tam olarak reddettiği şey.
+
 ### 1.2 Vision fixture'ları ve kutu doğruluğu — ✅ kod hazır, ölçüm anahtarı bekliyor
 
 **Durum: ölçüm altyapısı yazıldı ve 28 kontrolle doğrulandı.** Metrikler fixture

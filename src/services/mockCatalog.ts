@@ -161,7 +161,14 @@ const streetwearItems: CatalogItem[] = [
     description:
       "Kare yakalı, bele oturan fitilli örme kırık beyaz crop üst.",
     confidence: 0.91,
-    boundingBox: { x: 0.422, y: 0.35, width: 0.156, height: 0.083 },
+    /*
+     * Measured, not eyeballed. The previous box (0.422 / 0.35 / 0.156 / 0.083)
+     * was generous enough that roughly 60% of its pixels were the jacket around
+     * the top rather than the top itself, so the swatch for a garment the label
+     * calls "Beyaz" measured near-black. The white fill runs x 0.444-0.554,
+     * y 0.378-0.435; this is that, with a hair of padding.
+     */
+    boundingBox: { x: 0.443, y: 0.377, width: 0.112, height: 0.06 },
     colorHex: "#f4f1ea",
     exactMatch: {
       id: "sw-top-exact",
