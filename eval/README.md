@@ -3,6 +3,7 @@
 ```bash
 npm run eval                 # renk, sorgu, aile — anahtar gerekmez
 npm run eval -- --verbose    # parça parça detay
+npm run eval -- --floors     # ölçülene göre yapıştırılabilir FLOORS bloğu
 npm run eval:record          # gerçek Vision yanıtlarını kaydet (anahtar ister)
 npm run eval:record-attrs    # gerçek VLM özniteliklerini kaydet (anahtar ister)
 npm run eval:sweep           # NMS sabitlerini ızgarada tara (fixture ister)
@@ -10,6 +11,11 @@ npm run eval:sweep           # NMS sabitlerini ızgarada tara (fixture ister)
 
 Çıkış kodu, metriklerden biri tabanın altına düştüğünde sıfırdan farklı olur —
 yani bir değişikliği tip denetleyicisi gibi kapıda tutabilir.
+
+Set büyüdüğünde (1.1) tabanların hepsi yanlış kalır: fazla yüksekse çalışma kalıcı
+kırmızı, fazla düşükse hiçbir şey söylemez. `--floors` ölçülene 5 puan pay
+bırakarak yapıştırılabilir bir blok basar. **Otomatik uygulanmıyor ve
+uygulanmayacak** — kendi puanına taban koyan bir çalıştırma kapı değil, kaşedir.
 
 ## Neden var
 

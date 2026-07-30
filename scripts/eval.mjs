@@ -7,6 +7,7 @@
  *
  *   npm run eval              offline: colour, family, query
  *   npm run eval -- --verbose per-item detail
+ *   npm run eval -- --floors  paste-ready FLOORS block for the current set
  *
  * Recording fixtures needs a Vision key and is a separate step:
  *
@@ -901,6 +902,56 @@ if (familyMisses.length) {
   for (const miss of familyMisses) {
     console.log(`    ${miss.id.padEnd(16)} ${miss.itemType}: beklenen ${miss.want}, ölçülen ${miss.got}`);
   }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Suggested floors                                                          */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * `npm run eval -- --floors` prints a paste-ready FLOORS block.
+ *
+ * The set is four photographs today and the floors were tuned against it. When it
+ * grows (`docs/ROADMAP.md` 1.1) every one of them is wrong: too high and the run
+ * is permanently red, too low and it is uninformative. Re-deriving them by hand is
+ * the kind of chore that gets skipped, and a skipped floor is a gate that stopped
+ * gating.
+ *
+ * The margin is deliberate and deliberately small. A floor exists to catch a
+ * regression, so it sits just under what was measured — far enough that noise on a
+ * couple of items does not trip it, close enough that a real drop does.
+ *
+ * Not applied automatically, and it never will be: a run that lowers its own bar to
+ * whatever it just scored is not a gate, it is a rubber stamp. The number is
+ * printed; a person decides.
+ */
+const FLOOR_MARGIN = 0.05;
+
+if (process.argv.includes("--floors")) {
+  const floor = (value) => Math.max(0, Math.floor((value - FLOOR_MARGIN) * 100) / 100);
+
+  console.log("\n  Ölçülene göre önerilen tabanlar (scripts/eval.mjs içine):\n");
+  console.log("  const FLOORS = {");
+  console.log(`    color: ${floor(colorScore)},`);
+  console.log(`    query: ${floor(queryScore)},`);
+  console.log(`    visionQuery: ${floor(visionQueryScore)},`);
+  console.log(`    visualRetrieval: ${floor(retrievalScore)},`);
+  console.log(`    family: ${floor(familyScore)},`);
+  if (fixtures.length > 0) {
+    console.log(`    hotspotCount: ${floor(hotspotScore)},`);
+    console.log(`    boxRecall: ${floor(boxRecall)},`);
+    console.log(`    boxIou: ${Math.max(0, Math.floor((boxMedianIou - FLOOR_MARGIN) * 100) / 100)},`);
+  } else {
+    console.log("    // kutu tabanları için önce «npm run eval:record» gerekiyor");
+  }
+  if (gradedClaims > 0) {
+    console.log(`    vlmHallucination: ${Math.ceil((hallucinationRate + FLOOR_MARGIN) * 100) / 100},`);
+  }
+  console.log("  };");
+  console.log(
+    `\n  ${FLOOR_MARGIN * 100} puanlık pay bırakıldı. Bunlar öneri, karar değil —\n` +
+      "  kendi puanına taban koyan bir çalıştırma kapı değil, kaşedir.\n",
+  );
 }
 
 const failures = [
