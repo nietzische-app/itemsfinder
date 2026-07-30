@@ -8,6 +8,10 @@
  * Vision API implementation are interchangeable at the type level.
  */
 
+import type { ItemFamily } from "@/lib/itemFamily";
+
+export type { ItemFamily };
+
 /** Top-level grouping used to split the results pane into two sections. */
 export type ItemCategory = "clothing" | "beauty";
 
@@ -100,6 +104,18 @@ export interface DetectedItem {
   boundingBox: BoundingBox;
   /** Dominant colour of the region, used for the swatch dot. */
   colorHex: string;
+  /**
+   * Wardrobe family this detection was gated on.
+   *
+   * Carried on the item rather than recomputed downstream: the detector decides it
+   * (from Vision's object class, which is tied to the box it drew), and the live
+   * product stage has to reject rows against *that* decision. Recomputing it from
+   * the label can disagree — the label is a description, the family is a ruling —
+   * and two stages disagreeing about what was detected is how a shoe ends up
+   * offered a jacket. Optional because the mock scenarios predate it and their
+   * labels are precise enough to classify on sight.
+   */
+  family?: ItemFamily;
   /** Highest-confidence match; null when nothing crossed the threshold. */
   exactMatch: ProductMatch | null;
   /** Cheaper look-alikes, ordered by price ascending. */

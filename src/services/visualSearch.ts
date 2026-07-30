@@ -561,6 +561,9 @@ export class GoogleVisionSearchService implements VisualSearchService {
         confidence: detection.score,
         boundingBox: box,
         colorHex,
+        // The same ruling the catalogue was gated on, so the live stage rejects
+        // rows against it rather than re-deriving a possibly different answer.
+        family,
         exactMatch: exactMatch
           ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery))
           : null,

@@ -1,3 +1,5 @@
+import { toTurkishRetailTerms } from "@/lib/retailVocabulary";
+
 /**
  * Search query construction.
  *
@@ -138,8 +140,16 @@ export function buildSearchQuery(parts: SearchQueryParts): string {
   const push = (value: string | undefined, into: string[] = tokens) => {
     if (!value) return;
 
+    /*
+     * Vision answers in English and the storefronts are Turkish. Translating here
+     * rather than at each call site means every path — the coarse detector class,
+     * a web entity, the model's own words if it slips into English — arrives in
+     * the language the search box speaks. Unknown words pass through unchanged.
+     */
+    const translated = toTurkishRetailTerms(value);
+
     // Attribute lines are bullet-separated; split them into words.
-    for (const word of value.split(/[\s•·,/]+/)) {
+    for (const word of translated.split(/[\s•·,/]+/)) {
       const clean = word.trim().replace(/^[^0-9A-Za-zÀ-ÿĞğİıŞşÇçÖöÜü]+|[^0-9A-Za-zÀ-ÿĞğİıŞşÇçÖöÜü]+$/g, "");
       if (clean.length < 2) continue;
 

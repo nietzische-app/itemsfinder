@@ -38,6 +38,7 @@ alır.
 | VLM rengi | Kırpıma bakan modelin verdiği rengin aynı eşleşmeyi tutması (fixture ister) | aynı parçalarda ölçülen renk |
 | VLM ürün adı | Modelin verdiği Türkçe ürün adının beklenen token'ı taşıması (fixture ister) | — |
 | Sorgu token'ı | Üretilen aramanın, parçayı bulmaya yetecek Türkçe kelimeyi taşıması | %90 |
+| Vision sınıfı | **Yalnızca** Vision'ın İngilizce sınıfından üretilen sorgunun Türkçe terimi taşıması ve İngilizce kelime bırakmaması | %100 |
 | Aile tutarlılığı | Sınıflandırıcının kataloğu kendi içinde tutarlı etiketlemesi | %90 |
 | Hotspot sayısı | Temizlenmiş tespit sayısının beklenene ±1 yakınlığı (fixture ister) | %75 |
 
@@ -48,6 +49,20 @@ rengi aynı parçalarda ölçülenden kötüyse bu tercih yanlıştır ve eval k
 düşer. Karşılaştırma yalnızca fixture'ı olan parçalar üzerinde yapılıyor —
 14 parçalık skoru 4 parçalık skorla kıyaslamak iki farklı soruyu kıyaslamak
 olurdu.
+
+"Vision sınıfı" metriği, "Sorgu token'ı" metriğinin kendini kandırdığı yeri
+kapatıyor: o metrik elle yazılmış **Türkçe** etiketle besleniyor, dolayısıyla
+her zaman %100 raporladı — oysa *varsayılan* yol (VLM anahtarı yok, web varlığı
+yok) elinde yalnızca Vision'ın İngilizce sınıfı ve ölçülen renkle
+`"Siyah Shorts"` üretiyordu; "Outerwear", "Footwear" ve "Top" için de gürültü
+listesinde oldukları için yalnızca `"Siyah"`. Taban %100, çünkü buradaki her
+sapma eksik bir sözlük girdisidir — düzeltilebilir bir şey, kaçınılmaz bir
+sınır değil.
+
+Bu metrik `visionToken`'a karşı puanlanıyor ve o kasten daha zayıf:
+Vision "Footwear" diyor, "sneaker" demiyor. Hiçbir sözlük, dedektörün hiç
+görmediği bir ayrıntıyı geri getiremez; kaba yolu spesifik cevaba göre
+puanlamak, ona hiç sorulmamış bir soruyu sormak olurdu.
 
 Aile metriği **doğruluk değil tutarlılık** ölçüyor: referans aileler de aynı
 sınıflandırıcıdan türetiliyor. Bir kural değişikliğinin kataloğun yarısını
@@ -62,6 +77,7 @@ yüzden var.
   Bölge rengi      71%  (10/14)
   VLM rengi        —     (fixture yok)
   Sorgu token'ı   100%  (14/14)
+  Vision sınıfı   100%  (14/14)
   Aile tutarlılığı 100%  (14/14)
   Hotspot sayısı   —     (fixture yok)
 ```

@@ -46,6 +46,25 @@ export interface ItemExpectation {
    * a chance of finding this garment on a Turkish storefront.
    */
   queryToken: string;
+  /**
+   * The coarse English class Cloud Vision returns for this item.
+   *
+   * This exists because the query metric was flattering itself: it is fed the
+   * hand-written Turkish label from the catalogue, so it scored 100% while the
+   * *actual* default path — no VLM key, so nothing but Vision's English class and
+   * a measured colour — was producing "Siyah Shorts" and, for three of Vision's
+   * commonest classes, nothing but "Siyah".
+   */
+  visionClass: string;
+  /**
+   * Turkish token reachable from `visionClass` **alone**.
+   *
+   * Deliberately weaker than `queryToken`: Vision says "Footwear", not "sneaker",
+   * and no vocabulary table can recover a detail the detector never saw. Holding
+   * the coarse path to the specific answer would be scoring it against a question
+   * it was never asked.
+   */
+  visionToken: string;
 }
 
 export interface EvalCase {
@@ -58,26 +77,26 @@ export interface EvalCase {
 /** Per-item expectations, keyed by scenario. */
 const EXPECTATIONS: Record<string, ItemExpectation[]> = {
   "pink-outfit": [
-    { id: "po-cardigan", color: "pembe", queryToken: "ceket" },
-    { id: "po-shorts", color: "koyu", queryToken: "şort" },
-    { id: "po-sneakers", color: "koyu", queryToken: "sneaker" },
+    { id: "po-cardigan", color: "pembe", queryToken: "ceket", visionClass: "Outerwear", visionToken: "ceket" },
+    { id: "po-shorts", color: "koyu", queryToken: "şort", visionClass: "Shorts", visionToken: "şort" },
+    { id: "po-sneakers", color: "koyu", queryToken: "sneaker", visionClass: "Footwear", visionToken: "ayakkabı" },
   ],
   "biker-look": [
-    { id: "bk-jacket", color: "koyu", queryToken: "ceket" },
-    { id: "bk-body", color: "koyu", queryToken: "body" },
-    { id: "bk-jeans", color: "mavi", queryToken: "jean" },
-    { id: "bk-sunglasses", color: "gri", queryToken: "gözlük" },
+    { id: "bk-jacket", color: "koyu", queryToken: "ceket", visionClass: "Jacket", visionToken: "ceket" },
+    { id: "bk-body", color: "koyu", queryToken: "body", visionClass: "Top", visionToken: "bluz" },
+    { id: "bk-jeans", color: "mavi", queryToken: "jean", visionClass: "Jeans", visionToken: "jean" },
+    { id: "bk-sunglasses", color: "gri", queryToken: "gözlük", visionClass: "Sunglasses", visionToken: "gözlüğü" },
   ],
   "long-coat": [
-    { id: "lc-coat", color: "koyu", queryToken: "kaban" },
-    { id: "lc-beanie", color: "beyaz", queryToken: "şapka" },
-    { id: "lc-jeans", color: "mavi", queryToken: "jean" },
-    { id: "lc-sandals", color: "koyu", queryToken: "sandalet" },
+    { id: "lc-coat", color: "koyu", queryToken: "kaban", visionClass: "Coat", visionToken: "kaban" },
+    { id: "lc-beanie", color: "beyaz", queryToken: "şapka", visionClass: "Hat", visionToken: "şapka" },
+    { id: "lc-jeans", color: "mavi", queryToken: "jean", visionClass: "Jeans", visionToken: "jean" },
+    { id: "lc-sandals", color: "koyu", queryToken: "sandalet", visionClass: "Sandal", visionToken: "sandalet" },
   ],
   "black-blazer": [
-    { id: "bb-blazer", color: "koyu", queryToken: "blazer" },
-    { id: "bb-lip", color: "kirmizi", queryToken: "ruj" },
-    { id: "bb-heels", color: "koyu", queryToken: "sandalet" },
+    { id: "bb-blazer", color: "koyu", queryToken: "blazer", visionClass: "Outerwear", visionToken: "ceket" },
+    { id: "bb-lip", color: "kirmizi", queryToken: "ruj", visionClass: "Lipstick", visionToken: "ruj" },
+    { id: "bb-heels", color: "koyu", queryToken: "sandalet", visionClass: "High heels", visionToken: "topuklu" },
   ],
 };
 

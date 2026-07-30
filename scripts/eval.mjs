@@ -58,6 +58,13 @@ const { colorBucketOf } = await import("../eval/colorBucket.ts");
 const FLOORS = {
   color: 0.7,
   query: 0.9,
+  /*
+   * The coarse-class path. Set to 1.0 because unlike colour there is nothing
+   * irreducible here: every class Vision emits either has a Turkish retail term
+   * or should not be in the ground truth. A miss is a missing table entry, which
+   * is a fix, not a limitation.
+   */
+  visionQuery: 1,
   family: 0.9,
   hotspotCount: 0.75,
 };
@@ -218,6 +225,56 @@ for (const testCase of cases) {
 }
 
 /* -------------------------------------------------------------------------- */
+/*  2b. Turkish query from the coarse detector class alone                     */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * The metric above is fed the hand-written Turkish label, so it has always
+ * reported 100% — while the *default* path (no VLM key, no web entity) had only
+ * Vision's English class to work with and was sending "Siyah Shorts" to Turkish
+ * storefronts. For "Outerwear", "Footwear" and "Top" it sent nothing but the
+ * colour, because those sat on the noise list.
+ *
+ * Scored against `visionToken`, which is deliberately the coarse answer: Vision
+ * says "Footwear", not "sneaker", and no vocabulary table recovers a detail the
+ * detector never saw.
+ */
+let visionQueryHits = 0;
+let visionQueryTotal = 0;
+const visionQueryMisses = [];
+
+for (const testCase of cases) {
+  for (const item of testCase.items) {
+    visionQueryTotal += 1;
+
+    const query = buildSearchQuery({ itemType: item.visionClass, colorHex: "#111111" });
+    const lower = query.toLocaleLowerCase("tr");
+
+    // Two conditions, both required: the Turkish term has to be there, and the
+    // English class must be gone. A query carrying both would score as a pass
+    // while still shipping an English word to a Turkish search box.
+    const hasTurkish = lower.includes(item.visionToken.toLocaleLowerCase("tr"));
+    const englishLeft = item.visionClass
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((word) => word.length > 2)
+      .some((word) => lower.includes(word) && !item.visionToken.toLowerCase().includes(word));
+
+    if (hasTurkish && !englishLeft) {
+      visionQueryHits += 1;
+      if (VERBOSE) console.log(`    ✓ ${item.id.padEnd(16)} ${item.visionClass} -> "${query}"`);
+    } else {
+      visionQueryMisses.push({
+        id: item.id,
+        want: item.visionToken,
+        query,
+        note: englishLeft ? "İngilizce kelime kaldı" : "Türkçe terim yok",
+      });
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
 /*  3. Family classification                                                  */
 /* -------------------------------------------------------------------------- */
 
@@ -326,6 +383,7 @@ for (const name of fixtures) {
 const colorScore = pct(colorHits, colorTotal);
 const queryScore = pct(queryHits, queryTotal);
 const familyScore = pct(familyHits, familyTotal);
+const visionQueryScore = pct(visionQueryHits, visionQueryTotal);
 const hotspotScore = pct(hotspotHits, hotspotCases);
 
 const vlmColorScore = pct(vlmColorHits, vlmColorTotal);
@@ -346,6 +404,7 @@ if (vlmColorTotal > 0) {
   );
 }
 console.log(`  Sorgu token'ı    ${fmt(queryScore)}  (${queryHits}/${queryTotal})   taban ${fmt(FLOORS.query)}`);
+console.log(`  Vision sınıfı    ${fmt(visionQueryScore)}  (${visionQueryHits}/${visionQueryTotal})   taban ${fmt(FLOORS.visionQuery)}`);
 console.log(`  Aile tutarlılığı ${fmt(familyScore)}  (${familyHits}/${familyTotal})   taban ${fmt(FLOORS.family)}`);
 
 if (fixtures.length === 0) {
@@ -388,6 +447,12 @@ if (queryMisses.length) {
     console.log(`    ${miss.id.padEnd(16)} «${miss.want}» yok -> "${miss.query}"`);
   }
 }
+if (visionQueryMisses.length) {
+  console.log("\n  Vision sınıfı sapmaları:");
+  for (const miss of visionQueryMisses) {
+    console.log(`    ${miss.id.padEnd(16)} «${miss.want}» — ${miss.note} -> "${miss.query}"`);
+  }
+}
 if (familyMisses.length) {
   console.log("\n  Aile sapmaları:");
   for (const miss of familyMisses) {
@@ -399,6 +464,8 @@ const failures = [
   colorScore < FLOORS.color && `bölge rengi ${fmt(colorScore)} < ${fmt(FLOORS.color)}`,
   queryScore < FLOORS.query && `sorgu token'ı ${fmt(queryScore)} < ${fmt(FLOORS.query)}`,
   familyScore < FLOORS.family && `aile ${fmt(familyScore)} < ${fmt(FLOORS.family)}`,
+  visionQueryScore < FLOORS.visionQuery &&
+    `Vision sınıfı ${fmt(visionQueryScore)} < ${fmt(FLOORS.visionQuery)}`,
   fixtures.length > 0 &&
     hotspotScore < FLOORS.hotspotCount &&
     `hotspot ${fmt(hotspotScore)} < ${fmt(FLOORS.hotspotCount)}`,

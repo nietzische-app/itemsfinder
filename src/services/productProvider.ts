@@ -2,6 +2,8 @@ import "server-only";
 
 import { ContextDevService, type LiveProductCard } from "@/services/contextDevService";
 import { productUrlOrEmpty } from "@/lib/productUrl";
+import { familyOf } from "@/lib/itemFamily";
+import { rejectProductTitle } from "@/lib/retailVocabulary";
 import { buildSearchQuery } from "@/lib/searchQuery";
 import { hydrateProduct } from "@/services/mockCatalog";
 import type {
@@ -157,10 +159,40 @@ export class ContextDevProductProvider implements ProductProvider {
 
     if (cards.length === 0) return null;
 
+    /*
+     * Storefront search does not only return the thing you asked for. A query for
+     * a black coat also returns the toddler's version, a coat hanger, and a phone
+     * case that happens to be black — and this stage used to hand the top-ranked
+     * row straight to the user as the "exact match". The catalogue path has always
+     * been family-gated; live rows were the hole in that guarantee.
+     *
+     * The family is the detector's own ruling, carried on the item, not a fresh
+     * guess from the label.
+     */
+    const family = item.family ?? familyOf(`${item.itemType} ${item.label}`);
+    const rejected: string[] = [];
+    const usable = cards.filter((card) => {
+      const reason = rejectProductTitle(card.title, family);
+      if (reason) rejected.push(`"${card.title}" (${reason})`);
+      return reason === null;
+    });
+
+    if (rejected.length > 0) {
+      // One line per detection, not per row: a noisy query can reject ten.
+      console.warn(
+        `[products] ${rejected.length}/${cards.length} canlı satır «${item.itemType}» ` +
+          `(${family}) için elendi: ${rejected.slice(0, 3).join("; ")}`,
+      );
+    }
+
+    // Everything plausible was filtered out, so there is nothing live to show.
+    // The catalogue row is a worse price but a correct product.
+    if (usable.length === 0) return null;
+
     // The best-matching product is the exact match; everything cheaper than it
     // becomes a budget alternative, cheapest first. If nothing is cheaper we
     // still show the rest as alternatives — they are real options either way.
-    const [best, ...rest] = cards;
+    const [best, ...rest] = usable;
     if (!best) return null;
 
     const cheaper = rest
