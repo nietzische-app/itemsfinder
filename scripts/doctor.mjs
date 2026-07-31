@@ -110,7 +110,9 @@ const checks = [
      * belirtiliyor; şirket kurulduğunda tebligat adresi o zaman eklenir.
      */
     missing: "veri sorumlusunun adı (yasal-bildirim/page.tsx içinde CONTROLLER_NAME)",
-    why: "KVKK bildirimi yanlış sorumluyu adlandırırsa, boş olmasından kötüdür.",
+    why:
+      "KVKK bildirimi yanlış sorumluyu adlandırırsa, boş olmasından kötüdür. " +
+      "Unutulursa yayına çıkmıyor: VERCEL_ENV=production derlemesi yer tutucuda patlıyor.",
     fix: "CONTROLLER_NAME değerini kendi ad-soyadınla değiştir. Adres gerekmiyor: sorumlu gerçek kişi, ve ev adresi yayınlamak korunmak istenen şeyin tersi.",
   },
 ];

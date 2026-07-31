@@ -21,6 +21,31 @@ const CONTACT_EMAIL = "iletisim@markas.app";
  */
 const CONTROLLER_NAME = "[Ad Soyad]";
 
+/**
+ * Yer tutucuyla **üretime** çıkmayı imkânsız kılar.
+ *
+ * Buradaki not "yayına almadan önce doldur" diyordu ve bu, birinin hatırlamasına
+ * bağlı bir güvence — yani güvence değil. Kaçırıldığında sonucu, ziyaretçiye
+ * KVKK aydınlatma metninde köşeli parantez göstermek oluyor: veri sorumlusunun
+ * kimliğini belirtmeyen bir bildirim, hiç olmamasından daha kötü, çünkü
+ * belirtilmiş gibi duruyor.
+ *
+ * `verifiedProductUrls.ts` aynı şeyi kırık ürün bağlantısı için yapıyor —
+ * import sırasında patlıyor. Aynı desen, aynı gerekçe.
+ *
+ * Yalnızca `VERCEL_ENV === "production"` iken patlıyor: önizleme dağıtımları ve
+ * yerel derlemeler yer tutucuyla çalışmaya devam etsin, çünkü bu metnin
+ * doldurulması yayın anına ait bir karar, geliştirme anına değil.
+ */
+if (process.env.VERCEL_ENV === "production" && /\[.+\]/.test(CONTROLLER_NAME)) {
+  throw new Error(
+    "yasal-bildirim: CONTROLLER_NAME hâlâ yer tutucu. KVKK aydınlatma " +
+      "yükümlülüğü veri sorumlusunun kimliğinin açıkça belirtilmesini istiyor; " +
+      "üretime bu hâliyle çıkılamaz. src/app/(legal)/yasal-bildirim/page.tsx " +
+      "içinde gerçek ad-soyadı yaz.",
+  );
+}
+
 export default function LegalNoticePage() {
   return (
     <>
