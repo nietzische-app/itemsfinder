@@ -48,14 +48,21 @@ const items = cases.reduce((n, testCase) => n + testCase.items.length, 0);
 const checks = [
   {
     id: "0.1",
+    when: "trafik",
     label: "Hız sınırı sayaçları kalıcı",
     ok: env("UPSTASH_REDIS_REST_URL") && env("UPSTASH_REDIS_REST_TOKEN"),
     missing: "UPSTASH_REDIS_REST_URL ve UPSTASH_REDIS_REST_TOKEN",
     why: "Onlarsız sayaçlar süreç-yerel; sunucusuz ortamda instance başına, yani gerçek bir sınır değil.",
-    fix: "Upstash'te bir Redis aç, iki değeri ortama ekle.",
+    fix:
+      "upstash.com -> Redis database oluştur -> UPSTASH_REDIS_REST_URL ve\n" +
+      "                UPSTASH_REDIS_REST_TOKEN değerlerini ortama ekle (ücretsiz plan yeterli).\n" +
+      "                Upstash, siteyi çalıştıran kopyaların hepsinin gördüğü küçük bir sayaç\n" +
+      "                deposu; sayaç kendi belleğinde tutulursa «dakikada 10» aslında\n" +
+      "                «her kopyada 10» oluyor.",
   },
   {
     id: "0.3",
+    when: "yayın",
     label: "Ürünler satın alınabilir",
     ok: Object.keys(VERIFIED_PDP_URLS).length > 0,
     missing: `VERIFIED_PDP_URLS boş (${Object.keys(VERIFIED_PDP_IMAGES).length} görsel)`,
@@ -64,6 +71,7 @@ const checks = [
   },
   {
     id: "1.1",
+    when: "ölçüm",
     label: "Eval seti kıyaslama boyutunda",
     ok: cases.length >= 30,
     missing: `${cases.length} kombin / ${items} parça (hedef 30+)`,
@@ -72,6 +80,7 @@ const checks = [
   },
   {
     id: "1.2",
+    when: "ölçüm",
     label: "Kutu doğruluğu ölçüldü",
     ok: count("eval/fixtures") > 0,
     missing: "eval/fixtures/ boş",
@@ -80,6 +89,7 @@ const checks = [
   },
   {
     id: "1.3",
+    when: "ölçüm",
     label: "VLM kazancı ölçüldü",
     ok: count("eval/fixtures/attrs") > 0,
     missing: "eval/fixtures/attrs/ boş",
@@ -88,6 +98,7 @@ const checks = [
   },
   {
     id: "—",
+    when: "yayın",
     label: "Yasal kimlik dolduruldu",
     ok: legalIdentityFilled(),
     missing: "veri sorumlusunun adı ve tebligat adresi",
@@ -105,9 +116,26 @@ for (const check of done) {
   console.log(`  ✓ ${check.id.padEnd(4)} ${check.label}`);
 }
 
-if (open.length > 0) {
-  console.log("");
-  for (const check of open) {
+/*
+ * Grouped by *when it matters*, not just by what is missing.
+ *
+ * A flat list said "0/6 hazır" and gave a legal notice with a placeholder the same
+ * weight as a rate-limit store nobody needs until there is traffic. That reads as
+ * six equal emergencies, which is the fastest way to make someone ignore all six.
+ */
+const GROUPS = [
+  ["yayın", "Yayına çıkmadan önce", "Bunlar olmadan canlıya çıkmak kullanıcıya ya da sana zarar verir."],
+  ["ölçüm", "Doğruluğu ölçebilmek için", "Kod hazır; bunlar sayının kendisini üretiyor."],
+  ["trafik", "Gerçek kullanıcı geldiğinde", "Şu an trafik yokken bir şey değiştirmiyor."],
+];
+
+for (const [key, title, note] of GROUPS) {
+  const group = open.filter((check) => check.when === key);
+  if (group.length === 0) continue;
+
+  console.log(`\n  ${title.toLocaleUpperCase("tr")}`);
+  console.log(`  ${note}\n`);
+  for (const check of group) {
     console.log(`  ○ ${check.id.padEnd(4)} ${check.label}`);
     console.log(`         eksik: ${check.missing}`);
     console.log(`         neden: ${check.why}`);

@@ -539,7 +539,7 @@ sağlayabileceğin bir girdiyi** bekliyor — anahtar, fotoğraf, veri ya da bir
 | --- | --- |
 | 0.1 | `UPSTASH_REDIS_REST_URL` / `_TOKEN` — onlarsız sayaçlar süreç-yerel |
 | 0.3 | `VERIFIED_PDP_URLS` (elle doğrulanmış bağlantılar), sonra `npm run fetch:images` |
-| 1.1 | 30–50 çeşitli fotoğraf + elle ölçülmüş kutular (`tools/box-editor.html` hazır) |
+| 1.1 | 19/30 kombin etiketlendi; `public/examples/` içinde 29 fotoğraf daha bekliyor |
 | 1.2 | `GOOGLE_CLOUD_VISION_API_KEY=... npm run eval:record` |
 | 1.3 | `ANTHROPIC_API_KEY=... npm run eval:record-attrs` |
 | 2.1b | Ağı açık bir makine — model ağırlıkları buradan indirilemiyor |
@@ -550,17 +550,23 @@ sağlayabileceğin bir girdiyi** bekliyor — anahtar, fotoğraf, veri ya da bir
 Ölçülen durum:
 
 ```
-Bölge rengi      86%  (12/14)   taban 80%
-Sorgu token'ı   100%  (14/14)   taban 90%
-Vision sınıfı   100%  (14/14)   taban 100%
-Görsel erişim    86%  (12/14)   taban 70%, şans %7
-Aile tutarlılığı 100%  (14/14)   taban 90%
+19 kombin / 48 parça
+Bölge rengi      77%  (37/48)   taban 76%
+Sorgu token'ı   100%  (48/48)   taban 90%
+Vision sınıfı   100%  (48/48)   taban 100%
+Görsel erişim    63%  (30/48)   taban 57%, şans %2
+Aile tutarlılığı 100%  (48/48)   taban 90%
 Erişilebilirlik  61/61 kontrol, altı sayfa
 Bozulma yolları  20/20 kontrol
 ```
 
-Ve bu tablonun en önemli satırı **14**: her yüzde bu kadar küçük bir sete karşı
-ölçülüyor. 1.1 olmadan bu sayılar yön gösterir, büyüklük göstermez.
+Set 4 kombinden 19'a çıktı ve **yüzdeler düştü** — bu bir gerileme değil, sınavın
+zorlaşması. Görsel erişimde her kırpım artık 14 değil 48 aday arasından kendini
+buluyor (şans %7'den %2'ye); renkte ise set artık hardal, mor, camel, keten ve
+gölgedeki beyaz içeriyor, yani ilk dördün hiç sormadığı soruları soruyor. Kalan
+sapmaların hepsi belgelenmiş sınıflardan: gölgedeki denim, kutusu ağırlıklı
+arka plan olan ince parçalar, ve fotoğrafın kendisinin karar vermediği
+yakın-nötr tonlar.
 
 ## Sıralama önerisi
 

@@ -82,8 +82,18 @@ export function colorFamilyOf(hex: string): ColorFamily {
   if (lightness > 0.82 && delta < 0.14) return warmNeutral(r, b) ? "bej" : "beyaz";
   // Metal frames and washed greys sit around 0.15 saturation; 0.12 was too tight.
   if (saturation < 0.2) {
+    /*
+     * Warmth decides before lightness does.
+     *
+     * Sand trousers measure #8f8775 — lightness 0.51, twenty-six units warm — and
+     * the old order sent everything under 0.6 straight to "gri". Taupe and sand and
+     * stone are beiges at that lightness, not greys, and a shopper types "bej" for
+     * all three. Below 0.35 there is not enough light left to call a hue either
+     * way, so that stays dark grey.
+     */
+    if (warmNeutral(r, b) && lightness > 0.35) return "bej";
     if (lightness < 0.6) return "gri";
-    return warmNeutral(r, b) ? "bej" : "beyaz";
+    return "beyaz";
   }
 
   // Hue in degrees.

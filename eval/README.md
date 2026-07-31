@@ -26,8 +26,8 @@ büyüklükleri değil, boru hattı değiştiğinde **hangi yöne gittikleri**.
 
 ## Kapsam — dürüst hâli
 
-**On beş fotoğraf, otuz yedi parça.** Dördü vitrin görünümü (kutular
-`SHOWCASE_LOOKS`'tan, etiketler `MOCK_SCENARIOS`'tan), on biri
+**On dokuz kombin, kırk sekiz parça.** Dördü vitrin görünümü (kutular
+`SHOWCASE_LOOKS`'tan, etiketler `MOCK_SCENARIOS`'tan), on beşi
 `eval/photoCases.ts` içinde duran ve demo kataloğuna hiç dokunmayan elle
 etiketlenmiş fotoğraflar.
 
