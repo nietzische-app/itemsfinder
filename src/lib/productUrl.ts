@@ -32,6 +32,18 @@ const SEARCH_PATTERNS: RegExp[] = [
   /\/s\?/i,
   /\/kategori\//i,
   /\/c\/[\w-]+$/i,
+  /*
+   * Aşağıdakiler yirmi gerçek ürün sayfası ve yirmi dört gerçek liste sayfasıyla
+   * ölçüldükten sonra eklendi. Üçü de yanlış kabul üretiyordu ya da üretebilirdi,
+   * ve yanlış kabul yasağın engellemek için var olduğu şeyin ta kendisi:
+   * «Ürüne git»e basan biri bir sonuç sayfasına düşüyor.
+   */
+  // Inditex kategori: -l1335.html. Ürünlerinki -l03241999 (yedi hane ve üstü).
+  /-l\d{1,6}\.html?(?:$|[?#])/i,
+  // LCW kategori: /kadin-tisort-c-1050
+  /-c-\d+(?:$|[/?#])/i,
+  // Shopify koleksiyonu: /collections/pantolon
+  /\/collections\//i,
 ];
 
 /**
@@ -54,7 +66,45 @@ const PDP_PATTERNS: RegExp[] = [
   /\/product(?:s)?\/[\w.-]{3,}/i,
   /\/urun\/[\w.-]{3,}/i,
   /\/prd\/\d{4,}/i,
-  /\.html?(?:$|[?#])/i,
+  /*
+   * Türkiye mağazalarının gerçek ürün sayfası şekilleri.
+   *
+   * Buradaki her satır, kullanıcının verdiği gerçek bir ürün sayfasından
+   * çıkarıldı ve yirmi dört gerçek liste sayfasına karşı ölçüldü. Eskiden yirmi
+   * ürün sayfasının on ikisi reddediliyordu — hepsi büyük Türk perakendecilerin
+   * sıradan ürün sayfaları — çünkü kalıplar yalnızca yedi uluslararası mağazaya
+   * göre yazılmıştı.
+   */
+  // LCW: /100-pamuk-basic-tisort-lacivert-o-4827604
+  /-o-\d{5,}/i,
+  // Inditex ürünü: -l03241999. Kategorisi -l1335.html, o yukarıda reddediliyor.
+  /-l\d{7,}/i,
+  // Altınyıldız: /erkek-...-beyaz-tisort-4-p
+  /-\d+-p(?:$|[/?#])/i,
+  // Gap: /slim-khaki-pantolon-500357-acik-kahverengi/
+  /-\d{5,}-[\w-]+\/?(?:$|[?#])/i,
+  /*
+   * Slug'ın sonundaki ürün kimliği — DeFacto, Tudors, M&S, Vatkalı, Hafka.
+   *
+   * Kalıpların en gevşeği ve tek başına güvenli değil: bir kategori yolu da
+   * sonunda sayı taşıyabilir. Güvenliği yukarıdaki **açık kategori reddlerinden**
+   * alıyor — `/collections/`, `-c-\d+`, `-l\d{1,6}.html`, `/kategori/`, `/c/...`
+   * — ve arama kalıpları bu listeden önce çalıştığı için onlar kazanıyor.
+   *
+   * Sınır ilk denemede beş haneydi; LCW'nin `-c-1050` kategorisi dört haneyle
+   * içeri giriyordu. Kategori açıkça reddedilince ölçüm dört hanede de temiz
+   * çıktı (44/44), yani beş hane artık bir gerekçeye değil bir alışkanlığa
+   * dayanıyordu ve gerçek bir ürün sayfasını boşuna eliyordu.
+   *
+   * Bunun sınırı şu: liste tarafı yirmi dört gerçek URL ile ölçüldü. Sonu dört
+   * haneli sayıyla biten, yukarıdaki açık şekillerin hiçbirine uymayan bir
+   * kategori yolu bu kuralı geçer. Öyle bir örnek görüldüğünde çözüm sınırı
+   * yükseltmek değil, o şekli kategori listesine eklemek — çünkü asıl ayrım
+   * şeklin kendisi, hane sayısı değil.
+   */
+  /[_-]\d{4,}\/?(?:$|[?#])/i,
+  // Varyant kimliği taşıyan mağaza yazılımları (Paen, Void).
+  /[?&]vid=[0-9a-f]{8}-[0-9a-f]{4}/i,
 ];
 
 /** True when the URL is a search, listing or category page. */

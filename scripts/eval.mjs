@@ -48,6 +48,8 @@ const { materialVerdict, patternVerdict, tally, containsToken } = await import(
   "../eval/attributeScore.ts"
 );
 const { colorBucketOf } = await import("../eval/colorBucket.ts");
+const { isDirectProductUrl } = await import("@/lib/productUrl");
+const { PDP_URLS, LISTING_URLS } = await import("../eval/productUrlCases.ts");
 
 /**
  * Metric floors: set just under the measured baseline so a regression trips the
@@ -808,6 +810,20 @@ for (const name of fixtures) {
 const colorScore = pct(colorHits, colorTotal);
 const queryScore = pct(queryHits, queryTotal);
 const familyScore = pct(familyHits, familyTotal);
+
+/*
+ * Ürün bağlantısı yasağı, gerçek adreslere karşı.
+ *
+ * Kalıplar yalnızca yedi uluslararası mağazaya göre yazılmıştı ve yirmi gerçek
+ * ürün sayfasının on ikisini reddediyordu; bir Zara kategori sayfasını da kabul
+ * ediyordu. İkisi de kod okunarak fark edilmedi, ölçülünce çıktı — o yüzden ölçüm
+ * burada kalıyor.
+ */
+const urlFalseRejects = PDP_URLS.filter((url) => !isDirectProductUrl(url));
+const urlFalseAccepts = LISTING_URLS.filter((url) => isDirectProductUrl(url));
+const urlTotal = PDP_URLS.length + LISTING_URLS.length;
+const urlHits = urlTotal - urlFalseRejects.length - urlFalseAccepts.length;
+const urlScore = pct(urlHits, urlTotal);
 const visionQueryScore = pct(visionQueryHits, visionQueryTotal);
 const retrievalScore = pct(retrievalHits, tight.length);
 const hotspotScore = pct(hotspotHits, hotspotCases);
@@ -897,6 +913,12 @@ console.log(
     `taban ${fmt(FLOORS.visualRetrieval)}, şans ${fmt(loose.length === 0 ? 0 : 1 / loose.length)}`,
 );
 console.log(`  Aile tutarlılığı ${fmt(familyScore)}  (${familyHits}/${familyTotal})   taban ${fmt(FLOORS.family)}`);
+console.log(
+  `  Bağlantı yasağı  ${fmt(urlScore)}  (${urlHits}/${urlTotal})   taban %100` +
+    `, ${PDP_URLS.length} ürün + ${LISTING_URLS.length} liste sayfası`,
+);
+for (const url of urlFalseRejects) console.log(`      yanlış red    ${url.slice(0, 78)}`);
+for (const url of urlFalseAccepts) console.log(`      yanlış KABUL  ${url.slice(0, 78)}`);
 
 if (fixtures.length === 0) {
   console.log(
@@ -1044,6 +1066,15 @@ const failures = [
   colorScore < FLOORS.color && `bölge rengi ${fmt(colorScore)} < ${fmt(FLOORS.color)}`,
   queryScore < FLOORS.query && `sorgu token'ı ${fmt(queryScore)} < ${fmt(FLOORS.query)}`,
   familyScore < FLOORS.family && `aile ${fmt(familyScore)} < ${fmt(FLOORS.family)}`,
+  /*
+   * Taban %100 ve pazarlık payı yok. Diğer metrikler ölçtükleri şeyin doğası
+   * gereği eksik kalabilir — bir rengi insan da yanlış adlandırabilir. Burada
+   * öyle bir belirsizlik yok: listedeki her adres ya bir ürüne gidiyor ya
+   * gitmiyor, ve ikisi de elle bakılarak yazıldı.
+   */
+  urlScore < 1 &&
+    `bağlantı yasağı ${fmt(urlScore)}: ${urlFalseRejects.length} yanlış red, ` +
+      `${urlFalseAccepts.length} yanlış kabul`,
   visionQueryScore < FLOORS.visionQuery &&
     `Vision sınıfı ${fmt(visionQueryScore)} < ${fmt(FLOORS.visionQuery)}`,
   tight.length > 0 &&
