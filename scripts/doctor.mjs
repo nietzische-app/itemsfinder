@@ -52,13 +52,28 @@ const checks = [
     label: "Hız sınırı sayaçları kalıcı",
     ok: env("UPSTASH_REDIS_REST_URL") && env("UPSTASH_REDIS_REST_TOKEN"),
     missing: "UPSTASH_REDIS_REST_URL ve UPSTASH_REDIS_REST_TOKEN",
-    why: "Onlarsız sayaçlar süreç-yerel; sunucusuz ortamda instance başına, yani gerçek bir sınır değil.",
+    /*
+     * "Upstash bilgileri ne demek bilmiyorum" diye sorulduğu için baştan yazıldı.
+     *
+     * Eski metin upstash.com'a gidip iki değeri elle kopyalamayı anlatıyordu.
+     * Site Vercel'de duruyor ve Vercel bu servisi kendi pazaryerinden kuruyor,
+     * kurunca da iki değişkeni projeye kendisi ekliyor — yani kopyalanacak bir
+     * "bilgi" hiç yok. Anlaşılmayan adımı anlatmak yerine, o adımı olmayan yolu
+     * göstermek daha iyi bir cevap.
+     */
+    why:
+      "Onlarsız sayaçlar süreç-yerel; sunucusuz ortamda instance başına, yani gerçek bir sınır değil. " +
+      "Trafik yokken hiçbir şeyi değiştirmiyor — bu satırı görmezden gelmek şu an güvenli.",
     fix:
-      "upstash.com -> Redis database oluştur -> UPSTASH_REDIS_REST_URL ve\n" +
-      "                UPSTASH_REDIS_REST_TOKEN değerlerini ortama ekle (ücretsiz plan yeterli).\n" +
-      "                Upstash, siteyi çalıştıran kopyaların hepsinin gördüğü küçük bir sayaç\n" +
-      "                deposu; sayaç kendi belleğinde tutulursa «dakikada 10» aslında\n" +
-      "                «her kopyada 10» oluyor.",
+      "Ne olduğu: siteyi çalıştıran bütün kopyaların ortak kullandığı küçük bir\n" +
+      "                sayaç defteri. «Dakikada 10 tarama» sınırı, sayaç her kopyanın kendi\n" +
+      "                belleğindeyse aslında «her kopyada ayrı ayrı 10» demek oluyor.\n" +
+      "                Ortak bir defter olunca sınır gerçekten sınır oluyor.\n" +
+      "\n" +
+      "                Nasıl: Vercel panelinde proje -> Storage -> Marketplace'ten Upstash\n" +
+      "                for Redis ekle (ücretsiz plan yeterli). Vercel iki değişkeni projeye\n" +
+      "                kendisi yazıyor, elle kopyalanacak bir şey yok. Sonra bir kez\n" +
+      "                yeniden dağıt.",
   },
   {
     id: "0.3",
