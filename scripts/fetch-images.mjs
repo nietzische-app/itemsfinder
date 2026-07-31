@@ -38,8 +38,16 @@ if (entries.length === 0) {
   process.exit(1);
 }
 
-/** First matching Open Graph / Twitter image in a page's head. */
-function extractImage(html, pageUrl) {
+/**
+ * First matching Open Graph / Twitter image in a page's head.
+ *
+ * Dışa açık, çünkü bu betiğin yanlış olabilecek asıl parçası burası: ağ çağrısı
+ * standart, kırılgan olan bu dört kalıbın gerçek mağaza işaretlemesine uyup
+ * uymadığı. `npm run eval` bunu gerçek şekillere karşı puanlıyor
+ * (`eval/ogImageCases.ts`), yani bağlantılar dolduğunda ilk çalıştırmada
+ * öğrenilmiyor.
+ */
+export function extractImage(html, pageUrl) {
   const patterns = [
     /<meta[^>]+property=["']og:image(?::secure_url)?["'][^>]+content=["']([^"']+)["']/i,
     /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i,

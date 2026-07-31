@@ -50,6 +50,8 @@ const { materialVerdict, patternVerdict, tally, containsToken } = await import(
 const { colorBucketOf } = await import("../eval/colorBucket.ts");
 const { isDirectProductUrl } = await import("@/lib/productUrl");
 const { PDP_URLS, LISTING_URLS } = await import("../eval/productUrlCases.ts");
+const { extractImage } = await import("./fetch-images.mjs");
+const { OG_IMAGE_CASES } = await import("../eval/ogImageCases.ts");
 
 /**
  * Metric floors: set just under the measured baseline so a regression trips the
@@ -824,6 +826,18 @@ const urlFalseAccepts = LISTING_URLS.filter((url) => isDirectProductUrl(url));
 const urlTotal = PDP_URLS.length + LISTING_URLS.length;
 const urlHits = urlTotal - urlFalseRejects.length - urlFalseAccepts.length;
 const urlScore = pct(urlHits, urlTotal);
+
+/*
+ * `fetch:images`in gerçekten yanlış olabilecek parçası.
+ *
+ * Bağlantılar doldurulduktan sonraki adım ve hiç çalıştırılmadı; ağ çağrısı
+ * standart, kırılgan olan sayfadan görseli çeken kalıplar. O parça ağ istemiyor,
+ * yani ilk çalıştırmada öğrenilmesi gerekmiyor.
+ */
+const ogMisses = OG_IMAGE_CASES.filter(
+  (probe) => extractImage(probe.html, probe.pageUrl) !== probe.expected,
+);
+const ogScore = pct(OG_IMAGE_CASES.length - ogMisses.length, OG_IMAGE_CASES.length);
 const visionQueryScore = pct(visionQueryHits, visionQueryTotal);
 const retrievalScore = pct(retrievalHits, tight.length);
 const hotspotScore = pct(hotspotHits, hotspotCases);
@@ -919,6 +933,16 @@ console.log(
 );
 for (const url of urlFalseRejects) console.log(`      yanlış red    ${url.slice(0, 78)}`);
 for (const url of urlFalseAccepts) console.log(`      yanlış KABUL  ${url.slice(0, 78)}`);
+console.log(
+  `  Ürün görseli     ${fmt(ogScore)}  (${OG_IMAGE_CASES.length - ogMisses.length}/${OG_IMAGE_CASES.length})   taban %100` +
+    `, «fetch:images» og:image çıkarımı`,
+);
+for (const probe of ogMisses) {
+  console.log(
+    `      ${probe.name}: beklenen ${probe.expected ?? "boş"}, ` +
+      `çıkan ${extractImage(probe.html, probe.pageUrl) ?? "boş"}`,
+  );
+}
 
 if (fixtures.length === 0) {
   console.log(
@@ -1072,6 +1096,7 @@ const failures = [
    * öyle bir belirsizlik yok: listedeki her adres ya bir ürüne gidiyor ya
    * gitmiyor, ve ikisi de elle bakılarak yazıldı.
    */
+  ogScore < 1 && `ürün görseli çıkarımı ${fmt(ogScore)}: ${ogMisses.length} şekil kaçtı`,
   urlScore < 1 &&
     `bağlantı yasağı ${fmt(urlScore)}: ${urlFalseRejects.length} yanlış red, ` +
       `${urlFalseAccepts.length} yanlış kabul`,
