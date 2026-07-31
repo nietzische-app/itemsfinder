@@ -89,11 +89,26 @@ export default function LegalNoticePage() {
 
       <div className="mt-4 rounded-2xl border border-secondary/30 bg-secondary/[0.04] p-4">
         <p className="!mt-0 !text-[13px]">
-          <strong>Bu alanlar yayına almadan önce doldurulmalıdır.</strong> KVKK,
-          aydınlatma yükümlülüğü kapsamında veri sorumlusunun kimliğinin açıkça
-          belirtilmesini zorunlu kılar; köşeli parantezli alanlar boş bırakılırsa metin
-          mevzuata uygun sayılmaz. Bu bilgileri uydurmadık — gerçek işletme
-          bilgilerinin girilmesi gerekir.
+          <strong>Yayına almadan önce tek bir alan doldurulmalıdır:</strong> yukarıdaki
+          ad-soyad. KVKK, aydınlatma yükümlülüğü kapsamında veri sorumlusunun
+          kimliğinin açıkça belirtilmesini zorunlu kılar; köşeli parantez kaldığı sürece
+          metin mevzuata uygun sayılmaz. Bu bilgiyi uydurmadık — kimliğin sahibi
+          tarafından yazılması gerekir.
+        </p>
+        {/*
+          Adres alanı bilerek yok.
+
+          Sorumlu bir şirket değil, bir gerçek kişi. Gerçek kişinin yayınlayacağı
+          "açık adres" kendi ev adresidir, ve bir gizlilik metninin altına bir
+          kişinin ev adresini koymak, metnin korumaya çalıştığı şeyin tam tersi.
+          Kimlik ad + izlenen bir e-posta kutusuyla belirtiliyor. Şirket
+          kurulduğunda ticaret unvanı, vergi dairesi/numarası, MERSİS ve tebligat
+          adresi birlikte gelir — o zamana kadar eklenecek doğru bir adres yok.
+        */}
+        <p className="!mb-0 !text-[13px] !text-outline">
+          Açık adres alanı yok: veri sorumlusu bir gerçek kişi ve kimlik, ad ile
+          izlenen bir e-posta kutusu üzerinden belirtiliyor. Bir tüzel kişilik
+          kurulduğunda ticaret unvanı ve tebligat adresi bu tabloya birlikte eklenir.
         </p>
       </div>
 

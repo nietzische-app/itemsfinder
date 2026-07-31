@@ -23,6 +23,7 @@ register(new URL("./alias-loader.mjs", import.meta.url).href);
 const { MOCK_SCENARIOS, hydrateProduct } = await import("@/services/mockCatalog");
 const { isDirectProductUrl } = await import("@/lib/productUrl");
 const { merchantHost } = await import("@/services/merchantSearch");
+const { SHOWCASE_LOOKS } = await import("@/lib/showcase");
 
 const args = process.argv.slice(2);
 const EXACT_ONLY = args.includes("--exact");
@@ -111,6 +112,31 @@ if (!PASTE_ONLY) {
     `Eksik: ${filtered.length} satır, ${groups.length} mağaza ` +
       `(${exactCount} tanesi birebir eşleşme — önce bunlar)\n`,
   );
+
+  /*
+   * En küçük anlamlı adım, listenin başında.
+   *
+   * Bu betik "0/113" yazıp ardından yüz on üç satır döküyordu, ve bu ekran
+   * "yüz on üç bağlantı bulman lazım" diye okunuyor. Öyle değil: girdisi olmayan
+   * ürün CTA'sız render ediliyor, yani kısmi doldurma çalışan bir durum. Bir
+   * ziyaretçinin ilk gördüğü şey vitrin kombinlerinin birebir eşleşmeleri, ve
+   * onlar bu kadar. Gerçek iş listesi bu; gerisi derinlik.
+   */
+  const showcaseIds = new Set(SHOWCASE_LOOKS.map((look) => look.exampleId));
+  const showcaseExact = filtered.filter((row) => row.exact && showcaseIds.has(row.scenario));
+  if (showcaseExact.length && showcaseExact.length < filtered.length) {
+    console.log(`En küçük anlamlı adım — ${showcaseExact.length} bağlantı:`);
+    console.log(
+      "  Ziyaretçinin ilk gördüğü CTA'lar bunlar. Kalanı doldurmadan da site\n" +
+        "  tutarlı: bağlantısı olmayan ürün «Ürüne git» göstermiyor.\n",
+    );
+    for (const row of showcaseExact) {
+      console.log(`  ★ ${row.id}  (${row.merchant})`);
+      console.log(`      ${row.title}`);
+      console.log(`      ara: ${researchUrl(row.merchant, row.query)}`);
+    }
+    console.log("\n  Tamamı, mağazaya göre:");
+  }
 
   for (const [merchant, rows] of groups) {
     const exact = rows.filter((row) => row.exact).length;

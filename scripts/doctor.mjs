@@ -101,9 +101,17 @@ const checks = [
     when: "yayın",
     label: "Yasal kimlik dolduruldu",
     ok: legalIdentityFilled(),
-    missing: "veri sorumlusunun adı ve tebligat adresi",
+    /*
+     * Yalnızca ad. Bu satır eskiden "ad ve tebligat adresi" diyordu ve sayfada
+     * adres alanı yoktu: sorumlu bir şirket değil bir gerçek kişi, ve gerçek
+     * kişinin yayınlayacağı adres kendi ev adresi olur. Birini ev adresini
+     * internete koymaya yönlendiren bir kontrol listesi, kapatmaya çalıştığı
+     * riskten büyük bir risk açar. Kimlik ad + izlenen bir e-posta kutusuyla
+     * belirtiliyor; şirket kurulduğunda tebligat adresi o zaman eklenir.
+     */
+    missing: "veri sorumlusunun adı (yasal-bildirim/page.tsx içinde CONTROLLER_NAME)",
     why: "KVKK bildirimi yanlış sorumluyu adlandırırsa, boş olmasından kötüdür.",
-    fix: "yasal-bildirim/page.tsx içinde CONTROLLER_NAME ve adres — şirket değil, gerçek kişi olarak yazıldı.",
+    fix: "CONTROLLER_NAME değerini kendi ad-soyadınla değiştir. Adres gerekmiyor: sorumlu gerçek kişi, ve ev adresi yayınlamak korunmak istenen şeyin tersi.",
   },
 ];
 
@@ -135,6 +143,22 @@ for (const [key, title, note] of GROUPS) {
 
   console.log(`\n  ${title.toLocaleUpperCase("tr")}`);
   console.log(`  ${note}\n`);
+
+  /*
+   * Anahtar eklendiği hâlde iki maddenin açık kalmasının en sık sebebi.
+   *
+   * Ortam değişkenleri sürece **başlarken** veriliyor. Anahtarı ortam ayarlarına
+   * ekledikten sonra hâlâ açık duran bir oturum onu göremez — eklenmemiş
+   * olduğundan değil, bu sürecin ondan önce başlamış olmasından. Bu satır olmadan
+   * tek makul sonuç "anahtar çalışmıyor" oluyor, ki yanlış ve zaman kaybettiriyor.
+   */
+  if (key === "ölçüm" && !env("ANTHROPIC_API_KEY") && !env("GOOGLE_CLOUD_VISION_API_KEY")) {
+    console.log("  ! Anahtarı ekledim diyorsan: bu oturum onu göremez.");
+    console.log("    Ortam değişkenleri süreç başlarken veriliyor, yani anahtar");
+    console.log("    eklendikten sonra açılan bir oturum gerekiyor. Aynı oturumda");
+    console.log("    denemek, anahtar doğru olsa bile bu satırları değiştirmez.\n");
+  }
+
   for (const check of group) {
     console.log(`  ○ ${check.id.padEnd(4)} ${check.label}`);
     console.log(`         eksik: ${check.missing}`);
