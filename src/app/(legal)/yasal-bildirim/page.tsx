@@ -11,6 +11,16 @@ export const metadata: Metadata = {
 const UPDATED = "29 Temmuz 2026";
 const CONTACT_EMAIL = "iletisim@markas.app";
 
+/**
+ * Veri sorumlusunun adı.
+ *
+ * Gerçek kişi olduğu için ticaret unvanı yerine ad-soyad geçiyor. Buradaki değer
+ * doldurulmadan yayına çıkılmamalı: KVKK aydınlatma yükümlülüğü kimliğin
+ * **açıkça** belirtilmesini istiyor, ve yanlış ya da eksik bir kimlik boş
+ * bırakmaktan kötüdür.
+ */
+const CONTROLLER_NAME = "[Ad Soyad]";
+
 export default function LegalNoticePage() {
   return (
     <>
@@ -22,38 +32,41 @@ export default function LegalNoticePage() {
         6698 sayılı Kişisel Verilerin Korunması Kanunu (&laquo;KVKK&raquo;) uyarınca
         veri sorumlusu aşağıda belirtilen taraftır.
       </p>
+      {/*
+        Veri sorumlusu bir **gerçek kişi** olarak yazıldı.
+        KVKK md. 3/1-ı veri sorumlusunu "gerçek veya tüzel kişi" olarak tanımlıyor,
+        yani şirket kurmadan da veri sorumlusu olunur — ve bu site şu an bir şirkete
+        değil bir kişiye ait. Tablo eskiden ticaret unvanı, vergi numarası ve MERSİS
+        istiyordu; üçü de yalnızca tüzel kişide bulunur, yani doldurulması imkânsız
+        alanlar yüzünden metin sonsuza kadar yer tutucuyla kalırdı.
+
+        Şirket kurulduğunda: aşağıdaki iki satırın yerine ticaret unvanı, vergi
+        dairesi/numarası ve MERSİS numarası gelir.
+      */}
       <LegalTable>
         <table>
         <tbody>
           <tr>
             <td>
-              <strong>Ticaret unvanı</strong>
+              <strong>Veri sorumlusu</strong>
             </td>
-            <td>[Şirket / işletme unvanı]</td>
+            <td>{CONTROLLER_NAME}</td>
           </tr>
           <tr>
             <td>
-              <strong>Adres</strong>
+              <strong>Sıfatı</strong>
             </td>
-            <td>[Açık adres]</td>
-          </tr>
-          <tr>
-            <td>
-              <strong>Vergi dairesi / no</strong>
-            </td>
-            <td>[Vergi dairesi ve numarası]</td>
-          </tr>
-          <tr>
-            <td>
-              <strong>MERSİS no</strong>
-            </td>
-            <td>[MERSİS numarası]</td>
+            <td>Gerçek kişi (şirket tüzel kişiliği bulunmamaktadır)</td>
           </tr>
           <tr>
             <td>
               <strong>VERBİS kaydı</strong>
             </td>
-            <td>[Varsa VERBİS kayıt bilgisi]</td>
+            <td>
+              Gerekli değil — yıllık çalışan sayısı 50&apos;den az ve yıllık mali
+              bilanço toplamı 25 milyon TL&apos;den düşük olan veri sorumluları
+              VERBİS&apos;e kayıtla yükümlü tutulmamıştır.
+            </td>
           </tr>
           <tr>
             <td>

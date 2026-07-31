@@ -39,7 +39,7 @@ function legalIdentityFilled() {
   const path = `${ROOT}src/app/(legal)/yasal-bildirim/page.tsx`;
   if (!existsSync(path)) return true;
   const source = readFileSync(path, "utf8");
-  return !/(doldurulacak|belirlenecek|TODO|\[şirket|\[unvan)/i.test(source);
+  return !/(doldurulacak|belirlenecek|TODO|\[şirket|\[unvan|\[ad soyad|\[açık adres)/i.test(source);
 }
 
 const cases = groundTruth(familyOf);
@@ -90,9 +90,9 @@ const checks = [
     id: "—",
     label: "Yasal kimlik dolduruldu",
     ok: legalIdentityFilled(),
-    missing: "veri sorumlusu kimliği",
+    missing: "veri sorumlusunun adı ve tebligat adresi",
     why: "KVKK bildirimi yanlış sorumluyu adlandırırsa, boş olmasından kötüdür.",
-    fix: "src/app/(legal)/yasal-bildirim/page.tsx içindeki kimlik ve adres alanlarını doldur.",
+    fix: "yasal-bildirim/page.tsx içinde CONTROLLER_NAME ve adres — şirket değil, gerçek kişi olarak yazıldı.",
   },
 ];
 
