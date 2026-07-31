@@ -143,6 +143,10 @@ export interface DetectedItem {
   materials?: string[];
   /** Pattern descriptors extracted from ROI analysis. */
   patterns?: string[];
+  /** Fine-grained TOPS subtype (Tişört vs Body/Crop). */
+  topsSubtype?: "tshirt" | "body" | "crop" | "shirt" | "sweatshirt" | "cardigan" | "blouse" | "tank" | "knit" | "other";
+  /** Apparel gender / fit signal for query + sanitizer locks. */
+  gender?: "male" | "female" | "unisex";
   /** Highest-confidence match; null when nothing crossed the threshold. */
   exactMatch: ProductMatch | null;
   /** Cheaper look-alikes, ordered by price ascending. */

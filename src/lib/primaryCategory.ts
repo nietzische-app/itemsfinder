@@ -28,7 +28,7 @@ const FAMILY_TO_PRIMARY: Record<ItemFamily, PrimaryCategory> = {
 export const PRIMARY_CATEGORY_QUERY_LABEL: Record<PrimaryCategory, string> = {
   FOOTWEAR: "Ayakkabı",
   OUTERWEAR: "Ceket",
-  TOPS: "Üst",
+  TOPS: "Tişört",
   BOTTOMS: "Alt",
   DRESS: "Elbise",
   BEAUTY: "Makyaj",

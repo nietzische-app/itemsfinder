@@ -1,5 +1,6 @@
 import { isDirectProductUrl, PINK_OUTFIT_PDPS, resolveVerifiedPdp } from "@/services/productUrls";
 import { familyOf } from "@/lib/itemFamily";
+import { extractTopsSubtype } from "@/lib/searchQueryBuilder";
 import type { BoundingBox, ExampleId, Merchant } from "@/types";
 
 /**
@@ -77,7 +78,8 @@ export interface ShowcaseLook {
 function productUrl(merchant: Merchant, query: string, preferred?: string): string {
   if (preferred && isDirectProductUrl(preferred)) return preferred;
   const family = familyOf(query);
-  const verified = resolveVerifiedPdp(merchant, family);
+  const topsSubtype = family === "top" ? extractTopsSubtype(query) : null;
+  const verified = resolveVerifiedPdp(merchant, family, { topsSubtype });
   if (verified && isDirectProductUrl(verified)) return verified;
   return "";
 }

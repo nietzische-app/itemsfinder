@@ -4,6 +4,10 @@ import { ContextDevService, type LiveProductCard } from "@/services/contextDevSe
 import { getBudgetAlternatives, getExactMatches } from "@/services/matchPipeline";
 import { colorNameFromHex } from "@/lib/searchQueryColors";
 import {
+  extractApparelGender,
+  extractTopsSubtype,
+} from "@/lib/searchQueryBuilder";
+import {
   familyFromPrimary,
   primaryCategoryOf,
   type PrimaryCategory,
@@ -20,6 +24,7 @@ import type {
   ProductMatch,
   ProductSource,
 } from "@/types";
+import type { ApparelGender, TopsSubtype } from "@/lib/searchQueryBuilder";
 
 /**
  * Product resolution — the stage that decides *what to buy* for each detection.
@@ -174,6 +179,8 @@ export class ContextDevProductProvider implements ProductProvider {
       label: item.label,
       materials: item.materials ?? null,
       patterns: item.patterns ?? null,
+      topsSubtype: item.topsSubtype ?? null,
+      gender: item.gender ?? null,
       signal,
     };
 
@@ -211,6 +218,8 @@ export class ContextDevProductProvider implements ProductProvider {
       lockedPrimary: primary,
       colorHex: item.colorHex,
       colorName: stageInput.colorName,
+      topsSubtype: stageInput.topsSubtype,
+      gender: stageInput.gender,
     });
 
     // Final guard — if the exact card somehow fails, abort live enrichment.
@@ -227,6 +236,8 @@ export class ContextDevProductProvider implements ProductProvider {
           lockedPrimary: primary,
           colorHex: item.colorHex,
           colorName: stageInput.colorName,
+          topsSubtype: stageInput.topsSubtype,
+          gender: stageInput.gender,
         }),
       )
       .filter((product): product is ProductMatch => product !== null);
@@ -251,10 +262,18 @@ export function sanitizeDetectedItem(item: DetectedItem): DetectedItem {
       ? item.primaryCategory
       : primaryCategoryOf(`${item.itemType} ${item.label} ${item.attributes}`);
 
+  const phrase = `${item.itemType} ${item.label} ${item.attributes} ${item.webEntity ?? ""}`;
+  const topsSubtype =
+    item.topsSubtype ??
+    (primary === "TOPS" ? extractTopsSubtype(phrase) : null);
+  const gender = item.gender ?? extractApparelGender(phrase);
+
   const colorOpts = {
     colorHex: item.colorHex,
     colorName: colorNameFromHex(item.colorHex),
     enforceColor: true as const,
+    topsSubtype,
+    gender,
   };
 
   const exactMatch =
@@ -286,6 +305,8 @@ export function sanitizeDetectedItem(item: DetectedItem): DetectedItem {
   return {
     ...item,
     primaryCategory: primary,
+    topsSubtype: topsSubtype ?? undefined,
+    gender: gender ?? undefined,
     exactMatch,
     alternatives,
   };
@@ -337,6 +358,8 @@ interface ProductMatchOverrides {
   lockedPrimary: PrimaryCategory;
   colorHex?: string;
   colorName?: string | null;
+  topsSubtype?: TopsSubtype | null;
+  gender?: ApparelGender | null;
 }
 
 /** Absolute http(s) only — never hand the CTA anything else. */
@@ -361,6 +384,8 @@ function toProductMatch(
     colorHex: overrides.colorHex,
     colorName: overrides.colorName,
     enforceColor: Boolean(overrides.colorHex || overrides.colorName),
+    topsSubtype: overrides.topsSubtype,
+    gender: overrides.gender,
   };
 
   if (
@@ -382,7 +407,11 @@ function toProductMatch(
   let productUrl = isDirectProductUrl(card.productUrl) ? card.productUrl : "";
   if (!productUrl) {
     const family = familyFromPrimary(overrides.lockedPrimary);
-    productUrl = resolveVerifiedPdp(merchant, family) ?? "";
+    productUrl =
+      resolveVerifiedPdp(merchant, family, {
+        topsSubtype: overrides.topsSubtype,
+        gender: overrides.gender,
+      }) ?? "";
   }
 
   // Absolute ban — never ship a search-results URL to the CTA.

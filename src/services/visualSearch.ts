@@ -14,7 +14,9 @@ import { cropNormalizedRoi } from "@/lib/imageRoi";
 import { colorNameFromHex } from "@/lib/searchQueryColors";
 import {
   buildExactMatchQuery,
+  extractApparelGender,
   extractMaterialsAndPatterns,
+  extractTopsSubtype,
 } from "@/lib/searchQueryBuilder";
 import {
   familyFromPrimary,
@@ -326,6 +328,11 @@ export class GoogleVisionSearchService implements VisualSearchService {
           .filter(Boolean)
           .join(" ");
         const { materials, patterns } = extractMaterialsAndPatterns(featureSource);
+        const topsSubtype =
+          object.primaryCategory === "TOPS"
+            ? extractTopsSubtype(featureSource)
+            : null;
+        const gender = extractApparelGender(featureSource);
 
         const label = [brandLogo, colorName, phrase ?? object.name]
           .filter(Boolean)
@@ -341,6 +348,8 @@ export class GoogleVisionSearchService implements VisualSearchService {
           brandLogo,
           materials,
           patterns,
+          topsSubtype,
+          gender,
         });
 
         const { exactMatch, alternatives } = findProductsForLabel(
@@ -349,7 +358,13 @@ export class GoogleVisionSearchService implements VisualSearchService {
           familyFromPrimary(object.primaryCategory),
         );
 
-        const colorOpts = { colorHex: dominantHex, colorName, enforceColor: true };
+        const colorOpts = {
+          colorHex: dominantHex,
+          colorName,
+          enforceColor: true as const,
+          topsSubtype,
+          gender,
+        };
 
         const pool = [
           ...(exactMatch
@@ -383,6 +398,8 @@ export class GoogleVisionSearchService implements VisualSearchService {
             itemType: object.name,
             materials,
             patterns,
+            topsSubtype,
+            gender,
           },
           pool.map((product) => ({
             ...product,
@@ -438,6 +455,8 @@ export class GoogleVisionSearchService implements VisualSearchService {
             brandLogo: brandLogo ?? undefined,
             materials,
             patterns,
+            topsSubtype: topsSubtype ?? undefined,
+            gender: gender ?? undefined,
             exactMatch: hydratedExact,
             alternatives: hydratedAlts,
           }),

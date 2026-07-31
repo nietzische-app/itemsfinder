@@ -1,6 +1,7 @@
 import type { DetectedItem, ExampleId, ProductMatch } from "@/types";
 import { familyOf, normalizeTr, tokenize, type ItemFamily } from "@/lib/itemFamily";
 import { primaryCategoryOf } from "@/lib/primaryCategory";
+import { extractTopsSubtype } from "@/lib/searchQueryBuilder";
 import { passesWhitelistSanitizer } from "@/utils/sanitizer";
 import { showcaseBox } from "@/lib/showcase";
 import {
@@ -2281,6 +2282,7 @@ export function findProductsForLabel(
   const hinted = familyHint && familyHint !== "unknown" ? familyHint : null;
   const wanted = hinted ?? familyOf(label);
   const needles = tokenize(label);
+  const topsSubtype = extractTopsSubtype(label);
 
   // Same category, and — when we could read a family off the label — the same
   // family. This is the gate that makes "shoes showed me a jacket" impossible
@@ -2288,7 +2290,21 @@ export function findProductsForLabel(
   const candidates = ALL_ITEMS.filter((item) => {
     if (item.category !== category) return false;
     if (wanted === "unknown") return true;
-    return familyOf(`${item.itemType} ${item.label}`) === wanted;
+    if (familyOf(`${item.itemType} ${item.label}`) !== wanted) return false;
+
+    // T-Shirt detections must never resolve to Body / Crop catalogue rows.
+    if (topsSubtype === "tshirt" || topsSubtype === "other") {
+      const itemSubtype = extractTopsSubtype(`${item.itemType} ${item.label}`);
+      if (
+        itemSubtype === "body" ||
+        itemSubtype === "crop" ||
+        itemSubtype === "blouse" ||
+        itemSubtype === "tank"
+      ) {
+        return false;
+      }
+    }
+    return true;
   });
 
   let best: CatalogItem | null = null;
@@ -2360,11 +2376,13 @@ export function retargetSearchQuery(
  */
 export function hydrateProduct(product: CatalogProduct): ProductMatch {
   const { searchQuery, productUrl: authoredUrl, ...rest } = product;
-  const family = familyOf(`${product.title} ${product.brand} ${searchQuery}`);
+  const haystack = `${product.title} ${product.brand} ${searchQuery}`;
+  const family = familyOf(haystack);
+  const topsSubtype = family === "top" ? extractTopsSubtype(haystack) : null;
 
   const direct =
     (authoredUrl && isDirectProductUrl(authoredUrl) ? authoredUrl : null) ??
-    resolveVerifiedPdp(product.merchant, family);
+    resolveVerifiedPdp(product.merchant, family, { topsSubtype });
 
   const productUrl = direct && isDirectProductUrl(direct) ? direct : "";
 

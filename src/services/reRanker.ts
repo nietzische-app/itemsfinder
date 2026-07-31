@@ -5,7 +5,12 @@ import {
   colorBucketFromName,
   colorBucketQueryToken,
 } from "@/lib/searchQueryColors";
-import { extractMaterialsAndPatterns } from "@/lib/searchQueryBuilder";
+import {
+  extractMaterialsAndPatterns,
+  isBasicSolidApparel,
+  type ApparelGender,
+  type TopsSubtype,
+} from "@/lib/searchQueryBuilder";
 
 /**
  * Multi-candidate re-ranking for PDP matches.
@@ -15,11 +20,17 @@ import { extractMaterialsAndPatterns } from "@/lib/searchQueryBuilder";
  *   Colour & texture keywords … 30%
  *   WEB_DETECTION similarity … 30%
  *
- * Candidates scoring above {@link EXACT_MATCH_THRESHOLD} become the Exact Match
+ * Candidates scoring above the exact-match threshold become the Exact Match
  * (`Birebir Eşleşme`) and sit at the top of the /analyze result list.
+ *
+ * Basic solid staples (black/white tee, blue jean, black short) use a lower
+ * threshold because they are widely stocked across TR storefronts.
  */
 
 export const EXACT_MATCH_THRESHOLD = 0.85;
+
+/** Relaxed bar for basic solid-colour apparel with high marketplace coverage. */
+export const BASIC_SOLID_EXACT_THRESHOLD = 0.72;
 
 export interface ReRankTarget {
   primaryCategory: PrimaryCategory;
@@ -36,6 +47,8 @@ export interface ReRankTarget {
   itemType?: string | null;
   materials?: string[];
   patterns?: string[];
+  topsSubtype?: TopsSubtype | null;
+  gender?: ApparelGender | null;
 }
 
 export interface ReRankCandidate {
@@ -57,6 +70,26 @@ export interface RankedCandidate<T extends ReRankCandidate = ReRankCandidate> {
   };
   /** True when score clears the exact-match threshold. */
   isExact: boolean;
+}
+
+/** Exact-match bar for this target — lower for basic solid staples. */
+export function exactThresholdFor(target: ReRankTarget): number {
+  if (
+    isBasicSolidApparel({
+      primaryCategory: target.primaryCategory,
+      topsSubtype: target.topsSubtype,
+      colorName: target.colorName,
+      colorHex: target.colorHex,
+      patterns: target.patterns,
+      label: target.label,
+      itemType: target.itemType,
+      attributes: target.attributes,
+      webEntity: target.webEntity,
+    })
+  ) {
+    return BASIC_SOLID_EXACT_THRESHOLD;
+  }
+  return EXACT_MATCH_THRESHOLD;
 }
 
 function haystackOf(candidate: ReRankCandidate): string {
@@ -148,6 +181,20 @@ function visualScore(target: ReRankTarget, haystack: string): number {
     brandBoost = 0.25;
   }
 
+  // Subtype alignment boost for TOPS (tee vs body).
+  if (target.topsSubtype === "tshirt") {
+    if (/tişört|tisort|t-shirt|tshirt|\btee\b/i.test(haystack)) {
+      overlap = Math.min(1, overlap + 0.2);
+    }
+    if (/body|bodysuit|crop|askılı|askili|bluz/i.test(haystack)) {
+      overlap = Math.max(0, overlap - 0.35);
+    }
+  }
+
+  if (target.gender === "male" && /erkek|men'?s|male/i.test(haystack)) {
+    overlap = Math.min(1, overlap + 0.15);
+  }
+
   return Math.min(1, entityScore * 0.55 + overlap * 0.45 + brandBoost);
 }
 
@@ -166,12 +213,13 @@ export function scoreCandidate(
   }
 
   const score = category * 0.4 + colorTexture * 0.3 + visual * 0.3;
+  const threshold = exactThresholdFor(target);
 
   return {
     candidate,
     score,
     breakdown: { category, colorTexture, visual },
-    isExact: score >= EXACT_MATCH_THRESHOLD,
+    isExact: score >= threshold,
   };
 }
 
@@ -183,18 +231,19 @@ export function reRankCandidates<T extends ReRankCandidate>(
   target: ReRankTarget,
   candidates: T[],
 ): Array<RankedCandidate<T>> {
+  const threshold = exactThresholdFor(target);
   return candidates
     .map((candidate) => scoreCandidate(target, candidate) as RankedCandidate<T>)
     .sort((a, b) => b.score - a.score)
-    .map((entry, index, list) => {
-      // Only the top card may claim Exact Match, even if several clear 85%.
-      const isExact = index === 0 && entry.score >= EXACT_MATCH_THRESHOLD;
+    .map((entry, index) => {
+      // Only the top card may claim Exact Match, even if several clear the bar.
+      const isExact = index === 0 && entry.score >= threshold;
       return { ...entry, isExact };
     });
 }
 
 /**
- * Picks the Exact Match card (score ≥ 85%) and the remaining ordered pool.
+ * Picks the Exact Match card and the remaining ordered pool.
  * When nothing clears the threshold, `exact` is null and all stay in `rest`
  * sorted by score for fallback display.
  */

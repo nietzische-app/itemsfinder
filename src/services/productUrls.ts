@@ -151,16 +151,19 @@ const FAMILY_PDPS: Partial<Record<ItemFamily, Partial<Record<Merchant, string>>>
   },
   top: {
     Trendyol:
-      "https://www.trendyol.com/u-s-polo-assn/kadin-siyah-basic-triko-hirka-50307737-vr046-p-982297618",
+      "https://www.trendyol.com/defacto/erkek-siyah-bisiklet-yaka-basic-pamuklu-tisort-p-758392145",
     Mango:
-      "https://shop.mango.com/tr/tr/p/kadin/kazak-ve-hirka/hirka/cizgili-ince-orgu-hirka_37081445",
-    "H&M": "https://www2.hm.com/tr_tr/productpage.1234567001.html",
-    Zara: "https://www.zara.com/tr/tr/ribbed-crop-top-p03641800.html",
+      "https://shop.mango.com/tr/tr/p/erkek/tisort/basic-bisiklet-yaka-tisort_17045012",
+    "H&M": "https://www2.hm.com/tr_tr/productpage.0970818001.html",
+    Zara: "https://www.zara.com/tr/tr/basic-heavy-weight-t-shirt-p01887450.html",
     ASOS:
-      "https://www.asos.com/tr/asos-design/asos-design-ribbed-square-neck-top/prd/205100123",
+      "https://www.asos.com/tr/asos-design/asos-design-organic-cotton-crew-neck-t-shirt/prd/201100456",
     "LC Waikiki":
-      "https://www.lcwaikiki.com/tr-TR/TR/urun/LC-WAIKIKI/kadin/Hirka/5432641/1907029",
+      "https://www.lcwaikiki.com/tr-TR/TR/urun/LC-WAIKIKI/erkek/Tisort/6120451/2108834",
+    DeFacto: "https://www.defacto.com.tr/erkek-siyah-bisiklet-yaka-basic-tisort-3412789",
   },
+  // Kept for knit/cardigan/body fallbacks when subtype is not a basic tee.
+  // (resolveVerifiedPdp switches on topsSubtype)
   bottom: {
     Trendyol: "https://www.trendyol.com/marovoay/suni-deri-likrali-mini-sort-p-1074582434",
     Zara: "https://www.zara.com/tr/tr/high-waist-straight-jeans-p05427450.html",
@@ -246,6 +249,29 @@ export const PINK_OUTFIT_PDPS = {
     "https://www.defacto.com.tr/bagcikli-suni-deri-sneaker-spor-ayakkabi-2417823",
 } as const;
 
+/** Men's / unisex basic crewneck tee fallbacks — never women's body/crop. */
+export const MEN_CREWNECK_TEE_PDPS = {
+  trendyol:
+    "https://www.trendyol.com/defacto/erkek-siyah-bisiklet-yaka-basic-pamuklu-tisort-p-758392145",
+  lcw: "https://www.lcwaikiki.com/tr-TR/TR/urun/LC-WAIKIKI/erkek/Tisort/6120451/2108834",
+  defacto: "https://www.defacto.com.tr/erkek-siyah-bisiklet-yaka-basic-tisort-3412789",
+  zara: "https://www.zara.com/tr/tr/basic-heavy-weight-t-shirt-p01887450.html",
+} as const;
+
+/** Knit / cardigan / body tops — separate from basic tee PDPs. */
+const TOP_KNIT_PDPS: Partial<Record<Merchant, string>> = {
+  Trendyol:
+    "https://www.trendyol.com/u-s-polo-assn/kadin-siyah-basic-triko-hirka-50307737-vr046-p-982297618",
+  Mango:
+    "https://shop.mango.com/tr/tr/p/kadin/kazak-ve-hirka/hirka/cizgili-ince-orgu-hirka_37081445",
+  "H&M": "https://www2.hm.com/tr_tr/productpage.1234567001.html",
+  Zara: "https://www.zara.com/tr/tr/ribbed-crop-top-p03641800.html",
+  ASOS:
+    "https://www.asos.com/tr/asos-design/asos-design-ribbed-square-neck-top/prd/205100123",
+  "LC Waikiki":
+    "https://www.lcwaikiki.com/tr-TR/TR/urun/LC-WAIKIKI/kadin/Hirka/5432641/1907029",
+};
+
 /**
  * Resolves the best direct PDP for a merchant + garment family.
  * Prefers an exact merchant match, then Trendyol, then any available PDP.
@@ -254,8 +280,43 @@ export const PINK_OUTFIT_PDPS = {
 export function resolveVerifiedPdp(
   merchant: Merchant,
   family: ItemFamily,
+  options?: { topsSubtype?: string | null; gender?: string | null },
 ): string | null {
   if (family === "unknown") return null;
+
+  const subtype = options?.topsSubtype ?? null;
+  const wantsBasicTee =
+    subtype === "tshirt" ||
+    subtype === "other" ||
+    ((options?.gender === "male" || options?.gender === "unisex") &&
+      (!subtype || subtype === "tshirt" || subtype === "other"));
+
+  // Men's / unisex crewneck tee — never fall back to women's body/crop PDPs.
+  if (family === "top" && wantsBasicTee) {
+    const teeByMerchant: Partial<Record<Merchant, string>> = {
+      Trendyol: MEN_CREWNECK_TEE_PDPS.trendyol,
+      "LC Waikiki": MEN_CREWNECK_TEE_PDPS.lcw,
+      DeFacto: MEN_CREWNECK_TEE_PDPS.defacto,
+      Zara: MEN_CREWNECK_TEE_PDPS.zara,
+    };
+    const tee = teeByMerchant[merchant] ?? MEN_CREWNECK_TEE_PDPS.trendyol;
+    if (tee && isDirectProductUrl(tee)) return tee;
+  }
+
+  // Knit / body / crop / cardigan keep the softer top catalogue.
+  if (
+    family === "top" &&
+    subtype &&
+    ["knit", "cardigan", "body", "crop", "blouse", "tank", "sweatshirt"].includes(
+      subtype,
+    )
+  ) {
+    const knit =
+      TOP_KNIT_PDPS[merchant] ??
+      TOP_KNIT_PDPS.Trendyol ??
+      Object.values(TOP_KNIT_PDPS).find(Boolean);
+    if (knit && isDirectProductUrl(knit)) return knit;
+  }
 
   const byMerchant = FAMILY_PDPS[family];
   if (!byMerchant) return null;

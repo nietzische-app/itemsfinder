@@ -5,15 +5,19 @@ import type { ItemCategory } from "@/types";
 import {
   buildBudgetAlternativeQuery,
   buildExactMatchQuery,
+  extractApparelGender,
   extractMaterialsAndPatterns,
+  extractTopsSubtype,
+  type ApparelGender,
   type ExactQueryInput,
+  type TopsSubtype,
 } from "@/lib/searchQueryBuilder";
 import type { PrimaryCategory } from "@/lib/primaryCategory";
 import { passesWhitelistSanitizer } from "@/utils/sanitizer";
 import { isDirectProductUrl } from "@/services/productUrls";
 import { compareLiveMerchants } from "@/services/retailers";
 import {
-  EXACT_MATCH_THRESHOLD,
+  exactThresholdFor,
   pickExactAndRest,
   type ReRankTarget,
 } from "@/services/reRanker";
@@ -23,7 +27,8 @@ import {
  *
  * Stage 1 (`getExactMatches`) builds a brand/colour/texture-locked query, then
  * re-ranks PDPs (category 40% / colour-texture 30% / visual 30%). Only a card
- * scoring ≥ 85% becomes the Exact Match. Stage 2 runs only after that hit.
+ * clearing the exact threshold becomes the Exact Match. Stage 2 runs only after
+ * that hit.
  */
 
 export interface MatchStageInput {
@@ -39,7 +44,23 @@ export interface MatchStageInput {
   label?: string | null;
   materials?: string[] | null;
   patterns?: string[] | null;
+  topsSubtype?: TopsSubtype | null;
+  gender?: ApparelGender | null;
   signal?: AbortSignal;
+}
+
+function resolveSubtypeAndGender(input: MatchStageInput): {
+  topsSubtype: TopsSubtype | null;
+  gender: ApparelGender | null;
+} {
+  const phrase = [input.webEntity, input.attributes, input.label, input.itemType]
+    .filter(Boolean)
+    .join(" ");
+  const topsSubtype =
+    input.topsSubtype ??
+    (input.primaryCategory === "TOPS" ? extractTopsSubtype(phrase) : null);
+  const gender = input.gender ?? extractApparelGender(phrase);
+  return { topsSubtype, gender };
 }
 
 function toQueryInput(input: MatchStageInput): ExactQueryInput {
@@ -48,6 +69,7 @@ function toQueryInput(input: MatchStageInput): ExactQueryInput {
       .filter(Boolean)
       .join(" "),
   );
+  const { topsSubtype, gender } = resolveSubtypeAndGender(input);
 
   return {
     primaryCategory: input.primaryCategory,
@@ -60,6 +82,8 @@ function toQueryInput(input: MatchStageInput): ExactQueryInput {
     brandLogo: input.brandLogo,
     materials: input.materials?.length ? input.materials : extracted.materials,
     patterns: input.patterns?.length ? input.patterns : extracted.patterns,
+    topsSubtype,
+    gender,
   };
 }
 
@@ -77,6 +101,8 @@ function toReRankTarget(input: MatchStageInput): ReRankTarget {
     itemType: input.itemType,
     materials: queryInput.materials ?? [],
     patterns: queryInput.patterns ?? [],
+    topsSubtype: queryInput.topsSubtype,
+    gender: queryInput.gender,
   };
 }
 
@@ -85,6 +111,8 @@ function sanitizeCards(
   cards: LiveProductCard[],
   colorHex?: string,
   colorName?: string | null,
+  topsSubtype?: TopsSubtype | null,
+  gender?: ApparelGender | null,
 ): LiveProductCard[] {
   return cards.filter((card) => {
     if (!isDirectProductUrl(card.productUrl)) return false;
@@ -95,7 +123,7 @@ function sanitizeCards(
         productUrl: card.productUrl,
         brand: card.brand,
       },
-      { colorHex, colorName, enforceColor: true },
+      { colorHex, colorName, enforceColor: true, topsSubtype, gender },
     );
   });
 }
@@ -115,8 +143,11 @@ export async function getExactMatches(
   context: ContextDevService,
   input: MatchStageInput,
 ): Promise<{ query: string; cards: RankedLiveCard[]; exactThreshold: number }> {
-  const query = buildExactMatchQuery(toQueryInput(input));
-  if (!query.trim()) return { query, cards: [], exactThreshold: EXACT_MATCH_THRESHOLD };
+  const queryInput = toQueryInput(input);
+  const target = toReRankTarget(input);
+  const threshold = exactThresholdFor(target);
+  const query = buildExactMatchQuery(queryInput);
+  if (!query.trim()) return { query, cards: [], exactThreshold: threshold };
 
   const raw = await context.searchLiveProducts(
     query,
@@ -129,9 +160,11 @@ export async function getExactMatches(
     raw,
     input.colorHex,
     input.colorName,
+    queryInput.topsSubtype,
+    queryInput.gender,
   );
 
-  const { ranked } = pickExactAndRest(toReRankTarget(input), sanitized);
+  const { ranked } = pickExactAndRest(target, sanitized);
 
   // Tie-break equal scores with merchant priority so Trendyol/Zara still win.
   const cards: RankedLiveCard[] = ranked
@@ -149,13 +182,13 @@ export async function getExactMatches(
   // Re-apply exact flag after merchant tie-break — only top card ≥ threshold.
   const withExact = cards.map((card, index) => ({
     ...card,
-    isExact: index === 0 && card.matchScore >= EXACT_MATCH_THRESHOLD,
+    isExact: index === 0 && card.matchScore >= threshold,
   }));
 
   return {
     query,
     cards: withExact,
-    exactThreshold: EXACT_MATCH_THRESHOLD,
+    exactThreshold: threshold,
   };
 }
 
@@ -187,6 +220,8 @@ export async function getBudgetAlternatives(
     raw,
     input.colorHex,
     input.colorName,
+    toQueryInput(input).topsSubtype,
+    toQueryInput(input).gender,
   );
 
   const cheaper = pool

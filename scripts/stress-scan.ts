@@ -12,7 +12,10 @@
 
 import {
   buildExactMatchQuery,
+  extractApparelGender,
   extractMaterialsAndPatterns,
+  extractTopsSubtype,
+  isBasicSolidApparel,
   normalizeFashionQuery,
 } from "../src/lib/searchQueryBuilder";
 import {
@@ -28,7 +31,9 @@ import {
   retailerRank,
 } from "../src/services/retailers";
 import {
+  BASIC_SOLID_EXACT_THRESHOLD,
   EXACT_MATCH_THRESHOLD,
+  exactThresholdFor,
   pickExactAndRest,
   scoreCandidate,
 } from "../src/services/reRanker";
@@ -37,6 +42,8 @@ import { MOCK_SCENARIOS, hydrateItems } from "../src/services/mockCatalog";
 import {
   isBannedSearchUrl,
   isDirectProductUrl,
+  MEN_CREWNECK_TEE_PDPS,
+  resolveVerifiedPdp,
 } from "../src/services/productUrls";
 import { buildMerchantSearchUrl } from "../src/services/merchantSearch";
 
@@ -559,6 +566,188 @@ function archetypePrecisionLogoTextureRerank(): Check[] {
   return checks;
 }
 
+function archetypeGenderTopsExactThreshold(): Check[] {
+  const checks: Check[] = [];
+
+  const blackTeeQuery = buildExactMatchQuery({
+    primaryCategory: "TOPS",
+    colorName: "Siyah",
+    itemType: "Top",
+    label: "Black Crewneck Men's T-Shirt",
+    webEntity: "Crew Neck T-Shirt",
+    patterns: ["Düz"],
+  });
+
+  checks.push(
+    assert(
+      "black tee query avoids vague Üst",
+      !/\büst\b/i.test(blackTeeQuery) && !/\bust\b/i.test(blackTeeQuery),
+      blackTeeQuery,
+    ),
+  );
+  checks.push(
+    assert(
+      "black tee query is Erkek Bisiklet Yaka Tişört",
+      /siyah/i.test(blackTeeQuery) &&
+        /erkek/i.test(blackTeeQuery) &&
+        /tişört|tisort/i.test(blackTeeQuery) &&
+        /bisiklet/i.test(blackTeeQuery),
+      blackTeeQuery,
+    ),
+  );
+
+  checks.push(
+    assert(
+      "subtype Top → tshirt",
+      extractTopsSubtype("Top") === "tshirt",
+    ),
+  );
+  checks.push(
+    assert(
+      "subtype Kalp Yaka Body → body",
+      extractTopsSubtype("Kalp Yaka İnce Askılı Body") === "body",
+    ),
+  );
+  checks.push(
+    assert(
+      "gender Men's Crewneck → male",
+      extractApparelGender("Black Crewneck Men's T-Shirt") === "male",
+    ),
+  );
+
+  checks.push(
+    assert(
+      "sanitizer rejects Body for T-Shirt lock",
+      !passesWhitelistSanitizer(
+        "TOPS",
+        {
+          title: "Kalp Yaka İnce Askılı Body",
+          productUrl:
+            "https://shop.mango.com/tr/tr/p/kadin/kazak-ve-hirka/hirka/cizgili-ince-orgu-hirka_37081445",
+        },
+        { topsSubtype: "tshirt", gender: "male", enforceColor: false },
+      ),
+    ),
+  );
+  checks.push(
+    assert(
+      "sanitizer accepts Erkek Tişört for T-Shirt lock",
+      passesWhitelistSanitizer(
+        "TOPS",
+        {
+          title: "Erkek Siyah Bisiklet Yaka Basic Tişört",
+          productUrl: MEN_CREWNECK_TEE_PDPS.trendyol,
+        },
+        { topsSubtype: "tshirt", gender: "male", colorName: "Siyah" },
+      ),
+    ),
+  );
+  checks.push(
+    assert(
+      "sanitizer rejects /kadin/ for male lock",
+      !passesWhitelistSanitizer(
+        "TOPS",
+        {
+          title: "Siyah Basic Tişört",
+          productUrl:
+            "https://www.trendyol.com/u-s-polo-assn/kadin-siyah-basic-triko-hirka-50307737-vr046-p-982297618",
+        },
+        { topsSubtype: "tshirt", gender: "male", enforceColor: false },
+      ),
+    ),
+  );
+
+  const basicTarget = {
+    primaryCategory: "TOPS" as const,
+    colorName: "Siyah",
+    topsSubtype: "tshirt" as const,
+    gender: "male" as const,
+    itemType: "Top",
+    label: "Black Crewneck T-Shirt",
+    patterns: ["Düz"],
+  };
+
+  checks.push(
+    assert(
+      "basic solid tee flagged",
+      isBasicSolidApparel(basicTarget),
+    ),
+  );
+  checks.push(
+    assert(
+      "basic solid uses relaxed exact threshold",
+      exactThresholdFor(basicTarget) === BASIC_SOLID_EXACT_THRESHOLD &&
+        BASIC_SOLID_EXACT_THRESHOLD < EXACT_MATCH_THRESHOLD,
+      String(exactThresholdFor(basicTarget)),
+    ),
+  );
+
+  const ranked = pickExactAndRest(basicTarget, [
+    {
+      title: "Erkek Siyah Bisiklet Yaka Basic Tişört",
+      productUrl: MEN_CREWNECK_TEE_PDPS.lcw,
+      brand: "LC Waikiki",
+      priorSimilarity: 0.82,
+    },
+    {
+      title: "Kalp Yaka İnce Askılı Body",
+      productUrl:
+        "https://shop.mango.com/tr/tr/p/kadin/body/kalp-yaka-body_27081278",
+      brand: "Mango",
+      priorSimilarity: 0.9,
+    },
+  ]);
+
+  checks.push(
+    assert(
+      "basic tee clears birebir threshold",
+      Boolean(ranked.exact) && ranked.exact!.score >= BASIC_SOLID_EXACT_THRESHOLD,
+      ranked.exact ? String(ranked.exact.score) : "no exact",
+    ),
+  );
+  checks.push(
+    assert(
+      "exact is men's tee not body",
+      Boolean(ranked.exact) &&
+        /tişört|tisort/i.test(ranked.exact!.candidate.title) &&
+        !/body/i.test(ranked.exact!.candidate.title),
+      ranked.exact?.candidate.title,
+    ),
+  );
+
+  const teePdp = resolveVerifiedPdp("Trendyol", "top", {
+    topsSubtype: "tshirt",
+    gender: "male",
+  });
+  checks.push(
+    assert(
+      "verified tee PDP is erkek tisort",
+      Boolean(teePdp) &&
+        isDirectProductUrl(teePdp!) &&
+        /erkek|tisort|t-shirt/i.test(teePdp!),
+      teePdp ?? "(empty)",
+    ),
+  );
+
+  const bodyScore = scoreCandidate(basicTarget, {
+    title: "Kalp Yaka İnce Askılı Body",
+    productUrl: "https://shop.mango.com/tr/tr/p/kadin/body/x-p-1",
+  });
+  const teeScore = scoreCandidate(basicTarget, {
+    title: "Erkek Siyah Bisiklet Yaka Tişört",
+    productUrl: MEN_CREWNECK_TEE_PDPS.defacto,
+  });
+  checks.push(
+    assert(
+      "reRank prefers tee over body",
+      teeScore.score > bodyScore.score,
+      `tee=${teeScore.score} body=${bodyScore.score}`,
+    ),
+  );
+
+  return checks;
+}
+
 async function main() {
   const suites = [
     ...archetypePinkOutfit(),
@@ -568,6 +757,7 @@ async function main() {
     ...archetypeLowContrastRoiHints(),
     ...archetypePrecisionLogoTextureRerank(),
     ...archetypePdpOnly(),
+    ...archetypeGenderTopsExactThreshold(),
   ];
 
   let failed = 0;

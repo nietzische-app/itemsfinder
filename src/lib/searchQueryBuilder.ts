@@ -39,6 +39,286 @@ export interface ExactQueryInput {
   materials?: string[] | null;
   /** Explicit pattern descriptors extracted from ROI analysis. */
   patterns?: string[] | null;
+  /** TOPS subtype lock (Tişört vs Body/Crop/…). */
+  topsSubtype?: TopsSubtype | null;
+  /** Apparel gender / fit signal for storefront queries. */
+  gender?: ApparelGender | null;
+}
+
+/** Fine-grained TOPS subtypes — never collapse these to vague "Üst". */
+export type TopsSubtype =
+  | "tshirt"
+  | "body"
+  | "crop"
+  | "shirt"
+  | "sweatshirt"
+  | "cardigan"
+  | "blouse"
+  | "tank"
+  | "knit"
+  | "other";
+
+/** Storefront gender token for apparel queries. */
+export type ApparelGender = "male" | "female" | "unisex";
+
+const TOPS_SUBTYPE_LABEL: Record<TopsSubtype, string> = {
+  tshirt: "Tişört",
+  body: "Body",
+  crop: "Crop Tişört",
+  shirt: "Gömlek",
+  sweatshirt: "Sweatshirt",
+  cardigan: "Hırka",
+  blouse: "Bluz",
+  tank: "Atlet",
+  knit: "Kazak",
+  other: "Tişört",
+};
+
+const GENDER_QUERY_TOKEN: Record<ApparelGender, string> = {
+  male: "Erkek",
+  female: "Kadın",
+  unisex: "Unisex",
+};
+
+/** Neckline phrases appended when confidently detected. */
+const NECKLINE_RULES: Array<{ display: string; aliases: string[] }> = [
+  {
+    display: "Bisiklet Yaka",
+    aliases: [
+      "bisiklet yaka",
+      "crewneck",
+      "crew neck",
+      "crew-neck",
+      "round neck",
+      "round-neck",
+      "yuvarlak yaka",
+    ],
+  },
+  {
+    display: "V Yaka",
+    aliases: ["v yaka", "v-neck", "vneck", "v neck"],
+  },
+  {
+    display: "Halter Yaka",
+    aliases: ["halter", "halter yaka", "halterneck"],
+  },
+  {
+    display: "Kalp Yaka",
+    aliases: ["kalp yaka", "sweetheart", "heart neck"],
+  },
+];
+
+/**
+ * Classifies a TOPS detection into a concrete subtype.
+ * Vague Vision labels ("Top", "Üst") default to `tshirt` unless body/crop cues win.
+ */
+export function extractTopsSubtype(
+  text: string | null | undefined,
+): TopsSubtype | null {
+  if (!text?.trim()) return null;
+  const hay = foldQueryText(text);
+
+  if (
+    /\b(body|bodysuit|body\s*suit|askili\s*body|kalp\s*yaka|halter)\b/.test(hay)
+  ) {
+    return "body";
+  }
+  if (/\b(crop|cropped|crop\s*top|crop\s*ust)\b/.test(hay)) {
+    return "crop";
+  }
+  if (/\b(bluz|blouse)\b/.test(hay)) return "blouse";
+  if (/\b(atlet|tank\s*top|tanktop|camisole)\b/.test(hay)) return "tank";
+  if (/\b(hirka|cardigan|coatigan)\b/.test(hay)) return "cardigan";
+  if (/\b(sweatshirt|hoodie|kapusonlu|kapüşonlu)\b/.test(hay)) {
+    return "sweatshirt";
+  }
+  if (/\b(gomlek|gömlek|button\s*down|buttondown)\b/.test(hay)) return "shirt";
+  if (/\b(kazak|jumper|sweater|triko\s*kazak|cable\s*knit)\b/.test(hay)) {
+    return "knit";
+  }
+  if (
+    /\b(tisort|tişört|tshirt|t[\s-]?shirt|tee|crewneck|bisiklet\s*yaka)\b/.test(
+      hay,
+    )
+  ) {
+    return "tshirt";
+  }
+  // Vision "Top" / Turkish "Üst" with no feminine cut cues → basic tee.
+  if (/\b(top|ust|üst)\b/.test(hay)) return "tshirt";
+
+  return null;
+}
+
+/**
+ * Infers apparel gender from ROI text, web entities, and fit cues.
+ * Male/unisex + wide/oversize shoulders bias toward Erkek for basic tees.
+ */
+export function extractApparelGender(
+  text: string | null | undefined,
+): ApparelGender | null {
+  if (!text?.trim()) return null;
+  const hay = foldQueryText(text);
+
+  const female =
+    /\b(kadin|kadın|woman|women|ladies|bayan|female|girl|kız|kiz)\b/.test(hay) ||
+    /\b(body|bodysuit|crop|bluz|blouse|halter|askili|askılı|kalp\s*yaka)\b/.test(
+      hay,
+    );
+  const male =
+    /\b(erkek|man|men|male|bay|gentleman)\b/.test(hay) ||
+    /\b(wide[\s-]?fit|genis\s*omuz|geniş\s*omuz)\b/.test(hay);
+  const unisex =
+    /\b(unisex|oversize|oversized)\b/.test(hay) ||
+    /\b(crewneck|bisiklet\s*yaka|basic\s*tee|basic\s*tisort)\b/.test(hay);
+
+  if (male && !female) return "male";
+  if (female && !male) return "female";
+  if (unisex && !female) return "unisex";
+  if (male && female) return "unisex";
+  return null;
+}
+
+/** Neckline display token when present in the detection phrase. */
+export function extractNeckline(
+  text: string | null | undefined,
+): string | null {
+  if (!text?.trim()) return null;
+  const hay = foldQueryText(text);
+  for (const rule of NECKLINE_RULES) {
+    if (rule.aliases.some((alias) => hay.includes(foldQueryText(alias)))) {
+      return rule.display;
+    }
+  }
+  return null;
+}
+
+/** True for plain solid staples that are widely stocked (basic tee, jean, short). */
+export function isBasicSolidApparel(input: {
+  primaryCategory: PrimaryCategory;
+  topsSubtype?: TopsSubtype | null;
+  colorName?: string | null;
+  colorHex?: string | null;
+  patterns?: string[] | null;
+  label?: string | null;
+  itemType?: string | null;
+  attributes?: string | null;
+  webEntity?: string | null;
+}): boolean {
+  const hay = foldQueryText(
+    [input.label, input.itemType, input.attributes, input.webEntity]
+      .filter(Boolean)
+      .join(" "),
+  );
+
+  const busyPattern =
+    (input.patterns ?? []).some((p) => {
+      const key = normalizeTr(p);
+      return key !== "düz" && key !== "duz";
+    }) ||
+    /\b(ekose|cizgili|çizgili|cicekli|çiçekli|leopar|baskili|baskılı|graphic|print)\b/.test(
+      hay,
+    );
+  if (busyPattern) return false;
+
+  const color =
+    colorBucketFromName(input.colorName) ??
+    (input.colorHex ? colorBucketFromHex(input.colorHex) : null);
+
+  if (input.primaryCategory === "TOPS") {
+    const subtype =
+      input.topsSubtype ??
+      extractTopsSubtype(
+        [input.itemType, input.label, input.webEntity, input.attributes]
+          .filter(Boolean)
+          .join(" "),
+      );
+    if (subtype !== "tshirt" && subtype !== "other" && subtype !== null) {
+      return false;
+    }
+    return color === "Siyah" || color === "Beyaz" || /\b(siyah|beyaz|black|white)\b/.test(hay);
+  }
+
+  if (input.primaryCategory === "BOTTOMS") {
+    const jean = /\b(jean|jeans|kot|denim)\b/.test(hay);
+    const shorts = /\b(sort|şort|shorts)\b/.test(hay);
+    if (jean && (color === "Mavi" || color === "Lacivert" || /\b(mavi|blue)\b/.test(hay))) {
+      return true;
+    }
+    if (shorts && (color === "Siyah" || /\b(siyah|black)\b/.test(hay))) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function foldQueryText(text: string): string {
+  return normalizeTr(text)
+    .replace(/ç/g, "c")
+    .replace(/ğ/g, "g")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ş/g, "s")
+    .replace(/ü/g, "u");
+}
+
+function resolveTopsSubtype(input: ExactQueryInput): TopsSubtype | null {
+  if (input.primaryCategory !== "TOPS") return null;
+  if (input.topsSubtype) return input.topsSubtype;
+  return extractTopsSubtype(
+    [input.webEntity, input.attributes, input.label, input.itemType]
+      .filter(Boolean)
+      .join(" "),
+  );
+}
+
+function resolveApparelGender(input: ExactQueryInput): ApparelGender | null {
+  if (input.gender) return input.gender;
+  const fromText = extractApparelGender(
+    [input.webEntity, input.attributes, input.label, input.itemType]
+      .filter(Boolean)
+      .join(" "),
+  );
+  if (fromText) return fromText;
+
+  // Basic crewneck / vague "Top" with no feminine cut → Erkek storefront bias.
+  const subtype = resolveTopsSubtype(input);
+  if (subtype === "tshirt" || subtype === "other") {
+    const neck = extractNeckline(
+      [input.webEntity, input.label, input.attributes, input.itemType]
+        .filter(Boolean)
+        .join(" "),
+    );
+    if (neck === "Bisiklet Yaka" || subtype === "tshirt") {
+      return "male";
+    }
+  }
+  return null;
+}
+
+function topsCategoryToken(input: ExactQueryInput): string {
+  const subtype = resolveTopsSubtype(input) ?? "tshirt";
+  const neck = extractNeckline(
+    [input.webEntity, input.label, input.attributes, input.itemType]
+      .filter(Boolean)
+      .join(" "),
+  );
+
+  if (subtype === "tshirt") {
+    if (neck === "Bisiklet Yaka") return "Bisiklet Yaka Tişört";
+    if (neck === "V Yaka") return "V Yaka Tişört";
+    const hay = foldQueryText(
+      [input.webEntity, input.label, input.attributes, input.itemType]
+        .filter(Boolean)
+        .join(" "),
+    );
+    if (/\boversize|oversized\b/.test(hay)) return "Oversize Tişört";
+    // Default crewneck for plain black/white tees — never emit bare "Üst".
+    return "Bisiklet Yaka Tişört";
+  }
+
+  if (subtype === "body" && neck) return `${neck} Body`;
+  return TOPS_SUBTYPE_LABEL[subtype];
 }
 
 /** Texture / weave / material tokens (Turkish display form). */
@@ -120,7 +400,11 @@ const FASHION_PHRASES: Array<[RegExp, string]> = [
   [/\btrench\s*coat\b/gi, "Trençkot"],
   [/\bwide[\s-]*leg\s*(jeans?|pants?|trousers?)\b/gi, "Bol Paça Pantolon"],
   [/\bmom\s*jeans?\b/gi, "Mom Jean"],
-  [/\bcrop(?:ped)?\s*top\b/gi, "Crop Üst"],
+  [/\bcrop(?:ped)?\s*top\b/gi, "Crop Tişört"],
+  [/\bcrew[\s-]*neck\s*t[\s-]?shirts?\b/gi, "Bisiklet Yaka Tişört"],
+  [/\bcrew[\s-]*neck\b/gi, "Bisiklet Yaka"],
+  [/\bmen'?s?\s*t[\s-]?shirts?\b/gi, "Erkek Tişört"],
+  [/\bbasic\s*t[\s-]?shirts?\b/gi, "Basic Tişört"],
   [/\bplatform\s*(sneakers?|shoes?)\b/gi, "Platform Sneaker"],
   [/\bankle\s*boots?\b/gi, "Bilekte Bot"],
   [/\bheeled\s*sandals?\b/gi, "Topuklu Sandalet"],
@@ -194,6 +478,16 @@ const FASHION_WORDS: Record<string, string> = {
   velvet: "Kadife",
   suede: "Süet",
   denim: "Kot",
+  black: "Siyah",
+  white: "Beyaz",
+  red: "Kırmızı",
+  blue: "Mavi",
+  green: "Yeşil",
+  brown: "Kahverengi",
+  pink: "Pembe",
+  grey: "Gri",
+  gray: "Gri",
+  navy: "Lacivert",
 };
 
 /** Tokens that pollute storefront ranking and must never appear in a query. */
@@ -205,6 +499,8 @@ const VAGUE_NOISE = new Set([
   "person",
   "apparel",
   "top",
+  "üst",
+  "ust",
   "giyim",
   "kozmetik",
   "ürün",
@@ -294,6 +590,19 @@ const STYLE_KEEP = new Set([
   "baskili",
   "düz",
   "duz",
+  "tisort",
+  "tişört",
+  "tshirt",
+  "tee",
+  "erkek",
+  "kadin",
+  "kadın",
+  "unisex",
+  "bisiklet",
+  "gomlek",
+  "gömlek",
+  "sweatshirt",
+  "body",
 ]);
 
 /**
@@ -380,8 +689,8 @@ function resolveMaterialsAndPatterns(input: ExactQueryInput): {
 /**
  * Stage 1 — Exact visual match query.
  *
- * Shape: `[Brand?] + [Color] + [Texture/Pattern] + [WEB_DETECTION style] + [Category]`
- * Example: "Nike Siyah Yüksek Taban Sneaker" / "Fermuarlı Triko Hırka"
+ * Shape: `[Brand?] + [Color] + [Texture/Pattern] + [Gender?] + [WEB style] + [Subtype]`
+ * Example: "Siyah Bisiklet Yaka Erkek Tişört" / "Nike Siyah Yüksek Taban Sneaker"
  */
 export function buildExactMatchQuery(input: ExactQueryInput): string {
   const tokens: string[] = [];
@@ -400,30 +709,52 @@ export function buildExactMatchQuery(input: ExactQueryInput): string {
   for (const material of materials) pushToken(tokens, seen, material);
   for (const pattern of patterns) pushToken(tokens, seen, pattern);
 
+  const gender = resolveApparelGender(input);
+  if (gender) {
+    pushToken(tokens, seen, GENDER_QUERY_TOKEN[gender]);
+  }
+
   pushToken(tokens, seen, input.webEntity);
   pushToken(tokens, seen, input.attributes);
   pushToken(tokens, seen, input.label);
   pushToken(tokens, seen, input.itemType);
 
-  // Always force a concrete Turkish category word so storefronts cannot
-  // reinterpret an ambiguous phrase as home textiles.
-  const categoryLabel = PRIMARY_CATEGORY_QUERY_LABEL[input.primaryCategory];
+  // TOPS: emit a concrete subtype (Tişört / Body / Gömlek…) — never bare "Üst".
+  let categoryLabel = PRIMARY_CATEGORY_QUERY_LABEL[input.primaryCategory];
+  if (input.primaryCategory === "TOPS") {
+    categoryLabel = topsCategoryToken(input);
+  }
+
   if (categoryLabel) {
     const alreadyHasCategory = tokens.some((token) => {
       const key = normalizeTr(token);
+      const labelKey = normalizeTr(categoryLabel);
       return (
-        key === normalizeTr(categoryLabel) ||
+        key === labelKey ||
+        labelKey.includes(key) ||
         key === normalizeTr(input.itemType ?? "") ||
         STYLE_KEEP.has(key)
       );
     });
     if (!alreadyHasCategory) {
       pushToken(tokens, seen, categoryLabel);
+    } else {
+      // Still force the multi-word subtype phrase when only a vague stem matched.
+      if (
+        input.primaryCategory === "TOPS" &&
+        !tokens.some((token) =>
+          /tişört|tisort|body|gömlek|gomlek|sweatshirt|hırka|hirka|bluz|kazak/i.test(
+            token,
+          ),
+        )
+      ) {
+        pushToken(tokens, seen, categoryLabel);
+      }
     }
   }
 
   // Prefer a specific item type over the generic category label when both fit.
-  if (input.itemType) {
+  if (input.itemType && input.primaryCategory !== "TOPS") {
     pushToken(tokens, seen, input.itemType);
   }
 
@@ -441,7 +772,15 @@ export function buildExactMatchQuery(input: ExactQueryInput): string {
     }
   }
 
-  return tokens.slice(0, 7).join(" ");
+  // Gender + subtype are high-signal for TR storefronts — keep them in the window.
+  if (gender) {
+    const genderToken = GENDER_QUERY_TOKEN[gender];
+    if (!tokens.some((token) => normalizeTr(token) === normalizeTr(genderToken))) {
+      tokens.splice(Math.min(2, tokens.length), 0, genderToken);
+    }
+  }
+
+  return tokens.slice(0, 8).join(" ");
 }
 
 /**
@@ -479,23 +818,33 @@ export function buildBudgetAlternativeQuery(input: ExactQueryInput): string {
 
   pushToken(tokens, seen, input.itemType);
 
-  const categoryLabel = PRIMARY_CATEGORY_QUERY_LABEL[input.primaryCategory];
+  let categoryLabel = PRIMARY_CATEGORY_QUERY_LABEL[input.primaryCategory];
+  if (input.primaryCategory === "TOPS") {
+    categoryLabel = topsCategoryToken(input);
+  }
   if (categoryLabel) {
     pushToken(tokens, seen, categoryLabel);
+  }
+
+  const gender = resolveApparelGender(input);
+  if (gender) {
+    pushToken(tokens, seen, GENDER_QUERY_TOKEN[gender]);
   }
 
   // Prefer the specific type word (Sandalet) over generic (Ayakkabı) when both
   // are present — drop the generic if we already have a STYLE_KEEP type.
   const compact = tokens.filter((token, index, list) => {
     const key = normalizeTr(token);
-    if (key !== normalizeTr(categoryLabel)) return true;
+    if (key !== normalizeTr(PRIMARY_CATEGORY_QUERY_LABEL[input.primaryCategory])) {
+      return true;
+    }
     return !list.some(
       (other, otherIndex) =>
         otherIndex !== index && STYLE_KEEP.has(normalizeTr(other)),
     );
   });
 
-  const query = compact.slice(0, 6).join(" ");
+  const query = compact.slice(0, 7).join(" ");
   return query ? `${query} muadili` : `${categoryLabel || "ürün"} muadili`;
 }
 

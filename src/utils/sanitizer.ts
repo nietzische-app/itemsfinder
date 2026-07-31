@@ -9,6 +9,7 @@ import {
   colorsConflict,
   type ColorBucket,
 } from "@/lib/searchQueryColors";
+import type { ApparelGender, TopsSubtype } from "@/lib/searchQueryBuilder";
 
 /**
  * Mandatory whitelist schema per PrimaryCategory.
@@ -190,6 +191,76 @@ export interface SanitizeOptions {
   colorName?: string | null;
   /** When false, skip colour conflict checks (catalogue demos without colour). */
   enforceColor?: boolean;
+  /** TOPS subtype lock — T-Shirt must never match Body/Crop/Bluz. */
+  topsSubtype?: TopsSubtype | null;
+  /** Apparel gender — reject cross-gender PDPs when locked. */
+  gender?: ApparelGender | null;
+}
+
+/** Titles/URLs that are incompatible with a locked T-Shirt detection. */
+const TSHIRT_HARD_REJECT = [
+  "body",
+  "bodysuit",
+  "body suit",
+  "crop",
+  "cropped",
+  "askili",
+  "askılı",
+  "halter",
+  "bluz",
+  "blouse",
+  "atlet",
+  "tank top",
+  "tanktop",
+  "camisole",
+  "straplez",
+  "strapless",
+  "kalp yaka",
+  "sweetheart",
+  "bustiyer",
+  "bustier",
+];
+
+const MALE_GENDER_REJECT = [
+  "/kadin/",
+  "/kadın/",
+  "kadin-",
+  "kadın-",
+  "woman",
+  "women",
+  "ladies",
+  "bayan",
+  "girl",
+];
+
+const FEMALE_GENDER_REJECT = [
+  "/erkek/",
+  "erkek-",
+  " men ",
+  "man's",
+  "mens ",
+  "male ",
+];
+
+function hitsSubtypeMismatch(
+  topsSubtype: TopsSubtype | null | undefined,
+  haystack: string,
+): boolean {
+  if (topsSubtype !== "tshirt") return false;
+  return TSHIRT_HARD_REJECT.some((token) => haystack.includes(foldAscii(token)));
+}
+
+function hitsGenderMismatch(
+  gender: ApparelGender | null | undefined,
+  haystack: string,
+): boolean {
+  if (gender === "male") {
+    return MALE_GENDER_REJECT.some((token) => haystack.includes(foldAscii(token)));
+  }
+  if (gender === "female") {
+    return FEMALE_GENDER_REJECT.some((token) => haystack.includes(foldAscii(token)));
+  }
+  return false;
 }
 
 /** Fold Turkish diacritics so whitelist stems like `gozluk` hit `gözlüğü`. */
@@ -259,6 +330,9 @@ export function passesWhitelistSanitizer(
   }
 
   if (!hitsWhitelist(primary, haystack)) return false;
+
+  if (hitsSubtypeMismatch(options.topsSubtype, haystack)) return false;
+  if (hitsGenderMismatch(options.gender, haystack)) return false;
 
   const enforceColor = options.enforceColor !== false;
   if (enforceColor) {
