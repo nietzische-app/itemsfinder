@@ -1170,10 +1170,11 @@ const tailoringItems: CatalogItem[] = [
       "Kutu formlu, üst saplı, ince altın rengi metal aksesuarlı deri çanta.",
     confidence: 0.86,
     boundingBox: { x: 0.689, y: 0.467, width: 0.156, height: 0.142 },
-    colorHex: "#3a2c22",
+    // Espresso brown (not near-black anthracite) so colour sanitizer aligns.
+    colorHex: "#62422c",
     exactMatch: {
       id: "tl-tote-exact",
-      title: "Structured Leather Tote Bag",
+      title: "Espresso Structured Leather Tote Bag",
       brand: "Mango",
       merchant: "Mango",
       price: 3599.90,

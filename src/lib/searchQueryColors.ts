@@ -221,16 +221,31 @@ export function colorsConflict(expected: ColorBucket, title: string): boolean {
   });
 }
 
+/**
+ * Colour aliases must match as whole tokens (or hyphenated compounds), never as
+ * raw substrings — otherwise "red" fires inside "structured" / "covered".
+ */
 function detectBucketsInText(text: string): ColorBucket[] {
-  const haystack = normalizeTr(text);
+  const tokens = new Set(
+    normalizeTr(text)
+      .split(/[^a-z0-9çğıöşü]+/i)
+      .filter((token) => token.length >= 2),
+  );
   const hits: ColorBucket[] = [];
 
   for (const [bucket, aliases] of Object.entries(BUCKET_ALIASES) as Array<
     [ColorBucket, string[]]
   >) {
-    if (aliases.some((alias) => haystack.includes(normalizeTr(alias)))) {
-      hits.push(bucket);
-    }
+    const matched = aliases.some((alias) => {
+      const key = normalizeTr(alias);
+      if (key.includes(" ")) {
+        // Multi-word aliases ("navy blue", "off-white" after normalize) need
+        // the full phrase present as contiguous tokens.
+        return normalizeTr(text).includes(key);
+      }
+      return tokens.has(key);
+    });
+    if (matched) hits.push(bucket);
   }
 
   return hits;

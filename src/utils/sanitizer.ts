@@ -128,6 +128,7 @@ const CATEGORY_WHITELIST: Record<PrimaryCategory, string[]> = {
     "kolye",
     "bileklik",
     "gozluk",
+    "gozlug",
     "aksesuar",
     "bag",
     "handbag",
@@ -142,6 +143,12 @@ const CATEGORY_WHITELIST: Record<PrimaryCategory, string[]> = {
     "hoops",
     "zincir",
     "chain",
+    "bere",
+    "beanie",
+    "hat",
+    "sapka",
+    "bone",
+    "tote",
   ],
   UNKNOWN: [],
 };
@@ -185,8 +192,19 @@ export interface SanitizeOptions {
   enforceColor?: boolean;
 }
 
+/** Fold Turkish diacritics so whitelist stems like `gozluk` hit `gözlüğü`. */
+function foldAscii(text: string): string {
+  return normalizeTr(text)
+    .replace(/ç/g, "c")
+    .replace(/ğ/g, "g")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ş/g, "s")
+    .replace(/ü/g, "u");
+}
+
 function haystackOf(candidate: SanitizerCandidate): string {
-  return normalizeTr(
+  return foldAscii(
     [candidate.title, candidate.brand ?? "", candidate.productUrl ?? ""].join(" "),
   );
 }
@@ -194,8 +212,8 @@ function haystackOf(candidate: SanitizerCandidate): string {
 function tokensOf(haystack: string): Set<string> {
   return new Set(
     haystack
-      .split(/[^a-z0-9ğüşıöç]+/i)
-      .map((token) => normalizeTr(token))
+      .split(/[^a-z0-9]+/i)
+      .map((token) => foldAscii(token))
       .filter((token) => token.length >= 2),
   );
 }
@@ -233,7 +251,8 @@ export function passesWhitelistSanitizer(
 
   const haystack = haystackOf(candidate);
 
-  if (hitsHomeBlocklist(haystack)) return false;
+  // Shade names like "Pillow Talk" must not trip the bedding blocklist on beauty.
+  if (primary !== "BEAUTY" && hitsHomeBlocklist(haystack)) return false;
 
   if (hasCrossCategoryContamination(primary, candidate.title, candidate.productUrl, candidate.brand)) {
     return false;

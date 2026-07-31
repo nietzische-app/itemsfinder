@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "stress:scan": "tsx scripts/stress-scan.ts"
+    "stress:scan": "tsx scripts/stress-scan.ts",
+    "simulate:scans": "tsx --require ./scripts/shims/register-server-only.cjs scripts/simulate-scans.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",
