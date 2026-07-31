@@ -147,9 +147,16 @@ const checks = [
      * belirtiliyor; şirket kurulduğunda tebligat adresi o zaman eklenir.
      */
     missing: "veri sorumlusunun adı (yasal-bildirim/page.tsx içinde CONTROLLER_NAME)",
+    /*
+     * Bu satır bir ara "unutulursa derleme patlıyor" diyordu ve öyle bir kontrol
+     * gerçekten eklenmişti. Kaldırıldı: eksik bir alanın cezası sitenin tamamının
+     * dağıtılamaması olamaz, ve kontrol tam da onu yapıp bir dağıtımı kırdı.
+     * Sayfa artık yer tutucu yerine «henüz yayımlanmadı» yazıyor; eksik görünür
+     * kalıyor, karar sahibinde kalıyor.
+     */
     why:
       "KVKK bildirimi yanlış sorumluyu adlandırırsa, boş olmasından kötüdür. " +
-      "Unutulursa yayına çıkmıyor: VERCEL_ENV=production derlemesi yer tutucuda patlıyor.",
+      "Doldurulmadan da site çalışır; sayfa kimliğin yayımlanmadığını açıkça yazar.",
     fix: "CONTROLLER_NAME değerini kendi ad-soyadınla değiştir. Adres gerekmiyor: sorumlu gerçek kişi, ve ev adresi yayınlamak korunmak istenen şeyin tersi.",
   },
 ];

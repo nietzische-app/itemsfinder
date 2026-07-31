@@ -22,29 +22,20 @@ const CONTACT_EMAIL = "iletisim@markas.app";
 const CONTROLLER_NAME = "Niyazi Önder Duman";
 
 /**
- * Yer tutucuyla **üretime** çıkmayı imkânsız kılar.
+ * Adın hâlâ yer tutucu olup olmadığı.
  *
- * Buradaki not "yayına almadan önce doldur" diyordu ve bu, birinin hatırlamasına
- * bağlı bir güvence — yani güvence değil. Kaçırıldığında sonucu, ziyaretçiye
- * KVKK aydınlatma metninde köşeli parantez göstermek oluyor: veri sorumlusunun
- * kimliğini belirtmeyen bir bildirim, hiç olmamasından daha kötü, çünkü
- * belirtilmiş gibi duruyor.
+ * **Burada eskiden derlemeyi patlatan bir kontrol vardı ve yanlıştı.** Amacı
+ * doğruydu — ziyaretçiye KVKK metninde köşeli parantez göstermemek — ama bedeli
+ * bütün sitenin dağıtılamaması oluyordu, ve eksik bir alanın cezası sitenin
+ * tamamının çökmesi olamaz. Kendi eklediğim commit'te bile tetiklendi: kontrolü
+ * ad doldurulmadan önce push etmiştim, yani deploy edilemeyen bir sürüm çıktı.
  *
- * `verifiedProductUrls.ts` aynı şeyi kırık ürün bağlantısı için yapıyor —
- * import sırasında patlıyor. Aynı desen, aynı gerekçe.
- *
- * Yalnızca `VERCEL_ENV === "production"` iken patlıyor: önizleme dağıtımları ve
- * yerel derlemeler yer tutucuyla çalışmaya devam etsin, çünkü bu metnin
- * doldurulması yayın anına ait bir karar, geliştirme anına değil.
+ * Yayına çıkma kararı sahibinin; benim işim durumu görünür kılmak, kararı elinden
+ * almak değil. Eksiklik artık üç yerde görünüyor ve hiçbiri siteyi düşürmüyor:
+ * sayfanın kendisi «yayımlanmadı» diyor, `npm run doctor` maddeyi açık sayıyor,
+ * ve tablo yer tutucu yerine dürüst bir cümle gösteriyor.
  */
-if (process.env.VERCEL_ENV === "production" && /\[.+\]/.test(CONTROLLER_NAME)) {
-  throw new Error(
-    "yasal-bildirim: CONTROLLER_NAME hâlâ yer tutucu. KVKK aydınlatma " +
-      "yükümlülüğü veri sorumlusunun kimliğinin açıkça belirtilmesini istiyor; " +
-      "üretime bu hâliyle çıkılamaz. src/app/(legal)/yasal-bildirim/page.tsx " +
-      "içinde gerçek ad-soyadı yaz.",
-  );
-}
+const controllerNamePublished = !/\[.+\]/.test(CONTROLLER_NAME) && CONTROLLER_NAME.trim().length > 0;
 
 export default function LegalNoticePage() {
   return (
@@ -75,7 +66,13 @@ export default function LegalNoticePage() {
             <td>
               <strong>Veri sorumlusu</strong>
             </td>
-            <td>{CONTROLLER_NAME}</td>
+            <td>
+              {controllerNamePublished ? (
+                CONTROLLER_NAME
+              ) : (
+                <em>Henüz yayımlanmadı — aşağıdaki nota bakınız.</em>
+              )}
+            </td>
           </tr>
           <tr>
             <td>
@@ -113,13 +110,15 @@ export default function LegalNoticePage() {
       </LegalTable>
 
       <div className="mt-4 rounded-2xl border border-secondary/30 bg-secondary/[0.04] p-4">
-        <p className="!mt-0 !text-[13px]">
-          <strong>Yayına almadan önce tek bir alan doldurulmalıdır:</strong> yukarıdaki
-          ad-soyad. KVKK, aydınlatma yükümlülüğü kapsamında veri sorumlusunun
-          kimliğinin açıkça belirtilmesini zorunlu kılar; köşeli parantez kaldığı sürece
-          metin mevzuata uygun sayılmaz. Bu bilgiyi uydurmadık — kimliğin sahibi
-          tarafından yazılması gerekir.
-        </p>
+        {controllerNamePublished ? null : (
+          <p className="!mt-0 !text-[13px]">
+            <strong>Bu metin henüz tamamlanmamıştır.</strong> KVKK, aydınlatma
+            yükümlülüğü kapsamında veri sorumlusunun kimliğinin açıkça belirtilmesini
+            zorunlu kılar; ad-soyad yazılana kadar metin mevzuata uygun sayılmaz. Bu
+            bilgiyi uydurmuyoruz — kimliğin sahibi tarafından yazılması gerekir.
+            Bu arada başvurularınızı aşağıdaki e-posta adresine iletebilirsiniz.
+          </p>
+        )}
         {/*
           Adres alanı bilerek yok.
 

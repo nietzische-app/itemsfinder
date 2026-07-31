@@ -34,25 +34,71 @@ export interface LiveProductCard {
 }
 
 /**
- * Retailers we search. Scoping the search to an allowlist keeps results
- * shoppable (no blogs, no marketplaces we can't attribute) and keeps the
- * affiliate mapping in `utils/affiliate.ts` meaningful.
+ * Türkiye'den alışverişe uygun mağazalar — aramanın **birinci** katmanı.
+ *
+ * Liste eskiden tek Türk mağazası olarak Trendyol'u taşıyordu, yani "Türkiye'de
+ * bulunamazsa" durumu pratikte hemen her sorguda oluşuyordu. Buradakiler
+ * Türkiye'ye satış yapan, TL fiyat gösteren ve yurt içi kargo yapan mağazalar; hepsinin
+ * ürün sayfası şekli `productUrl.ts` tarafından tanınıyor ve `eval` tarafından
+ * ölçülüyor (`eval/productUrlCases.ts`).
  */
-const RETAILER_DOMAINS: Record<ItemCategory, string[]> = {
+const TURKISH_DOMAINS: Record<ItemCategory, string[]> = {
   clothing: [
-    "zara.com",
     "trendyol.com",
-    "shop.mango.com",
+    "boyner.com.tr",
+    "lcw.com",
+    "defacto.com.tr",
+    "mavi.com",
+    "koton.com",
+    "zara.com",
+    "pullandbear.com",
+    "stradivarius.com",
+    "bershka.com",
     "hm.com",
-    "asos.com",
-    "amazon.com",
+    "amazon.com.tr",
   ],
-  beauty: ["sephora.com", "trendyol.com", "amazon.com", "lookfantastic.com"],
+  beauty: [
+    "sephora.com.tr",
+    "trendyol.com",
+    "gratis.com",
+    "watsons.com.tr",
+    "rossmann.com.tr",
+    "amazon.com.tr",
+  ],
 };
+
+/**
+ * Yalnızca birinci katman boş dönerse aranan global mağazalar.
+ *
+ * Sıra kasıtlı: Türkiye'den alışveriş yapan biri için İngiltere'den gelen bir ASOS
+ * bağlantısı, aynı ürünü TL fiyatla ve yurt içi kargoyla veren bir bağlantıdan
+ * kötüdür — gümrük, kargo süresi ve iade hepsi değişiyor. Ama hiç sonuç
+ * olmamasından iyidir, ve bazı ürünler Türkiye'de gerçekten satılmıyor.
+ */
+const GLOBAL_DOMAINS: Record<ItemCategory, string[]> = {
+  clothing: ["asos.com", "shop.mango.com", "amazon.com", "zara.com", "hm.com"],
+  beauty: ["sephora.com", "lookfantastic.com", "amazon.com"],
+};
+
+/**
+ * Global katmana düşmeden önce birinci katmanda aranan en az aday sayısı.
+ *
+ * Bir tane değil: tek bir sonuç, o mağazanın elinde gerçekten o ürün olduğu
+ * anlamına gelmiyor — alakasız bir eşleşme de tek sonuç üretir. İki aday, ikinci
+ * aramanın parasını harcamadan önce "Türkiye'de var" demek için makul en düşük
+ * kanıt.
+ */
+const MIN_LOCAL_CANDIDATES = 2;
 
 /** Fallback currency per retailer TLD, used when extraction omits it. */
 const DOMAIN_CURRENCY: Array<[RegExp, string]> = [
-  [/\.com\.tr$|trendyol\.com/, "TRY"],
+  /*
+   * `.com.tr` çoğunu yakalıyor ama hepsini değil: LCW, Mavi, Koton ve Gratis
+   * Türkiye mağazası oldukları hâlde düz `.com` kullanıyor. Birinci katmana
+   * eklendiklerinde para birimi düşmüş oluyordu, yani TL fiyat para birimsiz
+   * görünüyordu.
+   */
+  [/\.com\.tr$|trendyol\.com|lcw\.com|mavi\.com|koton\.com|gratis\.com/, "TRY"],
   [/\.co\.uk$|asos\.com/, "GBP"],
   [/\.de$|\.fr$|\.es$|\.it$/, "EUR"],
 ];
@@ -149,6 +195,43 @@ export class ContextDevService {
   }
 
   /**
+   * Bir mağaza kümesinde arar ve mağaza başına en fazla bir aday döndürür.
+   *
+   * Mağaza başına tek sayfa, çünkü en iyi sıralanan mağazadan gelen birbirine
+   * benzeyen üç ilan, üç farklı mağazadan gelen üç seçenekten kötü.
+   */
+  private async searchTier(
+    query: string,
+    includeDomains: string[],
+    signal?: AbortSignal,
+  ): Promise<string[]> {
+    const search = await this.client.web.search(
+      {
+        query,
+        includeDomains,
+        numResults: 10,
+        timeoutMS: this.requestTimeoutMs,
+        tags: ["markas", "product-search"],
+      },
+      { signal },
+    );
+
+    const candidates: string[] = [];
+    const seenHosts = new Set<string>();
+
+    for (const result of search.results ?? []) {
+      const host = safeHostname(result.url);
+      if (!host || seenHosts.has(host)) continue;
+
+      seenHosts.add(host);
+      candidates.push(result.url);
+      if (candidates.length >= this.extractsPerQuery) break;
+    }
+
+    return candidates;
+  }
+
+  /**
    * Finds live, buyable products for a detection label.
    *
    * Two stages: `web.search` scoped to our retailer allowlist finds real
@@ -168,29 +251,35 @@ export class ContextDevService {
     if (cached) return cached;
 
     try {
-      const search = await this.client.web.search(
-        {
-          query: `${query} buy price`,
-          includeDomains: RETAILER_DOMAINS[category],
-          numResults: 10,
-          timeoutMS: this.requestTimeoutMs,
-          tags: ["markas", "product-search"],
-        },
-        { signal },
+      /*
+       * Önce Türkiye, bulunamazsa global.
+       *
+       * Tek bir aramada bütün mağazaları taramak, sıralamayı arama motoruna
+       * bırakmak demekti — ve o sıralama alışveriş yapanın nerede olduğunu
+       * bilmiyor. Türkiye'den bakan biri için TL fiyat ve yurt içi kargo veren bir
+       * bağlantı, aynı ürünün İngiltere bağlantısından iyi. Ama global katman da
+       * kapalı değil: bazı ürünler Türkiye'de gerçekten satılmıyor ve o durumda
+       * sonuçsuz bırakmaktansa gümrüklü bir seçenek göstermek daha faydalı.
+       *
+       * İkinci arama yalnızca birincisi yetersiz kaldığında yapılıyor, yani
+       * sorgu başına maliyet ancak gerektiğinde ikiye çıkıyor.
+       */
+      const local = await this.searchTier(
+        `${query} satın al fiyat`,
+        TURKISH_DOMAINS[category],
+        signal,
       );
 
-      // One page per retailer: a spread across merchants beats three near
-      // identical listings from whichever store ranked best.
-      const candidates: string[] = [];
-      const seenHosts = new Set<string>();
-
-      for (const result of search.results ?? []) {
-        const host = safeHostname(result.url);
-        if (!host || seenHosts.has(host)) continue;
-
-        seenHosts.add(host);
-        candidates.push(result.url);
-        if (candidates.length >= this.extractsPerQuery) break;
+      const candidates = [...local];
+      if (candidates.length < MIN_LOCAL_CANDIDATES) {
+        const global = await this.searchTier(
+          `${query} buy price`,
+          GLOBAL_DOMAINS[category],
+          signal,
+        );
+        for (const url of global) {
+          if (!candidates.includes(url)) candidates.push(url);
+        }
       }
 
       if (candidates.length === 0) return [];
