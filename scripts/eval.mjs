@@ -90,8 +90,16 @@ const FLOORS = {
    * has nothing to say about a garment that matches the backdrop it is standing in
    * front of. Documented rather than patched — one item is not enough to design a
    * guard against, and a guard designed on one item is a guess.
+   *
+   * Raised to 0.78 at 31 photographs / 74 items. 59/73 measured — the set nearly
+   * doubled and the score went *up*, because the new photographs found a rule that
+   * was wrong rather than a case that was hard: HSL saturation is unreliable at
+   * both ends of the lightness range, not just the top, so a white tee in shade and
+   * a near-black skirt both came out blue. `NO_HUE` in `colorFamily.ts` covers both
+   * ends now. The floor moves under the new measurement and above the old one,
+   * which is the only reason to move a floor.
    */
-  color: 0.76,
+  color: 0.78,
   query: 0.9,
   /*
    * The coarse-class path. Set to 1.0 because unlike colour there is nothing
@@ -125,8 +133,14 @@ const FLOORS = {
    * stronger result than 86% against 7% was — roughly 23 times chance instead of
    * 12 — and reading the two percentages side by side without that context would
    * be reading a harder exam as a worse student.
+   *
+   * Lowered again for the same reason at 74 items: 50% against a 1.4% chance rate,
+   * which is about 37 times chance where the 53-item run was 33 and the 37-item run
+   * 23. Every growth of the set makes this number fall and the result behind it
+   * improve, so the percentage on its own is not readable — the ratio to chance is
+   * printed next to it for exactly that reason.
    */
-  visualRetrieval: 0.57,
+  visualRetrieval: 0.45,
   family: 0.9,
   hotspotCount: 0.75,
   /*
@@ -182,6 +196,14 @@ const fmt = (v) => `${(v * 100).toFixed(0)}%`;
 
 let colorHits = 0;
 let colorTotal = 0;
+/**
+ * Items with no colour to grade — prints, whose ground colour nobody could name.
+ *
+ * Counted and printed rather than silently dropped. A denominator that quietly
+ * shrinks is how a score improves without the pipeline changing, and the number of
+ * items the eval declines to grade is itself something a reader should see.
+ */
+let colorUngraded = 0;
 const colorMisses = [];
 /** Per-item outcome, so the VLM section can be scored on the same items. */
 const regionHitById = new Map();
@@ -232,9 +254,17 @@ for (const testCase of cases) {
       .map((other) => other.box);
 
     const hex = await regionDominantColor(buffer, item.box, { size, exclude, foreground });
-    colorTotal += 1;
-
     const bucket = hex ? colorBucketOf(hex) : null;
+
+    if (item.color === null) {
+      colorUngraded += 1;
+      // `hit: null` rather than `false`: the VLM subset baseline must not treat an
+      // unasked question as a region-colour failure.
+      regionHitById.set(item.id, { hit: null, bucket, hex });
+      continue;
+    }
+
+    colorTotal += 1;
     regionHitById.set(item.id, { hit: bucket === item.color, bucket, hex });
 
     if (bucket === item.color) {
@@ -408,7 +438,10 @@ function readAttrFixture(raw) {
 }
 
 let vlmColorHits = 0;
+/** Recorded items whose colour is graded — prints are described but not scored. */
 let vlmColorTotal = 0;
+/** Every recorded item, which is what the noun and query metrics are asked about. */
+let vlmItemTotal = 0;
 let vlmDescribed = 0;
 let vlmNounHits = 0;
 let vlmQueryHits = 0;
@@ -444,8 +477,11 @@ for (const name of attrFixtures) {
   repeatRounds = Math.max(repeatRounds, recorded.repeat);
 
   for (const item of truth.items) {
-    vlmColorTotal += 1;
-    if (regionHitById.get(item.id)?.hit) regionHitsOnVlmItems += 1;
+    vlmItemTotal += 1;
+    if (item.color !== null) {
+      vlmColorTotal += 1;
+      if (regionHitById.get(item.id)?.hit) regionHitsOnVlmItems += 1;
+    }
     if (visionQueryById.get(item.id)) visionQueryHitsOnVlmItems += 1;
 
     const samples = recorded.samples.get(item.id) ?? [];
@@ -472,7 +508,9 @@ for (const name of attrFixtures) {
       const fellBackToRegion = regionHitById.get(item.id)?.hit ?? false;
       const fellBackToVision = visionQueryById.get(item.id) ?? false;
 
-      if (fellBackToRegion) vlmColorHits += 1;
+      if (item.color === null) {
+        // Nothing to inherit — the colour was never being graded on this item.
+      } else if (fellBackToRegion) vlmColorHits += 1;
       else vlmColorMisses.push({ id: item.id, want: item.color, got: "betimlenmedi, ölçülene düşüldü" });
 
       if (fellBackToVision) vlmQueryHits += 1;
@@ -489,10 +527,13 @@ for (const name of attrFixtures) {
 
     // --- colour -----------------------------------------------------------
     const bucket = colorBucketOf(attrs.colorHex);
-    const colorOk = bucket === item.color;
+    const colorOk = item.color !== null && bucket === item.color;
     if (HARD_COLOR_ITEMS.includes(item.id)) hardOutcome.set(item.id, colorOk);
 
-    if (colorOk) {
+    if (item.color === null) {
+      // Ungraded: a print has no ground colour, so whatever the model named for it
+      // is neither right nor wrong and belongs in no denominator.
+    } else if (colorOk) {
       vlmColorHits += 1;
       if (VERBOSE) {
         console.log(
@@ -776,16 +817,21 @@ const boxMedianIou = median(overlapSamples);
 const boxHalfRate = fractionAtLeast(overlapSamples, IOU_MATCH);
 
 const vlmColorScore = pct(vlmColorHits, vlmColorTotal);
-const vlmNounScore = pct(vlmNounHits, vlmColorTotal);
-const vlmQueryScore = pct(vlmQueryHits, vlmColorTotal);
+const vlmNounScore = pct(vlmNounHits, vlmItemTotal);
+const vlmQueryScore = pct(vlmQueryHits, vlmItemTotal);
 const regionSubsetScore = pct(regionHitsOnVlmItems, vlmColorTotal);
-const visionQuerySubsetScore = pct(visionQueryHitsOnVlmItems, vlmColorTotal);
+const visionQuerySubsetScore = pct(visionQueryHitsOnVlmItems, vlmItemTotal);
 const hallucinations = materialTally.wrong + patternTally.wrong;
 const gradedClaims = materialTally.graded + patternTally.graded;
 const hallucinationRate = pct(hallucinations, gradedClaims);
 
-console.log(`\n${cases.length} kombin / ${colorTotal} parça\n`);
-console.log(`  Bölge rengi      ${fmt(colorScore)}  (${colorHits}/${colorTotal})   taban ${fmt(FLOORS.color)}`);
+const itemTotal = cases.reduce((sum, entry) => sum + entry.items.length, 0);
+
+console.log(`\n${cases.length} kombin / ${itemTotal} parça\n`);
+console.log(
+  `  Bölge rengi      ${fmt(colorScore)}  (${colorHits}/${colorTotal})   taban ${fmt(FLOORS.color)}` +
+    (colorUngraded ? `, ${colorUngraded} parça desenli (renk notlanmıyor)` : ""),
+);
 for (const row of backdropDetail) {
   console.log(
     `      ${row.exampleId.padEnd(14)} ` +
@@ -794,15 +840,15 @@ for (const row of backdropDetail) {
         : `arka plan ${row.buckets} renk, %80 kapsama ${row.palette} kovada`),
   );
 }
-if (vlmColorTotal > 0) {
+if (vlmItemTotal > 0) {
   console.log(
     `  VLM rengi        ${fmt(vlmColorScore)}  (${vlmColorHits}/${vlmColorTotal})   taban ${fmt(regionSubsetScore)} (aynı parçalarda ölçülen renk)`,
   );
-  console.log(`  VLM ürün adı     ${fmt(vlmNounScore)}  (${vlmNounHits}/${vlmColorTotal})`);
+  console.log(`  VLM ürün adı     ${fmt(vlmNounScore)}  (${vlmNounHits}/${vlmItemTotal})`);
   console.log(
-    `  VLM sorgusu      ${fmt(vlmQueryScore)}  (${vlmQueryHits}/${vlmColorTotal})   taban ${fmt(visionQuerySubsetScore)} (aynı parçalarda Vision sınıfı)`,
+    `  VLM sorgusu      ${fmt(vlmQueryScore)}  (${vlmQueryHits}/${vlmItemTotal})   taban ${fmt(visionQuerySubsetScore)} (aynı parçalarda Vision sınıfı)`,
   );
-  console.log(`      ${vlmDescribed}/${vlmColorTotal} parça betimlendi`);
+  console.log(`      ${vlmDescribed}/${vlmItemTotal} parça betimlendi`);
 
   /*
    * The reason the stage exists, item by item. A single percentage would let three
@@ -1032,7 +1078,7 @@ const failures = [
    * call is actually paid for — a stage that describes colours beautifully and
    * still produces a worse search string has not earned it.
    */
-  vlmColorTotal > 0 &&
+  vlmItemTotal > 0 &&
     vlmQueryScore < visionQuerySubsetScore &&
     `VLM sorgusu ${fmt(vlmQueryScore)} < aynı parçalarda Vision sınıfı ${fmt(visionQuerySubsetScore)}`,
   /*

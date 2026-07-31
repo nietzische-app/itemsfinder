@@ -36,8 +36,13 @@ import type { ColorBucket } from "./colorBucket";
 export interface ItemExpectation {
   /** Catalogue item id, which is also the showcase item id. */
   id: string;
-  /** Colour family a human reading the photo would name. */
-  color: ColorBucket;
+  /**
+   * Colour family a human reading the photo would name, or `null` when the garment
+   * is a print with no ground colour anyone would type. See `photoCases.ts` for
+   * where the line sits — `null` is for prints, not for garments that are merely
+   * hard to measure.
+   */
+  color: ColorBucket | null;
   /**
    * Turkish token the generated search query must contain for the query to have
    * a chance of finding this garment on a Turkish storefront.

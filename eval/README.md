@@ -26,8 +26,8 @@ büyüklükleri değil, boru hattı değiştiğinde **hangi yöne gittikleri**.
 
 ## Kapsam — dürüst hâli
 
-**On dokuz kombin, kırk sekiz parça.** Dördü vitrin görünümü (kutular
-`SHOWCASE_LOOKS`'tan, etiketler `MOCK_SCENARIOS`'tan), on beşi
+**Otuz bir kombin, yetmiş dört parça.** Dördü vitrin görünümü (kutular
+`SHOWCASE_LOOKS`'tan, etiketler `MOCK_SCENARIOS`'tan), yirmi yedisi
 `eval/photoCases.ts` içinde duran ve demo kataloğuna hiç dokunmayan elle
 etiketlenmiş fotoğraflar.
 
@@ -40,10 +40,15 @@ Hâlâ bir kıyaslama seti sayılmaz ama artık duman testinden fazlası: stüdy
 sokak, tam boy ve yarım boy, açık ve koyu ten, gündüz ve yapay ışık, sade ve
 desenli, kadın ve erkek.
 
-Vaka eklemek: fotoğrafı `public/examples/`'a koy, ölçülmüş kutularla bir
-`SHOWCASE_LOOKS` kaydı ve eşleşen bir senaryo ekle, sonra `groundTruth.ts`
-içindeki `EXPECTATIONS`'a parça beklentilerini yaz. `npm run eval` otomatik
-alır.
+Vaka eklemek: fotoğrafı `public/examples/`'a koy ve `eval/photoCases.ts`'e
+kutularıyla birlikte bir kayıt ekle. `npm run eval` otomatik alır. Vitrin
+görünümlerinin yolu (`SHOWCASE_LOOKS` + `MOCK_SCENARIOS` + `groundTruth.ts`
+içindeki `EXPECTATIONS`) yalnızca demo kartı da olan dört kombin için duruyor;
+yeni ölçüm vakaları o yoldan geçmiyor.
+
+Kutuyu gözle kestirme: fotoğrafı 0..1 ızgara altında bas, kutuyu ızgaradan oku,
+sonra kutuyu fotoğrafın üstüne geri çizip bak. Bir onda bir kayan kutu yanlış
+pikselleri çok isabetli ölçer, ve bu adım atlandığında yakalanmıyor.
 
 Kutuları elle ölçmek yerine `tools/box-editor.html`'i tarayıcıda aç: fotoğrafı
 sürükle, kutuları çiz, ok tuşlarıyla piksel piksel düzelt, sonra **groundTruth.ts**
@@ -56,11 +61,24 @@ Malzeme ve desen alanlarını **boş bırakmak normaldir**: editör onları `nul
 olarak yazar ve eval `null` olanı derecelendirmez. Fotoğraftan söyleyemediğin bir
 kumaşı yazmak, ölçüme cevap uydurmaktır.
 
+**Renk de `null` olabilir, ama yalnızca desenliler için.** Siyah-kiremit bir
+kazayağı ceket #99948d ölçüyor — dokunduğu iki ipliğin hiçbirini adlandırmayan
+sıcak bir gri — ve kimse "gri kazayağı" aramıyor. Böyle bir parçada renk
+notlanmaz; sorgu token'ı, Vision sınıfı ve **desen** yine notlanır, yani vaka
+fotoğrafın söylediği her şeyi ölçer ve söylemediği hiçbir şeyi ölçmez.
+
+Bunu "boru hattının zorlandığı parçayı çıkarma" olarak kullanma. Koyu bordo,
+koyu indigo, montun altından görünen bir pantolon şeridi — bunların insanın
+söyleyebileceği bir cevabı var, ve boru hattı yanlış diye çıkarmak evali kimseye
+bir şey söyleyemez hâle getirir. Kaç parçanın notlanmadığı özet satırında
+yazıyor, çünkü sessizce küçülen bir payda, boru hattı değişmeden puanın
+yükselmesinin yoludur.
+
 ## Metrikler
 
 | Metrik | Ne ölçüyor | Taban |
 | --- | --- | --- |
-| Bölge rengi | Ölçülen baskın rengin, insanın adlandıracağı renk ailesiyle eşleşmesi (fon + ten elenerek) | %76 |
+| Bölge rengi | Ölçülen baskın rengin, insanın adlandıracağı renk ailesiyle eşleşmesi (fon + ten elenerek) | %78 |
 | VLM rengi | Kırpıma bakan modelin verdiği rengin aynı eşleşmeyi tutması (fixture ister) | aynı parçalarda ölçülen renk |
 | VLM ürün adı | Modelin verdiği Türkçe ürün adının beklenen token'ı taşıması (fixture ister) | — |
 | VLM sorgusu | Modelin gördüklerinden kurulan **tam sorgunun** spesifik token'ı taşıması (fixture ister) | aynı parçalarda Vision sınıfı |
@@ -68,7 +86,7 @@ kumaşı yazmak, ölçüme cevap uydurmaktır.
 | Malzeme / Desen | Modelin öne sürdüğü özniteliklerin fotoğrafla tutması — doğru / çekimser / **uydurma** (fixture ister) | henüz yok |
 | Sorgu token'ı | Üretilen aramanın, parçayı bulmaya yetecek Türkçe kelimeyi taşıması | %90 |
 | Vision sınıfı | **Yalnızca** Vision'ın İngilizce sınıfından üretilen sorgunun Türkçe terimi taşıması ve İngilizce kelime bırakmaması | %100 |
-| Görsel erişim | Bir parçanın sıkı kırpımının, **tüm** gevşek kırpımlar arasından kendi eşini bulması | %57 (şans, set boyutundan hesaplanıyor) |
+| Görsel erişim | Bir parçanın sıkı kırpımının, **tüm** gevşek kırpımlar arasından kendi eşini bulması | %45 (şans, set boyutundan hesaplanıyor) |
 | Aile tutarlılığı | Sınıflandırıcının kataloğu kendi içinde tutarlı etiketlemesi | %90 |
 | Hotspot sayısı | Temizlenmiş tespit sayısının beklenene ±1 yakınlığı (fixture ister) | %75 |
 | Kutu bulma | Etiketli parçaların kaçının bir tespitçe IoU ≥ 0.5 ile sahiplenildiği, **bire-bir** (fixture ister) | henüz yok |

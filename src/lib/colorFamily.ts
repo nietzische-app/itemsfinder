@@ -48,6 +48,41 @@ function warmNeutral(r: number, b: number): boolean {
   return r - b >= 16 / 255;
 }
 
+/**
+ * Channel spread under which there is no hue to read, at any lightness.
+ *
+ * Twenty units out of 255 was already documented below as the noise floor — it is
+ * the spread of a white sneaker photographed in open shade — but the rule that used
+ * it only applied above lightness 0.82, and HSL saturation is unreliable at *both*
+ * ends for the same reason: the `1 - |2L - 1|` denominator collapses toward zero as
+ * lightness approaches either extreme, so a tiny spread reports a large saturation.
+ *
+ * Two garments in the eval set fell through the gap the lightness condition left.
+ * A white tee in shade measures #c6d2da — lightness 0.816, four thousandths under
+ * the near-white gate, spread of exactly twenty — and came out "mavi". A navy skirt
+ * measures #040c12 — lightness 0.043, spread of fourteen — and reported 0.64
+ * saturation, enough to escape the dark gate, and also came out "mavi". Neither is
+ * blue to anyone looking at the photograph.
+ *
+ * Twenty-one rather than twenty so the observed noise floor is inside the rule
+ * rather than exactly on its edge.
+ */
+const NO_HUE = 21 / 255;
+
+/**
+ * Where a pixel with no hue lands, by lightness alone.
+ *
+ * Extracted from the saturation branch below so the spread gate and the saturation
+ * gate cannot answer the same question differently — the one thing worse than a
+ * neutral called blue is two rules that disagree about which neutral it is.
+ */
+function neutralFamily(r: number, b: number, lightness: number): ColorFamily {
+  if (lightness < 0.28) return "koyu";
+  if (warmNeutral(r, b) && lightness > 0.35) return "bej";
+  if (lightness < 0.6) return "gri";
+  return "beyaz";
+}
+
 export function colorFamilyOf(hex: string): ColorFamily {
   const value = hex.replace("#", "");
   const r = parseInt(value.slice(0, 2), 16) / 255;
@@ -59,6 +94,10 @@ export function colorFamilyOf(hex: string): ColorFamily {
   const lightness = (max + min) / 2;
   const delta = max - min;
   const saturation = delta === 0 ? 0 : delta / (1 - Math.abs(2 * lightness - 1));
+
+  // No hue at all, whatever the arithmetic says. Runs first, because both of the
+  // gates below trust a saturation this case is the counter-example to.
+  if (delta < NO_HUE) return neutralFamily(r, b, lightness);
 
   /*
    * Lightness dominates at the extremes, but only when the hue is weak. A dark
@@ -91,9 +130,7 @@ export function colorFamilyOf(hex: string): ColorFamily {
      * all three. Below 0.35 there is not enough light left to call a hue either
      * way, so that stays dark grey.
      */
-    if (warmNeutral(r, b) && lightness > 0.35) return "bej";
-    if (lightness < 0.6) return "gri";
-    return "beyaz";
+    return neutralFamily(r, b, lightness);
   }
 
   // Hue in degrees.

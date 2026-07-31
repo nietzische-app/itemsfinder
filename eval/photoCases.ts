@@ -39,8 +39,23 @@ export interface PhotoCaseItem {
   /** Turkish garment noun. */
   itemType: string;
   box: BoundingBox;
-  /** Colour family a person reading the photograph would name. */
-  color: ColorBucket;
+  /**
+   * Colour family a person reading the photograph would name, or `null` when the
+   * garment does not have one.
+   *
+   * `null` is for prints, not for hard cases. A black-and-rust houndstooth coat, a
+   * tropical-leaf dress, a blue-and-pink floral blouse — these have no ground
+   * colour a shopper would type, and picking one so the row can be scored would be
+   * recording a preference as ground truth. Every one of them still carries a
+   * `queryToken`, a `visionClass` and a `pattern`, so the case measures everything
+   * the photograph actually settles and nothing it does not.
+   *
+   * A garment that is *hard* to measure keeps its colour. Dark bordo, dark indigo,
+   * a trouser strip under a puffer — those have an answer a person can state, and
+   * withdrawing them because the pipeline gets them wrong is how an eval stops
+   * being able to tell anyone anything.
+   */
+  color: ColorBucket | null;
   /** Turkish token the generated query must carry to have a chance of finding it. */
   queryToken: string;
   /** The coarse English class Cloud Vision returns for this kind of item. */
@@ -611,6 +626,504 @@ export const PHOTO_CASES: PhotoCase[] = [
         visionToken: "ayakkabı",
         material: "süet",
         pattern: null,
+      },
+    ],
+  },
+  {
+    id: "cream-puffer",
+    image: "/examples/reynier-carl-87m1_NfKld4-unsplash.jpg",
+    credit: "Reynier Carl / Unsplash",
+    items: [
+      {
+        id: "cp-puffer",
+        label: "Krem Oversize Şişme Mont",
+        itemType: "Mont",
+        box: { x: 0.1, y: 0.3, width: 0.8, height: 0.55 },
+        color: "beyaz",
+        queryToken: "mont",
+        visionClass: "Jacket",
+        visionToken: "ceket",
+        material: null,
+        pattern: "düz",
+      },
+      /*
+       * The strip of trouser below the hem, and the one case in the set the
+       * backdrop learner gets wrong on purpose: the jacket box covers the middle
+       * of the frame, so everything the learner has left to learn from is grey
+       * wall *and* dark floor, and it files the trousers under scenery. Sampling
+       * the raw box measures #110b08 — the trousers are exactly where this says
+       * they are. Kept because an eval that only carries cases the pipeline
+       * survives stops being able to tell anyone anything.
+       */
+      {
+        id: "cp-trousers",
+        label: "Koyu Kahve Kadife Pantolon",
+        itemType: "Pantolon",
+        box: { x: 0.34, y: 0.91, width: 0.24, height: 0.09 },
+        color: "koyu",
+        queryToken: "pantolon",
+        visionClass: "Trousers",
+        visionToken: "pantolon",
+        material: "kadife",
+        pattern: "düz",
+      },
+    ],
+  },
+  {
+    id: "white-shirt-flare",
+    image: "/examples/vladimir-fedotov-NJAFmCuIx1s-unsplash.jpg",
+    credit: "Vladimir Fedotov / Unsplash",
+    items: [
+      {
+        id: "wf-shirt",
+        label: "Beyaz Saten Gömlek",
+        itemType: "Gömlek",
+        box: { x: 0.36, y: 0.38, width: 0.26, height: 0.13 },
+        color: "beyaz",
+        queryToken: "gömlek",
+        visionClass: "Top",
+        visionToken: "bluz",
+        material: null,
+        pattern: "düz",
+      },
+      /*
+       * The clearest demonstration in the set of why the foreground filter exists:
+       * a dark trouser photographed against a white-on-white interior. The raw box
+       * measures #d5d6d9 — the wall wins the modal bucket outright — and the same
+       * box behind the filter measures #2d3649. Two answers, opposite families,
+       * one box.
+       */
+      {
+        id: "wf-trousers",
+        label: "Lacivert İspanyol Paça Pantolon",
+        itemType: "Pantolon",
+        box: { x: 0.46, y: 0.55, width: 0.22, height: 0.33 },
+        color: "koyu",
+        queryToken: "pantolon",
+        visionClass: "Trousers",
+        visionToken: "pantolon",
+        material: null,
+        pattern: "düz",
+      },
+    ],
+  },
+  {
+    id: "olive-utility",
+    image: "/examples/oleg-ivanov-HvQTy1M8Z5M-unsplash.jpg",
+    credit: "Oleg Ivanov / Unsplash",
+    items: [
+      /*
+       * Only the trousers. The ribbed top above them measures #97a8ae, which is a
+       * pale blue-grey sitting on the line between "gri" and "beyaz" — naming it
+       * either way would be recording a preference as ground truth.
+       */
+      {
+        id: "ou-trousers",
+        label: "Haki Kadife Pantolon",
+        itemType: "Pantolon",
+        box: { x: 0.4, y: 0.69, width: 0.22, height: 0.07 },
+        color: "koyu",
+        queryToken: "pantolon",
+        visionClass: "Trousers",
+        visionToken: "pantolon",
+        material: "kadife",
+        pattern: "düz",
+      },
+    ],
+  },
+  {
+    id: "burgundy-jacquard",
+    image: "/examples/bulbul-ahmed-20XqbpJJn0U-unsplash.jpg",
+    credit: "Bulbul Ahmed / Unsplash",
+    items: [
+      /*
+       * Bordo, and the one colour in the set that falls through the crack the
+       * dark-saturated escape hatch was cut for. #4b1b2a reports 0.31 saturation,
+       * under the 0.55 that lets navy denim keep its hue, so it lands in "koyu".
+       * Labelled by the word a shopper types — "bordo ceket" — rather than by the
+       * bucket the rule happens to reach, which is the only way this can ever
+       * report that the rule is short.
+       */
+      {
+        id: "bj-blazer",
+        label: "Bordo Jakarlı Blazer",
+        itemType: "Blazer",
+        box: { x: 0.28, y: 0.3, width: 0.12, height: 0.16 },
+        color: "kirmizi",
+        queryToken: "blazer",
+        visionClass: "Outerwear",
+        visionToken: "ceket",
+        material: null,
+        pattern: null,
+      },
+      {
+        id: "bj-shirt",
+        label: "Siyah Klasik Gömlek",
+        itemType: "Gömlek",
+        box: { x: 0.5, y: 0.3, width: 0.09, height: 0.14 },
+        color: "koyu",
+        queryToken: "gömlek",
+        visionClass: "Top",
+        visionToken: "bluz",
+        material: null,
+        pattern: "düz",
+      },
+      {
+        id: "bj-trousers",
+        label: "Siyah Klasik Pantolon",
+        itemType: "Pantolon",
+        box: { x: 0.26, y: 0.58, width: 0.09, height: 0.1 },
+        color: "koyu",
+        queryToken: "pantolon",
+        visionClass: "Trousers",
+        visionToken: "pantolon",
+        material: null,
+        pattern: "düz",
+      },
+    ],
+  },
+  {
+    id: "orange-flares",
+    image: "/examples/edward-howell-EAWKyzfXw44-unsplash.jpg",
+    credit: "Edward Howell / Unsplash",
+    items: [
+      /*
+       * Orange, which the family taxonomy files under "sari" — and that is not the
+       * classifier flattering itself. `COLOR_NAMES` carries "Turuncu" at
+       * rgb(235,130,40), and putting that swatch through the same rule also gives
+       * "sari", so a listing titled "Turuncu Pantolon" and this measurement land in
+       * the same bucket and never contradict each other. The generated query still
+       * says "Turuncu" — the coarse family is only ever asked whether two colours
+       * could be the same garment.
+       *
+       * The blouse above is a green-and-cream ditsy floral with no ground colour a
+       * person could name, so it is not labelled.
+       */
+      {
+        id: "of-trousers",
+        label: "Turuncu İspanyol Paça Pantolon",
+        itemType: "Pantolon",
+        box: { x: 0.34, y: 0.48, width: 0.16, height: 0.35 },
+        color: "sari",
+        queryToken: "pantolon",
+        visionClass: "Trousers",
+        visionToken: "pantolon",
+        material: null,
+        pattern: "düz",
+      },
+    ],
+  },
+  {
+    id: "rust-workwear",
+    image: "/examples/emmanuel-akinte-XlcnwnD_1uw-unsplash.jpg",
+    credit: "Emmanuel Akinte / Unsplash",
+    items: [
+      {
+        id: "rw-jacket",
+        label: "Kiremit Rengi İşçi Ceketi",
+        itemType: "Ceket",
+        box: { x: 0.385, y: 0.33, width: 0.085, height: 0.14 },
+        color: "kirmizi",
+        queryToken: "ceket",
+        visionClass: "Jacket",
+        visionToken: "ceket",
+        material: null,
+        pattern: "düz",
+      },
+      {
+        id: "rw-trousers",
+        label: "Kiremit Rengi Pantolon",
+        itemType: "Pantolon",
+        box: { x: 0.5, y: 0.6, width: 0.08, height: 0.19 },
+        color: "kirmizi",
+        queryToken: "pantolon",
+        visionClass: "Trousers",
+        visionToken: "pantolon",
+        material: null,
+        pattern: "düz",
+      },
+      {
+        id: "rw-sneakers",
+        label: "Beyaz Deri Sneaker",
+        itemType: "Sneaker",
+        box: { x: 0.51, y: 0.84, width: 0.09, height: 0.05 },
+        color: "beyaz",
+        queryToken: "sneaker",
+        visionClass: "Footwear",
+        visionToken: "ayakkabı",
+        material: null,
+        pattern: null,
+      },
+    ],
+  },
+  {
+    id: "houndstooth-coat",
+    image: "/examples/ethan-rougon-9wz3oPSZb8s-unsplash.jpg",
+    credit: "Ethan Rougon / Unsplash",
+    items: [
+      /*
+       * The first case in the set with no colour to grade. A black-rust-cream
+       * houndstooth averages to #99948d, a warm grey that names neither of the two
+       * yarns it is woven from, and no shopper types "gri kazayağı". The pattern is
+       * the whole point of the garment and it is unambiguous, so that is what this
+       * row asserts.
+       *
+       * Recorded as "ekose" rather than the narrower "kazayağı" because ekose is
+       * the only check word `retailVocabulary` can reach — plaid, checked and
+       * tartan all map to it. Expecting a term the vocabulary cannot produce would
+       * score a correct answer as a hallucination.
+       */
+      {
+        id: "hc-coat",
+        label: "Ekose Desenli Uzun Ceket",
+        itemType: "Ceket",
+        box: { x: 0.44, y: 0.3, width: 0.14, height: 0.12 },
+        color: null,
+        queryToken: "ceket",
+        visionClass: "Coat",
+        visionToken: "kaban",
+        material: null,
+        pattern: "ekose",
+      },
+      {
+        id: "hc-turtleneck",
+        label: "Krem Balıkçı Yaka Kazak",
+        itemType: "Kazak",
+        box: { x: 0.33, y: 0.45, width: 0.16, height: 0.14 },
+        color: "beyaz",
+        queryToken: "kazak",
+        visionClass: "Top",
+        visionToken: "bluz",
+        material: "triko",
+        pattern: "düz",
+      },
+      /*
+       * Dark indigo, and a second look at the escape hatch that keeps navy denim
+       * out of "koyu". #112a36 reports 0.52 saturation against the 0.55 the rule
+       * asks for — the swatch the hatch was cut for (#011b2a) reports 0.94, so the
+       * gap is wide and this sits in it. A person looking at this photograph sees
+       * blue jeans, which is what is recorded.
+       */
+      {
+        id: "hc-jeans",
+        label: "Koyu Mavi Yüksek Bel Jean",
+        itemType: "Jean",
+        box: { x: 0.36, y: 0.66, width: 0.16, height: 0.12 },
+        color: "mavi",
+        queryToken: "jean",
+        visionClass: "Jeans",
+        visionToken: "jean",
+        material: "denim",
+        pattern: "düz",
+      },
+    ],
+  },
+  {
+    id: "mustard-bandeau",
+    image: "/examples/ethan-smith-XTfkVNU5DX4-unsplash.jpg",
+    credit: "Ethan Smith / Unsplash",
+    items: [
+      {
+        id: "mb-jacket",
+        label: "Siyah Denim Ceket",
+        itemType: "Ceket",
+        box: { x: 0.31, y: 0.6, width: 0.07, height: 0.12 },
+        color: "koyu",
+        queryToken: "ceket",
+        visionClass: "Jacket",
+        visionToken: "ceket",
+        material: "denim",
+        pattern: "düz",
+      },
+      {
+        id: "mb-top",
+        label: "Hardal Straplez Büstiyer",
+        itemType: "Büstiyer",
+        box: { x: 0.4, y: 0.65, width: 0.18, height: 0.08 },
+        color: "sari",
+        queryToken: "büstiyer",
+        visionClass: "Top",
+        visionToken: "bluz",
+        material: null,
+        pattern: "düz",
+      },
+      {
+        id: "mb-skirt",
+        label: "Siyah Uzun Etek",
+        itemType: "Etek",
+        box: { x: 0.36, y: 0.82, width: 0.24, height: 0.12 },
+        color: "koyu",
+        queryToken: "etek",
+        visionClass: "Skirt",
+        visionToken: "etek",
+        material: null,
+        pattern: "düz",
+      },
+      /*
+       * The straw fedora above is not labelled: hat straw measures #946f53, which
+       * the Kovač rules classify as skin, so the foreground filter removes the
+       * garment and the row would be measuring the filter rather than the hat.
+       */
+    ],
+  },
+  {
+    id: "navy-suit-tie",
+    image: "/examples/gregory-hayes-h5cd51KXmRQ-unsplash.jpg",
+    credit: "Gregory Hayes / Unsplash",
+    items: [
+      /*
+       * "Lacivert Takım Ceketi" appears twice in this file with two different
+       * colours, and that is on purpose. `ns-jacket` is photographed in daylight
+       * and is unmistakably blue cloth; this one is lit so low it measures #08060a
+       * — four units of channel spread, which is black. The label records what the
+       * *photograph* shows, not what the garment is called in a catalogue, because
+       * what the photograph shows is the only thing the pipeline is ever given.
+       * Both crops were put side by side and looked at before either was written.
+       */
+      {
+        id: "nt-suit",
+        label: "Lacivert Takım Ceketi",
+        itemType: "Ceket",
+        box: { x: 0.24, y: 0.5, width: 0.12, height: 0.2 },
+        color: "koyu",
+        queryToken: "ceket",
+        visionClass: "Outerwear",
+        visionToken: "ceket",
+        material: null,
+        pattern: "düz",
+      },
+      {
+        id: "nt-shirt",
+        label: "Açık Mavi Klasik Gömlek",
+        itemType: "Gömlek",
+        box: { x: 0.425, y: 0.37, width: 0.06, height: 0.045 },
+        color: "mavi",
+        queryToken: "gömlek",
+        visionClass: "Top",
+        visionToken: "bluz",
+        material: null,
+        pattern: "düz",
+      },
+      /*
+       * A navy ground under pale blue flowers — unlike the houndstooth, the ground
+       * colour here is nameable, so this row asserts both. It is the only item in
+       * the set carrying a pattern that is neither "düz" nor the leopard scarf, and
+       * "çiçekli" is a term `retailVocabulary` reaches from "floral".
+       */
+      {
+        id: "nt-tie",
+        label: "Mavi Çiçek Desenli Kravat",
+        itemType: "Kravat",
+        box: { x: 0.49, y: 0.48, width: 0.05, height: 0.15 },
+        color: "mavi",
+        queryToken: "kravat",
+        visionClass: "Tie",
+        visionToken: "kravat",
+        material: null,
+        pattern: "çiçekli",
+      },
+    ],
+  },
+  {
+    id: "white-tee-culottes",
+    image: "/examples/jonas-horsch-ni2uHFtetzE-unsplash.jpg",
+    credit: "Jonas Horsch / Unsplash",
+    items: [
+      /*
+       * A white tee whose box is over half arm and shoulder: the raw box measures
+       * #b9988c, a skin tone, and behind the filter it measures #e4eef6. The second
+       * demonstration in the set of the skin rule paying for itself.
+       */
+      {
+        id: "wt-tee",
+        label: "Beyaz Kolsuz Tişört",
+        itemType: "Tişört",
+        box: { x: 0.3, y: 0.24, width: 0.16, height: 0.14 },
+        color: "beyaz",
+        queryToken: "tişört",
+        visionClass: "Top",
+        visionToken: "bluz",
+        material: null,
+        pattern: "düz",
+      },
+      /*
+       * Tailored navy, recorded as "koyu" rather than "mavi" — the mirror of
+       * `hc-jeans`. At #040c12 the lightness is 4%, and a hue read off a spread of
+       * fourteen units at that lightness is arithmetic, not a colour anyone can
+       * see; the garment reads black in the photograph. Denim keeps "mavi" because
+       * denim reads blue. The rule is what a person sees, not what the hue says.
+       */
+      {
+        id: "wt-skirt",
+        label: "Lacivert Uzun Etek",
+        itemType: "Etek",
+        box: { x: 0.3, y: 0.52, width: 0.2, height: 0.15 },
+        color: "koyu",
+        queryToken: "etek",
+        visionClass: "Skirt",
+        visionToken: "etek",
+        material: null,
+        pattern: "düz",
+      },
+    ],
+  },
+  {
+    id: "ringer-tee",
+    image: "/examples/joshua-rawson-harris-7mfSzu6_qvA-unsplash.jpg",
+    credit: "Joshua Rawson-Harris / Unsplash",
+    items: [
+      /*
+       * White cloth in open shade, and the tightest near-miss in the set: #c6d2da
+       * is lightness 0.816 against the 0.82 the near-white gate asks for, and
+       * saturation 0.21 against the 0.20 the neutral gate allows. Four thousandths
+       * short in one direction and one hundredth over in the other, so a white
+       * tee-shirt comes out blue.
+       *
+       * The denim shorts below are not labelled — washed indigo in shadow measures
+       * #899aa4, and whether that is "açık mavi" or "gri" is a preference.
+       */
+      {
+        id: "rt-tee",
+        label: "Beyaz Bisiklet Yaka Tişört",
+        itemType: "Tişört",
+        box: { x: 0.4, y: 0.47, width: 0.1, height: 0.1 },
+        color: "beyaz",
+        queryToken: "tişört",
+        visionClass: "Top",
+        visionToken: "bluz",
+        material: null,
+        pattern: null,
+      },
+    ],
+  },
+  {
+    id: "red-graphic-sweat",
+    image: "/examples/katsiaryna-endruszkiewicz-BteCp6aq4GI-unsplash.jpg",
+    credit: "Katsiaryna Endruszkiewicz / Unsplash",
+    items: [
+      {
+        id: "rg-sweat",
+        label: "Kırmızı Baskılı Sweatshirt",
+        itemType: "Sweatshirt",
+        box: { x: 0.24, y: 0.5, width: 0.14, height: 0.1 },
+        color: "kirmizi",
+        queryToken: "sweatshirt",
+        visionClass: "Top",
+        visionToken: "bluz",
+        material: null,
+        pattern: null,
+      },
+      {
+        id: "rg-jacket",
+        label: "Siyah Oversize Ceket",
+        itemType: "Ceket",
+        box: { x: 0.64, y: 0.55, width: 0.14, height: 0.2 },
+        color: "koyu",
+        queryToken: "ceket",
+        visionClass: "Jacket",
+        visionToken: "ceket",
+        material: null,
+        pattern: "düz",
       },
     ],
   },

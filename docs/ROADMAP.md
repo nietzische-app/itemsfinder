@@ -143,9 +143,27 @@ eşleşmeleri için %100; her bağlantı elle açılıp doğru ürüne gittiği 
 
 Bu katman özellik üretmiyor. **Diğer her şeyin inandırıcılığı buna bağlı.**
 
-### 1.1 Eval setini büyütmek
+### 1.1 Eval setini büyütmek — ✅
 
-**Durum: 4 fotoğraf, 14 parça.** Bu bir kıyaslama seti değil, duman testi — ve
+**Durum: 31 kombin, 74 parça.** Bitti ölçütü karşılandı: `npm run eval` 31 kombin
+raporluyor ve tabanlar yeni sete göre yeniden türetildi (renk %76 → %78, görsel
+erişim %57 → %45 — ikincisi düştü çünkü aday havuzu 37'den 74'e çıktı, şans oranı
+%2,7'den %1,4'e indi ve aynı iş şansın 23 katından 37 katına yükseldi).
+
+Büyüyen set üç sınıflandırıcı hatası buldu; üçü de düzeltildi ve hiçbiri tek bir
+parçaya bakılarak bulunamazdı: orta parlaklıktaki sıcak nötrler griye gidiyordu,
+koyu kahve deri sarıya gidiyordu, ve HSL doygunluğunun yalnızca üst uçta değil
+**iki uçta da** güvenilmez olduğu görülmemişti — gölgedeki beyaz bir tişört
+(#c6d2da) ve neredeyse siyah bir etek (#040c12) ikisi de "mavi" çıkıyordu
+(`NO_HUE`, `colorFamily.ts`).
+
+Ayrıca renk artık `null` olabiliyor: yer rengi olmayan desenliler (kazayağı
+ceket, tropik baskı elbise) sorgu token'ı, Vision sınıfı ve desenle notlanıyor,
+renkle notlanmıyor. Kaç parçanın notlanmadığı özet satırında yazıyor.
+
+Aşağısı setin küçük olduğu dönemin kaydı olarak duruyor.
+
+**Eski durum: 4 fotoğraf, 14 parça.** Bu bir kıyaslama seti değil, duman testi — ve
 B-6…B-9'da verilen her karar bu 14 parçaya karşı ölçüldü. Renk metriğindeki
 %71'in %64 mü %78 mi olduğunu 14 örnek söyleyemez; iki parçanın yönü değişse
 skor 14 puan zıplıyor.
@@ -539,7 +557,6 @@ sağlayabileceğin bir girdiyi** bekliyor — anahtar, fotoğraf, veri ya da bir
 | --- | --- |
 | 0.1 | `UPSTASH_REDIS_REST_URL` / `_TOKEN` — onlarsız sayaçlar süreç-yerel |
 | 0.3 | `VERIFIED_PDP_URLS` (elle doğrulanmış bağlantılar), sonra `npm run fetch:images` |
-| 1.1 | 19/30 kombin etiketlendi; `public/examples/` içinde 29 fotoğraf daha bekliyor |
 | 1.2 | `GOOGLE_CLOUD_VISION_API_KEY=... npm run eval:record` |
 | 1.3 | `ANTHROPIC_API_KEY=... npm run eval:record-attrs` |
 | 2.1b | Ağı açık bir makine — model ağırlıkları buradan indirilemiyor |
@@ -550,31 +567,36 @@ sağlayabileceğin bir girdiyi** bekliyor — anahtar, fotoğraf, veri ya da bir
 Ölçülen durum:
 
 ```
-19 kombin / 48 parça
-Bölge rengi      77%  (37/48)   taban 76%
-Sorgu token'ı   100%  (48/48)   taban 90%
-Vision sınıfı   100%  (48/48)   taban 100%
-Görsel erişim    63%  (30/48)   taban 57%, şans %2
-Aile tutarlılığı 100%  (48/48)   taban 90%
+31 kombin / 74 parça
+Bölge rengi      81%  (59/73)   taban 78%, 1 parça desenli (renk notlanmıyor)
+Sorgu token'ı   100%  (74/74)   taban 90%
+Vision sınıfı   100%  (74/74)   taban 100%
+Görsel erişim    50%  (37/74)   taban 45%, şans %1,4
+Aile tutarlılığı 100%  (74/74)   taban 90%
 Erişilebilirlik  61/61 kontrol, altı sayfa
 Bozulma yolları  20/20 kontrol
+Uçtan uca       18/18 kontrol, 390px ve 1440px
 ```
 
-Set 4 kombinden 19'a çıktı ve **yüzdeler düştü** — bu bir gerileme değil, sınavın
-zorlaşması. Görsel erişimde her kırpım artık 14 değil 48 aday arasından kendini
-buluyor (şans %7'den %2'ye); renkte ise set artık hardal, mor, camel, keten ve
-gölgedeki beyaz içeriyor, yani ilk dördün hiç sormadığı soruları soruyor. Kalan
-sapmaların hepsi belgelenmiş sınıflardan: gölgedeki denim, kutusu ağırlıklı
-arka plan olan ince parçalar, ve fotoğrafın kendisinin karar vermediği
-yakın-nötr tonlar.
+Set 4 kombinden 31'e çıktı. **Renk yükseldi, görsel erişim düştü, ikisi de aynı
+şeyi söylüyor.** Renk yükseldi çünkü büyüyen set bir kuralın yanlış olduğunu
+gösterdi — HSL doygunluğu yalnızca üst uçta değil iki uçta da güvenilmez, ve
+düzeltilince gölgedeki beyaz tişört ile neredeyse siyah etek ikisi birden
+yerine oturdu. Görsel erişim düştü çünkü her kırpım artık 14 değil 74 aday
+arasından kendini buluyor: şans %7'den %1,4'e indi, aynı iş şansın 12 katından
+37 katına çıktı. Yüzdeyi tek başına okumak, zorlaşan sınavı kötüleşen öğrenci
+sanmaktır.
+
+Kalan sapmaların hepsi belgelenmiş sınıflardan: gölgedeki denim, kutusu
+ağırlıklı arka plan olan ince parçalar, fotoğrafın kendisinin karar vermediği
+yakın-nötr tonlar, ve doygunluk eşiğinin altında kalan koyu bordo.
 
 ## Sıralama önerisi
 
 1. ~~**0.2** (görsel sertleştirme)~~ — ✅
 2. ~~**0.1** (hız sınırı)~~ — ✅ kod; yalnızca Upstash kimlikleri kaldı.
-3. **1.1** (eval seti) — **sıradaki en yüksek kaldıraç ve tek gerçek engel.**
-   Diğer her ölçüm 14 parçaya bakıyor; bu sayı büyümeden ne 1.2/1.3'ün tabanları
-   ne de 2.1'in sabitleri güvenilir biçimde ayarlanabilir.
+3. ~~**1.1** (eval seti)~~ — ✅ 31 kombin / 74 parça. Katman 1'in kapısıydı;
+   1.2/1.3'ün tabanları ve 2.1'in sabitleri artık 14 değil 74 parçaya bakıyor.
 4. ~~**1.2 + 1.3** (fixture'lar)~~ — ✅ kod; anahtarlar verilince tek oturum.
 5. **0.3** (bağlantı + fotoğraf) — veri işi, paralel yürüyebilir; ürünü
    "satın alınabilir" yapan tek madde.

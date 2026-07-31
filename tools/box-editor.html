@@ -167,6 +167,13 @@
           <option>koyu</option><option>beyaz</option><option>gri</option><option>bej</option>
           <option>kahve</option><option>kirmizi</option><option>pembe</option><option>mor</option>
           <option>mavi</option><option>yesil</option><option>sari</option>
+          <!--
+            Desenli parçalar için renk notlanmaz: siyah-kiremit bir kazayağı ceket
+            hiçbir ipliğini adlandırmayan bir gri ölçer. Boş değer `color: null`
+            yazdırır. Boru hattının zorlandığı parçayı susturmak için değil,
+            yalnızca yer rengi olmayan desenliler için.
+          -->
+          <option value="">— desenli, renk yok —</option>
         </select></label>
       <label style="flex:1"><span>sorgu token'ı</span>
         <input id="f-token" placeholder="ceket"></label>
@@ -527,7 +534,7 @@ function showcaseCode() {
 
 function truthCode() {
   const rows = state.boxes.map((b) =>
-    `    { id: ${JSON.stringify(b.id || "TODO")}, color: ${JSON.stringify(b.color)}, ` +
+    `    { id: ${JSON.stringify(b.id || "TODO")}, color: ${b.color ? JSON.stringify(b.color) : "null"}, ` +
     `queryToken: ${JSON.stringify(b.token || "TODO")}, ` +
     `visionClass: ${JSON.stringify(b.vclass || "TODO")}, ` +
     `visionToken: ${JSON.stringify(b.vtoken || b.token || "TODO")}, ` +
