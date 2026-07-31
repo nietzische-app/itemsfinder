@@ -23,6 +23,26 @@ const ROOT = new URL("..", import.meta.url).pathname;
 const { VERIFIED_PDP_URLS, VERIFIED_PDP_IMAGES } = await import("@/data/verifiedProductUrls");
 const { familyOf } = await import("@/lib/itemFamily");
 const { groundTruth } = await import("../eval/groundTruth.ts");
+const { SHOWCASE_LOOKS } = await import("@/lib/showcase");
+const { MOCK_SCENARIOS } = await import("@/services/mockCatalog");
+
+/**
+ * Vitrin kombinlerinin birebir eşleşme ürünleri.
+ *
+ * 0.3 eskiden `VERIFIED_PDP_URLS` boş değilse yeşile dönüyordu, yani **tek** bir
+ * bağlantı yazıldığında "ürünler satın alınabilir" diyordu. Yüz on üç üründen
+ * biri bağlıyken bu cümle doğru değil, ve yanlış yeşil bir kontrol, kırmızı bir
+ * kontrolden kötü: bakan kişiye bakmasına gerek olmadığını söylüyor.
+ *
+ * Ölçü artık ziyaretçinin ilk gördüğü CTA'lar. Alternatifler kapsam dışı — onlar
+ * kart açılınca görünüyor ve bağlantısı olmayan zaten CTA'sız çiziliyor.
+ */
+const showcaseExactIds = SHOWCASE_LOOKS.flatMap((look) =>
+  (MOCK_SCENARIOS[look.exampleId] ?? [])
+    .map((item) => item.exactMatch?.id)
+    .filter((id) => typeof id === "string"),
+);
+const showcaseLinked = showcaseExactIds.filter((id) => (VERIFIED_PDP_URLS[id] ?? "").length > 0);
 
 const env = (name) => (process.env[name] ?? "").trim().length > 0;
 const count = (dir) =>
@@ -79,10 +99,12 @@ const checks = [
     id: "0.3",
     when: "yayın",
     label: "Ürünler satın alınabilir",
-    ok: Object.keys(VERIFIED_PDP_URLS).length > 0,
-    missing: `VERIFIED_PDP_URLS boş (${Object.keys(VERIFIED_PDP_IMAGES).length} görsel)`,
+    ok: showcaseLinked.length === showcaseExactIds.length,
+    missing:
+      `vitrin ürünlerinin ${showcaseLinked.length}/${showcaseExactIds.length}'ü bağlı ` +
+      `(${Object.keys(VERIFIED_PDP_IMAGES).length} görsel)`,
     why: "Site tarıyor, eşleştiriyor, fiyat gösteriyor — ve «Ürüne git» hiçbir yere gitmiyor.",
-    fix: "npm run check:pdp  (mağazaya göre iş listesi) → bağlantıları doldur → npm run fetch:images",
+    fix: "npm run check:pdp  (listenin başındaki 14 bağlantı) → doldur → npm run fetch:images",
   },
   {
     id: "1.1",
