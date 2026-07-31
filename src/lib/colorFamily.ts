@@ -53,8 +53,13 @@ export function colorFamilyOf(hex: string): ColorFamily {
    * channel spread of twelve units out of 255 and came out "sari". Nobody shops
    * for a yellow beanie because it is off-white. Above this lightness the raw
    * channel spread is the honest measure of whether there is a hue at all.
+   *
+   * Lowered from 0.86 when the set grew: white sneakers photographed in open shade
+   * measure #d0d9e4 — lightness 0.855, channel spread 20 of 255 — and came out
+   * "mavi". A twenty-unit spread is sensor noise and the shade of a cloudy sky, not
+   * a colour anybody would type into a search box.
    */
-  if (lightness > 0.86 && delta < 0.12) return "beyaz";
+  if (lightness > 0.82 && delta < 0.12) return "beyaz";
   // Metal frames and washed greys sit around 0.15 saturation; 0.12 was too tight.
   if (saturation < 0.2) return lightness < 0.6 ? "gri" : "beyaz";
 
@@ -72,12 +77,38 @@ export function colorFamilyOf(hex: string): ColorFamily {
     return lightness > 0.62 || saturation < 0.45 ? "pembe" : "kirmizi";
   }
   if (hue < 40) {
-    // Orange-browns: dark ones are leather/brown, light ones are beige.
+    /*
+     * Orange-browns split by saturation before lightness.
+     *
+     * Hue alone cannot tell mustard from camel: a mustard coat measures #cd9529 at
+     * hue 39 and a camel one measures #b5895a at hue 31, and the lightness rule put
+     * the mustard in "kahve" — a shopper looking at that coat types "hardal" or
+     * "sarı" and would never type "kahverengi". What separates them is how
+     * saturated they are: 0.67 against 0.38. Browns and beiges are muted by
+     * definition; a saturated amber is a yellow.
+     *
+     * The darkness gate comes first, and it is not optional. HSL saturation
+     * inflates as lightness falls — the same collapsing denominator that makes
+     * near-white unreliable, at the other end — so dark brown leather (#4d2d15,
+     * lightness 0.19) reports 0.57 saturation and went to "sari" the moment the
+     * rule looked at saturation alone. It is a brown jacket. Nothing this dark in
+     * this hue band is a yellow.
+     */
+    if (lightness < 0.35) return "kahve";
+    if (saturation > 0.55) return "sari";
     return lightness < 0.5 ? "kahve" : "bej";
   }
   if (hue < 70) return "sari";
   if (hue < 165) return "yesil";
-  if (hue < 255) return "mavi";
+  /*
+   * The blue/violet line sits at 248, not 255.
+   *
+   * A violet blazer measures #4a34b7 — hue 250 — and came out "mavi". Denim, which
+   * is what this boundary actually has to protect, lands at 195-205, so there is a
+   * forty-degree gap between the two and no reason to keep the line inside the
+   * violets.
+   */
+  if (hue < 248) return "mavi";
   if (hue < 290) return "mor";
   return "pembe";
 }

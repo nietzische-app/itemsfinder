@@ -30,5 +30,27 @@ export async function resolve(specifier, context, next) {
       }
     }
   }
+
+  /*
+   * Extensionless relative imports between TypeScript files.
+   *
+   * `./photoCases` is what TypeScript wants to see — writing `./photoCases.ts`
+   * needs `allowImportingTsExtensions`, which would change how the Next build
+   * treats the whole project for the sake of one dev-only script path. Node wants
+   * the extension. Adding it here keeps the source idiomatic and the change
+   * confined to a loader that only ever runs under `node --experimental-transform-types`.
+   */
+  if (specifier.startsWith("./") || specifier.startsWith("../")) {
+    if (!/\.[mc]?[jt]sx?$/.test(specifier) && context.parentURL?.endsWith(".ts")) {
+      for (const suffix of [".ts", ".tsx"]) {
+        try {
+          return await next(specifier + suffix, context);
+        } catch {
+          // fall through to the plain specifier
+        }
+      }
+    }
+  }
+
   return next(specifier, context);
 }

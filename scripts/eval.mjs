@@ -240,7 +240,14 @@ for (const testCase of cases) {
     });
     queryTotal += 1;
 
-    if (query.toLocaleLowerCase("tr").includes(item.queryToken.toLocaleLowerCase("tr"))) {
+    /*
+     * `containsToken`, not `includes`. Turkish softens a final consonant under a
+     * vowel-initial suffix, so "Güneş Gözlüğü" does not contain "gözlük" as a
+     * substring — and this metric scored a perfect query as a miss the moment a
+     * photograph with sunglasses entered the set. The attribute scorer already had
+     * the fix; this call site was left on the naive comparison.
+     */
+    if (containsToken(query, item.queryToken)) {
       queryHits += 1;
       if (VERBOSE) console.log(`    ✓ ${item.id.padEnd(16)} "${query}"`);
     } else {

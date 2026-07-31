@@ -1,5 +1,6 @@
 import { SHOWCASE_LOOKS } from "@/lib/showcase";
 import { MOCK_SCENARIOS } from "@/services/mockCatalog";
+import { PHOTO_CASES } from "./photoCases";
 import type { BoundingBox, ExampleId } from "@/types";
 import type { ItemFamily } from "@/lib/itemFamily";
 
@@ -89,7 +90,7 @@ export interface ItemExpectation {
 }
 
 export interface EvalCase {
-  exampleId: ExampleId;
+  exampleId: string;
   /** Path under `public/`. */
   image: string;
   items: ItemExpectation[];
@@ -150,7 +151,12 @@ export interface GroundTruthItem extends ItemExpectation {
 }
 
 export interface GroundTruthCase {
-  exampleId: ExampleId;
+  /**
+   * Case id. A string rather than `ExampleId` since the set grew past the demo
+   * looks — `PHOTO_CASES` are eval fixtures, not shipped examples, and they have
+   * no business in the union that types the app's demo buttons.
+   */
+  exampleId: string;
   image: string;
   items: GroundTruthItem[];
 }
@@ -162,7 +168,7 @@ export interface GroundTruthCase {
  * the classifier rather than trusting a cached answer.
  */
 export function groundTruth(familyOf: (text: string) => ItemFamily): GroundTruthCase[] {
-  return SHOWCASE_LOOKS.map((look) => {
+  const showcase: GroundTruthCase[] = SHOWCASE_LOOKS.map((look) => {
     const scenario = MOCK_SCENARIOS[look.exampleId];
     const expectations = EXPECTATIONS[look.exampleId] ?? [];
 
@@ -189,4 +195,21 @@ export function groundTruth(familyOf: (text: string) => ItemFamily): GroundTruth
 
     return { exampleId: look.exampleId, image: look.src, items };
   });
+
+  /*
+   * The hand-labelled photographs, which carry their own labels and boxes and need
+   * nothing from the demo catalogue. Appended rather than merged so the two sources
+   * stay legible: the four showcase looks are also product demos, these are only
+   * ever measurement.
+   */
+  const photos: GroundTruthCase[] = PHOTO_CASES.map((photoCase) => ({
+    exampleId: photoCase.id,
+    image: photoCase.image,
+    items: photoCase.items.map((item) => ({
+      ...item,
+      family: familyOf(`${item.itemType} ${item.label}`),
+    })),
+  }));
+
+  return [...showcase, ...photos];
 }
