@@ -79,7 +79,10 @@ export default function SavedPage() {
 
               <div className="mt-auto flex items-center justify-between gap-2">
                 <span className="font-display text-[18px] font-bold text-primary">
-                  {formatPrice(product.price, product.currency)}
+                  {/* Kaydedildiği andaki karar saklanıyor; eski kayıtlarda alan yok. */}
+                  {product.priceShown === false
+                    ? "Fiyat mağazada"
+                    : formatPrice(product.price, product.currency)}
                 </span>
                 <div className="flex shrink-0 items-center gap-1">
                   <button

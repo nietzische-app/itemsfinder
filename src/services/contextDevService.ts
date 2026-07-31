@@ -187,6 +187,15 @@ export class ContextDevService {
 
     this.client = new ContextDev({
       apiKey,
+      /*
+       * Sahte bir sunucuya yönlendirilebilsin diye.
+       *
+       * `eval:record` ve `eval:record-attrs` için aynısı yapıldı ve aynı sebeple:
+       * canlı yol bugüne kadar hiç çalıştırılmadı, çünkü çalıştırmanın tek yolu
+       * gerçek bir anahtar harcamaktı. Üretimde bu değişken boş, yani SDK kendi
+       * adresini kullanıyor — hiçbir davranış değişmiyor.
+       */
+      baseURL: process.env.CONTEXT_DEV_BASE_URL?.trim() || undefined,
       // The SDK retries twice by default; a scan is latency-sensitive and we
       // have a mock fallback, so fail fast instead.
       maxRetries: 1,

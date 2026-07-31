@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import type { ProductMatch } from "@/types";
+import { priceIsShowable } from "@/utils/affiliate";
 
 /**
  * "Kaydet" list, persisted in localStorage.
@@ -21,6 +22,15 @@ export interface SavedProduct {
   price: number;
   currency: string;
   productUrl: string;
+  /**
+   * Kaydedildiği anda fiyat gösterilebilir miydi (`priceIsShowable`).
+   *
+   * Kaydedilenler listesi ürünü yeniden çözmüyor, kaydedildiği andaki kopyayı
+   * gösteriyor — yani kuralı burada da uygulayabilmek için kararın kendisi
+   * saklanıyor. Alanı olmayan eski kayıtlar gösterilebilir sayılıyor: bağlantılar
+   * yazılmadan önce kaydedilmişler ve hiçbir mağazanın fiyatı gibi okunmuyorlardı.
+   */
+  priceShown?: boolean;
   savedAt: string;
 }
 
@@ -57,6 +67,7 @@ export function toProductSummary(product: ProductMatch): SavedProduct {
     price: product.price,
     currency: product.currency,
     productUrl: product.productUrl,
+    priceShown: priceIsShowable(product),
     savedAt: new Date().toISOString(),
   };
 }

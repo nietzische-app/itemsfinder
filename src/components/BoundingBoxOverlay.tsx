@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Maximize2, Minus, Plus, Sparkles } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { formatPrice } from "@/utils/affiliate";
+import { formatPrice, priceIsShowable } from "@/utils/affiliate";
 import type { DetectedItem } from "@/types";
 
 interface BoundingBoxOverlayProps {
@@ -260,9 +260,15 @@ export function BoundingBoxOverlay({
               <p className="mt-1 font-display text-[14px] font-semibold leading-tight text-primary">
                 {item.label}
               </p>
+              {/*
+                Kutunun üstündeki ipucu da aynı kuraldan geçiyor: gerçek bir
+                mağaza bağlantısı olan üründe uydurma rakam gösterilmiyor.
+              */}
               {item.exactMatch ? (
                 <p className="mt-2 text-label-sm font-bold text-secondary-deep">
-                  {formatPrice(item.exactMatch.price, item.exactMatch.currency)}
+                  {priceIsShowable(item.exactMatch)
+                    ? formatPrice(item.exactMatch.price, item.exactMatch.currency)
+                    : "Fiyat mağazada"}
                 </p>
               ) : null}
             </div>

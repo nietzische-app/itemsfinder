@@ -22,7 +22,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { formatPrice } from "@/utils/affiliate";
+import { formatPrice, priceIsShowable } from "@/utils/affiliate";
 import type { DetectedItem, DetectionResult, ItemCategory } from "@/types";
 
 interface DetectedItemsPanelProps {
@@ -183,9 +183,13 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
 
           <span className="mt-2 flex items-center justify-between gap-2">
             <span className="shrink-0 font-bold text-primary">
-              {item.exactMatch
-                ? formatPrice(item.exactMatch.price, item.exactMatch.currency)
-                : "—"}
+              {/* Parça özeti de aynı kuraldan geçiyor: gerçek mağaza bağlantısı
+                  olan üründe uydurma rakam gösterilmiyor. */}
+              {!item.exactMatch
+                ? "—"
+                : priceIsShowable(item.exactMatch)
+                  ? formatPrice(item.exactMatch.price, item.exactMatch.currency)
+                  : "Fiyat mağazada"}
             </span>
             <span
               className={cn(
@@ -241,7 +245,11 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
                     key={product.id}
                     product={product}
                     detectionId={item.id}
-                    referencePrice={item.exactMatch?.price}
+                    referencePrice={
+                      item.exactMatch && priceIsShowable(item.exactMatch)
+                        ? item.exactMatch.price
+                        : undefined
+                    }
                   />
                 ))}
               </div>
@@ -261,14 +269,28 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-3">
+                    {/*
+                      Fiyatı gösterilemeyenler sona: "en uygun fiyattan
+                      başlayarak" diyen bir listede, fiyatı bilinmeyen bir ürünü
+                      araya sokmak sıralamayı anlamsız kılar.
+                    */}
                     {[...allMatches]
-                      .sort((a, b) => a.price - b.price)
+                      .sort((a, b) => {
+                        const aShown = priceIsShowable(a);
+                        const bShown = priceIsShowable(b);
+                        if (aShown !== bShown) return aShown ? -1 : 1;
+                        return a.price - b.price;
+                      })
                       .map((product) => (
                         <ProductCard
                           key={product.id}
                           product={product}
                           detectionId={item.id}
-                          referencePrice={item.exactMatch?.price}
+                          referencePrice={
+                      item.exactMatch && priceIsShowable(item.exactMatch)
+                        ? item.exactMatch.price
+                        : undefined
+                    }
                         />
                       ))}
                   </div>
@@ -325,14 +347,27 @@ function CuratedLookDialog({ items }: { items: DetectedItem[] }) {
   );
 
   const currency = matches[0]?.product.currency ?? "USD";
-  const exactTotal = matches.reduce((sum, entry) => sum + entry.product.price, 0);
+
+  /*
+   * Toplam yalnızca fiyatı gösterilebilen parçalardan kuruluyor.
+   *
+   * Kartlar gerçek mağazaya bağlanınca uydurma fiyatları gizlemeye başladı
+   * (`priceIsShowable`). Toplamı eskisi gibi hesaplamak, tek tek gizlenen
+   * sayıları toplayıp başlıkta göstermek olurdu — aynı yanlış rakam, sadece daha
+   * görünür bir yerde. Bir parçanın fiyatı gösterilemiyorsa toplama da girmiyor,
+   * ve başlık kaç parçanın sayıldığını söylüyor.
+   */
+  const priced = matches.filter((entry) => priceIsShowable(entry.product));
+  const exactTotal = priced.reduce((sum, entry) => sum + entry.product.price, 0);
 
   // Cheapest route through the look: the lowest-priced option per item.
   const budgetTotal = items.reduce((sum, item) => {
     const prices = [
-      ...(item.exactMatch ? [item.exactMatch.price] : []),
-      ...item.alternatives.map((alternative) => alternative.price),
-    ];
+      ...(item.exactMatch ? [item.exactMatch] : []),
+      ...item.alternatives,
+    ]
+      .filter((product) => priceIsShowable(product))
+      .map((product) => product.price);
     return prices.length > 0 ? sum + Math.min(...prices) : sum;
   }, 0);
 
@@ -349,9 +384,21 @@ function CuratedLookDialog({ items }: { items: DetectedItem[] }) {
         <DialogHeader>
           <DialogTitle>Kombinin tamamı</DialogTitle>
           <DialogDescription>
-            {matches.length} birebir eşleşme — olduğu gibi almak{" "}
-            {formatPrice(exactTotal, currency)}, her parçanın en uygun seçeneğiyle{" "}
-            {formatPrice(budgetTotal, currency)}.
+            {priced.length === 0 ? (
+              <>
+                {matches.length} birebir eşleşme. Fiyatlar mağaza sayfalarında —
+                canlı fiyat açık değilken burada bir toplam göstermiyoruz.
+              </>
+            ) : (
+              <>
+                {matches.length} birebir eşleşme
+                {priced.length < matches.length ? (
+                  <> ({priced.length} tanesinin fiyatı sayılabiliyor)</>
+                ) : null}{" "}
+                — olduğu gibi almak {formatPrice(exactTotal, currency)}, her parçanın en
+                uygun seçeneğiyle {formatPrice(budgetTotal, currency)}.
+              </>
+            )}
           </DialogDescription>
         </DialogHeader>
 

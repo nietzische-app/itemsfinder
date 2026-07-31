@@ -54,6 +54,7 @@ const { extractImage } = await import("./fetch-images.mjs");
 const { OG_IMAGE_CASES } = await import("../eval/ogImageCases.ts");
 const { MOCK_SCENARIOS, hydrateProduct } = await import("@/services/mockCatalog");
 const { merchantLabel, merchantHost } = await import("@/services/merchantSearch");
+const { priceIsShowable } = await import("@/utils/affiliate");
 
 /**
  * Metric floors: set just under the measured baseline so a regression trips the
@@ -866,6 +867,18 @@ const badgeLies = badgeRows.filter((product) => {
   return !product.merchantDomain.includes(stem);
 });
 const badgeScore = pct(badgeRows.length - badgeLies.length, badgeRows.length);
+
+/*
+ * Gerçek bir mağaza bağlantısının yanında uydurma fiyat kalmasın.
+ *
+ * Demo kataloğundaki bütün fiyatlar uydurma ve site bunu söylüyor; sorun, gerçek
+ * bir Boyner bağlantısının yanındaki rakamın artık örnek veri gibi değil o
+ * mağazanın fiyatı gibi okunması. Kural `priceIsShowable`da: canlı ölçülmüş ya da
+ * bağlantısız olmayan hiçbir fiyat gösterilmiyor. Burada ölçülen, kuralın
+ * kataloğun tamamında tutup tutmadığı.
+ */
+const pricedWithLink = badgeRows.filter((product) => priceIsShowable(product));
+const priceScore = pct(badgeRows.length - pricedWithLink.length, badgeRows.length);
 const visionQueryScore = pct(visionQueryHits, visionQueryTotal);
 const retrievalScore = pct(retrievalHits, tight.length);
 const hotspotScore = pct(hotspotHits, hotspotCases);
@@ -970,6 +983,13 @@ for (const product of badgeLies) {
     `      ${product.id}: rozet «${merchantLabel(product.merchant, product.merchantDomain)}» ` +
       `ama bağlantı ${product.merchantDomain}`,
   );
+}
+console.log(
+  `  Fiyat dürüstlüğü ${fmt(priceScore)}  (${badgeRows.length - pricedWithLink.length}/${badgeRows.length})   taban %100` +
+    `, bağlantılı üründe uydurma fiyat gösterilmiyor`,
+);
+for (const product of pricedWithLink) {
+  console.log(`      ${product.id}: ${product.merchantDomain} bağlantısı var ama fiyat gösteriliyor`);
 }
 console.log(
   `  Ürün görseli     ${fmt(ogScore)}  (${OG_IMAGE_CASES.length - ogMisses.length}/${OG_IMAGE_CASES.length})   taban %100` +
@@ -1136,6 +1156,8 @@ const failures = [
    */
   badgeScore < 1 &&
     `mağaza rozeti ${fmt(badgeScore)}: ${badgeLies.length} kart gitmediği mağazayı gösteriyor`,
+  priceScore < 1 &&
+    `fiyat dürüstlüğü ${fmt(priceScore)}: ${pricedWithLink.length} üründe gerçek bağlantı yanında uydurma fiyat`,
   ogScore < 1 && `ürün görseli çıkarımı ${fmt(ogScore)}: ${ogMisses.length} şekil kaçtı`,
   urlScore < 1 &&
     `bağlantı yasağı ${fmt(urlScore)}: ${urlFalseRejects.length} yanlış red, ` +

@@ -142,3 +142,30 @@ export function savingsPercent(exactPrice: number, altPrice: number): number {
   if (exactPrice <= 0 || altPrice >= exactPrice) return 0;
   return Math.floor(((exactPrice - altPrice) / exactPrice) * 100);
 }
+
+/**
+ * Bu ürünün fiyatı gösterilebilir mi?
+ *
+ * Demo kataloğundaki fiyatlar uydurma — site bunu «Demo Modu (Örnek Veri)»
+ * rozetiyle ve altbilgide söylüyor. Doğrulanmış ürün bağlantıları yazılana kadar
+ * bu yeterliydi: uydurma bir fiyat, uydurma bir mağaza adının yanında duruyordu
+ * ve bütünü açıkça örnekti.
+ *
+ * Artık on dört kartta gerçek bir mağazaya giden gerçek bir bağlantı var. Gerçek
+ * bir Boyner bağlantısının yanındaki uydurma rakam artık örnek veri gibi değil,
+ * o mağazanın fiyatı gibi okunuyor — ve o fiyat yanlış. Yanlış fiyat, alışveriş
+ * uygulamasının yapabileceği en pahalı hatalardan biri.
+ *
+ * O yüzden kural şu: bir fiyat ancak **canlı** ölçüldüyse ya da ürünün gerçek bir
+ * sayfaya bağlantısı **yoksa** gösteriliyor. İkincisi hâlâ örnek veri ama hiçbir
+ * mağazanın fiyatı gibi okunmuyor, çünkü ortada bir mağaza yok.
+ *
+ * Canlı yol açıldığında (`ENABLE_CONTEXT_DEV_LIVE`) fiyatlar sayfadan çıkarılıyor
+ * ve bu kural kendiliğinden devre dışı kalıyor — hiçbir şeyi geri almak gerekmiyor.
+ */
+export function priceIsShowable(product: {
+  isLive: boolean;
+  productUrl: string;
+}): boolean {
+  return product.isLive || !product.productUrl;
+}

@@ -15,7 +15,12 @@ import {
   merchantTextColor,
 } from "@/services/merchantSearch";
 import { cn } from "@/lib/utils";
-import { buildAffiliateUrl, formatPrice, savingsPercent } from "@/utils/affiliate";
+import {
+  buildAffiliateUrl,
+  formatPrice,
+  priceIsShowable,
+  savingsPercent,
+} from "@/utils/affiliate";
 import type { ProductMatch } from "@/types";
 
 interface ProductCardProps {
@@ -48,8 +53,16 @@ export function ProductCard({
     subId: `${detectionId}:${product.id}`,
   });
 
+  /*
+   * Fiyat ve ondan türeyen indirim iddiası, aynı kapıdan geçiyor.
+   *
+   * «%X daha uygun» bir gösterim değil, dünya hakkında bir iddia — ve gizlenmiş
+   * bir referans fiyata karşı hesaplanırsa dayanağı görünmeyen bir iddia olur.
+   * Fiyat gösterilemiyorsa rozet de düşüyor.
+   */
+  const showPrice = priceIsShowable(product);
   const savings =
-    referencePrice && product.matchType === "alternative"
+    showPrice && referencePrice && product.matchType === "alternative"
       ? savingsPercent(referencePrice, product.price)
       : 0;
 
@@ -182,7 +195,11 @@ export function ProductCard({
                 isHero ? "text-[22px]" : "text-[17px]",
               )}
             >
-              {formatPrice(product.price, product.currency)}
+              {showPrice ? (
+                formatPrice(product.price, product.currency)
+              ) : (
+                <span className="text-[13px] font-semibold text-outline">Fiyat mağazada</span>
+              )}
             </span>
             {savings > 0 ? (
               <Badge variant="success" className="whitespace-nowrap text-[10px]">
