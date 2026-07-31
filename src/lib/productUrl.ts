@@ -103,7 +103,16 @@ const PDP_PATTERNS: RegExp[] = [
    * şeklin kendisi, hane sayısı değil.
    */
   /[_-]\d{4,}\/?(?:$|[?#])/i,
-  // Varyant kimliği taşıyan mağaza yazılımları (Paen, Void).
+  /*
+   * Harfle başlayan stok kodu: `-nbstr4085`, `-kssz3h76`.
+   *
+   * Yukarıdaki kural rakamdan hemen önce `-` ya da `_` istiyor, ve butik
+   * mağazaların çoğu slug'ın sonuna kendi stok kodunu koyuyor. Kısa bir harf
+   * öneki + en az dört hane, kategori yollarında rastlanmayan bir şekil: kategori
+   * "kadin-blazer" olur, "kadin-blazer-nbstr4085" olmaz.
+   */
+  /[_-][a-z]{2,6}\d{4,}\/?(?:$|[?#])/i,
+  // Varyant kimliği taşıyan mağaza yazılımları (Paen, Void, Gangown).
   /[?&]vid=[0-9a-f]{8}-[0-9a-f]{4}/i,
 ];
 

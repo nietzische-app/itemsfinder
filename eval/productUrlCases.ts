@@ -42,6 +42,25 @@ export const PDP_URLS: readonly string[] = [
   "https://www.tugba.com/products/arkasi-lastikli-pantolon-vizon?variant=52596773519649",
   "https://www.kigili.com/products/koyu-antrasit-super-slim-fit-klasik-kumas-pantolon-kssz3h76dz002q10-e",
   "https://voidtr.com/void-raw-nakis-detayli-premium-ekstra-baggy-pantolon?vid=3f0631bd-592c-4cb2-9ac0-057b72bc7c42",
+  /*
+   * Vitrin kombinlerinin on üç ürünü — sahibinin bulup gönderdiği gerçek
+   * sayfalar. Türkiye perakendesinin geniş bir kesitini kapsıyorlar: büyük
+   * zincirler, Inditex, gözlükçü, kürkçü, butik. Neselibutik'in stok kodu
+   * (`-nbstr4085`) harfle başladığı için kalıplara bir satır daha ekletti.
+   */
+  "https://www.trendyol.com/macharel-jeans/pembe-devrik-yaka-fermuarli-triko-hirka-p-861541982",
+  "https://www.boyner.com.tr/yuksek-bel-mini-meghan-deri-sort-siyah-p-15845369",
+  "https://www.pullandbear.com/tr/suni-deri-biker-ceket-l03720323",
+  "https://www.pullandbear.com/tr/ince-askili-poliamid-body-l03230388",
+  "https://www.lcw.com/yuksek-bel-super-skinny-fit-kadin-jean-pantolon-indigo-o-5239461",
+  "https://www.angeleyes.com.tr/angel-eyes-siyah-dikdortgen-unisex-gunes-gozlugu-6452",
+  "https://www.paulmark.com.tr/kadin-kusakli-uzun-kaban_399424",
+  "https://www.trendyol.com/jimmy-key/bej-sac-orgu-desenli-bere-p-1048646418",
+  "https://gangown.com.tr/black-vandal-yirtik-detayli-boyfriend-jean-pantolon?vid=55b16e38-13b7-4605-b8b5-1c9891490482",
+  "https://derimod.com.tr/products/kadin-siyah-bilekten-bantli-kalin-topuklu-sandalet-26sfe462318-5637145339?variant=51966618075449",
+  "https://www.neselibutik.com/neselibutik-kadin-siyah-oversize-tek-dugmeli-blazer-ceket-pantolon-takim-nbstr4085",
+  "https://www.sephora.com.tr/p/soft-matte-et-easy---mat-ruj-614289.html",
+  "https://www.boyner.com.tr/kadin-siyah-bantli-topuklu-sandalet-01sah321140a100-p-15865262",
 ];
 
 /** Liste, kategori ve arama yolları. Hiçbiri kabul edilmemeli. */
@@ -70,4 +89,10 @@ export const LISTING_URLS: readonly string[] = [
   "https://www.hafkagiyim.com/pantolon",
   "https://www.tudors.com/erkek-tisort",
   "https://www.altinyildizclassics.com/erkek-gomlek",
+  "https://www.angeleyes.com.tr/gunes-gozlugu",
+  "https://www.paulmark.com.tr/kadin-kaban",
+  "https://derimod.com.tr/collections/kadin-ayakkabi",
+  "https://www.neselibutik.com/kadin-blazer",
+  "https://gangown.com.tr/kategori/jean",
+  "https://www.sephora.com.tr/c/makyaj-ruj",
 ];

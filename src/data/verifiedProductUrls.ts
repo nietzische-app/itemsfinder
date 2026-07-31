@@ -64,6 +64,50 @@ export const VERIFIED_PDP_URLS: Readonly<Record<string, string>> = {
    * varyantın kastedildiği bilinmiyor, `/dp/<ASIN>` ise ürünün kanonik sayfası.
    */
   "po-sneakers-exact": "https://www.amazon.com.tr/dp/B0CJRGT916",
+
+  /*
+   * Vitrin kombinlerinin kalan on üç ürünü. Hepsi sahibi tarafından bulundu ve
+   * bu ortamdan hiçbir mağazaya ağ yolu olmadığı için sayfaları açıp
+   * doğrulayamadım — dosyanın başındaki not zaten bunun ancak sayfayı açan bir
+   * insan tarafından yapılabileceğini söylüyor. Ürün adları ile katalog
+   * başlıklarının örtüştüğünü kontrol ettim, gördüğüm tek fark
+   * `bb-blazer-exact`'te ve o da aşağıda yazılı.
+   *
+   * Takip parametreleri atıldı: `srsltid` (Google alışveriş yönlendirmesi),
+   * `boutiqueId`, `merchantId`, `storefrontId`, `countryCode`, `language`,
+   * `gads`, `pelement`, `cS`, `currency`. Bunlar bayatladığında yönlendirme
+   * yapabiliyor, ve ortaklık etiketini `buildAffiliateUrl` kendisi ekliyor.
+   *
+   * İşlevsel olanlar bilerek duruyor: `vid` ve `variant` ürünün kendisini ya da
+   * rengini seçiyor, atılırsa yanlış sayfa veya yanlış renk açılır — Gangown'da
+   * `vid` olmadan adres zaten bir ürüne çözülmüyor.
+   */
+  "po-cardigan-exact":
+    "https://www.trendyol.com/macharel-jeans/pembe-devrik-yaka-fermuarli-triko-hirka-p-861541982",
+  "po-shorts-exact": "https://www.boyner.com.tr/yuksek-bel-mini-meghan-deri-sort-siyah-p-15845369",
+  "bk-jacket-exact": "https://www.pullandbear.com/tr/suni-deri-biker-ceket-l03720323",
+  "bk-body-exact": "https://www.pullandbear.com/tr/ince-askili-poliamid-body-l03230388",
+  "bk-jeans-exact":
+    "https://www.lcw.com/yuksek-bel-super-skinny-fit-kadin-jean-pantolon-indigo-o-5239461",
+  "bk-sunglasses-exact":
+    "https://www.angeleyes.com.tr/angel-eyes-siyah-dikdortgen-unisex-gunes-gozlugu-6452",
+  "lc-coat-exact": "https://www.paulmark.com.tr/kadin-kusakli-uzun-kaban_399424",
+  "lc-beanie-exact": "https://www.trendyol.com/jimmy-key/bej-sac-orgu-desenli-bere-p-1048646418",
+  "lc-jeans-exact":
+    "https://gangown.com.tr/black-vandal-yirtik-detayli-boyfriend-jean-pantolon?vid=55b16e38-13b7-4605-b8b5-1c9891490482",
+  "lc-sandals-exact":
+    "https://derimod.com.tr/products/kadin-siyah-bilekten-bantli-kalin-topuklu-sandalet-26sfe462318-5637145339?variant=51966618075449",
+  /*
+   * Bu bağlantı bir **takım** — blazer + pantolon. Katalogdaki ürün yalnızca
+   * blazer. Aynı giysiyi içerdiği için yazıldı, ama alışveriş yapan kişi
+   * beklediğinden fazlasını içeren bir sayfaya düşecek; yalnız blazer satan bir
+   * sayfa bulunursa bununla değiştirilmeli.
+   */
+  "bb-blazer-exact":
+    "https://www.neselibutik.com/neselibutik-kadin-siyah-oversize-tek-dugmeli-blazer-ceket-pantolon-takim-nbstr4085",
+  "bb-lip-exact": "https://www.sephora.com.tr/p/soft-matte-et-easy---mat-ruj-614289.html",
+  "bb-heels-exact":
+    "https://www.boyner.com.tr/kadin-siyah-bantli-topuklu-sandalet-01sah321140a100-p-15865262",
 };
 
 /**
