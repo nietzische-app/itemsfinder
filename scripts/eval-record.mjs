@@ -28,6 +28,18 @@ if (!KEY) {
   process.exit(1);
 }
 
+/**
+ * Vision host, overridable so this script can be driven end to end without a key.
+ *
+ * The attribute recorder already had `VLM_BASE_URL` and this one did not, which
+ * meant the only way to find out whether it works was to run it against the real
+ * API — with a real key, on a real bill, and on the one session someone has the
+ * key in. Both recorders can now be pointed at a stub, so a crash on line ninety
+ * is found for free instead of halfway through a paid capture.
+ */
+const VISION_BASE_URL =
+  process.env.VISION_BASE_URL?.trim().replace(/\/$/, "") || "https://vision.googleapis.com";
+
 const { familyOf } = await import("@/lib/itemFamily");
 const { groundTruth } = await import("../eval/groundTruth.ts");
 
@@ -44,7 +56,7 @@ for (const testCase of groundTruth(familyOf)) {
   const content = readFileSync(path).toString("base64");
 
   const response = await fetch(
-    `https://vision.googleapis.com/v1/images:annotate?key=${KEY}`,
+    `${VISION_BASE_URL}/v1/images:annotate?key=${KEY}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },

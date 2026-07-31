@@ -74,6 +74,21 @@ bir şey söyleyemez hâle getirir. Kaç parçanın notlanmadığı özet satır
 yazıyor, çünkü sessizce küçülen bir payda, boru hattı değişmeden puanın
 yükselmesinin yoludur.
 
+## Kayıt betiklerini anahtarsız denemek
+
+`eval:record` ve `eval:record-attrs` gerçek çağrı yapıyor, yani anahtar
+harcamadan çalıştıklarını görmenin yolu yoktu — ve anahtar genelde tek bir
+oturumda elde oluyor. `scripts/stubs/` altındaki iki sunucu API'lerin şeklini
+taklit ediyor; ikisi de `VISION_BASE_URL` / `VLM_BASE_URL` ile devreye giriyor.
+Kullanımı ve **üretilen fixture'ların neden silinmesi gerektiği**
+`scripts/stubs/README.md` içinde.
+
+Bir kez sürüldü: iki betik de 31 kombinin tamamını yazdı, `npm run eval` hotspot,
+kutu bulma/isabet/IoU, VLM renk/ürün adı/sorgu, malzeme-desen ve kararlılık
+metriklerinin hepsini hesapladı, ve göreli kapılar kırmızıya döndü — kasten kötü
+bir stub'a karşı doğru davranış. Yani gerçek anahtar geldiğinde ölçülecek yol
+baştan sona çalışıyor; kalan tek bilinmeyen sayıların kendisi.
+
 ## Metrikler
 
 | Metrik | Ne ölçüyor | Taban |
