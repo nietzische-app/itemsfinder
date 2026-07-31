@@ -2,6 +2,7 @@ import "server-only";
 
 import { ContextDevService, type LiveProductCard } from "@/services/contextDevService";
 import { productUrlOrEmpty } from "@/lib/productUrl";
+import { merchantForDomain } from "@/services/merchantSearch";
 import { familyOf } from "@/lib/itemFamily";
 import {
   ALTERNATIVE_FLOOR,
@@ -449,28 +450,6 @@ export class ContextDevProductProvider implements ProductProvider {
 /*  Mapping                                                                   */
 /* -------------------------------------------------------------------------- */
 
-/** Domains we have an affiliate programme for, mapped to their `Merchant`. */
-const DOMAIN_TO_MERCHANT: Array<[RegExp, Merchant]> = [
-  [/(^|\.)zara\.com$/, "Zara"],
-  [/(^|\.)trendyol\.com$/, "Trendyol"],
-  [/(^|\.)mango\.com$/, "Mango"],
-  [/(^|\.)sephora\.com$/, "Sephora"],
-  [/(^|\.)amazon\./, "Amazon"],
-  [/(^|\.)hm\.com$/, "H&M"],
-  [/(^|\.)asos\.com$/, "ASOS"],
-];
-
-/**
- * Maps a live domain onto a known merchant so `buildAffiliateUrl` can attach
- * the right tracking tag. Unknown retailers fall through to `Other`, which
- * still gets UTM parameters — just no affiliate tag.
- */
-export function merchantForDomain(domain: string): Merchant {
-  for (const [pattern, merchant] of DOMAIN_TO_MERCHANT) {
-    if (pattern.test(domain)) return merchant;
-  }
-  return "Other";
-}
 
 interface ProductMatchOverrides {
   id: string;

@@ -30,6 +30,53 @@ export function merchantHost(merchant: Merchant): string {
   return MERCHANT_HOSTS[merchant];
 }
 
+/** Ortaklık programımız olan alan adları. */
+const DOMAIN_TO_MERCHANT: Array<[RegExp, Merchant]> = [
+  [/(^|\.)zara\.com$/, "Zara"],
+  [/(^|\.)trendyol\.com$/, "Trendyol"],
+  [/(^|\.)mango\.com$/, "Mango"],
+  [/(^|\.)sephora\.com(\.tr)?$/, "Sephora"],
+  [/(^|\.)amazon\./, "Amazon"],
+  [/(^|\.)hm\.com$/, "H&M"],
+  [/(^|\.)asos\.com$/, "ASOS"],
+];
+
+/**
+ * Bir alan adının hangi mağazaya ait olduğu; tanınmayanlar `Other`.
+ *
+ * `productProvider` içindeydi ve yalnızca canlı yol kullanıyordu. Demo kataloğun
+ * da buna ihtiyacı çıktı: katalog satırındaki mağaza adı elle yazılmış bir değer
+ * ve doğrulanmış bağlantı başka bir mağazaya gidebiliyor. Rozeti bağlantıya
+ * uydurmanın tek doğru yolu adı adresten türetmek.
+ */
+export function merchantForDomain(domain: string): Merchant {
+  const host = domain.replace(/^www\./, "");
+  for (const [pattern, merchant] of DOMAIN_TO_MERCHANT) {
+    if (pattern.test(host)) return merchant;
+  }
+  return "Other";
+}
+
+/**
+ * Rozette yazacak mağaza adı.
+ *
+ * Tanınan mağazalarda kendi adı. Tanınmayanlarda **alan adının kendisi** —
+ * uydurulmuş bir marka adı değil, bağlantının gerçekten açtığı yer. Bir butiğin
+ * adını tahmin etmek, kullanıcıya doğrulayamayacağı bir şey söylemek olur;
+ * "neselibutik.com" ise tıkladığında göreceği şeyin aynısı.
+ */
+export function merchantLabel(merchant: Merchant, domain: string): string {
+  if (merchant !== "Other") return merchant;
+  /*
+   * Uzantı atılıyor: rozet dar ve `pullandbear.com` kırpılıp «PULLANDBEAR…»
+   * oluyordu. `pullandbear` hem sığıyor hem de aynı şeyi söylüyor — uydurulmuş
+   * bir marka adı değil, bağlantının gittiği sitenin adı.
+   */
+  const host = domain.replace(/^www\./, "");
+  if (!host) return "Mağaza";
+  return host.replace(/\.(com|net|org|co)(\.[a-z]{2})?$/i, "") || host;
+}
+
 /**
  * Brand colours for the store badge, so a retailer is recognisable even when
  * the Brand API has not supplied a logo (mock mode, or a live lookup miss).
@@ -74,7 +121,16 @@ export function merchantTextColor(merchant: Merchant): string {
 }
 
 /** Short badge text — the first letters of the merchant name. */
-export function merchantInitials(merchant: Merchant): string {
+export function merchantInitials(merchant: Merchant, domain?: string): string {
   if (merchant === "H&M") return "H&M";
-  return merchant.slice(0, 2).toUpperCase();
+  /*
+   * Tanınmayan mağazada "OT" ("Other") yazıyordu — hiçbir şey ifade etmeyen ve
+   * yanlış okunması kolay bir kısaltma. Alan adının ilk iki harfi hiç olmazsa
+   * gidilecek yeri gösteriyor.
+   */
+  if (merchant === "Other" && domain) {
+    const host = domain.replace(/^www\./, "");
+    if (host) return host.slice(0, 2).toLocaleUpperCase("tr");
+  }
+  return merchant.slice(0, 2).toLocaleUpperCase("tr");
 }

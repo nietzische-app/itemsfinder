@@ -1,7 +1,7 @@
 import type { DetectedItem, ExampleId, ProductMatch } from "@/types";
 import { familyOf, normalizeTr, tokenize, type ItemFamily } from "@/lib/itemFamily";
 import { showcaseBox } from "@/lib/showcase";
-import { merchantHost } from "@/services/merchantSearch";
+import { merchantForDomain, merchantHost } from "@/services/merchantSearch";
 import { productThumbnail } from "@/lib/productThumbnail";
 import { verifiedPdpUrl, verifiedProductImage } from "@/data/verifiedProductUrls";
 import { productUrlOrEmpty } from "@/lib/productUrl";
@@ -2339,10 +2339,25 @@ export function hydrateProduct(product: CatalogProduct): ProductMatch {
    */
   const productUrl = productUrlOrEmpty(verifiedPdpUrl(product.id));
 
+  /*
+   * Mağaza adı bağlantıdan türetiliyor, katalog satırından değil.
+   *
+   * Katalogdaki `merchant` alanı elle yazılmış bir değer ve doğrulanmış bağlantı
+   * gelene kadar da öyle kalıyordu. Bağlantılar doldurulunca on dört üründen on
+   * biri yalan söylemeye başladı: kart Zara rozeti gösterirken «Ürüne git»
+   * Boyner'e, Mango rozeti gösterirken Pull&Bear'a gidiyordu. Rozet ile bağlantı
+   * arasındaki bu fark, kırık bağlantı kadar ciddi — ikisi de kullanıcıya
+   * gitmediği bir yeri gösteriyor.
+   *
+   * Bağlantı yoksa katalogdaki değer kalıyor: o durumda CTA da olmadığı için
+   * kimseye bir yer vaat edilmiyor.
+   */
   let merchantDomain = merchantHost(product.merchant);
+  let merchant = product.merchant;
   if (productUrl) {
     try {
       merchantDomain = new URL(productUrl).hostname.replace(/^www\./, "");
+      merchant = merchantForDomain(merchantDomain);
     } catch {
       // Validated on import, so this is unreachable; keep the merchant default.
     }
@@ -2357,6 +2372,7 @@ export function hydrateProduct(product: CatalogProduct): ProductMatch {
 
   return {
     ...rest,
+    merchant,
     imageUrl: verifiedImage || rest.imageUrl,
     productUrl,
     // Only ever "product": the search kind no longer exists as an outcome.

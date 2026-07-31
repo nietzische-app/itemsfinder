@@ -52,6 +52,8 @@ const { isDirectProductUrl } = await import("@/lib/productUrl");
 const { PDP_URLS, LISTING_URLS } = await import("../eval/productUrlCases.ts");
 const { extractImage } = await import("./fetch-images.mjs");
 const { OG_IMAGE_CASES } = await import("../eval/ogImageCases.ts");
+const { MOCK_SCENARIOS, hydrateProduct } = await import("@/services/mockCatalog");
+const { merchantLabel, merchantHost } = await import("@/services/merchantSearch");
 
 /**
  * Metric floors: set just under the measured baseline so a regression trips the
@@ -838,6 +840,32 @@ const ogMisses = OG_IMAGE_CASES.filter(
   (probe) => extractImage(probe.html, probe.pageUrl) !== probe.expected,
 );
 const ogScore = pct(OG_IMAGE_CASES.length - ogMisses.length, OG_IMAGE_CASES.length);
+
+/*
+ * Rozette yazan mağaza, «Ürüne git»in açtığı mağaza mı?
+ *
+ * Doğrulanmış bağlantılar yazılınca on dört üründen on biri yalan söylemeye
+ * başladı: katalogdaki mağaza alanı elle girilmişti ve bağlantı başka bir
+ * mağazaya gidiyordu — Zara rozeti, Boyner bağlantısı. Kırık bağlantı kadar
+ * ciddi, çünkü ikisi de kullanıcıya gitmediği bir yeri gösteriyor, ve gözle
+ * bakarak fark edilmesi daha zor.
+ */
+const badgeRows = Object.values(MOCK_SCENARIOS)
+  .flat()
+  .flatMap((item) => [item.exactMatch, ...item.alternatives])
+  .filter(Boolean)
+  .map((row) => hydrateProduct(row))
+  .filter((product) => product.productUrl);
+
+const badgeLies = badgeRows.filter((product) => {
+  const label = merchantLabel(product.merchant, product.merchantDomain);
+  // Tanınmayan mağazada etiket, alan adının uzantısız hâli olmalı — yani alan
+  // adı etiketle başlamalı. Eşitlik aramak, uzantı atıldığı an yanlış olurdu.
+  if (product.merchant === "Other") return !product.merchantDomain.startsWith(label);
+  const stem = merchantHost(product.merchant).replace(/^www\d*\./, "").split(".")[0];
+  return !product.merchantDomain.includes(stem);
+});
+const badgeScore = pct(badgeRows.length - badgeLies.length, badgeRows.length);
 const visionQueryScore = pct(visionQueryHits, visionQueryTotal);
 const retrievalScore = pct(retrievalHits, tight.length);
 const hotspotScore = pct(hotspotHits, hotspotCases);
@@ -933,6 +961,16 @@ console.log(
 );
 for (const url of urlFalseRejects) console.log(`      yanlış red    ${url.slice(0, 78)}`);
 for (const url of urlFalseAccepts) console.log(`      yanlış KABUL  ${url.slice(0, 78)}`);
+console.log(
+  `  Mağaza rozeti    ${fmt(badgeScore)}  (${badgeRows.length - badgeLies.length}/${badgeRows.length})   taban %100` +
+    `, rozet «Ürüne git»in gittiği yeri söylüyor mu`,
+);
+for (const product of badgeLies) {
+  console.log(
+    `      ${product.id}: rozet «${merchantLabel(product.merchant, product.merchantDomain)}» ` +
+      `ama bağlantı ${product.merchantDomain}`,
+  );
+}
 console.log(
   `  Ürün görseli     ${fmt(ogScore)}  (${OG_IMAGE_CASES.length - ogMisses.length}/${OG_IMAGE_CASES.length})   taban %100` +
     `, «fetch:images» og:image çıkarımı`,
@@ -1096,6 +1134,8 @@ const failures = [
    * öyle bir belirsizlik yok: listedeki her adres ya bir ürüne gidiyor ya
    * gitmiyor, ve ikisi de elle bakılarak yazıldı.
    */
+  badgeScore < 1 &&
+    `mağaza rozeti ${fmt(badgeScore)}: ${badgeLies.length} kart gitmediği mağazayı gösteriyor`,
   ogScore < 1 && `ürün görseli çıkarımı ${fmt(ogScore)}: ${ogMisses.length} şekil kaçtı`,
   urlScore < 1 &&
     `bağlantı yasağı ${fmt(urlScore)}: ${urlFalseRejects.length} yanlış red, ` +

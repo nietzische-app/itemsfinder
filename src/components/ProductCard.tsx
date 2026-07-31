@@ -8,7 +8,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { useSavedProducts } from "@/lib/savedItems";
-import { merchantColor, merchantInitials, merchantTextColor } from "@/services/merchantSearch";
+import {
+  merchantColor,
+  merchantInitials,
+  merchantLabel,
+  merchantTextColor,
+} from "@/services/merchantSearch";
 import { cn } from "@/lib/utils";
 import { buildAffiliateUrl, formatPrice, savingsPercent } from "@/utils/affiliate";
 import type { ProductMatch } from "@/types";
@@ -49,7 +54,16 @@ export function ProductCard({
       : 0;
 
   const isHero = variant === "hero";
-  const retailer = product.brandMetadata?.name ?? product.merchant;
+  /*
+   * Rozette yazan ad, bağlantının gerçekten açtığı yer.
+   *
+   * Eskiden `product.merchant` yazıyordu ve o katalogdaki elle girilmiş değerdi;
+   * doğrulanmış bağlantılar gelince on dört üründen on biri Zara rozetiyle
+   * Boyner'e gitmeye başladı. Tanınmayan mağazalarda marka adı uydurmak yerine
+   * alan adı gösteriliyor — kullanıcının tıkladığında göreceği şeyin aynısı.
+   */
+  const retailer =
+    product.brandMetadata?.name ?? merchantLabel(product.merchant, product.merchantDomain);
 
   return (
     <article
@@ -111,7 +125,7 @@ export function ProductCard({
                     color: merchantTextColor(product.merchant),
                   }}
                 >
-                  {merchantInitials(product.merchant)}
+                  {merchantInitials(product.merchant, product.merchantDomain)}
                 </span>
               )}
               <span className="truncate">{retailer}</span>
