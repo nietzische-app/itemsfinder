@@ -76,9 +76,9 @@ export default function TermsPage() {
         kampanya değişikliklerinden sorumlu tutulamaz.
       </p>
       <p>
-        Bazı ürün bağlantıları belirli bir ürün sayfası yerine{" "}
-        <strong>mağaza içi arama sonucuna</strong> yönlendirir; bu durumda düğme
-        &laquo;Mağazada bul&raquo; olarak görünür.
+        Ürün düğmeleri (&laquo;Ürüne git&raquo; / &laquo;İncele&raquo;) yalnızca
+        doğrulanmış <strong>ürün detay sayfalarına</strong> (PDP) yönlendirir.
+        Mağaza içi arama sonuç sayfalarına bağlantı verilmez.
       </p>
 
       <h2 id="affiliate">4. Affiliate (iş ortaklığı) bildirimi</h2>
