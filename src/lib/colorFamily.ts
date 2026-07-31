@@ -28,6 +28,26 @@ export type ColorFamily =
   | "sari"
   | "mor";
 
+/**
+ * Whether a near-neutral leans warm.
+ *
+ * Cream, ivory, sand and beige are warm neutrals and a shopper types "krem" or
+ * "bej" for them; a white shirt photographed in open shade is a *cool* neutral and
+ * they type "beyaz". Both measure as almost no hue, so a rule that only looks at
+ * how much colour there is has to call them the same thing — and it did, which is
+ * why a beige blouse (#e4dbcb) and a white sneaker (#d0d9e4) both came out white
+ * despite sitting on opposite sides of the only distinction that matters here.
+ *
+ * Red-minus-blue is the whole test, and the line sits at sixteen units out of 255.
+ * Eight was the first guess and it was too eager: an off-white (#f4f1ea, ten units
+ * warm) is what a Turkish shopper calls "kırık beyaz", not "bej". The colours this
+ * has to separate are further apart than that — a beige blouse runs 25 units warm
+ * and a cream dress 32, while a white sneaker in shade runs 20 units *cool*.
+ */
+function warmNeutral(r: number, b: number): boolean {
+  return r - b >= 16 / 255;
+}
+
 export function colorFamilyOf(hex: string): ColorFamily {
   const value = hex.replace("#", "");
   const r = parseInt(value.slice(0, 2), 16) / 255;
@@ -59,9 +79,12 @@ export function colorFamilyOf(hex: string): ColorFamily {
    * "mavi". A twenty-unit spread is sensor noise and the shade of a cloudy sky, not
    * a colour anybody would type into a search box.
    */
-  if (lightness > 0.82 && delta < 0.12) return "beyaz";
+  if (lightness > 0.82 && delta < 0.14) return warmNeutral(r, b) ? "bej" : "beyaz";
   // Metal frames and washed greys sit around 0.15 saturation; 0.12 was too tight.
-  if (saturation < 0.2) return lightness < 0.6 ? "gri" : "beyaz";
+  if (saturation < 0.2) {
+    if (lightness < 0.6) return "gri";
+    return warmNeutral(r, b) ? "bej" : "beyaz";
+  }
 
   // Hue in degrees.
   let hue = 0;

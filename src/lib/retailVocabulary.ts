@@ -135,6 +135,10 @@ const TERMS: Record<string, string> = {
   // --- Bags ---
   bag: "çanta",
   bags: "çanta",
+  // Vision emits both for luggage; without them the coarse query ships the
+  // English word to a Turkish search box.
+  briefcase: "evrak çantası",
+  suitcase: "bavul",
   handbag: "el çantası",
   clutch: "portföy çanta",
   tote: "tote çanta",

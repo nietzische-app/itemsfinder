@@ -305,4 +305,144 @@ export const PHOTO_CASES: PhotoCase[] = [
       },
     ],
   },
+  {
+    id: "navy-fur-puffer",
+    image: "/examples/edoardo-cuoghi-_NrW6FV5LKc-unsplash.jpg",
+    credit: "Edoardo Cuoghi / Unsplash",
+    items: [
+      {
+        id: "nf-coat",
+        label: "Lacivert Suni Kürk Mont",
+        itemType: "Mont",
+        box: { x: 0.11, y: 0.25, width: 0.79, height: 0.48 },
+        color: "koyu",
+        queryToken: "mont",
+        visionClass: "Coat",
+        visionToken: "kaban",
+        material: null,
+        pattern: "düz",
+      },
+      {
+        id: "nf-top",
+        label: "Krem Basic Üst",
+        itemType: "Bluz",
+        // Only the strip between the open zip is actually the top; the box I first
+        // drew reached into the fur on both sides and measured it.
+        box: { x: 0.355, y: 0.44, width: 0.075, height: 0.22 },
+        color: "beyaz",
+        queryToken: "bluz",
+        visionClass: "Top",
+        visionToken: "bluz",
+        material: null,
+        pattern: "düz",
+      },
+      {
+        id: "nf-jeans",
+        label: "Açık Mavi Yüksek Bel Jean",
+        itemType: "Jean",
+        box: { x: 0.19, y: 0.73, width: 0.5, height: 0.27 },
+        color: "mavi",
+        queryToken: "jean",
+        visionClass: "Jeans",
+        visionToken: "jean",
+        material: "denim",
+        pattern: "düz",
+      },
+    ],
+  },
+  {
+    id: "cream-blouse",
+    image: "/examples/engin-akyurt-jaZoffxg1yc-unsplash.jpg",
+    credit: "Engin Akyurt / Unsplash",
+    items: [
+      {
+        id: "cb-blouse",
+        label: "Bej Kruvaze Bluz",
+        itemType: "Bluz",
+        box: { x: 0.11, y: 0.28, width: 0.55, height: 0.32 },
+        color: "bej",
+        queryToken: "bluz",
+        visionClass: "Top",
+        visionToken: "bluz",
+        material: null,
+        pattern: "düz",
+      },
+      {
+        id: "cb-trousers",
+        label: "Beyaz Yüksek Bel Pantolon",
+        itemType: "Pantolon",
+        box: { x: 0.25, y: 0.56, width: 0.58, height: 0.44 },
+        color: "beyaz",
+        queryToken: "pantolon",
+        visionClass: "Trousers",
+        visionToken: "pantolon",
+        material: null,
+        pattern: "düz",
+      },
+    ],
+  },
+  {
+    id: "linen-shirt",
+    image: "/examples/gilda-gonzalez-UJlPhr1uRNQ-unsplash.jpg",
+    credit: "Gilda Gonzalez / Unsplash",
+    items: [
+      {
+        id: "ls-shirt",
+        label: "Bej Keten Kısa Kollu Gömlek",
+        itemType: "Gömlek",
+        box: { x: 0.28, y: 0.37, width: 0.42, height: 0.4 },
+        color: "bej",
+        queryToken: "gömlek",
+        visionClass: "Shirt",
+        visionToken: "gömlek",
+        material: "keten",
+        pattern: "düz",
+      },
+      /*
+       * The trousers in this frame are not labelled: they are the bottom fifth of
+       * a dim photograph and the box I drew for them was measuring the shirt hem.
+       * A box that has to be argued for is not ground truth.
+       */
+    ],
+  },
+  {
+    id: "field-dress",
+    image: "/examples/iurii-melentsov-7iKuB62CQBU-unsplash.jpg",
+    credit: "Iurii Melentsov / Unsplash",
+    items: [
+      {
+        id: "fd-dress",
+        label: "Krem Düğmeli Midi Elbise",
+        itemType: "Elbise",
+        // The skirt below the suitcase, not the whole figure: the wider box shared
+        // its area with the suitcase and the model's legs, and what survived the
+        // exclusions was shadow.
+        box: { x: 0.4, y: 0.6, width: 0.2, height: 0.19 },
+        color: "beyaz",
+        queryToken: "elbise",
+        visionClass: "Dress",
+        visionToken: "elbise",
+        material: null,
+        pattern: "düz",
+      },
+      /*
+       * The sun hat is not labelled. Its brim is a few pixels deep at this
+       * distance and every box that contains it also contains the shadow under it,
+       * which is what the measurement reads. This is the `bb-heels` class of
+       * problem and adding a third instance of it teaches nothing new.
+       */
+      {
+        id: "fd-case",
+        label: "Siyah Vintage Bavul",
+        itemType: "Bavul",
+        box: { x: 0.25, y: 0.62, width: 0.16, height: 0.13 },
+        color: "koyu",
+        queryToken: "bavul",
+        visionClass: "Briefcase",
+        visionToken: "çanta",
+        material: null,
+        pattern: "düz",
+      },
+    ],
+  },
 ];

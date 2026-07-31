@@ -26,11 +26,19 @@ büyüklükleri değil, boru hattı değiştiğinde **hangi yöne gittikleri**.
 
 ## Kapsam — dürüst hâli
 
-**Dört fotoğraf, on dört parça.** Bu bir kıyaslama seti değil, duman testi.
-Kutular `SHOWCASE_LOOKS`'tan, etiketler `MOCK_SCENARIOS`'tan geliyor; ikisi de
-elle ölçülmüş referans. Burada gerçekten yeni olan etiketler her parçanın
-beklenen **renk ailesi** ve üretilen sorguda görülmesi gereken **Türkçe
-token**.
+**On beş fotoğraf, otuz yedi parça.** Dördü vitrin görünümü (kutular
+`SHOWCASE_LOOKS`'tan, etiketler `MOCK_SCENARIOS`'tan), on biri
+`eval/photoCases.ts` içinde duran ve demo kataloğuna hiç dokunmayan elle
+etiketlenmiş fotoğraflar.
+
+O ayrım kasıtlı: bir vaka eskiden `MOCK_SCENARIOS` girdisi de istiyordu, yani
+fiyatlı-mağazalı tam ürün kartları. Otuz fotoğrafı öyle eklemek yüz tane sahte
+ürün uydurmak olurdu. Bir eval vakasının ürüne ihtiyacı yok — fotoğraf, kutular,
+ve bir insanın onlarda gördüğü şey yeterli.
+
+Hâlâ bir kıyaslama seti sayılmaz ama artık duman testinden fazlası: stüdyo ve
+sokak, tam boy ve yarım boy, açık ve koyu ten, gündüz ve yapay ışık, sade ve
+desenli, kadın ve erkek.
 
 Vaka eklemek: fotoğrafı `public/examples/`'a koy, ölçülmüş kutularla bir
 `SHOWCASE_LOOKS` kaydı ve eşleşen bir senaryo ekle, sonra `groundTruth.ts`
@@ -52,7 +60,7 @@ kumaşı yazmak, ölçüme cevap uydurmaktır.
 
 | Metrik | Ne ölçüyor | Taban |
 | --- | --- | --- |
-| Bölge rengi | Ölçülen baskın rengin, insanın adlandıracağı renk ailesiyle eşleşmesi (fon + ten elenerek) | %80 |
+| Bölge rengi | Ölçülen baskın rengin, insanın adlandıracağı renk ailesiyle eşleşmesi (fon + ten elenerek) | %76 |
 | VLM rengi | Kırpıma bakan modelin verdiği rengin aynı eşleşmeyi tutması (fixture ister) | aynı parçalarda ölçülen renk |
 | VLM ürün adı | Modelin verdiği Türkçe ürün adının beklenen token'ı taşıması (fixture ister) | — |
 | VLM sorgusu | Modelin gördüklerinden kurulan **tam sorgunun** spesifik token'ı taşıması (fixture ister) | aynı parçalarda Vision sınıfı |
@@ -60,7 +68,7 @@ kumaşı yazmak, ölçüme cevap uydurmaktır.
 | Malzeme / Desen | Modelin öne sürdüğü özniteliklerin fotoğrafla tutması — doğru / çekimser / **uydurma** (fixture ister) | henüz yok |
 | Sorgu token'ı | Üretilen aramanın, parçayı bulmaya yetecek Türkçe kelimeyi taşıması | %90 |
 | Vision sınıfı | **Yalnızca** Vision'ın İngilizce sınıfından üretilen sorgunun Türkçe terimi taşıması ve İngilizce kelime bırakmaması | %100 |
-| Görsel erişim | Bir parçanın sıkı kırpımının, 14 gevşek kırpım arasından kendi eşini bulması | %70 (şans %7) |
+| Görsel erişim | Bir parçanın sıkı kırpımının, **tüm** gevşek kırpımlar arasından kendi eşini bulması | %57 (şans, set boyutundan hesaplanıyor) |
 | Aile tutarlılığı | Sınıflandırıcının kataloğu kendi içinde tutarlı etiketlemesi | %90 |
 | Hotspot sayısı | Temizlenmiş tespit sayısının beklenene ±1 yakınlığı (fixture ister) | %75 |
 | Kutu bulma | Etiketli parçaların kaçının bir tespitçe IoU ≥ 0.5 ile sahiplenildiği, **bire-bir** (fixture ister) | henüz yok |
