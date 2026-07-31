@@ -19,7 +19,7 @@ const CONTACT_EMAIL = "iletisim@markas.app";
  * **açıkça** belirtilmesini istiyor, ve yanlış ya da eksik bir kimlik boş
  * bırakmaktan kötüdür.
  */
-const CONTROLLER_NAME = "[Ad Soyad]";
+const CONTROLLER_NAME = "Niyazi Önder Duman";
 
 /**
  * Yer tutucuyla **üretime** çıkmayı imkânsız kılar.

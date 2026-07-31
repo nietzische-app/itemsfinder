@@ -50,7 +50,21 @@ import { isDirectProductUrl, isSearchUrl } from "@/lib/productUrl";
  *   "po-shorts-exact":   "https://www.zara.com/tr/tr/deri-gorunumlu-sort-p04387042.html",
  *   "po-sneakers-exact": "https://www.amazon.com.tr/dp/B08N5WRWNW",
  */
-export const VERIFIED_PDP_URLS: Readonly<Record<string, string>> = {};
+export const VERIFIED_PDP_URLS: Readonly<Record<string, string>> = {
+  /*
+   * Sahibi tarafından `utm_term=showcase-shoes` etiketiyle verildi — yani bu
+   * eşleşme onun beyanı, benim çıkarımım değil. Bu ortamdan hiçbir mağazaya ağ
+   * yolu olmadığı için sayfayı açıp içindeki ürünün gerçekten siyah-beyaz bilekli
+   * bir sneaker olduğunu doğrulayamadım; dosyanın başındaki not da zaten bunun
+   * ancak sayfayı açan bir insan tarafından doğrulanabileceğini söylüyor.
+   *
+   * Takip parametreleri atıldı (`utm_*`, `tag`, `linkCode`): ortaklık etiketini
+   * `buildAffiliateUrl` kendisi ekliyor, ve burada saklanan eski bir etiket onun
+   * ekleyeceğiyle çakışır. Varyant seçicileri (`th`, `psc`) de atıldı — hangi
+   * varyantın kastedildiği bilinmiyor, `/dp/<ASIN>` ise ürünün kanonik sayfası.
+   */
+  "po-sneakers-exact": "https://www.amazon.com.tr/dp/B0CJRGT916",
+};
 
 /**
  * Fails loudly at import time on a malformed entry.
