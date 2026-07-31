@@ -195,6 +195,8 @@ export interface SanitizeOptions {
   topsSubtype?: TopsSubtype | null;
   /** Apparel gender — reject cross-gender PDPs when locked. */
   gender?: ApparelGender | null;
+  /** Detection item type (e.g. Sneaker) for footwear subtype locks. */
+  itemType?: string | null;
 }
 
 /** Titles/URLs that are incompatible with a locked T-Shirt detection. */
@@ -239,14 +241,50 @@ const FOOTWEAR_HARD_REJECT = [
   "jacket",
   "pantolon",
   "trousers",
-  "sandalet",
-  "sandal",
   "carsaf",
   "çarşaf",
   "nevresim",
   "bedding",
   "bedsheet",
 ];
+
+/** Extra blocks when the locked detection is a sneaker (not a sandal). */
+const SNEAKER_HARD_REJECT = ["sandalet", "sandal", "heel", "topuklu"];
+
+function hitsSubtypeMismatch(
+  topsSubtype: TopsSubtype | null | undefined,
+  primary: PrimaryCategory,
+  haystack: string,
+  itemType?: string | null,
+): boolean {
+  if (topsSubtype === "tshirt") {
+    if (TSHIRT_HARD_REJECT.some((token) => haystack.includes(foldAscii(token)))) {
+      return true;
+    }
+    // Allowlist-only: must contain Tişört / T-Shirt / tee.
+    const allowed = TSHIRT_HARD_ALLOW.some((token) =>
+      haystack.includes(foldAscii(token)),
+    );
+    return !allowed;
+  }
+
+  if (primary === "FOOTWEAR") {
+    if (FOOTWEAR_HARD_REJECT.some((token) => haystack.includes(foldAscii(token)))) {
+      return true;
+    }
+    const sneakerLock = /sneaker|trainer|spor ayakkab|hi-?top|bilekli/i.test(
+      itemType ?? "",
+    );
+    if (
+      sneakerLock &&
+      SNEAKER_HARD_REJECT.some((token) => haystack.includes(foldAscii(token)))
+    ) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 const MALE_GENDER_REJECT = [
   "/kadin/",
@@ -280,29 +318,6 @@ const FEMALE_GENDER_REJECT = [
   "mens ",
   "male ",
 ];
-
-function hitsSubtypeMismatch(
-  topsSubtype: TopsSubtype | null | undefined,
-  primary: PrimaryCategory,
-  haystack: string,
-): boolean {
-  if (topsSubtype === "tshirt") {
-    if (TSHIRT_HARD_REJECT.some((token) => haystack.includes(foldAscii(token)))) {
-      return true;
-    }
-    // Allowlist-only: must contain Tişört / T-Shirt / tee.
-    const allowed = TSHIRT_HARD_ALLOW.some((token) =>
-      haystack.includes(foldAscii(token)),
-    );
-    return !allowed;
-  }
-
-  if (primary === "FOOTWEAR") {
-    return FOOTWEAR_HARD_REJECT.some((token) => haystack.includes(foldAscii(token)));
-  }
-
-  return false;
-}
 
 function hitsGenderMismatch(
   gender: ApparelGender | null | undefined,
@@ -405,7 +420,9 @@ export function passesWhitelistSanitizer(
 
   if (!hitsWhitelist(primary, haystack)) return false;
 
-  if (hitsSubtypeMismatch(options.topsSubtype, primary, haystack)) return false;
+  if (hitsSubtypeMismatch(options.topsSubtype, primary, haystack, options.itemType)) {
+    return false;
+  }
   if (hitsGenderMismatch(options.gender, haystack, options.topsSubtype)) return false;
 
   const enforceColor = options.enforceColor !== false;
