@@ -6,6 +6,9 @@ import { colorNameFromHex } from "@/lib/searchQueryColors";
 import {
   extractApparelGender,
   extractTopsSubtype,
+  isBasicSolidApparel,
+  type ApparelGender,
+  type TopsSubtype,
 } from "@/lib/searchQueryBuilder";
 import {
   familyFromPrimary,
@@ -14,6 +17,10 @@ import {
 } from "@/lib/primaryCategory";
 import { passesWhitelistSanitizer } from "@/utils/sanitizer";
 import { LIVE_EXTRACT_DEADLINE_MS } from "@/lib/timeouts";
+import {
+  BIREBIR_HIGH_CONFIDENCE_TAG,
+  isForcedBasicExact,
+} from "@/services/reRanker";
 import { hydrateProduct } from "@/services/mockCatalog";
 import { isDirectProductUrl, resolveVerifiedPdp } from "@/services/productUrls";
 import type {
@@ -24,7 +31,6 @@ import type {
   ProductMatch,
   ProductSource,
 } from "@/types";
-import type { ApparelGender, TopsSubtype } from "@/lib/searchQueryBuilder";
 
 /**
  * Product resolution — the stage that decides *what to buy* for each detection.
@@ -209,11 +215,44 @@ export class ContextDevProductProvider implements ProductProvider {
       }),
     );
 
+    const basicExact =
+      best.matchScore >= 0.95 ||
+      isForcedBasicExact(
+        {
+          primaryCategory: primary,
+          colorHex: item.colorHex,
+          colorName: stageInput.colorName,
+          topsSubtype: stageInput.topsSubtype,
+          gender: stageInput.gender,
+          itemType: item.itemType,
+          label: item.label,
+          attributes: item.attributes,
+          webEntity: item.webEntity,
+          patterns: item.patterns,
+        },
+        {
+          title: best.title,
+          productUrl: best.productUrl,
+          brand: best.brand,
+        },
+      ) ||
+      isBasicSolidApparel({
+        primaryCategory: primary,
+        topsSubtype: stageInput.topsSubtype,
+        colorName: stageInput.colorName,
+        colorHex: item.colorHex,
+        patterns: item.patterns,
+        label: item.label,
+        itemType: item.itemType,
+        attributes: item.attributes,
+        webEntity: item.webEntity,
+      });
+
     const exactMatch = toProductMatch(best, {
       id: `${item.id}-live-exact`,
       matchType: "exact",
-      similarity: best.matchScore,
-      tag: "Birebir Eşleşme",
+      similarity: Math.max(best.matchScore, basicExact ? 0.95 : best.matchScore),
+      tag: basicExact ? BIREBIR_HIGH_CONFIDENCE_TAG : "Birebir Eşleşme",
       brand: brands.get(best.merchantDomain) ?? null,
       lockedPrimary: primary,
       colorHex: item.colorHex,

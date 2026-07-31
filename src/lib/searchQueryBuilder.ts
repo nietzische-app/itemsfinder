@@ -281,17 +281,10 @@ function resolveApparelGender(input: ExactQueryInput): ApparelGender | null {
   );
   if (fromText) return fromText;
 
-  // Basic crewneck / vague "Top" with no feminine cut → Erkek storefront bias.
+  // Absolute default: T-Shirt / vague Top with no feminine cut → Erkek.
   const subtype = resolveTopsSubtype(input);
   if (subtype === "tshirt" || subtype === "other") {
-    const neck = extractNeckline(
-      [input.webEntity, input.label, input.attributes, input.itemType]
-        .filter(Boolean)
-        .join(" "),
-    );
-    if (neck === "Bisiklet Yaka" || subtype === "tshirt") {
-      return "male";
-    }
+    return "male";
   }
   return null;
 }
@@ -686,17 +679,79 @@ function resolveMaterialsAndPatterns(input: ExactQueryInput): {
   );
 }
 
+/** Tokens banned from every storefront query — never emit these. */
+const BANNED_QUERY_GENERICS = new Set([
+  "ust",
+  "üst",
+  "top",
+  "alt",
+  "kiyafet",
+  "kıyafet",
+  "giyim",
+  "parca",
+  "parça",
+  "urun",
+  "ürün",
+  "clothing",
+  "apparel",
+  "item",
+  "product",
+  "object",
+  "wear",
+  "garment",
+]);
+
 /**
  * Stage 1 — Exact visual match query.
  *
- * Shape: `[Brand?] + [Color] + [Texture/Pattern] + [Gender?] + [WEB style] + [Subtype]`
- * Example: "Siyah Bisiklet Yaka Erkek Tişört" / "Nike Siyah Yüksek Taban Sneaker"
+ * Absolute shape for apparel (no LLM fluff):
+ *   `[Color] + [Material/Pattern?] + [Gender/Fit] + [Specific Subtype]`
+ * Example: "Siyah Erkek Bisiklet Yaka Tişört" / "Pembe Triko Fermuarlı Kadın Hırka"
  */
 export function buildExactMatchQuery(input: ExactQueryInput): string {
+  // --- TOPS: rigid template — ignore vague Vision "Top"/"Üst" dump ---
+  if (input.primaryCategory === "TOPS") {
+    const parts: string[] = [];
+    const color = resolveColor(input);
+    if (color) parts.push(color);
+
+    const { materials, patterns } = resolveMaterialsAndPatterns(input);
+    const material = materials[0];
+    if (material) parts.push(material);
+    const pattern = patterns.find((p) => !/^düz$/i.test(normalizeTr(p)));
+    if (pattern && !material) parts.push(pattern);
+
+    if (input.attributes) {
+      const normalised = normalizeFashionQuery(input.attributes);
+      for (const word of normalised.split(/\s+/)) {
+        const key = normalizeTr(word);
+        if (
+          (key === "fermuarli" ||
+            key === "fermuarlı" ||
+            key === "oversize" ||
+            key === "slim") &&
+          !parts.some((p) => normalizeTr(p) === key)
+        ) {
+          parts.push(word);
+          break;
+        }
+      }
+    }
+
+    const gender = resolveApparelGender(input) ?? "male";
+    parts.push(GENDER_QUERY_TOKEN[gender]);
+    parts.push(topsCategoryToken(input));
+
+    return parts
+      .map((part) => part.trim())
+      .filter((part) => part.length > 0)
+      .filter((part) => !BANNED_QUERY_GENERICS.has(normalizeTr(part)))
+      .join(" ");
+  }
+
   const tokens: string[] = [];
   const seen = new Set<string>();
 
-  // LOGO_DETECTION brand always leads the query when present.
   if (input.brandLogo?.trim()) {
     pushToken(tokens, seen, input.brandLogo.trim());
   }
@@ -705,9 +760,10 @@ export function buildExactMatchQuery(input: ExactQueryInput): string {
   pushToken(tokens, seen, color);
 
   const { materials, patterns } = resolveMaterialsAndPatterns(input);
-  // Mandatory texture / pattern descriptors from ROI analysis.
   for (const material of materials) pushToken(tokens, seen, material);
-  for (const pattern of patterns) pushToken(tokens, seen, pattern);
+  for (const pattern of patterns) {
+    if (!/^düz$/i.test(normalizeTr(pattern))) pushToken(tokens, seen, pattern);
+  }
 
   const gender = resolveApparelGender(input);
   if (gender) {
@@ -719,68 +775,42 @@ export function buildExactMatchQuery(input: ExactQueryInput): string {
   pushToken(tokens, seen, input.label);
   pushToken(tokens, seen, input.itemType);
 
-  // TOPS: emit a concrete subtype (Tişört / Body / Gömlek…) — never bare "Üst".
-  let categoryLabel = PRIMARY_CATEGORY_QUERY_LABEL[input.primaryCategory];
-  if (input.primaryCategory === "TOPS") {
-    categoryLabel = topsCategoryToken(input);
-  }
-
+  const categoryLabel = PRIMARY_CATEGORY_QUERY_LABEL[input.primaryCategory];
   if (categoryLabel) {
     const alreadyHasCategory = tokens.some((token) => {
       const key = normalizeTr(token);
-      const labelKey = normalizeTr(categoryLabel);
       return (
-        key === labelKey ||
-        labelKey.includes(key) ||
+        key === normalizeTr(categoryLabel) ||
         key === normalizeTr(input.itemType ?? "") ||
         STYLE_KEEP.has(key)
       );
     });
     if (!alreadyHasCategory) {
       pushToken(tokens, seen, categoryLabel);
-    } else {
-      // Still force the multi-word subtype phrase when only a vague stem matched.
-      if (
-        input.primaryCategory === "TOPS" &&
-        !tokens.some((token) =>
-          /tişört|tisort|body|gömlek|gomlek|sweatshirt|hırka|hirka|bluz|kazak/i.test(
-            token,
-          ),
-        )
-      ) {
-        pushToken(tokens, seen, categoryLabel);
-      }
     }
   }
 
-  // Prefer a specific item type over the generic category label when both fit.
-  if (input.itemType && input.primaryCategory !== "TOPS") {
+  if (input.itemType) {
     pushToken(tokens, seen, input.itemType);
   }
 
-  // Colour bucket is mandatory when Vision supplied one.
   if (color && !tokens.some((token) => normalizeTr(token) === normalizeTr(color))) {
     const brandOffset = input.brandLogo?.trim() ? 1 : 0;
     tokens.splice(brandOffset, 0, color);
   }
 
-  // Re-assert mandatory materials/patterns near the front if squeezed out.
   for (const mandatory of [...materials, ...patterns]) {
+    if (/^düz$/i.test(normalizeTr(mandatory))) continue;
     if (!tokens.some((token) => normalizeTr(token) === normalizeTr(mandatory))) {
       const insertAt = Math.min(tokens.length, input.brandLogo?.trim() ? 2 : 1);
       tokens.splice(insertAt, 0, mandatory);
     }
   }
 
-  // Gender + subtype are high-signal for TR storefronts — keep them in the window.
-  if (gender) {
-    const genderToken = GENDER_QUERY_TOKEN[gender];
-    if (!tokens.some((token) => normalizeTr(token) === normalizeTr(genderToken))) {
-      tokens.splice(Math.min(2, tokens.length), 0, genderToken);
-    }
-  }
-
-  return tokens.slice(0, 8).join(" ");
+  return tokens
+    .filter((token) => !BANNED_QUERY_GENERICS.has(normalizeTr(token)))
+    .slice(0, 8)
+    .join(" ");
 }
 
 /**

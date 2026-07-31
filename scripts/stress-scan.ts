@@ -588,11 +588,40 @@ function archetypeGenderTopsExactThreshold(): Check[] {
   checks.push(
     assert(
       "black tee query is Erkek Bisiklet Yaka Tişört",
-      /siyah/i.test(blackTeeQuery) &&
+      /^Siyah\b/i.test(blackTeeQuery) &&
         /erkek/i.test(blackTeeQuery) &&
         /tişört|tisort/i.test(blackTeeQuery) &&
-        /bisiklet/i.test(blackTeeQuery),
+        /bisiklet/i.test(blackTeeQuery) &&
+        !/\büst\b/i.test(blackTeeQuery) &&
+        !/\btop\b/i.test(blackTeeQuery),
       blackTeeQuery,
+    ),
+  );
+
+  checks.push(
+    assert(
+      "sanitizer rejects Hırka for T-Shirt lock",
+      !passesWhitelistSanitizer(
+        "TOPS",
+        {
+          title: "Fermuarlı Triko Hırka",
+          productUrl: "https://www.trendyol.com/x/hirka-p-1",
+        },
+        { topsSubtype: "tshirt", gender: "male", enforceColor: false },
+      ),
+    ),
+  );
+  checks.push(
+    assert(
+      "sanitizer rejects footwear×ceket",
+      !passesWhitelistSanitizer(
+        "FOOTWEAR",
+        {
+          title: "Siyah Deri Ceket",
+          productUrl: "https://www.zara.com/tr/tr/jacket-p06987463.html",
+        },
+        { enforceColor: false },
+      ),
     ),
   );
 
@@ -700,8 +729,10 @@ function archetypeGenderTopsExactThreshold(): Check[] {
 
   checks.push(
     assert(
-      "basic tee clears birebir threshold",
-      Boolean(ranked.exact) && ranked.exact!.score >= BASIC_SOLID_EXACT_THRESHOLD,
+      "basic tee force-promoted to ≥95% birebir",
+      Boolean(ranked.exact) &&
+        ranked.exact!.score >= 0.95 &&
+        Boolean(ranked.exact!.forcedBasicExact),
       ranked.exact ? String(ranked.exact.score) : "no exact",
     ),
   );

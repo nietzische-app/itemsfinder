@@ -219,6 +219,33 @@ const TSHIRT_HARD_REJECT = [
   "sweetheart",
   "bustiyer",
   "bustier",
+  "hirka",
+  "hırka",
+  "cardigan",
+  "sweatshirt",
+  "hoodie",
+  "kapuson",
+  "kazak",
+  "jumper",
+  "sweater",
+];
+
+/** T-Shirt may ONLY match titles that contain one of these stems. */
+const TSHIRT_HARD_ALLOW = ["tisort", "tişört", "tshirt", "t-shirt", "tee"];
+
+/** Footwear hard-block (cross-category / wrong shoe type). */
+const FOOTWEAR_HARD_REJECT = [
+  "ceket",
+  "jacket",
+  "pantolon",
+  "trousers",
+  "sandalet",
+  "sandal",
+  "carsaf",
+  "çarşaf",
+  "nevresim",
+  "bedding",
+  "bedsheet",
 ];
 
 const MALE_GENDER_REJECT = [
@@ -226,16 +253,28 @@ const MALE_GENDER_REJECT = [
   "/kadın/",
   "kadin-",
   "kadın-",
-  "woman",
+  "kadin ",
+  "kadın ",
+  " woman",
   "women",
   "ladies",
   "bayan",
   "girl",
+  "body",
+  "bodysuit",
+  "askili",
+  "askılı",
+  "halter",
+  "kalp yaka",
+  "crop",
+  "bluz",
+  "blouse",
 ];
 
 const FEMALE_GENDER_REJECT = [
   "/erkek/",
   "erkek-",
+  "erkek ",
   " men ",
   "man's",
   "mens ",
@@ -244,18 +283,53 @@ const FEMALE_GENDER_REJECT = [
 
 function hitsSubtypeMismatch(
   topsSubtype: TopsSubtype | null | undefined,
+  primary: PrimaryCategory,
   haystack: string,
 ): boolean {
-  if (topsSubtype !== "tshirt") return false;
-  return TSHIRT_HARD_REJECT.some((token) => haystack.includes(foldAscii(token)));
+  if (topsSubtype === "tshirt") {
+    if (TSHIRT_HARD_REJECT.some((token) => haystack.includes(foldAscii(token)))) {
+      return true;
+    }
+    // Allowlist-only: must contain Tişört / T-Shirt / tee.
+    const allowed = TSHIRT_HARD_ALLOW.some((token) =>
+      haystack.includes(foldAscii(token)),
+    );
+    return !allowed;
+  }
+
+  if (primary === "FOOTWEAR") {
+    return FOOTWEAR_HARD_REJECT.some((token) => haystack.includes(foldAscii(token)));
+  }
+
+  return false;
 }
 
 function hitsGenderMismatch(
   gender: ApparelGender | null | undefined,
   haystack: string,
+  topsSubtype?: TopsSubtype | null,
 ): boolean {
   if (gender === "male") {
     return MALE_GENDER_REJECT.some((token) => haystack.includes(foldAscii(token)));
+  }
+  if (gender === "unisex") {
+    // Unisex T-Shirts still cannot be women's Body / Askılı / /kadin/ cuts.
+    const unisexReject =
+      topsSubtype === "tshirt" || topsSubtype === "other" || !topsSubtype
+        ? [
+            "body",
+            "bodysuit",
+            "askili",
+            "askılı",
+            "halter",
+            "kalp yaka",
+            "/kadin/",
+            "/kadın/",
+            "kadin-",
+            "kadın-",
+          ]
+        : ["body", "bodysuit", "askili", "askılı", "halter", "kalp yaka"];
+    return unisexReject.some((token) => haystack.includes(foldAscii(token)));
   }
   if (gender === "female") {
     return FEMALE_GENDER_REJECT.some((token) => haystack.includes(foldAscii(token)));
@@ -331,8 +405,8 @@ export function passesWhitelistSanitizer(
 
   if (!hitsWhitelist(primary, haystack)) return false;
 
-  if (hitsSubtypeMismatch(options.topsSubtype, haystack)) return false;
-  if (hitsGenderMismatch(options.gender, haystack)) return false;
+  if (hitsSubtypeMismatch(options.topsSubtype, primary, haystack)) return false;
+  if (hitsGenderMismatch(options.gender, haystack, options.topsSubtype)) return false;
 
   const enforceColor = options.enforceColor !== false;
   if (enforceColor) {

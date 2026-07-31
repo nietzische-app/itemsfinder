@@ -20,17 +20,17 @@ import {
  *   Colour & texture keywords … 30%
  *   WEB_DETECTION similarity … 30%
  *
- * Candidates scoring above the exact-match threshold become the Exact Match
- * (`Birebir Eşleşme`) and sit at the top of the /analyze result list.
- *
- * Basic solid staples (black/white tee, blue jean, black short) use a lower
- * threshold because they are widely stocked across TR storefronts.
+ * Flexible matching is OFF for basic solid apparel: a colour+subtype hit from
+ * LCW / DeFacto / Trendyol / Zara is forced to Exact Match at ≥95%.
  */
 
 export const EXACT_MATCH_THRESHOLD = 0.85;
 
-/** Relaxed bar for basic solid-colour apparel with high marketplace coverage. */
-export const BASIC_SOLID_EXACT_THRESHOLD = 0.72;
+/** Floor for basic solid staples — any colour+subtype hit clears Birebir. */
+export const BASIC_SOLID_EXACT_THRESHOLD = 0.55;
+
+/** UI tag when basic solid apparel is force-promoted to Exact Match. */
+export const BIREBIR_HIGH_CONFIDENCE_TAG = "Birebir Eşleşme (%95+ Doğruluk)";
 
 export interface ReRankTarget {
   primaryCategory: PrimaryCategory;
@@ -70,26 +70,72 @@ export interface RankedCandidate<T extends ReRankCandidate = ReRankCandidate> {
   };
   /** True when score clears the exact-match threshold. */
   isExact: boolean;
+  /** True when basic-solid force-promotion applied. */
+  forcedBasicExact?: boolean;
+}
+
+function isBasicSolidTarget(target: ReRankTarget): boolean {
+  return isBasicSolidApparel({
+    primaryCategory: target.primaryCategory,
+    topsSubtype: target.topsSubtype,
+    colorName: target.colorName,
+    colorHex: target.colorHex,
+    patterns: target.patterns,
+    label: target.label,
+    itemType: target.itemType,
+    attributes: target.attributes,
+    webEntity: target.webEntity,
+  });
 }
 
 /** Exact-match bar for this target — lower for basic solid staples. */
 export function exactThresholdFor(target: ReRankTarget): number {
-  if (
-    isBasicSolidApparel({
-      primaryCategory: target.primaryCategory,
-      topsSubtype: target.topsSubtype,
-      colorName: target.colorName,
-      colorHex: target.colorHex,
-      patterns: target.patterns,
-      label: target.label,
-      itemType: target.itemType,
-      attributes: target.attributes,
-      webEntity: target.webEntity,
-    })
-  ) {
-    return BASIC_SOLID_EXACT_THRESHOLD;
-  }
+  if (isBasicSolidTarget(target)) return BASIC_SOLID_EXACT_THRESHOLD;
   return EXACT_MATCH_THRESHOLD;
+}
+
+/**
+ * Hard rule: solid black/white tee (or blue jean / black short) with matching
+ * subtype + colour tokens is immediately Exact Match — no budget fallback.
+ */
+export function isForcedBasicExact(
+  target: ReRankTarget,
+  candidate: ReRankCandidate,
+): boolean {
+  if (!isBasicSolidTarget(target)) return false;
+  const haystack = haystackOf(candidate);
+
+  const color =
+    colorBucketFromName(target.colorName) ??
+    (target.colorHex ? colorBucketFromHex(target.colorHex) : null);
+  const colorToken = color ? colorBucketQueryToken(color) : null;
+  if (colorToken && !haystack.includes(normalizeTr(colorToken))) {
+    // Allow black/white English synonyms.
+    const aliases =
+      color === "Siyah"
+        ? ["siyah", "black"]
+        : color === "Beyaz"
+          ? ["beyaz", "white"]
+          : color === "Mavi"
+            ? ["mavi", "blue"]
+            : [];
+    if (!aliases.some((a) => haystack.includes(a))) return false;
+  }
+
+  if (target.primaryCategory === "TOPS" || target.topsSubtype === "tshirt") {
+    if (!/tişört|tisort|t-shirt|tshirt|\btee\b/i.test(haystack)) return false;
+    if (/body|bodysuit|crop|askılı|askili|bluz|hirka|hırka|sweatshirt/i.test(haystack)) {
+      return false;
+    }
+  }
+
+  if (target.primaryCategory === "BOTTOMS") {
+    const jean = /jean|jeans|kot|denim/i.test(haystack);
+    const shorts = /şort|sort|shorts/i.test(haystack);
+    if (!jean && !shorts) return false;
+  }
+
+  return true;
 }
 
 function haystackOf(candidate: ReRankCandidate): string {
@@ -212,20 +258,28 @@ export function scoreCandidate(
     visual = Math.min(1, visual * 0.7 + candidate.priorSimilarity * 0.3);
   }
 
-  const score = category * 0.4 + colorTexture * 0.3 + visual * 0.3;
+  let score = category * 0.4 + colorTexture * 0.3 + visual * 0.3;
+  const forced = isForcedBasicExact(target, candidate);
+  if (forced) {
+    // Force ≥95% so UI can show "Birebir Eşleşme (%95+ Doğruluk)".
+    score = Math.max(score, 0.95);
+  }
+
   const threshold = exactThresholdFor(target);
 
   return {
     candidate,
     score,
     breakdown: { category, colorTexture, visual },
-    isExact: score >= threshold,
+    isExact: forced || score >= threshold,
+    forcedBasicExact: forced,
   };
 }
 
 /**
  * Ranks candidates by composite match score (desc). Highest scorer above the
  * exact threshold is flagged `isExact` for the Birebir Eşleşme slot.
+ * Basic solid apparel that matches colour+subtype is force-promoted.
  */
 export function reRankCandidates<T extends ReRankCandidate>(
   target: ReRankTarget,
@@ -236,9 +290,15 @@ export function reRankCandidates<T extends ReRankCandidate>(
     .map((candidate) => scoreCandidate(target, candidate) as RankedCandidate<T>)
     .sort((a, b) => b.score - a.score)
     .map((entry, index) => {
-      // Only the top card may claim Exact Match, even if several clear the bar.
-      const isExact = index === 0 && entry.score >= threshold;
-      return { ...entry, isExact };
+      const forced = Boolean(entry.forcedBasicExact);
+      const isExact =
+        index === 0 && (forced || entry.score >= threshold);
+      return {
+        ...entry,
+        score: forced && index === 0 ? Math.max(entry.score, 0.95) : entry.score,
+        isExact,
+        forcedBasicExact: forced && index === 0,
+      };
     });
 }
 

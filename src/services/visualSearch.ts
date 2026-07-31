@@ -44,7 +44,7 @@ import {
   sanitizeDetectedItem,
   type ProductProvider,
 } from "@/services/productProvider";
-import { pickExactAndRest } from "@/services/reRanker";
+import { pickExactAndRest, BIREBIR_HIGH_CONFIDENCE_TAG } from "@/services/reRanker";
 import {
   LOCALIZE_VISION_FEATURES,
   ROI_VISION_FEATURES,
@@ -412,7 +412,11 @@ export class GoogleVisionSearchService implements VisualSearchService {
               ...ranked.exact.candidate,
               matchType: "exact" as const,
               similarity: ranked.exact.score,
-              tag: "Birebir Eşleşme",
+              tag: ranked.exact.forcedBasicExact
+                ? BIREBIR_HIGH_CONFIDENCE_TAG
+                : ranked.exact.score >= 0.95
+                  ? BIREBIR_HIGH_CONFIDENCE_TAG
+                  : "Birebir Eşleşme",
             }
           : null;
 
