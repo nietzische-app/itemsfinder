@@ -122,6 +122,10 @@ const RULES: FamilyRule[] = [
       "bileklik",
       "yüzük",
       "fular",
+      "atkı",
+      "kravat",
+      "papyon",
+      "cüzdan",
       "kemer",
       "gözlü",
       "eldiven",
@@ -155,7 +159,7 @@ const RULES: FamilyRule[] = [
   },
   {
     family: "outerwear",
-    stems: ["ceket", "mont", "kaban", "palto", "yelek", "hırka", "trençkot", "parka"],
+    stems: ["ceket", "mont", "kaban", "palto", "yelek", "hırka", "trençkot", "anorak", "parka"],
     words: [
       "jacket",
       "jackets",
@@ -173,8 +177,13 @@ const RULES: FamilyRule[] = [
   },
   {
     family: "dress",
-    stems: ["elbise", "tulum", "kaftan"],
-    words: ["dress", "dresses", "jumpsuit", "gown", "romper"],
+    /*
+       Mayo ve bikini burada, ayrı bir aile açmak yerine: ikisi de tek parça giyilen
+       ve "elbise/tulum" ile aynı raflarda aranan ürünler, ve tek örneği olan bir
+       aile açmak katalogda da eval'de de karşılığı olmayan bir kutu üretirdi.
+    */
+    stems: ["elbise", "tulum", "kaftan", "mayo", "bikini", "kombinezon", "sabahlık"],
+    words: ["dress", "dresses", "jumpsuit", "gown", "romper", "swimsuit", "bikini"],
   },
   {
     family: "top",
@@ -202,7 +211,27 @@ const RULES: FamilyRule[] = [
   },
   {
     family: "bottom",
-    stems: ["pantolon", "şort", "etek", "tayt", "jogger", "jean", "kot"],
+    /*
+       "eşofman", "kapri", "palazzo" ve "pijama" ölçülerek eklendi: yaygın yetmiş
+       yedi Türkçe giysi kelimesinin sondasında dörtte biri hiçbir aileye
+       düşmüyordu, ve ailesi olmayan bir tespit katalogdan hiçbir ürün alamıyor
+       (`findProductsForLabel`, unknown dalı). Yani sözlükteki her boşluk, doğrudan
+       bir «bulunamadı» ekranı.
+    */
+    stems: [
+      "pantolon",
+      "şort",
+      "etek",
+      "tayt",
+      "jogger",
+      "jean",
+      "kot",
+      "eşofman",
+      "kapri",
+      "capri",
+      "palazzo",
+      "pijama",
+    ],
     words: [
       "jeans",
       "trouser",
@@ -227,7 +256,8 @@ const RULES: FamilyRule[] = [
   },
   {
     family: "eyes",
-    stems: ["maskara", "kirpik", "eyeliner", "göz", "kaş", "far"],
+    // "rimel" Türkiye'de maskaranın gündelik adı ve sözlükte yoktu.
+    stems: ["maskara", "rimel", "kirpik", "eyeliner", "göz", "kaş", "far"],
     words: [
       "eye",
       "eyes",

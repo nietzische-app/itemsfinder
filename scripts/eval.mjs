@@ -55,6 +55,8 @@ const { OG_IMAGE_CASES } = await import("../eval/ogImageCases.ts");
 const { MOCK_SCENARIOS, hydrateProduct } = await import("@/services/mockCatalog");
 const { merchantLabel, merchantHost } = await import("@/services/merchantSearch");
 const { priceIsShowable } = await import("@/utils/affiliate");
+const { findProductsForLabel } = await import("@/services/mockCatalog");
+const { COVERAGE_CASES, KNOWN_GAPS } = await import("../eval/coverageCases.ts");
 
 /**
  * Metric floors: set just under the measured baseline so a regression trips the
@@ -149,6 +151,20 @@ const FLOORS = {
    */
   visualRetrieval: 0.45,
   family: 0.9,
+  /*
+   * Ürün kapsamı — sıradan bir parçanın boş ekran görmemesi.
+   *
+   * 47/51 ölçüldü. Kaçan dördü tek bir sebep: katalogda `dress` ailesinde **hiç**
+   * satır yok, yani elbise, tulum, mayo ve bikini tespit edilse bile gösterilecek
+   * bir ürün bulunamıyor. Sözlük tarafı bu turda kapatıldı (yaygın yetmiş yedi
+   * kelimenin tanınmayanı %25'ten %6'ya indi); kalan boşluk veri tarafında.
+   *
+   * Taban 0.9: bugünkü ölçümün altında, düne göre yukarıda. **Hedef 1.0** ve oraya
+   * çıkmanın yolu belli — kataloğa elbise satırları eklemek. Bunu bir tahminle
+   * kapatmak yerine taban olarak yazmak, her çalıştırmada hangi dört parçanın boş
+   * döndüğünü isimleriyle basıyor.
+   */
+  coverage: 0.9,
   hotspotCount: 0.75,
   /*
    * Box accuracy. No floor yet — nothing has ever measured this, so any number
@@ -879,6 +895,27 @@ const badgeScore = pct(badgeRows.length - badgeLies.length, badgeRows.length);
  */
 const pricedWithLink = badgeRows.filter((product) => priceIsShowable(product));
 const priceScore = pct(badgeRows.length - pricedWithLink.length, badgeRows.length);
+
+/*
+ * Sıradan bir parça boş ekran görüyor mu?
+ *
+ * Bir tespitin ailesi okunamazsa katalog hiçbir ürün döndürmüyor — bu bilinçli
+ * bir karar (yanlış giysi göstermektense hiçbir şey göstermemek), ama sonucu boş
+ * ekran. Ölçüldüğünde yaygın yetmiş yedi Türkçe giysi kelimesinin dörtte biri
+ * hiçbir aileye düşmüyordu: eşofman, kravat, atkı, mayo, rimel, palazzo… hiçbiri
+ * egzotik değil.
+ *
+ * Bu metrik o boşluğun kapalı kalmasını sağlıyor: her vaka en az bir ürün
+ * döndürmeli.
+ */
+const coverageMisses = COVERAGE_CASES.filter((probe) => {
+  const { exactMatch, alternatives } = findProductsForLabel(probe.label, probe.category);
+  return !exactMatch && alternatives.length === 0;
+});
+const coverageScore = pct(
+  COVERAGE_CASES.length - coverageMisses.length,
+  COVERAGE_CASES.length,
+);
 const visionQueryScore = pct(visionQueryHits, visionQueryTotal);
 const retrievalScore = pct(retrievalHits, tight.length);
 const hotspotScore = pct(hotspotHits, hotspotCases);
@@ -974,6 +1011,16 @@ console.log(
 );
 for (const url of urlFalseRejects) console.log(`      yanlış red    ${url.slice(0, 78)}`);
 for (const url of urlFalseAccepts) console.log(`      yanlış KABUL  ${url.slice(0, 78)}`);
+console.log(
+  `  Ürün kapsamı     ${fmt(coverageScore)}  (${COVERAGE_CASES.length - coverageMisses.length}/${COVERAGE_CASES.length})   taban ${fmt(FLOORS.coverage)}` +
+    `, sıradan bir parça boş ekran görüyor mu`,
+);
+for (const probe of coverageMisses) {
+  console.log(`      «${probe.label}» için hiç ürün yok`);
+}
+if (KNOWN_GAPS.length) {
+  console.log(`      bilinen boşluklar (notlanmıyor): ${KNOWN_GAPS.length} tür — bkz. eval/coverageCases.ts`);
+}
 console.log(
   `  Mağaza rozeti    ${fmt(badgeScore)}  (${badgeRows.length - badgeLies.length}/${badgeRows.length})   taban %100` +
     `, rozet «Ürüne git»in gittiği yeri söylüyor mu`,
@@ -1154,6 +1201,9 @@ const failures = [
    * öyle bir belirsizlik yok: listedeki her adres ya bir ürüne gidiyor ya
    * gitmiyor, ve ikisi de elle bakılarak yazıldı.
    */
+  coverageScore < FLOORS.coverage &&
+    `ürün kapsamı ${fmt(coverageScore)} < ${fmt(FLOORS.coverage)}: ` +
+      `${coverageMisses.length} sıradan parça boş ekran görüyor`,
   badgeScore < 1 &&
     `mağaza rozeti ${fmt(badgeScore)}: ${badgeLies.length} kart gitmediği mağazayı gösteriyor`,
   priceScore < 1 &&

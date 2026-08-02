@@ -230,10 +230,30 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
                 variant="hero"
               />
             </div>
-          ) : (
+          ) : item.alternatives.length > 0 ? (
             <p className="rounded bg-surface-container p-3 text-[14px] text-on-surface-variant">
               Henüz güvenli bir birebir eşleşme yok — bulabildiğimiz en yakınları aşağıda.
             </p>
+          ) : (
+            /*
+              Hiç ürün yokken «en yakınları aşağıda» yazıyordu ve altında hiçbir şey
+              olmuyordu. Boş bir kart zaten kötü; boş bir kartın üstünde olmayan bir
+              şeyi işaret eden bir cümle daha kötü.
+
+              Yerine ne bulunduğu ve ne aranacağı yazılıyor. Arama bağlantısı
+              **verilmiyor**: mağaza arama adresleri CTA olarak yasaklı
+              (`productUrl.ts`), ve bu kural burada da geçerli. Metin, kullanıcının
+              kendi arayabileceği sorguyu görünür kılmakla yetiniyor.
+            */
+            <div className="rounded bg-surface-container p-3 text-[14px] text-on-surface-variant">
+              <p className="!mt-0">
+                Bu parçayı tanıdık ama şu an için doğrulanmış bir ürün bulamadık.
+              </p>
+              <p className="!mb-0 mt-2 text-[13px]">
+                Mağazalarda aratabileceğin tarif:{" "}
+                <strong className="text-on-surface">{item.label}</strong>
+              </p>
+            </div>
           )}
 
           {item.alternatives.length > 0 ? (
