@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRight, BadgeCheck, Bookmark, TrendingDown } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Bookmark, Star, TrendingDown } from "lucide-react";
 
 import { ProductImage } from "@/components/ProductImage";
 import { Badge } from "@/components/ui/badge";
@@ -185,6 +185,31 @@ export function ProductCard({
               <span className="ml-1.5 text-secondary-deep">· canlı fiyat</span>
             ) : null}
           </p>
+
+          {/*
+            Mağazanın kendi puanı — bizimki değil.
+
+            `rating` yalnızca canlı satırlarda dolduruluyor ve katalogda karşılığı
+            yok, yani demo modunda hiç görünmüyor: uydurma bir puan, gerçek bir
+            mağaza bağlantısının yanında uydurma bir fiyat kadar yanıltıcı olurdu.
+
+            Yorum **metni** gösterilmiyor, bilerek. Metin kullanıcının yazdığı,
+            mağazanın barındırdığı içerik; puan ve adet ise sayfada yazan bir olgu.
+            Yorumları okumak isteyen «Ürüne git» ile mağazaya gidiyor — kaynağı da
+            burada yazıyor, sayı bizim ölçtüğümüz bir şey sanılmasın diye.
+          */}
+          {typeof product.rating === "number" ? (
+            <p className="mt-1 flex items-center gap-1 text-[12px] text-on-surface-variant">
+              <Star className="h-3.5 w-3.5 fill-current text-secondary-deep" strokeWidth={0} />
+              <span className="font-semibold text-on-surface">
+                {product.rating.toLocaleString("tr-TR", { minimumFractionDigits: 1 })}
+              </span>
+              {typeof product.reviewCount === "number" ? (
+                <span>· {product.reviewCount.toLocaleString("tr-TR")} değerlendirme</span>
+              ) : null}
+              <span className="text-outline">· {retailer}</span>
+            </p>
+          ) : null}
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -195,6 +220,7 @@ export function ProductCard({
                 isHero ? "text-[22px]" : "text-[17px]",
               )}
             >
+              {/* Puan fiyatın hemen üstünde: ikisi de mağazanın söylediği şey. */}
               {showPrice ? (
                 formatPrice(product.price, product.currency)
               ) : (

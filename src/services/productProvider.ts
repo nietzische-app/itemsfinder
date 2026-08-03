@@ -494,6 +494,14 @@ function toProductMatch(
     merchantDomain: card.merchantDomain,
     isLive: true,
     brandMetadata: overrides.brand ?? undefined,
+    /*
+     * Puan yalnızca canlı satırlarda: katalogda karşılığı yok, çünkü uydurma bir
+     * puan gerçek bir mağaza bağlantısının yanında uydurma bir fiyat kadar
+     * yanıltıcı olur. `?? undefined`, alan yoksa hiç taşınmaması için.
+     */
+    rating: card.rating ?? undefined,
+    // Adet puansız gelemiyor: kural `ratingOf` içinde, kaynakta uygulanıyor.
+    reviewCount: card.reviewCount ?? undefined,
   };
 }
 

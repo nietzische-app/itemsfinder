@@ -97,6 +97,24 @@ export interface ProductMatch {
   isLive: boolean;
   /** Retailer branding, populated by the Brand API in live mode. */
   brandMetadata?: BrandMetadata;
+  /**
+   * Mağazanın kendi ürün puanı, 0..5. **Yalnızca canlı satırlarda.**
+   *
+   * Katalog satırları bu alanı hiç taşımıyor ve taşımamalı: uydurma bir puan,
+   * gerçek bir mağaza bağlantısının yanında uydurma bir fiyat kadar yanıltıcı —
+   * ikisi de o mağazanın söylediği şey gibi okunuyor. Bu yüzden `CatalogProduct`
+   * şemasında karşılığı yok; bir demo satırının puan göstermesi tip düzeyinde
+   * mümkün değil, `npm run eval` de ayrıca ölçüyor.
+   *
+   * Yorum **metni** bilerek taşınmıyor. Metin kullanıcının yazdığı, mağazanın
+   * barındırdığı içerik; kopyalayıp burada yayımlamak telif ve kullanım şartları
+   * meselesi. Puan ve adet ise sayfada yazan bir olgu, ve `factCheck: true`
+   * sayesinde modelin uyduramayacağı bir sayı. Yorumu okumak isteyen mağazaya
+   * gidiyor.
+   */
+  rating?: number;
+  /** Puanın kaç değerlendirmeye dayandığı. Puan varsa anlamlı, tek başına değil. */
+  reviewCount?: number;
 }
 
 /** One thing the vision engine found in the screenshot. */

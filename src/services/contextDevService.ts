@@ -31,6 +31,10 @@ export interface LiveProductCard {
   imageUrl: string | null;
   inStock: boolean;
   brand: string | null;
+  /** Mağazanın ürün puanı, 0..5. Sayfada yoksa `null`. */
+  rating: number | null;
+  /** Puanın kaç değerlendirmeye dayandığı. Sayfada yoksa `null`. */
+  reviewCount: number | null;
 }
 
 /**
@@ -127,6 +131,22 @@ const PRODUCT_SCHEMA = {
           imageUrl: { type: "string", description: "Absolute product image URL." },
           productUrl: { type: "string", description: "Absolute product page URL." },
           inStock: { type: "boolean", description: "False if sold out." },
+          /*
+             Puan ve adet, yorum **metni** değil.
+
+             Metin kullanıcının yazdığı, mağazanın barındırdığı içerik; kopyalayıp
+             başka bir sitede yayımlamak telif ve kullanım şartları meselesi. Puan
+             ve adet ise sayfada yazan bir olgu — ve `factCheck: true` ile birlikte
+             model sayfada olmayan bir sayıyı üretemiyor.
+          */
+          rating: {
+            type: "number",
+            description: "Average customer rating out of 5, as shown on the page.",
+          },
+          reviewCount: {
+            type: "number",
+            description: "Number of customer reviews the rating is based on.",
+          },
         },
         required: ["title", "price"],
         additionalProperties: false,
@@ -146,6 +166,8 @@ interface RawProduct {
   imageUrl?: unknown;
   productUrl?: unknown;
   inStock?: unknown;
+  rating?: unknown;
+  reviewCount?: unknown;
 }
 
 export interface ContextDevServiceOptions {
@@ -478,7 +500,45 @@ function normalizeProduct(
     // Absent stock info means listed-and-buyable, which is the common case.
     inStock: raw.inStock === false ? false : true,
     brand: typeof raw.brand === "string" && raw.brand.trim() ? raw.brand.trim() : null,
+    ...ratingOf(raw),
   };
+}
+
+/**
+ * Puan ve adet birlikte geçerli, ayrı ayrı değil.
+ *
+ * Adet tek başına anlamsız: «1.240 değerlendirme» satırı, yanında bir puan
+ * olmadan okuyana hiçbir şey söylemiyor — hatta ürünün çok beğenildiği izlenimi
+ * bırakıyor. İlk yazımda kapı yalnızca `toProductMatch`'te vardı, yani
+ * `LiveProductCard` puansız bir adet taşıyabiliyordu; sınır testi bunu üç vakada
+ * yakaladı (on üzerinden puan, sıfır, negatif). Kural artık kaynakta.
+ */
+function ratingOf(raw: RawProduct): { rating: number | null; reviewCount: number | null } {
+  const rating = toRating(raw.rating);
+  if (rating === null) return { rating: null, reviewCount: null };
+  return { rating, reviewCount: toReviewCount(raw.reviewCount) };
+}
+
+/**
+ * Puanı 0..5 aralığına göre doğrular.
+ *
+ * Aralık dışı bir değer düzeltilmiyor, **atılıyor**. Bazı mağazalar beş yerine
+ * on üzerinden puan yazıyor ve 8,4'ü 5'e kırpmak "çok beğenilmiş" bir ürünü
+ * "mükemmel" gibi gösterirdi; ölçeği bilinmeyen bir sayıyı yeniden ölçeklemek,
+ * uydurmakla aynı kapıya çıkar. Puan yoksa kart puan göstermiyor, o kadar.
+ */
+function toRating(value: unknown): number | null {
+  const parsed = typeof value === "number" ? value : Number.NaN;
+  if (!Number.isFinite(parsed) || parsed <= 0 || parsed > 5) return null;
+  // İki hane, çünkü mağazalar 4,37 gibi değerler yazabiliyor ve kartta 4,4 yeter.
+  return Math.round(parsed * 10) / 10;
+}
+
+/** Değerlendirme adedi: pozitif tam sayı ya da hiç. */
+function toReviewCount(value: unknown): number | null {
+  const parsed = typeof value === "number" ? value : Number.NaN;
+  if (!Number.isFinite(parsed) || parsed < 1) return null;
+  return Math.floor(parsed);
 }
 
 /**

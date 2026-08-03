@@ -50,6 +50,21 @@ bir `results` alanı değil. Yanlış şekildeki bir cevap sessizce «canlı sat
 bulunamadı» olarak kataloğa düşüyordu — gerçek anahtarla ilk denemede bunun
 teşhisi çok daha pahalı olurdu.
 
+## Mağaza puanı
+
+```bash
+node scripts/stubs/rating-check.mjs
+```
+
+Puan sayfadan çıkarılan bir sayı ve mağazalar aynı ölçeği kullanmıyor — bazıları
+on üzerinden yazıyor. 8,4'ü beşe kırpmak «çok beğenilmiş» bir ürünü «mükemmel»
+gibi gösterirdi, o yüzden ölçeği bilinmeyen bir puan düzeltilmiyor, **atılıyor**.
+
+Dokuz sınır vakası: normal puan, ondalık yuvarlama, puan yok, on üzerinden, sıfır,
+negatif, tam sınır 5, adetsiz puan, puansız adet. Bu dosya bir kez gerçek bir hata
+yakaladı — puan atıldığında değerlendirme adedi hayatta kalıyordu, yani kart
+puansız bir «1.240 değerlendirme» gösterebiliyordu.
+
 ## Sonuna kadar okunması gereken kısım
 
 **Bunlarla üretilen fixture'lar ölçüm değildir ve commit edilmemelidir.** Vision

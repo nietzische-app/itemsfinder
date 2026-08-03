@@ -915,6 +915,19 @@ const coverageMisses = COVERAGE_CASES.filter((probe) => {
   const { exactMatch, alternatives } = findProductsForLabel(probe.label, probe.category);
   return !exactMatch && alternatives.length === 0;
 });
+/*
+ * Katalogdan asla puan sızmamalı.
+ *
+ * Puan yalnızca canlı satırlarda dolduruluyor, çünkü uydurma bir puan gerçek bir
+ * mağaza bağlantısının yanında uydurma bir fiyat kadar yanıltıcı — ikisi de o
+ * mağazanın söylediği şey gibi okunuyor. Tip düzeyinde `CatalogProduct`'ta
+ * karşılığı yok, ama bir gün biri `hydrateProduct` içinde bir varsayılan koyarsa
+ * derleyici bunu yakalamaz; bu satır yakalar.
+ */
+const ratingLeaks = badgeRows.filter(
+  (product) => product.rating !== undefined || product.reviewCount !== undefined,
+);
+
 const coverageScore = pct(
   COVERAGE_CASES.length - coverageMisses.length,
   COVERAGE_CASES.length,
@@ -1014,6 +1027,13 @@ console.log(
 );
 for (const url of urlFalseRejects) console.log(`      yanlış red    ${url.slice(0, 78)}`);
 for (const url of urlFalseAccepts) console.log(`      yanlış KABUL  ${url.slice(0, 78)}`);
+console.log(
+  `  Puan sızıntısı   ${ratingLeaks.length === 0 ? "yok" : `${ratingLeaks.length} SATIR`}` +
+    `             taban «yok», katalog satırı mağaza puanı taşımamalı`,
+);
+for (const product of ratingLeaks) {
+  console.log(`      ${product.id}: katalog satırı puan taşıyor`);
+}
 console.log(
   `  Ürün kapsamı     ${fmt(coverageScore)}  (${COVERAGE_CASES.length - coverageMisses.length}/${COVERAGE_CASES.length})   taban ${fmt(FLOORS.coverage)}` +
     `, sıradan bir parça boş ekran görüyor mu`,
@@ -1204,6 +1224,8 @@ const failures = [
    * öyle bir belirsizlik yok: listedeki her adres ya bir ürüne gidiyor ya
    * gitmiyor, ve ikisi de elle bakılarak yazıldı.
    */
+  ratingLeaks.length > 0 &&
+    `puan sızıntısı: ${ratingLeaks.length} katalog satırı mağaza puanı taşıyor`,
   coverageScore < FLOORS.coverage &&
     `ürün kapsamı ${fmt(coverageScore)} < ${fmt(FLOORS.coverage)}: ` +
       `${coverageMisses.length} sıradan parça boş ekran görüyor`,

@@ -9,11 +9,28 @@
 import { createServer } from "node:http";
 const PORT = Number(process.argv[2] ?? 4731);
 
+/*
+ * `rating` üç ayrı durumu kapsıyor: normal bir puan, hiç puan olmaması, ve
+ * beş üzerinden olmayan bir puan (bazı mağazalar on üzerinden yazıyor —
+ * `toRating` bunu düzeltmiyor, atıyor).
+ */
 const PRODUCTS = {
-  "boyner.com.tr": { title: "Siyah Deri Mini Şort", price: 1299.9, brand: "Boyner" },
-  "trendyol.com": { title: "Pembe Fermuarlı Triko Hırka", price: 749.5, brand: "Macharel" },
-  "lcw.com": { title: "Yüksek Bel Skinny Jean", price: 599.99, brand: "LCW" },
-  "asos.com": { title: "Ripped Boyfriend Jean", price: 45.0, brand: "ASOS" },
+  "boyner.com.tr": {
+    title: "Siyah Deri Mini Şort", price: 1299.9, brand: "Boyner",
+    rating: 4.37, reviewCount: 1240,
+  },
+  "trendyol.com": {
+    title: "Pembe Fermuarlı Triko Hırka", price: 749.5, brand: "Macharel",
+    rating: 4.8, reviewCount: 86,
+  },
+  "lcw.com": {
+    title: "Yüksek Bel Skinny Jean", price: 599.99, brand: "LCW",
+    rating: null, reviewCount: null,
+  },
+  "asos.com": {
+    title: "Ripped Boyfriend Jean", price: 45.0, brand: "ASOS",
+    rating: 8.4, reviewCount: 300,
+  },
 };
 
 const server = createServer((req, res) => {
@@ -47,6 +64,7 @@ const server = createServer((req, res) => {
                   title: p.title, price: p.price, currency: "TRY", brand: p.brand,
                   imageUrl: `https://cdn.example.com/${host}.jpg`,
                   productUrl: target, inStock: true,
+                  rating: p.rating, reviewCount: p.reviewCount,
                 }],
               }
             : { products: [] },
