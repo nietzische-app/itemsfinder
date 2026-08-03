@@ -570,6 +570,7 @@ sağlayabileceğin bir girdiyi** bekliyor — anahtar, fotoğraf, veri ya da bir
 31 kombin / 74 parça
 Bölge rengi      81%  (59/73)   taban 78%, 1 parça desenli (renk notlanmıyor)
 Sorgu token'ı   100%  (74/74)   taban 90%
+Sorguda ürün adı 100% (170/170) taban 100%, 74 parça + 8 kurgu vaka
 Vision sınıfı   100%  (74/74)   taban 100%
 Görsel erişim    50%  (37/74)   taban 45%, şans %1,4
 Aile tutarlılığı 100%  (74/74)   taban 90%

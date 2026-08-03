@@ -129,6 +129,19 @@ const NOISE = new Set([
 const MAX_TOKENS = 6;
 
 /**
+ * Bir sözcüğü kenarındaki noktalama ve süslemeden arındırır.
+ *
+ * Tek bir yerde, çünkü hem sıfat hem ürün adı yolu aynı kuralı uygulamak zorunda:
+ * ikisi ayrı ayrı temizlense, «Ceket,» ile «Ceket» farklı sözcük sayılır ve isim
+ * hem sıfatların arasında hem sonda iki kez geçerdi.
+ */
+function cleanToken(word: string): string {
+  return word
+    .trim()
+    .replace(/^[^0-9A-Za-zÀ-ÿĞğİıŞşÇçÖöÜü]+|[^0-9A-Za-zÀ-ÿĞğİıŞşÇçÖöÜü]+$/g, "");
+}
+
+/**
  * Builds a descriptive, de-duplicated search query.
  *
  * Order matters: colour first, then the descriptors, then the descriptive
@@ -155,7 +168,7 @@ export function buildSearchQuery(parts: SearchQueryParts): string {
 
     // Attribute lines are bullet-separated; split them into words.
     for (const word of translated.split(/[\s•·,/]+/)) {
-      const clean = word.trim().replace(/^[^0-9A-Za-zÀ-ÿĞğİıŞşÇçÖöÜü]+|[^0-9A-Za-zÀ-ÿĞğİıŞşÇçÖöÜü]+$/g, "");
+      const clean = cleanToken(word);
       if (clean.length < 2) continue;
 
       const key = clean.toLocaleLowerCase("tr");
@@ -170,11 +183,66 @@ export function buildSearchQuery(parts: SearchQueryParts): string {
   for (const descriptor of parts.descriptors ?? []) push(descriptor ?? undefined);
   push(parts.label);
   push(parts.attributes);
-  // The garment noun is collected separately: it is the one token a search box
-  // cannot do without, and it used to sit last, so a rich set of attributes
-  // truncated it away — "pudra düz triko fermuarlı yüksek yaka" is a query with
-  // no product in it. Room is reserved for it instead of hoping it fits.
-  push(parts.itemType, noun);
+
+  /*
+   * The garment noun is collected separately: it is the one token a search box
+   * cannot do without, and it used to sit last, so a rich set of attributes
+   * truncated it away — "pudra düz triko fermuarlı yüksek yaka" is a query with
+   * no product in it. Room is reserved for it instead of hoping it fits.
+   *
+   * **Ama rezervasyon, isim daha önce geçtiyse çalışmıyordu.** `seen` paylaşıldığı
+   * için etikette zaten «ceket» geçen bir parçada `push` onu atlıyor, `noun` boş
+   * kalıyor, ayrılan yer sıfır oluyor — ve isim etiketin içinde, kesme sınırının
+   * ötesinde kalabiliyor. Ölçülen hâli, yorumun engellediğini söylediği durumun
+   * ta kendisi:
+   *
+   *   etiket «Yüksek yakalı ince örgü pastel pembe triko ceket», ürün adı «Ceket»
+   *   → «Pudra Pembe Yüksek yakalı ince örgü»   — içinde ürün yok
+   *
+   * İsim daha önce geçmişse **yalnızca kesilecekse** taşınıyor, her hâlükârda
+   * değil. Önce hepsini sona almayı denedim; ölçüm reddetti:
+   *
+   *   ürün adı «Triko», etiket «Bej Triko Kazak»
+   *   hep taşı → «Bej Kazak İnce Oversize Triko»    — Türkçe ters okunuyor
+   *   gerekirse → «Bej Triko Kazak İnce Oversize»   — olması gereken
+   *
+   * Yani doğru olan iddia «sorgu isimle bitsin» değil, **«isim sorguda kalsın»**.
+   * İlki benim düzenim, ikincisi kusurun kendisi. Türkçe'de sıfat isimden önce
+   * gelir; etiketin içinde doğru yerde duran bir ismi sona çekmek, düzeltmek değil
+   * bozmak oluyor.
+   */
+  const nounKeys: string[] = [];
+  for (const word of toTurkishRetailTerms(parts.itemType ?? "").split(/[\s•·,/]+/)) {
+    const clean = cleanToken(word);
+    if (clean.length < 2) continue;
+
+    const key = clean.toLocaleLowerCase("tr");
+    if (NOISE.has(key) || nounKeys.includes(key)) continue;
+    nounKeys.push(key);
+
+    // Hiç geçmemişse sona eklenecek; ayrılan yer de buradan doğuyor.
+    if (!seen.has(key)) {
+      seen.add(key);
+      noun.push(clean);
+    }
+  }
+
+  /*
+   * Kesme sınırının ötesinde kalan isim sözcüklerini sona taşı.
+   *
+   * Sabit noktaya kadar: her taşıma sona bir sözcük eklediği için sınır bir
+   * daralıyor, ve bu daralma daha önce güvenli görünen başka bir isim sözcüğünü
+   * sınırın dışına itebiliyor. En fazla birkaç tur — isim iki üç sözcük.
+   */
+  for (;;) {
+    const limit = Math.max(1, MAX_TOKENS - noun.length);
+    const at = tokens.findIndex(
+      (token, index) => index >= limit && nounKeys.includes(token.toLocaleLowerCase("tr")),
+    );
+    if (at === -1) break;
+
+    noun.unshift(...tokens.splice(at, 1));
+  }
 
   return [...tokens.slice(0, Math.max(1, MAX_TOKENS - noun.length)), ...noun].join(" ");
 }

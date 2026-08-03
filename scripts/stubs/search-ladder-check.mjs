@@ -88,6 +88,61 @@ function make(matcher) {
   t(calls.every((c) => /satın al/.test(c.query)), "global hiç aranmadı");
 }
 
+/*
+ * 6) Harcanan her arama rapor ediliyor — ve raporun sayıları doğru.
+ *
+ * Merdivenin parasını hak edip etmediği yalnızca bu kayıtla yargılanabiliyor
+ * (`BULUNAMADI.md` madde 4). Kaydın kendisi yanlışsa, kararı yanlış sayıya
+ * dayandırırız; o yüzden burada test edilen şey «kayıt var mı» değil, **kaydın
+ * gerçekten olan biteni anlatıp anlatmadığı**.
+ */
+{
+  const { svc } = make((q) =>
+    /^gömlek /.test(q)
+      ? ["https://www.trendyol.com/g-p-7777777", "https://www.lcw.com/h-o-88888"]
+      : [],
+  );
+  const seen = [];
+  await svc.searchLiveProducts(["beyaz keten gömlek", "gömlek"], "clothing", undefined, (a) =>
+    seen.push(a),
+  );
+
+  t(seen.length === 2, `her arama rapor ediliyor (${seen.length} === 2)`);
+  t(
+    seen[0]?.tier === "tr" && seen[0]?.rung === 0 && seen[0]?.found === 0,
+    `boş dönen tam sorgu 0 aday olarak yazılıyor (${JSON.stringify(seen[0])})`,
+  );
+  t(
+    seen[1]?.rung === 1 && seen[1]?.found === 2,
+    `kurtaran basamak kendi kazancıyla yazılıyor (${JSON.stringify(seen[1])})`,
+  );
+  t(
+    seen.every((a) => a.query.includes("satın al")),
+    "rapor edilen sorgu, mağazaya gerçekten gönderilen dize",
+  );
+}
+
+// 7) Aynı adayı ikinci kez bulan basamak kazanç yazmıyor — kredi boşa gitti demek.
+{
+  const { svc } = make(() => ["https://www.trendyol.com/i-p-9999999"]);
+  const seen = [];
+  await svc.searchLiveProducts(["tam sorgu", "gevşek"], "clothing", undefined, (a) => seen.push(a));
+
+  t(seen.length >= 2, `tek aday MIN_LOCAL_CANDIDATES'i karşılamıyor (${seen.length} >= 2)`);
+  t(seen[0]?.found === 1, "ilk basamak bulduğu adayı yazıyor");
+  t(seen[1]?.found === 0, `tekrar bulunan aday kazanç sayılmıyor (${seen[1]?.found})`);
+}
+
+// 8) Geri çağrı verilmezse arama yine çalışıyor — kayıt isteğe bağlı.
+{
+  const { svc } = make(() => [
+    "https://www.trendyol.com/j-p-1212121",
+    "https://www.boyner.com.tr/k-p-3434343",
+  ]);
+  const out = await svc.searchLiveProducts(["gömlek"], "clothing");
+  t(out.length > 0, "geri çağrısız çağrı bozulmuyor");
+}
+
 console.log(`${pass} ✓ / ${fails.length} ✗`);
 for (const f of fails) console.log(`  ✗ ${f}`);
 process.exit(fails.length ? 1 : 0);

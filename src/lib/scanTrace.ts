@@ -56,6 +56,43 @@ export interface RejectedProduct {
   reason: string;
 }
 
+/** Mağaza katmanı — önce Türkiye, bulunamazsa global. */
+export type SearchTier = "tr" | "global";
+
+/**
+ * Harcanmış tek bir arama.
+ *
+ * Merdiven ve katman geçişleri yazıldıktan sonra geriye şu soru kaldı: gevşemenin
+ * parası, getirdiği sonuca değiyor mu? Bunu ancak arama başına «hangi katman,
+ * hangi basamak, kaç yeni aday» kaydı cevaplayabilir. Kayıt olmadan canlı yolu
+ * açmak, kredinin nereye gittiğini görmeden harcamak olurdu.
+ *
+ * Burada, arayan serviste değil: `ScanDiagnostics` bir istemci bileşeni ve bu tip
+ * ona kadar gidiyor. Tipi `contextDevService`'te tanımlamak, `server-only` bir
+ * modülü istemci paketine sürüklerdi.
+ */
+export interface SearchAttemptRecord {
+  tier: SearchTier;
+  /** Merdiven basamağı: 0 tam sorgu, büyüdükçe gevşiyor. */
+  rung: number;
+  /** Mağazaya gerçekten gönderilen dize — son eki dahil. */
+  query: string;
+  /** Bu aramanın eklediği, daha önce görülmemiş aday sayısı. */
+  found: number;
+}
+
+/**
+ * Bir parça için harcanmış tek arama.
+ *
+ * `dropped`/`rejected` gibi ayrıntı bayrağına bağlı **değil**: bir taramada en
+ * fazla dört parça × üç arama, yani on iki satır. Bu, taşımanın bedava sayılacağı
+ * kadar küçük — ve karşılığında cevapladığı soru büyük: canlı yolun kredisi
+ * nereye gidiyor, sorgu gevşemesi kendini ödüyor mu.
+ */
+export interface SearchAttempt extends SearchAttemptRecord {
+  itemId: string;
+}
+
 export interface ScanTrace {
   /** Milliseconds per stage. Stages that did not run are absent, not zero. */
   timings: Partial<Record<ScanStage, number>>;
@@ -65,6 +102,8 @@ export interface ScanTrace {
   dropped: DroppedDetection[];
   /** Catalogue and live rows that were considered and refused. Detail only. */
   rejected: RejectedProduct[];
+  /** Canlı arama merdiveninin harcadığı aramalar. Canlı yol kapalıyken boş. */
+  searches: SearchAttempt[];
   /** Counts that are cheap enough to always carry. */
   counts: {
     rawDetections: number;
@@ -91,6 +130,8 @@ export interface TraceCollector {
   degrade(stage: ScanStage, reason: string): void;
   drop(entry: DroppedDetection): void;
   reject(entry: RejectedProduct): void;
+  /** Records one spent `web.search` credit. Always collected. */
+  search(entry: SearchAttempt): void;
   count(key: keyof ScanTrace["counts"], value: number): void;
   /** The trace so far. Safe to call more than once. */
   snapshot(): ScanTrace;
@@ -105,6 +146,7 @@ export function createTrace(options: { detail?: boolean } = {}): TraceCollector 
     degraded: [],
     dropped: [],
     rejected: [],
+    searches: [],
     counts: { rawDetections: 0, keptDetections: 0, describedItems: 0 },
   };
 
@@ -131,6 +173,9 @@ export function createTrace(options: { detail?: boolean } = {}): TraceCollector 
     reject(entry) {
       if (detail) trace.rejected.push(entry);
     },
+    search(entry) {
+      trace.searches.push(entry);
+    },
     count(key, value) {
       trace.counts[key] = value;
     },
@@ -141,6 +186,7 @@ export function createTrace(options: { detail?: boolean } = {}): TraceCollector 
         degraded: [...trace.degraded],
         dropped: [...trace.dropped],
         rejected: [...trace.rejected],
+        searches: [...trace.searches],
         counts: { ...trace.counts },
       };
     },
@@ -163,6 +209,17 @@ export function logScanTrace(trace: ScanTrace, context: { id: string; source: st
     ...trace.counts,
     droppedCount: trace.dropped.length,
     rejectedCount: trace.rejected.length,
+    /*
+     * Harcanan arama kredisi ve karşılığı.
+     *
+     * `searchCount` faturayı, `searchYield` neyin ödediğini anlatıyor: her giriş
+     * «katman:basamak=yeni aday». `tr:0=2` tam sorgunun Türkiye'de iki aday
+     * bulduğu, `tr:0=0,tr:1=3` ise tam sorgunun boş dönüp gevşemenin işi
+     * kurtardığı anlamına geliyor — yani merdivenin parasını hak edip etmediği
+     * tek satırda, greplenebilir biçimde okunuyor.
+     */
+    searchCount: trace.searches.length,
+    searchYield: trace.searches.map((entry) => `${entry.tier}:${entry.rung}=${entry.found}`),
   };
 
   // `warn` when something degraded, `log` otherwise: a scan that quietly fell back

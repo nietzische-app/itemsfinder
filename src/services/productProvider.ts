@@ -284,6 +284,7 @@ export class ContextDevProductProvider implements ProductProvider {
       ladder.length > 0 ? ladder : [item.label],
       item.category,
       signal,
+      (attempt) => trace?.search({ itemId: item.id, ...attempt }),
     );
 
     if (cards.length === 0) return null;

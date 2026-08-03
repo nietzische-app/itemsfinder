@@ -102,6 +102,45 @@ export function ScanDiagnostics({ result }: { result: DetectionResult }) {
             </div>
           ) : null}
 
+          {/*
+            Harcanan arama kredisi.
+
+            Ayrıntı bayrağının arkasında değil, çünkü sorduğu soru hata ayıklama
+            değil maliyet: gevşeyen her basamak bir `web.search` kredisi ve bu
+            liste, o kredinin karşılığını görmenin tek yolu. «0 yeni aday» dönen
+            bir basamak, boşa harcanmış paranın kendisi.
+          */}
+          {trace.searches.length > 0 ? (
+            <div>
+              <h3 className="mb-1 font-medium text-neutral-500">
+                Canlı aramalar ({trace.searches.length})
+              </h3>
+              <ul className="space-y-0.5">
+                {trace.searches.map((entry, index) => (
+                  <li
+                    key={`${entry.itemId}-${entry.tier}-${entry.rung}-${index}`}
+                    className="flex flex-wrap gap-x-2 text-neutral-500"
+                  >
+                    <span className="font-medium text-neutral-600 dark:text-neutral-300">
+                      {entry.tier === "tr" ? "TR" : "Global"}
+                    </span>
+                    <span className="tabular-nums text-neutral-400">
+                      basamak {entry.rung}
+                    </span>
+                    <span>«{entry.query}»</span>
+                    <span
+                      className={
+                        entry.found > 0 ? "tabular-nums" : "tabular-nums text-amber-700 dark:text-amber-400"
+                      }
+                    >
+                      → {entry.found} yeni aday
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
           {trace.dropped.length > 0 ? (
             <div>
               <h3 className="mb-1 font-medium text-neutral-500">

@@ -29,7 +29,7 @@ const VERBOSE = process.argv.includes("--verbose");
 const ROOT = new URL("..", import.meta.url).pathname;
 
 const { familyOf } = await import("@/lib/itemFamily");
-const { buildSearchQuery, colorNameFromHex } = await import("@/lib/searchQuery");
+const { buildSearchQuery, colorNameFromHex, relaxedQueries } = await import("@/lib/searchQuery");
 const { regionDominantColor, imageSize } = await import("@/services/regionColor");
 const { learnBackdrop, foregroundFilter } = await import("@/services/foreground");
 const {
@@ -59,6 +59,7 @@ const { findProductsForLabel } = await import("@/services/mockCatalog");
 const { COVERAGE_CASES, KNOWN_GAPS, VISION_CLASSES, GENERIC_VISION_CLASSES } = await import(
   "../eval/coverageCases.ts"
 );
+const { SEARCH_QUERY_CASES } = await import("../eval/searchQueryCases.ts");
 const { toTurkishRetailTerms } = await import("@/lib/retailVocabulary");
 
 /**
@@ -113,6 +114,15 @@ const FLOORS = {
    */
   color: 0.78,
   query: 0.9,
+  /*
+   * Ürün adı, merdivenin her basamağında sorgunun içinde ve sonunda.
+   *
+   * 1.0, çünkü burada indirilebilecek bir pay yok: bu bir doğruluk sınırı değil,
+   * bir kurulum hatası. Sorgunun içinde aranan ürün yoksa mağazadan gelen her
+   * satır zaten yanlış — kaç tanesinin doğru olduğu sorusu anlamsız. Bir kaçak,
+   * ölçülemeyen bir zorluk değil düzeltilecek bir kusur.
+   */
+  queryNoun: 1,
   /*
    * The coarse-class path. Set to 1.0 because unlike colour there is nothing
    * irreducible here: every class Vision emits either has a Turkish retail term
@@ -337,6 +347,86 @@ for (const testCase of cases) {
       if (VERBOSE) console.log(`    ✓ ${item.id.padEnd(16)} "${query}"`);
     } else {
       queryMisses.push({ id: item.id, want: item.queryToken, query });
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  2a. Ürün adı merdivenin her basamağında duruyor mu                        */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * «İçinde ürün olmayan sorgu» — ölçülmüş bir hataydı, tahmin değil.
+ *
+ * `buildSearchQuery` ürün adına yer ayırıyor, ama ayırma `seen` kümesini
+ * paylaştığı için ad **daha önce geçmişse** hiç ayrılmıyordu: etikette zaten
+ * «ceket» geçen bir parçada isim dizisi boş kalıyor, kesme sınırı adı etiketin
+ * içinden kesip atıyordu.
+ *
+ *   etiket «Yüksek yakalı ince örgü pastel pembe triko ceket», ürün adı «Ceket»
+ *   → «Pudra Pembe Yüksek yakalı ince örgü»
+ *
+ * O sorgu bir mağazada ne bulur belli değil ama aradığımız şeyi bulmaz. Mevcut
+ * «Sorgu token'ı» metriği bunu görmüyordu çünkü tek bir basamağa ve elle
+ * seçilmiş bir token'a bakıyor; buradaki kapı **her basamağa** ve parçanın kendi
+ * adına bakıyor.
+ *
+ * İki ayrı iddia ölçülüyor: ad sorgunun içinde mi (doğruluk), ve sorgu adla mı
+ * bitiyor (Türkçe'de sıfat isimden önce gelir, mağaza sıralaması da sondaki
+ * ismi ürün sanır).
+ */
+let nounHits = 0;
+let nounTotal = 0;
+const nounMisses = [];
+
+/*
+ * İki kaynak, ve ikincisi olmadan kapı ısırmıyor.
+ *
+ * Referans setinin 74 parçası sorguyu yalnızca **ad + etiket + renk**'ten kuruyor,
+ * çünkü öznitelik satırı modelin ürettiği bir metin ve referansta yok. Oysa kusur
+ * tam olarak öznitelik satırı doluyken çıkıyordu. Yalnız referansla ölçseydim
+ * metrik %100 yazardı ve hiçbir şey kanıtlamazdı — bu projede yeşil ama boş bir
+ * ölçüm, ölçüm yokluğundan kötü. `SEARCH_QUERY_CASES` eksik girdi şekillerini
+ * getiriyor ve kurgu oldukları kendi dosyasında yazılı.
+ */
+const nounSources = [
+  ...cases.flatMap((testCase) =>
+    testCase.items.map((item) => ({
+      id: item.id,
+      parts: { itemType: item.itemType, label: item.label, colorHex: "#000000" },
+    })),
+  ),
+  ...SEARCH_QUERY_CASES.map((entry) => ({
+    id: entry.name,
+    parts: {
+      itemType: entry.itemType,
+      label: entry.label,
+      colorName: entry.colorName,
+      colorHex: entry.colorHex,
+      attributes: entry.attributes,
+    },
+  })),
+];
+
+for (const source of nounSources) {
+  // Parçanın kendi adının son sözcüğü: «Güneş Gözlüğü» için «Gözlüğü».
+  const want = source.parts.itemType.trim().split(/\s+/).filter(Boolean).at(-1);
+  if (!want) continue;
+
+  for (const [rung, query] of relaxedQueries(source.parts).entries()) {
+    nounTotal += 1;
+
+    /*
+     * Ölçülen iddia «ad sorguda kalıyor mu», «sorgu adla bitiyor mu» değil.
+     * İkincisini de ölçmeyi denedim ve ölçüm reddetti: ürün adı «Triko», etiket
+     * «Bej Triko Kazak» olan bir parçada adı sona çekmek «Bej Kazak … Triko»
+     * üretiyor — Türkçe'de sıfat isimden önce geldiği için bu düzeltmek değil
+     * bozmak. Gerekçe `eval/searchQueryCases.ts` ve `searchQuery.ts` içinde.
+     */
+    if (containsToken(query, want)) {
+      nounHits += 1;
+    } else {
+      nounMisses.push({ id: source.id, rung, want, query, why: "ad sorguda yok" });
     }
   }
 }
@@ -836,6 +926,7 @@ for (const name of fixtures) {
 
 const colorScore = pct(colorHits, colorTotal);
 const queryScore = pct(queryHits, queryTotal);
+const nounScore = pct(nounHits, nounTotal);
 const familyScore = pct(familyHits, familyTotal);
 
 /*
@@ -1030,6 +1121,13 @@ if (vlmItemTotal > 0) {
   );
 }
 console.log(`  Sorgu token'ı    ${fmt(queryScore)}  (${queryHits}/${queryTotal})   taban ${fmt(FLOORS.query)}`);
+console.log(
+  `  Sorguda ürün adı ${fmt(nounScore)}  (${nounHits}/${nounTotal})   taban ${fmt(FLOORS.queryNoun)}` +
+    `, ${cases.reduce((n, c) => n + c.items.length, 0)} parça + ${SEARCH_QUERY_CASES.length} kurgu vaka`,
+);
+for (const miss of nounMisses.slice(0, 6)) {
+  console.log(`      ${miss.id.padEnd(16)} basamak ${miss.rung} «${miss.query}» — ${miss.why}`);
+}
 console.log(`  Vision sınıfı    ${fmt(visionQueryScore)}  (${visionQueryHits}/${visionQueryTotal})   taban ${fmt(FLOORS.visionQuery)}`);
 // Chance is computed, not written down: it is 1/candidates, and the candidate
 // pool is the eval set. Hard-coding "7%" was right for fourteen items and quietly
@@ -1243,6 +1341,8 @@ if (process.argv.includes("--floors")) {
 const failures = [
   colorScore < FLOORS.color && `bölge rengi ${fmt(colorScore)} < ${fmt(FLOORS.color)}`,
   queryScore < FLOORS.query && `sorgu token'ı ${fmt(queryScore)} < ${fmt(FLOORS.query)}`,
+  nounScore < FLOORS.queryNoun &&
+    `sorguda ürün adı ${fmt(nounScore)}: ${nounMisses.length} basamak ürün adı taşımıyor`,
   familyScore < FLOORS.family && `aile ${fmt(familyScore)} < ${fmt(FLOORS.family)}`,
   /*
    * Taban %100 ve pazarlık payı yok. Diğer metrikler ölçtükleri şeyin doğası

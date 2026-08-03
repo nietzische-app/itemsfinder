@@ -6,7 +6,13 @@
  * gap to paper over. Storefront search links are banned (`src/lib/productUrl.ts`),
  * so "no verified link" beats "a link to a results page".
  *
- * ## Why this file is empty
+ * ## Durum: 14 vitrin bağlantısı dolu, geri kalanı boş
+ *
+ * Dört vitrin kombininin birebir eşleşmeleri sahibi tarafından tek tek verildi ve
+ * dolduruldu; muadil (`-alt-N`) satırlarının çoğu hâlâ boş ve o satırlar CTA'sız
+ * çiziliyor. Aşağıdaki gerekçe değişmedi ve boş kalan her satır için geçerli.
+ *
+ * ## Neden uydurulamaz
  *
  * These have to be real, live URLs, and they cannot be generated. A PDP path
  * encodes a retailer's internal SKU (`-p-123456789`, `/dp/B0XXXXXXXX`,
@@ -28,15 +34,9 @@
  * link. `npm run typecheck` will not catch a wrong-but-well-shaped URL — only a
  * human opening it can confirm the product is the right one and still in stock.
  *
- * Product ids to fill, highest value first (the landing-page showcase looks):
- *
- *   pink-outfit    po-cardigan-exact, po-shorts-exact, po-sneakers-exact
- *                  po-cardigan-alt-1..3, po-shorts-alt-1..3, po-sneakers-alt-1..3
- *   biker-look     bk-jacket-exact, bk-body-exact, bk-jeans-exact, bk-sunglasses-exact (+ alts)
- *   long-coat      lc-coat-exact, lc-beanie-exact, lc-jeans-exact, lc-sandals-exact (+ alts)
- *   black-blazer   bb-blazer-exact, bb-lip-exact, bb-heels-exact (+ alts)
- *
- * `npm run check:pdp` lists every id that is still missing.
+ * `npm run check:pdp` hâlâ eksik olan her id'yi mağazaya göre gruplayarak yazıyor,
+ * `npm run check:links` de dolu olanların bugün hâlâ açılıp açılmadığını — ikisi de
+ * ağ erişimi olan bir makinede çalışıyor, bu ortamda değil.
  */
 import { isDirectProductUrl, isSearchUrl } from "@/lib/productUrl";
 

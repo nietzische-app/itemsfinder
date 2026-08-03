@@ -32,8 +32,8 @@ Hepsi bir Türk mağazasının ana kategorilerinde duruyor.
 **Sözlük genişletildi** — tanınmayan oran **%25 → %6**. Kalan beş kelime aşağıda,
 "yeni aile gerekiyor" başlığında.
 
-**Kapsam ölçüye bağlandı** — `eval/coverageCases.ts`, 51 sıradan ürün adı. Her
-biri en az bir ürün döndürmeli. Şu an **47/51 (%92)**, taban %90. Kaçanlar her
+**Kapsam ölçüye bağlandı** — `eval/coverageCases.ts`, sıradan ürün adları. Her
+biri en az bir ürün döndürmeli. Şu an **56/56 (%100)**, taban %100. Kaçanlar her
 çalıştırmada isimleriyle basılıyor.
 
 **Arayüz dürüstleştirildi** — hiç ürün yokken artık olmayan bir listeyi işaret
@@ -43,21 +43,16 @@ olarak yasaklı (`src/lib/productUrl.ts`) ve bu kural burada da geçerli.
 
 ## Sırada — etkiye göre
 
-### 1. `dress` ailesine katalog satırları  → kapsam %92'den %100'e
+### 1. `dress` ailesine katalog satırları — ✅ kapandı
 
-Kalan dört boşluğun tamamı bu: elbise, tulum, mayo, bikini. Katalogda bu ailede
-tek satır yok, yani tespit doğru çalışsa bile gösterilecek ürün bulunmuyor.
+Elbise, tulum, mayo ve bikini boşluğu kapandı: `mockCatalog.ts` içinde elbise
+senaryosu var ve kapsam %92'den %100'e çıktı.
 
-Elbise, görsel moda aramasının en sık parçalarından biri — bu boşluk kapanmadan
-"her parça bir şey bulur" denemez. İş: `mockCatalog.ts`'e bir elbise senaryosu,
-ve tercihen `VERIFIED_PDP_URLS`'e birer gerçek bağlantı.
+### 2. Yeni aileler: oje, parfüm, iç giyim — ✅ kapandı
 
-### 2. Yeni aileler: oje, parfüm, iç giyim
-
-Bunlar sözlüğe kelime eklemekle çözülmüyor — her biri yeni bir `ItemFamily`
-**ve** o ailede katalog satırı istiyor. Kelimeyi eklemek, boş bir aileye
-yönlendirmekten başka bir şey yapmaz. `eval/coverageCases.ts` içindeki
-`KNOWN_GAPS` bunları sayılmadan kayıtta tutuyor.
+Üçü de `ItemFamily` olarak eklendi **ve** her birinin katalog satırı var; kelimeyi
+boş bir aileye yönlendirmek olmadı. `eval/coverageCases.ts` içindeki `KNOWN_GAPS`
+artık boş — sayılmadan kayıtta tutulan bir boşluk kalmadı.
 
 ### 3. Canlı yolu açmak → asıl çözüm
 
@@ -71,16 +66,36 @@ Kod hazır ve sahte bir sunucuya karşı baştan sona sürüldü
 **Ama canlı yol da boş dönebilir**, ve o yüzden aşağıdaki iki madde onunla
 birlikte anlam kazanıyor.
 
-### 4. Canlı arama boş dönerse: sorguyu gevşetmek
+### 4. Canlı arama boş dönerse: sorguyu gevşetmek — ✅ yazıldı ve ölçüye bağlandı
 
-Bugün canlı arama tek bir sorgu deniyor: renk + malzeme + desen + ürün adı. Bir
-mağaza o kombinasyonu bulamazsa sonuç sıfır. Kademeli gevşetme — önce tam sorgu,
-sonra renk + ürün adı, sonra yalnız ürün adı — bir «beyaz keten oversize gömlek»
-bulunamadığında hiç değilse «gömlek» bulur.
+Merdiven yazıldı (`relaxedQueries`): önce tam sorgu, sonra renk + ürün adı, sonra
+yalnız ürün adı; ve her basamak iki mağaza katmanında deneniyor (önce Türkiye,
+sonra global). Sıra kasıtlı — önce katman, sonra basamak.
 
-Bu, ürün başına ekstra arama demek, yani ölçülmeden açılmamalı: hangi kademede
-kaç sonuç geldiği ve kaç kredi harcandığı, anahtar takıldıktan sonraki ilk işlerden
-biri olmalı.
+**Ve harcadığı kredi artık görünüyor.** Bu belge «hangi kademede kaç sonuç geldiği
+ve kaç kredi harcandığı ölçülmeden açılmamalı» diyordu; ölçüm yoktu, şimdi var:
+her arama `ScanTrace.searches` içine «katman, basamak, kaç **yeni** aday» olarak
+yazılıyor, teşhis panelinde «Canlı aramalar (n)» başlığı altında satır satır
+görünüyor, ve `[scan]` log satırında `searchCount` + `searchYield` olarak
+greplenebiliyor. `tr:0=0,tr:1=3` okunuşu şu: tam sorgu boş döndü, parayı gevşeme
+kurtardı.
+
+Sahte sunucuya karşı ilk sürüşün söylediği (yalnızca stub hakkında bir gözlem,
+üretim hakkında değil): üç parçada sekiz arama harcandı, basamak 0 hiç aday
+getirmedi, gelen her aday basamak 1 ve 2'den geldi.
+
+**Bu sürüş bir kusur da buldu** ve kusur stub'a ait değildi: `buildSearchQuery`
+ürün adına yer ayırıyordu ama ayırma `seen` kümesini paylaştığı için ad daha önce
+geçmişse hiç ayrılmıyordu. Sonuç, kodun kendi yorumunun «engellendi» dediği şeydi:
+
+```
+etiket «Yüksek yakalı ince örgü pastel pembe triko ceket», ürün adı «Ceket»
+→ «Pudra Pembe Yüksek yakalı ince örgü»        — içinde ürün yok
+```
+
+Böyle bir sorgunun döndürdüğü her satır zaten yanlış. Ad artık **yalnızca
+kesilecekse** sona taşınıyor, ve `eval/searchQueryCases.ts` ile yeni bir eval
+kapısı (**Sorguda ürün adı**, taban %100) bunu her basamakta ölçüyor.
 
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 
@@ -97,9 +112,14 @@ oluşturulması.
 
 ## Bunu ölçen şey
 
-`npm run eval` içinde **Ürün kapsamı** satırı. Taban 0.9, hedef 1.0. Kaçan her
-parça adıyla basılıyor, yani bir sonraki kişi hangi ürün türünün boş döndüğünü
-okumak için kod okumak zorunda kalmıyor.
+`npm run eval` içinde iki satır:
+
+- **Ürün kapsamı** — sıradan bir parça boş ekran görüyor mu. Taban %100, ölçülen
+  %100 (56/56). Kaçan her parça adıyla basılıyor, yani bir sonraki kişi hangi ürün
+  türünün boş döndüğünü okumak için kod okumak zorunda kalmıyor.
+- **Sorguda ürün adı** — merdivenin her basamağında aranan ürün sorgunun içinde
+  mi. Taban %100, ölçülen %100 (170/170). Kapsam «katalogda karşılığı var mı»yı
+  ölçüyor; bu satır «doğru şeyi mi arıyoruz»u.
 
 Vaka eklemek: `eval/coverageCases.ts` içine ürün adı yaz. Yeni bir ürün türü
 desteklenmeye başladığında oraya bir satır eklemek, desteğin geri gitmemesini

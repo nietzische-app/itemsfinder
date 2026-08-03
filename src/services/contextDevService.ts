@@ -1,5 +1,6 @@
 import "server-only";
 import { productUrlOrEmpty } from "@/lib/productUrl";
+import type { SearchAttemptRecord, SearchTier } from "@/lib/scanTrace";
 
 import ContextDev from "context.dev";
 
@@ -104,6 +105,7 @@ const MIN_LOCAL_CANDIDATES = 2;
  * zaten duruluyor, yani sıradan durumda tek arama yapılıyor.
  */
 const MAX_SEARCHES_PER_ITEM = 3;
+
 
 /** Fallback currency per retailer TLD, used when extraction omits it. */
 const DOMAIN_CURRENCY: Array<[RegExp, string]> = [
@@ -296,6 +298,7 @@ export class ContextDevService {
     queries: string[],
     category: ItemCategory,
     signal?: AbortSignal,
+    onAttempt?: (attempt: SearchAttemptRecord) => void,
   ): Promise<LiveProductCard[]> {
     const ladder = queries.map((entry) => entry.trim()).filter(Boolean);
     if (ladder.length === 0) return [];
@@ -323,13 +326,24 @@ export class ContextDevService {
        * gevşek bir eşleşme, globalde bulunan tam bir eşleşmeden iyi, çünkü
        * gümrük ve kargo farkı ürün farkından büyük.
        */
-      const attempts: Array<{ query: string; domains: string[] }> = [];
-      for (const query of ladder) {
-        attempts.push({ query: `${query} satın al fiyat`, domains: TURKISH_DOMAINS[category] });
-      }
-      for (const query of ladder) {
-        attempts.push({ query: `${query} buy price`, domains: GLOBAL_DOMAINS[category] });
-      }
+      const attempts: Array<{ query: string; domains: string[]; tier: SearchTier; rung: number }> =
+        [];
+      ladder.forEach((query, rung) => {
+        attempts.push({
+          query: `${query} satın al fiyat`,
+          domains: TURKISH_DOMAINS[category],
+          tier: "tr",
+          rung,
+        });
+      });
+      ladder.forEach((query, rung) => {
+        attempts.push({
+          query: `${query} buy price`,
+          domains: GLOBAL_DOMAINS[category],
+          tier: "global",
+          rung,
+        });
+      });
 
       const candidates: string[] = [];
       let searches = 0;
@@ -340,9 +354,27 @@ export class ContextDevService {
 
         searches += 1;
         const found = await this.searchTier(attempt.query, attempt.domains, signal);
+        const before = candidates.length;
         for (const url of found) {
           if (!candidates.includes(url)) candidates.push(url);
         }
+        /*
+         * Her arama, harcandığı anda rapor ediliyor — sonuçtan sonra değil.
+         *
+         * Merdivenin maliyeti basamak başına bir `web.search` kredisi ve gevşemenin
+         * karşılığını verip vermediği ancak «kaç arama harcandı, hangisi getirdi»
+         * bilinerek yargılanabilir. `BULUNAMADI.md` madde 4 bu ölçümü, canlı yol
+         * açılmadan önce yapılması gereken iş olarak yazıyor.
+         *
+         * `found` **yeni** aday sayısı, ham sonuç sayısı değil: aynı ürünü ikinci kez
+         * bulan bir basamak hiçbir şey eklemiyor ve öyle görünmeli.
+         */
+        onAttempt?.({
+          tier: attempt.tier,
+          rung: attempt.rung,
+          query: attempt.query,
+          found: candidates.length - before,
+        });
       }
 
       if (candidates.length === 0) return [];
