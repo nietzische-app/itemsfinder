@@ -84,6 +84,32 @@ gümrük ve kargo farkı ürün farkından büyük.
 sorgulara hiç sonuç dönmüyor, yani uygulamayı çalıştırdığında gevşemenin
 gerçekten devreye girdiğini stub loglarından görebiliyorsun.
 
+## Ölü bağlantılar (404)
+
+```bash
+node scripts/stubs/store.mjs 4741 &
+LINK_CHECK_BASE_URL=http://127.0.0.1:4741 npm run check:links
+
+node scripts/stubs/link-check.mjs   # karar sınırları
+```
+
+`check:pdp` adresin **şeklini** doğruluyor; şekli doğru bir adres 404 dönebilir ve
+zamanla döner de — mağazalar ürünü kaldırıyor, koleksiyon değiştiriyor, URL
+döndürüyor. `check:links` sayfayı gerçekten açmaya çalışıyor.
+
+404'ü yakalamak kolay olanı. Zor olan, mağazaların ölü bağlantı verme
+biçimlerinin hepsinin 404 olmaması:
+
+- **Ana sayfaya yönlendirme** — istek 200 dönüyor, kullanıcı ürünü göremiyor.
+  Sessiz olduğu için en tehlikelisi; yolun kısalmasından anlaşılıyor.
+- **HEAD'e 405** — sayfa duruyor, sadece HEAD desteklenmiyor. Ölü sanılmamalı.
+- **Bot duvarı (403)** — yine ölü değil, sadece bize kapalı.
+
+Altı vaka bunları ölçüyor, ulaşılamayan sunucu dahil.
+
+Betik hiçbir şeyi otomatik silmiyor: ölü bir bağlantıyı dosyadan çıkarmak bir
+karar, ve geçici bir stok kesintisi adresin yanlış olduğu anlamına gelmiyor.
+
 ## Sonuna kadar okunması gereken kısım
 
 **Bunlarla üretilen fixture'lar ölçüm değildir ve commit edilmemelidir.** Vision

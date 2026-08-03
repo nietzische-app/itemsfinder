@@ -9,6 +9,7 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "check:pdp": "node --experimental-transform-types scripts/check-pdp.mjs",
+    "check:links": "node --experimental-transform-types scripts/check-links.mjs",
     "eval": "node --experimental-transform-types scripts/eval.mjs",
     "eval:record": "node --experimental-transform-types scripts/eval-record.mjs",
     "eval:record-attrs": "node --experimental-transform-types scripts/eval-record-attrs.mjs",
