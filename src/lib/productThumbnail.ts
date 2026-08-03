@@ -136,6 +136,18 @@ const SHAPE_BY_FAMILY: Record<ItemFamily, Shape> = {
   lips: "lipstick",
   eyes: "wand",
   face: "compact",
+  /*
+   * Üç yeni aile mevcut siluetleri ödünç alıyor, kendilerine çizim eklenmeden.
+   *
+   * Oje şişesi ruja, parfüm şişesi de öyle: ikisi de dar gövdeli, kapaklı bir
+   * şişe ve bu ölçekte (küçük bir kart görseli) ayırt edilmiyorlar. İç giyim üst
+   * beden siluetiyle gidiyor. Yeni bir siluet çizmek daha doğru olurdu ama
+   * kapsamı açmak için gerekli değil, ve gereksiz bir çizim eklemek yerine
+   * ödünç almanın burada yazılı olması daha iyi.
+   */
+  nails: "lipstick",
+  fragrance: "lipstick",
+  underwear: "top",
   unknown: "generic",
 };
 

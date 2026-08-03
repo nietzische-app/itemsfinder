@@ -14,11 +14,10 @@
  * Bu liste o boşluğun kapalı kalmasını sağlıyor. Sözlüğe bir aile eklendiğinde
  * ölçü yükseliyor; bir kelime unutulduğunda düşüyor.
  *
- * **Bilinen ve kabul edilen boşluklar** listenin sonunda, `KNOWN_GAPS` içinde:
- * oje, parfüm ve iç giyim. Üçü de yeni bir `ItemFamily` **ve** o ailede katalog
- * satırı istiyor; sözlüğe kelime eklemek tek başına onları çözmez, yalnızca boş
- * bir aileye yönlendirir. Notlanmıyorlar ama yazılılar, çünkü sessizce eksik
- * bırakılan bir kapsam, kapanmış gibi görünen bir kapsamdır.
+ * O boşluk kapatıldı: yetmiş yedi kelimenin tamamı artık bir aileye düşüyor. Son
+ * üçü — oje, parfüm ve iç giyim — kendi `ItemFamily`'leri **ve** katalog
+ * satırlarıyla birlikte geldi, çünkü sözlüğe kelime eklemek tek başına onları
+ * yalnızca boş bir aileye yönlendirirdi, ve boş bir aile boş ekranla aynı şey.
  */
 
 export interface CoverageCase {
@@ -88,18 +87,24 @@ export const COVERAGE_CASES: readonly CoverageCase[] = [
   { label: "Eyeliner", category: "beauty" },
   { label: "Fondöten", category: "beauty" },
   { label: "Allık", category: "beauty" },
+  // Kendi aileleriyle birlikte eklenen üç tür — `KNOWN_GAPS` artık boş.
+  { label: "Uzun Kalıcı Oje", category: "beauty" },
+  { label: "Eau de Parfum", category: "beauty" },
+  { label: "Dikişsiz Sütyen", category: "clothing" },
+  { label: "Boxer", category: "clothing" },
+  { label: "Bralet", category: "clothing" },
 ];
 
 /**
  * Henüz karşılanamayan ürün türleri, gerekçesiyle.
  *
- * Yukarıdaki listeye eklenmiyorlar çünkü sözlüğe kelime eklemek onları boş bir
- * aileye yönlendirmekten başka bir şey yapmaz — her biri yeni bir `ItemFamily`
- * **ve** o ailede katalog satırı istiyor. Kapsam metriği bunları saymıyor; bu
- * liste, sayılmadıklarının unutulmaması için var.
+ * **Şu an boş.** Burada üç madde vardı — oje, parfüm, iç giyim — ve üçü de aynı
+ * şeyi söylüyordu: sözlüğe kelime eklemek yetmez, çünkü boş bir aile de boş
+ * ekranla aynı şey. Üçü de kendi `ItemFamily`'si ve katalog satırlarıyla birlikte
+ * kapatıldı, ve yukarıdaki listeye vaka olarak eklendi.
+ *
+ * Liste boş kalsın diye silinmedi: bir sonraki karşılanamayan tür çıktığında
+ * yazılacağı yer burası, ve boş olması "şu an bilinen bir boşluk yok" demek —
+ * "kimse bakmadı" değil.
  */
-export const KNOWN_GAPS: readonly string[] = [
-  "oje / tırnak bakımı — yeni aile gerekiyor",
-  "parfüm — yeni aile gerekiyor",
-  "iç giyim (sütyen, boxer, iç çamaşırı) — yeni aile gerekiyor",
-];
+export const KNOWN_GAPS: readonly string[] = [];

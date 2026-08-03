@@ -19,6 +19,9 @@ export type ItemFamily =
   | "lips"
   | "eyes"
   | "face"
+  | "nails"
+  | "fragrance"
+  | "underwear"
   | "unknown";
 
 /**
@@ -248,6 +251,36 @@ const RULES: FamilyRule[] = [
       "culottes",
       "denim",
     ],
+  },
+  /*
+     Tırnak, parfüm ve iç giyim — kapsam ölçümünün bulduğu üç boşluk.
+
+     Sözlüğe kelime eklemek tek başına yetmiyordu: ailesi olmayan bir tespit
+     katalogdan hiçbir ürün alamıyor, ama **boş bir aile** de aynı sonucu veriyor.
+     Bu yüzden üçü de kendi katalog satırlarıyla birlikte geldi; `eval`'in
+     «Ürün kapsamı» satırı ikisini birden ölçüyor.
+  */
+  {
+    family: "nails",
+    stems: ["oje", "tırnak", "manikür"],
+    words: ["nail", "nails", "polish", "manicure"],
+  },
+  {
+    family: "fragrance",
+    stems: ["parfüm", "koku"],
+    words: ["perfume", "fragrance", "cologne", "eau", "parfum"],
+  },
+  {
+    family: "underwear",
+    /*
+       "büstiyer" ve "atlet" bilerek yok: ikisi de görünür giyilen parçalar ve
+       yukarıdaki `top` kuralı onları zaten alıyor. Buraya yazmak, hiç
+       ateşlenmeyen bir girdi bırakmak olurdu — okuyana yanlış bilgi verir.
+       "korse" ise burada, çünkü Türkiye'de en sık şekillendirici iç giyim
+       anlamında kullanılıyor (korse tayt).
+    */
+    stems: ["sütyen", "külot", "boxer", "çamaşır", "korse", "bralet"],
+    words: ["bra", "bralette", "briefs", "boxer", "boxers", "lingerie", "underwear", "corset"],
   },
   {
     family: "lips",

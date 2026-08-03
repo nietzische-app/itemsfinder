@@ -2376,6 +2376,147 @@ const dressItems: CatalogItem[] = [
   },
 ];
 
+
+/**
+ * Tırnak, parfüm ve iç giyim — kapsam ölçümünün bulduğu son üç boşluk.
+ *
+ * `familyOf` bu üç türü hiç tanımıyordu ve tanımayan bir tespit katalogdan hiçbir
+ * ürün alamıyor. Ama yalnızca sözlüğe kelime eklemek de yetmez: **boş bir aile**
+ * de aynı boş ekranı verir. O yüzden üç aile ve satırları birlikte geldi.
+ *
+ * `dressItems` gibi bunlar da bir vitrin kombini değil, çözücünün havuzuna
+ * eklenen derinlik. Örnek veri, ve doğrulanmış bağlantıları olmadığı için
+ * fiyatları da örnek fiyat olarak görünüyor (`priceIsShowable`).
+ */
+const extraBeautyItems: CatalogItem[] = [
+  {
+    id: "gen-nails",
+    label: "Uzun Kalıcı Oje",
+    itemType: "Oje",
+    category: "beauty",
+    attributes: "Kırmızı • Parlak",
+    description: "Tek katta kapatan, uzun kalıcılıklı parlak bitişli oje.",
+    confidence: 0.82,
+    boundingBox: { x: 0.4, y: 0.4, width: 0.2, height: 0.2 },
+    colorHex: "#b3121f",
+    exactMatch: {
+      id: "gen-nails-exact",
+      title: "Uzun Kalıcı Oje — Klasik Kırmızı",
+      brand: "Flormar",
+      merchant: "Other",
+      price: 149.9,
+      currency: "TRY",
+      searchQuery: "uzun kalıcı kırmızı oje",
+      imageUrl: thumb("Nail Polish", "#c2202c"),
+      matchType: "exact",
+      similarity: 0.84,
+      tag: "Birebir eşleşme",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gen-nails-alt-1",
+        title: "Jel Etkili Oje",
+        brand: "Golden Rose",
+        merchant: "Other",
+        price: 99.9,
+        currency: "TRY",
+        searchQuery: "jel etkili oje",
+        imageUrl: thumb("Gel Polish", "#cf2f39"),
+        matchType: "alternative",
+        similarity: 0.79,
+        tag: "En uygun",
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "gen-fragrance",
+    label: "Odunsu Eau de Parfum",
+    itemType: "Parfüm",
+    category: "beauty",
+    attributes: "Odunsu • Kalıcı",
+    description: "Odunsu ve amber notalı, uzun kalıcılıklı eau de parfum.",
+    confidence: 0.8,
+    boundingBox: { x: 0.38, y: 0.34, width: 0.24, height: 0.3 },
+    colorHex: "#6b4b2a",
+    exactMatch: {
+      id: "gen-fragrance-exact",
+      title: "Odunsu Eau de Parfum 50 ml",
+      brand: "Nishane",
+      merchant: "Other",
+      price: 1899.9,
+      currency: "TRY",
+      searchQuery: "odunsu eau de parfum",
+      imageUrl: thumb("Perfume", "#7d5a34"),
+      matchType: "exact",
+      similarity: 0.82,
+      tag: "Birebir eşleşme",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gen-fragrance-alt-1",
+        title: "Amber Odunsu Parfüm",
+        brand: "Sephora Collection",
+        merchant: "Sephora",
+        price: 899.9,
+        currency: "TRY",
+        searchQuery: "amber odunsu parfüm",
+        imageUrl: thumb("Amber Parfum", "#8d693f"),
+        matchType: "alternative",
+        similarity: 0.77,
+        tag: "En uygun",
+        inStock: true,
+      },
+    ],
+  },
+];
+
+const underwearItems: CatalogItem[] = [
+  {
+    id: "gen-underwear",
+    label: "Dikişsiz Sütyen",
+    itemType: "Sütyen",
+    category: "clothing",
+    attributes: "Siyah • Dikişsiz",
+    description: "Destekli, dikişsiz ve kaşkorse dokulu günlük sütyen.",
+    confidence: 0.78,
+    boundingBox: { x: 0.36, y: 0.32, width: 0.28, height: 0.18 },
+    colorHex: "#18181b",
+    exactMatch: {
+      id: "gen-underwear-exact",
+      title: "Dikişsiz Destekli Sütyen",
+      brand: "Penti",
+      merchant: "Other",
+      price: 399.9,
+      currency: "TRY",
+      searchQuery: "dikişsiz destekli sütyen",
+      imageUrl: thumb("Bra", "#26262b"),
+      matchType: "exact",
+      similarity: 0.8,
+      tag: "Birebir eşleşme",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gen-underwear-alt-1",
+        title: "Kaşkorse Bralet",
+        brand: "Trendyol",
+        merchant: "Trendyol",
+        price: 249.9,
+        currency: "TRY",
+        searchQuery: "kaşkorse bralet",
+        imageUrl: thumb("Bralette", "#31313a"),
+        matchType: "alternative",
+        similarity: 0.75,
+        tag: "En uygun",
+        inStock: true,
+      },
+    ],
+  },
+];
+
 const ALL_ITEMS: CatalogItem[] = [
   ...pinkOutfitItems,
   ...bikerLookItems,
@@ -2387,6 +2528,8 @@ const ALL_ITEMS: CatalogItem[] = [
   ...softMinimalItems,
   ...genericItems,
   ...dressItems,
+  ...extraBeautyItems,
+  ...underwearItems,
 ];
 
 /**
