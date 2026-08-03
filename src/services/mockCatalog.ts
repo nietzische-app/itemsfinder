@@ -2221,6 +2221,161 @@ export const MOCK_SCENARIOS: Record<ExampleId | "generic", CatalogItem[]> = {
  * is in the image, we still need *something to buy*. Until a live product feed
  * is wired in, we resolve labels against this catalogue.
  */
+
+/**
+ * Elbise ailesi — kapsam boşluğunu kapatmak için eklendi.
+ *
+ * `npm run eval`'in «Ürün kapsamı» satırı 47/51 ölçüyordu ve kaçan dördün tamamı
+ * tek sebepti: katalogda `dress` ailesinde **hiç** satır yoktu. Yani elbise,
+ * tulum, mayo ya da bikini doğru tespit edilse bile gösterilecek ürün
+ * bulunamıyordu — görsel moda aramasının en sık parçalarından biri boş ekran
+ * veriyordu.
+ *
+ * Bunlar bir vitrin kombini değil, çözücünün havuzuna eklenen **derinlik**:
+ * `MOCK_SCENARIOS`'a değil yalnızca `ALL_ITEMS`'a giriyorlar, çünkü demo düğmesi
+ * olacak bir fotoğrafları yok. Katalogdaki geri kalan her şey gibi örnek veri;
+ * doğrulanmış bağlantıları olmadığı için fiyatları da örnek fiyat olarak
+ * görünüyor (`priceIsShowable`), yani hiçbir mağazanın fiyatı gibi okunmuyorlar.
+ */
+const dressItems: CatalogItem[] = [
+  {
+    id: "gen-dress",
+    label: "Askılı Midi Saten Elbise",
+    itemType: "Elbise",
+    category: "clothing",
+    attributes: "Siyah • Saten",
+    description: "İnce askılı, biye yakalı, midi boy düşük parlaklıkta saten elbise.",
+    confidence: 0.86,
+    boundingBox: { x: 0.3, y: 0.24, width: 0.4, height: 0.52 },
+    colorHex: "#17171b",
+    exactMatch: {
+      id: "gen-dress-exact",
+      title: "Askılı Midi Saten Elbise",
+      brand: "Trendyol",
+      merchant: "Trendyol",
+      price: 899.9,
+      currency: "TRY",
+      searchQuery: "siyah saten askılı midi elbise",
+      imageUrl: thumb("Satin Dress", "#26262d"),
+      matchType: "exact",
+      similarity: 0.88,
+      tag: "Birebir eşleşme",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gen-dress-alt-1",
+        title: "Biye Yaka Midi Elbise",
+        brand: "Boyner",
+        merchant: "Other",
+        price: 649.9,
+        currency: "TRY",
+        searchQuery: "biye yaka midi elbise",
+        imageUrl: thumb("Midi Dress", "#31313a"),
+        matchType: "alternative",
+        similarity: 0.82,
+        tag: "En uygun",
+        inStock: true,
+      },
+      {
+        id: "gen-dress-alt-2",
+        title: "Slip Midi Dress",
+        brand: "Mango",
+        merchant: "Mango",
+        price: 1799.9,
+        currency: "TRY",
+        searchQuery: "slip midi dress",
+        imageUrl: thumb("Slip Dress", "#3c3c46"),
+        matchType: "alternative",
+        similarity: 0.79,
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "gen-jumpsuit",
+    label: "Geniş Paça Tulum",
+    itemType: "Tulum",
+    category: "clothing",
+    attributes: "Lacivert • Dokuma",
+    description: "Kemerli beli ve geniş paçasıyla tek parça dokuma tulum.",
+    confidence: 0.84,
+    boundingBox: { x: 0.31, y: 0.22, width: 0.38, height: 0.58 },
+    colorHex: "#1d2333",
+    exactMatch: {
+      id: "gen-jumpsuit-exact",
+      title: "Kemerli Geniş Paça Tulum",
+      brand: "Trendyol",
+      merchant: "Trendyol",
+      price: 1149.9,
+      currency: "TRY",
+      searchQuery: "kemerli geniş paça tulum",
+      imageUrl: thumb("Jumpsuit", "#2b3245"),
+      matchType: "exact",
+      similarity: 0.85,
+      tag: "Birebir eşleşme",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gen-jumpsuit-alt-1",
+        title: "Wide Leg Jumpsuit",
+        brand: "H&M",
+        merchant: "H&M",
+        price: 999.9,
+        currency: "TRY",
+        searchQuery: "wide leg jumpsuit",
+        imageUrl: thumb("Wide Jumpsuit", "#353d52"),
+        matchType: "alternative",
+        similarity: 0.8,
+        tag: "En uygun",
+        inStock: true,
+      },
+    ],
+  },
+  {
+    id: "gen-swimwear",
+    label: "Düz Renk Bikini Takımı",
+    itemType: "Bikini",
+    category: "clothing",
+    attributes: "Siyah • Düz",
+    description: "Üçgen üst ve yüksek bel alt parçadan oluşan düz renk bikini takımı.",
+    confidence: 0.8,
+    boundingBox: { x: 0.34, y: 0.3, width: 0.32, height: 0.36 },
+    colorHex: "#141417",
+    exactMatch: {
+      id: "gen-swimwear-exact",
+      title: "Üçgen Bikini Takımı",
+      brand: "Trendyol",
+      merchant: "Trendyol",
+      price: 549.9,
+      currency: "TRY",
+      searchQuery: "siyah üçgen bikini takımı",
+      imageUrl: thumb("Bikini", "#22222a"),
+      matchType: "exact",
+      similarity: 0.83,
+      tag: "Birebir eşleşme",
+      inStock: true,
+    },
+    alternatives: [
+      {
+        id: "gen-swimwear-alt-1",
+        title: "Kaşkorse Mayo",
+        brand: "Boyner",
+        merchant: "Other",
+        price: 699.9,
+        currency: "TRY",
+        searchQuery: "siyah kaşkorse mayo",
+        imageUrl: thumb("Swimsuit", "#2c2c35"),
+        matchType: "alternative",
+        similarity: 0.78,
+        tag: "En uygun",
+        inStock: true,
+      },
+    ],
+  },
+];
+
 const ALL_ITEMS: CatalogItem[] = [
   ...pinkOutfitItems,
   ...bikerLookItems,
@@ -2231,6 +2386,7 @@ const ALL_ITEMS: CatalogItem[] = [
   ...tailoringItems,
   ...softMinimalItems,
   ...genericItems,
+  ...dressItems,
 ];
 
 /**

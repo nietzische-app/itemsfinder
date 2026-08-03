@@ -159,12 +159,15 @@ const FLOORS = {
    * bir ürün bulunamıyor. Sözlük tarafı bu turda kapatıldı (yaygın yetmiş yedi
    * kelimenin tanınmayanı %25'ten %6'ya indi); kalan boşluk veri tarafında.
    *
-   * Taban 0.9: bugünkü ölçümün altında, düne göre yukarıda. **Hedef 1.0** ve oraya
-   * çıkmanın yolu belli — kataloğa elbise satırları eklemek. Bunu bir tahminle
-   * kapatmak yerine taban olarak yazmak, her çalıştırmada hangi dört parçanın boş
-   * döndüğünü isimleriyle basıyor.
+   * Elbise satırları eklendi ve ölçüm 51/51'e çıktı, yani taban 1.0 oldu.
+   *
+   * Diğer «taban %100» metrikleri gibi burada da pazarlık payı yok, ve sebebi
+   * aynı: bir parça ya bir ürün döndürüyor ya döndürmüyor, arada yorum yok. Yeni
+   * bir ürün türü desteklenmeye başladığında `eval/coverageCases.ts`'e bir satır
+   * eklemek, desteğin geri gitmemesini sağlıyor — ve o satır ilk gün kırmızı
+   * olacaksa, kapsamın gerçekten büyümesi gerektiği anlamına geliyor.
    */
-  coverage: 0.9,
+  coverage: 1,
   hotspotCount: 0.75,
   /*
    * Box accuracy. No floor yet — nothing has ever measured this, so any number
