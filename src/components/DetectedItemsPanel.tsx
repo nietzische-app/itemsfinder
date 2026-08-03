@@ -12,6 +12,7 @@ import { AffiliateNotice } from "@/components/AffiliateNotice";
 import { EngineBadge } from "@/components/EngineBadge";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductImage } from "@/components/ProductImage";
+import { productThumbnail } from "@/lib/productThumbnail";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -156,8 +157,13 @@ function DetectedItemCard({ item, isActive, onSelect }: DetectedItemCardProps) {
         className="flex w-full min-w-0 gap-4 p-4 text-left"
       >
         <span className="h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-surface-container">
+          {/* Ürün kartıyla aynı yedek: CDN düşerse ikon değil siluet. */}
           {item.exactMatch ? (
-            <ProductImage src={item.exactMatch.imageUrl} alt="" />
+            <ProductImage
+              src={item.exactMatch.imageUrl}
+              alt=""
+              fallbackSrc={productThumbnail(item.label, item.colorHex)}
+            />
           ) : (
             <span
               aria-hidden="true"
@@ -332,7 +338,12 @@ function PendingItemCard({ item }: { item: DetectedItem }) {
     <article className="flex gap-4 rounded-2xl border border-outline-variant bg-surface-container-lowest p-4 opacity-60">
       <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-surface-container">
         {item.exactMatch ? (
-          <ProductImage src={item.exactMatch.imageUrl} alt="" className="grayscale" />
+          <ProductImage
+            src={item.exactMatch.imageUrl}
+            alt=""
+            className="grayscale"
+            fallbackSrc={productThumbnail(item.label, item.colorHex)}
+          />
         ) : null}
         <span className="absolute inset-0 flex items-center justify-center bg-black/10">
           <Loader2 className="h-5 w-5 animate-spin text-primary" strokeWidth={1.5} />

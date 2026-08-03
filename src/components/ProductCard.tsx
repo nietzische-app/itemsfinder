@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ArrowUpRight, BadgeCheck, Bookmark, Star, TrendingDown } from "lucide-react";
 
 import { ProductImage } from "@/components/ProductImage";
+import { productThumbnail } from "@/lib/productThumbnail";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
@@ -94,7 +95,16 @@ export function ProductCard({
           isHero ? "h-32 w-24" : "h-[84px] w-16",
         )}
       >
-        <ProductImage src={product.imageUrl} alt={product.title} />
+        {/*
+          Yedek siluet: mağaza CDN'i görseli düşürürse kart tanınmaz bir ikona
+          değil, ürünün siluetine düşüyor. Veri URL'i olduğu için kendisi hiç
+          başarısız olamıyor.
+        */}
+        <ProductImage
+          src={product.imageUrl}
+          alt={product.title}
+          fallbackSrc={productThumbnail(product.title, "#c9c6c2")}
+        />
         {!product.inStock ? (
           <span className="absolute inset-0 flex items-center justify-center bg-surface/85 text-center text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">
             Tükendi

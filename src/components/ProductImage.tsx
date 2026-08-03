@@ -9,6 +9,16 @@ interface ProductImageProps {
   src: string;
   alt: string;
   className?: string;
+  /**
+   * `src` yüklenmezse denenecek ikinci adres.
+   *
+   * Canlı satırlar mağaza CDN'ine bağlanıyor ve o adresler bayatlıyor, hız
+   * sınırına takılıyor ya da hotlink'i engelliyor. Yedeksiz hâlde kart nötr bir
+   * "görsel yok" ikonuna düşüyordu — dürüst ama tanınmaz. Katalogun çizdiği
+   * siluet, hiç değilse neyin satıldığını gösteriyor ve veri URL'i olduğu için
+   * kendisi hiç başarısız olamıyor.
+   */
+  fallbackSrc?: string;
 }
 
 /**
@@ -19,12 +29,25 @@ interface ProductImageProps {
  * broken <img> would leave the alt text spilling across the card, so a failed
  * load collapses to a neutral placeholder instead.
  */
-export function ProductImage({ src, alt, className }: ProductImageProps) {
+export function ProductImage({ src, alt, className, fallbackSrc }: ProductImageProps) {
   const [failed, setFailed] = useState(false);
+  /** Yedeğe geçildi mi — ikinci bir başarısızlıkta sonsuz döngü olmasın diye. */
+  const [usingFallback, setUsingFallback] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
 
   // Reset when the row is reused for a different product.
-  useEffect(() => setFailed(false), [src]);
+  useEffect(() => {
+    setFailed(false);
+    setUsingFallback(false);
+  }, [src]);
+
+  const current = usingFallback && fallbackSrc ? fallbackSrc : src;
+
+  /** Yedek varsa ve henüz denenmediyse ona geç; yoksa ikona düş. */
+  const handleFailure = () => {
+    if (fallbackSrc && !usingFallback) setUsingFallback(true);
+    else setFailed(true);
+  };
 
   /*
    * Catch a load that already failed before this effect ran. `onError` only
@@ -34,8 +57,11 @@ export function ProductImage({ src, alt, className }: ProductImageProps) {
    */
   useEffect(() => {
     const image = imageRef.current;
-    if (image && image.complete && image.naturalWidth === 0) setFailed(true);
-  }, [src]);
+    if (image && image.complete && image.naturalWidth === 0) handleFailure();
+    // `handleFailure` her render'da yeniden kuruluyor; bağımlılık `current`,
+    // çünkü asıl izlenen şey hangi adresin denendiği.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current]);
 
   if (failed) {
     return (
@@ -56,7 +82,7 @@ export function ProductImage({ src, alt, className }: ProductImageProps) {
     // eslint-disable-next-line @next/next/no-img-element
     <img
       ref={imageRef}
-      src={src}
+      src={current}
       alt={alt}
       className={cn("h-full w-full object-cover", className)}
       loading="lazy"
@@ -68,7 +94,7 @@ export function ProductImage({ src, alt, className }: ProductImageProps) {
        * which Markas page the shopper was on.
        */
       referrerPolicy="no-referrer"
-      onError={() => setFailed(true)}
+      onError={handleFailure}
     />
   );
 }
