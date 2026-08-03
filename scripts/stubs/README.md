@@ -65,6 +65,25 @@ negatif, tam sınır 5, adetsiz puan, puansız adet. Bu dosya bir kez gerçek bi
 yakaladı — puan atıldığında değerlendirme adedi hayatta kalıyordu, yani kart
 puansız bir «1.240 değerlendirme» gösterebiliyordu.
 
+## Arama merdiveni
+
+```bash
+node scripts/stubs/search-ladder-check.mjs
+```
+
+Canlı arama tek bir sorgu deniyordu: renk + malzeme + desen + ürün adı. Bir
+mağazada o kombinasyonun tam karşılığı yoksa sonuç sıfır oluyordu — «beyaz keten
+oversize gömlek» boş ekran veriyordu, oysa aynı mağazada onlarca gömlek var.
+
+Sekiz vaka: tam sorgu doluysa tek arama yapılıyor, boşsa gevşek basamak
+deneniyor, Türkiye hiç bulamazsa global katmana geçiliyor, arama sınırı (3)
+korunuyor, ve **Türkiye'deki gevşek sonuç globaldeki tam sonucu yeniyor** —
+gümrük ve kargo farkı ürün farkından büyük.
+
+`scripts/stubs/context.mjs` de bunu sürülebilir kılıyor: ikiden fazla kelimeli
+sorgulara hiç sonuç dönmüyor, yani uygulamayı çalıştırdığında gevşemenin
+gerçekten devreye girdiğini stub loglarından görebiliyorsun.
+
 ## Sonuna kadar okunması gereken kısım
 
 **Bunlarla üretilen fixture'lar ölçüm değildir ve commit edilmemelidir.** Vision

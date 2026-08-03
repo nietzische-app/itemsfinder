@@ -44,9 +44,20 @@ const server = createServer((req, res) => {
 
     if (url.includes("search")) {
       const domains = payload.includeDomains ?? [];
-      const hits = domains
-        .filter((d) => PRODUCTS[d])
-        .map((d) => ({ url: `https://www.${d}/urun/ornek-p-1234567`, title: PRODUCTS[d].title }));
+      const query = String(payload.query ?? "");
+
+      /*
+       * Merdiveni sürülebilir kılmak için: uzun (tam) sorgular hiç sonuç
+       * dönmüyor, kısa (gevşemiş) sorgular dönüyor. Gerçek bir mağazanın
+       * davranışı değil, kasten kurulmuş bir durum — amaç gevşemenin gerçekten
+       * devreye girdiğini görmek.
+       */
+      const words = query.replace(/ (satın al fiyat|buy price)$/, "").split(/\s+/).filter(Boolean);
+      const hits = words.length > 2
+        ? []
+        : domains
+            .filter((d) => PRODUCTS[d])
+            .map((d) => ({ url: `https://www.${d}/urun/ornek-p-1234567`, title: PRODUCTS[d].title }));
       res.end(JSON.stringify({ results: hits }));
       return;
     }

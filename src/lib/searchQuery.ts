@@ -220,3 +220,49 @@ export function attributeSearchQuery(attrs: GarmentAttributeLike): string {
     descriptors: [attrs.pattern, ...attrs.details, attrs.material, attrs.fit],
   });
 }
+
+/**
+ * Aynı parçanın giderek gevşeyen sorguları — en özelden en genele.
+ *
+ * **Neden.** Canlı arama tek bir sorgu deniyordu: renk + malzeme + desen + ürün
+ * adı. Bir mağazada o kombinasyonun tam karşılığı yoksa sonuç sıfır oluyordu, ve
+ * kullanıcı «beyaz keten oversize gömlek» için boş ekran görüyordu — oysa aynı
+ * mağazada onlarca gömlek var. Sıfır sonuç, «biraz farklı bir gömlek»ten kötü.
+ *
+ * Basamaklar:
+ *
+ *  1. Tam sorgu — renk + betimleyiciler + ürün adı.
+ *  2. Renk + ürün adı — malzeme ve desen düşüyor. Bunlar bir mağazanın
+ *     başlığında en sık eksik olan iki alan; «keten» yazmayan bir gömlek ilanı
+ *     keten olmadığı için değil, başlığa yazılmadığı için eşleşmiyor.
+ *  3. Yalnız ürün adı — son çare. Renk bile düşüyor, çünkü bir mağazada o rengin
+ *     hiç bulunmaması gerçek bir durum ve o noktada doğru cevap «bu mağazada
+ *     beyaz yok» değil, «işte gömlekler».
+ *
+ * Aynı metne çıkan basamaklar eleniyor: betimleyicisi olmayan bir parçada üç
+ * basamak da aynı olur ve üç arama yapmanın anlamı yok.
+ */
+export function relaxedQueries(parts: SearchQueryParts): string[] {
+  const ladder = [
+    buildSearchQuery(parts),
+    buildSearchQuery({ ...parts, descriptors: undefined, attributes: undefined }),
+    buildSearchQuery({
+      ...parts,
+      descriptors: undefined,
+      attributes: undefined,
+      colorHex: undefined,
+      colorName: undefined,
+      // Etiket bir cümle olabiliyor ("Yüksek yakalı ince örgü pastel pembe triko
+      // ceket"); son basamakta ondan da vazgeçiliyor, geriye ürün adı kalıyor.
+      label: undefined,
+    }),
+  ];
+
+  const seen = new Set<string>();
+  return ladder.filter((query) => {
+    const trimmed = query.trim();
+    if (!trimmed || seen.has(trimmed)) return false;
+    seen.add(trimmed);
+    return true;
+  });
+}

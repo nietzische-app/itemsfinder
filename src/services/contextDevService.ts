@@ -94,6 +94,17 @@ const GLOBAL_DOMAINS: Record<ItemCategory, string[]> = {
  */
 const MIN_LOCAL_CANDIDATES = 2;
 
+/**
+ * Bir parça için yapılabilecek en fazla arama.
+ *
+ * İki katman × üç basamak altı arama eder; her arama bir kredi ve bir gidiş
+ * dönüş demek, ve bir taramada dört parça çözülüyor. Üç, iki katmanın da
+ * denenmesine yetiyor (Türkiye'de tam sorgu, Türkiye'de gevşek sorgu, global)
+ * ve en kötü durumda gecikmeyi öngörülebilir tutuyor. Sonuç bulunduğu anda
+ * zaten duruluyor, yani sıradan durumda tek arama yapılıyor.
+ */
+const MAX_SEARCHES_PER_ITEM = 3;
+
 /** Fallback currency per retailer TLD, used when extraction omits it. */
 const DOMAIN_CURRENCY: Array<[RegExp, string]> = [
   /*
@@ -272,43 +283,64 @@ export class ContextDevService {
    *
    * Resolves to `[]` on any failure — callers fall back to the catalogue.
    */
+  /**
+   * Finds live, buyable products for a detection label.
+   *
+   * `queries` en özelden en genele sıralı basamaklardır (`relaxedQueries`). Her
+   * basamak iki mağaza katmanında deneniyor — önce Türkiye, sonra global — ve ilk
+   * yeterli sonuç geldiğinde duruluyor.
+   *
+   * Resolves to `[]` on any failure — callers fall back to the catalogue.
+   */
   async searchLiveProducts(
-    query: string,
+    queries: string[],
     category: ItemCategory,
     signal?: AbortSignal,
   ): Promise<LiveProductCard[]> {
-    const cacheKey = `${category}:${query.toLowerCase()}`;
+    const ladder = queries.map((entry) => entry.trim()).filter(Boolean);
+    if (ladder.length === 0) return [];
+
+    // Önbellek anahtarı en özel basamak: aynı parça hep aynı merdiveni üretiyor.
+    const cacheKey = `${category}:${ladder[0]!.toLowerCase()}`;
     const cached = this.readCache(this.productCache, cacheKey);
     if (cached) return cached;
 
     try {
       /*
-       * Önce Türkiye, bulunamazsa global.
+       * Önce Türkiye, bulunamazsa global; ve her ikisinde de sorgu gevşeyerek.
        *
        * Tek bir aramada bütün mağazaları taramak, sıralamayı arama motoruna
        * bırakmak demekti — ve o sıralama alışveriş yapanın nerede olduğunu
        * bilmiyor. Türkiye'den bakan biri için TL fiyat ve yurt içi kargo veren bir
        * bağlantı, aynı ürünün İngiltere bağlantısından iyi. Ama global katman da
-       * kapalı değil: bazı ürünler Türkiye'de gerçekten satılmıyor ve o durumda
-       * sonuçsuz bırakmaktansa gümrüklü bir seçenek göstermek daha faydalı.
+       * kapalı değil: bazı ürünler Türkiye'de gerçekten satılmıyor.
        *
-       * İkinci arama yalnızca birincisi yetersiz kaldığında yapılıyor, yani
-       * sorgu başına maliyet ancak gerektiğinde ikiye çıkıyor.
+       * Sorgu gevşemesi ikinci eksen: «beyaz keten oversize gömlek» hiçbir
+       * mağazada tam karşılık bulmayabilir ama «gömlek» bulur, ve sıfır sonuç
+       * biraz farklı bir gömlekten kötüdür.
+       *
+       * Sıra kasıtlı — önce **katman**, sonra **basamak**: Türkiye'de bulunan
+       * gevşek bir eşleşme, globalde bulunan tam bir eşleşmeden iyi, çünkü
+       * gümrük ve kargo farkı ürün farkından büyük.
        */
-      const local = await this.searchTier(
-        `${query} satın al fiyat`,
-        TURKISH_DOMAINS[category],
-        signal,
-      );
+      const attempts: Array<{ query: string; domains: string[] }> = [];
+      for (const query of ladder) {
+        attempts.push({ query: `${query} satın al fiyat`, domains: TURKISH_DOMAINS[category] });
+      }
+      for (const query of ladder) {
+        attempts.push({ query: `${query} buy price`, domains: GLOBAL_DOMAINS[category] });
+      }
 
-      const candidates = [...local];
-      if (candidates.length < MIN_LOCAL_CANDIDATES) {
-        const global = await this.searchTier(
-          `${query} buy price`,
-          GLOBAL_DOMAINS[category],
-          signal,
-        );
-        for (const url of global) {
+      const candidates: string[] = [];
+      let searches = 0;
+
+      for (const attempt of attempts) {
+        if (candidates.length >= MIN_LOCAL_CANDIDATES) break;
+        if (searches >= MAX_SEARCHES_PER_ITEM) break;
+
+        searches += 1;
+        const found = await this.searchTier(attempt.query, attempt.domains, signal);
+        for (const url of found) {
           if (!candidates.includes(url)) candidates.push(url);
         }
       }
@@ -327,7 +359,7 @@ export class ContextDevService {
       this.writeCache(this.productCache, cacheKey, deduped);
       return deduped;
     } catch (error) {
-      logFailure("searchLiveProducts", query, error);
+      logFailure("searchLiveProducts", ladder[0] ?? "", error);
       return [];
     }
   }

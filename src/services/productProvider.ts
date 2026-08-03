@@ -12,7 +12,7 @@ import {
 } from "@/lib/attributeMatch";
 import { rejectProductTitle } from "@/lib/retailVocabulary";
 import type { TraceCollector } from "@/lib/scanTrace";
-import { buildSearchQuery } from "@/lib/searchQuery";
+import { buildSearchQuery, relaxedQueries } from "@/lib/searchQuery";
 import { cropRegion } from "@/services/imageCrop";
 import { productThumbnail } from "@/lib/productThumbnail";
 import { hydrateProduct } from "@/services/mockCatalog";
@@ -265,9 +265,15 @@ export class ContextDevProductProvider implements ProductProvider {
     siblings: BoundingBox[] = [],
     trace?: TraceCollector,
   ): Promise<DetectedItem | null> {
-    // Search on the enriched query — colour plus descriptors plus type —
-    // rather than the bare label, which is often too generic to rank well.
-    const query = buildSearchQuery({
+    /*
+     * Tek bir sorgu değil, gevşeyen bir merdiven.
+     *
+     * En özel basamak renk + betimleyiciler + ürün adı; bir mağazada o
+     * kombinasyonun tam karşılığı yoksa sıfır sonuç dönüyordu ve kullanıcı boş
+     * ekran görüyordu — oysa aynı mağazada onlarca gömlek var. Arama ilk yeterli
+     * sonuçta duruyor, yani sıradan durumda hâlâ tek arama yapılıyor.
+     */
+    const ladder = relaxedQueries({
       itemType: item.itemType,
       label: item.label,
       colorHex: item.colorHex,
@@ -275,7 +281,7 @@ export class ContextDevProductProvider implements ProductProvider {
     });
 
     const cards = await this.context.searchLiveProducts(
-      query || item.label,
+      ladder.length > 0 ? ladder : [item.label],
       item.category,
       signal,
     );
