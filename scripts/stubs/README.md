@@ -60,6 +60,24 @@ bir `results` alanı değil. Yanlış şekildeki bir cevap sessizce «canlı sat
 bulunamadı» olarak kataloğa düşüyordu — gerçek anahtarla ilk denemede bunun
 teşhisi çok daha pahalı olurdu.
 
+## Dedektör kesintisi
+
+Vision çöktüğünde uygulamanın **hata vermek yerine kataloğa düşmesi** tasarımın en
+kritik davranışlarından biri, ve sürmenin tek yolu gerçek bir kesinti beklemekti.
+
+```bash
+FAIL=1 node scripts/stubs/vision.mjs 4751 &
+GOOGLE_CLOUD_VISION_API_KEY=stub \
+VISION_BASE_URL=http://127.0.0.1:4751 npm start
+```
+
+Ölçüldü: Vision her isteğe 500 dönerken tarama tamamlanıyor, kullanıcı **hata
+ekranı değil üç ürün** görüyor, motor rozeti dürüstçe «Demo Modu (Örnek Veri)»
+diyor, ve iz kaydı `source: mock-fallback` ile birlikte düşme sebebini yazıyor.
+
+Yani bir Google kesintisi kullanıcı için «bulunamadı» değil, «canlı yerine örnek
+veri» anlamına geliyor.
+
 ## Mağaza puanı
 
 ```bash

@@ -233,7 +233,19 @@ export class MockVisualSearchService implements VisualSearchService {
 /*  Google Cloud Vision implementation                                        */
 /* -------------------------------------------------------------------------- */
 
-const VISION_ENDPOINT = "https://vision.googleapis.com/v1/images:annotate";
+/**
+ * Vision adresi, sahte bir sunucuya çevrilebilsin diye.
+ *
+ * `VLM_BASE_URL`, `CONTEXT_DEV_BASE_URL` ve `LINK_CHECK_BASE_URL` ile aynı desen.
+ * Buradaki gerekçe ayrıca somut: dedektör çöktüğünde uygulamanın hata vermek
+ * yerine kataloğa düşmesi tasarımın en kritik davranışlarından biri ve hiç
+ * sürülmemişti — sürmenin tek yolu gerçek bir Vision kesintisi beklemekti.
+ * Üretimde boş, yani davranış değişmiyor.
+ */
+const VISION_BASE_URL = (
+  process.env.VISION_BASE_URL?.trim().replace(/\/$/, "") || "https://vision.googleapis.com"
+);
+const VISION_ENDPOINT = `${VISION_BASE_URL}/v1/images:annotate`;
 
 /** Minimal shape of the parts of the Vision response we consume. */
 interface VisionVertex {

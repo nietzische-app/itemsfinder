@@ -16,7 +16,22 @@ const OBJECTS = [
   { name: "Footwear", score: 0.81, box: [0.32, 0.86, 0.46, 0.96] },
 ];
 
+/*
+ * `FAIL=1` ile başlatıldığında her isteğe 500 dönüyor.
+ *
+ * Amaç, dedektör çöktüğünde uygulamanın hata vermek yerine kataloğa düşmesini
+ * sürebilmek. O davranış tasarımın en kritik parçalarından biri ve sürmenin tek
+ * yolu gerçek bir Vision kesintisi beklemekti.
+ */
+const ALWAYS_FAIL = process.env.FAIL === "1";
+
 const server = createServer((req, res) => {
+  if (ALWAYS_FAIL) {
+    res.writeHead(500, { "content-type": "application/json" });
+    res.end(JSON.stringify({ error: { code: 500, message: "stub outage" } }));
+    return;
+  }
+
   let body = "";
   req.on("data", (chunk) => (body += chunk));
   req.on("end", () => {
