@@ -114,7 +114,7 @@ const RULES: FamilyRule[] = [
    */
   {
     family: "headwear",
-    stems: ["şapka", "bere", "kasket", "bandana", "başlık"],
+    stems: ["şapka", "bere", "kasket", "bandana", "başlık", "kask"],
     words: ["hat", "hats", "cap", "caps", "beanie", "beret", "headband", "headscarf", "fedora"],
   },
   {

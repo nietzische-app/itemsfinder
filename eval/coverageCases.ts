@@ -108,3 +108,38 @@ export const COVERAGE_CASES: readonly CoverageCase[] = [
  * "kimse bakmadı" değil.
  */
 export const KNOWN_GAPS: readonly string[] = [];
+
+/**
+ * Google Cloud Vision'ın döndürdüğü moda ve kozmetik sınıfları.
+ *
+ * **Türkçe kelime listesinden daha kritik, çünkü boru hattına giren şey bu.**
+ * Ölçülünce elli dört sınıfın beşi hiçbir aileye düşmüyordu: Helmet, Wallet,
+ * Underpants, Brassiere ve iki üst sınıf. Ailesi olmayan bir tespit katalogdan
+ * hiçbir ürün alamıyor, yani her biri doğrudan bir boş ekran.
+ *
+ * Dördü çeviri tablosuna eklendi. Kalan ikisi listede **yok** ve olmamalı —
+ * aşağıdaki `GENERIC_VISION_CLASSES` onları ayrı tutuyor.
+ */
+export const VISION_CLASSES: readonly string[] = [
+  "Outerwear", "Coat", "Jacket", "Suit", "Blazer", "Sweater", "Shirt", "Top",
+  "T-shirt", "Dress", "Skirt", "Shorts", "Trousers", "Jeans", "Miniskirt",
+  "Swimwear", "Footwear", "Shoe", "Boot", "Sandal", "High heels", "Sneakers",
+  "Slipper", "Hat", "Cap", "Helmet", "Sunglasses", "Glasses", "Goggles",
+  "Scarf", "Tie", "Belt", "Glove", "Sock", "Handbag", "Bag", "Backpack",
+  "Briefcase", "Wallet", "Watch", "Necklace", "Earrings", "Bracelet", "Ring",
+  "Jewelry", "Lipstick", "Perfume", "Nail polish", "Brassiere", "Underpants",
+];
+
+/**
+ * Tip bilgisi taşımayan üst sınıflar — bilerek aileye bağlanmıyorlar.
+ *
+ * "Clothing" duyan bir sisteme rastgele bir giysi ailesi seçtirmek, kullanıcıya
+ * ayakkabı yerine ceket göstermenin kapısını açar. Bu sınıflar geldiğinde doğru
+ * davranış, tespitin **kendi etiketine** bakmak: `findProductsForLabel` kelime
+ * skoruyla çalışıyor ve «Clothing Beyaz Keten Gömlek» bir gömlek buluyor.
+ * Ölçüldü — yalnız üst sınıf sıfır ürün, herhangi bir betimleyici kelimeyle üç.
+ *
+ * Ayrıca `detectionFilter` bu kutuları spesifik olanın lehine eliyor, yani
+ * üstlerinde gerçek bir giysi kutusu varken zaten görünmüyorlar.
+ */
+export const GENERIC_VISION_CLASSES: readonly string[] = ["Clothing", "Cosmetics"];

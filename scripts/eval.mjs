@@ -56,7 +56,10 @@ const { MOCK_SCENARIOS, hydrateProduct } = await import("@/services/mockCatalog"
 const { merchantLabel, merchantHost } = await import("@/services/merchantSearch");
 const { priceIsShowable } = await import("@/utils/affiliate");
 const { findProductsForLabel } = await import("@/services/mockCatalog");
-const { COVERAGE_CASES, KNOWN_GAPS } = await import("../eval/coverageCases.ts");
+const { COVERAGE_CASES, KNOWN_GAPS, VISION_CLASSES, GENERIC_VISION_CLASSES } = await import(
+  "../eval/coverageCases.ts"
+);
+const { toTurkishRetailTerms } = await import("@/lib/retailVocabulary");
 
 /**
  * Metric floors: set just under the measured baseline so a regression trips the
@@ -932,6 +935,22 @@ const coverageScore = pct(
   COVERAGE_CASES.length - coverageMisses.length,
   COVERAGE_CASES.length,
 );
+
+/*
+ * Vision'ın sınıfları bir aileye düşüyor mu?
+ *
+ * Türkçe kelime listesinden daha kritik: boru hattına giren şey bu. Ölçülünce
+ * elli dört sınıfın beşi hiçbir aileye düşmüyordu (Helmet, Wallet, Underpants,
+ * Brassiere ve iki üst sınıf) ve ailesi olmayan bir tespit katalogdan hiçbir ürün
+ * alamıyor. Üst sınıflar ayrı tutuluyor — onları bir aileye zorlamak yanlış.
+ */
+const visionFamilyMisses = VISION_CLASSES.filter(
+  (name) => familyOf(`${name} ${toTurkishRetailTerms(name)}`) === "unknown",
+);
+const visionFamilyScore = pct(
+  VISION_CLASSES.length - visionFamilyMisses.length,
+  VISION_CLASSES.length,
+);
 const visionQueryScore = pct(visionQueryHits, visionQueryTotal);
 const retrievalScore = pct(retrievalHits, tight.length);
 const hotspotScore = pct(hotspotHits, hotspotCases);
@@ -1027,6 +1046,13 @@ console.log(
 );
 for (const url of urlFalseRejects) console.log(`      yanlış red    ${url.slice(0, 78)}`);
 for (const url of urlFalseAccepts) console.log(`      yanlış KABUL  ${url.slice(0, 78)}`);
+console.log(
+  `  Vision sınıf ailesi ${fmt(visionFamilyScore)}  (${VISION_CLASSES.length - visionFamilyMisses.length}/${VISION_CLASSES.length})   taban %100` +
+    `, ${GENERIC_VISION_CLASSES.length} üst sınıf ayrı tutuluyor`,
+);
+for (const name of visionFamilyMisses) {
+  console.log(`      «${name}» hiçbir aileye düşmüyor`);
+}
 console.log(
   `  Puan sızıntısı   ${ratingLeaks.length === 0 ? "yok" : `${ratingLeaks.length} SATIR`}` +
     `             taban «yok», katalog satırı mağaza puanı taşımamalı`,
@@ -1224,6 +1250,8 @@ const failures = [
    * öyle bir belirsizlik yok: listedeki her adres ya bir ürüne gidiyor ya
    * gitmiyor, ve ikisi de elle bakılarak yazıldı.
    */
+  visionFamilyScore < 1 &&
+    `Vision sınıf ailesi ${fmt(visionFamilyScore)}: ${visionFamilyMisses.length} sınıf aileye düşmüyor`,
   ratingLeaks.length > 0 &&
     `puan sızıntısı: ${ratingLeaks.length} katalog satırı mağaza puanı taşıyor`,
   coverageScore < FLOORS.coverage &&

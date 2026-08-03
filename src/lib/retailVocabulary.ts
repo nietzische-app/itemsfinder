@@ -247,6 +247,20 @@ const TERMS: Record<string, string> = {
   brassiere: "sütyen",
   nightwear: "pijama",
   helmet: "kask",
+  /*
+   * Vision'ın gerçekten döndürdüğü sınıflar ölçülünce eklendi: elli dört moda
+   * sınıfının beşi hiçbir aileye düşmüyordu, ve ailesi olmayan bir tespit
+   * katalogdan hiçbir ürün alamıyor — yani her biri doğrudan bir boş ekran.
+   * Bunlardan «Helmet» ve «Brassiere» aslında burada zaten çeviriliydi; eksik
+   * olan aile tarafıydı (`itemFamily.ts`). Gerçekten çevirisi olmayan ikisi
+   * aşağıdaki.
+   *
+   * Kalan «Clothing» ve «Cosmetics» bilerek çevrilmiyor: Vision'ın üst sınıfları,
+   * tip bilgisi taşımıyorlar. Onları bir aileye zorlamak, "giysi" duyan sisteme
+   * rastgele bir giysi ailesi seçtirmek olurdu.
+   */
+  wallet: "cüzdan",
+  underpants: "külot",
 
   // --- Beauty ---
   lipstick: "ruj",
