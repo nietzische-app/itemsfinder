@@ -387,7 +387,25 @@ export class ContextDevProductProvider implements ProductProvider {
               : Math.round((0.6 * entry.agreement.score + 0.4 * seen) * 100) / 100,
         };
       })
-      .sort((a, b) => b.score - a.score || a.card.price - b.card.price);
+      /*
+       * Stokta olan önce — puan farkı küçükken.
+       *
+       * Sıralama yalnızca puana bakıyordu, yani tükenmiş bir ürün başrolü («birebir
+       * eşleşme») alabiliyor ve satın alınabilir bir muadil altında kalabiliyordu.
+       * Kart «Tükendi» yazıyor, yani kimse kandırılmıyor — ama sonucun en görünür
+       * yeri tıklanınca alınamayan bir ürün oluyor, ki hedef tam olarak bunun
+       * tersi.
+       *
+       * Eşik neden var: stok her şeyi ezerse, doğru ürünün tükenmiş hâli yerine
+       * yanlış ürünün stoktaki hâli başrole geçer — bu daha kötü. Beş puanlık fark
+       * (0.05) "ikisi de aynı derecede iyi eşleşme" demek için makul bir aralık;
+       * ötesinde puan kazanıyor.
+       */
+      .sort((a, b) => {
+        const close = Math.abs(a.score - b.score) <= 0.05;
+        if (close && a.card.inStock !== b.card.inStock) return a.card.inStock ? -1 : 1;
+        return b.score - a.score || a.card.price - b.card.price;
+      });
 
     const leader = ranked[0];
     if (!leader) return null;

@@ -1,4 +1,14 @@
-# Kayıt betiklerini anahtarsız sürmek
+# Anahtarsız sürülen yollar
+
+```bash
+npm run check:stubs   # beş süitin hepsi, saniyeler sürer
+```
+
+Buradaki süitler `npm run eval`'in ölçemediğini ölçüyor: eval **veriye** bakıyor
+(renk doğru mu, kapsam tam mı), bunlar **karara** bakıyor — canlı yol kataloğu
+ezerse, tükenmiş ürün başrole geçerse, bir puan ölçeksiz gelirse ne oluyor.
+
+## Kayıt betiklerini anahtarsız sürmek
 
 `eval:record` ve `eval:record-attrs` gerçek API çağrısı yapıyor, yani ikisini de
 denemenin tek yolu bir anahtar harcamaktı. Anahtar genelde tek bir oturumda
