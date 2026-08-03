@@ -107,6 +107,26 @@ const checks = [
     fix: "npm run check:pdp  (listenin başındaki 14 bağlantı) → doldur → npm run fetch:images",
   },
   {
+    id: "0.4",
+    when: "trafik",
+    label: "Bağlantılar hâlâ açılıyor",
+    /*
+     * Bu kontrol ağ gerektiriyor, yani doctor onu kendisi çalıştıramaz — burada
+     * ölçülen tek şey bağlantı olup olmadığı. Amaç hatırlatmak: adresler yazıldığı
+     * gün doğruydu, ama mağazalar ürün kaldırıyor ve bir bağlantı sessizce ölüyor.
+     */
+    ok: false,
+    missing: `${showcaseLinked.length} bağlantının canlılığı bu ortamda ölçülemiyor`,
+    why:
+      "Adresler yazıldığı gün doğruydu; mağazalar ürün kaldırdıkça sessizce ölürler. " +
+      "Şekil kontrolü (check:pdp) bunu görmez — 404 dönen bir adres de doğru şekillidir.",
+    fix:
+      "npm run check:links — sayfaları gerçekten açmaya çalışır. Ayda bir yeterli.\n" +
+      "                Ölü bulursa otomatik silmez: ürün geçici olarak stokta\n" +
+      "                olmayabilir. Bağlantıyı aç, gerçekten yoksa dosyadan çıkar —\n" +
+      "                bağlantısız ürün CTA'sız çiziliyor, kırık bağlantıdan iyi.",
+  },
+  {
     id: "1.1",
     when: "ölçüm",
     label: "Eval seti kıyaslama boyutunda",

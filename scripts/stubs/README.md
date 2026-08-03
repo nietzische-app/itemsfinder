@@ -110,6 +110,22 @@ Altı vaka bunları ölçüyor, ulaşılamayan sunucu dahil.
 Betik hiçbir şeyi otomatik silmiyor: ölü bir bağlantıyı dosyadan çıkarmak bir
 karar, ve geçici bir stok kesintisi adresin yanlış olduğu anlamına gelmiyor.
 
+## Canlı yol kataloğu kötüleştirebiliyor mu
+
+```bash
+node scripts/stubs/no-downgrade-check.mjs
+```
+
+Kural: canlı veri açıldığında hiçbir kullanıcı, kapalıyken sahip olduğu bir şeyi
+kaybetmemeli. En somut hâli bağlantı.
+
+Bir kez gerçek bir kusur yakaladı: çıkarım ürün sayfası adresi bulamadığında
+canlı satır `productUrl: ""` ile geliyordu, yine de "en iyi" seçilebiliyordu ve
+katalogdaki **doğrulanmış bağlantılı** satırın yerine geçiyordu. Yani canlı yolu
+açtığın anda çalışan bir «Ürüne git» kaybolabiliyordu — canlı verinin katalogdan
+kötü bir sonuç üretebildiği tek yer. Bağlantısız canlı satırlar artık yarışmaya
+hiç girmiyor.
+
 ## Sonuna kadar okunması gereken kısım
 
 **Bunlarla üretilen fixture'lar ölçüm değildir ve commit edilmemelidir.** Vision

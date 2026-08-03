@@ -298,9 +298,31 @@ export class ContextDevProductProvider implements ProductProvider {
      * The family is the detector's own ruling, carried on the item, not a fresh
      * guess from the label.
      */
+    /*
+     * Bağlantısı olmayan canlı satır hiç yarışmaya girmiyor.
+     *
+     * Çıkarım bazen ürün sayfası şeklinde bir adres bulamıyor (`productUrl: ""`).
+     * Böyle bir satır yine de en iyi seçilebiliyordu ve katalogdaki satırın
+     * **yerine geçiyordu** — katalog satırının doğrulanmış bir bağlantısı varken.
+     * Sonuç: canlı yol açıldığında çalışan bir «Ürüne git» kaybolur, yerine
+     * tıklanamayan bir kart gelirdi. Canlı verinin katalogdan kötü bir sonuç
+     * üretebildiği tek yer burasıydı.
+     *
+     * Gerçek fiyat gösterip satın alma yolunu kapatmak, kataloğun tahmini
+     * fiyatını gösterip gerçek bir bağlantı vermekten kötü.
+     */
+    const linkable = cards.filter((card) => card.productUrl.length > 0);
+    if (linkable.length < cards.length) {
+      trace?.degrade(
+        "products",
+        `${cards.length - linkable.length} canlı satır bağlantısız geldi — elendi`,
+      );
+    }
+    if (linkable.length === 0) return null;
+
     const family = item.family ?? familyOf(`${item.itemType} ${item.label}`);
     const rejected: string[] = [];
-    const usable = cards.filter((card) => {
+    const usable = linkable.filter((card) => {
       const reason = rejectProductTitle(card.title, family);
       if (reason) {
         rejected.push(`"${card.title}" (${reason})`);
