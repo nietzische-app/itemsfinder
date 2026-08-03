@@ -104,7 +104,23 @@ const checks = [
       `vitrin ürünlerinin ${showcaseLinked.length}/${showcaseExactIds.length}'ü bağlı ` +
       `(${Object.keys(VERIFIED_PDP_IMAGES).length} görsel)`,
     why: "Site tarıyor, eşleştiriyor, fiyat gösteriyor — ve «Ürüne git» hiçbir yere gitmiyor.",
-    fix: "npm run check:pdp  (listenin başındaki 14 bağlantı) → doldur → npm run fetch:images",
+    /*
+     * "Vercel üzerinden mi çalıştırmam gerek?" diye soruldu — demek ki nerede
+     * çalışacağı yazılı değildi. İkisi de yerel: anahtar istemiyorlar, ortam
+     * değişkeni istemiyorlar, yalnızca mağazalara internet erişimi istiyorlar.
+     * Vercel'in bu adımlarda hiçbir rolü yok.
+     */
+    fix:
+      "Kendi bilgisayarında, depo klasöründe (Vercel'de değil — anahtar ya da\n" +
+      "                ortam değişkeni gerekmiyor, yalnızca mağazalara internet erişimi):\n" +
+      "\n" +
+      "                  npm run check:pdp      hangi ürün eksik, hazır arama bağlantılarıyla\n" +
+      "                  (bağlantıları src/data/verifiedProductUrls.ts içine yaz)\n" +
+      "                  npm run fetch:images   sayfalardan ürün fotoğrafını çeker\n" +
+      "\n" +
+      "                fetch:images hiçbir dosyayı kendisi değiştirmiyor; yapıştırılacak\n" +
+      "                bir blok basıyor. Yapıştırmadan önce görsellere bak — og:image\n" +
+      "                bazen kombin fotoğrafı ya da mağaza logosu olur.",
   },
   {
     id: "0.4",
@@ -121,7 +137,11 @@ const checks = [
       "Adresler yazıldığı gün doğruydu; mağazalar ürün kaldırdıkça sessizce ölürler. " +
       "Şekil kontrolü (check:pdp) bunu görmez — 404 dönen bir adres de doğru şekillidir.",
     fix:
-      "npm run check:links — sayfaları gerçekten açmaya çalışır. Ayda bir yeterli.\n" +
+      "Kendi bilgisayarında (Vercel'de değil, anahtar gerekmiyor):\n" +
+      "\n" +
+      "                  npm run check:links   sayfaları gerçekten açmaya çalışır\n" +
+      "\n" +
+      "                Ayda bir yeterli.\n" +
       "                Ölü bulursa otomatik silmez: ürün geçici olarak stokta\n" +
       "                olmayabilir. Bağlantıyı aç, gerçekten yoksa dosyadan çıkar —\n" +
       "                bağlantısız ürün CTA'sız çiziliyor, kırık bağlantıdan iyi.",
