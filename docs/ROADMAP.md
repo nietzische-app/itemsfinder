@@ -40,7 +40,7 @@ Aşağıdaki kayıt tarihsel.
 yok.
 
 Endpoint tamamen açık ve her çağrı **para harcıyor**: 1 Cloud Vision çağrısı +
-`VLM_MAX_ITEMS` kadar Claude çağrısı (varsayılan 4) + 1 Context.dev araması + 3
+`VLM_MAX_ITEMS` kadar Gemini Flash çağrısı (varsayılan 4) + 1 Context.dev araması + 3
 extract + 4 görsel indirme. Basit bir döngü tüm kredileri boşaltır ve bunu fark
 etmenin bir yolu yok.
 
@@ -303,7 +303,7 @@ Doğrulama **sentetik** kayıtlarla yapıldı ve commit edilmedi; ölçümün do
 çalıştığını kanıtlar, gerçek modelin ne yaptığı hakkında hiçbir şey söylemez.
 
 ```bash
-ANTHROPIC_API_KEY=... npm run eval:record-attrs           # ya da -- --repeat 3
+GEMINI_API_KEY=... npm run eval:record-attrs           # ya da -- --repeat 3
 npm run eval
 ```
 
@@ -447,20 +447,17 @@ başlangıç ciddi bir problem; ayrı bir çıkarım servisi gerekebilir.
 
 Değişken maliyet: tarama başına `VLM_MAX_ITEMS` (varsayılan 4) model çağrısı.
 Her çağrı bir kırpım (~640px kenar, birkaç yüz token görsel) artı kısa bir JSON
-yanıtı. Kaba hesapla parça başına ~1500 girdi + ~150 çıktı token'ı, yani
-`claude-opus-5` fiyatlarıyla (girdi $5/M, çıktı $25/M) parça başına ~$0.011,
-**tarama başına ~$0.045**.
+yanıtı. Gemini Flash ücretsiz kotası içinde kaldığı sürece **tarama başına ~$0**;
+ücretli kota aşımında da Flash fiyatları Claude Opus'tan kat kat düşük.
 
 Sabit maliyet: kendi çıkarım servisi. Bir DeepFashion2 dedektörünü sıcak tutan
 en küçük GPU'suz örnek aylık **~$25–40** bandında (küçük bir konteyner + sürekli
 çalışma); CPU'da soğuk başlangıç sunucusuz için kabul edilemez olduğu için
 "sıcak tutmak" bu kalemin tamamı.
 
-Başabaş: `$30 / $0.045 ≈ 670 tarama/ay` — günde ~22 tarama.
-
-Yani eşik şu: **aylık tarama sayısı istikrarlı biçimde 1000'i geçtiğinde** (bir
-miktar pay bırakarak) kendi dedektörü kendini finanse etmeye başlar. Bunun
-altında VLM çağrısı hem daha ucuz hem de bakımı yok.
+Başabaş: Gemini Flash ücretsiz kotası yettiği sürece VLM yolu sabit maliyetsiz;
+kota aşıldığında da Flash birim maliyeti, kendi GPU servisini sıcak tutmaktan
+çok daha geç başabaşa gelir.
 
 Bu sayı 3.2 ile ölçülebilir hâle geldi: `[scan]` logu tarama başına bir satır
 yazıyor, saymak için ayrı bir iş gerekmiyor.
@@ -558,7 +555,7 @@ sağlayabileceğin bir girdiyi** bekliyor — anahtar, fotoğraf, veri ya da bir
 | 0.1 | `UPSTASH_REDIS_REST_URL` / `_TOKEN` — onlarsız sayaçlar süreç-yerel |
 | 0.3 | `VERIFIED_PDP_URLS` (elle doğrulanmış bağlantılar), sonra `npm run fetch:images` |
 | 1.2 | `GOOGLE_CLOUD_VISION_API_KEY=... npm run eval:record` |
-| 1.3 | `ANTHROPIC_API_KEY=... npm run eval:record-attrs` |
+| 1.3 | `GEMINI_API_KEY=... npm run eval:record-attrs` |
 | 2.1b | Ağı açık bir makine — model ağırlıkları buradan indirilemiyor |
 | 2.2 | Aylık 1000+ tarama (bkz. yukarıdaki eşik hesabı) |
 | 2.3 | Bir ürün beslemesi anlaşması ya da kendi crawl'ımız |
