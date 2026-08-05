@@ -58,7 +58,7 @@ export interface AttributeRequest {
 
 export interface VlmServiceOptions {
   /**
-   * Model id. Defaults to `gemini-1.5-flash-8b` (higher free-tier quota).
+   * Model id. Defaults to canonical `gemini-1.5-flash`.
    * Do not include a leading `models/` prefix — the SDK adds it.
    */
   model?: string;
@@ -100,8 +100,8 @@ const FASHION_PROMPT = [
 ].join(" ");
 
 /**
- * Expected JSON keys — enforced by prompt + `responseMimeType` on stable v1
- * (`responseSchema` is a v1beta-only feature and is intentionally omitted).
+ * Expected JSON keys — enforced by prompt + `responseMimeType`.
+ * (`responseSchema` is optional; mime type + `cleanJsonResponse` are enough.)
  */
 const JSON_SHAPE_HINT = [
   "Respond with a single JSON object only (no markdown). Keys:",
@@ -142,25 +142,27 @@ const SYSTEM_PROMPT = [
 ].join("\n");
 
 /**
- * Default Flash model — hard-locked to Google Gemini Flash 8B.
+ * Canonical Gemini Flash id for `@google/generative-ai`.
  *
- * `gemini-1.5-flash` 404s on v1beta for many free keys and auto-falling through
- * to `gemini-2.0-flash` then hits `limit: 0` (hard 429). The 8B Flash variant
- * keeps free-tier RPM and lower latency; calls go to the stable **v1** API.
- *
- * No auto-fallback to `gemini-2.0-flash` — a miss goes straight to WEB_DETECTION.
- * Override with `VLM_MODEL`. Never pass a leading `models/` prefix.
+ * Hardcoded — no fallback chain through `gemini-1.5-flash-8b` /
+ * `gemini-2.0-flash` / `gemini-2.5-flash` (those 404 or have free-tier limit: 0
+ * and only spam retry warnings). Override with `VLM_MODEL` if needed.
+ * Never pass a leading `models/` prefix — the SDK appends it.
  */
-const DEFAULT_MODEL = "gemini-1.5-flash-8b";
+const DEFAULT_MODEL = "gemini-1.5-flash";
 
-/** Stable Generative Language API version — avoids v1beta 404s on Flash ids. */
-const GEMINI_API_VERSION = "v1";
+/**
+ * SDK default Generative Language API surface. Do not force `v1` here —
+ * `gemini-1.5-flash-8b` 404'd under locked `v1`; the Node SDK resolves
+ * `gemini-1.5-flash` on its default (`v1beta`) path.
+ */
+const GEMINI_API_VERSION = "v1beta";
 
 const DEFAULT_API_HOST = "https://generativelanguage.googleapis.com";
 
 /**
- * Strip a leading `models/` prefix so the SDK does not double-prefix the path
- * (`…/v1/models/models/…` → 404).
+ * Strip a leading `models/` prefix so neither the SDK nor our REST path
+ * double-prefix (`…/models/models/…` → 404).
  */
 export function normalizeModelId(raw: string): string {
   return raw.trim().replace(/^models\//i, "");
@@ -190,15 +192,18 @@ const VLM_INTER_REQUEST_MS = 500;
 
 export class GeminiVlmService {
   private readonly apiKey: string;
-  /** Locked model id — no auto-fallback chain (2.0-flash has free-tier limit: 0). */
+  /** Canonical model id — no auto-fallback chain through experimental aliases. */
   private readonly model: string;
   private readonly maxItems: number;
   private readonly deadlineMs: number;
   private readonly requestTimeoutMs: number;
   private readonly baseUrl: string;
   private readonly client: GoogleGenerativeAI | null;
-  /** Set when a describe() call exhausts 429 retries — extract() stops the queue. */
-  private rateLimited = false;
+  /**
+   * Set when Gemini is unavailable for this scan (404 model mismatch or
+   * exhausted 429). `extract()` stops the queue; caller uses WEB_DETECTION.
+   */
+  private geminiUnavailable = false;
 
   constructor(apiKey: string, options: VlmServiceOptions = {}) {
     this.apiKey = apiKey;
@@ -220,7 +225,7 @@ export class GeminiVlmService {
    *
    * Requests run **sequentially** with a short pause between Gemini calls.
    * Free-tier RPM is tiny; `Promise.all` on Top+Jeans was the 429 spike in
-   * production. Order is still the caller's priority order, and a hard 429
+   * production. Order is still the caller's priority order, and a hard 404/429
    * stops the queue early so remaining items fall back to WEB_DETECTION.
    */
   async extract(
@@ -233,11 +238,11 @@ export class GeminiVlmService {
     if (selected.length === 0) return results;
 
     const budget = withDeadline(this.deadlineMs, options.signal);
-    this.rateLimited = false;
+    this.geminiUnavailable = false;
 
     try {
       for (let index = 0; index < selected.length; index += 1) {
-        if (budget.signal.aborted || this.rateLimited) break;
+        if (budget.signal.aborted || this.geminiUnavailable) break;
 
         const request = selected[index]!;
 
@@ -247,7 +252,7 @@ export class GeminiVlmService {
          */
         if (index > 0) {
           const waited = await sleep(VLM_INTER_REQUEST_MS, budget.signal);
-          if (!waited || this.rateLimited) break;
+          if (!waited || this.geminiUnavailable) break;
         }
 
         try {
@@ -269,13 +274,14 @@ export class GeminiVlmService {
           const attributes = await this.describe(request, crop, budget.signal);
           if (attributes) results.set(request.key, attributes);
         } catch (error) {
+          // Never crash the scan — remaining items use WEB_DETECTION phrases.
           logFailure(logLabel(request.itemType), error);
         }
       }
 
-      if (this.rateLimited && results.size < selected.length) {
+      if (this.geminiUnavailable && results.size < selected.length) {
         console.warn(
-          `[vlm] free-tier 429 — stopped after ${results.size}/${selected.length} items; ` +
+          `[vlm] Gemini unavailable — stopped after ${results.size}/${selected.length} items; ` +
             "remaining detections use WEB_DETECTION web entities",
         );
       }
@@ -310,8 +316,9 @@ export class GeminiVlmService {
         return normalizeAttributes(JSON.parse(cleanJsonResponse(text)));
       } catch (error) {
         /*
-         * 429 / QuotaExceeded: one short backoff, then stop. Never fall through
-         * to gemini-2.0-flash (free-tier limit: 0). Caller uses WEB_DETECTION.
+         * Any Gemini failure (404 model mismatch, 429 quota, network) must not
+         * crash the scan. One short 429 backoff; then stop the queue and let
+         * visualSearch rebuild from WEB_DETECTION entities.
          */
         if (isRateLimitError(error) && attempt < RATE_LIMIT_RETRIES && !signal.aborted) {
           attempt += 1;
@@ -321,24 +328,28 @@ export class GeminiVlmService {
           );
           const waited = await sleep(RATE_LIMIT_BACKOFF_MS, signal);
           if (!waited) {
-            this.rateLimited = true;
+            this.geminiUnavailable = true;
             logFailure(logLabel(request.itemType), error);
             return null;
           }
           continue;
         }
 
+        this.geminiUnavailable = true;
         if (isRateLimitError(error)) {
-          this.rateLimited = true;
           console.warn(
-            `[vlm] 429 exhausted for ${logLabel(request.itemType)} — remaining items skip Gemini; ` +
+            `[vlm] 429 for ${logLabel(request.itemType)} — remaining items skip Gemini; ` +
               "WEB_DETECTION web entities supply the search phrase",
           );
         } else if (isModelNotFoundError(error)) {
-          // No auto-fallback to gemini-2.0-flash — that path has free-tier limit: 0.
           console.warn(
             `[vlm] model "${this.model}" not found (404) for ${logLabel(request.itemType)} — ` +
-              "set VLM_MODEL=gemini-1.5-flash-8b (v1); scan continues with WEB_DETECTION fallback",
+              "set VLM_MODEL=gemini-1.5-flash; scan continues with WEB_DETECTION fallback",
+          );
+        } else {
+          console.warn(
+            `[vlm] Gemini failed for ${logLabel(request.itemType)} — ` +
+              "scan continues with WEB_DETECTION fallback",
           );
         }
         logFailure(logLabel(request.itemType), error);
@@ -353,26 +364,19 @@ export class GeminiVlmService {
     signal: AbortSignal,
   ): Promise<string | null> {
     /*
-     * `responseMimeType: "application/json"` is mandatory. Without it Flash may
-     * return markdown / prose ("Here is the JSON…") and `JSON.parse` dies on the
-     * leading "H". Locked to stable `v1` — v1beta 404'd `gemini-1.5-flash` and
-     * the 2.0 fallback then hit free-tier limit: 0.
-     *
-     * `responseSchema` stays off on v1 (schema is a v1beta feature); the prompt
-     * + mime type + `cleanJsonResponse` keep the wire format parseable.
+     * Canonical `gemini-1.5-flash` — no `models/` prefix (SDK adds it).
+     * `responseMimeType: "application/json"` keeps the wire format parseable;
+     * `cleanJsonResponse` strips any leftover prose/markdown.
      */
-    const model = this.client!.getGenerativeModel(
-      {
-        model: this.model,
-        systemInstruction: SYSTEM_PROMPT,
-        generationConfig: {
-          temperature: 0.2,
-          maxOutputTokens: VLM_MAX_OUTPUT_TOKENS,
-          responseMimeType: "application/json",
-        },
+    const model = this.client!.getGenerativeModel({
+      model: this.model,
+      systemInstruction: SYSTEM_PROMPT,
+      generationConfig: {
+        temperature: 0.2,
+        maxOutputTokens: VLM_MAX_OUTPUT_TOKENS,
+        responseMimeType: "application/json",
       },
-      { apiVersion: GEMINI_API_VERSION },
-    );
+    });
 
     const result = await model.generateContent(
       {
@@ -408,9 +412,8 @@ export class GeminiVlmService {
   /**
    * Raw REST call for custom hosts (eval stubs via `VLM_BASE_URL`).
    *
-   * The official SDK hard-codes the Google host; stubs need a local server that
-   * speaks the same `generateContent` shape. Production uses the stable `v1`
-   * path — same lock as the SDK `apiVersion`.
+   * Matches the SDK default surface (`v1beta`). The model id must NOT include a
+   * `models/` prefix — it is inserted in the path exactly once.
    */
   private async describeWithFetch(
     crop: { base64: string; mediaType: "image/jpeg" },
@@ -848,7 +851,7 @@ export function getVlmService(): GeminiVlmService | null {
   if (!apiKey || process.env.ENABLE_VLM_ATTRIBUTES !== "true") return null;
 
   return new GeminiVlmService(apiKey, {
-    model: process.env.VLM_MODEL?.trim() || DEFAULT_MODEL,
+    model: resolveModelId(process.env.VLM_MODEL),
     maxItems: readInt(process.env.VLM_MAX_ITEMS, 4),
     // Hardcoded — ignore Vercel `VLM_DEADLINE_MS` so a stale env cannot overflow
     // the 60s function budget (see `src/config/deadlines.ts`).
