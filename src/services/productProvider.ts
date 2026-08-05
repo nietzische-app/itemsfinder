@@ -1,5 +1,6 @@
 import "server-only";
 
+import { CONTEXT_DEV_DEADLINE_MS } from "@/config/deadlines";
 import { ContextDevService, type LiveProductCard } from "@/services/contextDevService";
 import { productUrlOrEmpty } from "@/lib/productUrl";
 import { merchantForDomain } from "@/services/merchantSearch";
@@ -135,7 +136,7 @@ export class ContextDevProductProvider implements ProductProvider {
   ) {
     this.maxLiveItems = options.maxLiveItems ?? 4;
     this.concurrency = options.concurrency ?? 2;
-    this.deadlineMs = options.deadlineMs ?? 45_000;
+    this.deadlineMs = options.deadlineMs ?? CONTEXT_DEV_DEADLINE_MS;
     this.maxAlternatives = options.maxAlternatives ?? 3;
     this.visualCandidates = options.visualCandidates ?? 4;
     this.visualRerank = options.visualRerank ?? true;
@@ -145,6 +146,17 @@ export class ContextDevProductProvider implements ProductProvider {
     const signal = context.signal;
 
     if (result.items.length === 0) {
+      return { ...result, productSource: "mock", liveItemCount: 0 };
+    }
+
+    // Credits already gone — keep catalogue/WEB_DETECTION rows without waiting
+    // on a dead API. Empty [] from ContextDevService would also fall back, but
+    // skipping the stage avoids burning the wall-clock budget on no-ops.
+    if (this.context.isCreditsDepleted) {
+      context.trace?.degrade(
+        "products",
+        "context.dev kredisi tükendi — doğrulanmış katalog eşleşmelerine düşüldü",
+      );
       return { ...result, productSource: "mock", liveItemCount: 0 };
     }
 
@@ -165,7 +177,7 @@ export class ContextDevProductProvider implements ProductProvider {
       const resolved = new Map<string, DetectedItem>();
 
       await runWithConcurrency(priority, this.concurrency, async (item) => {
-        if (controller.signal.aborted) return;
+        if (controller.signal.aborted || this.context.isCreditsDepleted) return;
 
         /*
          * Sibling boxes travel with the item so the visual comparison can skip the
@@ -187,6 +199,13 @@ export class ContextDevProductProvider implements ProductProvider {
         );
         if (live) resolved.set(item.id, live);
       });
+
+      if (this.context.isCreditsDepleted) {
+        context.trace?.degrade(
+          "products",
+          "context.dev kredisi tükendi — doğrulanmış katalog eşleşmelerine düşüldü",
+        );
+      }
 
       const items = result.items.map((item) => resolved.get(item.id) ?? item);
       const liveItemCount = items.filter((item) =>

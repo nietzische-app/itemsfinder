@@ -222,6 +222,14 @@ export class ContextDevService {
   private readonly cacheTtlMs: number;
 
   /**
+   * Once context.dev returns HTTP 401 / `USAGE_EXCEEDED`, further calls cannot
+   * succeed until the key is topped up. Flip this and every public method returns
+   * empty immediately so the scan falls back to the verified catalogue instead of
+   * burning the function budget on retries and filling logs with the same 401.
+   */
+  private creditsDepleted = false;
+
+  /**
    * Caches live for the lifetime of the server process. Scans repeat the same
    * labels constantly ("Black Leather Biker Jacket"), and both credits and
    * latency are the scarce resources here.
@@ -246,11 +254,37 @@ export class ContextDevService {
        * adresini kullanıyor — hiçbir davranış değişmiyor.
        */
       baseURL: process.env.CONTEXT_DEV_BASE_URL?.trim() || undefined,
-      // The SDK retries twice by default; a scan is latency-sensitive and we
-      // have a mock fallback, so fail fast instead.
-      maxRetries: 1,
+      // Fail fast: retries cannot refill a depleted key, and the catalogue
+      // fallback already covers a miss. Zero retries also stops a 401 from being
+      // posted twice per attempt while credits are exhausted.
+      maxRetries: 0,
       timeout: this.requestTimeoutMs,
     });
+  }
+
+  /** True after a 401 / USAGE_EXCEEDED — callers can short-circuit without waiting. */
+  get isCreditsDepleted(): boolean {
+    return this.creditsDepleted;
+  }
+
+  /**
+   * Marks the key as exhausted and logs once. Subsequent public methods return
+   * empty without touching the network.
+   */
+  private markCreditsDepleted(error: unknown): void {
+    if (this.creditsDepleted) return;
+    this.creditsDepleted = true;
+    console.warn(
+      `[context.dev] credits depleted (${describeError(error)}) — ` +
+        "falling back to local verified catalogue for the rest of this process",
+    );
+  }
+
+  /** Returns true when `error` is a permanent credit / auth failure. */
+  private noteIfCreditsDepleted(error: unknown): boolean {
+    if (!isCreditsDepletedError(error)) return false;
+    this.markCreditsDepleted(error);
+    return true;
   }
 
   /**
@@ -264,30 +298,37 @@ export class ContextDevService {
     includeDomains: string[],
     signal?: AbortSignal,
   ): Promise<string[]> {
-    const search = await this.client.web.search(
-      {
-        query,
-        includeDomains: includeDomains.slice(0, MAX_INCLUDE_DOMAINS),
-        numResults: 10,
-        timeoutMS: this.requestTimeoutMs,
-        tags: ["markas", "product-search"],
-      },
-      { signal },
-    );
+    if (this.creditsDepleted) return [];
 
-    const candidates: string[] = [];
-    const seenHosts = new Set<string>();
+    try {
+      const search = await this.client.web.search(
+        {
+          query,
+          includeDomains: includeDomains.slice(0, MAX_INCLUDE_DOMAINS),
+          numResults: 10,
+          timeoutMS: this.requestTimeoutMs,
+          tags: ["markas", "product-search"],
+        },
+        { signal },
+      );
 
-    for (const result of search.results ?? []) {
-      const host = safeHostname(result.url);
-      if (!host || seenHosts.has(host)) continue;
+      const candidates: string[] = [];
+      const seenHosts = new Set<string>();
 
-      seenHosts.add(host);
-      candidates.push(result.url);
-      if (candidates.length >= this.extractsPerQuery) break;
+      for (const result of search.results ?? []) {
+        const host = safeHostname(result.url);
+        if (!host || seenHosts.has(host)) continue;
+
+        seenHosts.add(host);
+        candidates.push(result.url);
+        if (candidates.length >= this.extractsPerQuery) break;
+      }
+
+      return candidates;
+    } catch (error) {
+      if (this.noteIfCreditsDepleted(error)) return [];
+      throw error;
     }
-
-    return candidates;
   }
 
   /**
@@ -317,6 +358,9 @@ export class ContextDevService {
   ): Promise<LiveProductCard[]> {
     const ladder = queries.map((entry) => entry.trim()).filter(Boolean);
     if (ladder.length === 0) return [];
+
+    // Credits already gone — skip the network so callers keep catalogue rows.
+    if (this.creditsDepleted) return [];
 
     // Önbellek anahtarı en özel basamak: aynı parça hep aynı merdiveni üretiyor.
     const cacheKey = `${category}:${ladder[0]!.toLowerCase()}`;
@@ -385,30 +429,19 @@ export class ContextDevService {
           for (const url of found) {
             if (!candidates.includes(url)) candidates.push(url);
           }
+          // searchTier swallows credit errors (returns []); surface them once here.
+          if (this.creditsDepleted && !failure) {
+            failure = "credits depleted (401 / USAGE_EXCEEDED)";
+          }
         } catch (error) {
           failure = describeError(error);
-          logFailure("searchTier", attempt.query, error);
+          // Credit exhaustion is already logged once by markCreditsDepleted —
+          // do not spam a searchTier line for every remaining rung.
+          if (!this.noteIfCreditsDepleted(error)) {
+            logFailure("searchTier", attempt.query, error);
+          }
         }
-        /*
-         * Her arama, harcandığı anda rapor ediliyor — sonuçtan sonra değil.
-         *
-         * Merdivenin maliyeti basamak başına bir `web.search` kredisi ve gevşemenin
-         * karşılığını verip vermediği ancak «kaç arama harcandı, hangisi getirdi»
-         * bilinerek yargılanabilir. `BULUNAMADI.md` madde 4 bu ölçümü, canlı yol
-         * açılmadan önce yapılması gereken iş olarak yazıyor.
-         *
-         * `found` **yeni** aday sayısı, ham sonuç sayısı değil: aynı ürünü ikinci kez
-         * bulan bir basamak hiçbir şey eklemiyor ve öyle görünmeli.
-         */
-        /*
-         * Başarısız arama da rapor ediliyor.
-         *
-         * Önce yalnızca dönen sonuç raporlanıyordu, yani çağrı hata verince
-         * muhasebeye hiçbir şey yazılmıyordu. Üretimde üç arama 400 aldı ve log
-         * `searchCount: 0` yazdı — «kredi nereye gitti» sorusunu cevaplamak için
-         * yazılmış bir muhasebenin, tam da cevaplaması gereken anda sustuğu yer.
-         * Harcanmış bir çağrı, sonucu ne olursa olsun harcanmıştır.
-         */
+
         onAttempt?.({
           source: "metin",
           tier: attempt.tier,
@@ -418,6 +451,8 @@ export class ContextDevService {
           ms: Date.now() - startedAt,
           error: failure,
         });
+
+        if (this.creditsDepleted) break;
       }
 
       if (candidates.length === 0) return [];
@@ -436,6 +471,12 @@ export class ContextDevService {
         candidates.map((url) => this.extractProducts(url, signal)),
       );
 
+      for (const outcome of extracted) {
+        if (outcome.status === "rejected") {
+          this.noteIfCreditsDepleted(outcome.reason);
+        }
+      }
+
       const products = extracted.flatMap((outcome) =>
         outcome.status === "fulfilled" ? outcome.value : [],
       );
@@ -450,7 +491,9 @@ export class ContextDevService {
       this.writeCache(this.productCache, cacheKey, deduped);
       return deduped;
     } catch (error) {
-      logFailure("searchLiveProducts", ladder[0] ?? "", error);
+      if (!this.noteIfCreditsDepleted(error)) {
+        logFailure("searchLiveProducts", ladder[0] ?? "", error);
+      }
       return [];
     }
   }
@@ -465,18 +508,26 @@ export class ContextDevService {
    * kart tanımı demek olurdu ve ikisi zamanla birbirinden ayrılırdı.
    */
   async productsFromUrls(urls: string[], signal?: AbortSignal): Promise<LiveProductCard[]> {
-    if (urls.length === 0) return [];
+    if (urls.length === 0 || this.creditsDepleted) return [];
 
     try {
       const extracted = await Promise.allSettled(
         urls.map((url) => this.extractProducts(url, signal)),
       );
 
+      for (const outcome of extracted) {
+        if (outcome.status === "rejected") {
+          this.noteIfCreditsDepleted(outcome.reason);
+        }
+      }
+
       return dedupeByUrl(
         extracted.flatMap((outcome) => (outcome.status === "fulfilled" ? outcome.value : [])),
       );
     } catch (error) {
-      logFailure("productsFromUrls", urls[0] ?? "", error);
+      if (!this.noteIfCreditsDepleted(error)) {
+        logFailure("productsFromUrls", urls[0] ?? "", error);
+      }
       return [];
     }
   }
@@ -496,6 +547,11 @@ export class ContextDevService {
 
     const cached = this.readCache(this.brandCache, normalized);
     if (cached !== undefined) return cached;
+
+    if (this.creditsDepleted) {
+      this.writeCache(this.brandCache, normalized, null);
+      return null;
+    }
 
     try {
       const response = await this.client.brand.retrieveSimplified(
@@ -537,7 +593,9 @@ export class ContextDevService {
       this.writeCache(this.brandCache, normalized, metadata);
       return metadata;
     } catch (error) {
-      logFailure("enrichBrandMetadata", normalized, error);
+      if (!this.noteIfCreditsDepleted(error)) {
+        logFailure("enrichBrandMetadata", normalized, error);
+      }
       // Cache the miss too: a domain with no brand record would otherwise be
       // re-queried for every product card on every scan.
       this.writeCache(this.brandCache, normalized, null);
@@ -550,29 +608,36 @@ export class ContextDevService {
     url: string,
     signal?: AbortSignal,
   ): Promise<LiveProductCard[]> {
-    const response = await this.client.web.extract(
-      {
-        url,
-        schema: PRODUCT_SCHEMA as unknown as Record<string, unknown>,
-        // No invented prices: every value must be supported by the page.
-        factCheck: true,
-        maxDepth: 0,
-        maxPages: 1,
-        stopAfterMs: this.extractBudgetMs,
-        timeoutMS: this.requestTimeoutMs,
-        tags: ["markas", "product-extract"],
-      },
-      { signal },
-    );
+    if (this.creditsDepleted) return [];
 
-    const raw = (response.data as { products?: unknown })?.products;
-    if (!Array.isArray(raw)) return [];
+    try {
+      const response = await this.client.web.extract(
+        {
+          url,
+          schema: PRODUCT_SCHEMA as unknown as Record<string, unknown>,
+          // No invented prices: every value must be supported by the page.
+          factCheck: true,
+          maxDepth: 0,
+          maxPages: 1,
+          stopAfterMs: this.extractBudgetMs,
+          timeoutMS: this.requestTimeoutMs,
+          tags: ["markas", "product-extract"],
+        },
+        { signal },
+      );
 
-    const host = safeHostname(url) ?? "";
+      const raw = (response.data as { products?: unknown })?.products;
+      if (!Array.isArray(raw)) return [];
 
-    return raw
-      .map((entry) => normalizeProduct(entry as RawProduct, url, host))
-      .filter((product): product is LiveProductCard => product !== null);
+      const host = safeHostname(url) ?? "";
+
+      return raw
+        .map((entry) => normalizeProduct(entry as RawProduct, url, host))
+        .filter((product): product is LiveProductCard => product !== null);
+    } catch (error) {
+      if (this.noteIfCreditsDepleted(error)) return [];
+      throw error;
+    }
   }
 
   private readCache<T>(cache: Map<string, CacheEntry<T>>, key: string): T | undefined {
@@ -817,6 +882,76 @@ function logFailure(operation: string, subject: string, error: unknown): void {
 }
 
 /**
+ * HTTP 401 or an explicit usage/credit exhaustion payload from context.dev.
+ *
+ * Production logs: `The key's credits have been completely depleted` with status
+ * 401 / code `USAGE_EXCEEDED`. Treat both as permanent for this process — retrying
+ * cannot refill the key and only stalls the scan.
+ */
+export function isCreditsDepletedError(error: unknown): boolean {
+  if (error === null || error === undefined) return false;
+
+  const status = statusOf(error);
+  if (status === 401 || status === 402 || status === 403) {
+    // 401 alone is enough: context.dev uses it for depleted keys. Still scan the
+    // body so a mis-tagged 403 USAGE_EXCEEDED is caught the same way.
+    if (status === 401) return true;
+  }
+
+  const haystack = errorHaystack(error);
+  if (!haystack) return false;
+
+  return (
+    /\bUSAGE_EXCEEDED\b/i.test(haystack) ||
+    /credits? (have been )?(completely )?depleted/i.test(haystack) ||
+    /credit balance is too low/i.test(haystack) ||
+    /insufficient credits?/i.test(haystack) ||
+    /quota (exceeded|exhausted)/i.test(haystack)
+  );
+}
+
+function statusOf(error: unknown): number | null {
+  if (typeof error !== "object" || error === null) return null;
+  const bag = error as Record<string, unknown>;
+
+  for (const key of ["status", "statusCode", "status_code"]) {
+    const value = bag[key];
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string" && /^\d{3}$/.test(value)) return Number(value);
+  }
+
+  const response = bag.response;
+  if (typeof response === "object" && response !== null && "status" in response) {
+    const value = (response as { status: unknown }).status;
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+  }
+
+  return null;
+}
+
+/** Flatten message + nested SDK fields so credit phrases are findable. */
+function errorHaystack(error: unknown): string {
+  const parts: string[] = [];
+  if (error instanceof Error) parts.push(error.message);
+  else if (typeof error === "string") parts.push(error);
+
+  if (typeof error === "object" && error !== null) {
+    const bag = error as Record<string, unknown>;
+    for (const key of ["code", "error", "errors", "detail", "details", "body", "message", "cause"]) {
+      const value = bag[key];
+      if (value === undefined || value === null) continue;
+      try {
+        parts.push(typeof value === "string" ? value : JSON.stringify(value));
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  return parts.join(" ");
+}
+
+/**
  * Bir SDK hatasının **gerekçesi**, yalnızca durum kodu değil.
  *
  * Üretimde `400` görüldü ve tek yazdığımız şey oydu: `error.message` durum
@@ -828,10 +963,8 @@ function logFailure(operation: string, subject: string, error: unknown): void {
  * bulunan ilk anlamlı gövde kısaltılarak yazılıyor.
  */
 function describeError(error: unknown): string {
-  const status =
-    typeof error === "object" && error !== null && "status" in error
-      ? String((error as { status: unknown }).status)
-      : null;
+  const status = statusOf(error);
+  const statusText = status !== null ? String(status) : null;
 
   const base = error instanceof Error ? error.message : String(error);
   if (typeof error !== "object" || error === null) return base;
@@ -849,8 +982,8 @@ function describeError(error: unknown): string {
     }
     if (!text || text === "{}" || text === "[]") continue;
 
-    return `${status ?? base} — ${text.slice(0, 400)}`;
+    return `${statusText ?? base} — ${text.slice(0, 400)}`;
   }
 
-  return status ? `${status} (gerekçe gövdesi yok)` : base;
+  return statusText ? `${statusText} (gerekçe gövdesi yok)` : base;
 }
