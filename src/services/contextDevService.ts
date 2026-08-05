@@ -370,6 +370,7 @@ export class ContextDevService {
          * bulan bir basamak hiçbir şey eklemiyor ve öyle görünmeli.
          */
         onAttempt?.({
+          source: "metin",
           tier: attempt.tier,
           rung: attempt.rung,
           query: attempt.query,
@@ -392,6 +393,32 @@ export class ContextDevService {
       return deduped;
     } catch (error) {
       logFailure("searchLiveProducts", ladder[0] ?? "", error);
+      return [];
+    }
+  }
+
+  /**
+   * Verilmiş adreslerden ürün kartı çıkarır.
+   *
+   * Aday adresleri **kim bulduysa** bulsun, çıkarma tek yerden geçsin diye ayrıldı:
+   * görsel arama yolu (`visualLookup.ts`) adayları metin sorgusundan değil giysi
+   * kırpımından üretiyor, ama sonrasında olan biten birebir aynı olmalı — aynı
+   * şema, aynı `factCheck`, aynı tekilleştirme. İki ayrı çıkarma yolu, iki ayrı
+   * kart tanımı demek olurdu ve ikisi zamanla birbirinden ayrılırdı.
+   */
+  async productsFromUrls(urls: string[], signal?: AbortSignal): Promise<LiveProductCard[]> {
+    if (urls.length === 0) return [];
+
+    try {
+      const extracted = await Promise.allSettled(
+        urls.map((url) => this.extractProducts(url, signal)),
+      );
+
+      return dedupeByUrl(
+        extracted.flatMap((outcome) => (outcome.status === "fulfilled" ? outcome.value : [])),
+      );
+    } catch (error) {
+      logFailure("productsFromUrls", urls[0] ?? "", error);
       return [];
     }
   }

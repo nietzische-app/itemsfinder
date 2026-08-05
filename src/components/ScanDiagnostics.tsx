@@ -122,11 +122,16 @@ export function ScanDiagnostics({ result }: { result: DetectionResult }) {
                     className="flex flex-wrap gap-x-2 text-neutral-500"
                   >
                     <span className="font-medium text-neutral-600 dark:text-neutral-300">
-                      {entry.tier === "tr" ? "TR" : "Global"}
+                      {entry.source === "görsel"
+                        ? "Görsel"
+                        : entry.tier === "tr"
+                          ? "TR"
+                          : "Global"}
                     </span>
-                    <span className="tabular-nums text-neutral-400">
-                      basamak {entry.rung}
-                    </span>
+                    {/* Basamak metin merdiveninin kavramı; görsel yolda karşılığı yok. */}
+                    {entry.source === "metin" ? (
+                      <span className="tabular-nums text-neutral-400">basamak {entry.rung}</span>
+                    ) : null}
                     <span>«{entry.query}»</span>
                     <span
                       className={

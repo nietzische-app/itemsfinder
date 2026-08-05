@@ -14,6 +14,7 @@ import { rejectProductTitle } from "@/lib/retailVocabulary";
 import type { TraceCollector } from "@/lib/scanTrace";
 import { buildSearchQuery, relaxedQueries } from "@/lib/searchQuery";
 import { cropRegion } from "@/services/imageCrop";
+import { getVisualLookup } from "@/services/visualLookup";
 import { productThumbnail } from "@/lib/productThumbnail";
 import { hydrateProduct } from "@/services/mockCatalog";
 import { fetchRemoteImage } from "@/services/remoteImage";
@@ -257,6 +258,59 @@ export class ContextDevProductProvider implements ProductProvider {
     return measured;
   }
 
+  /**
+   * Giysi kırpımından doğrudan ürün kartları — metin sorgusundan geçmeden.
+   *
+   * Boş dizi «bu yol bir şey bulamadı» demek ve çağıran metin merdivenine
+   * düşüyor. Bayrak kapalıyken ya da elde fotoğraf yokken tek bir çağrı bile
+   * yapılmıyor.
+   */
+  private async resolveByImage(
+    item: DetectedItem,
+    signal: AbortSignal,
+    image?: EnrichContext["image"],
+    siblings: BoundingBox[] = [],
+    trace?: TraceCollector,
+  ): Promise<LiveProductCard[]> {
+    const lookup = getVisualLookup();
+    if (!lookup || !image) return [];
+
+    /*
+     * Kırpım, görsel benzerlik ölçümüyle **aynı** kırpım: aynı dolgu, aynı
+     * kardeş maskesi. İki ayrı kırpım tanımı, aynı giysinin iki farklı hâlini
+     * arayıp ölçmek olurdu.
+     */
+    const crop = await cropRegion(image.buffer, item.boundingBox, {
+      size: image.size,
+      exclude: siblings,
+    });
+    if (!crop) return [];
+
+    const { urls, seen } = await lookup.findProductPages(crop.base64, signal);
+
+    trace?.search({
+      itemId: item.id,
+      source: "görsel",
+      // Katman ve basamak metin merdiveninin kavramları; görsel yolda ikisi de yok.
+      tier: "tr",
+      rung: 0,
+      query: `${item.itemType} kırpımı (${crop.width}×${crop.height})`,
+      found: urls.length,
+    });
+
+    if (urls.length === 0) {
+      if (seen > 0) {
+        trace?.degrade(
+          "products",
+          `görsel arama ${seen} sonuç buldu, hiçbiri ürün sayfası değildi`,
+        );
+      }
+      return [];
+    }
+
+    return this.context.productsFromUrls(urls, signal);
+  }
+
   /** Resolves one detection, or `null` to keep its catalogue products. */
   private async resolveItem(
     item: DetectedItem,
@@ -273,19 +327,36 @@ export class ContextDevProductProvider implements ProductProvider {
      * ekran görüyordu — oysa aynı mağazada onlarca gömlek var. Arama ilk yeterli
      * sonuçta duruyor, yani sıradan durumda hâlâ tek arama yapılıyor.
      */
-    const ladder = relaxedQueries({
-      itemType: item.itemType,
-      label: item.label,
-      colorHex: item.colorHex,
-      attributes: item.attributes,
-    });
+    /*
+     * Önce görsel, sonra metin — ve görsel yol kapalı doğuyor.
+     *
+     * Metin yolu giysiyi kelimeye çevirip o kelimeyi arıyor, yani her adlandırma
+     * hatası yanlış bir aramaya dönüşüyor (bölge rengi ölçülen %81). Kırpımın
+     * kendisiyle aramak o adımı atlıyor. Sıra kasıtlı: görsel yol yeterince aday
+     * bulursa metin araması hiç yapılmıyor, yani `web.search` kredisi de harcanmıyor.
+     *
+     * Bulamazsa metin merdiveni olduğu gibi devrede. Yeni yol eskisinin **önüne**
+     * geçiyor, yerine değil — ölçülmemiş bir yolun, ölçülmüş bir yolu kaldırması
+     * için hiçbir gerekçe yok.
+     */
+    const seenFromImage = await this.resolveByImage(item, signal, image, siblings, trace);
 
-    const cards = await this.context.searchLiveProducts(
-      ladder.length > 0 ? ladder : [item.label],
-      item.category,
-      signal,
-      (attempt) => trace?.search({ itemId: item.id, ...attempt }),
-    );
+    let cards = seenFromImage;
+    if (cards.length === 0) {
+      const ladder = relaxedQueries({
+        itemType: item.itemType,
+        label: item.label,
+        colorHex: item.colorHex,
+        attributes: item.attributes,
+      });
+
+      cards = await this.context.searchLiveProducts(
+        ladder.length > 0 ? ladder : [item.label],
+        item.category,
+        signal,
+        (attempt) => trace?.search({ itemId: item.id, ...attempt }),
+      );
+    }
 
     if (cards.length === 0) return null;
 

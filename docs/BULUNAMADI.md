@@ -97,6 +97,47 @@ Böyle bir sorgunun döndürdüğü her satır zaten yanlış. Ad artık **yaln�
 kesilecekse** sona taşınıyor, ve `eval/searchQueryCases.ts` ile yeni bir eval
 kapısı (**Sorguda ürün adı**, taban %100) bunu her basamakta ölçüyor.
 
+### 4b. Kelimeye çevirmeden aramak — ✅ yazıldı, kapalı duruyor
+
+Yukarıdaki merdivenin tamamı bir varsayıma dayanıyor: giysiyi doğru kelimelerle
+tarif edebildiğimize. Ölçüm bunu tam olarak desteklemiyor — bölge rengi %81, ve
+sorgu o renkten kuruluyor, yani her adlandırma hatası doğrudan yanlış bir aramaya
+dönüşüyor. Merdiven bu kaybı **azaltıyor**, kaynağını ortadan kaldırmıyor.
+
+`src/services/visualLookup.ts` kaynağı kaldırıyor: giysi kırpımını Vision'ın
+`WEB_DETECTION`'ına soruyor ve dönen sayfalardan ürün adreslerini süzüyor. Metin
+hiç devreye girmiyor.
+
+**Yeni satıcı yok.** Google Shopping'in kamuya açık API'si yok (Content API kendi
+ürününü yükleyen satıcılar için, Custom Search alışveriş indeksi değil). Ama
+`WEB_DETECTION` **zaten her taramada çağrılıyor ve parası ödeniyor**; bugüne kadar
+cevabın yalnızca `webEntities` kısmı isimlendirme için kullanılıyor,
+`pagesWithMatchingImages` ve `visuallySimilarImages` çöpe gidiyordu.
+
+**Neden kırpım, tüm fotoğraf değil:** tüm fotoğrafı sormak Instagram gönderisini
+bulur, mağazayı değil — o görsel internette zaten o adreste duruyor. Tek bir
+giysinin kırpımı ise internette bulunmayan bir görsel.
+
+Mimaride değişen tek dikiş aday bulma; süzme (`productUrl.ts`), çıkarma
+(`web.extract`), puanlama, aile kapısı ve tabanlar aynı kalıyor. Görsel yol aday
+bulursa metin araması **hiç yapılmıyor**, yani `web.search` kredisi de harcanmıyor;
+bulamazsa merdiven olduğu gibi devrede.
+
+```bash
+ENABLE_VISION_LENS=true    # varsayılan kapalı
+```
+
+**Kapalı doğuyor, çünkü kalitesi ölçülmedi.** Metin aramasından iyi olduğu bu
+ortamda kanıtlanamaz — Vision anahtarı yok. Karar, anahtarlı tek bir oturumda iki
+yolun yan yana ölçülmesiyle verilecek; muhasebe bunun için hazır: her aramanın
+kaynağı (`görsel` / `metin`) ve getirdiği yeni aday sayısı teşhis panelinde ve
+`[scan]` logunun `searchYield` alanında (`img:0=3`, `tr:1=0`) duruyor.
+
+Sürülen şey karar, kalite değil: `npm run check:stubs` → görsel aday bulma, 18
+kontrol — hangi adres ürün sayfası sayılıyor, mağaza başına kaç aday alınıyor,
+Vision çökünce ne oluyor, ve görsel yol boş dönünce metin merdiveni gerçekten
+devreye giriyor mu.
+
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 
 Şu an eşleşme filtreleri (`rejectProductTitle`, aile kapısı, renk çelişkisi)

@@ -1,7 +1,7 @@
 /**
  * Bütün stub süitleri — `npm run check:stubs`.
  *
- * Altı ayrı dosya haline geldiler ve dağınık duran bir test, çalıştırılmayan bir
+ * Yedi ayrı dosya haline geldiler ve dağınık duran bir test, çalıştırılmayan bir
  * testtir. Hepsi ağsız ve saniyeler sürüyor, yani her değişiklikten sonra
  * çalıştırmanın maliyeti yok.
  *
@@ -18,6 +18,7 @@ const SUITES = [
   ["canlı yol kataloğu ezmiyor", "no-downgrade-check.mjs"],
   ["stok tercihi", "stock-check.mjs"],
   ["ekran görüntüsü şeridi", "chrome-check.mjs"],
+  ["görsel aday bulma", "lens-check.mjs"],
 ];
 
 let failed = 0;

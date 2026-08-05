@@ -72,10 +72,18 @@ export type SearchTier = "tr" | "global";
  * modülü istemci paketine sürüklerdi.
  */
 export interface SearchAttemptRecord {
+  /**
+   * Adayı ne buldu: giysi kırpımı mı, metin sorgusu mu.
+   *
+   * İki yol yan yana çalışıyor ve hangisinin işi yaptığı ancak bu alanla
+   * okunabiliyor — «görsel arama metinden iyi mi» sorusunun cevabı burada
+   * birikiyor, tahminde değil.
+   */
+  source: "metin" | "görsel";
   tier: SearchTier;
-  /** Merdiven basamağı: 0 tam sorgu, büyüdükçe gevşiyor. */
+  /** Merdiven basamağı: 0 tam sorgu, büyüdükçe gevşiyor. Görsel yolda hep 0. */
   rung: number;
-  /** Mağazaya gerçekten gönderilen dize — son eki dahil. */
+  /** Mağazaya gerçekten gönderilen dize; görsel yolda kırpımın kimliği. */
   query: string;
   /** Bu aramanın eklediği, daha önce görülmemiş aday sayısı. */
   found: number;
@@ -219,7 +227,9 @@ export function logScanTrace(trace: ScanTrace, context: { id: string; source: st
      * tek satırda, greplenebilir biçimde okunuyor.
      */
     searchCount: trace.searches.length,
-    searchYield: trace.searches.map((entry) => `${entry.tier}:${entry.rung}=${entry.found}`),
+    searchYield: trace.searches.map(
+      (entry) => `${entry.source === "görsel" ? "img" : entry.tier}:${entry.rung}=${entry.found}`,
+    ),
   };
 
   // `warn` when something degraded, `log` otherwise: a scan that quietly fell back
