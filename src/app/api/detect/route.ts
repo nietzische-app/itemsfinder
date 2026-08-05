@@ -23,15 +23,13 @@ export const dynamic = "force-dynamic";
 /**
  * Vercel serverless budget for this route, in seconds.
  *
- * A scan is Vision (a couple of seconds) followed by the optional Context.dev
- * stage, which is bounded by `CONTEXT_DEV_DEADLINE_MS` (45s by default). 60s
- * leaves headroom above that; the live stage's deadline must always stay below
- * this number, or the function is killed mid-flight and the client gets a
- * platform error instead of the catalogue fallback the deadline exists to
- * trigger.
+ * A scan is Vision, then optional VLM attributes (`VLM_DEADLINE_MS` = 10s,
+ * hardcoded in `src/config/deadlines.ts`), then the optional Context.dev stage
+ * (`CONTEXT_DEV_DEADLINE_MS` = 20s, same file). 10s + 20s = 30s leaves ~30s of
+ * headroom for Vision and the response. Env overrides are ignored so a stale
+ * Vercel value cannot push the sum past this ceiling.
  *
- * 60s is the ceiling on Vercel's Hobby plan. Paid plans allow more, so if
- * `CONTEXT_DEV_DEADLINE_MS` is raised, raise this with it.
+ * 60s is the ceiling on Vercel's Hobby plan.
  */
 export const maxDuration = 60;
 
