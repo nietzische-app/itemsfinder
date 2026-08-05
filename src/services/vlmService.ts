@@ -58,7 +58,7 @@ export interface AttributeRequest {
 
 export interface VlmServiceOptions {
   /**
-   * Model id. Defaults to `gemini-1.5-flash-latest`.
+   * Model id. Defaults to `gemini-1.5-flash`.
    * Do not include a leading `models/` prefix — the SDK adds it.
    */
   model?: string;
@@ -221,26 +221,21 @@ const SYSTEM_PROMPT = [
 /**
  * Default Flash model — hard-locked to Google Gemini Flash.
  *
- * Bare `gemini-1.5-flash` 404s on v1beta for many keys (retired id). Prefer
- * `gemini-1.5-flash-latest`. Override with `VLM_MODEL`. Never pass a leading
- * `models/` prefix — `@google/generative-ai` prefixes the path itself.
+ * Primary is the stable `gemini-1.5-flash` id (no `-latest` / `gemini-flash`
+ * aliases that 404 and burn retry loops). Override with `VLM_MODEL`. Never pass
+ * a leading `models/` prefix — `@google/generative-ai` prefixes the path itself.
  *
  * When the primary id 404s, `describe()` walks `MODEL_FALLBACKS` and sticks
  * with the first id that succeeds for the rest of the process lifetime.
  */
-const DEFAULT_MODEL = "gemini-1.5-flash-latest";
+const DEFAULT_MODEL = "gemini-1.5-flash";
 
 /**
  * Tried in order after the configured / default model returns 404.
- * Later entries cover keys that no longer see 1.5 / early-2.0 Flash.
+ * Keep this list short and real — invalid aliases (e.g. `gemini-2.5-flash`,
+ * bare `gemini-flash`) only add noise to the logs.
  */
-const MODEL_FALLBACKS = [
-  "gemini-1.5-flash",
-  "gemini-2.0-flash-exp",
-  "gemini-flash",
-  "gemini-flash-latest",
-  "gemini-2.5-flash",
-] as const;
+const MODEL_FALLBACKS = ["gemini-2.0-flash", "gemini-1.5-flash-latest", "gemini-2.0-flash-001"] as const;
 
 const DEFAULT_API_HOST = "https://generativelanguage.googleapis.com";
 
@@ -398,7 +393,7 @@ export class GeminiVlmService {
 
         if (!text) return null;
 
-        return normalizeAttributes(JSON.parse(text));
+        return normalizeAttributes(JSON.parse(cleanJsonResponse(text)));
       } catch (error) {
         /*
          * 429 / QuotaExceeded used to abort the whole crop and leave the pipeline
@@ -436,7 +431,7 @@ export class GeminiVlmService {
           console.warn(
             `[vlm] model "${failed}" not found (404) for "${request.itemType}" — ` +
               "exhausted Flash fallbacks; set VLM_MODEL to a listed id " +
-              "(e.g. gemini-1.5-flash-latest / gemini-flash-latest); " +
+              "(e.g. gemini-1.5-flash / gemini-2.0-flash); " +
               "scan continues with WEB_DETECTION fallback",
           );
         }
@@ -451,6 +446,11 @@ export class GeminiVlmService {
     userText: string,
     signal: AbortSignal,
   ): Promise<string | null> {
+    /*
+     * `responseMimeType: "application/json"` is mandatory. Without it Flash may
+     * return markdown / prose ("Here is the JSON…") and `JSON.parse` dies on the
+     * leading "H". Schema + mime together keep the wire format as a bare object.
+     */
     const model = this.client!.getGenerativeModel({
       model: this.model,
       systemInstruction: SYSTEM_PROMPT,
@@ -526,6 +526,7 @@ export class GeminiVlmService {
           temperature: 0.2,
           maxOutputTokens: VLM_MAX_OUTPUT_TOKENS,
           responseMimeType: "application/json",
+          responseSchema: ATTRIBUTE_SCHEMA,
         },
       }),
     });
@@ -560,6 +561,33 @@ export class GeminiVlmService {
     const text = candidate?.content?.parts?.map((part) => part.text ?? "").join("").trim();
     return text || null;
   }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  JSON sanitisation                                                         */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Strip markdown fences / leading prose so `JSON.parse` sees a bare object.
+ *
+ * Even with `responseMimeType: "application/json"`, some Flash responses still
+ * arrive as `Here is the JSON:\n```json\n{…}\n```` — the leading "H" is exactly
+ * what blew up attribute extraction for "Top".
+ */
+export function cleanJsonResponse(rawText: string): string {
+  const trimmed = rawText.trim();
+  if (!trimmed) return trimmed;
+
+  // Prefer a fenced ```json … ``` / ``` … ``` block when present.
+  const fenced = /```(?:json)?\s*([\s\S]*?)\s*```/i.exec(trimmed);
+  if (fenced?.[1]) {
+    const inner = fenced[1].trim();
+    const objectMatch = /{[\s\S]*}/.exec(inner);
+    return objectMatch ? objectMatch[0] : inner;
+  }
+
+  const objectMatch = /{[\s\S]*}/.exec(trimmed);
+  return objectMatch ? objectMatch[0] : trimmed;
 }
 
 /* -------------------------------------------------------------------------- */

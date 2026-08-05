@@ -13,6 +13,7 @@ export {
   getAttributeExtractor,
   getVlmService,
   isGenericGarment,
+  cleanJsonResponse,
   normalizeAttributes,
   GENERIC_GARMENTS,
   type AttributeRequest,
