@@ -1,5 +1,6 @@
 import "server-only";
 
+import { CONTEXT_DEV_DEADLINE_MS, VLM_DEADLINE_MS } from "@/config/deadlines";
 import type {
   BoundingBox,
   DetectedItem,
@@ -939,7 +940,9 @@ function getProductProvider(): ProductProvider {
     }),
     {
       maxLiveItems: readInt(process.env.CONTEXT_DEV_MAX_LIVE_ITEMS, 4),
-      deadlineMs: readInt(process.env.CONTEXT_DEV_DEADLINE_MS, 25_000),
+      // Hardcoded — ignore Vercel `CONTEXT_DEV_DEADLINE_MS` so a stale env cannot
+      // overflow the 60s function budget (see `src/config/deadlines.ts`).
+      deadlineMs: CONTEXT_DEV_DEADLINE_MS,
       visualCandidates: readInt(process.env.VISUAL_RERANK_CANDIDATES, 4),
       // On by default: it costs no credits, only a few small image fetches, and
       // without it the match score on a live card is text agreement alone.
@@ -975,20 +978,17 @@ export function getVisualSearchService(): VisualSearchService {
 function warnIfOverBudget(): void {
   if (process.env.ENABLE_VLM_ATTRIBUTES !== "true") return;
 
-  const vlm = readInt(process.env.VLM_DEADLINE_MS, 10_000);
-  const products = isContextDevConfigured()
-    ? readInt(process.env.CONTEXT_DEV_DEADLINE_MS, 25_000)
-    : 0;
+  const products = isContextDevConfigured() ? CONTEXT_DEV_DEADLINE_MS : 0;
 
-  // ~25s of headroom for Vision itself plus serialising the response (60s - 35s).
-  const budget = 35_000;
+  // Hardcoded budgets: 10s + 20s = 30s → ~30s left of the 60s function for Vision.
+  const budget = 45_000;
 
-  if (vlm + products > budget) {
+  if (VLM_DEADLINE_MS + products > budget) {
     console.warn(
-      `[detect] VLM_DEADLINE_MS (${vlm}) + CONTEXT_DEV_DEADLINE_MS (${products}) = ` +
-        `${vlm + products}ms, which leaves too little of the 60s function budget for ` +
-        "Vision. Lower CONTEXT_DEV_DEADLINE_MS, or a slow scan will be killed by the " +
-        "platform instead of degrading gracefully.",
+      `[detect] VLM_DEADLINE_MS (${VLM_DEADLINE_MS}) + CONTEXT_DEV_DEADLINE_MS (${products}) = ` +
+        `${VLM_DEADLINE_MS + products}ms, which leaves too little of the 60s function budget for ` +
+        "Vision. Edit `src/config/deadlines.ts` — env overrides are ignored so a stale " +
+        "Vercel value cannot kill the scan.",
     );
   }
 }

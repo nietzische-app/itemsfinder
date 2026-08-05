@@ -7,7 +7,6 @@ import "server-only";
  * so eval scripts and the visual-search pipeline do not need a wholesale rename.
  */
 export {
-  GeminiVlmService as ClaudeAttributeExtractor,
   GeminiVlmService,
   createAttributeExtractor,
   createVlmService,

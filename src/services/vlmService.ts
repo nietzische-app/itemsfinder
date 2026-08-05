@@ -2,6 +2,7 @@ import "server-only";
 
 import { GoogleGenerativeAI, SchemaType, type ResponseSchema } from "@google/generative-ai";
 
+import { VLM_DEADLINE_MS } from "@/config/deadlines";
 import type { BoundingBox } from "@/types";
 import { cropRegion } from "@/services/imageCrop";
 
@@ -301,8 +302,8 @@ export class GeminiVlmService {
     this.modelIndex = 0;
     this.model = this.modelCandidates[0] ?? DEFAULT_MODEL;
     this.maxItems = options.maxItems ?? 4;
-    this.deadlineMs = options.deadlineMs ?? 10_000;
-    this.requestTimeoutMs = options.requestTimeoutMs ?? 10_000;
+    this.deadlineMs = options.deadlineMs ?? VLM_DEADLINE_MS;
+    this.requestTimeoutMs = options.requestTimeoutMs ?? VLM_DEADLINE_MS;
     /*
      * Always explicit. A scan must not silently post user photographs to
      * whatever host an unrelated tool happened to name in the environment.
@@ -900,7 +901,9 @@ export function getVlmService(): GeminiVlmService | null {
   return new GeminiVlmService(apiKey, {
     model: process.env.VLM_MODEL?.trim() || DEFAULT_MODEL,
     maxItems: readInt(process.env.VLM_MAX_ITEMS, 4),
-    deadlineMs: readInt(process.env.VLM_DEADLINE_MS, 10_000),
+    // Hardcoded — ignore Vercel `VLM_DEADLINE_MS` so a stale env cannot overflow
+    // the 60s function budget (see `src/config/deadlines.ts`).
+    deadlineMs: VLM_DEADLINE_MS,
     baseUrl: process.env.VLM_BASE_URL?.trim() || undefined,
   });
 }

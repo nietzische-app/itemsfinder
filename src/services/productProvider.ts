@@ -1,5 +1,6 @@
 import "server-only";
 
+import { CONTEXT_DEV_DEADLINE_MS } from "@/config/deadlines";
 import { ContextDevService, type LiveProductCard } from "@/services/contextDevService";
 import { productUrlOrEmpty } from "@/lib/productUrl";
 import { merchantForDomain } from "@/services/merchantSearch";
@@ -135,7 +136,7 @@ export class ContextDevProductProvider implements ProductProvider {
   ) {
     this.maxLiveItems = options.maxLiveItems ?? 4;
     this.concurrency = options.concurrency ?? 2;
-    this.deadlineMs = options.deadlineMs ?? 25_000;
+    this.deadlineMs = options.deadlineMs ?? CONTEXT_DEV_DEADLINE_MS;
     this.maxAlternatives = options.maxAlternatives ?? 3;
     this.visualCandidates = options.visualCandidates ?? 4;
     this.visualRerank = options.visualRerank ?? true;
