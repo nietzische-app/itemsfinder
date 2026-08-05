@@ -1,5 +1,9 @@
 import "server-only";
 import { productUrlOrEmpty } from "@/lib/productUrl";
+import {
+  extractProductImageFromHtml,
+  isHttpsImageUrl,
+} from "@/lib/productImage";
 import type { SearchAttemptRecord, SearchTier } from "@/lib/scanTrace";
 
 import ContextDev from "context.dev";
@@ -156,7 +160,13 @@ const PRODUCT_SCHEMA = {
           },
           currency: { type: "string", description: "ISO 4217 code, e.g. USD." },
           brand: { type: "string", description: "Brand or label name." },
-          imageUrl: { type: "string", description: "Absolute product image URL." },
+          imageUrl: {
+            type: "string",
+            description:
+              "Absolute https URL of the primary product photograph. Prefer the " +
+              "page's og:image, twitter:image, or JSON-LD Product.image when present. " +
+              "Never invent a URL.",
+          },
           productUrl: { type: "string", description: "Absolute product page URL." },
           inStock: { type: "boolean", description: "False if sold out." },
           /*
@@ -556,6 +566,16 @@ export class ContextDevService {
         schema: PRODUCT_SCHEMA as unknown as Record<string, unknown>,
         // No invented prices: every value must be supported by the page.
         factCheck: true,
+        /*
+         * Image URLs are the field the model most often leaves empty — even when
+         * the PDP has a clear og:image. Spell the priority so extraction prefers
+         * the retailer's own nominated photo over inventing nothing.
+         */
+        instructions:
+          "For imageUrl, read the page's Open Graph og:image (or og:image:secure_url), " +
+          "twitter:image, or JSON-LD Product.image first. Return an absolute https URL. " +
+          "If none of those tags exist, use the main product gallery photo URL shown on " +
+          "the page. Do not leave imageUrl empty when any of those are present.",
         maxDepth: 0,
         maxPages: 1,
         stopAfterMs: this.extractBudgetMs,
@@ -570,9 +590,26 @@ export class ContextDevService {
 
     const host = safeHostname(url) ?? "";
 
-    return raw
+    const products = raw
       .map((entry) => normalizeProduct(entry as RawProduct, url, host))
       .filter((product): product is LiveProductCard => product !== null);
+
+    /*
+     * Structured extract still misses images on many retailers. When it does,
+     * fetch the PDP HTML once and parse og:image / twitter:image / JSON-LD —
+     * the same tags `fetch:images` uses for the catalogue. One cheap GET beats
+     * shipping a silhouette placeholder to the storefront.
+     */
+    if (products.some((product) => !product.imageUrl)) {
+      const pageImage = await fetchPageProductImage(url, signal);
+      if (pageImage) {
+        for (const product of products) {
+          if (!product.imageUrl) product.imageUrl = pageImage;
+        }
+      }
+    }
+
+    return products;
   }
 
   private readCache<T>(cache: Map<string, CacheEntry<T>>, key: string): T | undefined {
@@ -645,7 +682,7 @@ function normalizeProduct(
     merchantName: merchantNameFromDomain(host),
     merchantDomain: host,
     productUrl,
-    imageUrl: isHttpUrl(raw.imageUrl) ? (raw.imageUrl as string) : null,
+    imageUrl: isHttpsImageUrl(raw.imageUrl) ? (raw.imageUrl as string) : null,
     // Absent stock info means listed-and-buyable, which is the common case.
     inStock: raw.inStock === false ? false : true,
     brand: typeof raw.brand === "string" && raw.brand.trim() ? raw.brand.trim() : null,
@@ -810,6 +847,40 @@ function normalizeHex(value: unknown): string | null {
   if (typeof value !== "string") return null;
   const hex = value.trim();
   return /^#[0-9a-f]{6}$/i.test(hex) ? hex.toLowerCase() : null;
+}
+
+/**
+ * Lightweight PDP fetch for a retailer-nominated product photo.
+ *
+ * Bounded tightly: this only runs when structured extract left `imageUrl` empty,
+ * and a hung retailer must not eat the scan budget.
+ */
+async function fetchPageProductImage(
+  pageUrl: string,
+  signal?: AbortSignal,
+): Promise<string | null> {
+  try {
+    const response = await fetch(pageUrl, {
+      headers: {
+        "user-agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
+          "(KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        "accept-language": "tr-TR,tr;q=0.9",
+        accept: "text/html,application/xhtml+xml",
+      },
+      redirect: "follow",
+      signal: signal ?? AbortSignal.timeout(8_000),
+    });
+
+    if (!response.ok) return null;
+
+    const html = await response.text();
+    // Cap what we parse — some PDPs ship multi-MB HTML with embedded JSON.
+    return extractProductImageFromHtml(html.slice(0, 500_000), response.url);
+  } catch (error) {
+    logFailure("fetchPageProductImage", pageUrl, error);
+    return null;
+  }
 }
 
 function logFailure(operation: string, subject: string, error: unknown): void {

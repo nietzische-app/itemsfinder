@@ -14,8 +14,9 @@ import { rejectProductTitle } from "@/lib/retailVocabulary";
 import type { TraceCollector } from "@/lib/scanTrace";
 import { buildSearchQuery, relaxedQueries } from "@/lib/searchQuery";
 import { cropRegion } from "@/services/imageCrop";
-import { getVisualLookup } from "@/services/visualLookup";
+import { getVisionImageFallback, getVisualLookup } from "@/services/visualLookup";
 import { productThumbnail } from "@/lib/productThumbnail";
+import { isHttpsImageUrl } from "@/lib/productImage";
 import { hydrateProduct } from "@/services/mockCatalog";
 import { fetchRemoteImage } from "@/services/remoteImage";
 import { describeImage, visualSimilarity } from "@/services/visualDescriptor";
@@ -24,7 +25,6 @@ import type {
   BrandMetadata,
   DetectedItem,
   DetectionResult,
-  Merchant,
   ProductMatch,
   ProductSource,
 } from "@/types";
@@ -271,9 +271,9 @@ export class ContextDevProductProvider implements ProductProvider {
     image?: EnrichContext["image"],
     siblings: BoundingBox[] = [],
     trace?: TraceCollector,
-  ): Promise<LiveProductCard[]> {
+  ): Promise<{ cards: LiveProductCard[]; similarImages: string[] }> {
     const lookup = getVisualLookup();
-    if (!lookup || !image) return [];
+    if (!lookup || !image) return { cards: [], similarImages: [] };
 
     /*
      * Kırpım, görsel benzerlik ölçümüyle **aynı** kırpım: aynı dolgu, aynı
@@ -284,10 +284,10 @@ export class ContextDevProductProvider implements ProductProvider {
       size: image.size,
       exclude: siblings,
     });
-    if (!crop) return [];
+    if (!crop) return { cards: [], similarImages: [] };
 
     const lookupStartedAt = Date.now();
-    const { urls, seen } = await lookup.findProductPages(crop.base64, signal);
+    const { urls, seen, similarImages } = await lookup.findProductPages(crop.base64, signal);
 
     trace?.search({
       itemId: item.id,
@@ -307,10 +307,11 @@ export class ContextDevProductProvider implements ProductProvider {
           `görsel arama ${seen} sonuç buldu, hiçbiri ürün sayfası değildi`,
         );
       }
-      return [];
+      return { cards: [], similarImages };
     }
 
-    return this.context.productsFromUrls(urls, signal);
+    const cards = await this.context.productsFromUrls(urls, signal);
+    return { cards: fillMissingImages(cards, similarImages), similarImages };
   }
 
   /** Resolves one detection, or `null` to keep its catalogue products. */
@@ -343,7 +344,9 @@ export class ContextDevProductProvider implements ProductProvider {
      */
     const seenFromImage = await this.resolveByImage(item, signal, image, siblings, trace);
 
-    let cards = seenFromImage;
+    let cards = seenFromImage.cards;
+    let similarImages = seenFromImage.similarImages;
+
     if (cards.length === 0) {
       const ladder = relaxedQueries({
         itemType: item.itemType,
@@ -358,6 +361,18 @@ export class ContextDevProductProvider implements ProductProvider {
         signal,
         (attempt) => trace?.search({ itemId: item.id, ...attempt }),
       );
+
+      /*
+       * Text-search cards can still lack photos after og:image rescue. Pull
+       * Vision's visuallySimilarImages for this crop so the storefront never
+       * falls through to a silhouette SVG when a real photo is available.
+       */
+      if (cards.some((card) => !card.imageUrl) && image) {
+        similarImages = await this.similarImagesForItem(item, signal, image, siblings);
+        cards = fillMissingImages(cards, similarImages);
+      }
+    } else if (cards.some((card) => !card.imageUrl) && similarImages.length > 0) {
+      cards = fillMissingImages(cards, similarImages);
     }
 
     if (cards.length === 0) return null;
@@ -564,6 +579,27 @@ export class ContextDevProductProvider implements ProductProvider {
       ),
     };
   }
+
+  /**
+   * Vision visually-similar photos for one detection crop — thumbnail rescue only.
+   */
+  private async similarImagesForItem(
+    item: DetectedItem,
+    signal: AbortSignal,
+    image: NonNullable<EnrichContext["image"]>,
+    siblings: BoundingBox[],
+  ): Promise<string[]> {
+    const lookup = getVisionImageFallback();
+    if (!lookup) return [];
+
+    const crop = await cropRegion(image.buffer, item.boundingBox, {
+      size: image.size,
+      exclude: siblings,
+    });
+    if (!crop) return [];
+
+    return lookup.findSimilarImages(crop.base64, signal);
+  }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -579,6 +615,28 @@ interface ProductMatchOverrides {
   brand: BrandMetadata | null;
   /** The detection's colour, used when the retailer supplied no image. */
   colorHex: string;
+}
+
+/**
+ * Fills blank `imageUrl`s from Vision's visually similar list, in order.
+ *
+ * Live extract + og:image rescue should have covered most rows; this is the
+ * last step before a silhouette placeholder. One image per card, no reuse of
+ * the same URL across two cards on the same detection when alternatives exist.
+ */
+function fillMissingImages(
+  cards: LiveProductCard[],
+  similarImages: string[],
+): LiveProductCard[] {
+  if (similarImages.length === 0) return cards;
+
+  let cursor = 0;
+  return cards.map((card) => {
+    if (card.imageUrl || cursor >= similarImages.length) return card;
+    const imageUrl = similarImages[cursor++]!;
+    if (!isHttpsImageUrl(imageUrl)) return card;
+    return { ...card, imageUrl };
+  });
 }
 
 

@@ -187,6 +187,8 @@ export interface DetectRequestBody {
   image: string;
   /** Optional hint from the "try an example" buttons. */
   exampleId?: ExampleId;
+  /** Client-generated id for this scan attempt (isolation / diagnostics). */
+  scanId?: string;
 }
 
 /** Discriminated response so the client can narrow on `ok`. */
@@ -222,6 +224,13 @@ export interface ExampleImage {
 export interface UploadedImage {
   dataUrl: string;
   fileName: string;
+  /**
+   * Unique id for this upload/scan attempt.
+   *
+   * Prevents a slow previous scan from overwriting a newer one, and forces a
+   * fresh analysis even when the same file bytes are re-uploaded.
+   */
+  scanId: string;
   /** Present when the image came from a "try an example" button. */
   exampleId?: ExampleId;
 }

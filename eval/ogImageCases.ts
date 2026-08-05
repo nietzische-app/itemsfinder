@@ -90,4 +90,22 @@ export const OG_IMAGE_CASES: readonly OgImageCase[] = [
     pageUrl: PAGE,
     expected: null,
   },
+  {
+    name: "JSON-LD Product.image string",
+    html: `<script type="application/ld+json">{"@type":"Product","name":"Elbise","image":"https://cdn.example.com/j.jpg"}</script>`,
+    pageUrl: PAGE,
+    expected: "https://cdn.example.com/j.jpg",
+  },
+  {
+    name: "JSON-LD Product.image ImageObject",
+    html: `<script type="application/ld+json">{"@type":"Product","image":{"@type":"ImageObject","url":"https://cdn.example.com/k.jpg"}}</script>`,
+    pageUrl: PAGE,
+    expected: "https://cdn.example.com/k.jpg",
+  },
+  {
+    name: "JSON-LD @graph Product",
+    html: `<script type="application/ld+json">{"@graph":[{"@type":"WebPage"},{"@type":"Product","image":["https://cdn.example.com/l.jpg"]}]}</script>`,
+    pageUrl: PAGE,
+    expected: "https://cdn.example.com/l.jpg",
+  },
 ];

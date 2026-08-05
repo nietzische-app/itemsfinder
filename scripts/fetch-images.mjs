@@ -39,36 +39,16 @@ if (entries.length === 0) {
 }
 
 /**
- * First matching Open Graph / Twitter image in a page's head.
+ * First matching Open Graph / Twitter / JSON-LD image.
  *
- * Dışa açık, çünkü bu betiğin yanlış olabilecek asıl parçası burası: ağ çağrısı
- * standart, kırılgan olan bu dört kalıbın gerçek mağaza işaretlemesine uyup
- * uymadığı. `npm run eval` bunu gerçek şekillere karşı puanlıyor
- * (`eval/ogImageCases.ts`), yani bağlantılar dolduğunda ilk çalıştırmada
- * öğrenilmiyor.
+ * Implementation lives in `src/lib/productImage.ts` so the live extract path and
+ * this offline collector cannot disagree on which tags count. `npm run eval`
+ * scores the same function against `eval/ogImageCases.ts`.
  */
+const { extractProductImageFromHtml } = await import("@/lib/productImage");
+
 export function extractImage(html, pageUrl) {
-  const patterns = [
-    /<meta[^>]+property=["']og:image(?::secure_url)?["'][^>]+content=["']([^"']+)["']/i,
-    /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i,
-    /<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i,
-    /<link[^>]+rel=["']image_src["'][^>]+href=["']([^"']+)["']/i,
-  ];
-
-  for (const pattern of patterns) {
-    const match = pattern.exec(html);
-    if (!match) continue;
-
-    try {
-      // Relative og:image values are legal and common enough to bother with.
-      const resolved = new URL(match[1].trim(), pageUrl);
-      if (resolved.protocol === "https:") return resolved.toString();
-    } catch {
-      // Malformed value; try the next pattern.
-    }
-  }
-
-  return null;
+  return extractProductImageFromHtml(html, pageUrl);
 }
 
 const found = [];
