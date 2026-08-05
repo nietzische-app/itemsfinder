@@ -155,8 +155,21 @@ export function AnalyzeSidebar({
         ) : null}
       </div>
 
-      <div className="mt-auto hidden lg:block">
-        <EngineBadge result={result} />
+      {/*
+        Teşhis paneli telefonda da görünüyor.
+
+        `hidden lg:block` idi, yani 1024px altında hiç çizilmiyordu — ve taramayı
+        telefonda yapan biri paneli aramaya gittiğinde bulamıyordu. Panel bir hata
+        ayıklama aracı ve hata ayıklanacak taramaların çoğu telefonda yapılıyor;
+        kapalı açıldığı için yer de kaplamıyor.
+
+        Motor rozeti masaüstünde kaldığı yerde: onun mobil karşılığı üstteki
+        başlıkta zaten var, iki kez göstermek gürültü olurdu.
+      */}
+      <div className="mt-auto">
+        <div className="hidden lg:block">
+          <EngineBadge result={result} />
+        </div>
         {/*
           Below the badge, collapsed. The badge says *what* ran; this says what it
           did and how long each part took. Renders nothing at all when the response

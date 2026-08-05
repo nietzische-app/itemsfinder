@@ -186,9 +186,17 @@ export async function POST(request: Request) {
 
   if (hit) {
     trace.degrade("total", "önbellekten döndü — yeni çağrı yapılmadı");
-    logScanTrace(trace.snapshot(), { id: hit.id, source: `${service.source}+cache` });
+    /*
+     * Teşhis izi önbellekten dönen cevaba da takılıyor.
+     *
+     * Önbellek izi bilerek saklamıyor (başka bir isteğin süreleri bu isteği
+     * anlatmaz), ama izi hiç takmamak paneli **tamamen** yok ediyordu: aynı
+     * fotoğrafı ikinci kez tarayan biri «Tarama teşhisi» başlığını göremiyor ve
+     * panelin bozuk olduğunu sanıyor. Buradaki iz bu isteğe ait ve doğru olanı
+     * söylüyor — süreler gerçekten sıfıra yakın, çünkü gerçekten çağrı yapılmadı.
+     */
     return NextResponse.json<DetectResponse>(
-      { ok: true, result: hit },
+      { ok: true, result: withTrace(hit, trace, `${service.source}+cache`) },
       // Visible to whoever is debugging, and honest about where the answer came
       // from without dressing it up in the UI as something different.
       { headers: { "x-markas-cache": "hit" } },
