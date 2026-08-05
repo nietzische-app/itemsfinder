@@ -56,7 +56,7 @@ export interface AttributeRequest {
 }
 
 export interface VlmServiceOptions {
-  /** Model id. Defaults to `gemini-2.0-flash`. */
+  /** Model id. Defaults to `gemini-1.5-flash`. */
   model?: string;
   /** Detections to describe per scan. Beyond this, items keep the measured colour. */
   maxItems?: number;
@@ -74,13 +74,21 @@ export interface VlmServiceOptions {
 
 /**
  * Fashion-first instructions: Gemini must return specific Turkish retail terms
- * a shopper would type, never generic Vision classes like "Üst" / "Top".
+ * a shopper would type, never generic Vision classes like "Üst" / "Top" / "Alt".
+ *
+ * Examples are load-bearing — without them Flash collapses cream one-shoulder
+ * crops to "Krem Üst" and cargo denim to "Mavi Jean", which is exactly what the
+ * storefront then repeats as wrong products.
  */
 const FASHION_PROMPT = [
   "Analyze this clothing/fashion item image. Return a precise 4-5 word Turkish",
-  "search query. Specify: Gender (Erkek/Kadın/Unisex), Specific Item Subtype",
-  "(e.g., Bisiklet Yaka Tişört, Deri Şort, Triko Hırka, Likit Ruj), Dominant",
-  "Color, and Fit/Cut. Never use generic terms like 'Üst' or 'Top'.",
+  "search query for female apparel when applicable. Specify: Gender",
+  "(Erkek/Kadın/Unisex), Specific Item Subtype, Dominant Color, and Fit/Cut.",
+  "Examples of GOOD queries: \"Kadın Krem Tek Omuz Crop Top\",",
+  "\"Kadın Asimetrik Yaka Krem Bluz\", \"Kadın Mavi Kargo Cepli Wide Leg Jean\",",
+  "\"Kadın Yüksek Bel Bol Kargo Pantolon\", \"Bisiklet Yaka Tişört\", \"Deri Şort\".",
+  "HARD BAN — never output single-word or bare generics as the product name:",
+  "Üst, Alt, Top, Tops, Jeans, Jean, Clothing, Outerwear, Apparel, Giyim.",
 ].join(" ");
 
 /**
@@ -103,14 +111,16 @@ const ATTRIBUTE_SCHEMA: ResponseSchema = {
       description:
         "Precise 4-5 word Turkish e-commerce search query including Gender " +
         "(Erkek/Kadın/Unisex), specific item subtype, dominant colour, and fit/cut. " +
-        "Never generic terms like Üst or Top. Empty string if not determinable.",
+        'Examples: "Kadın Krem Tek Omuz Crop Top", "Kadın Mavi Kargo Cepli Wide Leg Jean". ' +
+        "Never single-word generics (Üst, Alt, Top, Jean, Jeans). Empty string if not determinable.",
     },
     garmentType: {
       type: SchemaType.STRING,
       description:
         "Turkish noun phrase for the garment as a Turkish e-commerce site would " +
-        'name it, e.g. "triko ceket", "deri şort", "bilekte sneaker", "bisiklet yaka tişört". ' +
-        "Specific subtype, never generic. Two or three words at most. Empty string if not determinable.",
+        'name it, e.g. "tek omuz crop top", "kargo jean", "asimetrik yaka bluz", ' +
+        '"triko ceket", "deri şort", "bilekte sneaker". Specific subtype of at least ' +
+        "two words when possible — never bare Üst/Alt/Top/Jean. Empty string if not determinable.",
     },
     colorName: {
       type: SchemaType.STRING,
@@ -185,17 +195,32 @@ const SYSTEM_PROMPT = [
   "3. Belirtilen sınıfa uyan bir parça kırpımda tanımlanamıyorsa visible=false",
   "   döndür ve diğer alanları boş bırak. Tahmin üretme.",
   "4. Değerler Türkçe ve bir alışveriş sitesinin arama kutusuna yazılacak",
-  "   sadelikte olmalı. Marka adı uydurma. Genel terimler yasak: Üst, Top,",
-  "   Clothing, Outerwear yerine somut alt tip kullan (Bisiklet Yaka Tişört,",
-  "   Deri Şort, Triko Hırka, Likit Ruj…).",
+  "   sadelikte olmalı. Marka adı uydurma. Genel terimler YASAK (tek kelime",
+  "   veya çıplak sınıf adı): Üst, Alt, Top, Jeans, Jean, Clothing, Outerwear,",
+  "   Apparel, Giyim. Yerine somut alt tip yaz — krem tek omuz crop için",
+  '   "Krem Tek Omuz Crop Top" veya "Asimetrik Yaka Krem Bluz"; mavi kargo',
+  '   denim için "Mavi Kargo Cepli Wide Leg Jean" veya "Yüksek Bel Bol Kargo',
+  '   Pantolon".',
   "5. Göremediğin bir özelliği boş string olarak bırak; parça tipinden çıkarım",
   '   yapma ("deri ceket" yazıyorsa diye malzemeye "deri" yazma).',
   "6. searchQuery alanı 4-5 kelimelik Türkçe arama sorgusu olmalı: Cinsiyet,",
-  "   spesifik ürün alt tipi, baskın renk, kalıp/kesim.",
+  "   spesifik ürün alt tipi, baskın renk, kalıp/kesim. Tek kelimelik çıktı",
+  "   (Top, Jeans, Üst, Alt) asla kabul edilmez.",
 ].join("\n");
 
-const DEFAULT_MODEL = "gemini-2.0-flash";
+/**
+ * Default Flash model.
+ *
+ * `gemini-1.5-flash` has materially higher free-tier RPM than `gemini-2.0-flash`
+ * (which was hitting QuotaExceeded / 429 and collapsing the stage to Vision
+ * class names). Override with `VLM_MODEL` when needed (e.g. `gemini-1.5-flash-8b`).
+ */
+const DEFAULT_MODEL = "gemini-1.5-flash";
 const DEFAULT_API_HOST = "https://generativelanguage.googleapis.com";
+
+/** One retry after a 429 — enough to absorb a brief free-tier burst, not a loop. */
+const RATE_LIMIT_RETRIES = 1;
+const RATE_LIMIT_BACKOFF_MS = 1_500;
 
 /* -------------------------------------------------------------------------- */
 /*  Service                                                                   */
@@ -273,23 +298,51 @@ export class GeminiVlmService {
     crop: { base64: string; mediaType: "image/jpeg" },
     signal: AbortSignal,
   ): Promise<GarmentAttributes | null> {
-    try {
-      const userText =
-        `${FASHION_PROMPT}\n\n` +
-        `Kaba sınıf: "${request.itemType}".\n` +
-        `Bu kırpım, fotoğrafın ${describePosition(request.box)} bölgesinden alındı.\n` +
-        "Bu sınıfa uyan parçanın özniteliklerini çıkar.";
+    const userText =
+      `${FASHION_PROMPT}\n\n` +
+      `Kaba sınıf: "${request.itemType}".\n` +
+      `Bu kırpım, fotoğrafın ${describePosition(request.box)} bölgesinden alındı.\n` +
+      "Bu sınıfa uyan parçanın özniteliklerini çıkar. Genel sınıf adını (Üst/Top/Alt/Jean) " +
+      "aynen tekrarlama — somut alt tip yaz.";
 
-      const text = this.client
-        ? await this.describeWithSdk(crop, userText, signal)
-        : await this.describeWithFetch(crop, userText, signal);
+    let attempt = 0;
+    for (;;) {
+      try {
+        const text = this.client
+          ? await this.describeWithSdk(crop, userText, signal)
+          : await this.describeWithFetch(crop, userText, signal);
 
-      if (!text) return null;
+        if (!text) return null;
 
-      return normalizeAttributes(JSON.parse(text));
-    } catch (error) {
-      logFailure(request.itemType, error);
-      return null;
+        return normalizeAttributes(JSON.parse(text));
+      } catch (error) {
+        /*
+         * 429 / QuotaExceeded used to abort the whole crop and leave the pipeline
+         * with Vision's bare class ("Top" → "Krem Üst"). One short backoff absorbs
+         * a free-tier burst; a second failure returns null so the caller can fall
+         * back to WEB_DETECTION entities instead of inventing a generic noun.
+         */
+        if (isRateLimitError(error) && attempt < RATE_LIMIT_RETRIES && !signal.aborted) {
+          attempt += 1;
+          console.warn(
+            `[vlm] 429 rate limit for "${request.itemType}" — retry ${attempt}/${RATE_LIMIT_RETRIES} after ${RATE_LIMIT_BACKOFF_MS}ms`,
+          );
+          const waited = await sleep(RATE_LIMIT_BACKOFF_MS, signal);
+          if (!waited) {
+            logFailure(request.itemType, error);
+            return null;
+          }
+          continue;
+        }
+
+        if (isRateLimitError(error)) {
+          console.warn(
+            `[vlm] 429 exhausted for "${request.itemType}" — caller should prefer WEB_DETECTION entities over generic Vision class`,
+          );
+        }
+        logFailure(request.itemType, error);
+        return null;
+      }
     }
   }
 
@@ -379,7 +432,11 @@ export class GeminiVlmService {
 
     if (!response.ok) {
       const body = await response.text().catch(() => "");
-      throw new Error(`Gemini HTTP ${response.status}: ${body.slice(0, 200)}`);
+      const err = new Error(`Gemini HTTP ${response.status}: ${body.slice(0, 200)}`);
+      if (response.status === 429) {
+        (err as Error & { status?: number }).status = 429;
+      }
+      throw err;
     }
 
     const payload = (await response.json()) as {
@@ -444,6 +501,10 @@ export function normalizeAttributes(raw: unknown): GarmentAttributes | null {
   // there is no reason to prefer this over the measured one.
   if (!garmentType || !colorHex) return null;
 
+  // A bare "Üst" / "Top" / "Jean" must not become the live search noun — returning
+  // null here lets visualSearch prefer WEB_DETECTION web entities instead.
+  if (isGenericGarment(garmentType)) return null;
+
   const colorName = text(value.colorName);
   if (!colorName) return null;
 
@@ -481,9 +542,19 @@ export function normalizeAttributes(raw: unknown): GarmentAttributes | null {
   };
 }
 
-const GENERIC_GARMENTS = new Set([
+/**
+ * Detector / model nouns too coarse to search with.
+ *
+ * Exported so the Vision fallback path can refuse the same list — otherwise a
+ * Gemini 429 quietly becomes "Krem Üst" / "Mavi Jean" in the storefront query.
+ */
+export const GENERIC_GARMENTS = new Set([
   "üst",
+  "alt",
   "top",
+  "tops",
+  "jean",
+  "jeans",
   "clothing",
   "outerwear",
   "footwear",
@@ -494,50 +565,88 @@ const GENERIC_GARMENTS = new Set([
   "parça",
 ]);
 
-function isGenericGarment(value: string): boolean {
-  return GENERIC_GARMENTS.has(value.toLocaleLowerCase("tr"));
+/** True when the noun is a banned singleton (or colour + singleton only). */
+export function isGenericGarment(value: string): boolean {
+  const words = value
+    .toLocaleLowerCase("tr")
+    .split(/\s+/)
+    .map((w) => w.trim())
+    .filter((w) => w.length > 0);
+
+  if (words.length === 0) return true;
+
+  const nonColour = words.filter((w) => !GENERIC_COLOUR_WORDS.has(w));
+  if (nonColour.length === 0) return true;
+  if (nonColour.length === 1) return GENERIC_GARMENTS.has(nonColour[0]!);
+  // Multi-word phrases like "tek omuz crop" are specific enough.
+  return nonColour.every((w) => GENERIC_GARMENTS.has(w));
 }
+
+const GENERIC_COLOUR_WORDS = new Set([
+  "siyah",
+  "beyaz",
+  "gri",
+  "bej",
+  "krem",
+  "kahverengi",
+  "kırmızı",
+  "mavi",
+  "lacivert",
+  "yeşil",
+  "pembe",
+  "pudra",
+  "mor",
+  "sarı",
+  "turuncu",
+  "camel",
+  "bordo",
+  "haki",
+  "antrasit",
+  "altın",
+  "gümüş",
+  "kırık",
+  "açık",
+  "koyu",
+]);
 
 /** Drop gender/colour filler words so what remains can stand as garmentType. */
 function garmentTypeFromSearchQuery(query: string): string | null {
-  const skip = new Set([
+  const skip = new Set<string>([
     "erkek",
     "kadın",
     "unisex",
-    "siyah",
-    "beyaz",
-    "gri",
-    "bej",
-    "kahverengi",
-    "kırmızı",
-    "mavi",
-    "lacivert",
-    "yeşil",
-    "pembe",
-    "pudra",
-    "mor",
-    "sarı",
-    "turuncu",
-    "camel",
-    "bordo",
-    "haki",
-    "antrasit",
-    "altın",
-    "gümüş",
     "oversize",
     "slim",
-    "crop",
     "regular",
     "fitted",
+    // "crop" is deliberately kept: "crop top" is the product name, not a fit adverb.
   ]);
+  for (const colour of Array.from(GENERIC_COLOUR_WORDS)) skip.add(colour);
 
   const words = query
     .split(/\s+/)
     .map((w) => w.trim())
     .filter((w) => w.length > 1 && !skip.has(w.toLocaleLowerCase("tr")));
 
+  // Strip a trailing bare generic ("… Top") only when richer words remain.
+  while (
+    words.length > 1 &&
+    GENERIC_GARMENTS.has(words[words.length - 1]!.toLocaleLowerCase("tr"))
+  ) {
+    // Keep "Crop Top" / "Kargo Jean" intact — those two-word retail names need
+    // the generic noun. Only drop it when at least two specific tokens stay.
+    const without = words.slice(0, -1);
+    const specific = without.filter(
+      (w) => !GENERIC_GARMENTS.has(w.toLocaleLowerCase("tr")),
+    );
+    if (specific.length < 2) break;
+    words.pop();
+  }
+
   if (words.length === 0) return null;
-  return words.slice(0, 3).join(" ");
+  // Reject if what remains is still only banned singletons.
+  if (isGenericGarment(words.join(" "))) return null;
+  return words.slice(0, 4).join(" ");
 }
 
 /** Trimmed non-empty string, or null. Caps length so a runaway answer cannot leak into the UI. */
@@ -602,6 +711,40 @@ function withDeadline(
 function logFailure(subject: string, error: unknown): void {
   const message = error instanceof Error ? error.message : String(error);
   console.warn(`[vlm] attribute extraction failed for "${subject}": ${message}`);
+}
+
+/** Gemini free-tier / quota failures — status 429 or QuotaExceeded / RESOURCE_EXHAUSTED. */
+function isRateLimitError(error: unknown): boolean {
+  if (!error) return false;
+  const status =
+    typeof error === "object" && error !== null && "status" in error
+      ? Number((error as { status?: unknown }).status)
+      : NaN;
+  if (status === 429) return true;
+
+  const message = error instanceof Error ? error.message : String(error);
+  return /429|quota.?exceeded|resource.?exhausted|rate.?limit|too many requests/i.test(
+    message,
+  );
+}
+
+/** Resolves false when aborted before the delay finishes. */
+function sleep(ms: number, signal: AbortSignal): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (signal.aborted) {
+      resolve(false);
+      return;
+    }
+    const timer = setTimeout(() => {
+      signal.removeEventListener("abort", onAbort);
+      resolve(true);
+    }, ms);
+    const onAbort = () => {
+      clearTimeout(timer);
+      resolve(false);
+    };
+    signal.addEventListener("abort", onAbort, { once: true });
+  });
 }
 
 /* -------------------------------------------------------------------------- */

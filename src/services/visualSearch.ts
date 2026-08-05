@@ -17,7 +17,12 @@ import {
   type DetectionCandidate,
 } from "@/lib/detectionFilter";
 import { familyOf, tokenize, type ItemFamily } from "@/lib/itemFamily";
-import { attributeSearchQuery, buildSearchQuery, colorNameFromHex } from "@/lib/searchQuery";
+import {
+  attributeSearchQuery,
+  buildSearchQuery,
+  colorNameFromHex,
+  isTooGenericQuery,
+} from "@/lib/searchQuery";
 import {
   MOCK_SCENARIOS,
   findProductsForLabel,
@@ -28,6 +33,7 @@ import {
 import { ContextDevService } from "@/services/contextDevService";
 import {
   getVlmService,
+  isGenericGarment,
   type GarmentAttributes,
 } from "@/services/vlmService";
 import { createTrace, type TraceCollector } from "@/lib/scanTrace";
@@ -585,7 +591,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
       trace.degrade(
         "vlm",
         `${detections.length - attributes.size}/${detections.length} parça betimlenemedi — ` +
-          "ölçülen renge ve Vision sınıfına düşüldü",
+          "WEB_DETECTION web entity'lerine düşüldü (genel Vision sınıfı değil)",
       );
     }
 
@@ -598,6 +604,11 @@ export class GoogleVisionSearchService implements VisualSearchService {
      * An entity is now only used when it names the same family as the detection
      * it is attached to. That keeps the genuinely useful case ("biker jacket" on
      * outerwear) and drops the rest instead of inventing a label.
+     *
+     * When the VLM stage is down (429 / QuotaExceeded), these entities are the
+     * *only* precise terms available — "Tek Omuz Crop", "Kargo Jean" — so the
+     * matcher below also accepts an entity whose family is unknown as long as
+     * the detection family is known and the Vision class itself is generic.
      */
     const webEntities = (annotation?.webDetection?.webEntities ?? [])
       .filter((entity): entity is Required<VisionWebEntity> =>
@@ -641,15 +652,27 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * The web entity is only consulted when the crop was not described. It names
        * the photograph, not the garment; once something has actually looked at this
        * region, that reading wins.
+       *
+       * Match order when VLM failed:
+       *   1. Same family (safe, preferred)
+       *   2. Unknown-family entity while Vision's class is a banned singleton
+       *      ("Top", "Jeans") — better a precise web phrase than "Krem Üst"
        */
+      const visionClassGeneric = isGenericGarment(name);
       const entity = attrs
         ? undefined
-        : webEntities.find(
-            (candidate) =>
-              !usedEntities.has(candidate.description) &&
-              familyOf(candidate.description) === family &&
-              family !== "unknown",
-          );
+        : webEntities.find((candidate) => {
+            if (usedEntities.has(candidate.description)) return false;
+            const entityFamily = familyOf(candidate.description);
+            if (family !== "unknown" && entityFamily === family) return true;
+            return (
+              visionClassGeneric &&
+              family !== "unknown" &&
+              entityFamily === "unknown" &&
+              !isGenericGarment(candidate.description) &&
+              tokenize(candidate.description).length >= 2
+            );
+          });
       if (entity) usedEntities.add(entity.description);
 
       // Measured colour is the fallback; the crop reading is preferred, because the
@@ -657,7 +680,14 @@ export class GoogleVisionSearchService implements VisualSearchService {
       const colorHex = attrs?.colorHex ?? regionColors[index] ?? imageDominantHex;
       const colorName = attrs?.colorName ?? colorNameFromHex(colorHex);
       const phrase = entity?.description;
-      const itemName = attrs?.garmentType ?? name;
+      /*
+       * When Vision only managed a generic class and WEB_DETECTION named the
+       * garment, the web phrase becomes the item noun — otherwise the query is
+       * "Krem Üst" / "Mavi Jean" regardless of how rich the entity list was.
+       */
+      const itemName =
+        attrs?.garmentType ??
+        (phrase && (visionClassGeneric || isGenericGarment(name)) ? phrase : name);
 
       const label = [colorName, attrs?.garmentType ?? phrase ?? name]
         .filter(Boolean)
@@ -668,16 +698,31 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * crop the query is built from what was seen in it — that assembly lives in
        * `attributeSearchQuery` so the eval can score the query the user actually
        * gets. Without one, all there is to work with is the detector's class, the
-       * web entity and a measured colour.
+       * web entity and a measured colour — and the web entity must lead when the
+       * detector class is a banned singleton.
        */
-      const searchQuery = attrs
+      let searchQuery = attrs
         ? attributeSearchQuery(attrs)
         : buildSearchQuery({
-            itemType: itemName,
-            label: phrase,
+            itemType: phrase && visionClassGeneric ? phrase : itemName,
+            label: phrase && !visionClassGeneric ? phrase : undefined,
             colorName: colorName ?? undefined,
             colorHex,
           });
+
+      // Hard ban: never ship "Top" / "Üst" / "Jean" (optionally with a colour) as
+      // the final query. Prefer rebuilding around the web entity; if that is
+      // still thin, keep the richer of the two rather than the banned singleton.
+      if (!attrs && isTooGenericQuery(searchQuery) && phrase) {
+        const rebuilt = buildSearchQuery({
+          itemType: phrase,
+          colorName: colorName ?? undefined,
+          colorHex,
+        });
+        if (!isTooGenericQuery(rebuilt) || rebuilt.length >= searchQuery.length) {
+          searchQuery = rebuilt;
+        }
+      }
 
       /*
        * The descriptive phrase and the query only pick the best row *within* the
