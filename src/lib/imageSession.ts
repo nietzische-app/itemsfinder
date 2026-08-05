@@ -10,9 +10,54 @@ import type { UploadedImage } from "@/types";
  */
 const STORAGE_KEY = "markas:pending-image";
 
-export function saveUploadedImage(image: UploadedImage): void {
+/** Keys cleared before every new upload so a previous scan cannot bleed through. */
+const SCAN_STORAGE_KEYS = [STORAGE_KEY, "markas:last-result", "markas:active-scan"] as const;
+
+function newScanId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return `scan-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+/** Builds an `UploadedImage` with a fresh `scanId`. */
+export function createUploadedImage(
+  input: Omit<UploadedImage, "scanId"> & { scanId?: string },
+): UploadedImage {
+  return {
+    dataUrl: input.dataUrl,
+    fileName: input.fileName,
+    exampleId: input.exampleId,
+    scanId: input.scanId ?? newScanId(),
+  };
+}
+
+/** Drops every scan-related session key. Safe to call when storage is unavailable. */
+export function clearScanSession(): void {
   try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(image));
+    for (const key of SCAN_STORAGE_KEYS) {
+      sessionStorage.removeItem(key);
+    }
+  } catch {
+    // Nothing to do — a stale entry is handled by the readers below.
+  }
+}
+
+/**
+ * Persists a fresh upload for `/analyze`.
+ *
+ * Always clears previous scan state first, then writes under a new `scanId`.
+ * If the write fails (quota / private mode), storage stays empty rather than
+ * leaving the previous photograph in place — that was how a female-outfit scan
+ * could reappear after a male-shirt upload.
+ */
+export function saveUploadedImage(image: Omit<UploadedImage, "scanId"> & { scanId?: string }): void {
+  clearScanSession();
+
+  const payload = createUploadedImage(image);
+
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
   } catch {
     // Private-mode / quota errors: /analyze will show its empty state instead.
   }
@@ -32,6 +77,9 @@ export function readUploadedImage(): UploadedImage | null {
       dataUrl: parsed.dataUrl,
       fileName: typeof parsed.fileName === "string" ? parsed.fileName : "screenshot",
       exampleId: parsed.exampleId,
+      // Legacy entries written before scanId existed still need an id so the
+      // analyze page can isolate in-flight responses.
+      scanId: typeof parsed.scanId === "string" && parsed.scanId.length > 0 ? parsed.scanId : newScanId(),
     };
   } catch {
     return null;
@@ -39,11 +87,7 @@ export function readUploadedImage(): UploadedImage | null {
 }
 
 export function clearUploadedImage(): void {
-  try {
-    sessionStorage.removeItem(STORAGE_KEY);
-  } catch {
-    // Nothing to do — a stale entry is harmless.
-  }
+  clearScanSession();
 }
 
 /**

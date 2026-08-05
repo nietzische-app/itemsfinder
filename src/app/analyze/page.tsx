@@ -11,7 +11,7 @@ import { DetectedItemsPanel } from "@/components/DetectedItemsPanel";
 import { ResultsSkeleton } from "@/components/ResultsSkeleton";
 import { Button } from "@/components/ui/button";
 import { parseUiCategory, uiCategoryOf, type UiCategory } from "@/lib/categories";
-import { readUploadedImage } from "@/lib/imageSession";
+import { createUploadedImage, readUploadedImage, saveUploadedImage } from "@/lib/imageSession";
 import { useSavedProducts } from "@/lib/savedItems";
 import type { DetectResponse, DetectionResult, UploadedImage } from "@/types";
 
@@ -33,8 +33,13 @@ function AnalyzeWorkspace() {
   const [revealedCount, setRevealedCount] = useState(0);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
 
+  /**
+   * The scan currently in flight (or last completed). Compared against each
+   * response so a slow previous upload cannot overwrite a newer one.
+   */
+  const activeScanId = useRef<string | null>(null);
   /** Guards against a duplicate scan from React 18 StrictMode double-effects. */
-  const scannedDataUrl = useRef<string | null>(null);
+  const scannedScanId = useRef<string | null>(null);
 
   // The category filter lives in the URL so the header switcher drives it too.
   const urlCategory = parseUiCategory(searchParams.get("kategori"));
@@ -53,6 +58,11 @@ function AnalyzeWorkspace() {
   }, []);
 
   const runDetection = useCallback(async (target: UploadedImage) => {
+    const scanId = target.scanId;
+    activeScanId.current = scanId;
+
+    // Drop any previous result/error before the new request leaves — otherwise
+    // the rail keeps showing the last outfit while the next scan is in flight.
     setStatus("scanning");
     setError(null);
     setActiveItemId(null);
@@ -63,10 +73,17 @@ function AnalyzeWorkspace() {
       const response = await fetch("/api/detect", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: target.dataUrl, exampleId: target.exampleId }),
+        body: JSON.stringify({
+          image: target.dataUrl,
+          exampleId: target.exampleId,
+          scanId,
+        }),
       });
 
       const payload = (await response.json()) as DetectResponse;
+
+      // A newer upload started while this one was in flight — discard.
+      if (activeScanId.current !== scanId) return;
 
       if (!payload.ok) {
         setError(payload.error);
@@ -77,14 +94,18 @@ function AnalyzeWorkspace() {
       setResult(payload.result);
       setStatus("done");
     } catch {
+      if (activeScanId.current !== scanId) return;
       setError("Analiz servisine ulaşamadık. Bağlantını kontrol et.");
       setStatus("error");
     }
   }, []);
 
   useEffect(() => {
-    if (!image || scannedDataUrl.current === image.dataUrl) return;
-    scannedDataUrl.current = image.dataUrl;
+    if (!image) return;
+    // Keyed by scanId, not dataUrl: re-uploading the same file must rescan, and
+    // two different photos must never share an in-flight response slot.
+    if (scannedScanId.current === image.scanId) return;
+    scannedScanId.current = image.scanId;
     void runDetection(image);
   }, [image, runDetection]);
 
@@ -114,6 +135,19 @@ function AnalyzeWorkspace() {
         ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
   }, []);
+
+  const handleRetry = useCallback(() => {
+    if (!image) return;
+    // Fresh id so the retry is not treated as the same scan by the guard refs.
+    const retry = createUploadedImage({
+      dataUrl: image.dataUrl,
+      fileName: image.fileName,
+      exampleId: image.exampleId,
+    });
+    saveUploadedImage(retry);
+    scannedScanId.current = null;
+    setImage(retry);
+  }, [image]);
 
   // Memoised so the derived useMemo hooks below keep a stable dependency.
   const items = useMemo(() => result?.items ?? [], [result]);
@@ -228,11 +262,7 @@ function AnalyzeWorkspace() {
               Bir şeyler ters gitti
             </p>
             <p className="mt-2 text-on-surface-variant">{error}</p>
-            <Button
-              variant="outline"
-              className="mt-6"
-              onClick={() => image && runDetection(image)}
-            >
+            <Button variant="outline" className="mt-6" onClick={handleRetry}>
               <RotateCcw strokeWidth={1.5} />
               Tekrar dene
             </Button>

@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { useDropzone, type FileRejection } from "react-dropzone";
 import { AlertCircle, UploadCloud } from "lucide-react";
 
-import { fileToDataUrl } from "@/lib/imageSession";
+import { createUploadedImage, fileToDataUrl } from "@/lib/imageSession";
 import { cn } from "@/lib/utils";
 import type { UploadedImage } from "@/types";
 
@@ -49,7 +49,7 @@ export function ImageUploader({ onImageReady }: ImageUploaderProps) {
       try {
         const dataUrl = await fileToDataUrl(file);
         setPreview(dataUrl);
-        onImageReady({ dataUrl, fileName: file.name });
+        onImageReady(createUploadedImage({ dataUrl, fileName: file.name }));
       } catch {
         setError("Bu dosyayı okuyamadık. Başka bir görsel dene.");
       }

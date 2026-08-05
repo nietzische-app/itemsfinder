@@ -224,6 +224,13 @@ const SYSTEM_PROMPT = [
 const DEFAULT_MODEL = "gemini-flash-latest";
 const DEFAULT_API_HOST = "https://generativelanguage.googleapis.com";
 
+/** Longest edge of ROI buffers sent to Gemini. Smaller = faster upload + decode. */
+const VLM_MAX_EDGE = 512;
+/** JPEG quality for VLM crops — 80% keeps garment detail without shipping megabytes. */
+const VLM_JPEG_QUALITY = 80;
+/** Hard cap on Gemini's reply. Fashion JSON fits in ~60 tokens when kept short. */
+const VLM_MAX_OUTPUT_TOKENS = 60;
+
 /** One retry after a 429 — enough to absorb a brief free-tier burst, not a loop. */
 const RATE_LIMIT_RETRIES = 1;
 const RATE_LIMIT_BACKOFF_MS = 1_500;
@@ -277,7 +284,19 @@ export class GeminiVlmService {
     try {
       const settled = await Promise.allSettled(
         selected.map(async (request) => {
-          const crop = await cropRegion(imageBuffer, request.box, { size: options.size });
+          /*
+           * Resize/compress in memory before Gemini: 512px @ 80% JPEG.
+           *
+           * Attribute extraction is perception, not pixel-peeping. Shipping a
+           * 640px/82 crop was the dominant cost of a 13s VLM stage — upload
+           * bytes and decode time. 512/80 keeps garment colour and subtype
+           * readable while cutting the payload roughly in half.
+           */
+          const crop = await cropRegion(imageBuffer, request.box, {
+            size: options.size,
+            maxEdge: VLM_MAX_EDGE,
+            quality: VLM_JPEG_QUALITY,
+          });
           if (!crop) return null;
 
           const attributes = await this.describe(request, crop, budget.signal);
@@ -368,7 +387,7 @@ export class GeminiVlmService {
       systemInstruction: SYSTEM_PROMPT,
       generationConfig: {
         temperature: 0.2,
-        maxOutputTokens: 1024,
+        maxOutputTokens: VLM_MAX_OUTPUT_TOKENS,
         responseMimeType: "application/json",
         responseSchema: ATTRIBUTE_SCHEMA,
       },
@@ -436,7 +455,7 @@ export class GeminiVlmService {
         ],
         generationConfig: {
           temperature: 0.2,
-          maxOutputTokens: 1024,
+          maxOutputTokens: VLM_MAX_OUTPUT_TOKENS,
           responseMimeType: "application/json",
         },
       }),

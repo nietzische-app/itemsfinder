@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { exampleToDataUrl } from "@/lib/imageSession";
+import { createUploadedImage, exampleToDataUrl } from "@/lib/imageSession";
 import { cn } from "@/lib/utils";
 import { SHOWCASE_FALLBACK, SHOWCASE_INTERVAL_MS } from "@/lib/showcase";
 import { merchantColor, merchantInitials, merchantTextColor } from "@/services/merchantSearch";
@@ -111,11 +111,13 @@ export function LiveScanPreview({
 
     try {
       const dataUrl = await exampleToDataUrl(imageSrc);
-      onOpenScan({
-        dataUrl,
-        fileName: imageSrc.split("/").pop() ?? "ornek-kombin.jpg",
-        exampleId: look.exampleId,
-      });
+      onOpenScan(
+        createUploadedImage({
+          dataUrl,
+          fileName: imageSrc.split("/").pop() ?? "ornek-kombin.jpg",
+          exampleId: look.exampleId,
+        }),
+      );
     } catch {
       setOpenError("Örnek taramayı açamadık. Tekrar dene.");
       setOpening(false);

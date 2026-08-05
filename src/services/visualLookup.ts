@@ -78,6 +78,13 @@ export interface VisualLookupResult {
   urls: string[];
   /** Süzmeden önce kaç aday geldiği — kaybın nerede olduğunu görmek için. */
   seen: number;
+  /**
+   * High-res visually similar image URLs from Vision.
+   *
+   * Used when live extract cannot find an `og:image` — better a real product
+   * photo than a silhouette SVG placeholder on the result card.
+   */
+  similarImages: string[];
 }
 
 export class VisionWebLookup {
@@ -92,35 +99,8 @@ export class VisionWebLookup {
    */
   async findProductPages(cropBase64: string, signal?: AbortSignal): Promise<VisualLookupResult> {
     try {
-      const response = await fetch(`${VISION_ENDPOINT}?key=${this.apiKey}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          requests: [
-            {
-              image: { content: cropBase64 },
-              features: [{ type: "WEB_DETECTION", maxResults: 20 }],
-            },
-          ],
-        }),
-        signal: signal ?? AbortSignal.timeout(15_000),
-      });
-
-      if (!response.ok) {
-        console.warn(`[lens] Vision ${response.status}`);
-        return { urls: [], seen: 0 };
-      }
-
-      const payload = (await response.json()) as VisionWebResponse;
-      const annotation = payload.responses?.[0];
-
-      if (annotation?.error?.message) {
-        console.warn(`[lens] Vision hata: ${annotation.error.message}`);
-        return { urls: [], seen: 0 };
-      }
-
-      const web = annotation?.webDetection;
-      if (!web) return { urls: [], seen: 0 };
+      const web = await this.annotate(cropBase64, signal);
+      if (!web) return { urls: [], seen: 0, similarImages: [] };
 
       /*
        * Sıra kasıtlı ve iddia gücüne göre.
@@ -162,12 +142,91 @@ export class VisionWebLookup {
         urls.push(url);
       }
 
-      return { urls, seen: raw.length };
+      return {
+        urls,
+        seen: raw.length,
+        similarImages: collectSimilarImages(web),
+      };
     } catch (error) {
       console.warn("[lens] görsel arama başarısız:", error);
-      return { urls: [], seen: 0 };
+      return { urls: [], seen: 0, similarImages: [] };
     }
   }
+
+  /**
+   * Visually similar product photos for a garment crop — thumbnail fallback only.
+   *
+   * Does not require `ENABLE_VISION_LENS`; a missing PDP `og:image` should still
+   * be able to land a real photo on the card when a Vision key is present.
+   */
+  async findSimilarImages(cropBase64: string, signal?: AbortSignal): Promise<string[]> {
+    try {
+      const web = await this.annotate(cropBase64, signal);
+      return web ? collectSimilarImages(web) : [];
+    } catch (error) {
+      console.warn("[lens] similar-image lookup failed:", error);
+      return [];
+    }
+  }
+
+  private async annotate(
+    cropBase64: string,
+    signal?: AbortSignal,
+  ): Promise<NonNullable<NonNullable<VisionWebResponse["responses"]>[number]["webDetection"]> | null> {
+    const response = await fetch(`${VISION_ENDPOINT}?key=${this.apiKey}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        requests: [
+          {
+            image: { content: cropBase64 },
+            features: [{ type: "WEB_DETECTION", maxResults: 20 }],
+          },
+        ],
+      }),
+      signal: signal ?? AbortSignal.timeout(15_000),
+    });
+
+    if (!response.ok) {
+      console.warn(`[lens] Vision ${response.status}`);
+      return null;
+    }
+
+    const payload = (await response.json()) as VisionWebResponse;
+    const annotation = payload.responses?.[0];
+
+    if (annotation?.error?.message) {
+      console.warn(`[lens] Vision hata: ${annotation.error.message}`);
+      return null;
+    }
+
+    return annotation?.webDetection ?? null;
+  }
+}
+
+/** Deduped https image URLs from Vision's visual-similarity lists. */
+function collectSimilarImages(
+  web: NonNullable<NonNullable<VisionWebResponse["responses"]>[number]["webDetection"]>,
+): string[] {
+  const seen = new Set<string>();
+  const images: string[] = [];
+
+  for (const entry of [
+    ...(web.visuallySimilarImages ?? []),
+    ...(web.fullMatchingImages ?? []),
+    ...(web.partialMatchingImages ?? []),
+  ]) {
+    const url = entry.url;
+    if (typeof url !== "string" || !url.startsWith("https://")) continue;
+    if (seen.has(url)) continue;
+    // Skip obvious non-photos (PDP HTML pages already handled separately).
+    if (/\.(html?)([?#]|$)/i.test(url)) continue;
+    seen.add(url);
+    images.push(url);
+    if (images.length >= 6) break;
+  }
+
+  return images;
 }
 
 /**
@@ -185,5 +244,17 @@ export function visualLookupEnabled(): boolean {
 export function getVisualLookup(): VisionWebLookup | null {
   const key = process.env.GOOGLE_CLOUD_VISION_API_KEY?.trim();
   if (!visualLookupEnabled() || !key) return null;
+  return new VisionWebLookup(key);
+}
+
+/**
+ * Vision client for thumbnail fallback only — does not require the lens flag.
+ *
+ * Product-page discovery stays behind `ENABLE_VISION_LENS`; missing card photos
+ * should still be fillable when a Vision key is configured.
+ */
+export function getVisionImageFallback(): VisionWebLookup | null {
+  const key = process.env.GOOGLE_CLOUD_VISION_API_KEY?.trim();
+  if (!key) return null;
   return new VisionWebLookup(key);
 }
