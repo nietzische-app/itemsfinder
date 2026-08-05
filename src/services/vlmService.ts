@@ -56,7 +56,7 @@ export interface AttributeRequest {
 }
 
 export interface VlmServiceOptions {
-  /** Model id. Defaults to `gemini-2.5-flash`. */
+  /** Model id. Defaults to `gemini-flash-latest`. */
   model?: string;
   /** Detections to describe per scan. Beyond this, items keep the measured colour. */
   maxItems?: number;
@@ -214,11 +214,14 @@ const SYSTEM_PROMPT = [
 /**
  * Default Flash model.
  *
- * `gemini-1.5-flash` returns 404 on today's `v1beta` endpoint (retired alias).
- * `gemini-2.5-flash` is the current stable Flash id. Override with `VLM_MODEL`
- * when needed (e.g. `gemini-2.5-flash-lite` or `gemini-flash-latest`).
+ * Versioned ids keep disappearing for new keys:
+ *   - `gemini-1.5-flash` — shut down (404 on v1beta)
+ *   - `gemini-2.0-flash` / `gemini-2.5-flash` — retired or closed to new users
+ *
+ * `gemini-flash-latest` is Google's stable alias that always resolves to the
+ * current Flash GA model (today: 3.5). Override with `VLM_MODEL` if needed.
  */
-const DEFAULT_MODEL = "gemini-2.5-flash";
+const DEFAULT_MODEL = "gemini-flash-latest";
 const DEFAULT_API_HOST = "https://generativelanguage.googleapis.com";
 
 /** One retry after a 429 — enough to absorb a brief free-tier burst, not a loop. */
@@ -342,6 +345,12 @@ export class GeminiVlmService {
           console.warn(
             `[vlm] 429 exhausted for "${request.itemType}" — caller should prefer WEB_DETECTION entities over generic Vision class`,
           );
+        } else if (isModelNotFoundError(error)) {
+          console.warn(
+            `[vlm] model "${this.model}" not found (404) for "${request.itemType}" — ` +
+              "set VLM_MODEL to a listed Flash id (e.g. gemini-flash-latest); " +
+              "scan continues with WEB_DETECTION fallback",
+          );
         }
         logFailure(request.itemType, error);
         return null;
@@ -436,9 +445,7 @@ export class GeminiVlmService {
     if (!response.ok) {
       const body = await response.text().catch(() => "");
       const err = new Error(`Gemini HTTP ${response.status}: ${body.slice(0, 200)}`);
-      if (response.status === 429) {
-        (err as Error & { status?: number }).status = 429;
-      }
+      (err as Error & { status?: number }).status = response.status;
       throw err;
     }
 
@@ -736,6 +743,21 @@ function isRateLimitError(error: unknown): boolean {
 
   const message = error instanceof Error ? error.message : String(error);
   return /429|quota.?exceeded|resource.?exhausted|rate.?limit|too many requests/i.test(
+    message,
+  );
+}
+
+/** Retired / closed-to-new-users model ids — 404 with "no longer available" or "not found". */
+function isModelNotFoundError(error: unknown): boolean {
+  if (!error) return false;
+  const status =
+    typeof error === "object" && error !== null && "status" in error
+      ? Number((error as { status?: unknown }).status)
+      : NaN;
+  if (status === 404) return true;
+
+  const message = error instanceof Error ? error.message : String(error);
+  return /404|not found|no longer available|is not supported for generateContent/i.test(
     message,
   );
 }
