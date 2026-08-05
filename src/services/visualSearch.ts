@@ -538,6 +538,28 @@ export class GoogleVisionSearchService implements VisualSearchService {
     const extractor = input.budgetConstrained ? null : getAttributeExtractor();
     if (input.budgetConstrained) {
       trace.degrade("vlm", "günlük bütçe eşiğinde — ücretli aşama atlandı");
+    } else if (!extractor) {
+      /*
+       * Kapalı bir aşama, sessiz bir aşama olmamalı.
+       *
+       * Üretimde `describedItems: 0` görüldü ve `degraded` bu konuda **tek kelime**
+       * etmiyordu: aşağıdaki uyarı `extractor &&` ile korumalı olduğu için, aşama
+       * hiç kurulmadığında hiçbir not düşülmüyordu. Sonuç, panelde ayırt edilemeyen
+       * iki bambaşka durum — «aşama kapalı» ile «aşama çalıştı ama betimleyemedi».
+       * İlki bir yapılandırma eksiği, ikincisi bir doğruluk sorunu; ikisine
+       * bakarken yapılacak iş de farklı.
+       *
+       * Hangi koşulun eksik olduğu ayrı ayrı yazılıyor, çünkü «kapalı» demek
+       * kullanıcıyı iki ayrı ortam değişkenini de kontrol etmeye gönderirdi.
+       */
+      const reason = !process.env.ANTHROPIC_API_KEY?.trim()
+        ? "ANTHROPIC_API_KEY yok"
+        : "ENABLE_VLM_ATTRIBUTES=true değil";
+
+      trace.degrade(
+        "vlm",
+        `öznitelik betimlemesi kapalı (${reason}) — ölçülen renge ve Vision sınıfına düşüldü`,
+      );
     }
 
     const attributes =
