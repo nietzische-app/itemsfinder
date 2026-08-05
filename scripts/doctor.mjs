@@ -171,7 +171,7 @@ const checks = [
     ok: count("eval/fixtures/attrs") > 0,
     missing: "eval/fixtures/attrs/ boş",
     why: "Boru hattı modelin rengini ölçülene tercih ediyor; bu tercihin doğru olduğunu gösteren sayı yok.",
-    fix: "ANTHROPIC_API_KEY=... npm run eval:record-attrs -- --repeat 3",
+    fix: "GEMINI_API_KEY=... npm run eval:record-attrs -- --repeat 3",
   },
   {
     id: "—",
@@ -238,7 +238,7 @@ for (const [key, title, note] of GROUPS) {
    * olduğundan değil, bu sürecin ondan önce başlamış olmasından. Bu satır olmadan
    * tek makul sonuç "anahtar çalışmıyor" oluyor, ki yanlış ve zaman kaybettiriyor.
    */
-  if (key === "ölçüm" && !env("ANTHROPIC_API_KEY") && !env("GOOGLE_CLOUD_VISION_API_KEY")) {
+  if (key === "ölçüm" && !env("GEMINI_API_KEY") && !env("GOOGLE_CLOUD_VISION_API_KEY")) {
     console.log("  ! Anahtarı ekledim diyorsan: bu oturum onu göremez.");
     console.log("    Ortam değişkenleri süreç başlarken veriliyor, yani anahtar");
     console.log("    eklendikten sonra açılan bir oturum gerekiyor. Aynı oturumda");

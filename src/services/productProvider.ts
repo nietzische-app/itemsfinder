@@ -135,7 +135,7 @@ export class ContextDevProductProvider implements ProductProvider {
   ) {
     this.maxLiveItems = options.maxLiveItems ?? 4;
     this.concurrency = options.concurrency ?? 2;
-    this.deadlineMs = options.deadlineMs ?? 45_000;
+    this.deadlineMs = options.deadlineMs ?? 25_000;
     this.maxAlternatives = options.maxAlternatives ?? 3;
     this.visualCandidates = options.visualCandidates ?? 4;
     this.visualRerank = options.visualRerank ?? true;
