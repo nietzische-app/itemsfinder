@@ -141,6 +141,7 @@ const BANNED_SINGLETON_NOUNS = new Set([
   "alt",
   "jean",
   "jeans",
+  "body",
   "clothing",
   "outerwear",
   "footwear",

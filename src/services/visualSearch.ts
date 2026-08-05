@@ -727,13 +727,19 @@ export class GoogleVisionSearchService implements VisualSearchService {
       /*
        * The descriptive phrase and the query only pick the best row *within* the
        * family; the family itself is the gate. The chosen rows then get their text
-       * search repointed at this detection.
+       * search — and, when the crop was described, their display title — repointed
+       * at this detection so catalogue placeholders ("Body", "Deri Şort") cannot
+       * outrank the VLM's exact terms ("Crop Top", "Wide Leg Jean").
        */
       const { exactMatch, alternatives } = findProductsForLabel(
         `${attrs?.garmentType ?? phrase ?? name} ${searchQuery}`,
         category,
         family,
       );
+
+      // VLM won: catalogue card titles must show the described garment, not the
+      // scenario stub that merely shared a wardrobe family.
+      const displayTitle = attrs ? label : undefined;
 
       items.push({
         id: `gv-${index}-${name.toLowerCase().replace(/\s+/g, "-")}`,
@@ -755,10 +761,10 @@ export class GoogleVisionSearchService implements VisualSearchService {
         // rows against it rather than re-deriving a possibly different answer.
         family,
         exactMatch: exactMatch
-          ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery))
+          ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery, displayTitle))
           : null,
         alternatives: alternatives.map((product) =>
-          hydrateProduct(retargetSearchQuery(product, searchQuery)),
+          hydrateProduct(retargetSearchQuery(product, searchQuery, displayTitle)),
         ),
       });
     }

@@ -56,7 +56,7 @@ export interface AttributeRequest {
 }
 
 export interface VlmServiceOptions {
-  /** Model id. Defaults to `gemini-1.5-flash`. */
+  /** Model id. Defaults to `gemini-2.5-flash`. */
   model?: string;
   /** Detections to describe per scan. Beyond this, items keep the measured colour. */
   maxItems?: number;
@@ -84,11 +84,14 @@ const FASHION_PROMPT = [
   "Analyze this clothing/fashion item image. Return a precise 4-5 word Turkish",
   "search query for female apparel when applicable. Specify: Gender",
   "(Erkek/Kadın/Unisex), Specific Item Subtype, Dominant Color, and Fit/Cut.",
-  "Examples of GOOD queries: \"Kadın Krem Tek Omuz Crop Top\",",
-  "\"Kadın Asimetrik Yaka Krem Bluz\", \"Kadın Mavi Kargo Cepli Wide Leg Jean\",",
-  "\"Kadın Yüksek Bel Bol Kargo Pantolon\", \"Bisiklet Yaka Tişört\", \"Deri Şort\".",
+  "Map what you see to RICH retail terms — never thin generics:",
+  "- cream / beige one-shoulder or asymmetric crop → \"Kadın Krem Tek Omuz Crop Top\"",
+  "  or \"Kadın Krem Asimetrik Yaka Bluz\" (NOT \"Krem Üst\", NOT \"Body\")",
+  "- blue baggy / wide cargo denim → \"Kadın Mavi Kargo Cepli Wide Leg Jean\"",
+  "  or \"Kadın Mavi Yüksek Bel Bol Pantolon\" (NOT \"Mavi Jean\", NOT \"Deri Şort\")",
+  "Other GOOD examples: \"Bisiklet Yaka Tişört\", \"Deri Biker Ceket\".",
   "HARD BAN — never output single-word or bare generics as the product name:",
-  "Üst, Alt, Top, Tops, Jeans, Jean, Clothing, Outerwear, Apparel, Giyim.",
+  "Üst, Alt, Top, Tops, Jeans, Jean, Body, Clothing, Outerwear, Apparel, Giyim.",
 ].join(" ");
 
 /**
@@ -196,26 +199,26 @@ const SYSTEM_PROMPT = [
   "   döndür ve diğer alanları boş bırak. Tahmin üretme.",
   "4. Değerler Türkçe ve bir alışveriş sitesinin arama kutusuna yazılacak",
   "   sadelikte olmalı. Marka adı uydurma. Genel terimler YASAK (tek kelime",
-  "   veya çıplak sınıf adı): Üst, Alt, Top, Jeans, Jean, Clothing, Outerwear,",
-  "   Apparel, Giyim. Yerine somut alt tip yaz — krem tek omuz crop için",
-  '   "Krem Tek Omuz Crop Top" veya "Asimetrik Yaka Krem Bluz"; mavi kargo',
-  '   denim için "Mavi Kargo Cepli Wide Leg Jean" veya "Yüksek Bel Bol Kargo',
-  '   Pantolon".',
+  "   veya çıplak sınıf adı): Üst, Alt, Top, Jeans, Jean, Body, Clothing,",
+  "   Outerwear, Apparel, Giyim. Zengin alt tip yaz — krem asimetrik/tek omuz",
+  '   crop için "Krem Tek Omuz Crop Top" veya "Krem Asimetrik Yaka Bluz";',
+  '   mavi bol kargo denim için "Mavi Kargo Cepli Wide Leg Jean" veya',
+  '   "Mavi Yüksek Bel Bol Pantolon". "Body" veya "Deri Şort" uydurma.',
   "5. Göremediğin bir özelliği boş string olarak bırak; parça tipinden çıkarım",
   '   yapma ("deri ceket" yazıyorsa diye malzemeye "deri" yazma).',
   "6. searchQuery alanı 4-5 kelimelik Türkçe arama sorgusu olmalı: Cinsiyet,",
   "   spesifik ürün alt tipi, baskın renk, kalıp/kesim. Tek kelimelik çıktı",
-  "   (Top, Jeans, Üst, Alt) asla kabul edilmez.",
+  "   (Top, Jeans, Üst, Alt, Body) asla kabul edilmez.",
 ].join("\n");
 
 /**
  * Default Flash model.
  *
- * `gemini-1.5-flash` has materially higher free-tier RPM than `gemini-2.0-flash`
- * (which was hitting QuotaExceeded / 429 and collapsing the stage to Vision
- * class names). Override with `VLM_MODEL` when needed (e.g. `gemini-1.5-flash-8b`).
+ * `gemini-1.5-flash` returns 404 on today's `v1beta` endpoint (retired alias).
+ * `gemini-2.5-flash` is the current stable Flash id. Override with `VLM_MODEL`
+ * when needed (e.g. `gemini-2.5-flash-lite` or `gemini-flash-latest`).
  */
-const DEFAULT_MODEL = "gemini-1.5-flash";
+const DEFAULT_MODEL = "gemini-2.5-flash";
 const DEFAULT_API_HOST = "https://generativelanguage.googleapis.com";
 
 /** One retry after a 429 — enough to absorb a brief free-tier burst, not a loop. */
@@ -491,10 +494,18 @@ export function normalizeAttributes(raw: unknown): GarmentAttributes | null {
   let garmentType = text(value.garmentType);
   const colorHex = hex(value.colorHex);
 
-  // Prefer the fashion search query's specificity when garmentType is missing or
-  // still a generic Vision-style class.
-  if (searchQuery && (!garmentType || isGenericGarment(garmentType))) {
-    garmentType = garmentTypeFromSearchQuery(searchQuery) ?? garmentType;
+  // Prefer the fashion search query's specificity when garmentType is missing,
+  // still a generic Vision-style class, or thinner than the query's product words.
+  if (searchQuery) {
+    const fromQuery = garmentTypeFromSearchQuery(searchQuery);
+    if (
+      fromQuery &&
+      (!garmentType ||
+        isGenericGarment(garmentType) ||
+        fromQuery.split(/\s+/).length > garmentType.split(/\s+/).length)
+    ) {
+      garmentType = fromQuery;
+    }
   }
 
   // Without a garment noun there is nothing to search for, and without a colour
@@ -555,6 +566,7 @@ export const GENERIC_GARMENTS = new Set([
   "tops",
   "jean",
   "jeans",
+  "body",
   "clothing",
   "outerwear",
   "footwear",
