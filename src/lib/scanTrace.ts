@@ -88,6 +88,14 @@ export interface SearchAttemptRecord {
   /** Bu aramanın eklediği, daha önce görülmemiş aday sayısı. */
   found: number;
   /**
+   * Bu çağrının kaç milisaniye sürdüğü.
+   *
+   * Üretimde ürün aşaması 42.7 saniye sürdü ve `ms.products` tek bir sayı olduğu
+   * için sürenin aramada mı çıkarımda mı geçtiği bilinmiyordu. Aşamanın toplamını
+   * bilmek «yavaş» demeye yetiyor, «neyi hızlandıracağız» demeye yetmiyor.
+   */
+  ms: number;
+  /**
    * Çağrı hata verdiyse gerekçesi; başarılıysa yok.
    *
    * Sıfır sonuç ile başarısız çağrı aynı şey değil: ilki «o mağazalarda yok»,

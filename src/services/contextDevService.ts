@@ -107,19 +107,17 @@ const MIN_LOCAL_CANDIDATES = 2;
 const MAX_SEARCHES_PER_ITEM = 3;
 
 /**
- * Tek bir aramaya verilebilecek en fazla alan adı.
+ * Tek bir aramaya verilebilecek en fazla alan adı — **API'nin doğrulanmış tavanı.**
  *
- * **Bu bir hipotez, doğrulanmış bir sınır değil** — ve öyle olduğu yazılı kalsın.
- * Üretimde üç arama da 400 aldı; üçü de `clothing` kategorisindeydi ve Türkiye
- * `clothing` listesi 12 alan adı taşıyan **tek** liste (beauty 6, global 5 ve 3).
- * Kanıt bu kadar: kategori ile başarısızlık birebir örtüşüyor, ama isteğin neden
- * reddedildiğini API söylemedi çünkü gerekçeyi hiç yazmıyorduk.
+ * Önce hipotezdi: üretimde üç arama da 400 aldı, üçü de `clothing` kategorisindeydi
+ * ve Türkiye `clothing` listesi 12 alan adı taşıyan tek listeydi. `describeError`
+ * yazıldıktan sonraki ilk üretim logu tahmini birebir doğruladı:
  *
- * 10, birçok arama API'sinde geçen yaygın tavan. Kesmek zararsız tarafta duruyor:
- * liste zaten öncelik sırasında ve düşen ikisi (hm.com, amazon.com.tr) global
- * katmanda yine aranıyor. `describeError` artık gerçek gerekçeyi yazdığı için bir
- * sonraki üretim logu bu tahmini ya doğrulayacak ya da çürütecek — çürütürse
- * kesme kalkar.
+ *   {code: "too_big", maximum: 10, inclusive: true,
+ *    message: "Too big: expected array to have <=10 items"}
+ *
+ * Yani sayı bizim seçimimiz değil, API'nin sınırı. Düşen ikisi (hm.com,
+ * amazon.com.tr) global katmanda yine aranıyor, çünkü liste öncelik sırasında.
  */
 const MAX_INCLUDE_DOMAINS = 10;
 
@@ -371,6 +369,7 @@ export class ContextDevService {
 
         searches += 1;
         const before = candidates.length;
+        const startedAt = Date.now();
         let failure: string | undefined;
 
         /*
@@ -416,18 +415,35 @@ export class ContextDevService {
           rung: attempt.rung,
           query: attempt.query,
           found: candidates.length - before,
+          ms: Date.now() - startedAt,
           error: failure,
         });
       }
 
       if (candidates.length === 0) return [];
 
+      /*
+       * Çıkarım süresi ayrı ölçülüyor.
+       *
+       * Üretimde ürün aşaması 42.7 saniye sürdü ve `ms.products` tek bir sayı
+       * olduğu için sürenin nerede geçtiği bilinmiyordu. Arama ile çıkarım
+       * bambaşka iki maliyet: arama bir istek, çıkarım aday başına bir sayfa
+       * indirip modele okutuyor. Hangisini kısacağımızı ancak ikisi ayrı ölçülünce
+       * söyleyebiliriz.
+       */
+      const extractStartedAt = Date.now();
       const extracted = await Promise.allSettled(
         candidates.map((url) => this.extractProducts(url, signal)),
       );
 
       const products = extracted.flatMap((outcome) =>
         outcome.status === "fulfilled" ? outcome.value : [],
+      );
+
+      console.log(
+        `[context.dev] çıkarım ${Date.now() - extractStartedAt}ms — ${candidates.length} aday, ` +
+          `${extracted.filter((o) => o.status === "rejected").length} başarısız, ` +
+          `${products.length} satır («${ladder[0]}»)`,
       );
 
       const deduped = dedupeByUrl(products);

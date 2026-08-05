@@ -133,6 +133,7 @@ export function ScanDiagnostics({ result }: { result: DetectionResult }) {
                       <span className="tabular-nums text-neutral-400">basamak {entry.rung}</span>
                     ) : null}
                     <span>«{entry.query}»</span>
+                    <span className="tabular-nums text-neutral-400">{entry.ms} ms</span>
                     {/*
                       Hata, sıfır sonuçtan farklı bir şey söylüyor: «o mağazalarda
                       yok» değil «soramadık». İkisini aynı görünüme sıkıştırmak,

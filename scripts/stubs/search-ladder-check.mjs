@@ -109,6 +109,10 @@ function make(matcher) {
 
   t(seen.length === 2, `her arama rapor ediliyor (${seen.length} === 2)`);
   t(
+    seen.every((a) => typeof a.ms === "number" && a.ms >= 0),
+    `her aramanın süresi yazılıyor: ${JSON.stringify(seen.map((a) => a.ms))}`,
+  );
+  t(
     seen[0]?.tier === "tr" && seen[0]?.rung === 0 && seen[0]?.found === 0,
     `boş dönen tam sorgu 0 aday olarak yazılıyor (${JSON.stringify(seen[0])})`,
   );
@@ -183,6 +187,11 @@ function make(matcher) {
   t(
     seen.some((a) => typeof a.error === "string" && /includeDomains/.test(a.error)),
     `hata gerekçesi muhasebeye geçti: ${JSON.stringify(seen.map((a) => a.error))}`,
+  );
+  // Başarısız çağrı da zaman harcadı; süresi yazılmazsa «nereye gitti» eksik kalır.
+  t(
+    seen.every((a) => typeof a.ms === "number"),
+    `başarısız çağrının süresi de yazıldı: ${JSON.stringify(seen.map((a) => a.ms))}`,
   );
 }
 

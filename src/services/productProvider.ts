@@ -286,6 +286,7 @@ export class ContextDevProductProvider implements ProductProvider {
     });
     if (!crop) return [];
 
+    const lookupStartedAt = Date.now();
     const { urls, seen } = await lookup.findProductPages(crop.base64, signal);
 
     trace?.search({
@@ -296,6 +297,7 @@ export class ContextDevProductProvider implements ProductProvider {
       rung: 0,
       query: `${item.itemType} kırpımı (${crop.width}×${crop.height})`,
       found: urls.length,
+      ms: Date.now() - lookupStartedAt,
     });
 
     if (urls.length === 0) {

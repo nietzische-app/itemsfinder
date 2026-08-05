@@ -216,7 +216,7 @@ function makeProvider({ fromUrls, fromSearch }) {
   t(log.extract === 1, `görsel adaylar çıkarıldı (${log.extract})`);
   t(log.search === 0, `görsel yol bulunca metin araması yapılmadı (${log.search})`);
   t(
-    trace.some((e) => e.source === "görsel" && e.found > 0),
+    trace.some((e) => e.source === "görsel" && e.found > 0 && typeof e.ms === "number"),
     `muhasebe görsel kaynağı yazıyor: ${JSON.stringify(trace)}`,
   );
 }
