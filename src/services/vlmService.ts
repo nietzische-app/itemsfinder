@@ -56,7 +56,10 @@ export interface AttributeRequest {
 }
 
 export interface VlmServiceOptions {
-  /** Model id. Defaults to `gemini-1.5-flash`. */
+  /**
+   * Model id. Defaults to `gemini-1.5-flash-latest`.
+   * Do not include a leading `models/` prefix — the SDK adds it.
+   */
   model?: string;
   /** Detections to describe per scan. Beyond this, items keep the measured colour. */
   maxItems?: number;
@@ -217,11 +220,53 @@ const SYSTEM_PROMPT = [
 /**
  * Default Flash model — hard-locked to Google Gemini Flash.
  *
- * Prefer the stable Flash id. Override with `VLM_MODEL` (e.g. `gemini-flash`
- * / `gemini-flash-latest`) if the keyed project rejects a versioned id.
+ * Bare `gemini-1.5-flash` 404s on v1beta for many keys (retired id). Prefer
+ * `gemini-1.5-flash-latest`. Override with `VLM_MODEL`. Never pass a leading
+ * `models/` prefix — `@google/generative-ai` prefixes the path itself.
+ *
+ * When the primary id 404s, `describe()` walks `MODEL_FALLBACKS` and sticks
+ * with the first id that succeeds for the rest of the process lifetime.
  */
-const DEFAULT_MODEL = "gemini-1.5-flash";
+const DEFAULT_MODEL = "gemini-1.5-flash-latest";
+
+/**
+ * Tried in order after the configured / default model returns 404.
+ * Later entries cover keys that no longer see 1.5 / early-2.0 Flash.
+ */
+const MODEL_FALLBACKS = [
+  "gemini-1.5-flash",
+  "gemini-2.0-flash-exp",
+  "gemini-flash",
+  "gemini-flash-latest",
+  "gemini-2.5-flash",
+] as const;
+
 const DEFAULT_API_HOST = "https://generativelanguage.googleapis.com";
+
+/**
+ * Strip a leading `models/` prefix so the SDK does not double-prefix the path
+ * (`…/v1beta/models/models/…` → 404).
+ */
+export function normalizeModelId(raw: string): string {
+  return raw.trim().replace(/^models\//i, "");
+}
+
+function resolveModelId(raw: string | undefined): string {
+  const candidate = raw?.trim();
+  return normalizeModelId(candidate && candidate.length > 0 ? candidate : DEFAULT_MODEL);
+}
+
+function buildModelCandidates(primary: string): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const id of [primary, ...MODEL_FALLBACKS]) {
+    const normalized = normalizeModelId(id);
+    if (!normalized || seen.has(normalized)) continue;
+    seen.add(normalized);
+    out.push(normalized);
+  }
+  return out;
+}
 
 /** Longest edge of ROI buffers sent to Gemini. Smaller = faster upload + decode. */
 const VLM_MAX_EDGE = 512;
@@ -240,7 +285,10 @@ const RATE_LIMIT_BACKOFF_MS = 1_500;
 
 export class GeminiVlmService {
   private readonly apiKey: string;
-  private readonly model: string;
+  /** Active model id — may advance through `modelCandidates` after a 404. */
+  private model: string;
+  private readonly modelCandidates: string[];
+  private modelIndex: number;
   private readonly maxItems: number;
   private readonly deadlineMs: number;
   private readonly requestTimeoutMs: number;
@@ -249,7 +297,9 @@ export class GeminiVlmService {
 
   constructor(apiKey: string, options: VlmServiceOptions = {}) {
     this.apiKey = apiKey;
-    this.model = options.model ?? DEFAULT_MODEL;
+    this.modelCandidates = buildModelCandidates(resolveModelId(options.model));
+    this.modelIndex = 0;
+    this.model = this.modelCandidates[0] ?? DEFAULT_MODEL;
     this.maxItems = options.maxItems ?? 4;
     this.deadlineMs = options.deadlineMs ?? 10_000;
     this.requestTimeoutMs = options.requestTimeoutMs ?? 10_000;
@@ -260,6 +310,15 @@ export class GeminiVlmService {
     this.baseUrl = (options.baseUrl ?? DEFAULT_API_HOST).replace(/\/$/, "");
     // SDK only for the official host; stubs and custom bases use raw fetch.
     this.client = this.baseUrl === DEFAULT_API_HOST ? new GoogleGenerativeAI(apiKey) : null;
+  }
+
+  /** Advance to the next Flash id after a 404. Returns the new id, or null. */
+  private advanceModelFallback(): string | null {
+    const nextIndex = this.modelIndex + 1;
+    if (nextIndex >= this.modelCandidates.length) return null;
+    this.modelIndex = nextIndex;
+    this.model = this.modelCandidates[nextIndex]!;
+    return this.model;
   }
 
   /**
@@ -364,9 +423,19 @@ export class GeminiVlmService {
             `[vlm] 429 exhausted for "${request.itemType}" — caller should prefer WEB_DETECTION entities over generic Vision class`,
           );
         } else if (isModelNotFoundError(error)) {
+          const failed = this.model;
+          const next = this.advanceModelFallback();
+          if (next && !signal.aborted) {
+            console.warn(
+              `[vlm] model "${failed}" not found (404) for "${request.itemType}" — ` +
+                `retrying with "${next}"`,
+            );
+            continue;
+          }
           console.warn(
-            `[vlm] model "${this.model}" not found (404) for "${request.itemType}" — ` +
-              "set VLM_MODEL to a listed Flash id (e.g. gemini-1.5-flash); " +
+            `[vlm] model "${failed}" not found (404) for "${request.itemType}" — ` +
+              "exhausted Flash fallbacks; set VLM_MODEL to a listed id " +
+              "(e.g. gemini-1.5-flash-latest / gemini-flash-latest); " +
               "scan continues with WEB_DETECTION fallback",
           );
         }
@@ -829,7 +898,7 @@ export function getVlmService(): GeminiVlmService | null {
   if (!apiKey || process.env.ENABLE_VLM_ATTRIBUTES !== "true") return null;
 
   return new GeminiVlmService(apiKey, {
-    model: process.env.VLM_MODEL?.trim() || undefined,
+    model: process.env.VLM_MODEL?.trim() || DEFAULT_MODEL,
     maxItems: readInt(process.env.VLM_MAX_ITEMS, 4),
     deadlineMs: readInt(process.env.VLM_DEADLINE_MS, 10_000),
     baseUrl: process.env.VLM_BASE_URL?.trim() || undefined,
