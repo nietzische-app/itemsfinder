@@ -328,6 +328,52 @@ function isFashionWebEntity(description: string): boolean {
   return tokenize(description).length >= 2;
 }
 
+const GENDER_TOKEN_RE = /\b(Erkek|Kadın|Unisex|Men|Women|Woman|Man)\b/i;
+
+/** Pull Erkek/Kadın/Unisex from WEB_DETECTION phrases when VLM did not run. */
+function pickGenderFromWebEntities(
+  entities: Array<Required<VisionWebEntity>>,
+): string | undefined {
+  for (const entity of entities) {
+    const match = GENDER_TOKEN_RE.exec(entity.description);
+    if (!match?.[1]) continue;
+    const raw = match[1].toLocaleLowerCase("tr");
+    if (raw === "erkek" || raw === "men" || raw === "man") return "Erkek";
+    if (raw === "kadın" || raw === "kadin" || raw === "women" || raw === "woman") return "Kadın";
+    if (raw === "unisex") return "Unisex";
+  }
+  return undefined;
+}
+
+/**
+ * 429 / VLM-miss search string: `[Color] + [Web Entity Keyword] + [Gender]`.
+ * Never includes Vision singletons like "Top" / "Jeans".
+ */
+function buildWebEntityFallbackQuery(parts: {
+  colorName: string | null;
+  phrase: string;
+  gender?: string;
+}): string {
+  const tokens: string[] = [];
+  const seen = new Set<string>();
+  const push = (value: string | undefined) => {
+    if (!value?.trim()) return;
+    for (const word of value.trim().split(/\s+/)) {
+      const key = word.toLocaleLowerCase("tr");
+      if (key.length < 2 || seen.has(key)) continue;
+      // Skip bare banned nouns that slipped into a phrase alone.
+      if (word.split(/\s+/).length === 1 && isGenericGarment(word)) continue;
+      seen.add(key);
+      tokens.push(word);
+    }
+  };
+
+  push(parts.colorName ?? undefined);
+  push(parts.phrase);
+  push(parts.gender);
+  return tokens.join(" ").trim();
+}
+
 /**
  * Best WEB_DETECTION phrase for a detection when VLM attributes are missing.
  *
@@ -754,7 +800,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
         attrs?.garmentType ??
         (phrase && (visionClassGeneric || isGenericGarment(name)) ? phrase : name);
 
-      const label = [colorName, attrs?.garmentType ?? phrase ?? name]
+      const label = [colorName, attrs?.garmentType ?? phrase ?? (visionClassGeneric ? "parça" : name)]
         .filter(Boolean)
         .join(" ");
 
@@ -762,23 +808,14 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * Two paths, because they are genuinely different questions. With a described
        * crop the query is built from what was seen in it — that assembly lives in
        * `attributeSearchQuery` so the eval can score the query the user actually
-       * gets. Without one, all there is to work with is the detector's class, the
-       * web entity and a measured colour — and the web entity must lead when the
-       * detector class is a banned singleton.
+       * gets. Without one (Gemini 429 / miss), format is mandatory:
+       *   [Color] + [Web Entity Keyword] + [Gender]
+       * so we never ship "Siyah Üst" / "Mavi Jean".
        */
-      let searchQuery = attrs
-        ? attributeSearchQuery(attrs)
-        : buildSearchQuery({
-            itemType: phrase && visionClassGeneric ? phrase : itemName,
-            label: phrase && !visionClassGeneric ? phrase : undefined,
-            colorName: colorName ?? undefined,
-            colorHex,
-          });
-
-      // Hard ban: never ship "Top" / "Üst" / "Jean" (optionally with a colour) as
-      // the final query. Prefer rebuilding around the web entity; if that is
-      // still thin, keep the richer of the two rather than the banned singleton.
-      if (!attrs && isTooGenericQuery(searchQuery)) {
+      let searchQuery: string;
+      if (attrs) {
+        searchQuery = attributeSearchQuery(attrs);
+      } else {
         const rescue =
           phrase ??
           pickWebEntityPhrase(webEntities, {
@@ -787,11 +824,27 @@ export class GoogleVisionSearchService implements VisualSearchService {
             used: usedEntities,
             allowReuse: true,
           });
+        const gender = pickGenderFromWebEntities(webEntities);
         if (rescue) {
-          const rebuilt = buildSearchQuery({
-            itemType: rescue,
+          searchQuery = buildWebEntityFallbackQuery({
+            colorName,
+            phrase: rescue,
+            gender,
+          });
+        } else {
+          searchQuery = buildSearchQuery({
+            itemType: itemName,
             colorName: colorName ?? undefined,
             colorHex,
+          });
+        }
+
+        // Hard ban: never leave a colour + singleton query standing.
+        if (isTooGenericQuery(searchQuery) && rescue) {
+          const rebuilt = buildWebEntityFallbackQuery({
+            colorName,
+            phrase: rescue,
+            gender,
           });
           if (!isTooGenericQuery(rebuilt) || rebuilt.length >= searchQuery.length) {
             searchQuery = rebuilt;
@@ -807,7 +860,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * outrank the VLM's exact terms ("Crop Top", "Wide Leg Jean").
        */
       const { exactMatch, alternatives } = findProductsForLabel(
-        `${attrs?.garmentType ?? phrase ?? name} ${searchQuery}`,
+        `${attrs?.garmentType ?? phrase ?? (visionClassGeneric ? searchQuery : name)} ${searchQuery}`,
         category,
         family,
       );
@@ -815,6 +868,10 @@ export class GoogleVisionSearchService implements VisualSearchService {
       // VLM won: catalogue card titles must show the described garment, not the
       // scenario stub that merely shared a wardrobe family.
       const displayTitle = attrs ? label : undefined;
+
+      const detectedNoun = visionClassGeneric
+        ? (phrase ?? "parça")
+        : name;
 
       items.push({
         id: `gv-${index}-${name.toLowerCase().replace(/\s+/g, "-")}`,
@@ -825,9 +882,13 @@ export class GoogleVisionSearchService implements VisualSearchService {
           .filter(Boolean)
           .join(" • "),
         description:
-          `Görselde "${name}" olarak tespit edildi ` +
+          `Görselde "${detectedNoun}" olarak tespit edildi ` +
           `(%${Math.round(detection.score * 100)} güven). ` +
-          (attrs ? `Kırpım analizi: ${describeAttributes(attrs)}. ` : "") +
+          (attrs
+            ? `Kırpım analizi: ${describeAttributes(attrs)}. `
+            : phrase
+              ? `WEB_DETECTION: "${phrase}". `
+              : "") +
           `Arama sorgusu: "${searchQuery}".`,
         confidence: detection.score,
         boundingBox: box,

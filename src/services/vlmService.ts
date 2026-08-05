@@ -1,6 +1,6 @@
 import "server-only";
 
-import { GoogleGenerativeAI, SchemaType, type ResponseSchema } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 import { VLM_DEADLINE_MS } from "@/config/deadlines";
 import type { BoundingBox } from "@/types";
@@ -58,7 +58,7 @@ export interface AttributeRequest {
 
 export interface VlmServiceOptions {
   /**
-   * Model id. Defaults to `gemini-1.5-flash`.
+   * Model id. Defaults to `gemini-1.5-flash-8b` (higher free-tier quota).
    * Do not include a leading `models/` prefix — the SDK adds it.
    */
   model?: string;
@@ -100,97 +100,20 @@ const FASHION_PROMPT = [
 ].join(" ");
 
 /**
- * Every field is a required string, and "unknown" is the empty string rather than
- * `null`. A required-string schema behaves identically across dialects and the
- * empty string is normalised to `null` below.
+ * Expected JSON keys — enforced by prompt + `responseMimeType` on stable v1
+ * (`responseSchema` is a v1beta-only feature and is intentionally omitted).
  */
-const ATTRIBUTE_SCHEMA: ResponseSchema = {
-  type: SchemaType.OBJECT,
-  properties: {
-    visible: {
-      type: SchemaType.BOOLEAN,
-      description:
-        "true only if the garment of the stated class is actually identifiable in " +
-        "the crop. false if the crop is mostly background, or shows a different kind " +
-        "of item.",
-    },
-    searchQuery: {
-      type: SchemaType.STRING,
-      description:
-        "Precise 4-5 word Turkish e-commerce search query including Gender " +
-        "(Erkek/Kadın/Unisex), specific item subtype, dominant colour, and fit/cut. " +
-        'Canonical examples: "Siyah Erkek Bisiklet Yaka Tişört", ' +
-        '"Krem Tek Omuz Crop Top", "Mavi Kargo Cepli Wide Leg Jean". ' +
-        "Never single-word generics (Üst, Alt, Top, Jean, Jeans). Empty string if not determinable.",
-    },
-    garmentType: {
-      type: SchemaType.STRING,
-      description:
-        "Turkish noun phrase for the garment as a Turkish e-commerce site would " +
-        'name it, e.g. "tek omuz crop top", "kargo jean", "asimetrik yaka bluz", ' +
-        '"triko ceket", "deri şort", "bilekte sneaker". Specific subtype of at least ' +
-        "two words when possible — never bare Üst/Alt/Top/Jean. Empty string if not determinable.",
-    },
-    colorName: {
-      type: SchemaType.STRING,
-      description:
-        'Turkish colour name of the GARMENT, e.g. "Siyah", "Pudra", "Lacivert". ' +
-        "Never the colour of the background, the skin or a neighbouring garment.",
-    },
-    colorHex: {
-      type: SchemaType.STRING,
-      description:
-        'Approximate sRGB hex of that same garment colour, "#rrggbb". Must be the ' +
-        "garment, not the backdrop.",
-    },
-    material: {
-      type: SchemaType.STRING,
-      description:
-        'Turkish material word, e.g. "deri", "triko", "denim", "saten". Empty ' +
-        "string if not visually determinable — do not guess from the garment type.",
-    },
-    pattern: {
-      type: SchemaType.STRING,
-      description:
-        'Turkish pattern word, e.g. "düz", "çizgili", "ekose", "leopar". Empty ' +
-        "string if not determinable.",
-    },
-    details: {
-      type: SchemaType.ARRAY,
-      description:
-        "Up to three Turkish detail words a shopper would type, e.g. " +
-        '["fermuarlı", "yüksek yaka", "cepli"]. Only details visible in the crop. ' +
-        "May include gender (Erkek/Kadın/Unisex) when visually clear.",
-      items: { type: SchemaType.STRING },
-      maxItems: 3,
-    },
-    fit: {
-      type: SchemaType.STRING,
-      description:
-        'Turkish fit/cut word, e.g. "oversize", "slim", "crop". Empty string if not ' +
-        "determinable.",
-    },
-    confidence: {
-      type: SchemaType.NUMBER,
-      description: "Your own confidence in this description, 0 to 1.",
-    },
-  },
-  required: [
-    "visible",
-    "searchQuery",
-    "garmentType",
-    "colorName",
-    "colorHex",
-    "material",
-    "pattern",
-    "details",
-    "fit",
-    "confidence",
-  ],
-};
+const JSON_SHAPE_HINT = [
+  "Respond with a single JSON object only (no markdown). Keys:",
+  "visible (boolean), searchQuery, garmentType, colorName, colorHex,",
+  "material, pattern, details (string array, max 3), fit, confidence (0..1).",
+  "Unknown string fields must be empty strings, never null.",
+].join(" ");
 
 const SYSTEM_PROMPT = [
   FASHION_PROMPT,
+  "",
+  JSON_SHAPE_HINT,
   "",
   "Türk e-ticaret siteleri için ürün özniteliği çıkaran bir görsel analiz",
   "sistemisin. Sana bir moda fotoğrafından kesilmiş tek bir bölge ve o bölgede",
@@ -219,25 +142,25 @@ const SYSTEM_PROMPT = [
 ].join("\n");
 
 /**
- * Default Flash model — hard-locked to Google Gemini Flash.
+ * Default Flash model — hard-locked to Google Gemini Flash 8B.
  *
- * Strict id only: `gemini-1.5-flash`. One optional fallback (`gemini-2.0-flash`)
- * covers keys that no longer see 1.5. No `-latest` / `gemini-flash` /
- * `gemini-2.5-flash` aliases — those 404 and burn retry loops on free tier.
+ * `gemini-1.5-flash` 404s on v1beta for many free keys and auto-falling through
+ * to `gemini-2.0-flash` then hits `limit: 0` (hard 429). The 8B Flash variant
+ * keeps free-tier RPM and lower latency; calls go to the stable **v1** API.
  *
- * Override with `VLM_MODEL`. Never pass a leading `models/` prefix — the SDK
- * prefixes the path itself.
+ * No auto-fallback to `gemini-2.0-flash` — a miss goes straight to WEB_DETECTION.
+ * Override with `VLM_MODEL`. Never pass a leading `models/` prefix.
  */
-const DEFAULT_MODEL = "gemini-1.5-flash";
+const DEFAULT_MODEL = "gemini-1.5-flash-8b";
 
-/** Sole 404 fallback — a real Flash id, not an alias. */
-const MODEL_FALLBACKS = ["gemini-2.0-flash"] as const;
+/** Stable Generative Language API version — avoids v1beta 404s on Flash ids. */
+const GEMINI_API_VERSION = "v1";
 
 const DEFAULT_API_HOST = "https://generativelanguage.googleapis.com";
 
 /**
  * Strip a leading `models/` prefix so the SDK does not double-prefix the path
- * (`…/v1beta/models/models/…` → 404).
+ * (`…/v1/models/models/…` → 404).
  */
 export function normalizeModelId(raw: string): string {
   return raw.trim().replace(/^models\//i, "");
@@ -246,18 +169,6 @@ export function normalizeModelId(raw: string): string {
 function resolveModelId(raw: string | undefined): string {
   const candidate = raw?.trim();
   return normalizeModelId(candidate && candidate.length > 0 ? candidate : DEFAULT_MODEL);
-}
-
-function buildModelCandidates(primary: string): string[] {
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const id of [primary, ...MODEL_FALLBACKS]) {
-    const normalized = normalizeModelId(id);
-    if (!normalized || seen.has(normalized)) continue;
-    seen.add(normalized);
-    out.push(normalized);
-  }
-  return out;
 }
 
 /** Longest edge of ROI buffers sent to Gemini. Smaller = faster upload + decode. */
@@ -279,10 +190,8 @@ const VLM_INTER_REQUEST_MS = 500;
 
 export class GeminiVlmService {
   private readonly apiKey: string;
-  /** Active model id — may advance through `modelCandidates` after a 404. */
-  private model: string;
-  private readonly modelCandidates: string[];
-  private modelIndex: number;
+  /** Locked model id — no auto-fallback chain (2.0-flash has free-tier limit: 0). */
+  private readonly model: string;
   private readonly maxItems: number;
   private readonly deadlineMs: number;
   private readonly requestTimeoutMs: number;
@@ -293,9 +202,7 @@ export class GeminiVlmService {
 
   constructor(apiKey: string, options: VlmServiceOptions = {}) {
     this.apiKey = apiKey;
-    this.modelCandidates = buildModelCandidates(resolveModelId(options.model));
-    this.modelIndex = 0;
-    this.model = this.modelCandidates[0] ?? DEFAULT_MODEL;
+    this.model = resolveModelId(options.model);
     this.maxItems = options.maxItems ?? 4;
     this.deadlineMs = options.deadlineMs ?? VLM_DEADLINE_MS;
     this.requestTimeoutMs = options.requestTimeoutMs ?? VLM_DEADLINE_MS;
@@ -306,15 +213,6 @@ export class GeminiVlmService {
     this.baseUrl = (options.baseUrl ?? DEFAULT_API_HOST).replace(/\/$/, "");
     // SDK only for the official host; stubs and custom bases use raw fetch.
     this.client = this.baseUrl === DEFAULT_API_HOST ? new GoogleGenerativeAI(apiKey) : null;
-  }
-
-  /** Advance to the next Flash id after a 404. Returns the new id, or null. */
-  private advanceModelFallback(): string | null {
-    const nextIndex = this.modelIndex + 1;
-    if (nextIndex >= this.modelCandidates.length) return null;
-    this.modelIndex = nextIndex;
-    this.model = this.modelCandidates[nextIndex]!;
-    return this.model;
   }
 
   /**
@@ -371,7 +269,7 @@ export class GeminiVlmService {
           const attributes = await this.describe(request, crop, budget.signal);
           if (attributes) results.set(request.key, attributes);
         } catch (error) {
-          logFailure(request.itemType ?? "extract", error);
+          logFailure(logLabel(request.itemType), error);
         }
       }
 
@@ -412,19 +310,19 @@ export class GeminiVlmService {
         return normalizeAttributes(JSON.parse(cleanJsonResponse(text)));
       } catch (error) {
         /*
-         * 429 / QuotaExceeded used to abort the whole crop and leave the pipeline
-         * with Vision's bare class ("Top" → "Krem Üst"). One short backoff absorbs
-         * a free-tier burst; a second failure returns null so the caller can fall
-         * back to WEB_DETECTION entities instead of inventing a generic noun.
+         * 429 / QuotaExceeded: one short backoff, then stop. Never fall through
+         * to gemini-2.0-flash (free-tier limit: 0). Caller uses WEB_DETECTION.
          */
         if (isRateLimitError(error) && attempt < RATE_LIMIT_RETRIES && !signal.aborted) {
           attempt += 1;
           console.warn(
-            `[vlm] 429 rate limit for "${request.itemType}" — retry ${attempt}/${RATE_LIMIT_RETRIES} after ${RATE_LIMIT_BACKOFF_MS}ms`,
+            `[vlm] 429 rate limit for ${logLabel(request.itemType)} — ` +
+              `retry ${attempt}/${RATE_LIMIT_RETRIES} after ${RATE_LIMIT_BACKOFF_MS}ms`,
           );
           const waited = await sleep(RATE_LIMIT_BACKOFF_MS, signal);
           if (!waited) {
-            logFailure(request.itemType, error);
+            this.rateLimited = true;
+            logFailure(logLabel(request.itemType), error);
             return null;
           }
           continue;
@@ -433,26 +331,17 @@ export class GeminiVlmService {
         if (isRateLimitError(error)) {
           this.rateLimited = true;
           console.warn(
-            `[vlm] 429 exhausted for "${request.itemType}" — remaining items skip Gemini; ` +
-              "caller must prefer WEB_DETECTION entities over generic Vision class",
+            `[vlm] 429 exhausted for ${logLabel(request.itemType)} — remaining items skip Gemini; ` +
+              "WEB_DETECTION web entities supply the search phrase",
           );
         } else if (isModelNotFoundError(error)) {
-          const failed = this.model;
-          const next = this.advanceModelFallback();
-          if (next && !signal.aborted) {
-            console.warn(
-              `[vlm] model "${failed}" not found (404) for "${request.itemType}" — ` +
-                `retrying with "${next}"`,
-            );
-            continue;
-          }
+          // No auto-fallback to gemini-2.0-flash — that path has free-tier limit: 0.
           console.warn(
-            `[vlm] model "${failed}" not found (404) for "${request.itemType}" — ` +
-              "exhausted Flash fallbacks; set VLM_MODEL to gemini-1.5-flash or gemini-2.0-flash; " +
-              "scan continues with WEB_DETECTION fallback",
+            `[vlm] model "${this.model}" not found (404) for ${logLabel(request.itemType)} — ` +
+              "set VLM_MODEL=gemini-1.5-flash-8b (v1); scan continues with WEB_DETECTION fallback",
           );
         }
-        logFailure(request.itemType, error);
+        logFailure(logLabel(request.itemType), error);
         return null;
       }
     }
@@ -466,18 +355,24 @@ export class GeminiVlmService {
     /*
      * `responseMimeType: "application/json"` is mandatory. Without it Flash may
      * return markdown / prose ("Here is the JSON…") and `JSON.parse` dies on the
-     * leading "H". Schema + mime together keep the wire format as a bare object.
+     * leading "H". Locked to stable `v1` — v1beta 404'd `gemini-1.5-flash` and
+     * the 2.0 fallback then hit free-tier limit: 0.
+     *
+     * `responseSchema` stays off on v1 (schema is a v1beta feature); the prompt
+     * + mime type + `cleanJsonResponse` keep the wire format parseable.
      */
-    const model = this.client!.getGenerativeModel({
-      model: this.model,
-      systemInstruction: SYSTEM_PROMPT,
-      generationConfig: {
-        temperature: 0.2,
-        maxOutputTokens: VLM_MAX_OUTPUT_TOKENS,
-        responseMimeType: "application/json",
-        responseSchema: ATTRIBUTE_SCHEMA,
+    const model = this.client!.getGenerativeModel(
+      {
+        model: this.model,
+        systemInstruction: SYSTEM_PROMPT,
+        generationConfig: {
+          temperature: 0.2,
+          maxOutputTokens: VLM_MAX_OUTPUT_TOKENS,
+          responseMimeType: "application/json",
+        },
       },
-    });
+      { apiVersion: GEMINI_API_VERSION },
+    );
 
     const result = await model.generateContent(
       {
@@ -514,14 +409,15 @@ export class GeminiVlmService {
    * Raw REST call for custom hosts (eval stubs via `VLM_BASE_URL`).
    *
    * The official SDK hard-codes the Google host; stubs need a local server that
-   * speaks the same `generateContent` shape.
+   * speaks the same `generateContent` shape. Production uses the stable `v1`
+   * path — same lock as the SDK `apiVersion`.
    */
   private async describeWithFetch(
     crop: { base64: string; mediaType: "image/jpeg" },
     userText: string,
     signal: AbortSignal,
   ): Promise<string | null> {
-    const url = `${this.baseUrl}/v1beta/models/${encodeURIComponent(this.model)}:generateContent?key=${encodeURIComponent(this.apiKey)}`;
+    const url = `${this.baseUrl}/${GEMINI_API_VERSION}/models/${encodeURIComponent(this.model)}:generateContent?key=${encodeURIComponent(this.apiKey)}`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -543,7 +439,6 @@ export class GeminiVlmService {
           temperature: 0.2,
           maxOutputTokens: VLM_MAX_OUTPUT_TOKENS,
           responseMimeType: "application/json",
-          responseSchema: ATTRIBUTE_SCHEMA,
         },
       }),
     });
@@ -862,7 +757,16 @@ function withDeadline(
 
 function logFailure(subject: string, error: unknown): void {
   const message = error instanceof Error ? error.message : String(error);
-  console.warn(`[vlm] attribute extraction failed for "${subject}": ${message}`);
+  console.warn(`[vlm] attribute extraction failed for ${subject}: ${message}`);
+}
+
+/**
+ * Never echo banned Vision singletons ("Top", "Jeans") into logs — those are
+ * exactly the terms the 429 fallback path must not reinforce.
+ */
+function logLabel(itemType: string | undefined): string {
+  if (!itemType?.trim()) return "garment";
+  return isGenericGarment(itemType) ? "garment" : `"${itemType}"`;
 }
 
 /** Gemini free-tier / quota failures — status 429 or QuotaExceeded / RESOURCE_EXHAUSTED. */

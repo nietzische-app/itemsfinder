@@ -57,7 +57,7 @@ const { groundTruth } = await import("../eval/groundTruth.ts");
 const outDir = `${ROOT}eval/fixtures/attrs`;
 if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
 
-const MODEL = process.env.VLM_MODEL?.trim() || "gemini-1.5-flash";
+const MODEL = process.env.VLM_MODEL?.trim() || "gemini-1.5-flash-8b";
 
 const extractor = createVlmService(KEY, {
   model: process.env.VLM_MODEL?.trim() || undefined,
