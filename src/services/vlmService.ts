@@ -221,21 +221,17 @@ const SYSTEM_PROMPT = [
 /**
  * Default Flash model — hard-locked to Google Gemini Flash.
  *
- * Primary is the stable `gemini-1.5-flash` id (no `-latest` / `gemini-flash`
- * aliases that 404 and burn retry loops). Override with `VLM_MODEL`. Never pass
- * a leading `models/` prefix — `@google/generative-ai` prefixes the path itself.
+ * Strict id only: `gemini-1.5-flash`. One optional fallback (`gemini-2.0-flash`)
+ * covers keys that no longer see 1.5. No `-latest` / `gemini-flash` /
+ * `gemini-2.5-flash` aliases — those 404 and burn retry loops on free tier.
  *
- * When the primary id 404s, `describe()` walks `MODEL_FALLBACKS` and sticks
- * with the first id that succeeds for the rest of the process lifetime.
+ * Override with `VLM_MODEL`. Never pass a leading `models/` prefix — the SDK
+ * prefixes the path itself.
  */
 const DEFAULT_MODEL = "gemini-1.5-flash";
 
-/**
- * Tried in order after the configured / default model returns 404.
- * Keep this list short and real — invalid aliases (e.g. `gemini-2.5-flash`,
- * bare `gemini-flash`) only add noise to the logs.
- */
-const MODEL_FALLBACKS = ["gemini-2.0-flash", "gemini-1.5-flash-latest", "gemini-2.0-flash-001"] as const;
+/** Sole 404 fallback — a real Flash id, not an alias. */
+const MODEL_FALLBACKS = ["gemini-2.0-flash"] as const;
 
 const DEFAULT_API_HOST = "https://generativelanguage.googleapis.com";
 
@@ -274,6 +270,8 @@ const VLM_MAX_OUTPUT_TOKENS = 60;
 /** One retry after a 429 — enough to absorb a brief free-tier burst, not a loop. */
 const RATE_LIMIT_RETRIES = 1;
 const RATE_LIMIT_BACKOFF_MS = 1_500;
+/** Pause between sequential Gemini calls so free-tier RPM is not spiked by a burst. */
+const VLM_INTER_REQUEST_MS = 500;
 
 /* -------------------------------------------------------------------------- */
 /*  Service                                                                   */
@@ -290,6 +288,8 @@ export class GeminiVlmService {
   private readonly requestTimeoutMs: number;
   private readonly baseUrl: string;
   private readonly client: GoogleGenerativeAI | null;
+  /** Set when a describe() call exhausts 429 retries — extract() stops the queue. */
+  private rateLimited = false;
 
   constructor(apiKey: string, options: VlmServiceOptions = {}) {
     this.apiKey = apiKey;
@@ -320,9 +320,10 @@ export class GeminiVlmService {
   /**
    * Describes as many of the requested regions as the budget allows.
    *
-   * Requests are honoured in the order given, so callers should pass their most
-   * important detections first. Resolves to a map keyed by `request.key`; a key is
-   * simply absent when that item could not be described.
+   * Requests run **sequentially** with a short pause between Gemini calls.
+   * Free-tier RPM is tiny; `Promise.all` on Top+Jeans was the 429 spike in
+   * production. Order is still the caller's priority order, and a hard 429
+   * stops the queue early so remaining items fall back to WEB_DETECTION.
    */
   async extract(
     imageBuffer: Buffer,
@@ -334,10 +335,24 @@ export class GeminiVlmService {
     if (selected.length === 0) return results;
 
     const budget = withDeadline(this.deadlineMs, options.signal);
+    this.rateLimited = false;
 
     try {
-      const settled = await Promise.allSettled(
-        selected.map(async (request) => {
+      for (let index = 0; index < selected.length; index += 1) {
+        if (budget.signal.aborted || this.rateLimited) break;
+
+        const request = selected[index]!;
+
+        /*
+         * Pause *before* the next call (not after the last) so Top+Jeans never
+         * share the same free-tier second. First item starts immediately.
+         */
+        if (index > 0) {
+          const waited = await sleep(VLM_INTER_REQUEST_MS, budget.signal);
+          if (!waited || this.rateLimited) break;
+        }
+
+        try {
           /*
            * Resize/compress in memory before Gemini: 512px @ 80% JPEG.
            *
@@ -351,19 +366,20 @@ export class GeminiVlmService {
             maxEdge: VLM_MAX_EDGE,
             quality: VLM_JPEG_QUALITY,
           });
-          if (!crop) return null;
+          if (!crop) continue;
 
           const attributes = await this.describe(request, crop, budget.signal);
-          return attributes ? ([request.key, attributes] as const) : null;
-        }),
-      );
-
-      for (const outcome of settled) {
-        if (outcome.status === "fulfilled" && outcome.value) {
-          results.set(outcome.value[0], outcome.value[1]);
-        } else if (outcome.status === "rejected") {
-          logFailure("extract", outcome.reason);
+          if (attributes) results.set(request.key, attributes);
+        } catch (error) {
+          logFailure(request.itemType ?? "extract", error);
         }
+      }
+
+      if (this.rateLimited && results.size < selected.length) {
+        console.warn(
+          `[vlm] free-tier 429 — stopped after ${results.size}/${selected.length} items; ` +
+            "remaining detections use WEB_DETECTION web entities",
+        );
       }
     } finally {
       budget.dispose();
@@ -415,8 +431,10 @@ export class GeminiVlmService {
         }
 
         if (isRateLimitError(error)) {
+          this.rateLimited = true;
           console.warn(
-            `[vlm] 429 exhausted for "${request.itemType}" — caller should prefer WEB_DETECTION entities over generic Vision class`,
+            `[vlm] 429 exhausted for "${request.itemType}" — remaining items skip Gemini; ` +
+              "caller must prefer WEB_DETECTION entities over generic Vision class",
           );
         } else if (isModelNotFoundError(error)) {
           const failed = this.model;
@@ -430,8 +448,7 @@ export class GeminiVlmService {
           }
           console.warn(
             `[vlm] model "${failed}" not found (404) for "${request.itemType}" — ` +
-              "exhausted Flash fallbacks; set VLM_MODEL to a listed id " +
-              "(e.g. gemini-1.5-flash / gemini-2.0-flash); " +
+              "exhausted Flash fallbacks; set VLM_MODEL to gemini-1.5-flash or gemini-2.0-flash; " +
               "scan continues with WEB_DETECTION fallback",
           );
         }

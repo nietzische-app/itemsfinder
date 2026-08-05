@@ -298,6 +298,79 @@ function toHex(color: VisionColorInfo["color"]): string {
 }
 
 /**
+ * Photo-meta WEB_DETECTION noise — describes the shoot, not a garment.
+ * These must never become the search noun when Gemini 429s.
+ */
+const WEB_ENTITY_NOISE = new Set([
+  "street fashion",
+  "fashion",
+  "moda",
+  "photo shoot",
+  "photoshoot",
+  "photography",
+  "model",
+  "person",
+  "clothing",
+  "apparel",
+  "outfit",
+  "look",
+  "style",
+  "giyim",
+  "kombin",
+]);
+
+function isFashionWebEntity(description: string): boolean {
+  const lower = description.toLocaleLowerCase("tr").trim();
+  if (!lower || WEB_ENTITY_NOISE.has(lower)) return false;
+  if (isGenericGarment(description)) return false;
+  // Prefer multi-token material / pattern / style phrases ("Asimetrik Crop",
+  // "Kargo Jean") over single noisy proper nouns.
+  return tokenize(description).length >= 2;
+}
+
+/**
+ * Best WEB_DETECTION phrase for a detection when VLM attributes are missing.
+ *
+ * Priority:
+ *   1. Same wardrobe family (safe)
+ *   2. Unknown-family fashion phrase while Vision's class is a banned singleton
+ *   3. Any unused fashion phrase (last resort so we never ship "Siyah Üst")
+ */
+function pickWebEntityPhrase(
+  entities: Array<Required<VisionWebEntity>>,
+  options: {
+    family: ItemFamily;
+    visionClassGeneric: boolean;
+    used: Set<string>;
+    allowReuse?: boolean;
+  },
+): string | undefined {
+  const available = entities.filter((entity) => {
+    if (!options.allowReuse && options.used.has(entity.description)) return false;
+    return isFashionWebEntity(entity.description);
+  });
+  if (available.length === 0) return undefined;
+
+  const sameFamily = available.find((entity) => {
+    if (options.family === "unknown") return false;
+    return familyOf(entity.description) === options.family;
+  });
+  if (sameFamily) return sameFamily.description;
+
+  if (options.visionClassGeneric) {
+    const unknownFashion = available.find(
+      (entity) => familyOf(entity.description) === "unknown",
+    );
+    if (unknownFashion) return unknownFashion.description;
+
+    // Last resort: any fashion phrase beats a banned Vision singleton.
+    return available[0]?.description;
+  }
+
+  return undefined;
+}
+
+/**
  * Converts Vision's normalized vertex polygon into our `BoundingBox`.
  * Vision returns four vertices; we take the axis-aligned extent of them.
  */
@@ -607,9 +680,9 @@ export class GoogleVisionSearchService implements VisualSearchService {
      * outerwear) and drops the rest instead of inventing a label.
      *
      * When the VLM stage is down (429 / QuotaExceeded), these entities are the
-     * *only* precise terms available — "Tek Omuz Crop", "Kargo Jean" — so the
-     * matcher below also accepts an entity whose family is unknown as long as
-     * the detection family is known and the Vision class itself is generic.
+     * *only* precise terms available — "Asimetrik Crop", "Kargo Jean" — so the
+     * picker below prefers material / pattern / style phrases over Vision's bare
+     * class. The pipeline must never ship "Siyah Üst" when a richer entity exists.
      */
     const webEntities = (annotation?.webDetection?.webEntities ?? [])
       .filter((entity): entity is Required<VisionWebEntity> =>
@@ -654,33 +727,24 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * the photograph, not the garment; once something has actually looked at this
        * region, that reading wins.
        *
-       * Match order when VLM failed:
-       *   1. Same family (safe, preferred)
-       *   2. Unknown-family entity while Vision's class is a banned singleton
-       *      ("Top", "Jeans") — better a precise web phrase than "Krem Üst"
+       * On Gemini 429 the VLM map is empty — WEB_DETECTION material/pattern/style
+       * phrases ("Asimetrik Crop", "Kargo Jean") become the search string so we
+       * never degrade to "Siyah Üst".
        */
       const visionClassGeneric = isGenericGarment(name);
-      const entity = attrs
+      const phrase = attrs
         ? undefined
-        : webEntities.find((candidate) => {
-            if (usedEntities.has(candidate.description)) return false;
-            const entityFamily = familyOf(candidate.description);
-            if (family !== "unknown" && entityFamily === family) return true;
-            return (
-              visionClassGeneric &&
-              family !== "unknown" &&
-              entityFamily === "unknown" &&
-              !isGenericGarment(candidate.description) &&
-              tokenize(candidate.description).length >= 2
-            );
+        : pickWebEntityPhrase(webEntities, {
+            family,
+            visionClassGeneric,
+            used: usedEntities,
           });
-      if (entity) usedEntities.add(entity.description);
+      if (phrase) usedEntities.add(phrase);
 
       // Measured colour is the fallback; the crop reading is preferred, because the
       // measurement describes the rectangle and this describes the garment.
       const colorHex = attrs?.colorHex ?? regionColors[index] ?? imageDominantHex;
       const colorName = attrs?.colorName ?? colorNameFromHex(colorHex);
-      const phrase = entity?.description;
       /*
        * When Vision only managed a generic class and WEB_DETECTION named the
        * garment, the web phrase becomes the item noun — otherwise the query is
@@ -714,14 +778,24 @@ export class GoogleVisionSearchService implements VisualSearchService {
       // Hard ban: never ship "Top" / "Üst" / "Jean" (optionally with a colour) as
       // the final query. Prefer rebuilding around the web entity; if that is
       // still thin, keep the richer of the two rather than the banned singleton.
-      if (!attrs && isTooGenericQuery(searchQuery) && phrase) {
-        const rebuilt = buildSearchQuery({
-          itemType: phrase,
-          colorName: colorName ?? undefined,
-          colorHex,
-        });
-        if (!isTooGenericQuery(rebuilt) || rebuilt.length >= searchQuery.length) {
-          searchQuery = rebuilt;
+      if (!attrs && isTooGenericQuery(searchQuery)) {
+        const rescue =
+          phrase ??
+          pickWebEntityPhrase(webEntities, {
+            family,
+            visionClassGeneric: true,
+            used: usedEntities,
+            allowReuse: true,
+          });
+        if (rescue) {
+          const rebuilt = buildSearchQuery({
+            itemType: rescue,
+            colorName: colorName ?? undefined,
+            colorHex,
+          });
+          if (!isTooGenericQuery(rebuilt) || rebuilt.length >= searchQuery.length) {
+            searchQuery = rebuilt;
+          }
         }
       }
 
