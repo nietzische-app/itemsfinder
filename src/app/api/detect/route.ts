@@ -6,7 +6,8 @@ import {
   scanDetailEnabled,
   type TraceCollector,
 } from "@/lib/scanTrace";
-import { inspectUpload } from "@/services/imageDecode";
+import { inspectUpload, openImage } from "@/services/imageDecode";
+import { measureChrome } from "@/services/screenshotChrome";
 import { readCachedScan, scanCacheKey, writeCachedScan } from "@/services/scanCache";
 import { checkRateLimit, rateLimitMessage } from "@/services/rateLimit";
 import {
@@ -140,6 +141,40 @@ export async function POST(request: Request) {
   const trace = createTrace();
 
   /*
+   * Ekran görüntüsünden gelen arayüz şeritlerini kırp.
+   *
+   * Kullanıcılar kombinleri Instagram'dan ekran görüntüsü olarak getiriyor ve
+   * durum çubuğu, sekme çubuğu, beğeni satırı kombinin parçası değil — ama boru
+   * hattının her aşaması onları fotoğrafın parçası sayıyor. En pahalısı arka plan
+   * modeli: paleti «tespitlerin ve kişinin dışı»ndan öğreniyor, ki bir ekran
+   * görüntüsünde orası arayüzün kendisi.
+   *
+   * Tespitin **öncesinde**, çünkü kutu koordinatları kareye göre normalleniyor;
+   * sonradan kırpmak her kutuyu kaydırırdı.
+   *
+   * Bulamazsa hiçbir şey yapmıyor ve bu sıradan durum: 57 gerçek fotoğrafın
+   * 55'inde kırpma yok, ikisinde de kırpılan gerçekten tek renk bir bant.
+   */
+  const chrome = await measureChrome(buffer);
+  let image = { base64: parsed.base64, mimeType: parsed.mimeType };
+
+  if (chrome.box) {
+    try {
+      const cropped = await openImage(buffer).extract(chrome.box).png().toBuffer();
+      image = { base64: cropped.toString("base64"), mimeType: "image/png" };
+      /*
+       * `trace.degrade` değil: o dizi «aşama geriledi» demek ve arayüzde amber bir
+       * uyarı olarak çiziliyor. Şerit kırpmak bir gerileme değil iyileştirme;
+       * oraya yazmak, çalışan bir taramayı sorunlu göstermek olurdu.
+       */
+      console.log(`[detect] ${chrome.reason} (${chrome.box.width}×${chrome.box.height})`);
+    } catch (error) {
+      // Kırpma bir iyileştirme; başarısız olması taramayı durdurmamalı.
+      console.warn("[detect] arayüz şeridi kırpılamadı:", error);
+    }
+  }
+
+  /*
    * Same photograph, same answer — and paid for once.
    *
    * The key is a hash of the decoded bytes. The photograph itself is never
@@ -162,8 +197,8 @@ export async function POST(request: Request) {
 
   try {
     const result = await service.analyze({
-      imageBase64: parsed.base64,
-      mimeType: parsed.mimeType,
+      imageBase64: image.base64,
+      mimeType: image.mimeType,
       exampleId,
       budgetConstrained: limit.degraded,
       // Abandon live lookups as soon as the client goes away; live product
@@ -193,8 +228,8 @@ export async function POST(request: Request) {
     if (service.source !== "mock") {
       try {
         const fallback = await new MockVisualSearchService(0).analyze({
-          imageBase64: parsed.base64,
-          mimeType: parsed.mimeType,
+          imageBase64: image.base64,
+          mimeType: image.mimeType,
           exampleId,
         });
 
