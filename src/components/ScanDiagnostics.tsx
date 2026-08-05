@@ -133,13 +133,26 @@ export function ScanDiagnostics({ result }: { result: DetectionResult }) {
                       <span className="tabular-nums text-neutral-400">basamak {entry.rung}</span>
                     ) : null}
                     <span>«{entry.query}»</span>
-                    <span
-                      className={
-                        entry.found > 0 ? "tabular-nums" : "tabular-nums text-amber-700 dark:text-amber-400"
-                      }
-                    >
-                      → {entry.found} yeni aday
-                    </span>
+                    {/*
+                      Hata, sıfır sonuçtan farklı bir şey söylüyor: «o mağazalarda
+                      yok» değil «soramadık». İkisini aynı görünüme sıkıştırmak,
+                      düzeltilecek bir arızayı normal bir sonuç gibi gösterirdi.
+                    */}
+                    {entry.error ? (
+                      <span className="text-red-700 dark:text-red-400">
+                        → çağrı başarısız: {entry.error}
+                      </span>
+                    ) : (
+                      <span
+                        className={
+                          entry.found > 0
+                            ? "tabular-nums"
+                            : "tabular-nums text-amber-700 dark:text-amber-400"
+                        }
+                      >
+                        → {entry.found} yeni aday
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>

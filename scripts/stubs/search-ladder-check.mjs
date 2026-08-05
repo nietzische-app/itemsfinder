@@ -143,6 +143,60 @@ function make(matcher) {
   t(out.length > 0, "geri çağrısız çağrı bozulmuyor");
 }
 
+/*
+ * 9) Bir basamağın hata vermesi merdiveni bitirmemeli — ve harcanan çağrı
+ *    muhasebeye yazılmalı.
+ *
+ * Üretimden gelen kayıt: Türkiye katmanındaki sorgu 400 aldı, dıştaki `try`
+ * bütün döngüyü iptal etti, global katman hiç denenmedi ve log `searchCount: 0`
+ * yazdı — üç çağrı harcanmışken. Bir mağaza kümesinin isteği reddetmesi, öteki
+ * kümenin denenmemesi için gerekçe değil; ve harcanmış çağrı harcanmıştır.
+ */
+{
+  const svc = new ContextDevService("stub");
+  const calls = [];
+  svc.client = {
+    web: {
+      search: async ({ query, includeDomains }) => {
+        calls.push({ query, includeDomains });
+        // Türkiye katmanı reddediyor, global katman çalışıyor.
+        if (/satın al/.test(query)) throw Object.assign(new Error("400"), {
+          status: 400,
+          error: { message: "includeDomains too long" },
+        });
+        return { results: [{ url: "https://www.asos.com/prd/1234567" }] };
+      },
+      extract: async ({ url }) => ({
+        data: { products: [{ title: "Ürün", price: 100, currency: "TRY", productUrl: url }] },
+      }),
+    },
+  };
+
+  const seen = [];
+  const out = await svc.searchLiveProducts(["nadir parça"], "clothing", undefined, (a) =>
+    seen.push(a),
+  );
+
+  t(calls.length >= 2, `hata sonrası global katman denendi (${calls.length} çağrı)`);
+  t(out.length > 0, "global katmandan ürün döndü — merdiven iptal olmadı");
+  t(seen.length === calls.length, `harcanan her çağrı yazıldı (${seen.length}/${calls.length})`);
+  t(
+    seen.some((a) => typeof a.error === "string" && /includeDomains/.test(a.error)),
+    `hata gerekçesi muhasebeye geçti: ${JSON.stringify(seen.map((a) => a.error))}`,
+  );
+}
+
+// 10) Alan adı listesi tavana kırpılıyor — 12 alan adlı liste 10'a iniyor.
+{
+  const { svc, calls } = make(() => []);
+  await svc.searchLiveProducts(["gömlek"], "clothing");
+  t(
+    calls[0].includeDomains.length <= 10,
+    `alan adı listesi kırpıldı (${calls[0].includeDomains.length} <= 10)`,
+  );
+  t(calls[0].includeDomains.includes("trendyol.com"), "öncelikli mağazalar korundu");
+}
+
 console.log(`${pass} ✓ / ${fails.length} ✗`);
 for (const f of fails) console.log(`  ✗ ${f}`);
 process.exit(fails.length ? 1 : 0);

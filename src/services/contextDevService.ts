@@ -106,6 +106,23 @@ const MIN_LOCAL_CANDIDATES = 2;
  */
 const MAX_SEARCHES_PER_ITEM = 3;
 
+/**
+ * Tek bir aramaya verilebilecek en fazla alan adı.
+ *
+ * **Bu bir hipotez, doğrulanmış bir sınır değil** — ve öyle olduğu yazılı kalsın.
+ * Üretimde üç arama da 400 aldı; üçü de `clothing` kategorisindeydi ve Türkiye
+ * `clothing` listesi 12 alan adı taşıyan **tek** liste (beauty 6, global 5 ve 3).
+ * Kanıt bu kadar: kategori ile başarısızlık birebir örtüşüyor, ama isteğin neden
+ * reddedildiğini API söylemedi çünkü gerekçeyi hiç yazmıyorduk.
+ *
+ * 10, birçok arama API'sinde geçen yaygın tavan. Kesmek zararsız tarafta duruyor:
+ * liste zaten öncelik sırasında ve düşen ikisi (hm.com, amazon.com.tr) global
+ * katmanda yine aranıyor. `describeError` artık gerçek gerekçeyi yazdığı için bir
+ * sonraki üretim logu bu tahmini ya doğrulayacak ya da çürütecek — çürütürse
+ * kesme kalkar.
+ */
+const MAX_INCLUDE_DOMAINS = 10;
+
 
 /** Fallback currency per retailer TLD, used when extraction omits it. */
 const DOMAIN_CURRENCY: Array<[RegExp, string]> = [
@@ -252,7 +269,7 @@ export class ContextDevService {
     const search = await this.client.web.search(
       {
         query,
-        includeDomains,
+        includeDomains: includeDomains.slice(0, MAX_INCLUDE_DOMAINS),
         numResults: 10,
         timeoutMS: this.requestTimeoutMs,
         tags: ["markas", "product-search"],
@@ -353,10 +370,25 @@ export class ContextDevService {
         if (searches >= MAX_SEARCHES_PER_ITEM) break;
 
         searches += 1;
-        const found = await this.searchTier(attempt.query, attempt.domains, signal);
         const before = candidates.length;
-        for (const url of found) {
-          if (!candidates.includes(url)) candidates.push(url);
+        let failure: string | undefined;
+
+        /*
+         * Her basamak **kendi** başına yakalanıyor, merdivenin tamamı değil.
+         *
+         * Üretimde ölçüldü: Türkiye katmanındaki bir sorgu 400 dönünce dıştaki
+         * `try` bütün döngüyü iptal ediyordu, yani global katman hiç denenmiyordu
+         * ve parça kataloğa düşüyordu. Bir mağaza kümesinin isteği reddetmesi,
+         * öteki kümenin de denenmemesi için bir gerekçe değil.
+         */
+        try {
+          const found = await this.searchTier(attempt.query, attempt.domains, signal);
+          for (const url of found) {
+            if (!candidates.includes(url)) candidates.push(url);
+          }
+        } catch (error) {
+          failure = describeError(error);
+          logFailure("searchTier", attempt.query, error);
         }
         /*
          * Her arama, harcandığı anda rapor ediliyor — sonuçtan sonra değil.
@@ -369,12 +401,22 @@ export class ContextDevService {
          * `found` **yeni** aday sayısı, ham sonuç sayısı değil: aynı ürünü ikinci kez
          * bulan bir basamak hiçbir şey eklemiyor ve öyle görünmeli.
          */
+        /*
+         * Başarısız arama da rapor ediliyor.
+         *
+         * Önce yalnızca dönen sonuç raporlanıyordu, yani çağrı hata verince
+         * muhasebeye hiçbir şey yazılmıyordu. Üretimde üç arama 400 aldı ve log
+         * `searchCount: 0` yazdı — «kredi nereye gitti» sorusunu cevaplamak için
+         * yazılmış bir muhasebenin, tam da cevaplaması gereken anda sustuğu yer.
+         * Harcanmış bir çağrı, sonucu ne olursa olsun harcanmıştır.
+         */
         onAttempt?.({
           source: "metin",
           tier: attempt.tier,
           rung: attempt.rung,
           query: attempt.query,
           found: candidates.length - before,
+          error: failure,
         });
       }
 
@@ -755,6 +797,44 @@ function normalizeHex(value: unknown): string | null {
 }
 
 function logFailure(operation: string, subject: string, error: unknown): void {
-  const message = error instanceof Error ? error.message : String(error);
-  console.warn(`[context.dev] ${operation} failed for "${subject}": ${message}`);
+  console.warn(`[context.dev] ${operation} failed for "${subject}": ${describeError(error)}`);
+}
+
+/**
+ * Bir SDK hatasının **gerekçesi**, yalnızca durum kodu değil.
+ *
+ * Üretimde `400` görüldü ve tek yazdığımız şey oydu: `error.message` durum
+ * kodundan ibaret, isteğin neden reddedildiği hata nesnesinin içindeki alanlarda
+ * duruyor. Yani log «bir şey yanlış» diyor, «ne yanlış» demiyordu — ve bu, hata
+ * ayıklamanın tam olarak ihtiyaç duyduğu tek cümle.
+ *
+ * Alan adları sağlayıcıdan sağlayıcıya değişiyor, o yüzden hepsi taranıyor ve
+ * bulunan ilk anlamlı gövde kısaltılarak yazılıyor.
+ */
+function describeError(error: unknown): string {
+  const status =
+    typeof error === "object" && error !== null && "status" in error
+      ? String((error as { status: unknown }).status)
+      : null;
+
+  const base = error instanceof Error ? error.message : String(error);
+  if (typeof error !== "object" || error === null) return base;
+
+  const bag = error as Record<string, unknown>;
+  for (const key of ["error", "errors", "detail", "details", "body", "response", "cause"]) {
+    const value = bag[key];
+    if (value === undefined || value === null) continue;
+
+    let text: string;
+    try {
+      text = typeof value === "string" ? value : JSON.stringify(value);
+    } catch {
+      continue;
+    }
+    if (!text || text === "{}" || text === "[]") continue;
+
+    return `${status ?? base} — ${text.slice(0, 400)}`;
+  }
+
+  return status ? `${status} (gerekçe gövdesi yok)` : base;
 }

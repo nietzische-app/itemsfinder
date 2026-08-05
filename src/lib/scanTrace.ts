@@ -87,6 +87,15 @@ export interface SearchAttemptRecord {
   query: string;
   /** Bu aramanın eklediği, daha önce görülmemiş aday sayısı. */
   found: number;
+  /**
+   * Çağrı hata verdiyse gerekçesi; başarılıysa yok.
+   *
+   * Sıfır sonuç ile başarısız çağrı aynı şey değil: ilki «o mağazalarda yok»,
+   * ikincisi «soramadık» demek, ve ikisi bambaşka işler gerektiriyor. Ayrımı
+   * taşımayan bir muhasebe, boşuna harcanmış krediyi başarısız bir aramadan
+   * ayırt edemez.
+   */
+  error?: string;
 }
 
 /**
@@ -228,7 +237,9 @@ export function logScanTrace(trace: ScanTrace, context: { id: string; source: st
      */
     searchCount: trace.searches.length,
     searchYield: trace.searches.map(
-      (entry) => `${entry.source === "görsel" ? "img" : entry.tier}:${entry.rung}=${entry.found}`,
+      (entry) =>
+        `${entry.source === "görsel" ? "img" : entry.tier}:${entry.rung}=` +
+        (entry.error ? `HATA ${entry.error.slice(0, 120)}` : entry.found),
     ),
   };
 
