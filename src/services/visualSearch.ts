@@ -27,9 +27,9 @@ import {
 } from "@/services/mockCatalog";
 import { ContextDevService } from "@/services/contextDevService";
 import {
-  getAttributeExtractor,
+  getVlmService,
   type GarmentAttributes,
-} from "@/services/attributeExtractor";
+} from "@/services/vlmService";
 import { createTrace, type TraceCollector } from "@/lib/scanTrace";
 import { foregroundFilter, learnBackdrop } from "@/services/foreground";
 import { imageSize, regionDominantColor } from "@/services/regionColor";
@@ -536,7 +536,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
      * every item that fails to be described keeps the measured colour and Vision's
      * class, which is exactly what shipped before this stage existed.
      */
-    const extractor = input.budgetConstrained ? null : getAttributeExtractor();
+    const extractor = input.budgetConstrained ? null : getVlmService();
     if (input.budgetConstrained) {
       trace.degrade("vlm", "günlük bütçe eşiğinde — ücretli aşama atlandı");
     } else if (!extractor) {
@@ -553,8 +553,8 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * Hangi koşulun eksik olduğu ayrı ayrı yazılıyor, çünkü «kapalı» demek
        * kullanıcıyı iki ayrı ortam değişkenini de kontrol etmeye gönderirdi.
        */
-      const reason = !process.env.ANTHROPIC_API_KEY?.trim()
-        ? "ANTHROPIC_API_KEY yok"
+      const reason = !process.env.GEMINI_API_KEY?.trim()
+        ? "GEMINI_API_KEY yok"
         : "ENABLE_VLM_ATTRIBUTES=true değil";
 
       trace.degrade(

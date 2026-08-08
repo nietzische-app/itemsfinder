@@ -21,7 +21,7 @@ const fails = [];
 const t = (c, n) => (c ? pass++ : fails.push(n));
 
 const { createTrace } = await import("@/lib/scanTrace");
-const { getAttributeExtractor } = await import("@/services/attributeExtractor");
+const { getVlmService } = await import("@/services/vlmService");
 
 /**
  * `visualSearch` içindeki karar, aynı koşullarla.
@@ -31,13 +31,13 @@ const { getAttributeExtractor } = await import("@/services/attributeExtractor");
  */
 function noteFor({ budgetConstrained }) {
   const trace = createTrace({ detail: false });
-  const extractor = budgetConstrained ? null : getAttributeExtractor();
+  const extractor = budgetConstrained ? null : getVlmService();
 
   if (budgetConstrained) {
     trace.degrade("vlm", "günlük bütçe eşiğinde — ücretli aşama atlandı");
   } else if (!extractor) {
-    const reason = !process.env.ANTHROPIC_API_KEY?.trim()
-      ? "ANTHROPIC_API_KEY yok"
+    const reason = !process.env.GEMINI_API_KEY?.trim()
+      ? "GEMINI_API_KEY yok"
       : "ENABLE_VLM_ATTRIBUTES=true değil";
     trace.degrade(
       "vlm",
@@ -50,20 +50,20 @@ function noteFor({ budgetConstrained }) {
 
 // 1) Anahtar yok → gerekçe anahtarı adıyla söylüyor.
 {
-  delete process.env.ANTHROPIC_API_KEY;
+  delete process.env.GEMINI_API_KEY;
   process.env.ENABLE_VLM_ATTRIBUTES = "true";
 
   const notes = noteFor({ budgetConstrained: false });
   t(notes.length === 1, `anahtarsızken not düşülüyor (${notes.length})`);
   t(
-    /ANTHROPIC_API_KEY yok/.test(notes[0]?.reason ?? ""),
+    /GEMINI_API_KEY yok/.test(notes[0]?.reason ?? ""),
     `eksik olan anahtar adıyla yazılıyor: «${notes[0]?.reason}»`,
   );
 }
 
 // 2) Anahtar var ama bayrak kapalı → gerekçe bayrağı söylüyor, anahtarı değil.
 {
-  process.env.ANTHROPIC_API_KEY = "stub";
+  process.env.GEMINI_API_KEY = "stub";
   process.env.ENABLE_VLM_ATTRIBUTES = "false";
 
   const notes = noteFor({ budgetConstrained: false });
@@ -73,14 +73,14 @@ function noteFor({ budgetConstrained }) {
     `eksik olan koşul bayrak olarak yazılıyor: «${notes[0]?.reason}»`,
   );
   t(
-    !/ANTHROPIC_API_KEY/.test(notes[0]?.reason ?? ""),
+    !/GEMINI_API_KEY/.test(notes[0]?.reason ?? ""),
     "var olan anahtar eksik gösterilmiyor",
   );
 }
 
 // 3) Bütçe kapısı ayrı bir gerekçe — «kapalı» ile karıştırılmamalı.
 {
-  process.env.ANTHROPIC_API_KEY = "stub";
+  process.env.GEMINI_API_KEY = "stub";
   process.env.ENABLE_VLM_ATTRIBUTES = "true";
 
   const notes = noteFor({ budgetConstrained: true });
@@ -90,7 +90,7 @@ function noteFor({ budgetConstrained }) {
 
 // 4) Her şey yerindeyse fazladan not yok — gürültü de bir kusur.
 {
-  process.env.ANTHROPIC_API_KEY = "stub";
+  process.env.GEMINI_API_KEY = "stub";
   process.env.ENABLE_VLM_ATTRIBUTES = "true";
 
   const notes = noteFor({ budgetConstrained: false });

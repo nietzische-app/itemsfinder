@@ -1167,7 +1167,7 @@ if (vlmItemTotal > 0) {
   }
 } else {
   console.log(
-    `  VLM rengi        —      (fixture yok; «npm run eval:record-attrs» bir ANTHROPIC_API_KEY ister)`,
+    `  VLM rengi        —      (fixture yok; «npm run eval:record-attrs» bir GEMINI_API_KEY ister)`,
   );
 }
 console.log(`  Sorgu token'ı    ${fmt(queryScore)}  (${queryHits}/${queryTotal})   taban ${fmt(FLOORS.query)}`);
