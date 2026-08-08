@@ -206,6 +206,68 @@ function make(matcher) {
   t(calls[0].includeDomains.includes("trendyol.com"), "öncelikli mağazalar korundu");
 }
 
+/*
+ * 11) Anahtar reddedilince merdiven durmalı — ve durduğunu söylemeli.
+ *
+ * Üretimden gelen kayıt: kredisi biten bir anahtarla dört parça için **12** arama
+ * yapıldı, on ikisi de `401 USAGE_EXCEEDED` aldı. Merdiven her basamağı ve her
+ * katmanı denemeye devam ediyordu, çünkü hata «bu sorgu tutmadı» ile «bu anahtar
+ * çalışmıyor» arasında ayrım yapmıyordu. Sorguyu değiştirmek 401'i çözmez.
+ */
+{
+  const svc = new ContextDevService("stub");
+  const calls = [];
+  svc.client = {
+    web: {
+      search: async ({ query }) => {
+        calls.push(query);
+        throw Object.assign(new Error("401"), {
+          status: 401,
+          error: { message: "The key's credits have been completely depleted.", error_code: "USAGE_EXCEEDED" },
+        });
+      },
+      extract: async () => ({ data: { products: [] } }),
+    },
+  };
+
+  const seen = [];
+  await svc.searchLiveProducts(["a", "b", "c"], "clothing", undefined, (x) => seen.push(x));
+  t(calls.length === 1, `401 sonrası merdiven durdu (${calls.length} çağrı, 3 değil)`);
+  t(seen.length === 1 && Boolean(seen[0]?.error), "duran çağrı muhasebeye yazıldı");
+
+  // İkinci parça hiç sormamalı: aynı anahtar, aynı cevap.
+  const before = calls.length;
+  const seen2 = [];
+  await svc.searchLiveProducts(["d"], "clothing", undefined, (x) => seen2.push(x));
+  t(calls.length === before, `sonraki parça hiç sormadı (${calls.length - before} çağrı)`);
+  t(
+    seen2.some((x) => /çağrı yapılmadı/.test(x.error ?? "")),
+    `yapılmayan çağrı da yazıldı: ${JSON.stringify(seen2.map((x) => x.error))}`,
+  );
+}
+
+// 12) Geçici hata merdiveni durdurmuyor — 500 ile 401 aynı şey değil.
+{
+  const svc = new ContextDevService("stub");
+  const calls = [];
+  svc.client = {
+    web: {
+      search: async ({ query }) => {
+        calls.push(query);
+        if (/satın al/.test(query)) throw Object.assign(new Error("500"), { status: 500 });
+        return { results: [{ url: "https://www.asos.com/prd/1234567" }] };
+      },
+      extract: async ({ url }) => ({
+        data: { products: [{ title: "Ürün", price: 100, currency: "TRY", productUrl: url }] },
+      }),
+    },
+  };
+
+  const out = await svc.searchLiveProducts(["nadir"], "clothing");
+  t(calls.length >= 2, `500 sonrası merdiven yürüdü (${calls.length} çağrı)`);
+  t(out.length > 0, "geçici hatadan sonra global katman sonuç verdi");
+}
+
 console.log(`${pass} ✓ / ${fails.length} ✗`);
 for (const f of fails) console.log(`  ✗ ${f}`);
 process.exit(fails.length ? 1 : 0);

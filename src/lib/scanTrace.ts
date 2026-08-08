@@ -219,6 +219,46 @@ export function createTrace(options: { detail?: boolean } = {}): TraceCollector 
 }
 
 /**
+ * Bir hatanın kısa kimliği: durum kodu ve varsa sağlayıcının kendi kodu.
+ *
+ * Tam gerekçe `[context.dev]` uyarı satırında ve teşhis panelinde zaten duruyor.
+ * Burada gereken şey **greplenebilir bir etiket**, çünkü bu satır bir özet.
+ */
+function errorTag(text: string): string {
+  const status = /\b(4\d{2}|5\d{2})\b/.exec(text)?.[1];
+  const code = /"error_code"\s*:\s*"([A-Z_]+)"/.exec(text)?.[1];
+
+  if (status && code) return `${status} ${code}`;
+  if (code) return code;
+  if (status) return status;
+  return text.slice(0, 40);
+}
+
+/**
+ * Arama kayıtlarını özete indirger.
+ *
+ * İlk hâli her kaydı olduğu gibi yazıyordu ve üretimde işe yaramaz hâle geldi:
+ * kredisi biten bir anahtarla yapılan 12 arama, aynı 120 karakterlik hata
+ * metnini 12 kez tekrarladı ve `[scan]` satırı bir duvara döndü. Özet olsun diye
+ * yazılmış bir alanın okunamaz olması, hiç olmamasından iyi değil.
+ *
+ * Aynı (kaynak, katman, basamak, sonuç) dörtlüsü artık tek satırda toplanıyor ve
+ * kaç kez olduğu `×N` ile yazılıyor.
+ */
+function summariseSearches(searches: SearchAttempt[]): string[] {
+  const counts = new Map<string, number>();
+
+  for (const entry of searches) {
+    const where = entry.source === "görsel" ? "img" : entry.tier;
+    const outcome = entry.error ? `HATA ${errorTag(entry.error)}` : String(entry.found);
+    const key = `${where}:${entry.rung}=${outcome}`;
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+
+  return Array.from(counts, ([key, count]) => (count > 1 ? `${key} ×${count}` : key));
+}
+
+/**
  * One structured line per scan, for whatever is reading stdout.
  *
  * Deliberately a single line of JSON rather than a paragraph: a log that has to be
@@ -244,11 +284,7 @@ export function logScanTrace(trace: ScanTrace, context: { id: string; source: st
      * tek satırda, greplenebilir biçimde okunuyor.
      */
     searchCount: trace.searches.length,
-    searchYield: trace.searches.map(
-      (entry) =>
-        `${entry.source === "görsel" ? "img" : entry.tier}:${entry.rung}=` +
-        (entry.error ? `HATA ${entry.error.slice(0, 120)}` : entry.found),
-    ),
+    searchYield: summariseSearches(trace.searches),
   };
 
   // `warn` when something degraded, `log` otherwise: a scan that quietly fell back

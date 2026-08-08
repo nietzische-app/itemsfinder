@@ -121,6 +121,40 @@ const MAX_SEARCHES_PER_ITEM = 3;
  */
 const MAX_INCLUDE_DOMAINS = 10;
 
+/**
+ * Anahtar reddedildikten sonra yeniden denemeden önce beklenen süre.
+ *
+ * Kredisi bitmiş bir anahtar **her** çağrıda aynı cevabı veriyor. Üretimde ölçüldü:
+ * dört parça için 12 arama yapıldı, on ikisi de `401 USAGE_EXCEEDED` aldı ve
+ * 2.1 saniye harcandı — aynı şeyi on iki kez öğrenmek için. Merdiven her basamağı
+ * ve her katmanı denemeye devam ediyordu, çünkü hata «bu sorgu tutmadı» ile
+ * «bu anahtar çalışmıyor» arasında ayrım yapmıyordu.
+ *
+ * Kalıcı bir kilit değil, çünkü kullanıcı kredi yükleyebilir ve sunucusuz bir
+ * instance dakikalarca yaşıyor. Bir dakika, boşa çağrıyı durdurmaya yetecek kadar
+ * uzun, kendini iyileştirmeyi engellemeyecek kadar kısa.
+ */
+const AUTH_COOLDOWN_MS = 60_000;
+
+/**
+ * Bu hata tekrar denemeye değer mi?
+ *
+ * Anahtarın reddedilmesi (401/403) ya da kotanın dolması, sorguyu değiştirerek
+ * çözülecek bir şey değil — sıradaki basamak da, sıradaki parça da aynı cevabı
+ * alacak. Sunucu hatası ya da zaman aşımı ise geçici olabilir; onlarda merdiven
+ * yürümeye devam ediyor.
+ */
+function isKeyRejection(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) return false;
+
+  const status = (error as { status?: unknown }).status;
+  if (status === 401 || status === 403 || status === 429) return true;
+
+  return /USAGE_EXCEEDED|credits? (have been )?(completely )?depleted|quota/i.test(
+    describeError(error),
+  );
+}
+
 
 /** Fallback currency per retailer TLD, used when extraction omits it. */
 const DOMAIN_CURRENCY: Array<[RegExp, string]> = [
@@ -220,6 +254,15 @@ export class ContextDevService {
   private readonly requestTimeoutMs: number;
   private readonly extractBudgetMs: number;
   private readonly cacheTtlMs: number;
+
+  /**
+   * Anahtar reddedildiğinde bu ana kadar hiç çağrı yapılmıyor.
+   *
+   * Örnek üzerinde yaşıyor, süreç ömrü boyunca: sunucusuz bir instance dakikalarca
+   * ayakta kalıyor ve o süre boyunca aynı reddi tekrar tekrar almanın hiçbir
+   * karşılığı yok.
+   */
+  private rejectedUntil = 0;
 
   /**
    * Caches live for the lifetime of the server process. Scans repeat the same
@@ -383,6 +426,25 @@ export class ContextDevService {
         if (candidates.length >= MIN_LOCAL_CANDIDATES) break;
         if (searches >= MAX_SEARCHES_PER_ITEM) break;
 
+        /*
+         * Anahtar az önce reddedildiyse hiç sorma.
+         *
+         * Kaydı yine düşülüyor — «yapılmayan çağrı» da muhasebenin bir parçası,
+         * ve kredinin neden harcanmadığını okuyabilmek gerekiyor.
+         */
+        if (Date.now() < this.rejectedUntil) {
+          onAttempt?.({
+            source: "metin",
+            tier: attempt.tier,
+            rung: attempt.rung,
+            query: attempt.query,
+            found: 0,
+            ms: 0,
+            error: "anahtar reddedildi — çağrı yapılmadı",
+          });
+          break;
+        }
+
         searches += 1;
         const before = candidates.length;
         const startedAt = Date.now();
@@ -404,6 +466,21 @@ export class ContextDevService {
         } catch (error) {
           failure = describeError(error);
           logFailure("searchTier", attempt.query, error);
+
+          if (isKeyRejection(error)) {
+            this.rejectedUntil = Date.now() + AUTH_COOLDOWN_MS;
+            onAttempt?.({
+              source: "metin",
+              tier: attempt.tier,
+              rung: attempt.rung,
+              query: attempt.query,
+              found: 0,
+              ms: Date.now() - startedAt,
+              error: failure,
+            });
+            // Sorguyu değiştirmek bu hatayı çözmez; merdivenin geri kalanı boşuna.
+            return [];
+          }
         }
         /*
          * Her arama, harcandığı anda rapor ediliyor — sonuçtan sonra değil.
