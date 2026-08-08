@@ -114,6 +114,9 @@ const NOISE = new Set([
   "person",
   "apparel",
   "top",
+  "tops",
+  "üst",
+  "alt",
   "giyim",
   "kozmetik",
   "ürün",
@@ -123,6 +126,56 @@ const NOISE = new Set([
   "düz",
   "sade",
   "desensiz",
+]);
+
+/**
+ * Product nouns that must never be the *entire* search query (alone or with only
+ * a colour). "Jean" is kept as a token inside "Kargo Jean" — it is banned only
+ * as a singleton final query, which is what produced repetitive wrong products
+ * after Gemini 429s.
+ */
+const BANNED_SINGLETON_NOUNS = new Set([
+  "top",
+  "tops",
+  "üst",
+  "alt",
+  "jean",
+  "jeans",
+  "body",
+  "clothing",
+  "outerwear",
+  "footwear",
+  "apparel",
+  "giyim",
+  "bluz",
+  "pantolon",
+]);
+
+const COLOUR_TOKEN_HINTS = new Set([
+  "siyah",
+  "beyaz",
+  "gri",
+  "bej",
+  "krem",
+  "kahverengi",
+  "kırmızı",
+  "mavi",
+  "lacivert",
+  "yeşil",
+  "pembe",
+  "pudra",
+  "mor",
+  "sarı",
+  "turuncu",
+  "camel",
+  "bordo",
+  "haki",
+  "antrasit",
+  "altın",
+  "gümüş",
+  "kırık",
+  "açık",
+  "koyu",
 ]);
 
 /** Storefront search boxes degrade past a handful of words. */
@@ -245,6 +298,28 @@ export function buildSearchQuery(parts: SearchQueryParts): string {
   }
 
   return [...tokens.slice(0, Math.max(1, MAX_TOKENS - noun.length)), ...noun].join(" ");
+}
+
+/**
+ * True when a finished query is too thin to send to a storefront — a lone
+ * banned noun, or that noun plus only colour words ("Krem Üst", "Mavi Jean").
+ *
+ * Callers with a WEB_DETECTION phrase should rebuild; callers without one still
+ * avoid shipping the bare generic by falling through to a richer label.
+ */
+export function isTooGenericQuery(query: string): boolean {
+  const words = query
+    .trim()
+    .split(/\s+/)
+    .map((w) => cleanToken(w).toLocaleLowerCase("tr"))
+    .filter((w) => w.length >= 2);
+
+  if (words.length === 0) return true;
+
+  const nonColour = words.filter((w) => !COLOUR_TOKEN_HINTS.has(w) && !NOISE.has(w));
+  if (nonColour.length === 0) return true;
+  if (nonColour.length === 1) return BANNED_SINGLETON_NOUNS.has(nonColour[0]!);
+  return nonColour.every((w) => BANNED_SINGLETON_NOUNS.has(w));
 }
 
 /**

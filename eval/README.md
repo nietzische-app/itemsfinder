@@ -305,7 +305,7 @@ siyah sneaker'dan daha yakın ölçülüyor (0.559 vs 0.353). Maskelemeyle pembe
 
 ## VLM öznitelik aşaması — durum
 
-Aşamanın kendisi yazıldı (`src/services/attributeExtractor.ts`) ve boru hattına
+Aşamanın kendisi yazıldı (`src/services/vlmService.ts`, Gemini Flash) ve boru hattına
 bağlandı; yerel bir stub'a karşı 58 kontrolle doğrulandı: kırpma, şema
 doğrulaması, etiket/renk/sorgu/aile birleştirmesi ve her başarısızlık modunun
 (bozuk JSON, ret, HTTP 500, süre aşımı, şemaya uyan ama kullanılamaz içerik)
@@ -315,8 +315,8 @@ doğrulaması, etiket/renk/sorgu/aile birleştirmesi ve her başarısızlık mod
 için gerçek bir model çağrısı gerekiyor:
 
 ```bash
-ANTHROPIC_API_KEY=... npm run eval:record-attrs
-ANTHROPIC_API_KEY=... npm run eval:record-attrs -- --repeat 3   # kararlılık da ölçülsün
+GEMINI_API_KEY=... npm run eval:record-attrs
+GEMINI_API_KEY=... npm run eval:record-attrs -- --repeat 3   # kararlılık da ölçülsün
 npm run eval
 ```
 

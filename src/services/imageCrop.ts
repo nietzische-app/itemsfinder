@@ -59,6 +59,8 @@ export interface CropOptions {
   padding?: number;
   maxEdge?: number;
   minEdge?: number;
+  /** JPEG quality 1–100. Defaults to 82. */
+  quality?: number;
   /** Other detections' boxes, in whole-image normalised coordinates. */
   exclude?: BoundingBox[];
 }
@@ -81,6 +83,7 @@ export async function cropRegion(
   const padding = options.padding ?? PADDING;
   const maxEdge = options.maxEdge ?? MAX_EDGE;
   const minEdge = options.minEdge ?? MIN_EDGE;
+  const quality = options.quality ?? 82;
 
   try {
     const image = openImage(imageBuffer);
@@ -117,7 +120,7 @@ export async function cropRegion(
 
     const { data, info } = await pipeline
       .flatten({ background: "#ffffff" })
-      .jpeg({ quality: 82 })
+      .jpeg({ quality })
       .toBuffer({ resolveWithObject: true });
 
     // Occluders, from whole-image fractions into this crop's own fractions. Scale

@@ -1,14 +1,14 @@
 /**
  * Records VLM garment attributes for the eval set.
  *
- * Needs `ANTHROPIC_API_KEY`. Writes one JSON per look into
+ * Needs `GEMINI_API_KEY`. Writes one JSON per look into
  * `eval/fixtures/attrs/`, which `npm run eval` then replays offline — so the
  * question "does looking at the crop actually beat measuring the box?" gets
  * answered by a number instead of by a screenshot.
  *
- *   ANTHROPIC_API_KEY=... npm run eval:record-attrs
- *   ANTHROPIC_API_KEY=... npm run eval:record-attrs -- --repeat 3
- *
+ *   GEMINI_API_KEY=... npm run eval:record-attrs
+ *   GEMINI_API_KEY=... npm run eval:record-attrs -- --repeat 3
+ * *
  * The ground-truth boxes are used rather than Vision's, so this measures the
  * attribute stage on its own instead of compounding two error sources. Re-run it
  * after changing the prompt or the schema.
@@ -30,7 +30,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 register(new URL("./alias-loader.mjs", import.meta.url).href);
 
 const ROOT = new URL("..", import.meta.url).pathname;
-const KEY = process.env.ANTHROPIC_API_KEY ?? "";
+const KEY = process.env.GEMINI_API_KEY ?? "";
 
 const repeatArg = process.argv.findIndex((arg) => arg === "--repeat");
 const REPEAT = Math.max(
@@ -43,7 +43,7 @@ const REPEAT = Math.max(
 
 if (!KEY) {
   console.error(
-    "\nANTHROPIC_API_KEY yok. Öznitelik kaydı gerçek bir model çağrısı ister.\n" +
+    "\nGEMINI_API_KEY yok. Öznitelik kaydı gerçek bir model çağrısı ister.\n" +
       "«npm run eval» anahtar olmadan ölçülen renk metriğini yine raporlar.\n",
   );
   process.exit(1);
@@ -51,15 +51,15 @@ if (!KEY) {
 
 const { familyOf } = await import("@/lib/itemFamily");
 const { imageSize } = await import("@/services/regionColor");
-const { createAttributeExtractor } = await import("@/services/attributeExtractor");
+const { createVlmService } = await import("@/services/vlmService");
 const { groundTruth } = await import("../eval/groundTruth.ts");
 
 const outDir = `${ROOT}eval/fixtures/attrs`;
 if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
 
-const MODEL = process.env.VLM_MODEL?.trim() || "claude-opus-5";
+const MODEL = process.env.VLM_MODEL?.trim() || "gemini-1.5-flash-latest";
 
-const extractor = createAttributeExtractor(KEY, {
+const extractor = createVlmService(KEY, {
   model: process.env.VLM_MODEL?.trim() || undefined,
   // The eval is not latency-bound and every item matters here, so no item cap and
   // a generous budget — unlike a live scan.
