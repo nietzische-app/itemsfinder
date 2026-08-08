@@ -440,11 +440,12 @@ Vercel's default target.
 ### Function timeout
 
 `/api/detect` declares `maxDuration = 60` (seconds), the ceiling on the Hobby
-plan. The live product stage is bounded separately by
-`CONTEXT_DEV_DEADLINE_MS` (45s by default), which must stay **below**
-`maxDuration`: the deadline degrades gracefully to catalogue products, whereas a
-platform timeout returns a `504` with no result at all. If you raise one, raise
-the other.
+plan. Stage budgets are **hardcoded** in `src/config/deadlines.ts`:
+`VLM_DEADLINE_MS = 10000` and `CONTEXT_DEV_DEADLINE_MS = 20000` (10s + 20s =
+30s), leaving ~30s for Vision and network I/O. Vercel env overrides for those
+two keys are ignored so a stale value cannot push the sum past the platform
+kill. The deadlines degrade gracefully to catalogue products; a platform
+timeout returns a `504` with no result at all.
 
 ## Demo photography
 

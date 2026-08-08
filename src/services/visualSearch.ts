@@ -1,5 +1,6 @@
 import "server-only";
 
+import { CONTEXT_DEV_DEADLINE_MS, VLM_DEADLINE_MS } from "@/config/deadlines";
 import type {
   BoundingBox,
   DetectedItem,
@@ -17,7 +18,12 @@ import {
   type DetectionCandidate,
 } from "@/lib/detectionFilter";
 import { familyOf, tokenize, type ItemFamily } from "@/lib/itemFamily";
-import { attributeSearchQuery, buildSearchQuery, colorNameFromHex } from "@/lib/searchQuery";
+import {
+  attributeSearchQuery,
+  buildSearchQuery,
+  colorNameFromHex,
+  isTooGenericQuery,
+} from "@/lib/searchQuery";
 import {
   MOCK_SCENARIOS,
   findProductsForLabel,
@@ -27,9 +33,10 @@ import {
 } from "@/services/mockCatalog";
 import { ContextDevService } from "@/services/contextDevService";
 import {
-  getAttributeExtractor,
+  getVlmService,
+  isGenericGarment,
   type GarmentAttributes,
-} from "@/services/attributeExtractor";
+} from "@/services/vlmService";
 import { createTrace, type TraceCollector } from "@/lib/scanTrace";
 import { foregroundFilter, learnBackdrop } from "@/services/foreground";
 import { imageSize, regionDominantColor } from "@/services/regionColor";
@@ -292,6 +299,125 @@ function toHex(color: VisionColorInfo["color"]): string {
 }
 
 /**
+ * Photo-meta WEB_DETECTION noise — describes the shoot, not a garment.
+ * These must never become the search noun when Gemini 429s.
+ */
+const WEB_ENTITY_NOISE = new Set([
+  "street fashion",
+  "fashion",
+  "moda",
+  "photo shoot",
+  "photoshoot",
+  "photography",
+  "model",
+  "person",
+  "clothing",
+  "apparel",
+  "outfit",
+  "look",
+  "style",
+  "giyim",
+  "kombin",
+]);
+
+function isFashionWebEntity(description: string): boolean {
+  const lower = description.toLocaleLowerCase("tr").trim();
+  if (!lower || WEB_ENTITY_NOISE.has(lower)) return false;
+  if (isGenericGarment(description)) return false;
+  // Prefer multi-token material / pattern / style phrases ("Asimetrik Crop",
+  // "Kargo Jean") over single noisy proper nouns.
+  return tokenize(description).length >= 2;
+}
+
+const GENDER_TOKEN_RE = /\b(Erkek|Kadın|Unisex|Men|Women|Woman|Man)\b/i;
+
+/** Pull Erkek/Kadın/Unisex from WEB_DETECTION phrases when VLM did not run. */
+function pickGenderFromWebEntities(
+  entities: Array<Required<VisionWebEntity>>,
+): string | undefined {
+  for (const entity of entities) {
+    const match = GENDER_TOKEN_RE.exec(entity.description);
+    if (!match?.[1]) continue;
+    const raw = match[1].toLocaleLowerCase("tr");
+    if (raw === "erkek" || raw === "men" || raw === "man") return "Erkek";
+    if (raw === "kadın" || raw === "kadin" || raw === "women" || raw === "woman") return "Kadın";
+    if (raw === "unisex") return "Unisex";
+  }
+  return undefined;
+}
+
+/**
+ * 429 / VLM-miss search string: `[Color] + [Web Entity Keyword] + [Gender]`.
+ * Never includes Vision singletons like "Top" / "Jeans".
+ */
+function buildWebEntityFallbackQuery(parts: {
+  colorName: string | null;
+  phrase: string;
+  gender?: string;
+}): string {
+  const tokens: string[] = [];
+  const seen = new Set<string>();
+  const push = (value: string | undefined) => {
+    if (!value?.trim()) return;
+    for (const word of value.trim().split(/\s+/)) {
+      const key = word.toLocaleLowerCase("tr");
+      if (key.length < 2 || seen.has(key)) continue;
+      // Skip bare banned nouns that slipped into a phrase alone.
+      if (word.split(/\s+/).length === 1 && isGenericGarment(word)) continue;
+      seen.add(key);
+      tokens.push(word);
+    }
+  };
+
+  push(parts.colorName ?? undefined);
+  push(parts.phrase);
+  push(parts.gender);
+  return tokens.join(" ").trim();
+}
+
+/**
+ * Best WEB_DETECTION phrase for a detection when VLM attributes are missing.
+ *
+ * Priority:
+ *   1. Same wardrobe family (safe)
+ *   2. Unknown-family fashion phrase while Vision's class is a banned singleton
+ *   3. Any unused fashion phrase (last resort so we never ship "Siyah Üst")
+ */
+function pickWebEntityPhrase(
+  entities: Array<Required<VisionWebEntity>>,
+  options: {
+    family: ItemFamily;
+    visionClassGeneric: boolean;
+    used: Set<string>;
+    allowReuse?: boolean;
+  },
+): string | undefined {
+  const available = entities.filter((entity) => {
+    if (!options.allowReuse && options.used.has(entity.description)) return false;
+    return isFashionWebEntity(entity.description);
+  });
+  if (available.length === 0) return undefined;
+
+  const sameFamily = available.find((entity) => {
+    if (options.family === "unknown") return false;
+    return familyOf(entity.description) === options.family;
+  });
+  if (sameFamily) return sameFamily.description;
+
+  if (options.visionClassGeneric) {
+    const unknownFashion = available.find(
+      (entity) => familyOf(entity.description) === "unknown",
+    );
+    if (unknownFashion) return unknownFashion.description;
+
+    // Last resort: any fashion phrase beats a banned Vision singleton.
+    return available[0]?.description;
+  }
+
+  return undefined;
+}
+
+/**
  * Converts Vision's normalized vertex polygon into our `BoundingBox`.
  * Vision returns four vertices; we take the axis-aligned extent of them.
  */
@@ -536,7 +662,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
      * every item that fails to be described keeps the measured colour and Vision's
      * class, which is exactly what shipped before this stage existed.
      */
-    const extractor = input.budgetConstrained ? null : getAttributeExtractor();
+    const extractor = input.budgetConstrained ? null : getVlmService();
     if (input.budgetConstrained) {
       trace.degrade("vlm", "günlük bütçe eşiğinde — ücretli aşama atlandı");
     } else if (!extractor) {
@@ -553,8 +679,8 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * Hangi koşulun eksik olduğu ayrı ayrı yazılıyor, çünkü «kapalı» demek
        * kullanıcıyı iki ayrı ortam değişkenini de kontrol etmeye gönderirdi.
        */
-      const reason = !process.env.ANTHROPIC_API_KEY?.trim()
-        ? "ANTHROPIC_API_KEY yok"
+      const reason = !process.env.GEMINI_API_KEY?.trim()
+        ? "GEMINI_API_KEY yok"
         : "ENABLE_VLM_ATTRIBUTES=true değil";
 
       trace.degrade(
@@ -586,7 +712,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
       trace.degrade(
         "vlm",
         `${detections.length - attributes.size}/${detections.length} parça betimlenemedi — ` +
-          "ölçülen renge ve Vision sınıfına düşüldü",
+          "WEB_DETECTION web entity'lerine düşüldü (genel Vision sınıfı değil)",
       );
     }
 
@@ -599,6 +725,11 @@ export class GoogleVisionSearchService implements VisualSearchService {
      * An entity is now only used when it names the same family as the detection
      * it is attached to. That keeps the genuinely useful case ("biker jacket" on
      * outerwear) and drops the rest instead of inventing a label.
+     *
+     * When the VLM stage is down (429 / QuotaExceeded), these entities are the
+     * *only* precise terms available — "Asimetrik Crop", "Kargo Jean" — so the
+     * picker below prefers material / pattern / style phrases over Vision's bare
+     * class. The pipeline must never ship "Siyah Üst" when a richer entity exists.
      */
     const webEntities = (annotation?.webDetection?.webEntities ?? [])
       .filter((entity): entity is Required<VisionWebEntity> =>
@@ -642,25 +773,35 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * The web entity is only consulted when the crop was not described. It names
        * the photograph, not the garment; once something has actually looked at this
        * region, that reading wins.
+       *
+       * On Gemini 429 the VLM map is empty — WEB_DETECTION material/pattern/style
+       * phrases ("Asimetrik Crop", "Kargo Jean") become the search string so we
+       * never degrade to "Siyah Üst".
        */
-      const entity = attrs
+      const visionClassGeneric = isGenericGarment(name);
+      const phrase = attrs
         ? undefined
-        : webEntities.find(
-            (candidate) =>
-              !usedEntities.has(candidate.description) &&
-              familyOf(candidate.description) === family &&
-              family !== "unknown",
-          );
-      if (entity) usedEntities.add(entity.description);
+        : pickWebEntityPhrase(webEntities, {
+            family,
+            visionClassGeneric,
+            used: usedEntities,
+          });
+      if (phrase) usedEntities.add(phrase);
 
       // Measured colour is the fallback; the crop reading is preferred, because the
       // measurement describes the rectangle and this describes the garment.
       const colorHex = attrs?.colorHex ?? regionColors[index] ?? imageDominantHex;
       const colorName = attrs?.colorName ?? colorNameFromHex(colorHex);
-      const phrase = entity?.description;
-      const itemName = attrs?.garmentType ?? name;
+      /*
+       * When Vision only managed a generic class and WEB_DETECTION named the
+       * garment, the web phrase becomes the item noun — otherwise the query is
+       * "Krem Üst" / "Mavi Jean" regardless of how rich the entity list was.
+       */
+      const itemName =
+        attrs?.garmentType ??
+        (phrase && (visionClassGeneric || isGenericGarment(name)) ? phrase : name);
 
-      const label = [colorName, attrs?.garmentType ?? phrase ?? name]
+      const label = [colorName, attrs?.garmentType ?? phrase ?? (visionClassGeneric ? "parça" : name)]
         .filter(Boolean)
         .join(" ");
 
@@ -668,28 +809,70 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * Two paths, because they are genuinely different questions. With a described
        * crop the query is built from what was seen in it — that assembly lives in
        * `attributeSearchQuery` so the eval can score the query the user actually
-       * gets. Without one, all there is to work with is the detector's class, the
-       * web entity and a measured colour.
+       * gets. Without one (Gemini 429 / miss), format is mandatory:
+       *   [Color] + [Web Entity Keyword] + [Gender]
+       * so we never ship "Siyah Üst" / "Mavi Jean".
        */
-      const searchQuery = attrs
-        ? attributeSearchQuery(attrs)
-        : buildSearchQuery({
+      let searchQuery: string;
+      if (attrs) {
+        searchQuery = attributeSearchQuery(attrs);
+      } else {
+        const rescue =
+          phrase ??
+          pickWebEntityPhrase(webEntities, {
+            family,
+            visionClassGeneric: true,
+            used: usedEntities,
+            allowReuse: true,
+          });
+        const gender = pickGenderFromWebEntities(webEntities);
+        if (rescue) {
+          searchQuery = buildWebEntityFallbackQuery({
+            colorName,
+            phrase: rescue,
+            gender,
+          });
+        } else {
+          searchQuery = buildSearchQuery({
             itemType: itemName,
-            label: phrase,
             colorName: colorName ?? undefined,
             colorHex,
           });
+        }
+
+        // Hard ban: never leave a colour + singleton query standing.
+        if (isTooGenericQuery(searchQuery) && rescue) {
+          const rebuilt = buildWebEntityFallbackQuery({
+            colorName,
+            phrase: rescue,
+            gender,
+          });
+          if (!isTooGenericQuery(rebuilt) || rebuilt.length >= searchQuery.length) {
+            searchQuery = rebuilt;
+          }
+        }
+      }
 
       /*
        * The descriptive phrase and the query only pick the best row *within* the
        * family; the family itself is the gate. The chosen rows then get their text
-       * search repointed at this detection.
+       * search — and, when the crop was described, their display title — repointed
+       * at this detection so catalogue placeholders ("Body", "Deri Şort") cannot
+       * outrank the VLM's exact terms ("Crop Top", "Wide Leg Jean").
        */
       const { exactMatch, alternatives } = findProductsForLabel(
-        `${attrs?.garmentType ?? phrase ?? name} ${searchQuery}`,
+        `${attrs?.garmentType ?? phrase ?? (visionClassGeneric ? searchQuery : name)} ${searchQuery}`,
         category,
         family,
       );
+
+      // VLM won: catalogue card titles must show the described garment, not the
+      // scenario stub that merely shared a wardrobe family.
+      const displayTitle = attrs ? label : undefined;
+
+      const detectedNoun = visionClassGeneric
+        ? (phrase ?? "parça")
+        : name;
 
       items.push({
         id: `gv-${index}-${name.toLowerCase().replace(/\s+/g, "-")}`,
@@ -700,9 +883,13 @@ export class GoogleVisionSearchService implements VisualSearchService {
           .filter(Boolean)
           .join(" • "),
         description:
-          `Görselde "${name}" olarak tespit edildi ` +
+          `Görselde "${detectedNoun}" olarak tespit edildi ` +
           `(%${Math.round(detection.score * 100)} güven). ` +
-          (attrs ? `Kırpım analizi: ${describeAttributes(attrs)}. ` : "") +
+          (attrs
+            ? `Kırpım analizi: ${describeAttributes(attrs)}. `
+            : phrase
+              ? `WEB_DETECTION: "${phrase}". `
+              : "") +
           `Arama sorgusu: "${searchQuery}".`,
         confidence: detection.score,
         boundingBox: box,
@@ -711,10 +898,10 @@ export class GoogleVisionSearchService implements VisualSearchService {
         // rows against it rather than re-deriving a possibly different answer.
         family,
         exactMatch: exactMatch
-          ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery))
+          ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery, displayTitle))
           : null,
         alternatives: alternatives.map((product) =>
-          hydrateProduct(retargetSearchQuery(product, searchQuery)),
+          hydrateProduct(retargetSearchQuery(product, searchQuery, displayTitle)),
         ),
       });
     }
@@ -883,7 +1070,9 @@ function getProductProvider(): ProductProvider {
     }),
     {
       maxLiveItems: readInt(process.env.CONTEXT_DEV_MAX_LIVE_ITEMS, 4),
-      deadlineMs: readInt(process.env.CONTEXT_DEV_DEADLINE_MS, 45_000),
+      // Hardcoded — ignore Vercel `CONTEXT_DEV_DEADLINE_MS` so a stale env cannot
+      // overflow the 60s function budget (see `src/config/deadlines.ts`).
+      deadlineMs: CONTEXT_DEV_DEADLINE_MS,
       visualCandidates: readInt(process.env.VISUAL_RERANK_CANDIDATES, 4),
       // On by default: it costs no credits, only a few small image fetches, and
       // without it the match score on a live card is text agreement alone.
@@ -919,20 +1108,17 @@ export function getVisualSearchService(): VisualSearchService {
 function warnIfOverBudget(): void {
   if (process.env.ENABLE_VLM_ATTRIBUTES !== "true") return;
 
-  const vlm = readInt(process.env.VLM_DEADLINE_MS, 15_000);
-  const products = isContextDevConfigured()
-    ? readInt(process.env.CONTEXT_DEV_DEADLINE_MS, 45_000)
-    : 0;
+  const products = isContextDevConfigured() ? CONTEXT_DEV_DEADLINE_MS : 0;
 
-  // ~15s of headroom for Vision itself plus serialising the response.
+  // Hardcoded budgets: 10s + 20s = 30s → ~30s left of the 60s function for Vision.
   const budget = 45_000;
 
-  if (vlm + products > budget) {
+  if (VLM_DEADLINE_MS + products > budget) {
     console.warn(
-      `[detect] VLM_DEADLINE_MS (${vlm}) + CONTEXT_DEV_DEADLINE_MS (${products}) = ` +
-        `${vlm + products}ms, which leaves too little of the 60s function budget for ` +
-        "Vision. Lower CONTEXT_DEV_DEADLINE_MS, or a slow scan will be killed by the " +
-        "platform instead of degrading gracefully.",
+      `[detect] VLM_DEADLINE_MS (${VLM_DEADLINE_MS}) + CONTEXT_DEV_DEADLINE_MS (${products}) = ` +
+        `${VLM_DEADLINE_MS + products}ms, which leaves too little of the 60s function budget for ` +
+        "Vision. Edit `src/config/deadlines.ts` — env overrides are ignored so a stale " +
+        "Vercel value cannot kill the scan.",
     );
   }
 }
