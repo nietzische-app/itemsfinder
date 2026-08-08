@@ -17,7 +17,12 @@ import {
   type DetectionCandidate,
 } from "@/lib/detectionFilter";
 import { familyOf, tokenize, type ItemFamily } from "@/lib/itemFamily";
-import { attributeSearchQuery, buildSearchQuery, colorNameFromHex } from "@/lib/searchQuery";
+import {
+  attributeSearchQuery,
+  buildSearchQuery,
+  colorNameFromHex,
+  isTooGenericQuery,
+} from "@/lib/searchQuery";
 import {
   MOCK_SCENARIOS,
   findProductsForLabel,
@@ -27,9 +32,10 @@ import {
 } from "@/services/mockCatalog";
 import { ContextDevService } from "@/services/contextDevService";
 import {
-  getAttributeExtractor,
+  getVlmService,
+  isGenericGarment,
   type GarmentAttributes,
-} from "@/services/attributeExtractor";
+} from "@/services/vlmService";
 import { createTrace, type TraceCollector } from "@/lib/scanTrace";
 import { foregroundFilter, learnBackdrop } from "@/services/foreground";
 import { imageSize, regionDominantColor } from "@/services/regionColor";
@@ -536,7 +542,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
      * every item that fails to be described keeps the measured colour and Vision's
      * class, which is exactly what shipped before this stage existed.
      */
-    const extractor = input.budgetConstrained ? null : getAttributeExtractor();
+    const extractor = input.budgetConstrained ? null : getVlmService();
     if (input.budgetConstrained) {
       trace.degrade("vlm", "günlük bütçe eşiğinde — ücretli aşama atlandı");
     } else if (!extractor) {
@@ -553,8 +559,8 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * Hangi koşulun eksik olduğu ayrı ayrı yazılıyor, çünkü «kapalı» demek
        * kullanıcıyı iki ayrı ortam değişkenini de kontrol etmeye gönderirdi.
        */
-      const reason = !process.env.ANTHROPIC_API_KEY?.trim()
-        ? "ANTHROPIC_API_KEY yok"
+      const reason = !process.env.GEMINI_API_KEY?.trim()
+        ? "GEMINI_API_KEY yok"
         : "ENABLE_VLM_ATTRIBUTES=true değil";
 
       trace.degrade(
@@ -586,7 +592,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
       trace.degrade(
         "vlm",
         `${detections.length - attributes.size}/${detections.length} parça betimlenemedi — ` +
-          "ölçülen renge ve Vision sınıfına düşüldü",
+          "WEB_DETECTION web entity'lerine düşüldü (genel Vision sınıfı değil)",
       );
     }
 
@@ -599,6 +605,11 @@ export class GoogleVisionSearchService implements VisualSearchService {
      * An entity is now only used when it names the same family as the detection
      * it is attached to. That keeps the genuinely useful case ("biker jacket" on
      * outerwear) and drops the rest instead of inventing a label.
+     *
+     * When the VLM stage is down (429 / QuotaExceeded), these entities are the
+     * *only* precise terms available — "Tek Omuz Crop", "Kargo Jean" — so the
+     * matcher below also accepts an entity whose family is unknown as long as
+     * the detection family is known and the Vision class itself is generic.
      */
     const webEntities = (annotation?.webDetection?.webEntities ?? [])
       .filter((entity): entity is Required<VisionWebEntity> =>
@@ -642,15 +653,27 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * The web entity is only consulted when the crop was not described. It names
        * the photograph, not the garment; once something has actually looked at this
        * region, that reading wins.
+       *
+       * Match order when VLM failed:
+       *   1. Same family (safe, preferred)
+       *   2. Unknown-family entity while Vision's class is a banned singleton
+       *      ("Top", "Jeans") — better a precise web phrase than "Krem Üst"
        */
+      const visionClassGeneric = isGenericGarment(name);
       const entity = attrs
         ? undefined
-        : webEntities.find(
-            (candidate) =>
-              !usedEntities.has(candidate.description) &&
-              familyOf(candidate.description) === family &&
-              family !== "unknown",
-          );
+        : webEntities.find((candidate) => {
+            if (usedEntities.has(candidate.description)) return false;
+            const entityFamily = familyOf(candidate.description);
+            if (family !== "unknown" && entityFamily === family) return true;
+            return (
+              visionClassGeneric &&
+              family !== "unknown" &&
+              entityFamily === "unknown" &&
+              !isGenericGarment(candidate.description) &&
+              tokenize(candidate.description).length >= 2
+            );
+          });
       if (entity) usedEntities.add(entity.description);
 
       // Measured colour is the fallback; the crop reading is preferred, because the
@@ -658,7 +681,14 @@ export class GoogleVisionSearchService implements VisualSearchService {
       const colorHex = attrs?.colorHex ?? regionColors[index] ?? imageDominantHex;
       const colorName = attrs?.colorName ?? colorNameFromHex(colorHex);
       const phrase = entity?.description;
-      const itemName = attrs?.garmentType ?? name;
+      /*
+       * When Vision only managed a generic class and WEB_DETECTION named the
+       * garment, the web phrase becomes the item noun — otherwise the query is
+       * "Krem Üst" / "Mavi Jean" regardless of how rich the entity list was.
+       */
+      const itemName =
+        attrs?.garmentType ??
+        (phrase && (visionClassGeneric || isGenericGarment(name)) ? phrase : name);
 
       const label = [colorName, attrs?.garmentType ?? phrase ?? name]
         .filter(Boolean)
@@ -669,27 +699,48 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * crop the query is built from what was seen in it — that assembly lives in
        * `attributeSearchQuery` so the eval can score the query the user actually
        * gets. Without one, all there is to work with is the detector's class, the
-       * web entity and a measured colour.
+       * web entity and a measured colour — and the web entity must lead when the
+       * detector class is a banned singleton.
        */
-      const searchQuery = attrs
+      let searchQuery = attrs
         ? attributeSearchQuery(attrs)
         : buildSearchQuery({
-            itemType: itemName,
-            label: phrase,
+            itemType: phrase && visionClassGeneric ? phrase : itemName,
+            label: phrase && !visionClassGeneric ? phrase : undefined,
             colorName: colorName ?? undefined,
             colorHex,
           });
 
+      // Hard ban: never ship "Top" / "Üst" / "Jean" (optionally with a colour) as
+      // the final query. Prefer rebuilding around the web entity; if that is
+      // still thin, keep the richer of the two rather than the banned singleton.
+      if (!attrs && isTooGenericQuery(searchQuery) && phrase) {
+        const rebuilt = buildSearchQuery({
+          itemType: phrase,
+          colorName: colorName ?? undefined,
+          colorHex,
+        });
+        if (!isTooGenericQuery(rebuilt) || rebuilt.length >= searchQuery.length) {
+          searchQuery = rebuilt;
+        }
+      }
+
       /*
        * The descriptive phrase and the query only pick the best row *within* the
        * family; the family itself is the gate. The chosen rows then get their text
-       * search repointed at this detection.
+       * search — and, when the crop was described, their display title — repointed
+       * at this detection so catalogue placeholders ("Body", "Deri Şort") cannot
+       * outrank the VLM's exact terms ("Crop Top", "Wide Leg Jean").
        */
       const { exactMatch, alternatives } = findProductsForLabel(
         `${attrs?.garmentType ?? phrase ?? name} ${searchQuery}`,
         category,
         family,
       );
+
+      // VLM won: catalogue card titles must show the described garment, not the
+      // scenario stub that merely shared a wardrobe family.
+      const displayTitle = attrs ? label : undefined;
 
       items.push({
         id: `gv-${index}-${name.toLowerCase().replace(/\s+/g, "-")}`,
@@ -711,10 +762,10 @@ export class GoogleVisionSearchService implements VisualSearchService {
         // rows against it rather than re-deriving a possibly different answer.
         family,
         exactMatch: exactMatch
-          ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery))
+          ? hydrateProduct(retargetSearchQuery(exactMatch, searchQuery, displayTitle))
           : null,
         alternatives: alternatives.map((product) =>
-          hydrateProduct(retargetSearchQuery(product, searchQuery)),
+          hydrateProduct(retargetSearchQuery(product, searchQuery, displayTitle)),
         ),
       });
     }
@@ -883,7 +934,7 @@ function getProductProvider(): ProductProvider {
     }),
     {
       maxLiveItems: readInt(process.env.CONTEXT_DEV_MAX_LIVE_ITEMS, 4),
-      deadlineMs: readInt(process.env.CONTEXT_DEV_DEADLINE_MS, 45_000),
+      deadlineMs: readInt(process.env.CONTEXT_DEV_DEADLINE_MS, 25_000),
       visualCandidates: readInt(process.env.VISUAL_RERANK_CANDIDATES, 4),
       // On by default: it costs no credits, only a few small image fetches, and
       // without it the match score on a live card is text agreement alone.
@@ -919,13 +970,13 @@ export function getVisualSearchService(): VisualSearchService {
 function warnIfOverBudget(): void {
   if (process.env.ENABLE_VLM_ATTRIBUTES !== "true") return;
 
-  const vlm = readInt(process.env.VLM_DEADLINE_MS, 15_000);
+  const vlm = readInt(process.env.VLM_DEADLINE_MS, 10_000);
   const products = isContextDevConfigured()
-    ? readInt(process.env.CONTEXT_DEV_DEADLINE_MS, 45_000)
+    ? readInt(process.env.CONTEXT_DEV_DEADLINE_MS, 25_000)
     : 0;
 
-  // ~15s of headroom for Vision itself plus serialising the response.
-  const budget = 45_000;
+  // ~25s of headroom for Vision itself plus serialising the response (60s - 35s).
+  const budget = 35_000;
 
   if (vlm + products > budget) {
     console.warn(
