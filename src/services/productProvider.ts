@@ -14,7 +14,7 @@ import { rejectProductTitle } from "@/lib/retailVocabulary";
 import type { TraceCollector } from "@/lib/scanTrace";
 import { buildSearchQuery, relaxedQueries } from "@/lib/searchQuery";
 import { cropRegion } from "@/services/imageCrop";
-import { getVisualLookup } from "@/services/visualLookup";
+import { getVisualLookup, visualLookupStatus } from "@/services/visualLookup";
 import { markupExtractionEnabled, productsFromMarkup } from "@/services/markupProducts";
 import { productThumbnail } from "@/lib/productThumbnail";
 import { hydrateProduct } from "@/services/mockCatalog";
@@ -156,6 +156,18 @@ export class ContextDevProductProvider implements ProductProvider {
     signal?.addEventListener("abort", abortOnOuter, { once: true });
     const deadline = setTimeout(() => controller.abort(), this.deadlineMs);
 
+    /*
+     * Görsel yolun durumu, tarama başına bir satır.
+     *
+     * Üç ayrı üretim çalıştırmasında `img:` kaydı çıkmadı ve sebebini her seferinde
+     * tahmin etmek zorunda kaldık. Artık tahmin yok: bayrak, anahtar ve fotoğraf
+     * koşullarının hangisinin eksik olduğu burada yazılı.
+     */
+    console.log(
+      `[lens] ${visualLookupStatus()}` +
+        (context.image ? "" : " (ayrıca bu taramada fotoğraf taşınmadı)"),
+    );
+
     try {
       // Spend the budget on the detections the user is most likely to act on.
       const priority = [...result.items]
@@ -285,7 +297,11 @@ export class ContextDevProductProvider implements ProductProvider {
       size: image.size,
       exclude: siblings,
     });
-    if (!crop) return [];
+    if (!crop) {
+      // Kırpılamayan bir kutu, görsel yolun sessizce atladığı üçüncü durumdu.
+      trace?.degrade("products", `«${item.itemType}» kırpılamadı — görsel arama atlandı`);
+      return [];
+    }
 
     const lookupStartedAt = Date.now();
     const { urls, seen } = await lookup.findProductPages(crop.base64, signal);

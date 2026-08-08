@@ -367,6 +367,53 @@ function makeProvider({ fromUrls, fromSearch }) {
   delete process.env.ENABLE_MARKUP_EXTRACT;
 }
 
+/* -------------------------------------------------------------------------- */
+/*  11. Görsel yol devre dışıysa sebebini söylüyor mu                         */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * Üç ayrı üretim çalıştırmasında `img:` kaydı hiç çıkmadı ve her seferinde
+ * sebebini tahmin etmek zorunda kaldık: bayrak mı, anahtar mı, fotoğraf mı.
+ * Yol sessizce devre dışı kalıyordu. «Kapalı» olmak arıza değil; **görünmez**
+ * olmak arıza.
+ */
+{
+  const { visualLookupStatus } = await import("@/services/visualLookup");
+
+  process.env.ENABLE_VISION_LENS = "false";
+  t(/ENABLE_VISION_LENS/.test(visualLookupStatus()), `bayrak kapalı sebebiyle: «${visualLookupStatus()}»`);
+
+  process.env.ENABLE_VISION_LENS = "true";
+  const key = process.env.GOOGLE_CLOUD_VISION_API_KEY;
+  delete process.env.GOOGLE_CLOUD_VISION_API_KEY;
+  t(/API_KEY/.test(visualLookupStatus()), `anahtar eksikliği sebebiyle: «${visualLookupStatus()}»`);
+
+  process.env.GOOGLE_CLOUD_VISION_API_KEY = key;
+  t(visualLookupStatus() === "açık", `her şey yerindeyken «açık»: «${visualLookupStatus()}»`);
+
+  // Ve durum satırı gerçekten her taramada basılıyor mu?
+  const lines = [];
+  const realLog = console.log;
+  const provider = new ContextDevProductProvider(
+    {
+      findCandidateUrls: async () => [],
+      productsFromUrls: async () => [],
+      enrichBrandMetadata: async () => null,
+    },
+    { maxLiveItems: 1, deadlineMs: 20000, visualRerank: false },
+  );
+  console.log = (...args) => lines.push(args.join(" "));
+  try {
+    await provider.enrich(RESULT, { image: { buffer: photo } });
+  } finally {
+    console.log = realLog;
+  }
+  t(
+    lines.some((line) => line.startsWith("[lens]")),
+    `durum satırı her taramada yazılıyor: ${JSON.stringify(lines)}`,
+  );
+}
+
 server.close();
 console.log(`${pass} ✓ / ${fails.length} ✗`);
 for (const f of fails) console.log(`  ✗ ${f}`);

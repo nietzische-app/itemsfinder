@@ -187,3 +187,22 @@ export function getVisualLookup(): VisionWebLookup | null {
   if (!visualLookupEnabled() || !key) return null;
   return new VisionWebLookup(key);
 }
+
+/**
+ * Görsel yolun neden çalışıp çalışmadığı, insan okuyabilir hâlde.
+ *
+ * Üç ayrı üretim çalıştırmasında `img:` kaydı hiç çıkmadı ve her seferinde
+ * sebebini **tahmin etmek** zorunda kaldık — bayrak mı, anahtar mı, fotoğraf mı,
+ * yoksa kırpma mı. Yol sessizce devre dışı kalıyordu, çünkü kurulamadığında
+ * hiçbir yere hiçbir şey yazmıyordu.
+ *
+ * «Kapalı» olmak bir arıza değil, o yüzden bu bir `degrade` değil; ama görünmez
+ * olmak arıza — hangi koşulun eksik olduğunu okuyabilmek gerekiyor.
+ */
+export function visualLookupStatus(): string {
+  if (!visualLookupEnabled()) return "kapalı — ENABLE_VISION_LENS=true değil";
+  if (!process.env.GOOGLE_CLOUD_VISION_API_KEY?.trim()) {
+    return "kapalı — GOOGLE_CLOUD_VISION_API_KEY yok";
+  }
+  return "açık";
+}
