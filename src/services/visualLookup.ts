@@ -2,6 +2,7 @@ import "server-only";
 
 import { isDirectProductUrl, isSearchUrl } from "@/lib/productUrl";
 import { visionApiKey } from "@/services/visionKey";
+import { GLOBAL_DOMAINS, TURKISH_DOMAINS } from "@/services/contextDevService";
 
 /**
  * Giysi kırpımından doğrudan ürün sayfası bulma — metinden geçmeden.
@@ -53,6 +54,36 @@ const MAX_PER_HOST = 1;
 
 /** Bir kırpım için en fazla kaç aday adres döndürülecek. */
 const MAX_CANDIDATES = 6;
+
+/**
+ * Yalnızca tanıdığımız mağazalar.
+ *
+ * Metin yolunda bu soru zaten cevaplıydı: arama `includeDomains` ile mağazalara
+ * kısıtlanıyordu. Görsel yolun böyle bir kısıtı yok ve tersine görsel arama bir
+ * moda fotoğrafında bolca Pinterest, Instagram ve blog döndürüyor.
+ *
+ * **Şekil süzgeci tek başına yetmiyor** ve bunu bir test yakaladı:
+ * `instagram.com/p/AbCdEf/`, Mango ve H&M için yazılmış `/p/<kimlik>` kalıbına
+ * uyuyor ve ürün sayfası sayılıyordu. Yani bu yol açılsaydı «Ürüne git» bir
+ * Instagram gönderisine gidebilirdi — alışveriş uygulamasının yapabileceği en
+ * kötü şeylerden biri.
+ *
+ * «Bu adres ürün sayfası şeklinde mi» ile «bu ana bilgisayar bir mağaza mı» ayrı
+ * sorular; ilki `productUrl.ts`'nin, ikincisi burasının işi.
+ *
+ * Bedeli: tanımadığımız bir mağaza keşfedilemiyor. Bilerek bu tarafta duruluyor —
+ * bir mağazanın mağaza olduğunu doğrulayabildiğimizde gevşetilebilir.
+ */
+const RETAIL_HOSTS = new Set(
+  [...Object.values(TURKISH_DOMAINS), ...Object.values(GLOBAL_DOMAINS)].flat(),
+);
+
+/** Alt alan adları da sayılıyor: `shop.mango.com` ve `www2.hm.com` gibi. */
+function isRetailHost(host: string): boolean {
+  return Array.from(RETAIL_HOSTS).some(
+    (domain) => host === domain || host.endsWith(`.${domain}`),
+  );
+}
 
 interface WebImage {
   url?: string;
@@ -143,11 +174,19 @@ export class VisionWebLookup {
 
       const hosts = new Map<string, number>();
       const urls: string[] = [];
+      /*
+       * Elenen adaylar ana bilgisayara göre sayılıyor.
+       *
+       * Üretimde ölçüldü: görsel arama **41 sonuç** buldu ve hiçbiri ürün sayfası
+       * sayılmadı. O satır kaybın büyüklüğünü söylüyor ama **sebebini** söylemiyor
+       * — Vision blog ve Pinterest mi döndürdü, yoksa gerçek mağaza adreslerini
+       * şekil süzgecim mi reddetti? İkisi bambaşka işler gerektiriyor: ilki
+       * «görsel arama bu iş için uygun değil», ikincisi «süzgecim eksik».
+       */
+      const rejected = new Map<string, number>();
 
       for (const url of raw) {
         if (urls.length >= MAX_CANDIDATES) break;
-        // Arama ve liste sayfaları CTA olarak yasaklı; burada da geçerli.
-        if (!isDirectProductUrl(url) || isSearchUrl(url)) continue;
 
         let host: string;
         try {
@@ -156,11 +195,26 @@ export class VisionWebLookup {
           continue;
         }
 
+        // Önce mağaza mı, sonra ürün sayfası mı — ikisi ayrı sorular.
+        if (!isRetailHost(host) || !isDirectProductUrl(url) || isSearchUrl(url)) {
+          rejected.set(host, (rejected.get(host) ?? 0) + 1);
+          continue;
+        }
+
         const used = hosts.get(host) ?? 0;
         if (used >= MAX_PER_HOST) continue;
 
         hosts.set(host, used + 1);
         urls.push(url);
+      }
+
+      if (urls.length === 0 && rejected.size > 0) {
+        const top = Array.from(rejected)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 8)
+          .map(([host, count]) => `${host}×${count}`)
+          .join(", ");
+        console.warn(`[lens] ${raw.length} sonucun hiçbiri ürün sayfası değil — ${top}`);
       }
 
       return { urls, seen: raw.length };

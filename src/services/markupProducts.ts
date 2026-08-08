@@ -42,7 +42,10 @@ const USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
   "(KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 
-async function fetchHtml(url: string, signal?: AbortSignal): Promise<string | null> {
+/** Sayfa okunamadığında sebebi — sayı değil cümle, çünkü karar o cümleye bağlı. */
+type MarkupOutcome = { html: string } | { reason: string };
+
+async function fetchHtml(url: string, signal?: AbortSignal): Promise<MarkupOutcome> {
   try {
     const response = await fetch(url, {
       redirect: "follow",
@@ -51,12 +54,14 @@ async function fetchHtml(url: string, signal?: AbortSignal): Promise<string | nu
     });
 
     if (!response.ok) {
-      console.warn(`[markup] ${response.status} — ${url}`);
-      return null;
+      // 403 bot duvarı, 404 ölü bağlantı: ikisi bambaşka şeyler söylüyor.
+      return { reason: `HTTP ${response.status}` };
     }
 
     const type = response.headers.get("content-type") ?? "";
-    if (!/text\/html|application\/xhtml/i.test(type)) return null;
+    if (!/text\/html|application\/xhtml/i.test(type)) {
+      return { reason: `HTML değil (${type.split(";")[0] || "tipsiz"})` };
+    }
 
     /*
      * Gövde okunurken de sınır var: `content-length` yalan söyleyebilir ya da hiç
@@ -64,14 +69,12 @@ async function fetchHtml(url: string, signal?: AbortSignal): Promise<string | nu
      */
     const buffer = await response.arrayBuffer();
     if (buffer.byteLength > MAX_BYTES) {
-      console.warn(`[markup] gövde çok büyük (${buffer.byteLength}) — ${url}`);
-      return null;
+      return { reason: `gövde çok büyük (${Math.round(buffer.byteLength / 1024)} KB)` };
     }
 
-    return new TextDecoder("utf-8").decode(buffer);
+    return { html: new TextDecoder("utf-8").decode(buffer) };
   } catch (error) {
-    console.warn(`[markup] indirilemedi — ${url}:`, error instanceof Error ? error.message : error);
-    return null;
+    return { reason: error instanceof Error ? error.message.slice(0, 60) : "indirilemedi" };
   }
 }
 
@@ -98,13 +101,36 @@ export async function productsFromMarkup(
   if (urls.length === 0) return [];
 
   const startedAt = Date.now();
+
+  /*
+   * Sayfa başına **sebep** toplanıyor, yalnızca sayı değil.
+   *
+   * Üretimde `1 sayfa, 0 satır okundu` yazdı ve bu satır kararı vermeye
+   * yetmiyordu: sayfa bot duvarına mı takıldı, işaretleme mi yoktu, yoksa
+   * işaretleme vardı da fiyat mı okunamadı? Üçü üç ayrı iş — sırasıyla «başka
+   * mağaza dene», «bu mağaza desteklenmiyor» ve «ayrıştırıcı eksik».
+   */
+  const reasons: string[] = [];
+
   const settled = await Promise.allSettled(
     urls.map(async (url): Promise<LiveProductCard | null> => {
-      const html = await fetchHtml(url, signal);
-      if (!html) return null;
+      const host = merchantDomainOf(url) || url.slice(0, 40);
+      const fetched = await fetchHtml(url, signal);
 
-      const product = extractProductMarkup(html, url);
-      if (!product || product.price === null) return null;
+      if ("reason" in fetched) {
+        reasons.push(`${host}: ${fetched.reason}`);
+        return null;
+      }
+
+      const product = extractProductMarkup(fetched.html, url);
+      if (!product) {
+        reasons.push(`${host}: ürün işaretlemesi yok`);
+        return null;
+      }
+      if (product.price === null) {
+        reasons.push(`${host}: işaretleme var, fiyat yok`);
+        return null;
+      }
 
       const domain = merchantDomainOf(url);
       return {
@@ -132,7 +158,8 @@ export async function productsFromMarkup(
   );
 
   console.log(
-    `[markup] ${Date.now() - startedAt}ms — ${urls.length} sayfa, ${cards.length} satır okundu`,
+    `[markup] ${Date.now() - startedAt}ms — ${urls.length} sayfa, ${cards.length} satır okundu` +
+      (reasons.length > 0 ? ` — ${reasons.slice(0, 6).join("; ")}` : ""),
   );
 
   return cards;

@@ -428,6 +428,94 @@ function makeProvider({ fromUrls, fromSearch }) {
   );
 }
 
+/* -------------------------------------------------------------------------- */
+/*  11b. Mağaza olmayan ana bilgisayar ürün sayfası sayılmamalı               */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * Bu kontrolü yazarken gerçek bir kusur çıktı: `instagram.com/p/AbCdEf/`, Mango
+ * ve H&M için yazılmış `/p/<kimlik>` kalıbına uyuyor ve ürün sayfası sayılıyordu.
+ * Tersine görsel arama bir moda fotoğrafında bolca Instagram ve Pinterest
+ * döndürüyor, yani bu yol açılsaydı «Ürüne git» bir gönderiye gidebilirdi.
+ */
+{
+  nextPayload = pages(
+    "https://www.instagram.com/p/AbCdEf/",
+    "https://tr.pinterest.com/pin/123456789/",
+    "https://www.trendyol.com/marka/urun-p-123456789",
+  );
+  const { urls } = await lookup.findProductPages("aaa");
+
+  t(
+    !urls.some((u) => /instagram|pinterest/.test(u)),
+    `sosyal medya adresi ürün sayfası sayılmıyor: ${JSON.stringify(urls)}`,
+  );
+  t(
+    urls.some((u) => u.includes("trendyol")),
+    `gerçek mağaza yine geçiyor: ${JSON.stringify(urls)}`,
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  12. Kayıp nerede olduğunu söylüyor mu                                     */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * Üretimde iki satır kaybın **büyüklüğünü** söyledi ama **sebebini** söylemedi:
+ *
+ *   «görsel arama 41 sonuç buldu, hiçbiri ürün sayfası değildi»
+ *   «[markup] 1 sayfa, 0 satır okundu»
+ *
+ * Birincisinde asıl soru şu: Vision blog ve Pinterest mi döndürdü, yoksa gerçek
+ * mağaza adreslerini şekil süzgecim mi reddetti? İkisi bambaşka işler gerektiriyor
+ * — «görsel arama bu iş için uygun değil» ile «süzgecim eksik».
+ */
+{
+  const lines = [];
+  const realWarn = console.warn;
+
+  nextPayload = pages(
+    "https://tr.pinterest.com/pin/123456789/",
+    "https://www.instagram.com/p/AbCdEf/",
+    "https://blog.example.com/2024/moda-trendleri",
+    "https://www.trendyol.com/sr?q=triko",
+  );
+
+  console.warn = (...args) => lines.push(args.join(" "));
+  try {
+    await lookup.findProductPages("aaa");
+  } finally {
+    console.warn = realWarn;
+  }
+
+  const summary = lines.find((line) => line.includes("hiçbiri ürün sayfası değil")) ?? "";
+  t(summary.length > 0, `elenme özeti yazılıyor: ${JSON.stringify(lines)}`);
+  t(/pinterest/.test(summary), `elenen ana bilgisayarlar adıyla yazılıyor: «${summary}»`);
+  t(/\b4\b/.test(summary), `kaç sonuç geldiği yazılıyor: «${summary}»`);
+}
+
+// 13) İşaretleme okunamayınca sayfa başına sebep yazılıyor mu?
+{
+  const lines = [];
+  const realLog = console.log;
+  const { productsFromMarkup } = await import("@/services/markupProducts");
+
+  console.log = (...args) => lines.push(args.join(" "));
+  try {
+    // Bu ortamdan mağazaya ağ yolu yok; sebep ne olursa olsun yazılmalı.
+    await productsFromMarkup(["https://www.trendyol.com/a/urun-p-123456789"]);
+  } finally {
+    console.log = realLog;
+  }
+
+  const summary = lines.find((line) => line.startsWith("[markup]")) ?? "";
+  t(summary.length > 0, "markup özeti yazılıyor");
+  t(
+    /trendyol\.com: .+/.test(summary),
+    `sayfa başına sebep, ana bilgisayar adıyla yazılıyor: «${summary}»`,
+  );
+}
+
 server.close();
 console.log(`${pass} ✓ / ${fails.length} ✗`);
 for (const f of fails) console.log(`  ✗ ${f}`);

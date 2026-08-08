@@ -47,7 +47,7 @@ export interface LiveProductCard {
  * ürün sayfası şekli `productUrl.ts` tarafından tanınıyor ve `eval` tarafından
  * ölçülüyor (`eval/productUrlCases.ts`).
  */
-const TURKISH_DOMAINS: Record<ItemCategory, string[]> = {
+export const TURKISH_DOMAINS: Record<ItemCategory, string[]> = {
   clothing: [
     "trendyol.com",
     "boyner.com.tr",
@@ -80,7 +80,7 @@ const TURKISH_DOMAINS: Record<ItemCategory, string[]> = {
  * kötüdür — gümrük, kargo süresi ve iade hepsi değişiyor. Ama hiç sonuç
  * olmamasından iyidir, ve bazı ürünler Türkiye'de gerçekten satılmıyor.
  */
-const GLOBAL_DOMAINS: Record<ItemCategory, string[]> = {
+export const GLOBAL_DOMAINS: Record<ItemCategory, string[]> = {
   clothing: ["asos.com", "shop.mango.com", "amazon.com", "zara.com", "hm.com"],
   beauty: ["sephora.com", "lookfantastic.com", "amazon.com"],
 };
