@@ -60,6 +60,8 @@ const { COVERAGE_CASES, KNOWN_GAPS, VISION_CLASSES, GENERIC_VISION_CLASSES } = a
   "../eval/coverageCases.ts"
 );
 const { SEARCH_QUERY_CASES } = await import("../eval/searchQueryCases.ts");
+const { PRODUCT_MARKUP_CASES } = await import("../eval/productMarkupCases.ts");
+const { extractProductMarkup } = await import("@/lib/productMarkup");
 const { toTurkishRetailTerms } = await import("@/lib/retailVocabulary");
 
 /**
@@ -123,6 +125,12 @@ const FLOORS = {
    * ölçülemeyen bir zorluk değil düzeltilecek bir kusur.
    */
   queryNoun: 1,
+  /*
+   * Ürün işaretlemesi okuma. %100, çünkü buradaki her vaka schema.org'da tanımlı
+   * bir şekil — kaçırılan bir şekil, ölçülemeyen bir zorluk değil, desteklenmeyen
+   * bir biçim. Yani düzeltilecek bir kusur.
+   */
+  productMarkup: 1,
   /*
    * The coarse-class path. Set to 1.0 because unlike colour there is nothing
    * irreducible here: every class Vision emits either has a Turkish retail term
@@ -428,6 +436,47 @@ for (const source of nounSources) {
     } else {
       nounMisses.push({ id: source.id, rung, want, query, why: "ad sorguda yok" });
     }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  2c. Ürün işaretlemesi — sayfayı modele okutmadan okuyabiliyor muyuz       */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * `web.extract` boru hattındaki en pahalı ve tek satıcıya bağlı adım: sayfayı bir
+ * modele okutuyor, ve kredi bitince ürün araması tamamen duruyor. Oysa mağazalar
+ * fiyatı, stoğu ve puanı ürün sayfasına schema.org işaretlemesiyle zaten yazıyor.
+ *
+ * Bu satır o ayrıştırıcıyı ölçüyor. Vakalar **standarttan** kuruldu, bir mağazadan
+ * kopyalanmadı — yani ölçtüğü şey «standarda uyuyor mu», «Trendyol'u okuyabiliyor
+ * mu» değil. İkincisi ancak ağı açık bir makinede ölçülebilir ve o ölçüm yapılana
+ * kadar bu yol açılmamalı.
+ */
+let markupHits = 0;
+const markupMisses = [];
+
+for (const testCase of PRODUCT_MARKUP_CASES) {
+  const got = extractProductMarkup(testCase.html, testCase.pageUrl);
+
+  if (testCase.expect === null) {
+    if (got === null) markupHits += 1;
+    else markupMisses.push(`${testCase.name}: null bekleniyordu`);
+    continue;
+  }
+
+  if (!got) {
+    markupMisses.push(`${testCase.name}: hiç okunamadı`);
+    continue;
+  }
+
+  const wrong = Object.entries(testCase.expect).filter(([key, want]) => got[key] !== want);
+  if (wrong.length === 0) markupHits += 1;
+  else {
+    markupMisses.push(
+      `${testCase.name}: ` +
+        wrong.map(([key, want]) => `${key} ${JSON.stringify(got[key])} ≠ ${JSON.stringify(want)}`).join(", "),
+    );
   }
 }
 
@@ -927,6 +976,7 @@ for (const name of fixtures) {
 const colorScore = pct(colorHits, colorTotal);
 const queryScore = pct(queryHits, queryTotal);
 const nounScore = pct(nounHits, nounTotal);
+const markupScore = pct(markupHits, PRODUCT_MARKUP_CASES.length);
 const familyScore = pct(familyHits, familyTotal);
 
 /*
@@ -1128,6 +1178,11 @@ console.log(
 for (const miss of nounMisses.slice(0, 6)) {
   console.log(`      ${miss.id.padEnd(16)} basamak ${miss.rung} «${miss.query}» — ${miss.why}`);
 }
+console.log(
+  `  Ürün işaretlemesi ${fmt(markupScore)}  (${markupHits}/${PRODUCT_MARKUP_CASES.length})   ` +
+    `taban ${fmt(FLOORS.productMarkup)}, schema.org şekilleri — mağaza ölçümü değil`,
+);
+for (const miss of markupMisses.slice(0, 6)) console.log(`      ${miss}`);
 console.log(`  Vision sınıfı    ${fmt(visionQueryScore)}  (${visionQueryHits}/${visionQueryTotal})   taban ${fmt(FLOORS.visionQuery)}`);
 // Chance is computed, not written down: it is 1/candidates, and the candidate
 // pool is the eval set. Hard-coding "7%" was right for fourteen items and quietly
@@ -1341,6 +1396,8 @@ if (process.argv.includes("--floors")) {
 const failures = [
   colorScore < FLOORS.color && `bölge rengi ${fmt(colorScore)} < ${fmt(FLOORS.color)}`,
   queryScore < FLOORS.query && `sorgu token'ı ${fmt(queryScore)} < ${fmt(FLOORS.query)}`,
+  markupScore < FLOORS.productMarkup &&
+    `ürün işaretlemesi ${fmt(markupScore)}: ${markupMisses.length} şekil okunamıyor`,
   nounScore < FLOORS.queryNoun &&
     `sorguda ürün adı ${fmt(nounScore)}: ${nounMisses.length} basamak ürün adı taşımıyor`,
   familyScore < FLOORS.family && `aile ${fmt(familyScore)} < ${fmt(FLOORS.family)}`,

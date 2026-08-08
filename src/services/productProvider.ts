@@ -15,6 +15,7 @@ import type { TraceCollector } from "@/lib/scanTrace";
 import { buildSearchQuery, relaxedQueries } from "@/lib/searchQuery";
 import { cropRegion } from "@/services/imageCrop";
 import { getVisualLookup } from "@/services/visualLookup";
+import { markupExtractionEnabled, productsFromMarkup } from "@/services/markupProducts";
 import { productThumbnail } from "@/lib/productThumbnail";
 import { hydrateProduct } from "@/services/mockCatalog";
 import { fetchRemoteImage } from "@/services/remoteImage";
@@ -308,6 +309,36 @@ export class ContextDevProductProvider implements ProductProvider {
         );
       }
       return [];
+    }
+
+    return this.extractFrom(urls, signal, trace);
+  }
+
+  /**
+   * Aday adreslerden kart çıkarır — iki yoldan biriyle.
+   *
+   * Varsayılan `web.extract`: sayfayı bir modele okutuyor, doğru ama pahalı ve
+   * tek satıcıya bağlı. `ENABLE_MARKUP_EXTRACT` açıkken önce mağazanın kendi
+   * schema.org işaretlemesi deneniyor — orada fiyat, stok ve puan zaten yazılı,
+   * yani çıkarıma gerek yok ve uydurma ihtimali de yok.
+   *
+   * Sıra kasıtlı ve geri düşüşlü: işaretleme okunamazsa (sayfa bot duvarına
+   * takıldı, ya da mağaza işaretleme koymuyor) `web.extract` devrede kalıyor.
+   * Ölçülmemiş bir yolun, ölçülmüş bir yolu kaldırması için gerekçe yok.
+   */
+  private async extractFrom(
+    urls: string[],
+    signal: AbortSignal,
+    trace?: TraceCollector,
+  ): Promise<LiveProductCard[]> {
+    if (markupExtractionEnabled()) {
+      const cards = await productsFromMarkup(urls, signal);
+      if (cards.length > 0) return cards;
+
+      trace?.degrade(
+        "products",
+        `${urls.length} sayfanın işaretlemesi okunamadı — çıkarıma düşüldü`,
+      );
     }
 
     return this.context.productsFromUrls(urls, signal);
