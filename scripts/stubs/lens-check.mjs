@@ -186,13 +186,19 @@ function makeProvider({ fromUrls, fromSearch }) {
   const log = { search: 0, extract: 0 };
   const provider = new ContextDevProductProvider(
     {
-      searchLiveProducts: async () => {
+      findCandidateUrls: async () => {
         log.search += 1;
-        return fromSearch;
+        return fromSearch.map((c) => c.productUrl);
       },
-      productsFromUrls: async () => {
+      /*
+       * Artık iki yol da buradan geçiyor: aday bulma ile kart çıkarma ayrıldı.
+       * Ayrımın kendisi ölçülmüş bir kusurdan geldi — işaretleme okuma yolu
+       * yalnızca görsel dala takılıydı, çünkü metin dalının çıkarımı servisin
+       * içine gömülüydü.
+       */
+      productsFromUrls: async (urls) => {
         log.extract += 1;
-        return fromUrls;
+        return urls.length > 0 ? fromUrls : [];
       },
       enrichBrandMetadata: async () => null,
     },
@@ -258,6 +264,65 @@ function makeProvider({ fromUrls, fromSearch }) {
 
   t(calls === before, `fotoğrafsız taramada Vision çağrılmadı (${calls - before})`);
   t(log.search === 1, "fotoğrafsız taramada metin merdiveni çalıştı");
+}
+
+/* -------------------------------------------------------------------------- */
+/*  9. İşaretleme okuma yolu METİN dalında da çalışıyor mu                    */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * Üretimde ölçülen kusur: `ENABLE_MARKUP_EXTRACT=true` iken tek bir `[markup]`
+ * satırı çıkmadı. Sebep, yolun yalnızca görsel arama dalına takılı olmasıydı —
+ * metin dalının çıkarımı `searchLiveProducts`'ın **içine** gömülüydü, yani ana
+ * yolda hiç uğranmıyordu. Aday bulma ile kart çıkarma ayrıldı; bu kontrol
+ * ayrımın gerçekten işe yaradığını ölçüyor.
+ */
+{
+  process.env.ENABLE_MARKUP_EXTRACT = "true";
+  nextPayload = { webDetection: {} }; // görsel yol boş → metin dalına düşülüyor
+
+  const log = { search: 0, extract: 0 };
+  const provider = new ContextDevProductProvider(
+    {
+      findCandidateUrls: async () => {
+        log.search += 1;
+        return ["https://www.trendyol.com/a/urun-p-999999999"];
+      },
+      productsFromUrls: async () => {
+        log.extract += 1;
+        return [card("https://www.trendyol.com/a/urun-p-999999999")];
+      },
+      enrichBrandMetadata: async () => null,
+    },
+    { maxLiveItems: 1, deadlineMs: 20000, visualRerank: false },
+  );
+
+  /*
+   * Ölçülen şey `[markup]` satırının çıkması.
+   *
+   * İlk hâlinde `productsFromUrls` çağrıldı mı diye bakmıştım ve kontrol
+   * **ısırmıyordu**: eski wiring'de de o çağrılıyor, çünkü metin dalı doğrudan
+   * ona gidiyordu. Ayırt edici olan işaretlemenin *denenmesi* — ve kullanıcının
+   * «markup çıkmadı» derken kastettiği şey de tam olarak bu satırdı.
+   */
+  const lines = [];
+  const realLog = console.log;
+  console.log = (...args) => lines.push(args.join(" "));
+  try {
+    await provider.enrich(RESULT, { image: { buffer: photo } });
+  } finally {
+    console.log = realLog;
+  }
+
+  t(log.search === 1, `metin dalı aday buldu (${log.search})`);
+  t(
+    lines.some((line) => line.startsWith("[markup]")),
+    `metin dalında işaretleme denendi: ${JSON.stringify(lines)}`,
+  );
+  // Okunamayınca `web.extract` geri düşüşü çalışmalı — açmak bir şey kaybettirmemeli.
+  t(log.extract === 1, `okunamayınca çıkarıma düşüldü (${log.extract})`);
+
+  delete process.env.ENABLE_MARKUP_EXTRACT;
 }
 
 server.close();

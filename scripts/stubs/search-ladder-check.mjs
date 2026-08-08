@@ -41,7 +41,7 @@ function make(matcher) {
     "https://www.trendyol.com/a-p-1111111",
     "https://www.boyner.com.tr/b-p-2222222",
   ]);
-  await svc.searchLiveProducts(["beyaz keten gömlek", "gömlek"], "clothing");
+  await svc.findCandidateUrls(["beyaz keten gömlek", "gömlek"], "clothing");
   t(calls.length === 1, "tam sorgu doluysa tek arama");
 }
 
@@ -52,10 +52,10 @@ function make(matcher) {
       ? ["https://www.trendyol.com/c-p-3333333", "https://www.lcw.com/d-o-44444"]
       : [],
   );
-  const out = await svc.searchLiveProducts(["beyaz keten gömlek", "gömlek"], "clothing");
+  const out = await svc.findCandidateUrls(["beyaz keten gömlek", "gömlek"], "clothing");
   t(calls.length === 2, "tam sorgu boşsa ikinci basamak deneniyor");
   t(/^gömlek /.test(calls[1].query), "ikinci basamak gevşek sorgu");
-  t(out.length > 0, "gevşek sorgudan ürün dönüyor");
+  t(out.length > 0, "gevşek sorgudan aday adres dönüyor");
 }
 
 // 3) Türkiye hiç bulamazsa global katmana geçiliyor.
@@ -63,14 +63,14 @@ function make(matcher) {
   const { svc, calls } = make((q) =>
     /buy price/.test(q) ? ["https://www.asos.com/prd/1234567"] : [],
   );
-  await svc.searchLiveProducts(["nadir parça"], "clothing");
+  await svc.findCandidateUrls(["nadir parça"], "clothing");
   t(calls.some((c) => c.includeDomains.includes("asos.com")), "global katmana geçiliyor");
 }
 
 // 4) Arama sayısı sınırı aşılmıyor.
 {
   const { svc, calls } = make(() => []);
-  await svc.searchLiveProducts(["a", "b", "c"], "clothing");
+  await svc.findCandidateUrls(["a", "b", "c"], "clothing");
   t(calls.length <= 3, `arama sınırı korunuyor (${calls.length} <= 3)`);
 }
 
@@ -83,8 +83,8 @@ function make(matcher) {
         ? ["https://www.asos.com/prd/7654321"]
         : [],
   );
-  const out = await svc.searchLiveProducts(["beyaz keten gömlek", "gömlek"], "clothing");
-  t(out.every((c) => !c.merchantDomain.includes("asos")), "Türkiye gevşek sonucu globalden önce");
+  const out = await svc.findCandidateUrls(["beyaz keten gömlek", "gömlek"], "clothing");
+  t(out.every((u) => !u.includes("asos")), "Türkiye gevşek sonucu globalden önce");
   t(calls.every((c) => /satın al/.test(c.query)), "global hiç aranmadı");
 }
 
@@ -103,7 +103,7 @@ function make(matcher) {
       : [],
   );
   const seen = [];
-  await svc.searchLiveProducts(["beyaz keten gömlek", "gömlek"], "clothing", undefined, (a) =>
+  await svc.findCandidateUrls(["beyaz keten gömlek", "gömlek"], "clothing", undefined, (a) =>
     seen.push(a),
   );
 
@@ -130,7 +130,7 @@ function make(matcher) {
 {
   const { svc } = make(() => ["https://www.trendyol.com/i-p-9999999"]);
   const seen = [];
-  await svc.searchLiveProducts(["tam sorgu", "gevşek"], "clothing", undefined, (a) => seen.push(a));
+  await svc.findCandidateUrls(["tam sorgu", "gevşek"], "clothing", undefined, (a) => seen.push(a));
 
   t(seen.length >= 2, `tek aday MIN_LOCAL_CANDIDATES'i karşılamıyor (${seen.length} >= 2)`);
   t(seen[0]?.found === 1, "ilk basamak bulduğu adayı yazıyor");
@@ -143,7 +143,7 @@ function make(matcher) {
     "https://www.trendyol.com/j-p-1212121",
     "https://www.boyner.com.tr/k-p-3434343",
   ]);
-  const out = await svc.searchLiveProducts(["gömlek"], "clothing");
+  const out = await svc.findCandidateUrls(["gömlek"], "clothing");
   t(out.length > 0, "geri çağrısız çağrı bozulmuyor");
 }
 
@@ -177,12 +177,12 @@ function make(matcher) {
   };
 
   const seen = [];
-  const out = await svc.searchLiveProducts(["nadir parça"], "clothing", undefined, (a) =>
+  const out = await svc.findCandidateUrls(["nadir parça"], "clothing", undefined, (a) =>
     seen.push(a),
   );
 
   t(calls.length >= 2, `hata sonrası global katman denendi (${calls.length} çağrı)`);
-  t(out.length > 0, "global katmandan ürün döndü — merdiven iptal olmadı");
+  t(out.length > 0, "global katmandan aday döndü — merdiven iptal olmadı");
   t(seen.length === calls.length, `harcanan her çağrı yazıldı (${seen.length}/${calls.length})`);
   t(
     seen.some((a) => typeof a.error === "string" && /includeDomains/.test(a.error)),
@@ -198,7 +198,7 @@ function make(matcher) {
 // 10) Alan adı listesi tavana kırpılıyor — 12 alan adlı liste 10'a iniyor.
 {
   const { svc, calls } = make(() => []);
-  await svc.searchLiveProducts(["gömlek"], "clothing");
+  await svc.findCandidateUrls(["gömlek"], "clothing");
   t(
     calls[0].includeDomains.length <= 10,
     `alan adı listesi kırpıldı (${calls[0].includeDomains.length} <= 10)`,
@@ -231,14 +231,14 @@ function make(matcher) {
   };
 
   const seen = [];
-  await svc.searchLiveProducts(["a", "b", "c"], "clothing", undefined, (x) => seen.push(x));
+  await svc.findCandidateUrls(["a", "b", "c"], "clothing", undefined, (x) => seen.push(x));
   t(calls.length === 1, `401 sonrası merdiven durdu (${calls.length} çağrı, 3 değil)`);
   t(seen.length === 1 && Boolean(seen[0]?.error), "duran çağrı muhasebeye yazıldı");
 
   // İkinci parça hiç sormamalı: aynı anahtar, aynı cevap.
   const before = calls.length;
   const seen2 = [];
-  await svc.searchLiveProducts(["d"], "clothing", undefined, (x) => seen2.push(x));
+  await svc.findCandidateUrls(["d"], "clothing", undefined, (x) => seen2.push(x));
   t(calls.length === before, `sonraki parça hiç sormadı (${calls.length - before} çağrı)`);
   t(
     seen2.some((x) => /çağrı yapılmadı/.test(x.error ?? "")),
@@ -263,7 +263,7 @@ function make(matcher) {
     },
   };
 
-  const out = await svc.searchLiveProducts(["nadir"], "clothing");
+  const out = await svc.findCandidateUrls(["nadir"], "clothing");
   t(calls.length >= 2, `500 sonrası merdiven yürüdü (${calls.length} çağrı)`);
   t(out.length > 0, "geçici hatadan sonra global katman sonuç verdi");
 }

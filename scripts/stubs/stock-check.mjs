@@ -24,7 +24,11 @@ const card = (title, over) => ({
 
 async function run(cards) {
   const provider = new ContextDevProductProvider(
-    { searchLiveProducts: async () => cards, enrichBrandMetadata: async () => null },
+    {
+      findCandidateUrls: async () => cards.map((c) => c.productUrl || "https://www.trendyol.com/x-p-1"),
+      productsFromUrls: async () => cards,
+      enrichBrandMetadata: async () => null,
+    },
     { maxLiveItems: 4, deadlineMs: 20000, visualRerank: false },
   );
   const items = hydrateItems(MOCK_SCENARIOS["pink-outfit"]);

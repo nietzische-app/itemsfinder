@@ -383,12 +383,24 @@ export class ContextDevProductProvider implements ProductProvider {
         attributes: item.attributes,
       });
 
-      cards = await this.context.searchLiveProducts(
+      const urls = await this.context.findCandidateUrls(
         ladder.length > 0 ? ladder : [item.label],
         item.category,
         signal,
         (attempt) => trace?.search({ itemId: item.id, ...attempt }),
       );
+
+      /*
+       * Çıkarım artık burada, servisin içinde değil.
+       *
+       * Ayrılmasının sebebi ölçülmüş bir kusur: işaretleme okuma yolu yalnızca
+       * görsel arama dalına takılıydı, çünkü metin dalının çıkarımı
+       * `searchLiveProducts`'ın **içine** gömülüydü. Yani `ENABLE_MARKUP_EXTRACT`
+       * açıkken bile ana yolda hiç çalışmıyordu ve üretimde tek bir `[markup]`
+       * satırı çıkmadı. Aday bulma ile kart çıkarma iki ayrı iş; ayrı durunca her
+       * ikisinin de sağlayıcısı bağımsız seçilebiliyor.
+       */
+      cards = await this.extractFrom(urls, signal, trace);
     }
 
     if (cards.length === 0) return null;

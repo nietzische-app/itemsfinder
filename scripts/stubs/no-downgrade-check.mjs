@@ -23,7 +23,8 @@ const t = (c, n) => (c ? pass++ : fails.push(n));
 function providerReturning(cards) {
   return new ContextDevProductProvider(
     {
-      searchLiveProducts: async () => cards,
+      findCandidateUrls: async () => cards.map((c) => c.productUrl || "https://www.trendyol.com/x-p-1"),
+      productsFromUrls: async () => cards,
       enrichBrandMetadata: async () => null,
     },
     { maxLiveItems: 4, deadlineMs: 20000, visualRerank: false },

@@ -269,7 +269,15 @@ export class ContextDevService {
    * labels constantly ("Black Leather Biker Jacket"), and both credits and
    * latency are the scarce resources here.
    */
-  private readonly productCache = new Map<string, CacheEntry<LiveProductCard[]>>();
+  /**
+   * Aday adresler, kart değil.
+   *
+   * Arama ile çıkarım ayrıldığında önbellek de ayrıldı: saklanan şey artık
+   * «bu sorgu hangi sayfaları buldu». Kart saklamak, çıkarımın hangi yolla
+   * yapıldığını da dondururdu — oysa aynı adresler bir çalıştırmada işaretlemeden,
+   * bir başkasında `web.extract` ile okunabiliyor.
+   */
+  private readonly urlCache = new Map<string, CacheEntry<string[]>>();
   private readonly brandCache = new Map<string, CacheEntry<BrandMetadata | null>>();
 
   constructor(apiKey: string, options: ContextDevServiceOptions = {}) {
@@ -368,18 +376,18 @@ export class ContextDevService {
    *
    * Resolves to `[]` on any failure — callers fall back to the catalogue.
    */
-  async searchLiveProducts(
+  async findCandidateUrls(
     queries: string[],
     category: ItemCategory,
     signal?: AbortSignal,
     onAttempt?: (attempt: SearchAttemptRecord) => void,
-  ): Promise<LiveProductCard[]> {
+  ): Promise<string[]> {
     const ladder = queries.map((entry) => entry.trim()).filter(Boolean);
     if (ladder.length === 0) return [];
 
     // Önbellek anahtarı en özel basamak: aynı parça hep aynı merdiveni üretiyor.
     const cacheKey = `${category}:${ladder[0]!.toLowerCase()}`;
-    const cached = this.readCache(this.productCache, cacheKey);
+    const cached = this.readCache(this.urlCache, cacheKey);
     if (cached) return cached;
 
     try {
@@ -513,37 +521,10 @@ export class ContextDevService {
         });
       }
 
-      if (candidates.length === 0) return [];
-
-      /*
-       * Çıkarım süresi ayrı ölçülüyor.
-       *
-       * Üretimde ürün aşaması 42.7 saniye sürdü ve `ms.products` tek bir sayı
-       * olduğu için sürenin nerede geçtiği bilinmiyordu. Arama ile çıkarım
-       * bambaşka iki maliyet: arama bir istek, çıkarım aday başına bir sayfa
-       * indirip modele okutuyor. Hangisini kısacağımızı ancak ikisi ayrı ölçülünce
-       * söyleyebiliriz.
-       */
-      const extractStartedAt = Date.now();
-      const extracted = await Promise.allSettled(
-        candidates.map((url) => this.extractProducts(url, signal)),
-      );
-
-      const products = extracted.flatMap((outcome) =>
-        outcome.status === "fulfilled" ? outcome.value : [],
-      );
-
-      console.log(
-        `[context.dev] çıkarım ${Date.now() - extractStartedAt}ms — ${candidates.length} aday, ` +
-          `${extracted.filter((o) => o.status === "rejected").length} başarısız, ` +
-          `${products.length} satır («${ladder[0]}»)`,
-      );
-
-      const deduped = dedupeByUrl(products);
-      this.writeCache(this.productCache, cacheKey, deduped);
-      return deduped;
+      this.writeCache(this.urlCache, cacheKey, candidates);
+      return candidates;
     } catch (error) {
-      logFailure("searchLiveProducts", ladder[0] ?? "", error);
+      logFailure("findCandidateUrls", ladder[0] ?? "", error);
       return [];
     }
   }
