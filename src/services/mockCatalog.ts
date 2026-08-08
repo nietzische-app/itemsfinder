@@ -2600,20 +2600,29 @@ export function findProductsForLabel(
 }
 
 /**
- * Repoints a catalogue product's storefront search at what was actually
- * detected, keeping the retailer.
+ * Repoints a catalogue product at what was actually detected.
  *
  * Without this, a shoe detection that resolves to the catalogue's platform
  * sneaker sends you to a search for *that* sneaker's title. The family is right
  * but the query is still someone else's: the button says "find it in the store",
  * so the store it opens should be searching for your item.
+ *
+ * When a VLM description succeeded, `displayTitle` also overwrites the catalogue
+ * row's authored title — otherwise a cream crop top keeps showing as "Body" or
+ * cargo denim as "Deri Şort" because those were the scenario's placeholder rows.
  */
 export function retargetSearchQuery(
   product: CatalogProduct,
   searchQuery: string,
+  displayTitle?: string,
 ): CatalogProduct {
   const trimmed = searchQuery.trim();
-  return trimmed ? { ...product, searchQuery: trimmed } : product;
+  const title = displayTitle?.trim();
+  return {
+    ...product,
+    ...(trimmed ? { searchQuery: trimmed } : {}),
+    ...(title ? { title } : {}),
+  };
 }
 
 /* -------------------------------------------------------------------------- */
