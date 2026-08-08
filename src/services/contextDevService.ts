@@ -264,6 +264,22 @@ export class ContextDevService {
     includeDomains: string[],
     signal?: AbortSignal,
   ): Promise<string[]> {
+    /*
+     * Kesme sessiz olmamalı.
+     *
+     * Tavan API'nin sınırı ve kesmek doğru davranış, ama kesilen her alan adı o
+     * aramada **hiç sorulmamış** bir mağaza demek. Sessizce yapılırsa listeye
+     * eklenen on birinci mağaza hiçbir zaman aranmaz ve bunu kimse fark etmez —
+     * çalışıyor görünen, aslında görmezden gelinen bir yapılandırma.
+     */
+    if (includeDomains.length > MAX_INCLUDE_DOMAINS) {
+      console.warn(
+        `[context.dev] ${includeDomains.length} alan adı tavana (${MAX_INCLUDE_DOMAINS}) ` +
+          `kırpıldı — bu aramada sorulmayanlar: ` +
+          includeDomains.slice(MAX_INCLUDE_DOMAINS).join(", "),
+      );
+    }
+
     const search = await this.client.web.search(
       {
         query,
