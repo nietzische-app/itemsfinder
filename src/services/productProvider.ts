@@ -331,6 +331,17 @@ export class ContextDevProductProvider implements ProductProvider {
     signal: AbortSignal,
     trace?: TraceCollector,
   ): Promise<LiveProductCard[]> {
+    /*
+     * Aday yoksa çıkaracak bir şey de yok.
+     *
+     * Üretim logu bunu «0 sayfanın işaretlemesi okunamadı — çıkarıma düşüldü»
+     * diye yazdı, iki kez. Oysa okunamayan bir şey yoktu: arama hiç aday
+     * döndürmemişti. Olmayan bir başarısızlığı raporlamak, `degraded` listesini
+     * gerçek arızaların arasına gürültü katıyor — ve o liste arayüzde amber bir
+     * uyarı olarak çiziliyor.
+     */
+    if (urls.length === 0) return [];
+
     if (markupExtractionEnabled()) {
       const cards = await productsFromMarkup(urls, signal);
       if (cards.length > 0) return cards;

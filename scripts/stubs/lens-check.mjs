@@ -325,6 +325,48 @@ function makeProvider({ fromUrls, fromSearch }) {
   delete process.env.ENABLE_MARKUP_EXTRACT;
 }
 
+/* -------------------------------------------------------------------------- */
+/*  10. Aday yokken «okunamadı» denmemeli                                     */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * Üretim logu `degraded` içine iki kez «0 sayfanın işaretlemesi okunamadı»
+ * yazdı. Okunamayan bir şey yoktu: arama 401 aldığı için hiç aday dönmemişti.
+ * Olmayan bir başarısızlığı raporlamak, gerçek arızaların arasına gürültü
+ * katıyor — ve `degraded` arayüzde amber bir uyarı olarak çiziliyor.
+ */
+{
+  process.env.ENABLE_MARKUP_EXTRACT = "true";
+  nextPayload = { webDetection: {} };
+
+  const notes = [];
+  let extractCalls = 0;
+  const provider = new ContextDevProductProvider(
+    {
+      findCandidateUrls: async () => [],
+      productsFromUrls: async () => {
+        extractCalls += 1;
+        return [];
+      },
+      enrichBrandMetadata: async () => null,
+    },
+    { maxLiveItems: 1, deadlineMs: 20000, visualRerank: false },
+  );
+
+  await provider.enrich(RESULT, {
+    image: { buffer: photo },
+    trace: { search() {}, reject() {}, degrade: (stage, reason) => notes.push(reason) },
+  });
+
+  t(
+    !notes.some((reason) => /okunamadı/.test(reason)),
+    `aday yokken «okunamadı» denmiyor: ${JSON.stringify(notes)}`,
+  );
+  t(extractCalls === 0, `aday yokken çıkarım da çağrılmıyor (${extractCalls})`);
+
+  delete process.env.ENABLE_MARKUP_EXTRACT;
+}
+
 server.close();
 console.log(`${pass} ✓ / ${fails.length} ✗`);
 for (const f of fails) console.log(`  ✗ ${f}`);
