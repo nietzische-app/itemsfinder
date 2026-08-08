@@ -1,6 +1,7 @@
 import "server-only";
 
 import { isDirectProductUrl, isSearchUrl } from "@/lib/productUrl";
+import { visionApiKey } from "@/services/visionKey";
 
 /**
  * Giysi kırpımından doğrudan ürün sayfası bulma — metinden geçmeden.
@@ -183,7 +184,7 @@ export function visualLookupEnabled(): boolean {
 }
 
 export function getVisualLookup(): VisionWebLookup | null {
-  const key = process.env.GOOGLE_CLOUD_VISION_API_KEY?.trim();
+  const key = visionApiKey();
   if (!visualLookupEnabled() || !key) return null;
   return new VisionWebLookup(key);
 }
@@ -201,8 +202,8 @@ export function getVisualLookup(): VisionWebLookup | null {
  */
 export function visualLookupStatus(): string {
   if (!visualLookupEnabled()) return "kapalı — ENABLE_VISION_LENS=true değil";
-  if (!process.env.GOOGLE_CLOUD_VISION_API_KEY?.trim()) {
-    return "kapalı — GOOGLE_CLOUD_VISION_API_KEY yok";
+  if (!visionApiKey()) {
+    return "kapalı — GOOGLE_CLOUD_VISION_API_KEY / GOOGLE_VISION_API_KEY yok";
   }
   return "açık";
 }

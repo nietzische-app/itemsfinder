@@ -388,6 +388,20 @@ function makeProvider({ fromUrls, fromSearch }) {
   delete process.env.GOOGLE_CLOUD_VISION_API_KEY;
   t(/API_KEY/.test(visualLookupStatus()), `anahtar eksikliği sebebiyle: «${visualLookupStatus()}»`);
 
+  /*
+   * Takma ad da tanınmalı — ve bu, üretimde ölçülmüş bir kusurun kapısı.
+   *
+   * Dedektör `GOOGLE_VISION_API_KEY`'i de kabul ediyordu; sonradan yazılan görsel
+   * yol yalnızca uzun adı okuyordu. Kullanıcı kısa adı ayarlamıştı, yani aynı
+   * taramanın logunda `source: "google-vision"` ile `[lens] kapalı — … yok`
+   * yan yana yazıyordu. Anahtar okuması artık tek yerde (`services/visionKey.ts`);
+   * bu kontrol o tekliğin bozulmadığını ölçüyor.
+   */
+  process.env.GOOGLE_VISION_API_KEY = "takma-ad";
+  t(visualLookupStatus() === "açık", `takma ad tanınıyor: «${visualLookupStatus()}»`);
+  t(getVisualLookup() !== null, "takma adla yol kuruluyor");
+  delete process.env.GOOGLE_VISION_API_KEY;
+
   process.env.GOOGLE_CLOUD_VISION_API_KEY = key;
   t(visualLookupStatus() === "açık", `her şey yerindeyken «açık»: «${visualLookupStatus()}»`);
 

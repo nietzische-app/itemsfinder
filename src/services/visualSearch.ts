@@ -33,6 +33,7 @@ import {
 import { createTrace, type TraceCollector } from "@/lib/scanTrace";
 import { foregroundFilter, learnBackdrop } from "@/services/foreground";
 import { imageSize, regionDominantColor } from "@/services/regionColor";
+import { visionApiKey } from "@/services/visionKey";
 import {
   ContextDevProductProvider,
   MockProductProvider,
@@ -806,16 +807,10 @@ class ComposedVisualSearchService implements VisualSearchService {
 /**
  * Reads the Cloud Vision credential.
  *
- * `GOOGLE_VISION_API_KEY` is accepted as an alias for
- * `GOOGLE_CLOUD_VISION_API_KEY` so either spelling works.
+ * Gövdesi `services/visionKey.ts`'e taşındı: aynı kimliği iki yerde ayrı ayrı
+ * okumak, görsel arama yolunun takma adı görmemesine yol açmıştı.
  */
-function readVisionApiKey(): string | undefined {
-  return (
-    process.env.GOOGLE_CLOUD_VISION_API_KEY?.trim() ||
-    process.env.GOOGLE_VISION_API_KEY?.trim() ||
-    undefined
-  );
-}
+const readVisionApiKey = visionApiKey;
 
 /** True when real credentials are present and mocking is not forced on. */
 export function isVisionConfigured(): boolean {
