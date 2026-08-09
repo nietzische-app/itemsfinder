@@ -15,6 +15,7 @@ import type { TraceCollector } from "@/lib/scanTrace";
 import { buildSearchQuery, relaxedQueries } from "@/lib/searchQuery";
 import { cropRegion } from "@/services/imageCrop";
 import { getVisualLookup, visualLookupStatus } from "@/services/visualLookup";
+import { getGoogleSearch, googleSearchStatus } from "@/services/googleSearch";
 import { markupExtractionEnabled, productsFromMarkup } from "@/services/markupProducts";
 import { productThumbnail } from "@/lib/productThumbnail";
 import { hydrateProduct } from "@/services/mockCatalog";
@@ -167,6 +168,7 @@ export class ContextDevProductProvider implements ProductProvider {
       `[lens] ${visualLookupStatus()}` +
         (context.image ? "" : " (ayrıca bu taramada fotoğraf taşınmadı)"),
     );
+    console.log(`[cse] ${googleSearchStatus()}`);
 
     try {
       // Spend the budget on the detections the user is most likely to act on.
@@ -331,6 +333,59 @@ export class ContextDevProductProvider implements ProductProvider {
   }
 
   /**
+   * Aday adresleri bulur — iki sağlayıcıdan biriyle.
+   *
+   * Aday bulma zincirin ilk halkası ve tek satıcıya bağlıydı: `web.search` ölünce
+   * (üretimde `401 USAGE_EXCEEDED`) çıkarılacak sayfa da kalmıyor, yani işaretleme
+   * okuma yolu tek başına kurtarmıyor.
+   *
+   * Google Programmable Search açıksa **önce** o deneniyor. Sıra kasıtlı: bir
+   * geri düşüş kurgusu ölü bir anahtara her seferinde bir gidiş dönüş harcatırdı,
+   * ve context.dev kredisi bittiğinde durum tam olarak buydu. Boş dönerse
+   * merdiven olduğu gibi devrede.
+   *
+   * Merdivenin yalnızca ilk basamağı CSE'ye gidiyor: gevşetme `web.search`'ün
+   * sıfır sonucuna karşı yazılmıştı, CSE ise zaten alan adına kısıtlı bir web
+   * araması ve kotası günlük — üç kat sorgu harcamadan önce ölçülmesi gerekiyor.
+   */
+  private async discoverCandidates(
+    ladder: string[],
+    item: DetectedItem,
+    signal: AbortSignal,
+    trace?: TraceCollector,
+  ): Promise<string[]> {
+    const google = getGoogleSearch();
+
+    if (google && ladder[0]) {
+      const startedAt = Date.now();
+      const { urls, seen, error } = await google.findProductPages(ladder[0], item.category, signal);
+
+      trace?.search({
+        itemId: item.id,
+        source: "cse",
+        tier: "tr",
+        rung: 0,
+        query: ladder[0],
+        found: urls.length,
+        ms: Date.now() - startedAt,
+        error,
+      });
+
+      if (urls.length > 0) return urls;
+      if (seen > 0) {
+        trace?.degrade("products", `Google araması ${seen} sonuç buldu, hiçbiri ürün sayfası değildi`);
+      }
+    }
+
+    return this.context.findCandidateUrls(
+      ladder,
+      item.category,
+      signal,
+      (attempt) => trace?.search({ itemId: item.id, ...attempt }),
+    );
+  }
+
+  /**
    * Aday adreslerden kart çıkarır — iki yoldan biriyle.
    *
    * Varsayılan `web.extract`: sayfayı bir modele okutuyor, doğru ama pahalı ve
@@ -410,11 +465,11 @@ export class ContextDevProductProvider implements ProductProvider {
         attributes: item.attributes,
       });
 
-      const urls = await this.context.findCandidateUrls(
+      const urls = await this.discoverCandidates(
         ladder.length > 0 ? ladder : [item.label],
-        item.category,
+        item,
         signal,
-        (attempt) => trace?.search({ itemId: item.id, ...attempt }),
+        trace,
       );
 
       /*

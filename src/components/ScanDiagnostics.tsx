@@ -124,9 +124,11 @@ export function ScanDiagnostics({ result }: { result: DetectionResult }) {
                     <span className="font-medium text-neutral-600 dark:text-neutral-300">
                       {entry.source === "görsel"
                         ? "Görsel"
-                        : entry.tier === "tr"
-                          ? "TR"
-                          : "Global"}
+                        : entry.source === "cse"
+                          ? "Google"
+                          : entry.tier === "tr"
+                            ? "TR"
+                            : "Global"}
                     </span>
                     {/* Basamak metin merdiveninin kavramı; görsel yolda karşılığı yok. */}
                     {entry.source === "metin" ? (
