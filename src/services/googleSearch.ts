@@ -74,15 +74,42 @@ const NON_SHOP_HOSTS = [
 ];
 
 /**
- * Öncelikli mağazalar — elenmiyor, **öne alınıyor.**
+ * Arama motoruna tanımlı mağazalar — **motorun yapılandırmasının kod içindeki aynası.**
  *
- * Türkiye'den alışveriş yapan biri için TL fiyat ve yurt içi kargo veren bir
- * bağlantı, aynı ürünün yurt dışı bağlantısından iyi. Ama global sonuçlar da
- * gösteriliyor, çünkü bazı ürünler Türkiye'de gerçekten satılmıyor — izin
- * listesinin kaldırılma sebebi de buydu.
+ * ## Neden burada bir liste var
+ *
+ * Google'ın «Tüm web'de ara» seçeneği kaldırılıyor (arayüzdeki bildirime göre
+ * 1 Ocak 2027'de tamamen). Yani motor yalnızca kendisine tanımlı sitelerde
+ * arıyor ve o liste artık **gerçek kısıtlama**. Bir sonraki okuyan kişi o
+ * anahtarı aramasın diye yazılı duruyor.
+ *
+ * Bu liste elemiyor — motor zaten yalnızca bunlarda arıyor. İşi **sıralamak**:
+ * Türkiye'den alışveriş yapan biri için TL fiyat ve yurt içi kargo veren bağlantı
+ * önce gelmeli, ve sıra doğrudan hangi mağazanın kullanıcıya gösterileceğini
+ * belirliyor çünkü çıkarma aday listesini baştan tüketiyor.
+ *
+ * ## Neden `TURKISH_DOMAINS`'e eklenmedi
+ *
+ * O liste context.dev'in `includeDomains` parametresine gidiyor ve orada
+ * **on alan adı tavanı** var (üretimde ölçüldü: `too_big, maximum: 10`). Oraya
+ * beş mağaza daha eklemek, hâlihazırdaki beşini aramanın dışına iterdi. İki
+ * sağlayıcının kısıtları farklı, o yüzden listeleri de ayrı.
  */
+const CSE_SITE_LIST = [
+  // Motora tanımlı Türkiye perakendecileri.
+  "trendyol.com", "boyner.com.tr", "lcw.com", "defacto.com.tr", "mavi.com",
+  "koton.com", "beymen.com", "vakko.com", "flo.com.tr", "hepsiburada.com",
+  "amazon.com.tr",
+  // Türkiye'de mağazası olan uluslararası markalar.
+  "zara.com", "pullandbear.com", "stradivarius.com", "bershka.com", "hm.com",
+  "mango.com",
+  // Kozmetik.
+  "sephora.com.tr", "gratis.com", "watsons.com.tr", "rossmann.com.tr",
+];
+
 const PREFERRED_HOSTS = new Set(
   [
+    ...CSE_SITE_LIST,
     ...Object.values(TURKISH_DOMAINS),
     ...Object.values(GLOBAL_DOMAINS),
     ...(process.env.EXTRA_RETAIL_DOMAINS?.split(",").map((entry) => entry.trim()) ?? []),

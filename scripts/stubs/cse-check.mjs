@@ -199,6 +199,41 @@ const search = new GoogleProductSearch("stub-key", "stub-engine");
   t(cseAdvice(unknown) === unknown, "tanınmayan hata olduğu gibi bırakılıyor");
 }
 
+/*
+ * 8) Motora tanımlı her mağaza öncelikli sayılıyor mu?
+ *
+ * Ölçülmüş bir uyumsuzluktan geldi: motora beş yeni mağaza eklendi (beymen,
+ * vakko, flo, hepsiburada, mango) ama kodun öncelik listesinde yoktular, yani
+ * sonuç verseler bile sıralamada arkaya düşüyorlardı. Sıra önemli çünkü çıkarma
+ * aday listesini baştan tüketiyor.
+ */
+{
+  const engineSites = [
+    "beymen.com", "vakko.com", "flo.com.tr", "hepsiburada.com", "mango.com",
+    "trendyol.com", "boyner.com.tr", "lcw.com", "defacto.com.tr", "mavi.com",
+    "koton.com", "zara.com", "pullandbear.com", "stradivarius.com", "bershka.com",
+    "hm.com", "amazon.com.tr", "sephora.com.tr", "gratis.com", "watsons.com.tr",
+    "rossmann.com.tr",
+  ];
+
+  const missed = [];
+  for (const domain of engineSites) {
+    // Bilinmeyen bir mağazayla yan yana koyup hangisinin öne geçtiğine bak.
+    nextItems = [
+      "https://www.bilinmeyenmagaza.com.tr/a-p-111111111",
+      `https://www.${domain}/urun-p-222222222`,
+    ];
+    const { urls } = await search.findProductPages("triko", "clothing");
+    if (!urls[0]?.includes(domain)) missed.push(domain);
+  }
+
+  t(
+    missed.length === 0,
+    `motora tanımlı her mağaza öncelikli: eksik ${JSON.stringify(missed)}`,
+  );
+  console.log(`  motora tanımlı ${engineSites.length} mağazanın hepsi öncelik listesinde`);
+}
+
 server.close();
 console.log(`${pass} ✓ / ${fails.length} ✗`);
 for (const f of fails) console.log(`  ✗ ${f}`);
