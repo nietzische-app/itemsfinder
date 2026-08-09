@@ -293,5 +293,13 @@ export function visualLookupStatus(): string {
   if (!visionApiKey()) {
     return "kapalı — GOOGLE_CLOUD_VISION_API_KEY / GOOGLE_VISION_API_KEY yok";
   }
-  return "açık";
+  /*
+   * Açıkken de kararı hatırlatıyor.
+   *
+   * Bu yol ölçülüp reddedildi ama bayrak açılabilir durumda, ve açık olduğunda
+   * parça başına bir Vision birimi harcayıp saniyeler ekliyor — üretimde 5.4
+   * saniye, sıfır ürün sayfası. Bayrağı açan kişi (ki bir kez ben önerdim, sonra
+   * ölçüm beni yalanladı) ölçümü görmeden kalmasın.
+   */
+  return "açık — ama ÖLÇÜLDÜ VE REDDEDİLDİ, kapatılması önerilir (docs/BULUNAMADI.md 4b)";
 }

@@ -398,12 +398,17 @@ function makeProvider({ fromUrls, fromSearch }) {
    * bu kontrol o tekliğin bozulmadığını ölçüyor.
    */
   process.env.GOOGLE_VISION_API_KEY = "takma-ad";
-  t(visualLookupStatus() === "açık", `takma ad tanınıyor: «${visualLookupStatus()}»`);
+  t(visualLookupStatus().startsWith("açık"), `takma ad tanınıyor: «${visualLookupStatus()}»`);
   t(getVisualLookup() !== null, "takma adla yol kuruluyor");
   delete process.env.GOOGLE_VISION_API_KEY;
 
   process.env.GOOGLE_CLOUD_VISION_API_KEY = key;
-  t(visualLookupStatus() === "açık", `her şey yerindeyken «açık»: «${visualLookupStatus()}»`);
+    // Açıkken bile ölçülmüş reddi hatırlatmalı: bayrak açılabilir ama karar verilmiş.
+  t(visualLookupStatus().startsWith("açık"), `her şey yerindeyken «açık»: «${visualLookupStatus()}»`);
+  t(
+    /REDDEDİLDİ/.test(visualLookupStatus()),
+    `açıkken ölçülmüş ret hatırlatılıyor: «${visualLookupStatus()}»`,
+  );
 
   // Ve durum satırı gerçekten her taramada basılıyor mu?
   const lines = [];
