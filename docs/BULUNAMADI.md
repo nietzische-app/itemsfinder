@@ -97,7 +97,7 @@ Böyle bir sorgunun döndürdüğü her satır zaten yanlış. Ad artık **yaln�
 kesilecekse** sona taşınıyor, ve `eval/searchQueryCases.ts` ile yeni bir eval
 kapısı (**Sorguda ürün adı**, taban %100) bunu her basamakta ölçüyor.
 
-### 4b. Kelimeye çevirmeden aramak — ✅ yazıldı, kapalı duruyor
+### 4b. Kelimeye çevirmeden aramak — ❌ ölçüldü ve reddedildi
 
 Yukarıdaki merdivenin tamamı bir varsayıma dayanıyor: giysiyi doğru kelimelerle
 tarif edebildiğimize. Ölçüm bunu tam olarak desteklemiyor — bölge rengi %81, ve
@@ -127,16 +127,40 @@ bulamazsa merdiven olduğu gibi devrede.
 ENABLE_VISION_LENS=true    # varsayılan kapalı
 ```
 
-**Kapalı doğuyor, çünkü kalitesi ölçülmedi.** Metin aramasından iyi olduğu bu
-ortamda kanıtlanamaz — Vision anahtarı yok. Karar, anahtarlı tek bir oturumda iki
-yolun yan yana ölçülmesiyle verilecek; muhasebe bunun için hazır: her aramanın
-kaynağı (`görsel` / `metin`) ve getirdiği yeni aday sayısı teşhis panelinde ve
-`[scan]` logunun `searchYield` alanında (`img:0=3`, `tr:1=0`) duruyor.
+**Ve ölçüm reddetti.** Üretimde açıldı; dört parça için 166 sonuç döndü ve
+**ürün sayfası sayısı sıfırdı** — dört parçanın dördünde de:
 
-Sürülen şey karar, kalite değil: `npm run check:stubs` → görsel aday bulma, 18
-kontrol — hangi adres ürün sayfası sayılıyor, mağaza başına kaç aday alınıyor,
-Vision çökünce ne oluyor, ve görsel yol boş dönünce metin merdiveni gerçekten
-devreye giriyor mu.
+```
+youtube.com×17  facebook.com×10  tiktok.com×8  instagram.com×7
+spotify.com×4   pinterest.com×3  aas.org  web.ua.es  bbci.co.uk  bcg.com
++ görsel CDN'leri: i.pinimg.com, m.media-amazon.com, cdn.dsmcdn.com,
+  n.nordstrommedia.com, images.bloomingdalesassets.com
+```
+
+Sebebi bir hata değil, mekanizmanın kendisi. İki alan iki farklı soruyu
+cevaplıyor ve ikisi de bizim sorumuz değil: `pagesWithMatchingImages` **bu
+görselin nerede yayımlandığını** buluyor — kırpım bir influencer fotoğrafından
+geldiği için cevap doğru, gönderinin kendisi ve onu paylaşan platformlar; kısmi
+eşleşme çalıştığı için kırpmak da kurtarmıyor. `visuallySimilarImages` ise benzer
+**görselleri** buluyor ve döndürdüğü şey bir görselin adresi, sayfanın değil.
+
+Dikkat çeken ayrıntı: dönen CDN'lerin arasında Trendyol (`cdn.dsmcdn.com`),
+Amazon ve Nordstrom var. Yani Vision doğru mağazaların ürün görsellerini
+gerçekten buluyor — ama elimize geçen görselin adresi ve oradan ürün sayfasına
+gitmenin genel bir yolu yok.
+
+Kod duruyor, silinmedi: ölçülmüş bir ret, silinmiş bir denemeden değerli. Aynı
+fikre gelen bir sonraki kişi ölçümü tekrarlamak zorunda kalmıyor.
+
+**Çalışabileceği tek durum:** kullanıcı bir influencer fotoğrafı değil, doğrudan
+bir **ürün fotoğrafı** taradığında. Ölçülmedi; bayrağı açan kişi önce bunu
+ölçmeli.
+
+Yol boyunca gerçek bir kusur da buldu: `instagram.com/p/AbCdEf/`, Mango ve H&M
+için yazılmış `/p/<kimlik>` kalıbına uyuyor ve ürün sayfası sayılıyordu. Metin
+yolunda «bu ana bilgisayar mağaza mı» sorusu `includeDomains` ile zaten
+cevaplanıyordu; görsel yolun böyle bir kısıtı yoktu. Artık ikisi de aynı
+perakendeci listesine bakıyor.
 
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 

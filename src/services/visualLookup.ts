@@ -226,12 +226,46 @@ export class VisionWebLookup {
 }
 
 /**
- * Bayrak arkasında, ve kapalı doğuyor.
+ * Bayrak arkasında, ve **ölçülüp reddedildi.**
  *
- * Kalitesinin metin aramasından iyi olduğu **ölçülmedi** — bu ortamda Vision
- * anahtarı yok. Anahtarlı tek bir oturumda iki yol yan yana ölçülüp karar
- * verilecek; o zamana kadar açık olması, ölçülmemiş bir değişikliği kullanıcıya
- * göndermek olurdu.
+ * ## Ölçüm
+ *
+ * Üretimde açıldı ve dört parça için 166 sonuç döndü. Ana bilgisayar dağılımı:
+ *
+ *   youtube.com×17, facebook.com×10, tiktok.com×8, instagram.com×7,
+ *   spotify.com×4, pinterest.com×3, aas.org, web.ua.es, bbci.co.uk, bcg.com
+ *   + görsel CDN'leri: i.pinimg.com, m.media-amazon.com, cdn.dsmcdn.com,
+ *     n.nordstrommedia.com, images.bloomingdalesassets.com
+ *
+ * **Ürün sayfası sayısı: sıfır.** Dört parçanın dördünde de.
+ *
+ * ## Neden — ve bu bir hata değil, mekanizmanın kendisi
+ *
+ * İki alan iki farklı soruyu cevaplıyor ve ikisi de bizim sorumuz değil:
+ *
+ *  - `pagesWithMatchingImages` **bu görselin nerede yayımlandığını** buluyor.
+ *    Kırpım bir influencer fotoğrafından geldiği için cevap doğru: gönderinin
+ *    kendisi ve onu paylaşan platformlar. Kısmi eşleşme çalıştığı için kırpmak
+ *    da kurtarmıyor.
+ *  - `visuallySimilarImages` benzer **görselleri** buluyor ve döndürdüğü adres
+ *    bir görselin adresi, sayfanın değil. Bir görsel adresi hiçbir zaman ürün
+ *    sayfası olamaz.
+ *
+ * İkincisinde dikkat çeken bir ayrıntı var: dönen CDN'lerin arasında Trendyol
+ * (`cdn.dsmcdn.com`), Amazon ve Nordstrom var — yani Vision doğru mağazaların
+ * ürün görsellerini gerçekten buluyor. Ama elimize geçen şey görselin adresi ve
+ * oradan ürün sayfasına gitmenin genel bir yolu yok.
+ *
+ * ## Kod neden duruyor
+ *
+ * `describeImage`'ın filtreli hâli gibi: ölçülmüş bir ret, silinmiş bir denemeden
+ * daha değerli. Bir daha aynı fikre gelen kişi bu yorumu okuyup ölçümü tekrar
+ * yapmak zorunda kalmıyor.
+ *
+ * **Çalışabileceği tek durum:** kullanıcı bir influencer fotoğrafı değil, doğrudan
+ * bir **ürün fotoğrafı** taradığında. O zaman `pagesWithMatchingImages` o
+ * fotoğrafın yayımlandığı mağaza sayfasını bulabilir — ve perakendeci kapısı
+ * zaten yerinde. Ölçülmedi; bayrağı açan kişi önce bunu ölçmeli.
  */
 export function visualLookupEnabled(): boolean {
   return process.env.ENABLE_VISION_LENS === "true";
