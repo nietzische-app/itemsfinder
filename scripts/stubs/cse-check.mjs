@@ -130,7 +130,8 @@ const search = new GoogleProductSearch("stub-key", "stub-engine");
   status = 429;
   const { urls, error } = await search.findProductPages("triko", "clothing");
   t(urls.length === 0, "kota hatasında boş dönüyor");
-  t(/Quota/.test(error ?? ""), `gerekçe taşınıyor: «${error}»`);
+  // Ham «Quota exceeded» değil, yapılacak işe çevrilmiş hâli taşınıyor.
+  t(/kota/i.test(error ?? ""), `gerekçe yönergeye çevrilmiş hâlde taşınıyor: «${error}»`);
   status = 200;
 }
 
@@ -167,6 +168,35 @@ const search = new GoogleProductSearch("stub-key", "stub-engine");
 
   delete process.env.GOOGLE_VISION_API_KEY;
   process.env.GOOGLE_CSE_API_KEY = own;
+}
+
+/*
+ * 7) Hata mesajı yapılacak işe çevriliyor mu?
+ *
+ * Ham mesaj doğru ama eyleme geçirmiyor: «Requests to this API … are blocked»
+ * cümlesi okuyan kişiye konsolda hangi düğmeye basacağını söylemiyor. Kurulumun
+ * altı adımı var ve hangisinin atlandığı ancak buradan okunabiliyor.
+ */
+{
+  const { cseAdvice } = await import("@/services/googleSearch");
+
+  const cases = [
+    ["Custom Search API has not been used in project 123 before or it is disabled", /Library.*Enable|Enable/i],
+    ["Requests to this API customsearch method … are blocked", /Enable/i],
+    ["Invalid Value", /cx|kimliği/i],
+    ["API key not valid. Please pass a valid API key.", /Anahtar geçersiz/i],
+    ["Quota exceeded for quota metric 'Queries'", /kota/i],
+  ];
+
+  for (const [message, expected] of cases) {
+    const advice = cseAdvice(message);
+    t(expected.test(advice), `«${message.slice(0, 40)}…» → «${advice.slice(0, 60)}»`);
+    t(advice !== message, `gerekçe yönergeye çevrildi: «${message.slice(0, 30)}…»`);
+  }
+
+  // Tanınmayan hata olduğu gibi kalmalı — uydurulmuş yönerge, yönergesizlikten kötü.
+  const unknown = "Something nobody has seen before";
+  t(cseAdvice(unknown) === unknown, "tanınmayan hata olduğu gibi bırakılıyor");
 }
 
 server.close();

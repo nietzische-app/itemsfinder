@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "check:pdp": "node --experimental-transform-types scripts/check-pdp.mjs",
     "check:links": "node --experimental-transform-types scripts/check-links.mjs",
+    "check:cse": "node --experimental-transform-types scripts/check-cse.mjs",
     "check:stubs": "node scripts/stubs/all.mjs",
     "eval": "node --experimental-transform-types scripts/eval.mjs",
     "eval:record": "node --experimental-transform-types scripts/eval-record.mjs",

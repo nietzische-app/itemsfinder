@@ -103,6 +103,40 @@ function isPreferred(host: string): boolean {
   return Array.from(PREFERRED_HOSTS).some((domain) => matchesHost(host, domain));
 }
 
+/**
+ * Google'ın hata metnini **yapılacak işe** çevirir.
+ *
+ * Ham mesaj doğru ama eyleme geçirmiyor: «Requests to this API customsearch
+ * method google.customsearch.v1.Search are blocked» cümlesi, okuyan kişiye
+ * konsolda hangi düğmeye basacağını söylemiyor. Kurulum bu projedeki en çok adımı
+ * olan iş ve adımların hangisinin atlandığı ancak buradan okunabiliyor.
+ *
+ * Tanımadığı hatayı olduğu gibi bırakıyor — uydurulmuş bir yönerge, yönerge
+ * olmamasından kötü.
+ */
+export function cseAdvice(message: string): string {
+  if (/has not been used|is disabled|SERVICE_DISABLED|blocked/i.test(message)) {
+    return (
+      "Custom Search API bu projede açık değil. Google Cloud Console → " +
+      "APIs & Services → Library → «Custom Search API» → Enable. " +
+      "Anahtarın hangi projeye ait olduğuna dikkat et."
+    );
+  }
+  if (/Invalid Value|invalid.*cx|cx.*invalid/i.test(message)) {
+    return (
+      "Arama motoru kimliği (cx) tanınmadı. GOOGLE_CSE_ID, gömme kodundaki " +
+      "«cx=» değerinin aynısı olmalı — başında/sonunda boşluk olmasın."
+    );
+  }
+  if (/API key not valid|API_KEY_INVALID|keyInvalid/i.test(message)) {
+    return "Anahtar geçersiz. Anahtar kısıtlamalarında Custom Search API'ye izin verildiğinden emin ol.";
+  }
+  if (/Quota|rateLimitExceeded|dailyLimitExceeded/i.test(message)) {
+    return "Günlük ücretsiz kota doldu. Yarın sıfırlanıyor; daha fazlası için faturalandırma gerekiyor.";
+  }
+  return message;
+}
+
 interface CseResponse {
   items?: Array<{ link?: string }>;
   error?: { message?: string; code?: number };
@@ -149,8 +183,10 @@ export class GoogleProductSearch {
 
       if (!response.ok || payload.error) {
         const reason = payload.error?.message ?? `HTTP ${response.status}`;
+        const advice = cseAdvice(reason);
         console.warn(`[cse] «${query}» başarısız: ${reason.slice(0, 160)}`);
-        return { urls: [], seen: 0, error: reason.slice(0, 160) };
+        if (advice !== reason) console.warn(`[cse] → ${advice}`);
+        return { urls: [], seen: 0, error: advice.slice(0, 200) };
       }
     } catch (error) {
       const reason = error instanceof Error ? error.message.slice(0, 80) : "istek başarısız";
