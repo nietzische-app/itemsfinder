@@ -65,7 +65,44 @@ const search = new GoogleProductSearch("stub-key", "stub-engine");
 
   t(seen === 5, `gelen sonuç sayılıyor (${seen})`);
   t(urls.length === 2, `yalnızca ürün sayfaları kaldı (${urls.length})`);
-  t(!urls.some((u) => /instagram/.test(u)), `mağaza olmayan ana bilgisayar elendi: ${JSON.stringify(urls)}`);
+  t(!urls.some((u) => /instagram/.test(u)), `mağaza olamayacak ana bilgisayar elendi: ${JSON.stringify(urls)}`);
+}
+
+/*
+ * 1b) Tanımadığımız bir mağaza da geçebilmeli — global arama bunun için var.
+ *
+ * İlk sürümde burada izin listesi vardı ve yalnızca 17 perakendeci geçiyordu;
+ * motor bütün web'i tarasa da sonuç o listeye iniyordu, yani «global» sözü
+ * boştu. Asıl garanti izin listesi değil **fiyat kanıtı**: her iki çıkarma yolu
+ * da fiyatsız sayfayı reddediyor, yani bir blog yazısı karta dönüşemiyor.
+ */
+{
+  nextItems = [
+    "https://www.instagram.com/p/AbCdEf/",
+    "https://www.vogue.com/article/moda-p-123456",
+    "https://www.bilinmeyenmagaza.com.tr/kadin-triko-p-987654321",
+  ];
+  const { urls } = await search.findProductPages("triko", "clothing");
+
+  t(
+    urls.some((u) => /bilinmeyenmagaza/.test(u)),
+    `tanınmayan mağaza geçiyor: ${JSON.stringify(urls)}`,
+  );
+  t(
+    !urls.some((u) => /instagram|vogue/.test(u)),
+    `sosyal ve yayın adresleri eleniyor: ${JSON.stringify(urls)}`,
+  );
+}
+
+// 1c) Bilinen perakendeci öne alınıyor — eleme değil sıralama.
+{
+  nextItems = [
+    "https://www.bilinmeyenmagaza.com.tr/a-p-111111111",
+    "https://www.trendyol.com/a/urun-p-222222222",
+  ];
+  const { urls } = await search.findProductPages("triko", "clothing");
+  t(urls[0]?.includes("trendyol"), `bilinen mağaza başta: ${JSON.stringify(urls)}`);
+  t(urls.length === 2, `öteki elenmedi, sadece sonra geldi (${urls.length})`);
 }
 
 // 2) Mağaza başına tek aday.

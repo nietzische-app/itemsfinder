@@ -41,21 +41,66 @@ const MAX_PER_HOST = 1;
 const MAX_CANDIDATES = 4;
 
 /**
- * Tanıdığımız mağazalar.
+ * Mağaza **olamayacak** ana bilgisayarlar.
  *
- * Arama motorunun kendisi de sitelerle sınırlanabiliyor (Programmable Search
- * motoruna perakendeciler tanımlanarak), ama ona **güvenilmiyor**: yapılandırma
- * bizim depomuzda değil, ve görsel yolda tam olarak bu kapı eksik olduğu için
- * `instagram.com/p/…` ürün sayfası sayılmıştı. İki kapı bir kapıdan iyi.
+ * İlk sürümde burada bir izin listesi vardı: yalnızca tanıdığımız 17 perakendeci.
+ * Güvenliydi ama global aramayı anlamsız kılıyordu — motor bütün web'i tarasa da
+ * sonuç 17 alan adına iniyordu.
+ *
+ * İzin listesi yerine **iki kapı**:
+ *
+ *  1. Buradaki kara liste — sosyal medya, video, ansiklopedi, haber, blog
+ *     platformları ve görsel CDN'leri. Bunlar tanım gereği mağaza değil.
+ *  2. **Fiyat kanıtı.** Asıl garanti bu ve kara listeden güçlü: her iki çıkarma
+ *     yolu da fiyatsız bir sayfayı reddediyor (`contextDevService` ve
+ *     `markupProducts` içinde `price === null → null`). Yani bir sayfa ancak
+ *     üzerinde gerçek bir fiyat varsa karta dönüşüyor, ve bağlantı ancak kart
+ *     varsa çiziliyor. Bir blog yazısı bu kapıdan geçemez.
+ *
+ * Görsel yoldaki `instagram.com/p/…` kusuru bu iki kapının ikisinden de dönüyor:
+ * kara listede var, ve zaten fiyat üretmiyor.
  */
-const RETAIL_HOSTS = new Set(
-  [...Object.values(TURKISH_DOMAINS), ...Object.values(GLOBAL_DOMAINS)].flat(),
+const NON_SHOP_HOSTS = [
+  // Sosyal ve video
+  "instagram.com", "facebook.com", "tiktok.com", "pinterest.com", "pinimg.com",
+  "twitter.com", "x.com", "youtube.com", "youtu.be", "reddit.com", "tumblr.com",
+  "linkedin.com", "snapchat.com", "vk.com", "spotify.com",
+  // Yayın ve ansiklopedi
+  "wikipedia.org", "wikimedia.org", "medium.com", "blogspot.com", "wordpress.com",
+  "quora.com", "bbc.co.uk", "bbc.com", "nytimes.com", "vogue.com", "elle.com",
+  // Pazaryeri olmayan altyapı ve görsel CDN'leri
+  "googleusercontent.com", "gstatic.com", "cloudfront.net", "akamaized.net",
+  "shopify.com", "amazonaws.com", "media-amazon.com", "ssl-images-amazon.com",
+];
+
+/**
+ * Öncelikli mağazalar — elenmiyor, **öne alınıyor.**
+ *
+ * Türkiye'den alışveriş yapan biri için TL fiyat ve yurt içi kargo veren bir
+ * bağlantı, aynı ürünün yurt dışı bağlantısından iyi. Ama global sonuçlar da
+ * gösteriliyor, çünkü bazı ürünler Türkiye'de gerçekten satılmıyor — izin
+ * listesinin kaldırılma sebebi de buydu.
+ */
+const PREFERRED_HOSTS = new Set(
+  [
+    ...Object.values(TURKISH_DOMAINS),
+    ...Object.values(GLOBAL_DOMAINS),
+    ...(process.env.EXTRA_RETAIL_DOMAINS?.split(",").map((entry) => entry.trim()) ?? []),
+  ]
+    .flat()
+    .filter(Boolean),
 );
 
-function isRetailHost(host: string): boolean {
-  return Array.from(RETAIL_HOSTS).some(
-    (domain) => host === domain || host.endsWith(`.${domain}`),
-  );
+function matchesHost(host: string, domain: string): boolean {
+  return host === domain || host.endsWith(`.${domain}`);
+}
+
+function isNonShop(host: string): boolean {
+  return NON_SHOP_HOSTS.some((domain) => matchesHost(host, domain));
+}
+
+function isPreferred(host: string): boolean {
+  return Array.from(PREFERRED_HOSTS).some((domain) => matchesHost(host, domain));
 }
 
 interface CseResponse {
@@ -131,8 +176,8 @@ export class GoogleProductSearch {
         continue;
       }
 
-      // Önce mağaza mı, sonra ürün sayfası mı — ikisi ayrı sorular.
-      if (!isRetailHost(host) || !isDirectProductUrl(link) || isSearchUrl(link)) {
+      // Mağaza olamayacak yer mi, ve ürün sayfası şeklinde mi.
+      if (isNonShop(host) || !isDirectProductUrl(link) || isSearchUrl(link)) {
         rejected.set(host, (rejected.get(host) ?? 0) + 1);
         continue;
       }
@@ -143,6 +188,23 @@ export class GoogleProductSearch {
       hosts.set(host, used + 1);
       urls.push(link);
     }
+
+    /*
+     * Bilinen perakendeciler öne — elenmiyorlar, sıralanıyorlar.
+     *
+     * Çıkarma aday listesini baştan tüketiyor, yani sıra doğrudan hangi mağazanın
+     * kullanıcıya gösterileceğini belirliyor.
+     */
+    urls.sort((a, b) => {
+      const rank = (url: string) => {
+        try {
+          return isPreferred(new URL(url).hostname.replace(/^www\./, "")) ? 0 : 1;
+        } catch {
+          return 1;
+        }
+      };
+      return rank(a) - rank(b);
+    });
 
     if (urls.length === 0 && rejected.size > 0) {
       const top = Array.from(rejected)
