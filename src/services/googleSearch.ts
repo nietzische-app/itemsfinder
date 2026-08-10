@@ -177,10 +177,32 @@ export interface GoogleSearchResult {
   error?: string;
 }
 
+/**
+ * Kurulum hatasından sonra ne kadar susulacağı.
+ *
+ * Kalıcı bir kilit değil: kullanıcı konsolda düğmeye basabilir ve sunucusuz bir
+ * instance dakikalarca yaşıyor. Bir dakika, boşa gidiş dönüşü durdurmaya yetecek
+ * kadar uzun, kendini iyileştirmeyi engellemeyecek kadar kısa —
+ * `contextDevService`'teki anahtar kilidiyle aynı gerekçe.
+ */
+const SETUP_COOLDOWN_MS = 60_000;
+
 export class GoogleProductSearch {
+  /**
+   * Kurulum hatası verdiği ana kadar susulacak zaman damgası.
+   *
+   * Üretimde ölçüldü: Custom Search API kapalıyken tek bir taramada dört parça
+   * için dört ayrı çağrı yapıldı, dördü de aynı «are blocked» cevabını aldı ve
+   * log sekiz özdeş satırla doldu. Kapalı bir API'yi sorguyu değiştirerek açmak
+   * mümkün değil — sıradaki parça da aynı cevabı alacak.
+   */
+  private blockedUntil = 0;
+
   constructor(
     private readonly apiKey: string,
     private readonly engineId: string,
+    /** Kilidin süresi. Ölçüm betikleri kısaltabilsin diye parametre. */
+    private readonly cooldownMs: number = SETUP_COOLDOWN_MS,
   ) {}
 
   /**
@@ -194,6 +216,18 @@ export class GoogleProductSearch {
     category: ItemCategory,
     signal?: AbortSignal,
   ): Promise<GoogleSearchResult> {
+    /*
+     * Kurulum bu taramada zaten reddedildi — çağrı yapmadan geçiyoruz.
+     *
+     * Gerekçe muhasebeden düşmüyor: kayıt «çağrı yapılmadı» diyor, yani `[scan]`
+     * satırında sekiz başarısız arama gibi değil, bir hata artı üç atlanan çağrı
+     * gibi görünüyor. Harcanmamış krediyi harcanmış gibi göstermek, muhasebenin
+     * kendisini yanlış yapardı.
+     */
+    if (Date.now() < this.blockedUntil) {
+      return { urls: [], seen: 0, error: "kurulum reddedildi — çağrı yapılmadı" };
+    }
+
     const url = new URL(CSE_ENDPOINT);
     url.searchParams.set("key", this.apiKey);
     url.searchParams.set("cx", this.engineId);
@@ -212,9 +246,25 @@ export class GoogleProductSearch {
         const reason = payload.error?.message ?? `HTTP ${response.status}`;
         const advice = cseAdvice(reason);
         console.warn(`[cse] «${query}» başarısız: ${reason.slice(0, 160)}`);
-        if (advice !== reason) console.warn(`[cse] → ${advice}`);
+
+        /*
+         * Yönergeye çevrilebilen hata, tekrar denemeye değmeyen hatadır.
+         *
+         * Ayrı bir kalıp listesi yazmak yerine `cseAdvice`'ın kendi kararı
+         * kullanılıyor: çevirebiliyorsa sebep kurulumda (API kapalı, cx yanlış,
+         * anahtar geçersiz, kota dolu) ve bunların hiçbiri sıradaki sorguda
+         * değişmiyor. İki liste tutmak, ikisinin ayrışması demekti.
+         */
+        if (advice !== reason) {
+          console.warn(`[cse] → ${advice}`);
+          this.blockedUntil = Date.now() + this.cooldownMs;
+        }
+
         return { urls: [], seen: 0, error: advice.slice(0, 200) };
       }
+
+      // Çalıştı — varsa eski kilit kalkıyor.
+      this.blockedUntil = 0;
     } catch (error) {
       const reason = error instanceof Error ? error.message.slice(0, 80) : "istek başarısız";
       console.warn(`[cse] «${query}» başarısız: ${reason}`);
@@ -298,6 +348,16 @@ export function googleSearchEnabled(): boolean {
   return process.env.ENABLE_GOOGLE_CSE === "true";
 }
 
+/**
+ * Aynı yapılandırma için aynı örnek.
+ *
+ * Kurulum kilidi örnek durumu ve `discoverCandidates` her parça için
+ * `getGoogleSearch()` çağırıyor — her seferinde yeni bir örnek üretilseydi kilit
+ * hiçbir şeyi tutmazdı, üretimde ölçülen dört özdeş çağrı aynen tekrarlanırdı.
+ * Anahtar zaten örneğin içinde duruyor; burada tutulması yeni bir açıklık değil.
+ */
+let cached: { key: string; engineId: string; search: GoogleProductSearch } | null = null;
+
 export function getGoogleSearch(): GoogleProductSearch | null {
   if (!googleSearchEnabled()) return null;
 
@@ -308,7 +368,11 @@ export function getGoogleSearch(): GoogleProductSearch | null {
   const engineId = process.env.GOOGLE_CSE_ID?.trim();
 
   if (!key || !engineId) return null;
-  return new GoogleProductSearch(key, engineId);
+  if (cached && cached.key === key && cached.engineId === engineId) return cached.search;
+
+  const search = new GoogleProductSearch(key, engineId);
+  cached = { key, engineId, search };
+  return search;
 }
 
 /** Neden çalışmadığı, insan okuyabilir hâlde — `visualLookupStatus` ile aynı gerekçe. */

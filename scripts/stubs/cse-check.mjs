@@ -19,15 +19,19 @@ const t = (c, n) => (c ? pass++ : fails.push(n));
 let nextItems = [];
 let status = 200;
 let lastQuery = null;
+let errorMessage = "Quota exceeded for quota metric 'Queries'";
+/** Kaç istek geldiği — kilidin çağrıyı gerçekten kestiğini ölçmenin tek yolu. */
+let requests = 0;
 
 const server = createServer((req, res) => {
+  requests += 1;
   lastQuery = new URL(req.url, "http://x").searchParams;
   res.writeHead(status, { "content-type": "application/json" });
   res.end(
     JSON.stringify(
       status === 200
         ? { items: nextItems.map((link) => ({ link })) }
-        : { error: { code: status, message: "Quota exceeded for quota metric 'Queries'" } },
+        : { error: { code: status, message: errorMessage } },
     ),
   );
 });
@@ -43,7 +47,14 @@ const { GoogleProductSearch, getGoogleSearch, googleSearchStatus } = await impor
   "@/services/googleSearch"
 );
 
-const search = new GoogleProductSearch("stub-key", "stub-engine");
+/*
+ * Ortak örneğin kurulum kilidi kapalı (`cooldownMs = 0`).
+ *
+ * Kilit ayrı ayrı ölçülüyor; buradaki kontroller süzme ve sıralama hakkında ve
+ * bir hata kontrolünün ardından gelenlerin sessizce atlanması, o kontrolleri
+ * ölçüyor gibi görünüp hiçbir şey ölçmemesine yol açardı.
+ */
+const search = new GoogleProductSearch("stub-key", "stub-engine", 0);
 
 // 1) Ürün sayfası geçer; arama, kategori ve mağaza olmayan adres geçmez.
 {
@@ -232,6 +243,152 @@ const search = new GoogleProductSearch("stub-key", "stub-engine");
     `motora tanımlı her mağaza öncelikli: eksik ${JSON.stringify(missed)}`,
   );
   console.log(`  motora tanımlı ${engineSites.length} mağazanın hepsi öncelik listesinde`);
+}
+
+/*
+ * 9) Kurulum hatasından sonra susuyor mu?
+ *
+ * Üretimde ölçüldü: Custom Search API kapalıyken **tek** bir taramada dört parça
+ * için dört ayrı çağrı yapıldı, dördü de aynı «are blocked» cevabını aldı ve log
+ * sekiz özdeş satırla doldu. Kapalı bir API sorgu değiştirerek açılmıyor.
+ *
+ * Ölçülen şey mesaj değil **gidiş dönüş**: ikinci çağrının sunucuya hiç
+ * ulaşmaması gerekiyor. Sunucuya sayaç bunun için kondu — «boş döndü» kontrolü
+ * kilit hiç çalışmasa da yeşil kalırdı.
+ */
+{
+  const latching = new GoogleProductSearch("stub-key", "stub-engine");
+  status = 403;
+  errorMessage = "Requests to this API customsearch method … are blocked.";
+
+  const before = requests;
+  const first = await latching.findProductPages("gri pantolon", "clothing");
+  const afterFirst = requests;
+  const second = await latching.findProductPages("gümüş ayakkabı", "clothing");
+
+  t(afterFirst === before + 1, `ilk çağrı gerçekten gidiyor (${afterFirst - before})`);
+  t(/Enable/.test(first.error ?? ""), `ilk çağrının gerekçesi yönerge: «${first.error}»`);
+  t(requests === afterFirst, `ikinci çağrı hiç gitmiyor (${requests - afterFirst} istek)`);
+  t(
+    /çağrı yapılmadı/.test(second.error ?? ""),
+    `atlanan çağrı kendini böyle bildiriyor: «${second.error}»`,
+  );
+
+  // Aynı koşulda kilitsiz örnek gidiyor — yani yukarıdaki kontrol boş değil.
+  const openBefore = requests;
+  await search.findProductPages("gri pantolon", "clothing");
+  t(requests === openBefore + 1, "kilitsiz örnek aynı hatada denemeye devam ediyor");
+
+  status = 200;
+  errorMessage = "Quota exceeded for quota metric 'Queries'";
+}
+
+/*
+ * 10) Geçici hata kilitlemiyor.
+ *
+ * Kilit «bu kurulum bozuk» demek, «bu istek tutmadı» demek değil. Sunucu hatası
+ * ya da zaman aşımı bir sonraki denemede geçebilir; onları da susturmak,
+ * çalışan bir kurulumu bir dakikalığına kapatırdı.
+ */
+{
+  const transient = new GoogleProductSearch("stub-key", "stub-engine");
+  status = 500;
+  errorMessage = "Backend Error";
+
+  const before = requests;
+  const first = await transient.findProductPages("triko", "clothing");
+  await transient.findProductPages("triko", "clothing");
+
+  t(requests === before + 2, `tanınmayan hata kilitlemiyor (${requests - before} istek)`);
+  t(first.error === "Backend Error", `tanınmayan hata olduğu gibi taşınıyor: «${first.error}»`);
+
+  status = 200;
+  errorMessage = "Quota exceeded for quota metric 'Queries'";
+}
+
+// 11) Kilit süreli — süresi dolunca yeniden deneniyor.
+{
+  const brief = new GoogleProductSearch("stub-key", "stub-engine", 5);
+  status = 403;
+  errorMessage = "Requests to this API customsearch method … are blocked.";
+  await brief.findProductPages("triko", "clothing");
+
+  const blocked = requests;
+  await brief.findProductPages("triko", "clothing");
+  t(requests === blocked, "süre dolmadan susuyor");
+
+  status = 200;
+  nextItems = ["https://www.trendyol.com/a/urun-p-555555555"];
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  const { urls } = await brief.findProductPages("triko", "clothing");
+
+  t(requests === blocked + 1, "süre dolunca yeniden deniyor");
+  t(urls.length === 1, `kurulum düzelirse aday yine geliyor (${urls.length})`);
+
+  errorMessage = "Quota exceeded for quota metric 'Queries'";
+}
+
+/*
+ * 12) Parça başına yeni örnek üretilmiyor.
+ *
+ * Kilit örnek durumu ve `discoverCandidates` her parça için `getGoogleSearch()`
+ * çağırıyor. Her çağrıda yeni bir örnek dönseydi kilit hiçbir şey tutmazdı ve
+ * üretimde ölçülen dört özdeş çağrı aynen tekrarlanırdı.
+ */
+{
+  t(getGoogleSearch() === getGoogleSearch(), "aynı yapılandırma aynı örneği veriyor");
+
+  const own = process.env.GOOGLE_CSE_ID;
+  const first = getGoogleSearch();
+  process.env.GOOGLE_CSE_ID = "baska-motor";
+  t(getGoogleSearch() !== first, "yapılandırma değişince örnek yenileniyor");
+  process.env.GOOGLE_CSE_ID = own;
+}
+
+/*
+ * 13) `[scan]` özeti Google'ı kendi adıyla yazıyor mu?
+ *
+ * İlk hâli `görsel` dışındaki her şeye katman adını yazıyordu ve üretimde yanlış
+ * yeri suçladı: Google'ın reddettiği dört çağrı `tr:0=HATA…` diye göründü, yani
+ * satırı okuyan kişi context.dev'in Türkiye katmanının bozulduğunu sanırdı.
+ */
+{
+  const { createTrace, logScanTrace } = await import("@/lib/scanTrace");
+  const trace = createTrace({ detail: false });
+
+  trace.search({
+    itemId: "a", source: "cse", tier: "tr", rung: 0,
+    query: "gri pantolon", found: 0, ms: 12,
+    error: "Custom Search API bu projede açık değil.",
+  });
+  trace.search({
+    itemId: "b", source: "metin", tier: "tr", rung: 1,
+    query: "gri pantolon satın al", found: 2, ms: 30,
+  });
+
+  const lines = [];
+  const original = console.log;
+  console.log = (line) => lines.push(String(line));
+  try {
+    logScanTrace(trace.snapshot(), { id: "det_test", source: "stub" });
+  } finally {
+    console.log = original;
+  }
+
+  const yielded = JSON.parse(lines.find((line) => line.startsWith("[scan] ")).slice(7)).searchYield;
+
+  t(
+    yielded.some((entry) => entry.startsWith("cse:")),
+    `Google başarısızlığı «cse:» diye yazılıyor: ${JSON.stringify(yielded)}`,
+  );
+  t(
+    !yielded.some((entry) => entry.startsWith("tr:0=HATA")),
+    `context.dev katmanı suçlanmıyor: ${JSON.stringify(yielded)}`,
+  );
+  t(
+    yielded.some((entry) => entry === "tr:1=2"),
+    `metin merdiveni katman adıyla kalıyor: ${JSON.stringify(yielded)}`,
+  );
 }
 
 server.close();

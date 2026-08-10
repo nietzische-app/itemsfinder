@@ -249,7 +249,15 @@ function summariseSearches(searches: SearchAttempt[]): string[] {
   const counts = new Map<string, number>();
 
   for (const entry of searches) {
-    const where = entry.source === "görsel" ? "img" : entry.tier;
+    /*
+     * Kaynak, katmandan önce gelir.
+     *
+     * İlk hâli `görsel` dışındaki her şey için katmanı yazıyordu ve üretimde
+     * yanlış yeri suçladı: Google'ın reddettiği dört çağrı `tr:0=HATA…` diye
+     * göründü, yani okuyan kişi context.dev'in Türkiye katmanının bozulduğunu
+     * sanırdı. Katman metin merdiveninin kavramı; CSE'de karşılığı yok.
+     */
+    const where = entry.source === "görsel" ? "img" : entry.source === "cse" ? "cse" : entry.tier;
     const outcome = entry.error ? `HATA ${errorTag(entry.error)}` : String(entry.found);
     const key = `${where}:${entry.rung}=${outcome}`;
     counts.set(key, (counts.get(key) ?? 0) + 1);
