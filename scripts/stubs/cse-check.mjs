@@ -239,6 +239,16 @@ const search = new GoogleProductSearch("stub-key", "stub-engine", 0);
   t(closed !== disabled && closed !== blocked, "kapalı kapı öteki iki hatadan ayrı");
   t(!/Enable|Credentials/.test(closed), `konsolda düğme aratmıyor: «${closed.slice(0, 60)}…»`);
   t(/ENABLE_GOOGLE_CSE=false/.test(closed), `yapılacak işi söylüyor: «${closed.slice(0, 60)}…»`);
+  t(closed.length <= 200, `kayıt alanına sığıyor (${closed.length} karakter)`);
+  /*
+   * İlk cümle tek başına anlamlı ve 60 karakterin altında olmalı: `[scan]`
+   * özetindeki etiket ilk cümleyi alıyor ve üretimde bu metin «…yeni projelere
+   * ka» diye kesilmişti.
+   */
+  t(
+    /^[^.\n]{1,60}\./.test(closed),
+    `ilk cümle etiket olacak kadar kısa: «${/^[^.\n]{1,60}\./.exec(closed)?.[0] ?? closed.slice(0, 60)}»`,
+  );
   t(/Credentials/.test(blocked), `anahtar kısıtlaması Credentials'a yolluyor: «${blocked.slice(0, 45)}…»`);
   t(!/^Custom Search API bu projede açık değil/.test(blocked), "kapalı anahtar Library'ye yollanmıyor");
   t(/Library/.test(disabled), `kapalı API Library'ye yolluyor: «${disabled.slice(0, 45)}…»`);

@@ -22,6 +22,7 @@ const SUITES = [
   ["kapalı aşama sessiz kalmıyor", "stage-off-check.mjs"],
   ["Google aday bulma", "cse-check.mjs"],
   ["ücretsiz keşif kararları", "kesif-check.mjs"],
+  ["ölü VLM anahtarı susuyor", "vlm-latch-check.mjs"],
 ];
 
 let failed = 0;

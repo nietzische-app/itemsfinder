@@ -168,10 +168,16 @@ export function cseAdvice(message: string): string {
    * olarak bu oldu, iki tur boyunca yanlış sayfaya yolladı.
    */
   if (/does not have the access to Custom Search/i.test(message)) {
+    /*
+     * İlk cümle tek başına anlamlı ve kısa: `[scan]` özetindeki hata etiketi ilk
+     * cümleyi alıyor, ve üretimde bu metin «Custom Search JSON API yeni projelere
+     * ka» diye kesilmişti — 60 karakteri aşan bir ilk cümle etiketi kullanılmaz
+     * hâle getiriyor.
+     */
     return (
-      "Custom Search JSON API yeni projelere kapalı (1 Ocak 2027'de tamamen " +
-      "kapanıyor). Kurulum hatası değil, basılacak düğme yok. " +
-      "ENABLE_GOOGLE_CSE=false yapıp başka bir arama sağlayıcısına geçmek gerekiyor."
+      "Custom Search JSON API yeni projelere kapalı. 1 Ocak 2027'de tamamen " +
+      "kapanıyor; kurulum hatası değil, basılacak düğme yok. " +
+      "ENABLE_GOOGLE_CSE=false yapıp başka bir sağlayıcıya geçmek gerekiyor."
     );
   }
   if (/are blocked|API_KEY_SERVICE_BLOCKED/i.test(message)) {

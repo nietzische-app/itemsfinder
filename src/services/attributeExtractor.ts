@@ -68,6 +68,8 @@ export interface AttributeExtractorOptions {
   requestTimeoutMs?: number;
   /** Override the API host — used to point the tests at a local stub. */
   baseUrl?: string;
+  /** Kredi/anahtar reddi sonrası susma süresi. Ölçüm betikleri kısaltabilsin diye. */
+  cooldownMs?: number;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -182,11 +184,13 @@ export class ClaudeAttributeExtractor {
   private readonly model: string;
   private readonly maxItems: number;
   private readonly deadlineMs: number;
+  private readonly cooldownMs: number;
 
   constructor(apiKey: string, options: AttributeExtractorOptions = {}) {
     this.model = options.model ?? "claude-opus-5";
     this.maxItems = options.maxItems ?? 4;
     this.deadlineMs = options.deadlineMs ?? 15_000;
+    this.cooldownMs = options.cooldownMs ?? AUTH_COOLDOWN_MS;
 
     this.client = new Anthropic({
       apiKey,
@@ -218,6 +222,21 @@ export class ClaudeAttributeExtractor {
     const results = new Map<string, GarmentAttributes>();
     const selected = requests.slice(0, this.maxItems);
     if (selected.length === 0) return results;
+
+    /*
+     * Önceki tarama kredi ya da anahtar reddi aldı — kırpma bile yapılmıyor.
+     *
+     * Sessiz atlanmıyor: sebebi olmayan bir boşluk, hata ayıklarken en pahalı
+     * şey. Aşamanın neden hiçbir şey üretmediği tek satırda yazıyor.
+     */
+    const remaining = vlmBlockedUntil - Date.now();
+    if (remaining > 0) {
+      console.warn(
+        `[vlm] ${selected.length} parça atlandı — kredi/anahtar reddi, ` +
+          `${Math.ceil(remaining / 1000)} sn sonra yeniden denenecek`,
+      );
+      return results;
+    }
 
     const budget = withDeadline(this.deadlineMs, options.signal);
 
@@ -311,9 +330,18 @@ export class ClaudeAttributeExtractor {
 
       if (!text) return null;
 
+      // Çalıştı — varsa eski kilit kalkıyor.
+      vlmBlockedUntil = 0;
+
       return normalizeAttributes(JSON.parse(text));
     } catch (error) {
       logFailure(request.itemType, error);
+      /*
+       * Kilit burada kuruluyor, dış döngüde değil: API hataları bu `catch`'te
+       * yakalanıp `null` dönüyor, yani `allSettled` tarafına hiç ulaşmıyorlar.
+       * Dış döngüye yazılmış bir kilit hiçbir zaman kurulmazdı.
+       */
+      if (isCreditOrAuthRejection(error)) vlmBlockedUntil = Date.now() + this.cooldownMs;
       return null;
     }
   }
@@ -435,6 +463,42 @@ function withDeadline(
 function logFailure(subject: string, error: unknown): void {
   const message = error instanceof Error ? error.message : String(error);
   console.warn(`[vlm] attribute extraction failed for "${subject}": ${message}`);
+}
+
+/**
+ * Kredi ya da anahtar reddi sonrası ne kadar susulacağı.
+ *
+ * `contextDevService` ve `googleSearch` ile aynı gerekçe ve aynı süre: kullanıcı
+ * kredi yükleyebilir ve sunucusuz bir instance dakikalarca yaşıyor.
+ */
+const AUTH_COOLDOWN_MS = 60_000;
+
+/**
+ * Modül düzeyinde, örnek düzeyinde değil.
+ *
+ * Ötekilerden farkı bu: bir taramanın bütün parçaları tek bir `allSettled` içinde
+ * **aynı anda** yola çıkıyor, yani örnek durumu aynı tarama içinde hiçbir şey
+ * kesemez. Kazanç sonraki taramalarda: üretimde ölçüldü, kredisi biten bir
+ * anahtarla her tarama parça sayısı kadar çağrı ve ~330 ms harcamaya devam
+ * ediyordu.
+ */
+let vlmBlockedUntil = 0;
+
+/**
+ * Bu hata tekrar denemeye değer mi?
+ *
+ * Kredi bitmesi ya da anahtar reddi, kırpımı değiştirerek çözülecek bir şey
+ * değil — sıradaki parça da, sıradaki tarama da aynı cevabı alacak. Zaman aşımı
+ * ya da sunucu hatası geçici olabilir; onlarda susulmuyor.
+ */
+function isCreditOrAuthRejection(error: unknown): boolean {
+  const status = (error as { status?: unknown } | null)?.status;
+  if (status === 401 || status === 403) return true;
+
+  const message = error instanceof Error ? error.message : String(error ?? "");
+  return /credit balance is too low|authentication_error|invalid_api_key|permission_error/i.test(
+    message,
+  );
 }
 
 /* -------------------------------------------------------------------------- */
