@@ -32,6 +32,7 @@
 import { gunzipSync } from "node:zlib";
 
 import { USER_AGENT, productLinks, rankByQuery } from "./kesif-lib.mjs";
+import { parseArgs } from "./args.mjs";
 
 const {
   sitemapUrlsFromRobots,
@@ -43,13 +44,7 @@ const {
   SITEMAP_GUESSES,
 } = await import("@/lib/sitemapIndex");
 
-const args = process.argv.slice(2);
-const arg = (name) => {
-  const hit = args.find((entry) => entry.startsWith(`--${name}=`));
-  if (hit) return hit.slice(name.length + 3);
-  const at = args.indexOf(`--${name}`);
-  return at !== -1 ? args[at + 1] : undefined;
-};
+const arg = parseArgs(process.argv.slice(2), { q: ["sorgu"], site: ["magaza"] });
 
 const query = arg("q") ?? "gri pantolon";
 const only = arg("site");

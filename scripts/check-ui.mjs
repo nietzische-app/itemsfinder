@@ -23,13 +23,9 @@
  * arayüz kontrolü için kurulum ağırlığı. Ortamda varsa çalışıyor, yoksa ne
  * yapılacağını söyleyip çıkıyor.
  */
-const args = process.argv.slice(2);
-const arg = (name) => {
-  const hit = args.find((entry) => entry.startsWith(`--${name}=`));
-  if (hit) return hit.slice(name.length + 3);
-  const at = args.indexOf(`--${name}`);
-  return at !== -1 ? args[at + 1] : undefined;
-};
+import { parseArgs } from "./args.mjs";
+
+const arg = parseArgs(process.argv.slice(2), { url: ["adres"] });
 
 const base = (arg("url") ?? "http://127.0.0.1:3000").replace(/\/$/, "");
 

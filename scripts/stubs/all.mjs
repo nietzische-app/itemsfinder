@@ -28,6 +28,7 @@ const SUITES = [
   ["beklenti başlıkla aynı dilde", "title-match-check.mjs"],
   ["sitemap okuma kararları", "sitemap-check.mjs"],
   ["ürün aşamasının içi ölçülüyor", "spend-check.mjs"],
+  ["yanlış bayrak sessiz geçmiyor", "args-check.mjs"],
 ];
 
 let failed = 0;
