@@ -20,27 +20,39 @@
  *
  * ## Arama adresi uydurulmuyor
  *
- * Her mağazanın arama adresi farklı ve ezberden yazılan bir kalıp ölçümü sessizce
- * bozar: 404 alan bir istek «bot duvarı» gibi görünür. Adres mağazanın **kendi
- * ilanından** okunuyor — schema.org `SearchAction` ya da OpenSearch tanımı. İkisi
- * de yoksa betik kalıp uydurmuyor, «ilan etmemiş» diyor ve geçiyor; o mağazayı
- * ölçmek isteyen adresi `--url` ile kendisi verir.
+ * Ezberden yazılan bir kalıp ölçümü sessizce bozar: 404 alan bir istek «bot
+ * duvarı» gibi görünür ve mağaza haksız yere elenir. Sıra şu:
+ *
+ *   1. Mağazanın **kendi ilanı** — schema.org `SearchAction` ya da OpenSearch.
+ *   2. İlan yoksa yaygın **şekiller** deneniyor (`PROBE_SHAPES`). Bunlar mağazaya
+ *      değil, e-ticaret yazılımlarının arama yoluna ait; ve bir şekil ancak sayfa
+ *      200 dönüp içinden ürün bağlantısı çıkarsa kabul ediliyor. Hangi adresin
+ *      tuttuğu çıktıya yazılıyor, yani doğrulanabilir kalıyor.
+ *
+ * ## Satır çıkmazsa sayfa teşhis ediliyor
+ *
+ * «İşaretleme yok» üç ayrı ihtimali gizliyor ve biri bizim kusurumuz: okunan
+ * adres hiç ürün sayfası olmayabilir. O yüzden sıfır satır çıkan her mağaza için
+ * okunan adresler ve sayfada gerçekte ne olduğu yazılıyor.
  *
  * ## Ne ölçüldü, ne ölçülmedi
  *
- * Kararlar (kalıp okuma, bağlantı süzme, duvar teşhisi) `kesif-lib.mjs` içinde ve
- * `scripts/stubs/kesif-check.mjs` ile sahte bir mağazaya karşı ölçüldü. Gerçek
- * mağazaların davranışı **ölçülmedi** — bu betiğin yazıldığı ortamdan onlara
- * çıkış kapalı. Cevabı senin makinen verecek.
+ * Kararlar (kalıp okuma, bağlantı süzme, duvar teşhisi, sayfa teşhisi)
+ * `kesif-lib.mjs` içinde ve `scripts/stubs/kesif-check.mjs` ile sahte bir
+ * mağazaya karşı ölçüldü. Gerçek mağazaların davranışı ağ gerektiriyor:
+ * GitHub Actions → «Ücretsiz keşif ölçümü».
  *
  * Hiçbir yere veri göndermiyor; yalnızca mağazalara gidiyor.
  */
 import {
+  PROBE_SHAPES,
   USER_AGENT,
   fillTemplate,
   looksLikeWall,
   openSearchHref,
   openSearchUrlFromXml,
+  pageDiagnosis,
+  probeUrls,
   productLinks,
   searchActionTemplate,
 } from "./kesif-lib.mjs";
@@ -117,7 +129,28 @@ async function templateFor(host) {
     }
   }
 
-  return { failure: "arama adresini ilan etmemiş — `--url` ile verilebilir" };
+  /*
+   * İlan etmemiş — yaygın şekiller deneniyor.
+   *
+   * İlk ölçümde on dokuz mağazanın **sekizi** buraya düştü, yani ölçüm onlar
+   * hakkında hiçbir şey söylemedi. «İlan etmemiş» bir cevap değil, cevabın
+   * yokluğu; ve o sekizin arasında Zara, Mango, Bershka var.
+   *
+   * Adres uydurulmuyor: denenen şekil ancak sayfa 200 dönüp içinden ürün
+   * bağlantısı çıkarsa kabul ediliyor ve hangi adresin tuttuğu çıktıya
+   * yazılıyor, yani doğrulanabilir kalıyor.
+   */
+  for (const url of probeUrls(host, query)) {
+    const page = await get(url);
+    if (page.status !== 200 || looksLikeWall(page.body)) continue;
+    if (productLinks(page.body, page.url, host).length === 0) continue;
+
+    return { template: url.replace(encodeURIComponent(query), "{q}"), probed: true };
+  }
+
+  return {
+    failure: `arama adresi bulunamadı (ilan yok, ${PROBE_SHAPES.length} şekil denendi)`,
+  };
 }
 
 const stores = only ? [only] : STORES;
@@ -130,7 +163,7 @@ const rows = [];
 for (const host of stores) {
   process.stdout.write(`  ${host.padEnd(18)}`);
 
-  const { template, failure } = await templateFor(host);
+  const { template, failure, probed } = await templateFor(host);
   if (!template) {
     console.log(failure);
     rows.push({ host, outcome: failure });
@@ -173,9 +206,32 @@ for (const host of stores) {
   const top = links.slice(0, 3);
   const cards = await productsFromMarkup(top);
 
-  console.log(`${String(links.length).padStart(3)} aday → ${top.length} sayfa okundu, ${cards.length} satır`);
+  console.log(
+    `${String(links.length).padStart(4)} aday → ${top.length} sayfa okundu, ${cards.length} satır` +
+      (probed ? "  (adres denenerek bulundu)" : ""),
+  );
+
   for (const card of cards.slice(0, 2)) {
     console.log(`${" ".repeat(22)}«${card.title.slice(0, 48)}» ${card.price ?? "?"} ${card.currency ?? ""}`);
+  }
+
+  /*
+   * Satır çıkmadıysa okunan sayfanın ne olduğu yazılıyor.
+   *
+   * «İşaretleme yok» tek başına üç ayrı ihtimali gizliyor ve biri bizim
+   * kusurumuz: okunan adres hiç ürün sayfası olmayabilir. O ihtimali görmeden
+   * mağazayı elemek, mağazayı haksız yere suçlamak olur.
+   */
+  if (cards.length === 0) {
+    for (const url of top) {
+      const page = await get(url);
+      const where = url.replace(/^https?:\/\/(www\.)?/, "");
+      console.log(
+        `${" ".repeat(22)}${where.slice(0, 62)}\n${" ".repeat(24)}${
+          page.status === 200 ? pageDiagnosis(page.body) : `HTTP ${page.status}`
+        }`,
+      );
+    }
   }
 
   rows.push({ host, links: links.length, cards: cards.length });

@@ -14,10 +14,13 @@
 import { createServer } from "node:http";
 
 import {
+  PROBE_SHAPES,
   fillTemplate,
   looksLikeWall,
   openSearchHref,
   openSearchUrlFromXml,
+  pageDiagnosis,
+  probeUrls,
   productLinks,
   searchActionTemplate,
 } from "../kesif-lib.mjs";
@@ -171,6 +174,71 @@ const t = (c, n) => (c ? pass++ : fails.push(n));
    */
   t(!links.some((l) => l.includes("/sr?")), "arama sayfası aday sayılmıyor");
   t(!links.some((l) => l.includes("-c-1234")), "kategori sayfası aday sayılmıyor");
+}
+
+/*
+ * 5b) Sayfa teşhisi — «işaretleme yok» cevabını eyleme çeviriyor.
+ *
+ * İlk gerçek ölçümde dört mağaza «3 sayfa, 0 satır — ürün işaretlemesi yok»
+ * dedi ve bu satır karar vermeye yetmiyordu: sayfa gerçekten işaretlemesiz mi,
+ * işaretleme `Product` değil mi, yoksa okunan adres hiç ürün sayfası değil mi?
+ * Sonuncusu mağazayı değil bizi suçlaması gereken durum.
+ */
+{
+  const withProduct = `<script type="application/ld+json">${JSON.stringify({
+    "@type": "Product",
+    name: "Pantolon",
+  })}</script>`;
+  t(/Product/.test(pageDiagnosis(withProduct)), `Product tipi görünüyor: «${pageDiagnosis(withProduct)}»`);
+
+  // İşaretleme var ama ürün değil — bambaşka bir durum ve ayırt edilmeli.
+  const breadcrumbOnly = `<script type="application/ld+json">${JSON.stringify({
+    "@type": "BreadcrumbList",
+    itemListElement: [],
+  })}</script>`;
+  const crumb = pageDiagnosis(breadcrumbOnly);
+  t(/BreadcrumbList/.test(crumb) && !/Product/.test(crumb), `ürün olmayan tip ayırt ediliyor: «${crumb}»`);
+
+  const bare = pageDiagnosis("<html><body>hiçbir şey</body></html>");
+  t(/0 ld\+json/.test(bare) && /tipler: yok/.test(bare), `boş sayfa böyle görünüyor: «${bare}»`);
+
+  // İstemci tarafı çatı: gövde boş gelip içerik tarayıcıda çiziliyor olabilir.
+  t(
+    /istemci tarafı çatı/.test(pageDiagnosis('<script id="__NEXT_DATA__">{}</script>')),
+    "istemci tarafı çatı işaretleniyor",
+  );
+  t(
+    !/istemci tarafı çatı/.test(pageDiagnosis("<html><body>düz sayfa</body></html>")),
+    "düz sayfa çatı diye işaretlenmiyor",
+  );
+
+  t(/og:title var/.test(pageDiagnosis('<meta property="og:title" content="x">')), "og:title görülüyor");
+  t(
+    /fiyat meta var/.test(pageDiagnosis('<meta property="product:price:amount" content="99">')),
+    "fiyat metası görülüyor",
+  );
+}
+
+/*
+ * 5c) Denenen arama şekilleri.
+ *
+ * İlk gerçek ölçümde on dokuz mağazanın sekizi arama adresini ilan etmemişti ve
+ * ölçüm onlar hakkında hiçbir şey söylemedi — aralarında Zara, Mango, Bershka
+ * vardı. Şekiller mağazaya değil, e-ticaret yazılımlarının arama yoluna ait.
+ */
+{
+  const urls = probeUrls("magaza.com", "gri pantolon");
+
+  t(urls.length === PROBE_SHAPES.length, `her şekil için bir adres (${urls.length})`);
+  t(
+    urls.every((url) => url.startsWith("https://www.magaza.com/")),
+    "adresler mağazanın kendi alan adında",
+  );
+  t(
+    urls.every((url) => url.includes("gri%20pantolon")),
+    `sorgu kodlanmış hâlde: «${urls[0]}»`,
+  );
+  t(new Set(urls).size === urls.length, "aynı adres iki kez denenmiyor");
 }
 
 /*

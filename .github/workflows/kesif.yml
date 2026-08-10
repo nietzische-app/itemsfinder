@@ -34,10 +34,10 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # `--experimental-transform-types` Node 22 istiyor.
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -59,7 +59,7 @@ jobs:
           npm run check:kesif -- "${args[@]}" 2>&1 | tee kesif.txt
 
       # Çıktı iş kaydında zaten görünüyor; dosya olarak da indirilebilsin diye.
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: kesif-ciktisi

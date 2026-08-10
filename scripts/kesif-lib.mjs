@@ -76,6 +76,75 @@ export function openSearchHref(html) {
   return link ? (/href=["']([^"']+)["']/i.exec(link)?.[1] ?? null) : null;
 }
 
+/**
+ * Sayfada ne var — «işaretleme yok» cevabını **eyleme** çevirir.
+ *
+ * İlk ölçüm dört mağaza için «3 sayfa, 0 satır — ürün işaretlemesi yok» dedi ve
+ * bu satır kararı vermeye yetmiyor. Üç bambaşka ihtimali aynı cümleye
+ * sıkıştırıyor:
+ *
+ *   1. Sayfa gerçekten işaretlemesiz — mağaza desteklenemez.
+ *   2. İşaretleme var ama `Product` değil (`BreadcrumbList`, `Organization`) —
+ *      ayrıştırıcının bakacağı başka yer olabilir.
+ *   3. Okunan adres zaten ürün sayfası değil — süzgeç fazla gevşek, ve mağaza
+ *      haksız yere elenmiş olur.
+ *
+ * Üçüncüsü en tehlikelisi çünkü mağazayı değil **bizi** suçlaması gerekiyor.
+ * Beymen'in tek arama sayfasından 1254 «aday» çıkarması tam olarak bu şüpheyi
+ * doğuruyor.
+ */
+export function pageDiagnosis(html) {
+  const blocks = html.match(/<script[^>]+application\/ld\+json/gi)?.length ?? 0;
+
+  const types = new Set();
+  for (const node of jsonLdNodes(html)) {
+    for (const type of [node["@type"]].flat()) {
+      if (typeof type === "string") types.add(type);
+    }
+  }
+
+  const ogTitle = /property=["']og:title["']/i.test(html);
+  const price = /["'](og:price:amount|product:price:amount)["']/i.test(html);
+  // İstemci tarafı çatı: gövde boş gelip içerik tarayıcıda çiziliyor olabilir.
+  const spa = /__NEXT_DATA__|window\.__NUXT__|window\.__INITIAL_STATE__|ng-version=/i.test(html);
+
+  return [
+    `${blocks} ld+json`,
+    `tipler: ${types.size > 0 ? Array.from(types).slice(0, 6).join("/") : "yok"}`,
+    `og:title ${ogTitle ? "var" : "yok"}`,
+    `fiyat meta ${price ? "var" : "yok"}`,
+    `${Math.round(html.length / 1024)} KB`,
+    spa ? "istemci tarafı çatı" : null,
+  ]
+    .filter(Boolean)
+    .join(", ");
+}
+
+/**
+ * İlan edilmemiş arama adresini bulmak için denenecek **şekiller**.
+ *
+ * Mağaza başına ezberden adres yazmıyoruz — bu liste mağazaya değil, yaygın
+ * e-ticaret yazılımlarının arama yoluna ait. Fark önemli: uydurulmuş bir adres
+ * sessizce yanlış sonuç üretir, denenen bir şekil ise **çıktıda hangisinin
+ * tuttuğu yazılarak** doğrulanabilir hâle gelir.
+ *
+ * Bir şekil ancak sayfayı 200 döndürüp içinden ürün bağlantısı çıkarsa
+ * kullanılıyor; yani «tuttu» demek, ölçülmüş bir şey demek.
+ */
+export const PROBE_SHAPES = [
+  "/search?q=",
+  "/arama?q=",
+  "/ara?q=",
+  "/search?searchTerm=",
+  "/s?k=",
+  "/tr/search?q=",
+  "/catalogsearch/result/?q=",
+];
+
+export function probeUrls(host, term) {
+  return PROBE_SHAPES.map((shape) => `https://www.${host}${shape}${encodeURIComponent(term)}`);
+}
+
 export function fillTemplate(template, term) {
   return template
     .replace(/\{search_term_string\}/gi, encodeURIComponent(term))
