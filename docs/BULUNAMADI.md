@@ -467,6 +467,42 @@ Yayımlamadan önce iki kapı, ikisi de ölçülmüş bir arızadan doğdu:
    şey yazılmıyor. «Yayımlamadan önce çıktıya bak» bir kural değil bir dilek;
    periyodik bir işin çıktısına kimse baştan sona bakmıyor.
 
+**Dizin depoya girdi — ve gerçek veriyi ilk kez görünce bir kusur çıktı.**
+Commit'lenen ilk dizinin ilk iki satırı `zara.com/mx/es/…` ve `beymen.com/en/…`
+idi. Ölçüldü:
+
+```
+151.976 yolun 52.401'i (%34,5) yabancı vitrin
+  beymen.com       40.000 /tr/ · 39.999 /en/      — her ürün iki kez, biri İngilizce
+  bershka.com       8.111 /tr/ ·  9.086 /ee/      — çoğunluk Estonya
+  zara.com         12.483 /tr/tr ·  2.576 yabancı (uk, us, mx, no, tw)
+  pullandbear.com     224 /tr/ ·    740 /ie/, /gr/
+```
+
+Dosya seçimindeki yabancı dil cezası yetmiyormuş: **seçilen dosyanın içi**
+karışık. Türkiye'den alışveriş yapan biri için `bershka.com/ee/…` yanlış dil,
+yanlış para birimi ve çoğu zaman ulaşılamayan bir sepet; Beymen'de ise aynı
+ürünün ikinci kopyası, yani dizinin yarısı kendi tekrarı.
+
+Kural ret listesi değil **şekil** sınaması: ilk parça iki harfli bir dil kodu
+şeklindeyse Türkçe olmak zorunda. Gerekçesi ölçülmüş — `ee`, `ie`, `gr`, `no`
+`FOREIGN_LOCALES`'te yoktu ve dördü de bu ölçümde çıktı, yani ret listesi hep bir
+adım geride. Şekil sınamasının yanlış pozitifi de ölçüldü: 151.976 yolda iki
+harfli her ilk parça gerçekten bir dil kodu, ve dil parçası taşımayan 38.757 yol
+(Koton, Gratis) dokunulmadan geçiyor.
+
+Süzgeç saf kazanç çıktı:
+
+```
+151.976 → 99.575 yol    9,5 → 6,4 MB ham    2,0 → 1,3 MB gzip
+kapsam  56/56 → 56/56   (yalnızca zara 51 → 50)
+yükleme 181 → 93 ms     sorgu 19 → 12 ms
+```
+
+Küçülme koruması bunu arıza sanardı (Bershka %47 düşüyor), o yüzden bilerek
+yapılan daralmalar için `--zorla` bayrağı var — karar operatörün ve bayrak onu
+görünür kılıyor.
+
 **Sırada:** üretimde aday kaynağı olarak bağlamak.
 
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?

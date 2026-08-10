@@ -112,6 +112,49 @@ const FOREIGN_LOCALES = [
   "rs", "ja", "jp", "ko", "kr", "zh", "cn", "tw", "us", "gb", "ca", "au", "mx", "br",
 ];
 
+/**
+ * Bu adres Türkiye vitrinine mi ait?
+ *
+ * ## Neden gerekiyor
+ *
+ * Dosya seçimindeki yabancı dil cezası yetmiyor: **seçilen dosyanın içi** karışık
+ * olabiliyor. Depoya yazılan ilk dizin ölçüldü ve 151.976 yolun 52.401'i
+ * (%34,5) yabancı vitrindi:
+ *
+ *   beymen.com       40.000 /tr/ · 39.999 /en/     — her ürün iki kez, biri İngilizce
+ *   bershka.com       8.111 /tr/ ·  9.086 /ee/     — çoğunluk Estonya
+ *   zara.com         12.483 /tr/tr ·  2.576 yabancı (uk, us, mx, no, tw)
+ *   pullandbear.com     224 /tr/ ·    740 /ie/, /gr/
+ *
+ * Türkiye'den alışveriş yapan biri için `bershka.com/ee/…` yanlış dil, yanlış
+ * para birimi ve çoğu zaman ulaşılamayan bir sepet. Beymen'de ise aynı ürünün
+ * ikinci kopyası — dizinin yarısı kendi tekrarı.
+ *
+ * ## Kural neden şekle bakıyor, listeye değil
+ *
+ * `FOREIGN_LOCALES` bir ret listesi ve ret listesi hep bir adım geride: `ee`,
+ * `ie`, `gr`, `no` orada yoktu ve dördü de bu ölçümde çıktı. Bir sonraki
+ * mağazanın `/fi/`si de olmayacak.
+ *
+ * Onun yerine **şekil**: ilk parça iki harfli bir dil kodu şeklindeyse Türkçe
+ * olmak zorunda. Ölçüldü — altı mağazanın 151.976 yolunda iki harfli her ilk
+ * parça gerçekten bir dil kodu (`tr en ee uk us ie gr mx no tw`), tek bir
+ * yanlış pozitif yok. Dil kodu taşımayan 38.757 yol (Koton, Gratis) dokunulmadan
+ * geçiyor.
+ *
+ * **Sınırı:** yeni bir mağaza eklenmeden önce `npm run check:sitemap` ile
+ * ölçülmeli; iki harfli gerçek bir kategorisi olan bir mağaza bu kuralda
+ * kaybolur.
+ */
+const LOCALE_SHAPE = /^[a-z]{2}(-[a-z]{2})?$/;
+
+export function isTurkishStorefrontPath(path: string): boolean {
+  const first = path.split("/").filter(Boolean)[0]?.toLowerCase();
+  if (!first || !LOCALE_SHAPE.test(first)) return true;
+
+  return first === "tr" || first === "tr-tr";
+}
+
 /** Gzip sihirli baytları: `1f 8b`. */
 export function isGzip(bytes: Uint8Array): boolean {
   return bytes.length > 2 && bytes[0] === 0x1f && bytes[1] === 0x8b;

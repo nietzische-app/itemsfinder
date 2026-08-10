@@ -40,10 +40,13 @@ import { parseArgs } from "./args.mjs";
 import { productSitemaps, sitemapsFor } from "./sitemapFetch.mjs";
 import { countPaths, keepsPrevious, shrinkReason } from "./indexFile.mjs";
 
+const { isTurkishStorefrontPath } = await import("@/lib/sitemapIndex");
+
 const arg = parseArgs(process.argv.slice(2), {
   site: ["magaza"],
   files: ["dosya"],
   out: ["cikti"],
+  force: ["zorla"],
 });
 
 /**
@@ -107,6 +110,7 @@ for (const host of stores) {
    */
   const paths = new Set();
   let raw = 0;
+  let foreign = 0;
 
   for (const leaf of leaves) {
     raw += leaf.locs.length;
@@ -119,7 +123,19 @@ for (const host of stores) {
     for (const url of products) {
       try {
         const parsed = new URL(url);
-        paths.add(parsed.pathname + parsed.search);
+        const path = parsed.pathname + parsed.search;
+
+        /*
+         * Yabancı vitrin dizine girmiyor — kural `sitemapIndex.ts`'te ve
+         * ölçümle bağlı. Sayısı ayrıca yazılıyor: elenen bir şeyin kaç tane
+         * olduğu görünmezse, kuralın fazla yediği fark edilmez.
+         */
+        if (!isTurkishStorefrontPath(path)) {
+          foreign += 1;
+          continue;
+        }
+
+        paths.add(path);
       } catch {
         // Ayrıştırılamayan adres dizine girmez; sayısı `raw - paths.size`de görünür.
       }
@@ -140,7 +156,15 @@ for (const host of stores) {
    * ağsız ölçülüyor.
    */
   const previous = existsSync(file) ? readFileSync(file, "utf-8") : "";
-  const keptOld = keepsPrevious(previous, sorted.length);
+  /*
+   * `--zorla` korumayı atlıyor.
+   *
+   * Koruma «bu düşüş bir arıza» varsayımına dayanıyor ve bilerek yapılan bir
+   * daralmada bu varsayım yanlış: yabancı vitrin süzgeci Bershka'yı 17.197'den
+   * 8.111'e indiriyor, yani koruma kasıtlı bir düzeltmeyi arıza sanıp
+   * engellerdi. Karar operatörün, ve bayrak onu görünür kılıyor.
+   */
+  const keptOld = !arg("force") && keepsPrevious(previous, sorted.length);
 
   if (!keptOld) writeFileSync(file, body, "utf-8");
 
@@ -148,6 +172,7 @@ for (const host of stores) {
   console.log(
     `${String(fetched).padStart(3)} dosya → ${String(raw).padStart(6)} adres → ` +
       `${String(sorted.length).padStart(6)} ürün yolu  (${kb} KB)` +
+      (foreign > 0 ? `  [${foreign} yabancı vitrin elendi]` : "") +
       (keptOld ? `  ⚠ ${shrinkReason(previous, sorted.length)}` : ""),
   );
 

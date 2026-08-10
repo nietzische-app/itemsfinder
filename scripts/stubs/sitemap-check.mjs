@@ -20,6 +20,7 @@ const {
   looksLikeSitemapList,
   isGzip,
   rankProductSitemaps,
+  isTurkishStorefrontPath,
   SITEMAP_GUESSES,
 } = await import("@/lib/sitemapIndex");
 const { gzipSync } = await import("node:zlib");
@@ -258,6 +259,54 @@ sitemap: https://www.magaza.com/sitemap.xml
     "https://www.trendyol.com/sitemap_products1.xml",
   ]);
   t(!trendyolRs[0]?.includes("/rs/"), `Sırbistan dosyası arkada: ${trendyolRs[0]}`);
+}
+
+/*
+ * Yabancı vitrin dizine girmiyor.
+ *
+ * Dosya seçimindeki dil cezası yetmiyordu: **seçilen dosyanın içi** karışık
+ * çıktı. Depoya yazılan ilk dizin ölçüldü ve 151.976 yolun 52.401'i (%34,5)
+ * yabancı vitrindi — Beymen'in yarısı İngilizce kopya, Bershka'nın çoğunluğu
+ * Estonya. Türkiye'den alışveriş yapan biri için `bershka.com/ee/…` yanlış dil,
+ * yanlış para birimi ve çoğu zaman ulaşılamayan bir sepet.
+ *
+ * Aşağıdaki adresler o dizinden, uydurma değil.
+ */
+{
+  // Türkiye vitrini — geçmeli.
+  t(isTurkishStorefrontPath("/tr/tr/kadin-keten-gomlek-p12345.html"), "zara /tr/tr geçiyor");
+  t(isTurkishStorefrontPath("/tr/p_04651-mavi-keten-gomlek_1968686"), "beymen /tr geçiyor");
+  t(isTurkishStorefrontPath("/tr/oversize-gomlek-c0p123.html"), "bershka /tr geçiyor");
+
+  // Yabancı vitrin — düşmeli.
+  t(!isTurkishStorefrontPath("/en/p_04651-light-blue-linen-bermuda_1968682"), "beymen /en düşüyor");
+  t(!isTurkishStorefrontPath("/ee/luhikeste-varrukatega-sark-c0p123.html"), "bershka /ee düşüyor");
+  t(!isTurkishStorefrontPath("/mx/es/traje-de-bano-p05664699.html"), "zara /mx/es düşüyor");
+  t(!isTurkishStorefrontPath("/uk/en/linen-shirt-p07099690.html"), "zara /uk/en düşüyor");
+  t(!isTurkishStorefrontPath("/ie/oversize-shirt-l07683312"), "pullandbear /ie düşüyor");
+  t(!isTurkishStorefrontPath("/gr/pack-4-vrachiolia-l03016508"), "pullandbear /gr düşüyor");
+
+  /*
+   * **Dil kodu taşımayan yol dokunulmadan geçiyor** — kuralın en kritik yanı.
+   *
+   * Koton ve Gratis'in 38.757 yolunda dil parçası yok. Kural «ilk parça iki
+   * harfliyse» diye başlamasaydı ya da fazla hevesli olsaydı, iki mağaza birden
+   * dizinden silinirdi ve kapsam bunu ancak yüzde olarak gösterirdi.
+   */
+  t(isTurkishStorefrontPath("/10-lu-yuzuk-seti-altin-rengi-4203129-1/"), "koton yolu geçiyor");
+  t(isTurkishStorefrontPath("/oje/flormar-oje-p-123"), "gratis kategori yolu geçiyor");
+  t(isTurkishStorefrontPath("/ruj/mat-ruj-p-9"), "üç harfli ilk parça dil sanılmıyor");
+
+  /*
+   * Ret listesi değil şekil sınaması — ve fark bu satırda.
+   *
+   * `ee`, `ie`, `gr`, `no` `FOREIGN_LOCALES`'te **yoktu** ve dördü de gerçek
+   * ölçümde çıktı. Bir sonraki mağazanın dili de listede olmayacak; şekil
+   * sınaması onu da yakalıyor.
+   */
+  t(!isTurkishStorefrontPath("/fi/takki-p-1"), "listede olmayan dil de düşüyor");
+  t(!isTurkishStorefrontPath("/pt-br/camisa-p-1"), "iki parçalı dil kodu da düşüyor");
+  t(isTurkishStorefrontPath("/tr-tr/gomlek-p-1"), "tr-tr geçiyor");
 }
 
 console.log(`${pass} ✓ / ${fails.length} ✗`);

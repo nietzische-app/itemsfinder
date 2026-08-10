@@ -15,7 +15,7 @@
 #
 # ## Neden depoya, ayrı bir depolamaya değil
 #
-# Ölçüldü: 151.976 ürün yolu, 9,5 MB ham / **2,0 MB gzip**. Bu bir Vercel
+# Ölçüldü: 99.575 ürün yolu, 6,4 MB ham / **1,3 MB gzip**. Bu bir Vercel
 # fonksiyonuna sığıyor, yani Redis'e, S3'e ya da ödemeye gerek yok — ve bu
 # projede ücretsizlik bir tercih değil kısıt (`docs/BULUNAMADI.md` 4c).
 #
@@ -32,6 +32,10 @@
 #    düşerse iş kırmızıya dönüyor ve **hiçbir şey yazılmıyor**. «Yayımlamadan
 #    önce çıktıya bak» bir kural değil bir dilek; periyodik bir işin çıktısına
 #    kimse baştan sona bakmıyor.
+#
+# Yalnızca Türkiye vitrini yazılıyor: ilk dizin ölçüldüğünde 151.976 yolun
+# 52.401'i (%34,5) yabancı vitrindi — Beymen'in yarısı İngilizce kopya,
+# Bershka'nın çoğunluğu Estonya. Süzüldükten sonra kapsam yine 56/56.
 name: Ürün adres dizini
 
 on:
@@ -47,6 +51,14 @@ on:
         description: "Mağaza başına en fazla sitemap dosyası"
         required: false
         default: "8"
+      zorla:
+        description: "Küçülme korumasını atla — yalnızca daralma bilerek yapılıyorsa"
+        required: false
+        default: "hayır"
+        type: choice
+        options:
+          - hayır
+          - evet
       yaz:
         description: "Sonucu depoya yaz"
         required: false
@@ -83,10 +95,14 @@ jobs:
         env:
           MAGAZA: ${{ inputs.magaza }}
           DOSYA: ${{ inputs.dosya }}
+          ZORLA: ${{ inputs.zorla }}
         run: |
           set -o pipefail
           args=(--dosya "${DOSYA:-8}")
           [ -n "$MAGAZA" ] && args+=(--magaza "$MAGAZA")
+          # Koruma «bu düşüş bir arıza» varsayar; bilerek daraltılan bir koşuda
+          # bu varsayım yanlış ve karar operatörün.
+          [ "$ZORLA" = "evet" ] && args+=(--zorla 1)
           npm run build:index -- "${args[@]}" 2>&1 | tee dizin.txt
 
       # Kapı: kapsam tabanın altındaysa burada duruyor ve yazma adımına
