@@ -26,6 +26,7 @@ const SUITES = [
   ["teşhis aritmetiği kapanıyor", "dedupe-explain-check.mjs"],
   ["mağaza arama sağlayıcısı", "store-search-check.mjs"],
   ["beklenti başlıkla aynı dilde", "title-match-check.mjs"],
+  ["sitemap okuma kararları", "sitemap-check.mjs"],
 ];
 
 let failed = 0;

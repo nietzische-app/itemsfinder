@@ -26,6 +26,14 @@ on:
       adres:
         description: "Arama adresi kalıbı — mağaza kendi ilan etmiyorsa. Örn: https://x.com/ara?k={q}"
         required: false
+      kanal:
+        description: "Hangi kanal ölçülsün"
+        required: false
+        default: arama
+        type: choice
+        options:
+          - arama
+          - sitemap
 
 jobs:
   olc:
@@ -51,12 +59,19 @@ jobs:
           SORGU: ${{ inputs.sorgu }}
           MAGAZA: ${{ inputs.magaza }}
           ADRES: ${{ inputs.adres }}
+          KANAL: ${{ inputs.kanal }}
         run: |
           set -o pipefail
           args=(--q "${SORGU:-gri pantolon}")
           [ -n "$MAGAZA" ] && args+=(--site "$MAGAZA")
-          [ -n "$ADRES" ] && args+=(--url "$ADRES")
-          npm run check:kesif -- "${args[@]}" 2>&1 | tee kesif.txt
+          # Arama adresi kalıbı yalnızca arama kanalının kavramı.
+          [ -n "$ADRES" ] && [ "${KANAL:-arama}" = "arama" ] && args+=(--url "$ADRES")
+
+          if [ "${KANAL:-arama}" = "sitemap" ]; then
+            npm run check:sitemap -- "${args[@]}" 2>&1 | tee kesif.txt
+          else
+            npm run check:kesif -- "${args[@]}" 2>&1 | tee kesif.txt
+          fi
 
       # Çıktı iş kaydında zaten görünüyor; dosya olarak da indirilebilsin diye.
       - uses: actions/upload-artifact@v5
