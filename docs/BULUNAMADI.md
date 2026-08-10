@@ -503,7 +503,25 @@ Küçülme koruması bunu arıza sanardı (Bershka %47 düşüyor), o yüzden bi
 yapılan daralmalar için `--zorla` bayrağı var — karar operatörün ve bayrak onu
 görünür kılıyor.
 
-**Sırada:** üretimde aday kaynağı olarak bağlamak.
+**Üretime bağlandı** (`ENABLE_PRODUCT_INDEX=true`). `services/productIndex.ts`
+dizini bir kez yükleyip (93 ms) her sorguyu 12 ms'te cevaplıyor; çalışma anında
+ağ yok, satıcı yok, ödeme yok.
+
+Aday bulma sırası artık **tazelik ile maliyetin arasında**: görsel → Google →
+mağaza araması → **dizin** → context.dev. Dizin canlı kanalların arkasında,
+çünkü elindeki adresler gece toplanmış — mağazanın bugün eklediği ürün burada
+yok. Ama context.dev'in önünde, çünkü o kredi harcıyor ve kredisi bitti.
+
+Merdivenin **her basamağı** deneniyor, mağaza aramasının aksine: orada her
+basamak mağaza başına bir HTTP isteği demekti, burada bir basamak 12 ms ve
+hiçbir istek. Gevşetmenin bedava olduğu tek kanal bu.
+
+Dağıtımdaki en olası arıza dosyaların fonksiyon paketine girmemesi olurdu —
+Next'in izlemesi `import` grafiğine bakıyor, bu dosyalar ise yoldan çözülüyor.
+`outputFileTracingIncludes` ile eklendi ve **ölçüldü**: `npm run build` sonrası
+`route.js.nft.json` altı dosyanın altısını da listeliyor.
+
+**Sırada:** üretimde bir tarama sürüp `[dizin]` satırını okumak.
 
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 

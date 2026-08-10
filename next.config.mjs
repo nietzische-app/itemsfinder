@@ -1,5 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  /*
+   * Ürün adres dizini fonksiyon paketine dahil edilsin.
+   *
+   * `data/urun-adresleri/*.txt` çalışma anında `fs` ile okunuyor
+   * (`services/productIndex.ts`) ve Next'in dosya izlemesi bunu göremiyor:
+   * izleme `import` grafiğine bakıyor, bu dosyalar ise koddan değil yoldan
+   * çözülüyor. Burada söylenmezse dağıtılan fonksiyonda dizin **yok** olur ve
+   * aşama sessizce «dizin dosyaları bulunamadı» der — yerelde çalışan,
+   * üretimde çalışmayan bir yol.
+   */
+  outputFileTracingIncludes: {
+    "/api/**": ["./data/urun-adresleri/**"],
+  },
   images: {
     /*
      * Allowlist for remote product imagery.

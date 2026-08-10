@@ -17,6 +17,7 @@ import { buildSearchQuery, relaxedQueries } from "@/lib/searchQuery";
 import { cropRegion } from "@/services/imageCrop";
 import { getVisualLookup, visualLookupStatus } from "@/services/visualLookup";
 import { getGoogleSearch, googleSearchStatus } from "@/services/googleSearch";
+import { getProductIndex, productIndexStatus } from "@/services/productIndex";
 import { getStoreSearch, storeSearchStatus } from "@/services/storeSearch";
 import { markupExtractionEnabled, productsFromMarkup } from "@/services/markupProducts";
 import { productThumbnail } from "@/lib/productThumbnail";
@@ -193,6 +194,7 @@ export class ContextDevProductProvider implements ProductProvider {
     );
     console.log(`[cse] ${googleSearchStatus()}`);
     console.log(`[mağaza] ${storeSearchStatus()}`);
+    console.log(`[dizin] ${productIndexStatus()}`);
 
     try {
       // Spend the budget on the detections the user is most likely to act on.
@@ -456,6 +458,55 @@ export class ContextDevProductProvider implements ProductProvider {
           "products",
           `mağaza aramaları ${seen} ürün sayfası buldu, hiçbiri sorguyla eşleşmedi`,
         );
+      }
+    }
+
+    /*
+     * Önceden toplanmış adres dizini — ağa hiç çıkmayan yol.
+     *
+     * En sonda, çünkü elindeki adresler **gece toplanmış**: mağazanın bugün
+     * eklediği ürün burada yok ve stoktan kalkmış bir ürün hâlâ olabilir. Canlı
+     * kanallar bulabiliyorsa onların cevabı daha taze.
+     *
+     * Ama context.dev'den **önce**, çünkü o kredi harcıyor ve kredisi bitti.
+     * Sıra, tazelik ile maliyetin arasında: ücretsiz ve taze olan en önde,
+     * ücretsiz ve bayat olan ortada, ücretli olan en sonda.
+     *
+     * Merdivenin her basamağı deneniyor — mağaza aramasının aksine. Orada her
+     * basamak mağaza başına bir HTTP isteği demekti; burada bir basamak 12 ms
+     * ve hiçbir istek. Gevşetmenin bedava olduğu tek kanal bu.
+     */
+    const index = getProductIndex();
+
+    if (index) {
+      for (let rung = 0; rung < ladder.length; rung += 1) {
+        const query = ladder[rung]!;
+        const startedAt = Date.now();
+        const { urls, seen, error } = index.findProductPages(query);
+
+        trace?.search({
+          itemId: item.id,
+          source: "dizin",
+          tier: "tr",
+          rung,
+          query,
+          found: urls.length,
+          ms: Date.now() - startedAt,
+          error,
+        });
+        trace?.spend("arama", Date.now() - startedAt);
+
+        if (urls.length > 0) return urls;
+
+        /*
+         * Sıfırın sebebi ilk basamakta bir kez yazılıyor: dizin okunamadıysa
+         * bunu her basamakta tekrarlamak logu doldurur, ama hiç yazmamak
+         * «dizinde bu ürün yok» ile «dizin yüklenemedi»yi aynı gösterirdi.
+         */
+        if (rung === 0 && seen === 0) {
+          trace?.degrade("products", `adres dizini kullanılamadı — ${error ?? "boş"}`);
+          break;
+        }
       }
     }
 

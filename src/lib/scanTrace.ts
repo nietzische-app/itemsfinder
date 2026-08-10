@@ -79,7 +79,7 @@ export interface SearchAttemptRecord {
    * okunabiliyor — «görsel arama metinden iyi mi» sorusunun cevabı burada
    * birikiyor, tahminde değil.
    */
-  source: "metin" | "görsel" | "cse" | "mağaza";
+  source: "metin" | "görsel" | "cse" | "mağaza" | "dizin";
   tier: SearchTier;
   /** Merdiven basamağı: 0 tam sorgu, büyüdükçe gevşiyor. Görsel yolda hep 0. */
   rung: number;

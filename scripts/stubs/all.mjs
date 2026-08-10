@@ -30,6 +30,7 @@ const SUITES = [
   ["ürün aşamasının içi ölçülüyor", "spend-check.mjs"],
   ["yanlış bayrak sessiz geçmiyor", "args-check.mjs"],
   ["dizin ağacı geziliyor", "index-build-check.mjs"],
+  ["adres dizini aday üretiyor", "product-index-check.mjs"],
 ];
 
 let failed = 0;
