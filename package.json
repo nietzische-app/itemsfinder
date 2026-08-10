@@ -13,6 +13,7 @@
     "check:cse": "node --experimental-transform-types scripts/check-cse.mjs",
     "check:kesif": "node --experimental-transform-types scripts/check-kesif.mjs",
     "check:sitemap": "node --experimental-transform-types scripts/check-sitemap.mjs",
+    "build:index": "node --experimental-transform-types scripts/build-index.mjs",
     "check:ui": "node scripts/check-ui.mjs",
     "check:stubs": "node scripts/stubs/all.mjs",
     "eval": "node --experimental-transform-types scripts/eval.mjs",

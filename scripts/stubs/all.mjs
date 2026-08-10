@@ -29,6 +29,7 @@ const SUITES = [
   ["sitemap okuma kararları", "sitemap-check.mjs"],
   ["ürün aşamasının içi ölçülüyor", "spend-check.mjs"],
   ["yanlış bayrak sessiz geçmiyor", "args-check.mjs"],
+  ["dizin ağacı geziliyor", "index-build-check.mjs"],
 ];
 
 let failed = 0;

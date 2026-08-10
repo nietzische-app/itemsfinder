@@ -29,20 +29,13 @@
  *
  * Ağ gerektiriyor: Actions → «Ücretsiz keşif ölçümü» → kanal «sitemap».
  */
-import { gunzipSync } from "node:zlib";
-
-import { USER_AGENT, productLinks, rankByQuery } from "./kesif-lib.mjs";
+import { productLinks, rankByQuery } from "./kesif-lib.mjs";
 import { parseArgs } from "./args.mjs";
+import { get, sitemapsFor } from "./sitemapFetch.mjs";
 
-const {
-  sitemapUrlsFromRobots,
-  locsIn,
-  isSitemapIndex,
-  looksLikeSitemapList,
-  isGzip,
-  rankProductSitemaps,
-  SITEMAP_GUESSES,
-} = await import("@/lib/sitemapIndex");
+const { locsIn, isSitemapIndex, looksLikeSitemapList, rankProductSitemaps } = await import(
+  "@/lib/sitemapIndex"
+);
 
 const arg = parseArgs(process.argv.slice(2), { q: ["sorgu"], site: ["magaza"] });
 
@@ -55,74 +48,6 @@ const STORES = [
   "zara.com", "hm.com", "mango.com", "pullandbear.com", "bershka.com",
   "stradivarius.com", "gratis.com", "watsons.com.tr", "sephora.com.tr",
 ];
-
-/** Sitemap dosyaları büyük; gövde sınırı olmadan tek dosya ölçümü yiyebilir. */
-const MAX_BYTES = 25 * 1024 * 1024;
-
-async function get(url) {
-  try {
-    const response = await fetch(url, {
-      redirect: "follow",
-      headers: {
-        "user-agent": USER_AGENT,
-        accept: "application/xml,text/xml,text/plain,*/*",
-        "accept-encoding": "gzip, deflate",
-      },
-      signal: AbortSignal.timeout(20_000),
-    });
-
-    const buffer = await response.arrayBuffer();
-    if (buffer.byteLength > MAX_BYTES) {
-      return { status: response.status, body: "", url: response.url, tooBig: buffer.byteLength };
-    }
-
-    /*
-     * `.xml.gz` dosyaları TAŞIMA sıkıştırması değil, gövdenin kendisi gzip.
-     *
-     * İlk koşuda altı mağaza «0 adres» dedi — Zara, Pull&Bear, Bershka,
-     * Stradivarius, Vakko, Flo. `robots.txt` sitemap ilan ediyordu ve dosya 200
-     * dönüyordu; gövde gzip olduğu için `TextDecoder` çöp üretti ve içinde
-     * `<loc>` bulunamadı. Ölçüm «bu mağazada sitemap yok» diyordu, oysa vardı.
-     */
-    const bytes = new Uint8Array(buffer);
-    const body = isGzip(bytes)
-      ? gunzipSync(bytes).toString("utf-8")
-      : new TextDecoder("utf-8").decode(bytes);
-
-    return { status: response.status, body, url: response.url };
-  } catch (error) {
-    return {
-      status: 0,
-      body: "",
-      url,
-      error: error instanceof Error ? error.message.slice(0, 60) : "istek başarısız",
-    };
-  }
-}
-
-/** Mağazanın ilan ettiği ya da standart yerdeki sitemap adresleri. */
-async function sitemapsFor(host) {
-  const robots = await get(`https://www.${host}/robots.txt`);
-
-  if (robots.status === 200) {
-    const declared = sitemapUrlsFromRobots(robots.body);
-    if (declared.length > 0) return { urls: declared, from: "robots.txt" };
-  }
-
-  for (const guess of SITEMAP_GUESSES) {
-    const page = await get(`https://www.${host}${guess}`);
-    if (page.status === 200 && /<(sitemapindex|urlset)[\s>]/i.test(page.body)) {
-      return { urls: [page.url], from: `tahmin ${guess}` };
-    }
-  }
-
-  return {
-    urls: [],
-    from: null,
-    robotsStatus: robots.status,
-    robotsError: robots.error,
-  };
-}
 
 const stores = only ? [only] : STORES;
 

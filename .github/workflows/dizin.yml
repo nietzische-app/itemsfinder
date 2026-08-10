@@ -1,0 +1,82 @@
+# Ürün adres dizinini çıkarır — ve **önce boyutunu ölçer**.
+#
+# Actions sekmesi → «Ürün adres dizini» → «Run workflow».
+#
+# ## Neden burada
+#
+# `kesif.yml` ile aynı gerekçe: mağazalar veri merkezi IP'sine ev bağlantısından
+# farklı davranıyor, ve dizin üretimde kullanılacaksa üretimin gördüğü cevapla
+# üretilmeli.
+#
+# ## Bu koşu neyi cevaplıyor
+#
+# Sitemap kanalı ölçüldü ve altı mağazada çalışıyor (`docs/BULUNAMADI.md` 4e).
+# Açık kalan tek soru dizinin **nerede saklanacağı** ve o soru boyutu bilinmeden
+# cevaplanamaz: 2 MB'lık bir dizin depoya yazılır, 200 MB'lık bir dizin başka bir
+# çözüm ister. Bu koşu dizini çıkarıp boyutunu bildiriyor — depoya bir şey
+# yazmıyor, çünkü nereye yazılacağı henüz karar değil.
+#
+# Çıktı bir yapı olarak indirilebiliyor; nasıl sunulacağına o sayıya bakıp karar
+# vereceğiz.
+name: Ürün adres dizini
+
+on:
+  workflow_dispatch:
+    inputs:
+      magaza:
+        description: "Tek bir mağaza (boş bırakılırsa ölçülmüş altı mağaza)"
+        required: false
+      dosya:
+        description: "Mağaza başına en fazla sitemap dosyası — boyutu görmek için artır"
+        required: false
+        default: "8"
+
+jobs:
+  dizin:
+    name: Dizin ne kadar yer tutuyor
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v5
+
+      # `--experimental-transform-types` Node 22 istiyor.
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Girdiler kabuğa doğrudan gömülmüyor, ortam değişkeni olarak veriliyor:
+      # `${{ }}` ile yazılan bir girdi kabuk kaçışına açık olurdu.
+      - name: Dizini çıkar
+        env:
+          MAGAZA: ${{ inputs.magaza }}
+          DOSYA: ${{ inputs.dosya }}
+        run: |
+          set -o pipefail
+          args=(--dosya "${DOSYA:-8}")
+          [ -n "$MAGAZA" ] && args+=(--magaza "$MAGAZA")
+          npm run build:index -- "${args[@]}" 2>&1 | tee dizin.txt
+
+      # Sıkıştırılmış boyut da ölçülüyor: depoya yazma kararı git'in sakladığı
+      # boyuta bakıyor, ham metne değil.
+      - name: Boyut
+        run: |
+          echo "--- ham ---"
+          du -sh data/urun-adresleri || true
+          wc -l data/urun-adresleri/*.txt || true
+          echo "--- gzip ---"
+          for f in data/urun-adresleri/*.txt; do
+            [ -e "$f" ] || continue
+            printf '%s  %s\n' "$(gzip -c "$f" | wc -c)" "$f"
+          done
+
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: urun-adres-dizini
+          path: |
+            dizin.txt
+            data/urun-adresleri

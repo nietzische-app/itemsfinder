@@ -16,3 +16,7 @@ yarn-error.log*
 .vercel
 *.tsbuildinfo
 next-env.d.ts
+# Çıkarılan ürün adres dizini — şimdilik depoya girmiyor.
+# Nerede saklanacağı ölçülmemiş bir karar (docs/BULUNAMADI.md 4e): önce
+# «Ürün adres dizini» iş akışı boyutu bildiriyor, saklama ondan sonra.
+data/urun-adresleri/
