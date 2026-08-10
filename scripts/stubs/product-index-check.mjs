@@ -97,6 +97,45 @@ const { getProductIndex, productIndexStatus, ProductIndexSearch } = await import
 }
 
 /*
+ * 2b) Kotayı ilk mağazalar yemiyor — her mağaza sıra alıyor.
+ *
+ * **Üretimde ölçülmüş bir kusur.** İlk hâli mağazaları tek tek gezip her
+ * birinden ikişer aday alıyordu ve mağazalar dosya adına göre — alfabetik —
+ * geziliyordu. Dört kotayı ilk iki mağaza dolduruyordu:
+ *
+ *   4 sayfa, 0 satır — bershka: HTTP 403 ×2; beymen: işaretleme yok ×2
+ *
+ * Koton ve Zara hiçbir taramada sıra almadı. Aday seçimi alakayla değil
+ * **alfabeyle** belirleniyordu.
+ *
+ * Aşağıdaki kurulum o durumun aynısı: alfabetik olarak ilk iki mağazanın
+ * ikişer eşleşmesi var ve dördü de kotayı doldurabilir. Ölçülen iddia, en
+ * arkadaki mağazanın yine de listeye girmesi.
+ */
+{
+  const kota = mkdtempSync(join(tmpdir(), "kota-"));
+  writeFileSync(join(kota, "aaa.com.txt"), "/keten-gomlek-bir-p-1\n/keten-gomlek-iki-p-2\n");
+  writeFileSync(join(kota, "bbb.com.txt"), "/keten-gomlek-uc-p-3\n/keten-gomlek-dort-p-4\n");
+  writeFileSync(join(kota, "zzz.com.txt"), "/keten-gomlek-bes-p-5\n");
+
+  process.env.PRODUCT_INDEX_DIR = kota;
+  const { urls } = new ProductIndexSearch().findProductPages("Keten Gömlek");
+  process.env.PRODUCT_INDEX_DIR = dir;
+
+  t(urls.length === 4, `kota doluyor (${urls.length})`);
+  t(
+    urls.some((u) => u.includes("zzz.com")),
+    `en arkadaki mağaza da sıra alıyor — ${urls.map((u) => new URL(u).hostname).join(", ")}`,
+  );
+  t(
+    new Set(urls.map((u) => new URL(u).hostname)).size === 3,
+    "üç mağazanın üçü de temsil ediliyor",
+  );
+
+  rmSync(kota, { recursive: true, force: true });
+}
+
+/*
  * 3) Sıralama: daha çok kelime tutan öne geçiyor.
  *
  * Sıra burada indirilecek sayfayı belirliyor — ilk ikisi indiriliyor, gerisi

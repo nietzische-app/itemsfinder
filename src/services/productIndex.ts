@@ -131,7 +131,7 @@ export class ProductIndexSearch {
     // dördünü döndürmek, sorguyla ilgisi olmayan dört sayfa indirmek demek.
     if (!matcher) return { urls: [], seen };
 
-    const urls: string[] = [];
+    const perStore: Array<Array<{ url: string; score: number }>> = [];
 
     for (const store of stores) {
       const hits: Array<{ url: string; score: number }> = [];
@@ -147,10 +147,45 @@ export class ProductIndexSearch {
        * uyabiliyor ve indirilecek olan ilk ikisi.
        */
       hits.sort((a, b) => b.score - a.score);
-      for (const hit of hits.slice(0, MAX_PER_STORE)) urls.push(hit.url);
+      if (hits.length > 0) perStore.push(hits.slice(0, MAX_PER_STORE));
     }
 
-    return { urls: urls.slice(0, MAX_CANDIDATES), seen };
+    /*
+     * Mağazalar sırayla, hepsinden birer tane.
+     *
+     * **Ölçülmüş bir kusur.** İlk hâli mağazaları tek tek gezip her birinden
+     * ikişer aday alıyordu, ve mağazalar dosya adına göre — yani alfabetik —
+     * geziliyordu. Dört kotayı ilk iki mağaza dolduruyordu: `bershka.com` ve
+     * `beymen.com`. Koton, Zara, Gratis ve Pull&Bear hiçbir taramada sıra
+     * almadı.
+     *
+     * Üretimde iki tarama üst üste aynı şeyi yazdı:
+     *
+     *   4 sayfa, 0 satır — bershka: HTTP 403 ×2; beymen: ürün işaretlemesi yok ×2
+     *   4 sayfa, 1 satır — bershka: HTTP 403 ×2; beymen: ürün işaretlemesi yok
+     *
+     * Yani dizin doğru adayları buluyordu ama kotayı okunamayan iki mağaza
+     * yiyordu — ve bunun sebebi alakayla değil **alfabeyle** ilgiliydi.
+     *
+     * Sıra iki kurala bağlı, ve ikisi de bir şey söylüyor: mağazalar en iyi
+     * eşleşmesine göre sıralanıyor (alaka), sonra sırayla birer aday alınıyor
+     * (temsil). Alfabenin karara girdiği yer kalmadı.
+     *
+     * Okunabilirliğe göre sıralamak daha iyi olurdu — ama o veri henüz yok,
+     * çünkü öteki dört mağaza hiç denenmedi. Bu değişiklikten sonra `[markup]`
+     * satırları onu ölçecek.
+     */
+    perStore.sort((a, b) => b[0]!.score - a[0]!.score);
+
+    const urls: string[] = [];
+    for (let round = 0; round < MAX_PER_STORE; round += 1) {
+      for (const hits of perStore) {
+        const hit = hits[round];
+        if (hit && urls.length < MAX_CANDIDATES) urls.push(hit.url);
+      }
+    }
+
+    return { urls, seen };
   }
 }
 

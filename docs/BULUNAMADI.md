@@ -521,7 +521,42 @@ Next'in izlemesi `import` grafiğine bakıyor, bu dosyalar ise yoldan çözülü
 `outputFileTracingIncludes` ile eklendi ve **ölçüldü**: `npm run build` sonrası
 `route.js.nft.json` altı dosyanın altısını da listeliyor.
 
-**Sırada:** üretimde bir tarama sürüp `[dizin]` satırını okumak.
+**Üretimde sürüldü — ve iki kusur çıkardı.**
+
+İlki teşhiste: `searchYield` dizinin bulduğu adayları `tr:0=4` diye yazdı, yani
+kredisi bitmiş context.dev'in bulduğunu söyledi. Aynı kusur ikinci kez oldu
+(ilkinde CSE'de) çünkü düzeltmesi kaynakları tek tek sayan bir zincirdi ve yeni
+kaynak zincire yazılmadı. Zincir yerine kural: katman yalnızca metin
+merdiveninin kavramı, geri kalan her kaynak kendi adıyla yazılıyor.
+
+İkincisi, ancak etiket düzeldikten sonra görülebildi. `[markup]` satırları iki
+tarama üst üste aynı şeyi yazdı:
+
+```
+4 sayfa, 0 satır — bershka: HTTP 403 ×2; beymen: ürün işaretlemesi yok ×2
+4 sayfa, 1 satır — bershka: HTTP 403 ×2; beymen: ürün işaretlemesi yok
+```
+
+Dizin doğru adayları buluyordu ama dört kotayı hep aynı iki mağaza yiyordu:
+mağazalar dosya adına göre — yani **alfabetik** — geziliyordu ve `bershka.com`
+ile `beymen.com` listenin başındaydı. Koton, Zara, Gratis ve Pull&Bear hiçbir
+taramada sıra almadı. Aday seçimi alakayla değil alfabeyle belirleniyordu.
+
+Sıra artık iki kurala bağlı: mağazalar en iyi eşleşmesine göre sıralanıyor
+(alaka), sonra sırayla birer aday alınıyor (temsil). Gerçek dizinde ölçüldü —
+altı sorgunun altısında da okunabilir bir mağaza kotaya giriyor:
+
+```
+Keten Gömlek   bershka, beymen, koton, pullandbear
+Kot Pantolon   koton, zara, bershka, beymen
+Mat Ruj        beymen, gratis, beymen, gratis
+```
+
+**Sırada:** mağaza başına «kaç aday verdi / kaçı satıra dönüştü» ölçüsü. Bershka
+ürün sayfalarında veri merkezi IP'sine 403 veriyor ve Beymen'de schema.org
+`Product` işaretlemesi yok; ikisi dizinin yarısı (57 bin yol). Sıra düzeldikten
+sonra öteki dört mağaza ilk kez denenecek ve o zaman okunabilirliğe göre
+sıralamak — ya da okunamayanı çıkarmak — ölçüye dayanabilecek.
 
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 
