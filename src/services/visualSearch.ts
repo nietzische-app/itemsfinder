@@ -30,6 +30,7 @@ import {
 import { ContextDevService } from "@/services/contextDevService";
 import {
   getAttributeExtractor,
+  vlmCreditExhausted,
   type GarmentAttributes,
 } from "@/services/attributeExtractor";
 import { createTrace, type TraceCollector } from "@/lib/scanTrace";
@@ -589,10 +590,21 @@ export class GoogleVisionSearchService implements VisualSearchService {
 
     trace.count("describedItems", attributes.size);
     if (extractor && attributes.size < detections.length) {
+      /*
+       * Sebep bilinebiliyorsa yazılıyor.
+       *
+       * «Betimlenemedi» bir gözlem; «kredi bitti, şu bayrağı kapat» bir iş.
+       * Üretimde ölçüldü: kredisi bitmiş bir anahtarla bu aşama her taramada
+       * 330–1460 ms harcadı ve hiçbir şey üretmedi. Kilit sunucusuz dağıtımda
+       * kurtarmıyor — her tarama soğuk bir instance'a düşüyor.
+       */
       trace.degrade(
         "vlm",
         `${detections.length - attributes.size}/${detections.length} parça betimlenemedi — ` +
-          "ölçülen renge ve Vision sınıfına düşüldü",
+          "ölçülen renge ve Vision sınıfına düşüldü" +
+          (vlmCreditExhausted()
+            ? " (Anthropic kredisi bitti — boşa harcamayı durdurmak için ENABLE_VLM_ATTRIBUTES=false)"
+            : ""),
       );
     }
 

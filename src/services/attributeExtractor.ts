@@ -485,6 +485,22 @@ const AUTH_COOLDOWN_MS = 60_000;
 let vlmBlockedUntil = 0;
 
 /**
+ * Aşama kredi ya da anahtar reddi yüzünden mi susuyor — ve operatör ne yapmalı.
+ *
+ * Kilit sunucusuz bir dağıtımda çoğu zaman işe yaramıyor: her tarama soğuk bir
+ * instance'a düşüyor ve kilit onunla birlikte ölüyor. Üretimde ölçüldü — kredisi
+ * bitmiş bir anahtarla aşama her taramada 330–1460 ms harcamaya devam etti ve
+ * karşılığında hiçbir şey üretmedi.
+ *
+ * Kalıcı çözüm bayrağı kapatmak, ve bunu ancak operatör yapabilir. O yüzden
+ * gerileme notu artık **hangi bayrağı** kapatacağını söylüyor: «betimlenemedi»
+ * demek bir gözlem, «kredi bitti, şu bayrağı kapat» demek bir iş.
+ */
+export function vlmCreditExhausted(): boolean {
+  return vlmBlockedUntil > 0;
+}
+
+/**
  * Bu hata tekrar denemeye değer mi?
  *
  * Kredi bitmesi ya da anahtar reddi, kırpımı değiştirerek çözülecek bir şey
