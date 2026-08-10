@@ -187,6 +187,14 @@ export interface DetectRequestBody {
   image: string;
   /** Optional hint from the "try an example" buttons. */
   exampleId?: ExampleId;
+  /**
+   * Kimin için alışveriş yapıldığı — kullanıcının seçimi, «kadın» ya da «erkek».
+   *
+   * İsteğe bağlı ve varsayılanı yok: yokluğu «fark etmez» demek. Fotoğraftan
+   * çıkarılmıyor, çünkü görünüşten cinsiyet tahmin etmek hem güvenilmez hem de
+   * yapılmaması gereken bir şey.
+   */
+  gender?: "kadın" | "erkek";
 }
 
 /** Discriminated response so the client can narrow on `ok`. */

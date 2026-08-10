@@ -18,6 +18,7 @@ import {
   type DetectionCandidate,
 } from "@/lib/detectionFilter";
 import { familyOf, tokenize, type ItemFamily } from "@/lib/itemFamily";
+import type { ShopperGender } from "@/lib/shopperGender";
 import { attributeSearchQuery, buildSearchQuery, colorNameFromHex } from "@/lib/searchQuery";
 import {
   MOCK_SCENARIOS,
@@ -70,6 +71,12 @@ export interface VisualSearchInput {
    * keeps working untouched; a scan with no collector simply is not observed.
    */
   trace?: TraceCollector;
+  /**
+   * Kimin için alışveriş yapıldığı — kullanıcının seçimi, yoksa «fark etmez».
+   *
+   * Tespite değil **puanlamaya** giriyor: fotoğraftan cinsiyet çıkarılmıyor.
+   */
+  shopperGender?: ShopperGender;
 }
 
 /**
@@ -768,7 +775,12 @@ class ComposedVisualSearchService implements VisualSearchService {
 
       const image = { buffer, size: (await imageSize(buffer)) ?? undefined };
       const enrich = () =>
-        this.products.enrich(detected, { signal: input.signal, image, trace: input.trace });
+        this.products.enrich(detected, {
+          signal: input.signal,
+          image,
+          trace: input.trace,
+          shopperGender: input.shopperGender,
+        });
 
       const enriched = input.trace
         ? await input.trace.stage("products", enrich)

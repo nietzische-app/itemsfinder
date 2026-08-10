@@ -14,6 +14,7 @@ import {
   MockVisualSearchService,
   getVisualSearchService,
 } from "@/services/visualSearch";
+import { parseShopperGender } from "@/lib/shopperGender";
 import type { DetectRequestBody, DetectResponse, DetectionResult, ExampleId } from "@/types";
 
 /** Vision calls are outbound HTTP, so this must not be statically evaluated. */
@@ -181,7 +182,8 @@ export async function POST(request: Request) {
    * stored; see `services/scanCache.ts` for why that distinction is the whole
    * KVKK argument.
    */
-  const cacheKey = scanCacheKey(buffer, exampleId);
+  const shopperGender = parseShopperGender(body.gender);
+  const cacheKey = scanCacheKey(buffer, exampleId, shopperGender);
   const hit = await readCachedScan(cacheKey);
 
   if (hit) {
@@ -213,6 +215,7 @@ export async function POST(request: Request) {
       // resolution is the slow part and every call costs credits.
       signal: request.signal,
       trace,
+      shopperGender,
     });
 
     await writeCachedScan(cacheKey, result, {

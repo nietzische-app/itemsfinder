@@ -172,9 +172,20 @@ export function scanCacheTtlSeconds(): number {
  * user file take different paths through the mock engine, and a shared entry would
  * hand one the other's answer.
  */
-export function scanCacheKey(imageBytes: Buffer, exampleId?: string): string {
+export function scanCacheKey(
+  imageBytes: Buffer,
+  exampleId?: string,
+  /**
+   * Kimin için arandığı da anahtara giriyor.
+   *
+   * Girmeseydi seçimi değiştiren kullanıcı, önceki seçimle hesaplanmış sonucu
+   * geri alırdı — ve bu, çalışmayan bir seçici gibi görünürdü. Sonucu değiştiren
+   * her girdi anahtarın parçası olmalı.
+   */
+  shopperGender?: string,
+): string {
   const digest = createHash("sha256").update(imageBytes).digest("hex").slice(0, 32);
-  return `scan:v1:${digest}:${exampleId ?? "-"}`;
+  return `scan:v1:${digest}:${exampleId ?? "-"}:${shopperGender ?? "-"}`;
 }
 
 /**

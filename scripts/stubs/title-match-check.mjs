@@ -25,6 +25,7 @@ register(new URL("../alias-loader.mjs", import.meta.url).href);
 const { EXACT_MATCH_FLOOR, expectedAttributesOf, scoreTitleAgreement } = await import(
   "@/lib/attributeMatch"
 );
+const { contradictsShopper } = await import("@/lib/shopperGender");
 
 let pass = 0;
 const fails = [];
@@ -117,6 +118,64 @@ const score = (item, title) => scoreTitleAgreement(title, expectedAttributesOf(i
     renk.score < EXACT_MATCH_FLOOR,
     `çelişen renk birebir eşleşmeyi engelliyor (${renk.score.toFixed(2)})`,
   );
+}
+
+/*
+ * 4) Kitle kapısı — **üretimden gelen gerçek vaka**.
+ *
+ * Kadın kombini tarandı ve Boyner'in arama sayfası «Slim Fit Orta Bel Düz Paça
+ * Erkek Gri Pantolon» döndürdü. Satır bütün kapıları geçti: doğru aile, doğru
+ * renk, doğru cins ürün. Teknik olarak kusursuz, kullanıcı için yanlış ürün.
+ *
+ * Bu bir KAPI, kanıt değil — ölçüm bunu düzeltti. Önce puanlayıcıya -0.3'lük
+ * bir ceza yazıldı ve yetmedi: ad, renk ve niteleyici uyduğu için satır 0.60 ile
+ * birebir eşleşme tabanını yine geçti. İki mekanizma tek kural için, ve ikisi de
+ * yarım.
+ *
+ * Cinsiyet fotoğraftan çıkarılmıyor — görünüşten tahmin etmek hem güvenilmez
+ * hem de yapılmaması gereken bir şey. Değer yalnızca kullanıcının seçiminden
+ * geliyor, ve seçim yoksa hiçbir satır elenmiyor.
+ */
+{
+  const erkekPantolon = "Slim Fit Orta Bel Düz Paça Erkek Gri Pantolon";
+
+  t(!contradictsShopper(erkekPantolon), "seçim yokken hiçbir şey elenmiyor");
+  t(contradictsShopper(erkekPantolon, "kadın"), "«kadın» seçiliyken erkek ürünü eleniyor");
+  t(!contradictsShopper(erkekPantolon, "erkek"), "«erkek» seçiliyken aynı ürün geçiyor");
+
+  /*
+   * Yokluk cezalandırılmıyor: mağazaların çoğu başlığa cinsiyet yazıyor ama
+   * hepsi yazmıyor, ve yazmayanı elemek yalnızca uzun başlık yazanı öne
+   * çıkarırdı.
+   */
+  t(
+    !contradictsShopper("Yüksek Bel Bol Paça Kumaş Pantolon", "kadın"),
+    "cinsiyet yazmayan başlık elenmiyor",
+  );
+
+  // Koton'un gerçek satırı: «Kadın» yazan başlık, kadın seçimiyle geçmeli.
+  t(
+    !contradictsShopper("Kadın Oversize Viskon Cep Detaylı Pileli Kumaş Pantolon", "kadın"),
+    "uyan kitle geçiyor",
+  );
+
+  /*
+   * «Erkek Çocuk» bir çocuk ürünü, erkek ürünü değil — ve ikisiyle de çelişiyor.
+   * Kelime sırasına bakan bir kural bunu erkek sayardı ve bir çocuk pantolonunu
+   * yetişkine gösterirdi.
+   */
+  t(contradictsShopper("Erkek Çocuk Rahat Kesim Kumaş Pantolon", "erkek"), "çocuk ürünü yetişkine verilmiyor");
+  t(contradictsShopper("Kız Çocuk Kot Pantolon", "kadın"), "kız çocuk ürünü de yetişkine verilmiyor");
+
+  // «Unisex» hiçbir seçimle çelişmiyor: zaten ikisi için de satılıyor.
+  t(!contradictsShopper("Unisex Rahat Kesim Kumaş Pantolon", "kadın"), "unisex çelişmiyor");
+
+  /*
+   * Kelime sınırı şart: «erkekçe» ya da «kadinlar» gibi bir kelimenin içinde
+   * geçen harf dizisi kitle bildirmiyor. Alt dize araması bir markayı ya da bir
+   * desen adını cinsiyet sanabilirdi.
+   */
+  t(!contradictsShopper("Mango Kadife Pantolon", "kadın"), "kelime içindeki dizi kitle sayılmıyor");
 }
 
 console.log(`${pass} ✓ / ${fails.length} ✗`);

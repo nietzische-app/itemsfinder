@@ -11,6 +11,7 @@ import {
   scoreTitleAgreement,
 } from "@/lib/attributeMatch";
 import { rejectProductTitle } from "@/lib/retailVocabulary";
+import { contradictsShopper, type ShopperGender } from "@/lib/shopperGender";
 import type { TraceCollector } from "@/lib/scanTrace";
 import { buildSearchQuery, relaxedQueries } from "@/lib/searchQuery";
 import { cropRegion } from "@/services/imageCrop";
@@ -65,6 +66,14 @@ export interface EnrichContext {
    * a scan.
    */
   trace?: TraceCollector;
+  /**
+   * Kimin için alışveriş yapıldığı. Yokluğu «fark etmez» demek.
+   *
+   * Puanlamaya giriyor: yanlış kitleye ait bir ürün, yanlış renk kadar yanlış.
+   * Üretimde ölçüldü — kadın kombini tarandı, «… Erkek Gri Pantolon» bütün
+   * kapıları geçti.
+   */
+  shopperGender?: ShopperGender;
 }
 
 export interface ProductProvider {
@@ -201,6 +210,7 @@ export class ContextDevProductProvider implements ProductProvider {
           context.image,
           siblings,
           context.trace,
+          context.shopperGender,
         );
         if (live) resolved.set(item.id, live);
       });
@@ -472,6 +482,7 @@ export class ContextDevProductProvider implements ProductProvider {
     image?: EnrichContext["image"],
     siblings: BoundingBox[] = [],
     trace?: TraceCollector,
+    shopperGender?: ShopperGender,
   ): Promise<DetectedItem | null> {
     /*
      * Tek bir sorgu değil, gevşeyen bir merdiven.
@@ -561,6 +572,23 @@ export class ContextDevProductProvider implements ProductProvider {
     const family = item.family ?? familyOf(`${item.itemType} ${item.label}`);
     const rejected: string[] = [];
     const usable = linkable.filter((card) => {
+      /*
+       * Kitle kapısı, aile kapısının yanında.
+       *
+       * «Erkek» yazan bir başlık kadın kombini için yanlış ürün — ve bu bir
+       * kanıt değil bir kapı. Ölçüm bunu gösterdi: puanlayıcıya -0.3'lük bir
+       * ceza yazıldı ve yetmedi, çünkü ad, renk ve niteleyici uyuyordu ve satır
+       * 0.60 ile birebir eşleşme tabanını yine geçti.
+       *
+       * Seçim yoksa kapı yok: `contradictsShopper` seçimsiz her zaman `false`.
+       */
+      if (contradictsShopper(card.title, shopperGender)) {
+        const reason = `kitle çelişkisi (${shopperGender} aranıyor)`;
+        rejected.push(`"${card.title}" (${reason})`);
+        trace?.reject({ itemId: item.id, title: card.title, reason });
+        return false;
+      }
+
       const reason = rejectProductTitle(card.title, family);
       if (reason) {
         rejected.push(`"${card.title}" (${reason})`);

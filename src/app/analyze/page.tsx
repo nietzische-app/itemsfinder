@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { parseUiCategory, uiCategoryOf, type UiCategory } from "@/lib/categories";
 import { readUploadedImage } from "@/lib/imageSession";
 import { useSavedProducts } from "@/lib/savedItems";
+import type { ShopperGender } from "@/lib/shopperGender";
 import type { DetectResponse, DetectionResult, UploadedImage } from "@/types";
 
 /** Delay between detections appearing in the rail, in milliseconds. */
@@ -43,6 +44,21 @@ function AnalyzeWorkspace() {
 
   useEffect(() => setLocalCategory(urlCategory), [urlCategory]);
 
+  /**
+   * Kimin için arandığı — kullanıcının seçimi, varsayılan «fark etmez».
+   *
+   * Fotoğraftan çıkarılmıyor: görünüşten cinsiyet tahmin etmek hem güvenilmez
+   * hem de yapılmaması gereken bir şey. Seçim tarayıcıda saklanıyor, çünkü aynı
+   * kişi genelde aynı bölümde alışveriş yapıyor ve her taramada yeniden seçmek
+   * işkence olurdu.
+   */
+  const [gender, setGender] = useState<ShopperGender | null>(null);
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem(GENDER_KEY);
+    if (stored === "kadın" || stored === "erkek") setGender(stored);
+  }, []);
+
   useEffect(() => {
     const stored = readUploadedImage();
     if (!stored) {
@@ -52,7 +68,7 @@ function AnalyzeWorkspace() {
     setImage(stored);
   }, []);
 
-  const runDetection = useCallback(async (target: UploadedImage) => {
+  const runDetection = useCallback(async (target: UploadedImage & { gender?: ShopperGender | null }) => {
     setStatus("scanning");
     setError(null);
     setActiveItemId(null);
@@ -63,7 +79,11 @@ function AnalyzeWorkspace() {
       const response = await fetch("/api/detect", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: target.dataUrl, exampleId: target.exampleId }),
+        body: JSON.stringify({
+          image: target.dataUrl,
+          exampleId: target.exampleId,
+          gender: target.gender ?? undefined,
+        }),
       });
 
       const payload = (await response.json()) as DetectResponse;
@@ -85,8 +105,8 @@ function AnalyzeWorkspace() {
   useEffect(() => {
     if (!image || scannedDataUrl.current === image.dataUrl) return;
     scannedDataUrl.current = image.dataUrl;
-    void runDetection(image);
-  }, [image, runDetection]);
+    void runDetection({ ...image, gender });
+  }, [image, gender, runDetection]);
 
   /**
    * Detections land in one response, but the engine genuinely resolves them
@@ -231,22 +251,25 @@ function AnalyzeWorkspace() {
             <Button
               variant="outline"
               className="mt-6"
-              onClick={() => image && runDetection(image)}
+              onClick={() => image && runDetection({ ...image, gender })}
             >
               <RotateCcw strokeWidth={1.5} />
               Tekrar dene
             </Button>
           </div>
         ) : result && (status === "done" || revealedCount > 0) ? (
-          <DetectedItemsPanel
-            result={result}
-            identified={visible}
-            pending={pending}
-            activeItemId={activeItemId}
-            onSelect={handleSelect}
-            isFiltered={isFiltered}
-            onResetFilters={resetFilters}
-          />
+          <>
+            <ShopperGenderPicker value={gender} onChange={setGender} />
+            <DetectedItemsPanel
+              result={result}
+              identified={visible}
+              pending={pending}
+              activeItemId={activeItemId}
+              onSelect={handleSelect}
+              isFiltered={isFiltered}
+              onResetFilters={resetFilters}
+            />
+          </>
         ) : (
           <>
             <header className="border-b border-outline-variant p-gutter">
@@ -261,6 +284,60 @@ function AnalyzeWorkspace() {
           </>
         )}
       </aside>
+    </div>
+  );
+}
+
+const GENDER_KEY = "markas:kime";
+
+/**
+ * Kimin için arandığını soran seçici.
+ *
+ * Neden fotoğraftan çıkarılmıyor: görünüşten cinsiyet tahmin etmek hem
+ * güvenilmez hem de yapılmaması gereken bir şey. Varsayılan «fark etmez» ve
+ * seçim yapılmadığı sürece hiçbir ürün bu yüzden elenmiyor.
+ *
+ * Seçim değişince tarama yeniden çalışıyor — sonucu değiştiren bir girdi, ve
+ * sunucu önbelleğinin anahtarı da bunu içeriyor.
+ */
+function ShopperGenderPicker({
+  value,
+  onChange,
+}: {
+  value: ShopperGender | null;
+  onChange: (next: ShopperGender | null) => void;
+}) {
+  const options: Array<{ label: string; value: ShopperGender | null }> = [
+    { label: "Fark etmez", value: null },
+    { label: "Kadın", value: "kadın" },
+    { label: "Erkek", value: "erkek" },
+  ];
+
+  return (
+    <div className="flex flex-wrap items-center gap-2 border-b border-outline-variant px-gutter py-3">
+      <span className="text-[13px] text-on-surface-variant">Kimin için:</span>
+      {options.map((option) => {
+        const active = value === option.value;
+        return (
+          <button
+            key={option.label}
+            type="button"
+            aria-pressed={active}
+            onClick={() => {
+              if (option.value === null) window.localStorage.removeItem(GENDER_KEY);
+              else window.localStorage.setItem(GENDER_KEY, option.value);
+              onChange(option.value);
+            }}
+            className={
+              active
+                ? "rounded-full bg-primary px-3 py-1 text-[13px] font-medium text-on-primary"
+                : "rounded-full border border-outline-variant px-3 py-1 text-[13px] text-on-surface-variant hover:bg-surface-container"
+            }
+          >
+            {option.label}
+          </button>
+        );
+      })}
     </div>
   );
 }

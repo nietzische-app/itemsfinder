@@ -43,6 +43,17 @@ export interface ExpectedAttributes {
    * for a linen jacket sailed through as `unknown` instead of contradicting.
    */
   materialGroups: string[];
+  /*
+   * Kitle burada yok, ve bilerek.
+   *
+   * «Erkek» yazan bir başlık kadın kombini için yanlış ürün, ama bu bir **kanıt**
+   * değil bir **kapı** — tıpkı aile gibi. Ölçüm bunu gösterdi: -0.3'lük bir ceza
+   * yazıldı ve yetmedi, çünkü geri kalan her şey uyuyordu (ad, renk, niteleyici)
+   * ve satır 0.60 ile kapıyı yine geçti. İki mekanizma tek kural için, ve ikisi
+   * de yarım.
+   *
+   * Eleme `productProvider` içinde, `rejectProductTitle` ile yan yana duruyor.
+   */
 }
 
 export type Verdict = "agree" | "conflict" | "unknown";
