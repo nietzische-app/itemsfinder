@@ -60,6 +60,12 @@ jobs:
           [ -n "$MAGAZA" ] && args+=(--magaza "$MAGAZA")
           npm run build:index -- "${args[@]}" 2>&1 | tee dizin.txt
 
+      # Boyut tek başına karar vermeye yetmiyor: hiçbir sorguya cevap veremeyen
+      # 2 MB'lık bir dizin, cevap veren 20 MB'lıktan kötü. Sorgular
+      # `eval/coverageCases.ts`'ten — bu turdan bağımsız, gerçek ürün adları.
+      - name: Sorulara cevap veriyor mu
+        run: npm run check:index 2>&1 | tee -a dizin.txt
+
       # Sıkıştırılmış boyut da ölçülüyor: depoya yazma kararı git'in sakladığı
       # boyuta bakıyor, ham metne değil.
       - name: Boyut
