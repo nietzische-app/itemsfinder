@@ -12,6 +12,7 @@ import {
   boxArea,
   bodyPosition,
   dedupeDetections,
+  explainDedupe,
   familyFitsBody,
   intersectionArea,
   type DetectionCandidate,
@@ -446,16 +447,14 @@ export class GoogleVisionSearchService implements VisualSearchService {
      * to test than the thing it explains. Diffing its input against its output says
      * which candidates went, which is the question anyone reading this actually has.
      */
-    const kept = new Set(detections.map((detection) => detection.box));
-    for (const candidate of candidates) {
-      if (!kept.has(candidate.box)) {
-        trace.drop({
-          name: candidate.name,
-          score: candidate.score,
-          box: candidate.box,
-          reason: "temizlikte elendi (güven eşiği, örtüşme, içerme ya da parça sınırı)",
-        });
-      }
+    for (const { candidate, reason } of explainDedupe(candidates, detections)) {
+      if (!reason) continue;
+      trace.drop({
+        name: candidate.name,
+        score: candidate.score,
+        box: candidate.box,
+        reason,
+      });
     }
 
     trace.count("rawDetections", objects.length);

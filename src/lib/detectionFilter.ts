@@ -186,6 +186,80 @@ export function dedupeDetections(
 /* -------------------------------------------------------------------------- */
 
 /** Where a garment sits on the body. */
+export interface DedupeExplanation {
+  candidate: DetectionCandidate;
+  /** `null` when this candidate survived as a detection. */
+  reason: string | null;
+}
+
+/**
+ * Hangi aday neden listede yok — `dedupeDetections`'ın girdisiyle çıktısını
+ * karşılaştırarak.
+ *
+ * ## Neden kutu karşılaştırması yetmiyor
+ *
+ * İlk hâli sağ kalanları **kutu referansıyla** buluyordu ve birleştirme bunu
+ * sessizce bozuyordu: aynı aileden iki komşu kutu birleştiğinde sağ kalan
+ * `{ ...existing, box: unionBox(...) }` oluyor, yani kutusu artık hiçbir adayın
+ * kutusu değil. Sonuç: birleşmeden **sağ çıkan** parça da «temizlikte elendi»
+ * diye yazılıyordu.
+ *
+ * Üretimde görüldü — sayılar tutmuyordu: 18 ham tespit, 3 kalan, 17 elenen.
+ * 3 + 17 = 20. Bir teşhis aracının kendi aritmetiği tutmuyorsa, söylediği hiçbir
+ * şeye güvenilmez.
+ *
+ * ## Kimliği ne taşıyor
+ *
+ * Birleştirme kutuyu değiştiriyor ama `name`, `score` ve `family` alanlarını
+ * olduğu gibi kopyalıyor. Sağ kalanlar bu üçlüyle eşleniyor ve her tespit **tek**
+ * bir adayı tüketiyor, yani aynı adayı iki tespit sahiplenemiyor.
+ *
+ * Böylece aritmetik kapanıyor: her aday ya bir tespitin kaynağı, ya da bir
+ * gerekçeyle listede yok.
+ */
+export function explainDedupe(
+  candidates: DetectionCandidate[],
+  detections: DetectionCandidate[],
+): DedupeExplanation[] {
+  const survivors = new Set<DetectionCandidate>();
+
+  for (const detection of detections) {
+    const source = candidates.find(
+      (candidate) =>
+        !survivors.has(candidate) &&
+        candidate.name === detection.name &&
+        candidate.score === detection.score &&
+        candidate.family === detection.family,
+    );
+    if (source) survivors.add(source);
+  }
+
+  return candidates.map((candidate) => {
+    if (survivors.has(candidate)) return { candidate, reason: null };
+
+    /*
+     * Birleştirilmiş mi, elenmiş mi?
+     *
+     * İkisi bambaşka şeyler söylüyor: biri «bu parça bir sıcak noktanın içinde
+     * duruyor» (bir çift ayakkabının teki), öteki «bu parça hiç gösterilmiyor».
+     * Tek gerekçeye sıkıştırmak, çalışan bir birleştirmeyi arıza gibi gösterirdi.
+     */
+    const absorbed = detections.some(
+      (detection) =>
+        detection.family === candidate.family &&
+        detection.family !== "unknown" &&
+        containment(candidate.box, detection.box) >= 0.9,
+    );
+
+    return {
+      candidate,
+      reason: absorbed
+        ? "aynı aile ile birleştirildi — tek sıcak noktada gösteriliyor"
+        : "temizlikte elendi (güven eşiği, örtüşme, içerme ya da parça sınırı)",
+    };
+  });
+}
+
 export type BodyRegion = "head" | "upper" | "lower" | "feet" | "unknown";
 
 /**

@@ -137,6 +137,15 @@ const MAX_INCLUDE_DOMAINS = 10;
 const AUTH_COOLDOWN_MS = 60_000;
 
 /**
+ * Hangi kırpılmış liste için uyarı yazıldı.
+ *
+ * Süreç ömrü boyunca: kesilen liste yapılandırmadan geliyor ve çalışırken
+ * değişmiyor. Katman başına ayrı anahtar, çünkü Türkiye ve global listelerinin
+ * kesilen kuyrukları farklı ve ikisi de duyurulmalı.
+ */
+const warnedDomainCaps = new Set<string>();
+
+/**
  * Bu hata tekrar denemeye değer mi?
  *
  * Anahtarın reddedilmesi (401/403) ya da kotanın dolması, sorguyu değiştirerek
@@ -323,12 +332,24 @@ export class ContextDevService {
      * eklenen on birinci mağaza hiçbir zaman aranmaz ve bunu kimse fark etmez —
      * çalışıyor görünen, aslında görmezden gelinen bir yapılandırma.
      */
+    /*
+     * ...ama bir kez.
+     *
+     * Kesilen liste bir **yapılandırma** gerçeği, olay değil: her parça, her
+     * basamak ve her katman için tekrarlanınca tek bir taramada yirmiden fazla
+     * özdeş satır çıkabiliyor. `searchYield`'i okunmaz hâle getiren şey buydu ve
+     * aynı ders burada da geçerli — tekrar eden bir uyarı, uyarı olmaktan çıkıp
+     * gürültü oluyor.
+     */
     if (includeDomains.length > MAX_INCLUDE_DOMAINS) {
-      console.warn(
-        `[context.dev] ${includeDomains.length} alan adı tavana (${MAX_INCLUDE_DOMAINS}) ` +
-          `kırpıldı — bu aramada sorulmayanlar: ` +
-          includeDomains.slice(MAX_INCLUDE_DOMAINS).join(", "),
-      );
+      const skipped = includeDomains.slice(MAX_INCLUDE_DOMAINS).join(", ");
+      if (!warnedDomainCaps.has(skipped)) {
+        warnedDomainCaps.add(skipped);
+        console.warn(
+          `[context.dev] ${includeDomains.length} alan adı tavana (${MAX_INCLUDE_DOMAINS}) ` +
+            `kırpıldı — bu aramalarda hiç sorulmayanlar: ${skipped}`,
+        );
+      }
     }
 
     const search = await this.client.web.search(
