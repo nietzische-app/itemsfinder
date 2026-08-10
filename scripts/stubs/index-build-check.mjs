@@ -16,6 +16,7 @@
  * için Actions koşusu beklemek, turu iki katına çıkarıyor.
  */
 import { productSitemaps } from "../sitemapFetch.mjs";
+import { keepsPrevious } from "../indexFile.mjs";
 
 let pass = 0;
 const fails = [];
@@ -184,6 +185,45 @@ const P = "https://x.com/urun";
   const { leaves, fetched } = await productSitemaps(["https://x.com/sitemap.xml"], 10, fetcher);
   t(leaves.length === 1, `ulaşılan dosya toplandı (${leaves.length})`);
   t(fetched === 3, `başarısız istek de sayılıyor (${fetched})`);
+}
+
+/*
+ * 8) Açılamayan dosyalar sayılıyor — sıfırın sebebi yazılabilsin diye.
+ *
+ * Koşu bunu zorunlu kıldı: Gratis bir koşuda 13.233 ürün yolu verdi, sonrakinde
+ * `7 dosya → 1258 adres → 0 ürün yolu`. Sayıdan okunabilen tek şey sıfır
+ * olduğuydu, oysa sebebi üç ayrı iş: dosyalar mı açılmadı, açılanlar ürün
+ * dosyası değil miydi, adresler süzgeçten mi düştü. Teşhis satırı ancak
+ * gezinme başarısızlıkları dışarı verdiği için yazılabiliyor.
+ */
+{
+  const { fetcher } = network({
+    "https://x.com/sitemap.xml": index(`${P}1.xml`, `${P}2.xml`),
+    [`${P}2.xml`]: urlset("https://x.com/b-p-2"),
+  });
+
+  const { failures } = await productSitemaps(["https://x.com/sitemap.xml"], 10, fetcher);
+  t(failures.length === 1, `açılamayan dosya sayılıyor (${failures.length})`);
+  t(failures[0]?.url === `${P}1.xml`, `hangi dosya olduğu yazılıyor (${failures[0]?.url})`);
+  t(/404/.test(failures[0]?.why ?? ""), `sebebi taşınıyor (${failures[0]?.why})`);
+}
+
+/*
+ * 9) Boş sonuç, dolu dosyanın üstüne yazılmıyor.
+ *
+ * Asıl tehlike bu. Gratis'in sıfırı dosyaya yazıldı; dizin depoya konduğunda
+ * aynı şey, geçici bir mağaza arızasının on üç bin çalışan adresi **silmesi**
+ * demek — ve periyodik bir iş bunu gece yarısı sessizce yapar.
+ *
+ * `build-index.mjs`'in kararı burada ayrıca ölçülüyor çünkü betiğin kendisi ağa
+ * gidiyor. Ölçülen şey kural: dolu dosya + sıfır sonuç → dosya korunur; dolu
+ * dosya + dolu sonuç → yazılır; boş dosya + sıfır sonuç → yazılır.
+ */
+{
+  t(keepsPrevious("/a-p-1\n/b-p-2\n", 0), "dolu dosya sıfır sonuçta korunuyor");
+  t(!keepsPrevious("/a-p-1\n/b-p-2\n", 5), "dolu sonuç yazılıyor");
+  t(!keepsPrevious("", 0), "boş dosya sıfır sonuçta yazılıyor — korunacak bir şey yok");
+  t(!keepsPrevious("\n  \n", 0), "yalnızca boşluk taşıyan dosya korunmuyor");
 }
 
 console.log(`${pass} ✓ / ${fails.length} ✗`);

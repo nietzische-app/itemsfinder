@@ -32,12 +32,13 @@
  * Ana bilgisayar dosya adında, yolun içinde değil — aynı bilgiyi on beş bin kez
  * yazmamak için.
  */
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { productLinks } from "./kesif-lib.mjs";
 import { parseArgs } from "./args.mjs";
 import { productSitemaps, sitemapsFor } from "./sitemapFetch.mjs";
+import { keepsPrevious } from "./indexFile.mjs";
 
 const arg = parseArgs(process.argv.slice(2), {
   site: ["magaza"],
@@ -74,6 +75,9 @@ if (!Number.isFinite(fileBudget) || fileBudget < 1) {
 
 const stores = only ? [only] : STORES;
 
+/** Teşhis satırlarında adres kısaltması — `check-sitemap.mjs` ile aynı biçim. */
+const short = (url) => url.replace(/^https?:\/\/(www\.)?/, "").slice(0, 60);
+
 console.log(`\nDizin çıkarılıyor — ${stores.length} mağaza, mağaza başına en fazla ${fileBudget} dosya`);
 console.log(`Çıktı: ${outDir}\n`);
 
@@ -92,7 +96,7 @@ for (const host of stores) {
     continue;
   }
 
-  const { leaves, fetched } = await productSitemaps(found.urls, fileBudget);
+  const { leaves, fetched, failures } = await productSitemaps(found.urls, fileBudget);
 
   /*
    * Uygulamanın kendi süzgeci — ikinci bir kopya değil.
@@ -130,15 +134,58 @@ for (const host of stores) {
   const sorted = [...paths].sort();
   const body = sorted.join("\n") + (sorted.length > 0 ? "\n" : "");
   const file = join(outDir, `${host}.txt`);
-  writeFileSync(file, body, "utf-8");
 
-  const kb = Math.round(Buffer.byteLength(body, "utf-8") / 1024);
+  /*
+   * Boş sonuç, dolu dosyanın üstüne yazılmıyor — kural `indexFile.mjs`'te ve
+   * ağsız ölçülüyor.
+   */
+  const previous = existsSync(file) ? readFileSync(file, "utf-8") : "";
+  const keptOld = keepsPrevious(previous, sorted.length);
+
+  if (!keptOld) writeFileSync(file, body, "utf-8");
+
+  const kb = Math.round(Buffer.byteLength(keptOld ? previous : body, "utf-8") / 1024);
   console.log(
     `${String(fetched).padStart(3)} dosya → ${String(raw).padStart(6)} adres → ` +
-      `${String(sorted.length).padStart(6)} ürün yolu  (${kb} KB)`,
+      `${String(sorted.length).padStart(6)} ürün yolu  (${kb} KB)` +
+      (keptOld ? "  ⚠ sıfır geldi — önceki dosya korundu" : ""),
   );
 
-  rows.push({ host, fetched, raw, kept: sorted.length, kb, files: leaves.length });
+  /*
+   * Sıfır çıkan mağazanın **sebebi** yazılıyor.
+   *
+   * Koşu bunu zorunlu kıldı: Gratis bir koşuda 13.233 ürün yolu verdi, sonraki
+   * koşuda `7 dosya → 1258 adres → 0 ürün yolu`. Sayıdan okunabilen tek şey
+   * sıfır olduğu; sebebi üç ayrı iş: dosyalar mı açılmadı, açılanlar ürün
+   * dosyası değil miydi, yoksa adresler süzgeçten mi düştü?
+   *
+   * `check-sitemap.mjs` aynı dersi bir tur önce almıştı ve orada teşhis satırı
+   * dördüncü koşuda iki mağazayı kurtardı. Aynısı burada da gerekiyor — bir
+   * mağazanın sessizce düşmesi, kanalın daraldığını fark etmeden dizini
+   * yayımlamak demek.
+   */
+  if (sorted.length === 0) {
+    const pad = " ".repeat(22);
+    if (failures.length > 0) {
+      console.log(`${pad}${failures.length} dosya açılmadı — ${failures[0].why}: ${short(failures[0].url)}`);
+    }
+    console.log(`${pad}${leaves.length} ürün dosyası, ${raw} ham adres`);
+    for (const leaf of leaves.slice(0, 2)) {
+      console.log(`${pad}dosya: ${short(leaf.url)}`);
+      for (const loc of leaf.locs.slice(0, 2)) console.log(`${pad}  adres: ${short(loc)}`);
+    }
+  }
+
+  rows.push({
+    host,
+    fetched,
+    raw,
+    kept: sorted.length,
+    kb,
+    files: leaves.length,
+    failed: failures.length,
+    keptOld,
+  });
 }
 
 const total = rows.reduce((sum, row) => sum + (row.kept ?? 0), 0);

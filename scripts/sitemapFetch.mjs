@@ -115,6 +115,8 @@ export async function productSitemaps(roots, budget, fetcher = get) {
   const seen = new Set(queue.map((entry) => entry.url));
   const leaves = [];
   const perParent = new Map();
+  /** Açılamayan dosyalar — sıfırın sebebini yazabilmek için. */
+  const failures = [];
   let fetched = 0;
 
   /*
@@ -142,7 +144,10 @@ export async function productSitemaps(roots, budget, fetcher = get) {
 
     const page = await fetcher(url);
     fetched += 1;
-    if (page.status !== 200) continue;
+    if (page.status !== 200) {
+      failures.push({ url, why: page.error ?? (page.tooBig ? "çok büyük" : `HTTP ${page.status}`) });
+      continue;
+    }
 
     const locs = locsIn(page.body);
 
@@ -181,5 +186,5 @@ export async function productSitemaps(roots, budget, fetcher = get) {
     }
   }
 
-  return { leaves, fetched };
+  return { leaves, fetched, failures };
 }

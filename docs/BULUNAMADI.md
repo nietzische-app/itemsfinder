@@ -415,8 +415,40 @@ sayıdan okunamayacak cinsten:
   ama bütçe boşa gidiyor ve sayı «bir ürün dosyası bulundu» diyor. Sayının
   yalan söylemesi, verinin bozulmasından daha sinsi.
 
-**Sırada:** koşuyu sürüp toplam satır ve gzip boyutunu görmek. Ondan sonraki
-karar saklama yeri, ve ancak ondan sonra üretim tarafı.
+**Ölçüldü — dört koşu:**
+
+```
+151.976 ürün yolu   9,5 MB ham / 2,0 MB gzip   (mağaza başına 8 dosya tavanı)
+kapsam 56/56 (%100) — eval/coverageCases.ts'in elli altı gerçek ürün adı
+dağılım: beymen 55, zara 51, koton 47, bershka 43, gratis 33, pullandbear 22
+yükleme 79 ms, sorgu başına 8 ms
+```
+
+Boyut korkulandan küçük: 2 MB gzip bir Vercel fonksiyonuna sığıyor, ayrı bir
+veritabanı gerekmiyor. Dağılım altı mağazaya yayılmış, yani bu bir kanal — bir
+mağazanın kataloğu değil.
+
+Koşular üç kusur daha yazdırdı, üçü de ölçümün kendisinden:
+
+- **Sorgu başına 239 ms.** Bir taramada on iki sorguya kadar çıkıyor, yani üç
+  saniye — bağlanamazdı. Ölçünce işin neredeyse tamamı sorgudan bağımsız çıktı:
+  her sorgu yüz elli iki bin adresi yeniden ayrıştırıp yeniden katlıyordu. Karar
+  döngüden ayrıldı (`queryMatcher`), katlama yükleme anına taşındı, `new URL`
+  tamamen düştü — yol dosyada zaten yol olarak duruyor. 239 → 8 ms.
+- **Hızlandırma bir şey düşürdü.** Dosya bayt bayt aynıyken Bershka 43'ten 30'a
+  indi. Sebep `decodeURIComponent`: sitemap'ler Türkçe harfi kaçışlı yazıyor ve
+  `g%C3%B6mlek` çözülmeden katlanınca içinde «gomlek» geçmiyor. `foldUrlPath`
+  tek yerde ve iki kanal da onu çağırıyor; sonraki koşuda 43'e döndü. Bu, tek
+  başına «hızlandı» diyen bir ölçümün neden yetmediğinin ölçüsü.
+- **Bir mağaza sessizce düştü.** Gratis bir koşuda 13.233 yol verdi, sonrakinde
+  `7 dosya → 1258 adres → 0 ürün yolu` — ve **sıfır dosyaya yazıldı**. Dizin
+  depoya konduğunda bu, geçici bir mağaza arızasının on üç bin çalışan adresi
+  silmesi demek; periyodik bir iş bunu gece yarısı sessizce yapar. Artık boş
+  sonuç dolu dosyanın üstüne yazılmıyor (`keepsPrevious`) ve sıfırın sebebi
+  yazılıyor: kaç dosya açılmadı, kaç ham adres geldi, örnek adresler.
+
+**Sırada:** dizini depoya yazan periyodik iş, ve üretimde aday kaynağı olarak
+bağlamak.
 
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 
