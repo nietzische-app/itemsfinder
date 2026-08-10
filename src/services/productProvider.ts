@@ -571,6 +571,23 @@ export class ContextDevProductProvider implements ProductProvider {
 
     const family = item.family ?? familyOf(`${item.itemType} ${item.label}`);
     const rejected: string[] = [];
+
+    /*
+     * Elenen satırın **adresi** de yazılıyor.
+     *
+     * Üretimde «Shoe» için gelen iki aday şorttu ve sebebini logdan okumak
+     * mümkün değildi: eleme satırı yalnızca başlığı taşıyordu, oysa asıl soru
+     * «bu adres neden aday oldu» — aday seçimi slug'a bakıyor ve slug adreste.
+     * Başlıksız bir adres gibi, adressiz bir başlık da yarım bir teşhis.
+     */
+    const where = (url: string) => {
+      try {
+        const parsed = new URL(url);
+        return `${parsed.hostname.replace(/^www\./, "")}${parsed.pathname}`.slice(0, 80);
+      } catch {
+        return url.slice(0, 80);
+      }
+    };
     const usable = linkable.filter((card) => {
       /*
        * Kitle kapısı, aile kapısının yanında.
@@ -584,14 +601,14 @@ export class ContextDevProductProvider implements ProductProvider {
        */
       if (contradictsShopper(card.title, shopperGender)) {
         const reason = `kitle çelişkisi (${shopperGender} aranıyor)`;
-        rejected.push(`"${card.title}" (${reason})`);
+        rejected.push(`${where(card.productUrl)} "${card.title}" (${reason})`);
         trace?.reject({ itemId: item.id, title: card.title, reason });
         return false;
       }
 
       const reason = rejectProductTitle(card.title, family);
       if (reason) {
-        rejected.push(`"${card.title}" (${reason})`);
+        rejected.push(`${where(card.productUrl)} "${card.title}" (${reason})`);
         trace?.reject({ itemId: item.id, title: card.title, reason });
       }
       return reason === null;
