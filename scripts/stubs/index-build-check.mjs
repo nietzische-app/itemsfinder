@@ -16,7 +16,7 @@
  * için Actions koşusu beklemek, turu iki katına çıkarıyor.
  */
 import { productSitemaps } from "../sitemapFetch.mjs";
-import { keepsPrevious } from "../indexFile.mjs";
+import { countPaths, keepsPrevious, shrinkReason } from "../indexFile.mjs";
 
 let pass = 0;
 const fails = [];
@@ -220,10 +220,28 @@ const P = "https://x.com/urun";
  * dosya + dolu sonuç → yazılır; boş dosya + sıfır sonuç → yazılır.
  */
 {
-  t(keepsPrevious("/a-p-1\n/b-p-2\n", 0), "dolu dosya sıfır sonuçta korunuyor");
-  t(!keepsPrevious("/a-p-1\n/b-p-2\n", 5), "dolu sonuç yazılıyor");
+  const dolu = Array.from({ length: 100 }, (_, i) => `/urun-${i}-p-${i}`).join("\n") + "\n";
+
+  t(countPaths(dolu) === 100, `yol sayısı okunuyor (${countPaths(dolu)})`);
+  t(keepsPrevious(dolu, 0), "dolu dosya sıfır sonuçta korunuyor");
+  t(!keepsPrevious(dolu, 120), "büyüyen sonuç yazılıyor");
+  t(!keepsPrevious(dolu, 100), "aynı kalan sonuç yazılıyor");
   t(!keepsPrevious("", 0), "boş dosya sıfır sonuçta yazılıyor — korunacak bir şey yok");
   t(!keepsPrevious("\n  \n", 0), "yalnızca boşluk taşıyan dosya korunmuyor");
+
+  /*
+   * **Kısmi küçülme de kapanıyor** — asıl gözlenen arıza buydu.
+   *
+   * Gratis'in bozuk koşusu 1258 ham adres getirdi ve sıfıra süzüldü. Sıfır
+   * kontrolü onu yakaladı, ama üç yüze süzülseydi geçerdi ve dizin sessizce
+   * onda birine inerdi. Ölçülen şey «az kalsın» olan durum.
+   */
+  t(keepsPrevious(dolu, 12), "yarıdan fazla düşen sonuç yazılmıyor");
+  t(keepsPrevious(dolu, 49), "eşiğin hemen altı korunuyor");
+  t(!keepsPrevious(dolu, 50), "eşiğin tam üstü yazılıyor — sıradan dalgalanma engellenmiyor");
+
+  t(/sıfır/.test(shrinkReason(dolu, 0)), `sıfırın sebebi yazılıyor: ${shrinkReason(dolu, 0)}`);
+  t(/100 → 12/.test(shrinkReason(dolu, 12)), `düşüşün sebebi yazılıyor: ${shrinkReason(dolu, 12)}`);
 }
 
 console.log(`${pass} ✓ / ${fails.length} ✗`);

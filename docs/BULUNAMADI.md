@@ -447,8 +447,27 @@ Koşular üç kusur daha yazdırdı, üçü de ölçümün kendisinden:
   sonuç dolu dosyanın üstüne yazılmıyor (`keepsPrevious`) ve sıfırın sebebi
   yazılıyor: kaç dosya açılmadı, kaç ham adres geldi, örnek adresler.
 
-**Sırada:** dizini depoya yazan periyodik iş, ve üretimde aday kaynağı olarak
-bağlamak.
+**Periyodik iş yazıldı** (`.github/workflows/dizin.yml`, her gece 03:00 UTC).
+Dizin **depoya** yazılıyor — 2 MB gzip bir Vercel fonksiyonuna sığıyor, yani
+Redis'e ya da ödemeye gerek yok, ve bu projede ücretsizlik bir tercih değil
+kısıt. Düz metin olduğu için git satır satır fark üretiyor: «bu hafta hangi
+ürünler eklendi» okunabiliyor.
+
+Yayımlamadan önce iki kapı, ikisi de ölçülmüş bir arızadan doğdu:
+
+1. **Mağaza başına** — sonuç sıfırsa ya da yarıdan fazla düştüyse önceki dosya
+   korunuyor. Gözlenen arıza aslında **kısmi**ydi: Gratis'in bozuk koşusu 1258
+   ham adres getirdi ve sıfıra süzüldü. Sıfır kontrolü onu yakalar, ama üç yüze
+   süzülseydi geçerdi ve dizin sessizce onda birine inerdi. Eşik (yarı) bir
+   yargı, ölçüm değil — ve öyle olduğu kodda yazılı. Koruma sessiz değil: hem
+   mağaza satırında hem özette yazılıyor, çünkü eskimiş bir dizinin taze
+   sanılması da sessiz silme kadar kötü.
+2. **Dizin bütünü** — `check:index` kapsamı ölçüyor, taban elli (ölçülen elli
+   altı, dört koşuda değişmedi). Altına düşerse iş kırmızıya dönüyor ve hiçbir
+   şey yazılmıyor. «Yayımlamadan önce çıktıya bak» bir kural değil bir dilek;
+   periyodik bir işin çıktısına kimse baştan sona bakmıyor.
+
+**Sırada:** üretimde aday kaynağı olarak bağlamak.
 
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 

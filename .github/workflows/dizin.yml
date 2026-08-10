@@ -1,39 +1,68 @@
-# Ürün adres dizinini çıkarır — ve **önce boyutunu ölçer**.
+# Ürün adres dizinini çıkarır, ölçer ve **depoya yazar**.
 #
 # Actions sekmesi → «Ürün adres dizini» → «Run workflow».
+# Ayrıca her gece kendiliğinden çalışıyor.
 #
-# ## Neden burada
+# ## Neden burada, neden tarama anında değil
 #
-# `kesif.yml` ile aynı gerekçe: mağazalar veri merkezi IP'sine ev bağlantısından
-# farklı davranıyor, ve dizin üretimde kullanılacaksa üretimin gördüğü cevapla
-# üretilmeli.
+# Sitemap kanalı altı mağazada çalışıyor ama dosya başına 10–15 bin adres var:
+# tarama anında indirilemez. Adresler önceden toplanıyor, tarama anında yalnızca
+# yerel arama yapılıyor — satıcı yok, çalışma anında ağ yok.
 #
-# ## Bu koşu neyi cevaplıyor
+# Ve **burada**, yerel makinede değil: mağazalar veri merkezi IP'sine ev
+# bağlantısından farklı davranıyor, üretimdeki istek de bir veri merkezinden
+# gidiyor. `kesif.yml` ile aynı gerekçe.
 #
-# Sitemap kanalı ölçüldü ve altı mağazada çalışıyor (`docs/BULUNAMADI.md` 4e).
-# Açık kalan tek soru dizinin **nerede saklanacağı** ve o soru boyutu bilinmeden
-# cevaplanamaz: 2 MB'lık bir dizin depoya yazılır, 200 MB'lık bir dizin başka bir
-# çözüm ister. Bu koşu dizini çıkarıp boyutunu bildiriyor — depoya bir şey
-# yazmıyor, çünkü nereye yazılacağı henüz karar değil.
+# ## Neden depoya, ayrı bir depolamaya değil
 #
-# Çıktı bir yapı olarak indirilebiliyor; nasıl sunulacağına o sayıya bakıp karar
-# vereceğiz.
+# Ölçüldü: 151.976 ürün yolu, 9,5 MB ham / **2,0 MB gzip**. Bu bir Vercel
+# fonksiyonuna sığıyor, yani Redis'e, S3'e ya da ödemeye gerek yok — ve bu
+# projede ücretsizlik bir tercih değil kısıt (`docs/BULUNAMADI.md` 4c).
+#
+# Düz metin, satır başına bir yol: git satır satır fark üretiyor, yani «bu hafta
+# hangi ürünler eklendi» sorusu okunabiliyor.
+#
+# ## Yayımlamadan önce iki kapı
+#
+# 1. **Mağaza başına** — bir mağazanın sonucu sıfırsa ya da yarıdan fazla
+#    düştüyse önceki dosyası korunuyor (`indexFile.mjs`). Bu ölçülmüş bir arıza:
+#    Gratis bir koşuda 13.233 yol verdi, sonrakinde sıfır, bir sonrakinde yine
+#    13.233. Koruma olmasa geçici bir arıza on üç bin çalışan adresi silerdi.
+# 2. **Dizin bütünü** — `check:index` kapsamı ölçüyor ve taban elli. Altına
+#    düşerse iş kırmızıya dönüyor ve **hiçbir şey yazılmıyor**. «Yayımlamadan
+#    önce çıktıya bak» bir kural değil bir dilek; periyodik bir işin çıktısına
+#    kimse baştan sona bakmıyor.
 name: Ürün adres dizini
 
 on:
+  schedule:
+    # Her gece 03:00 UTC (Türkiye 06:00) — mağazaların sakin saati.
+    - cron: "0 3 * * *"
   workflow_dispatch:
     inputs:
       magaza:
         description: "Tek bir mağaza (boş bırakılırsa ölçülmüş altı mağaza)"
         required: false
       dosya:
-        description: "Mağaza başına en fazla sitemap dosyası — boyutu görmek için artır"
+        description: "Mağaza başına en fazla sitemap dosyası"
         required: false
         default: "8"
+      yaz:
+        description: "Sonucu depoya yaz"
+        required: false
+        default: "evet"
+        type: choice
+        options:
+          - evet
+          - hayır
+
+# Dizini depoya yazabilmesi için. Başka hiçbir izin istenmiyor.
+permissions:
+  contents: write
 
 jobs:
   dizin:
-    name: Dizin ne kadar yer tutuyor
+    name: Dizini çıkar, ölç ve yaz
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -60,14 +89,12 @@ jobs:
           [ -n "$MAGAZA" ] && args+=(--magaza "$MAGAZA")
           npm run build:index -- "${args[@]}" 2>&1 | tee dizin.txt
 
-      # Boyut tek başına karar vermeye yetmiyor: hiçbir sorguya cevap veremeyen
-      # 2 MB'lık bir dizin, cevap veren 20 MB'lıktan kötü. Sorgular
-      # `eval/coverageCases.ts`'ten — bu turdan bağımsız, gerçek ürün adları.
+      # Kapı: kapsam tabanın altındaysa burada duruyor ve yazma adımına
+      # geçilmiyor. Boyut tek başına karar vermeye yetmiyor — hiçbir sorguya
+      # cevap veremeyen 2 MB'lık bir dizin, cevap veren 20 MB'lıktan kötü.
       - name: Sorulara cevap veriyor mu
         run: npm run check:index 2>&1 | tee -a dizin.txt
 
-      # Sıkıştırılmış boyut da ölçülüyor: depoya yazma kararı git'in sakladığı
-      # boyuta bakıyor, ham metne değil.
       - name: Boyut
         run: |
           echo "--- ham ---"
@@ -78,6 +105,39 @@ jobs:
             [ -e "$f" ] || continue
             printf '%s  %s\n' "$(gzip -c "$f" | wc -c)" "$f"
           done
+
+      # Tek bir mağaza ölçülürken yazılmıyor: o koşu ötekilerin dosyalarına
+      # dokunmaz ama commit'i yarım bir dizin gibi gösterir.
+      - name: Depoya yaz
+        if: inputs.yaz != 'hayır' && inputs.magaza == ''
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/urun-adresleri
+
+          # Değişiklik yoksa commit yok: mağazalar o gün ürün eklemediyse boş bir
+          # commit, geçmişi «her gün bir şey değişti» diye okutur.
+          if git diff --cached --quiet; then
+            echo "Dizin değişmedi — commit yok."
+            exit 0
+          fi
+
+          git commit -m "Ürün adres dizini — $(date -u '+%Y-%m-%d')
+
+          $(git diff --cached --numstat -- data/urun-adresleri \
+            | awk '{printf "  %s  +%s -%s\n", $3, $1, $2}')"
+
+          # Aynı dala aynı anda başka bir itme gelmişse yeniden dene.
+          for i in 1 2 3 4; do
+            git push origin "HEAD:$BRANCH" && exit 0
+            echo "İtme başarısız, $((2 ** i)) sn sonra yeniden deneniyor."
+            sleep $((2 ** i))
+            git pull --rebase origin "$BRANCH"
+          done
+          exit 1
 
       - uses: actions/upload-artifact@v5
         if: always()

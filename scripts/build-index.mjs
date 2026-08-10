@@ -38,7 +38,7 @@ import { join } from "node:path";
 import { productLinks } from "./kesif-lib.mjs";
 import { parseArgs } from "./args.mjs";
 import { productSitemaps, sitemapsFor } from "./sitemapFetch.mjs";
-import { keepsPrevious } from "./indexFile.mjs";
+import { countPaths, keepsPrevious, shrinkReason } from "./indexFile.mjs";
 
 const arg = parseArgs(process.argv.slice(2), {
   site: ["magaza"],
@@ -136,7 +136,7 @@ for (const host of stores) {
   const file = join(outDir, `${host}.txt`);
 
   /*
-   * Boş sonuç, dolu dosyanın üstüne yazılmıyor — kural `indexFile.mjs`'te ve
+   * Ani küçülme dolu dosyanın üstüne yazılmıyor — kural `indexFile.mjs`'te ve
    * ağsız ölçülüyor.
    */
   const previous = existsSync(file) ? readFileSync(file, "utf-8") : "";
@@ -148,7 +148,7 @@ for (const host of stores) {
   console.log(
     `${String(fetched).padStart(3)} dosya → ${String(raw).padStart(6)} adres → ` +
       `${String(sorted.length).padStart(6)} ürün yolu  (${kb} KB)` +
-      (keptOld ? "  ⚠ sıfır geldi — önceki dosya korundu" : ""),
+      (keptOld ? `  ⚠ ${shrinkReason(previous, sorted.length)}` : ""),
   );
 
   /*
@@ -180,7 +180,10 @@ for (const host of stores) {
     host,
     fetched,
     raw,
-    kept: sorted.length,
+    // Dizinde **duran** sayı: koruma devreye girdiyse bu, bu koşunun getirdiği
+    // değil önceki koşunun bıraktığı sayı. Toplamın diskteki hâli anlatması şart.
+    kept: keptOld ? countPaths(previous) : sorted.length,
+    fresh: sorted.length,
     kb,
     files: leaves.length,
     failed: failures.length,
@@ -202,6 +205,20 @@ console.log("");
  * fazlasına bakılmadı» demek. İkisini ayırmadan yazılan bir toplam, dizinin
  * tamamlandığını sanmaya yol açar.
  */
+/*
+ * Koruma devreye girdiyse **özet satırında da** görünüyor.
+ *
+ * Mağaza satırındaki uyarı altı satırın arasında kalıyor ve periyodik bir işin
+ * çıktısına kimse baştan sona bakmıyor. Korunmuş bir dizin taze bir dizin gibi
+ * görünmemeli — korumanın bütün değeri görülebilir olmasında.
+ */
+const protectedRows = rows.filter((row) => row.keptOld);
+if (protectedRows.length > 0) {
+  console.log(`  ⚠ ${protectedRows.length} mağazada önceki dosya korundu:`);
+  for (const row of protectedRows) console.log(`    ${row.host} — bu koşu ${row.fresh} yol getirdi`);
+  console.log("");
+}
+
 const capped = rows.filter((row) => row.files >= fileBudget);
 if (capped.length > 0) {
   console.log(`  Bütçesi dolan (${fileBudget} dosya): ${capped.map((r) => r.host).join(", ")}`);

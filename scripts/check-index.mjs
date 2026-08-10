@@ -31,8 +31,22 @@ import { parseArgs } from "./args.mjs";
 
 const { COVERAGE_CASES } = await import("../eval/coverageCases.ts");
 
-const arg = parseArgs(process.argv.slice(2), { dir: ["dizin"] });
+const arg = parseArgs(process.argv.slice(2), { dir: ["dizin"], floor: ["taban"] });
 const dir = arg("dir") ?? join(process.cwd(), "data", "urun-adresleri");
+
+/**
+ * Kapsam bu sayının altına düşerse betik hata veriyor.
+ *
+ * Bir kapı, bir rapor değil: dizin depoya yazılacaksa bozuk bir dizinin
+ * yayımlanmaması gerekiyor, ve «yayımlamadan önce çıktıya bak» bir kural değil
+ * bir dilek. Periyodik bir işin çıktısına kimse baştan sona bakmıyor.
+ *
+ * Elli altı ölçüldü ve dört koşuda değişmedi. Taban elli: bir mağazanın geçici
+ * arızası birkaç ürün adını düşürebilir ve bu kanalın bozulduğu anlamına
+ * gelmez — ama üçte biri düştüyse gelir.
+ */
+const DEFAULT_FLOOR = 50;
+const floor = Number(arg("floor") ?? DEFAULT_FLOOR);
 
 if (!existsSync(dir)) {
   console.error(`Dizin yok: ${dir}\nÖnce: npm run build:index`);
@@ -130,3 +144,11 @@ if (bos.length > 0) {
 }
 
 console.log("");
+
+if (hit < floor) {
+  console.error(
+    `Kapsam tabanın altında: ${hit} < ${floor}. Bu dizin yayımlanmamalı — ` +
+      "yukarıdaki «aday bulunamayan» listesi hangi kategorinin düştüğünü söylüyor.",
+  );
+  process.exit(1);
+}
