@@ -129,6 +129,18 @@ export interface ScanTrace {
   rejected: RejectedProduct[];
   /** Canlı arama merdiveninin harcadığı aramalar. Canlı yol kapalıyken boş. */
   searches: SearchAttempt[];
+  /**
+   * Ürün aşamasının içinde nereye ne kadar harcandığı, milisaniye.
+   *
+   * `ms.products` tek bir sayı ve «yavaş» demeye yetiyor, «neyi hızlandıracağız»
+   * demeye yetmiyor: içinde üç ayrı iş var — mağaza araması, sayfa indirip
+   * işaretleme okuma, ve ürün görsellerini indirip kırpımla karşılaştırma.
+   *
+   * **Toplam, duvar saati değil.** Parçalar paralel çözülüyor, yani buradaki
+   * sayıların toplamı aşamanın süresini aşabilir. Cevapladığı soru «ne kadar
+   * sürdü» değil, **«iş nerede»**.
+   */
+  spent: Record<string, number>;
   /** Counts that are cheap enough to always carry. */
   counts: {
     rawDetections: number;
@@ -157,6 +169,8 @@ export interface TraceCollector {
   reject(entry: RejectedProduct): void;
   /** Records one spent `web.search` credit. Always collected. */
   search(entry: SearchAttempt): void;
+  /** Ürün aşamasının içindeki bir işe harcanan süreyi ekler. */
+  spend(key: string, ms: number): void;
   count(key: keyof ScanTrace["counts"], value: number): void;
   /** The trace so far. Safe to call more than once. */
   snapshot(): ScanTrace;
@@ -172,6 +186,7 @@ export function createTrace(options: { detail?: boolean } = {}): TraceCollector 
     dropped: [],
     rejected: [],
     searches: [],
+    spent: {},
     counts: { rawDetections: 0, keptDetections: 0, describedItems: 0 },
   };
 
@@ -201,6 +216,9 @@ export function createTrace(options: { detail?: boolean } = {}): TraceCollector 
     search(entry) {
       trace.searches.push(entry);
     },
+    spend(key, ms) {
+      trace.spent[key] = (trace.spent[key] ?? 0) + ms;
+    },
     count(key, value) {
       trace.counts[key] = value;
     },
@@ -212,6 +230,7 @@ export function createTrace(options: { detail?: boolean } = {}): TraceCollector 
         dropped: [...trace.dropped],
         rejected: [...trace.rejected],
         searches: [...trace.searches],
+        spent: { ...trace.spent },
         counts: { ...trace.counts },
       };
     },
@@ -328,6 +347,14 @@ export function logScanTrace(
      */
     searchCount: trace.searches.length,
     searchYield: summariseSearches(trace.searches),
+    /*
+     * Ürün aşamasının içi.
+     *
+     * `ms.products` «yavaş» demeye yetiyor ama «neyi hızlandıracağız» demeye
+     * yetmiyor. Toplamlar duvar saatini aşabilir (parçalar paralel çözülüyor);
+     * cevapladıkları soru süre değil, işin nerede olduğu.
+     */
+    spent: Object.keys(trace.spent).length > 0 ? trace.spent : undefined,
   };
 
   // `warn` when something degraded, `log` otherwise: a scan that quietly fell back

@@ -27,6 +27,7 @@ const SUITES = [
   ["mağaza arama sağlayıcısı", "store-search-check.mjs"],
   ["beklenti başlıkla aynı dilde", "title-match-check.mjs"],
   ["sitemap okuma kararları", "sitemap-check.mjs"],
+  ["ürün aşamasının içi ölçülüyor", "spend-check.mjs"],
 ];
 
 let failed = 0;

@@ -250,9 +250,28 @@ export class ContextDevProductProvider implements ProductProvider {
     signal: AbortSignal,
     image?: EnrichContext["image"],
     siblings: BoundingBox[] = [],
+    trace?: TraceCollector,
   ): Promise<Map<string, number>> {
     const measured = new Map<string, number>();
     if (!image || !this.visualRerank) return measured;
+
+    const startedAt = Date.now();
+    try {
+      return await this.measureVisualRows(scored, item, signal, image, siblings);
+    } finally {
+      trace?.spend("görsel", Date.now() - startedAt);
+    }
+  }
+
+  /** Ölçümün kendisi; süresi `measureVisualSimilarity` tarafından kaydediliyor. */
+  private async measureVisualRows(
+    scored: Array<{ card: LiveProductCard; agreement: { score: number } }>,
+    item: DetectedItem,
+    signal: AbortSignal,
+    image: NonNullable<EnrichContext["image"]>,
+    siblings: BoundingBox[],
+  ): Promise<Map<string, number>> {
+    const measured = new Map<string, number>();
 
     const crop = await cropRegion(image.buffer, item.boundingBox, {
       size: image.size,
@@ -416,6 +435,7 @@ export class ContextDevProductProvider implements ProductProvider {
         ms: Date.now() - startedAt,
         error,
       });
+      trace?.spend("arama", Date.now() - startedAt);
 
       if (urls.length > 0) return urls;
       if (seen > 0) {
@@ -462,6 +482,20 @@ export class ContextDevProductProvider implements ProductProvider {
      */
     if (urls.length === 0) return [];
 
+    const extractStarted = Date.now();
+    try {
+      return await this.extractRows(urls, signal, trace);
+    } finally {
+      trace?.spend("çıkarım", Date.now() - extractStarted);
+    }
+  }
+
+  /** Çıkarımın kendisi; süresi `extractFrom` tarafından ölçülüyor. */
+  private async extractRows(
+    urls: string[],
+    signal: AbortSignal,
+    trace?: TraceCollector,
+  ): Promise<LiveProductCard[]> {
     if (markupExtractionEnabled()) {
       const cards = await productsFromMarkup(urls, signal);
       if (cards.length > 0) return cards;
@@ -649,7 +683,14 @@ export class ContextDevProductProvider implements ProductProvider {
      * agreement, so this costs a handful of small image fetches, and it degrades to
      * `null` per row rather than failing the detection.
      */
-    const visual = await this.measureVisualSimilarity(scored, item, signal, image, siblings);
+    const visual = await this.measureVisualSimilarity(
+      scored,
+      item,
+      signal,
+      image,
+      siblings,
+      trace,
+    );
 
     const ranked = scored
       .map((entry) => {
