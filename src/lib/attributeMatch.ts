@@ -1,6 +1,6 @@
 import { colorFamiliesContradict, colorFamilyOf, type ColorFamily } from "@/lib/colorFamily";
 import { normalizeTr } from "@/lib/itemFamily";
-import { TURKISH_MATERIALS, materialGroupOf } from "@/lib/retailVocabulary";
+import { TURKISH_MATERIALS, materialGroupOf, toTurkishRetailTerms } from "@/lib/retailVocabulary";
 import { COLOR_NAMES } from "@/lib/searchQuery";
 
 /**
@@ -248,7 +248,25 @@ export function expectedAttributesOf(item: {
   label: string;
   colorHex: string;
 }): ExpectedAttributes {
-  const nounTokens = tokensOf(item.itemType).filter(
+  /*
+   * Beklenti, başlıkla **aynı dilde** olmalı.
+   *
+   * `itemType` detektörün sınıfı ve İngilizce geliyor — `Jeans`, `Top`, `Shoe`.
+   * Mağaza başlıkları Türkçe. `hasStem` ön ek karşılaştırıyor ve «jean» kelimesi
+   * «jeans» ile başlamadığı için ürün adı **hiçbir zaman** tutmuyordu.
+   *
+   * Üretimde ölçüldü: canlı yol ilk kez gerçek satır getirdiğinde ikisi de doğru
+   * aileden geldi ve ikisi de tam olarak `BASE` puanı aldı — yani hiçbir kanıt
+   * bileşeni tutmadı, ürün adı dahil:
+   *
+   *   «Jeans» ← "Regular Fit Pamuklu Normal Bel Tapered Jean Pantolon"  %35
+   *   «Top»   ← "Uzun Kollu Volanlı Kareli Bağlama Detaylı V Yaka Bluz" %35
+   *
+   * Sorgu zaten `toTurkishRetailTerms`'ten geçiyordu (`buildSearchQuery`), yani
+   * Türkçe arayıp İngilizce puanlıyorduk. Çeviriyle ikisi de 0.55'e, tam da
+   * birebir eşleşme tabanına çıkıyor.
+   */
+  const nounTokens = tokensOf(toTurkishRetailTerms(item.itemType)).filter(
     (token) => token.length > 2 && !GENERIC.has(token),
   );
 

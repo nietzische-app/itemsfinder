@@ -592,6 +592,19 @@ export class ContextDevService {
     const cached = this.readCache(this.brandCache, normalized);
     if (cached !== undefined) return cached;
 
+    /*
+     * Anahtar reddedildiyse marka da sorulmuyor.
+     *
+     * Aynı kilit arama tarafında zaten vardı ama burada yoktu, ve üretimde
+     * görüldü: aramalar susturulduktan sonra marka çağrısı her mağaza için
+     * yapılmaya devam etti ve aynı `401 USAGE_EXCEEDED` cevabını aldı. Kredisi
+     * bitmiş bir anahtar marka kaydı için de bitmiştir.
+     */
+    if (Date.now() < this.rejectedUntil) {
+      this.writeCache(this.brandCache, normalized, null);
+      return null;
+    }
+
     try {
       const response = await this.client.brand.retrieveSimplified(
         {
@@ -633,6 +646,7 @@ export class ContextDevService {
       return metadata;
     } catch (error) {
       logFailure("enrichBrandMetadata", normalized, error);
+      if (isKeyRejection(error)) this.rejectedUntil = Date.now() + AUTH_COOLDOWN_MS;
       // Cache the miss too: a domain with no brand record would otherwise be
       // re-queried for every product card on every scan.
       this.writeCache(this.brandCache, normalized, null);

@@ -25,6 +25,7 @@ const SUITES = [
   ["ölü VLM anahtarı susuyor", "vlm-latch-check.mjs"],
   ["teşhis aritmetiği kapanıyor", "dedupe-explain-check.mjs"],
   ["mağaza arama sağlayıcısı", "store-search-check.mjs"],
+  ["beklenti başlıkla aynı dilde", "title-match-check.mjs"],
 ];
 
 let failed = 0;
