@@ -400,6 +400,16 @@ export class ContextDevProductProvider implements ProductProvider {
     signal: AbortSignal,
     trace?: TraceCollector,
   ): Promise<string[]> {
+    /** Teşhis satırlarında adres kısaltması — eleme satırıyla aynı biçim. */
+    const where = (url: string) => {
+      try {
+        const parsed = new URL(url);
+        return `${parsed.hostname.replace(/^www\./, "")}${parsed.pathname}`.slice(0, 60);
+      } catch {
+        return url.slice(0, 60);
+      }
+    };
+
     const google = getGoogleSearch();
 
     if (google && ladder[0]) {
@@ -438,7 +448,7 @@ export class ContextDevProductProvider implements ProductProvider {
 
     if (stores && ladder[0]) {
       const startedAt = Date.now();
-      const { urls, seen, error } = await stores.findProductPages(ladder[0], signal);
+      const { urls, seen, samples, error } = await stores.findProductPages(ladder[0], signal);
 
       trace?.search({
         itemId: item.id,
@@ -456,7 +466,16 @@ export class ContextDevProductProvider implements ProductProvider {
       if (seen > 0) {
         trace?.degrade(
           "products",
-          `mağaza aramaları ${seen} ürün sayfası buldu, hiçbiri sorguyla eşleşmedi`,
+          /*
+           * Sorgu ve elenen adres de yazılıyor.
+           *
+           * Sayı tek başına «süzgeç mi fazla katı, gelenler mi alakasız»
+           * sorusunu cevaplamıyor — ve o iki durum iki ayrı iş. Aynı ders bu
+           * turda iki kez ödendi; ikincisinde eleme satırına eklenen adres
+           * «gumus-rengi» kusurunu ilk turda yakaladı.
+           */
+          `«${ladder[0]}» için mağaza aramaları ${seen} ürün sayfası buldu, hiçbiri eşleşmedi` +
+            (samples.length > 0 ? ` — ${samples.map(where).join(", ")}` : ""),
         );
       }
     }

@@ -99,6 +99,19 @@ export interface StoreSearchResult {
   urls: string[];
   /** Süzmeden önce kaç bağlantı görüldüğü — kaybın nerede olduğunu görmek için. */
   seen: number;
+  /**
+   * Görülüp **elenen** birkaç adres.
+   *
+   * Sayı tek başına yarım teşhis: «24 ürün sayfası buldu, hiçbiri sorguyla
+   * eşleşmedi» satırı üretimde iki kez çıktı ve ikisinde de cevaplayamadığı soru
+   * aynıydı — süzgeç fazla mı katı, yoksa gelenler gerçekten alakasız mı?
+   * Birincisi bizim kusurumuz, ikincisi mağazanın öneri karuseli; ikisi iki ayrı
+   * iş ve aralarındaki farkı yalnızca adres söylüyor.
+   *
+   * Aynı ders bu turda bir kez ödendi: eleme satırına adres eklenince ilk
+   * yakaladığı şey «gumus-rengi» kusuru oldu.
+   */
+  samples: string[];
   /** Hiçbir mağaza cevap veremediyse gerekçe. */
   error?: string;
 }
@@ -170,12 +183,13 @@ export class StoreProductSearch {
     host: string,
     query: string,
     signal?: AbortSignal,
-  ): Promise<{ urls: string[]; seen: number }> {
+  ): Promise<{ urls: string[]; seen: number; samples: string[] }> {
     const template = await this.templateFor(host, signal);
-    if (!template) return { urls: [], seen: 0 };
+    if (!template) return { urls: [], seen: 0, samples: [] };
 
     const page = await this.get(fillTemplate(template, query), signal);
-    if (page.status !== 200 || looksLikeWall(page.body)) return { urls: [], seen: 0 };
+    if (page.status !== 200 || looksLikeWall(page.body))
+      return { urls: [], seen: 0, samples: [] };
 
     /*
      * Sorguyla ilgisi olmayan bağlantı indirilmiyor.
@@ -188,7 +202,13 @@ export class StoreProductSearch {
     const links = productLinks(page.body, page.url, hostFilterFor(host));
     const matching = rankByQuery(links, query);
 
-    return { urls: matching.slice(0, MAX_PER_STORE), seen: links.length };
+    /*
+     * Elenenlerden birkaç örnek — yalnızca hiçbiri geçmediğinde anlamı var.
+     * Geçen varsa zaten aday listesi konuşuyor.
+     */
+    const samples = matching.length === 0 ? links.slice(0, 2) : [];
+
+    return { urls: matching.slice(0, MAX_PER_STORE), seen: links.length, samples };
   }
 
   /**
@@ -204,6 +224,7 @@ export class StoreProductSearch {
     );
 
     const urls: string[] = [];
+    const samples: string[] = [];
     let seen = 0;
     let failures = 0;
 
@@ -216,13 +237,16 @@ export class StoreProductSearch {
       for (const url of outcome.value.urls) {
         if (urls.length < MAX_CANDIDATES) urls.push(url);
       }
+      for (const sample of outcome.value.samples) {
+        if (samples.length < 2) samples.push(sample);
+      }
     }
 
     if (urls.length === 0 && failures === settled.length && settled.length > 0) {
-      return { urls: [], seen, error: "hiçbir mağazaya ulaşılamadı" };
+      return { urls: [], seen, samples, error: "hiçbir mağazaya ulaşılamadı" };
     }
 
-    return { urls, seen };
+    return { urls, seen, samples };
   }
 }
 

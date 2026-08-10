@@ -88,10 +88,16 @@ const { StoreProductSearch, getStoreSearch, storeSearchStatus } = await import(
  */
 {
   const search = new StoreProductSearch(["magaza-bir.com", "magaza-iki.com"]);
-  const { urls, seen } = await search.findProductPages("gri pantolon");
+  const { urls, seen, samples } = await search.findProductPages("gri pantolon");
 
   t(urls.length === 4, `dört aday (${urls.length})`);
   t(seen === 10, `süzmeden önce on bağlantı görüldü (${seen})`);
+
+  /*
+   * Aday varken örnek yazılmıyor: eleme satırı zaten çıkmıyor ve o hâlde
+   * örnekler yalnızca gürültü olurdu.
+   */
+  t(samples.length === 0, `aday bulununca örnek taşınmıyor (${samples.length})`);
 
   const hosts = urls.map((url) => new URL(url).pathname.split("/")[1]);
   t(
@@ -101,6 +107,30 @@ const { StoreProductSearch, getStoreSearch, storeSearchStatus } = await import(
   t(
     !urls.some((url) => url.includes("-c-1050")),
     "kategori bağlantısı aday sayılmıyor",
+  );
+}
+
+/*
+ * 1b) Hiçbiri eşleşmediğinde **elenen adres** taşınıyor.
+ *
+ * Üretimde iki kez «24 ürün sayfası buldu, hiçbiri sorguyla eşleşmedi» yazdı ve
+ * o satır kararı vermeye yetmiyordu: süzgeç fazla mı katı, yoksa gelenler
+ * gerçekten alakasız mı? Birincisi bizim kusurumuz, ikincisi mağazanın öneri
+ * karuseli — ve aralarındaki farkı yalnızca adres söylüyor.
+ *
+ * Sorgu bilerek mağazanın hiçbir ürününe uymuyor: ölçülen şey «sıfır aday»
+ * değil, sıfırın **yanında ne yazıldığı**.
+ */
+{
+  const search = new StoreProductSearch(["magaza-bir.com"]);
+  const { urls, seen, samples } = await search.findProductPages("Halka küpe");
+
+  t(urls.length === 0, `uymayan sorguda aday yok (${urls.length})`);
+  t(seen > 0, `ama bağlantı görüldü (${seen})`);
+  t(samples.length > 0, `elenen adres taşınıyor (${samples.length})`);
+  t(
+    samples.every((url) => url.includes("magaza-bir.com")),
+    `örnekler gerçek adres: ${samples.join(", ")}`,
   );
 }
 
