@@ -103,8 +103,23 @@ function AnalyzeWorkspace() {
   }, []);
 
   useEffect(() => {
-    if (!image || scannedDataUrl.current === image.dataUrl) return;
-    scannedDataUrl.current = image.dataUrl;
+    if (!image) return;
+
+    /*
+     * Anahtar, sonucu belirleyen **her** girdiyi taşımalı.
+     *
+     * Nöbetçi yalnızca görsele bakıyordu ve tarayıcıda ölçüldü: «Kadın»a
+     * basmak hiçbir istek üretmedi, seçim yalnızca sayfa yenilenince devreye
+     * girdi. Yani seçici sessizce çalışmıyor görünüyordu — düğme doluyor,
+     * sonuç değişmiyor.
+     *
+     * Sunucu önbelleğinin anahtarında bu ders zaten alınmıştı (`scanCacheKey`);
+     * istemci tarafında tekrarlandı.
+     */
+    const key = `${image.dataUrl}::${gender ?? "-"}`;
+    if (scannedDataUrl.current === key) return;
+
+    scannedDataUrl.current = key;
     void runDetection({ ...image, gender });
   }, [image, gender, runDetection]);
 
