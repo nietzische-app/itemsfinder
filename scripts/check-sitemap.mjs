@@ -153,22 +153,39 @@ for (const host of stores) {
   }
 
   /*
-   * Dizinse bir kademe daha in. İkiden fazla inilmiyor: iç içe dizin nadir ve
-   * her kademe bir indirme demek.
+   * Dizin dizini işaret edebiliyor — üç kademe iniliyor.
+   *
+   * Dördüncü koşu gösterdi: Boyner'in `sitemap.xml`'i `product.xml`'e, o da
+   * `product1.xml, product2.xml…`e işaret ediyor. Tek kademe inen kural ikinci
+   * durakta kalıyor ve mağaza «0 ürün sayfası» görünüyordu — oysa ürünler bir
+   * kademe aşağıdaydı.
+   *
+   * Üçte duruyor çünkü her kademe bir indirme ve daha derini görülmedi. Zincir
+   * çıktıya yazılıyor: nerede durulduğu okunabilsin.
    */
   let target = rankProductSitemaps(found.urls)[0];
   let first = await get(target);
+  const chain = [target];
 
-  if (first.status === 200 && (isSitemapIndex(first.body) || looksLikeSitemapList(locsIn(first.body)))) {
-    const children = rankProductSitemaps(locsIn(first.body));
+  for (let depth = 0; depth < 3; depth += 1) {
+    if (first.status !== 200) break;
+
+    const locs = locsIn(first.body);
+    if (!isSitemapIndex(first.body) && !looksLikeSitemapList(locs)) break;
+
+    const children = rankProductSitemaps(locs);
     if (children.length === 0) {
       console.log(`dizin boş (${found.from})`);
       rows.push({ host, outcome: "dizin boş" });
-      continue;
+      break;
     }
+
     target = children[0];
+    chain.push(target);
     first = await get(target);
   }
+
+  if (rows.at(-1)?.host === host) continue;
 
   if (first.status !== 200) {
     const why = first.tooBig
@@ -213,6 +230,9 @@ for (const host of stores) {
     for (const url of matching.slice(0, 2)) console.log(`${" ".repeat(22)}${short(url)}`);
   } else {
     console.log(`${" ".repeat(22)}okunan dosya: ${short(target)}`);
+    if (chain.length > 1) {
+      console.log(`${" ".repeat(22)}zincir: ${chain.map(short).map((u) => u.split("/").pop()).join(" → ")}`);
+    }
     const samples = products.length > 0 ? products : locs;
     const etiket = products.length > 0 ? "ürün sayfası" : "ham adres";
     for (const url of samples.slice(0, 3)) {

@@ -235,6 +235,29 @@ sitemap: https://www.magaza.com/sitemap.xml
     "ürün adresleri sitemap listesi sayılmıyor",
   );
   t(!looksLikeSitemapList([]), "boş liste sayılmıyor");
+
+  /*
+   * Dördüncü koşu: dizin dizini işaret edebiliyor.
+   *
+   * Boyner'in `sitemap.xml`'i `product.xml`'e, o da `product1.xml…`e işaret
+   * ediyor. Tek kademe inen kural ikinci durakta kalıyor ve mağaza «0 ürün
+   * sayfası» görünüyordu — oysa ürünler bir kademe aşağıdaydı.
+   */
+  t(
+    looksLikeSitemapList([
+      "https://sitemap.boyner.com.tr/bynsitemap/product1.xml",
+      "https://sitemap.boyner.com.tr/bynsitemap/product2.xml",
+      "https://sitemap.boyner.com.tr/bynsitemap/product3.xml",
+    ]),
+    "üçüncü kademe de sitemap listesi sayılıyor",
+  );
+
+  // Trendyol için seçilen `rs` (Sırbistan) dosyası artık ceza alıyor.
+  const trendyolRs = rankProductSitemaps([
+    "https://www.trendyol.com/rs/sitemap_products1.xml",
+    "https://www.trendyol.com/sitemap_products1.xml",
+  ]);
+  t(!trendyolRs[0]?.includes("/rs/"), `Sırbistan dosyası arkada: ${trendyolRs[0]}`);
 }
 
 console.log(`${pass} ✓ / ${fails.length} ✗`);

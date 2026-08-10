@@ -108,6 +108,8 @@ export function looksLikeSitemapList(locs: string[]): boolean {
 const FOREIGN_LOCALES = [
   "bg", "en", "de", "fr", "es", "it", "ru", "ro", "el", "ar", "az",
   "nl", "pl", "cs", "hu", "sr", "uk", "sk", "hr", "pt", "sv", "da",
+  // Dördüncü koşu: Trendyol için `rs` (Sırbistan) seçilmişti.
+  "rs", "ja", "jp", "ko", "kr", "zh", "cn", "tw", "us", "gb", "ca", "au", "mx", "br",
 ];
 
 /** Gzip sihirli baytları: `1f 8b`. */

@@ -324,9 +324,33 @@ Koşu ölçümün kendisinde iki kusur buldu:
   taşıyan dosya artık ağır ceza alıyor: yerli bir kategori dosyasının bile
   arkasına düşüyor, ama elenmiyor.
 
-**Açık kalanlar:** ikinci koşu (gzip ve dil düzeltmesinden sonra) kaç mağazanın
-açıldığını söyleyecek. Trendyol zaman aşımına uğradı, Hepsiburada/DeFacto/Mango/
-Watsons sitemap'e de 403 verdi.
+**Dördüncü koşu — teşhis satırı her sıfırın sebebini verdikten sonra:**
+
+```
+10/19  sitemap açıldı
+ 6/19  sorguya uyan ürün adresi bulundu
+
+koton.com        15000 adres → 1524 uyan
+zara.com         10686 adres →  686 uyan   (tr-tr dosyası seçildikten sonra)
+beymen.com       10000 adres →  266 uyan
+bershka.com       2400 adres →  219 uyan   (adres şekli tanındıktan sonra)
+pullandbear.com    224 adres →    9 uyan
+gratis.com       13233 adres →    6 uyan   (pantolon çorabı — isabet değil)
+```
+
+Dört koşuda kanal 0'dan 6 mağazaya çıktı ve her adım bir ölçümle geldi:
+
+| Koşu | Ne bulundu | Ne düzeltildi |
+| --- | --- | --- |
+| 1 | 6/19 açıldı, 3 kullanılabilir | — |
+| 2 | Altı mağaza «0 adres», Trendyol Bulgarca | gzip gövde, yabancı dil cezası |
+| 3 | Zara İngilizce, Bershka tanınmıyor, Boyner/LCW iç içe | `tr-tr` tercihi, Bershka kalıbı, uzantıya bakan dizin tespiti |
+| 4 | Boyner üç kademe derin, Trendyol Sırpça | üç kademe iniş, eksik dil kodları |
+
+**Açık kalanlar:** Hepsiburada, DeFacto, Mango ve Watsons sitemap'e de 403
+veriyor. Mavi ve H&M sitemap ilan etmiyor. Stradivarius yalnızca `keyword.xml`
+yayımlıyor (2982 kategori adresi, tek ürün yok). Sephora kozmetik satıyor, «gri
+pantolon» için sıfır çıkması doğru.
 
 **Üretime bağlanmadan önce cevaplanacak soru:** dosya başına 10–15 bin adres
 görüldü ve bir mağazanın tamamı bunun katları. Tarama anında indirilemez, yani
