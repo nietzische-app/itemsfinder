@@ -111,14 +111,28 @@ export function rankProductSitemaps(urls: string[]): string[] {
     const has = (...stems: string[]) =>
       words.some((word) => stems.some((stem) => word.startsWith(stem)));
 
-    const foreign = words.some((word) => FOREIGN_LOCALES.includes(word)) ? 4 : 0;
+    /*
+     * Türkçe dosya varsa o kazanır — yasak listesiyle değil, **tercihle**.
+     *
+     * İlk düzeltme yabancı dil kodlarını cezalandırıyordu ve liste eksikti:
+     * ikinci koşuda Zara'nın 8655 ürün sayfası açıldı ama hiçbiri sorguya uymadı,
+     * çünkü seçilen dosya Türkçe değildi ve o dilin kodu listede yoktu. Dünyadaki
+     * bütün dil kodlarını saymak yerine, aradığımızı söylemek daha sağlam:
+     * `tr` taşıyan dosya öne geçiyor.
+     *
+     * Yasak listesi yine duruyor ama ikinci sırada: `tr` hiçbir dosyada geçmiyorsa
+     * (çoğu Türk mağazasında geçmiyor, çünkü zaten tek dilliler) bilinen yabancı
+     * kodlar yine aşağı itiliyor.
+     */
+    const turkish = words.includes("tr") ? -8 : 0;
+    const foreign = !words.includes("tr") && words.some((word) => FOREIGN_LOCALES.includes(word)) ? 4 : 0;
 
-    if (has("product", "urun", "ürün")) return 0 + foreign;
-    if (has("item", "sku", "detail")) return 1 + foreign;
+    if (has("product", "urun", "ürün")) return 0 + foreign + turkish;
+    if (has("item", "sku", "detail")) return 1 + foreign + turkish;
     if (has("categor", "kategori", "blog", "store", "magaza", "mağaza", "page", "sayfa", "brand", "marka")) {
-      return 3 + foreign;
+      return 3 + foreign + turkish;
     }
-    return 2 + foreign;
+    return 2 + foreign + turkish;
   };
 
   return [...urls].sort((a, b) => score(a) - score(b));

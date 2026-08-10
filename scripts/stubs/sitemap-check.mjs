@@ -138,6 +138,26 @@ sitemap: https://www.magaza.com/sitemap.xml
   ]);
   t(!karisik[0]?.includes("/en/"), `yerli kategori bile yabancı üründen önce: ${karisik[0]}`);
 
+  /*
+   * Türkçe dosya varsa o kazanır — yasak listesi eksik kalabilir, tercih kalmaz.
+   *
+   * İkinci koşuda Zara'nın 8655 ürün sayfası açıldı ve hiçbiri sorguya uymadı:
+   * seçilen dosya Türkçe değildi ve o dilin kodu listede yoktu. Dünyadaki bütün
+   * dil kodlarını saymak yerine aradığımızı söylemek daha sağlam.
+   */
+  const zara = rankProductSitemaps([
+    "https://www.zara.com/sitemaps/sitemap-ja-jp-products.xml",
+    "https://www.zara.com/sitemaps/sitemap-tr-tr-products.xml",
+  ]);
+  t(zara[0]?.includes("tr-tr"), `Türkçe dosya kazanıyor: ${zara[0]}`);
+
+  // Türkçe dosya, tanınmayan bir adlandırmaya sahip olsa bile öne geçiyor.
+  const karma = rankProductSitemaps([
+    "https://m.com/sitemap-products.xml",
+    "https://m.com/tr/sitemap-bilinmeyen.xml",
+  ]);
+  t(karma[0]?.includes("/tr/"), `Türkçe her şeyin önünde: ${karma[0]}`);
+
   // Ama eleme değil: başka hiçbir şey yoksa yabancı dosya yine ölçülebilmeli.
   t(
     rankProductSitemaps(["https://m.com/de/sitemap-products.xml"]).length === 1,

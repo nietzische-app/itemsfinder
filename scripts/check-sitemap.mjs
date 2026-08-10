@@ -187,12 +187,30 @@ for (const host of stores) {
   );
   const matching = rankByQuery(products, query);
 
+  const short = (url) => url.replace(/^https?:\/\/(www\.)?/, "").slice(0, 74);
+
   console.log(
     `${String(locs.length).padStart(6)} adres → ${products.length} ürün sayfası → ` +
       `${matching.length} sorguya uyan  (${found.from})`,
   );
-  for (const url of matching.slice(0, 2)) {
-    console.log(`${" ".repeat(22)}${url.replace(/^https?:\/\/(www\.)?/, "").slice(0, 70)}`);
+
+  /*
+   * Sıfır çıkan her adımda **örnek adres** yazılıyor.
+   *
+   * İkinci koşuda Zara'nın 8655 ürün sayfası açıldı ve hiçbiri sorguya uymadı.
+   * Sebebi sayıdan okunamıyor: yanlış dil dosyası mı, tanınmayan adres şekli mi,
+   * yoksa gerçekten o üründen yok mu? Üçü üç ayrı iş. Bir tur önce aynı dersi
+   * eleme satırında almıştık — adressiz bir sayı yarım teşhis.
+   */
+  if (matching.length > 0) {
+    for (const url of matching.slice(0, 2)) console.log(`${" ".repeat(22)}${short(url)}`);
+  } else {
+    console.log(`${" ".repeat(22)}okunan dosya: ${short(target)}`);
+    const samples = products.length > 0 ? products : locs;
+    const etiket = products.length > 0 ? "ürün sayfası" : "ham adres";
+    for (const url of samples.slice(0, 3)) {
+      console.log(`${" ".repeat(22)}${etiket}: ${short(url)}`);
+    }
   }
 
   rows.push({ host, locs: locs.length, products: products.length, matching: matching.length });
