@@ -25,5 +25,7 @@ export const {
   probeUrls,
   productLinks,
   rankByQuery,
+  queryMatcher,
+  foldPath,
   searchActionTemplate,
 } = await import("@/lib/storeSearchPage");

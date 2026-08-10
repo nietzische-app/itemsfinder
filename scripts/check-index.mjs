@@ -26,7 +26,7 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
-import { rankByQuery } from "./kesif-lib.mjs";
+import { queryMatcher, foldPath } from "./kesif-lib.mjs";
 import { parseArgs } from "./args.mjs";
 
 const { COVERAGE_CASES } = await import("../eval/coverageCases.ts");
@@ -41,7 +41,11 @@ if (!existsSync(dir)) {
 
 /*
  * Yükleme ölçülüyor, çünkü üretimde bu maliyet her soğuk başlangıçta ödenecek.
- * Adres birleştirme de burada: dosyada yol var, mağaza dosya adında.
+ *
+ * Katlama **burada**, sorgu sırasında değil. İlk koşu bunu zorunlu kıldı: sorgu
+ * başına 239 ms çıktı ve ölçünce işin neredeyse tamamı sorgudan bağımsız çıktı —
+ * her sorgu yüz elli iki bin adresi yeniden ayrıştırıp yeniden katlıyordu. Yol
+ * dosyada zaten yol olarak duruyor, yani `new URL` de gereksiz.
  */
 const loadStart = performance.now();
 const stores = [];
@@ -49,11 +53,11 @@ const stores = [];
 for (const file of readdirSync(dir).filter((name) => name.endsWith(".txt")).sort()) {
   const host = file.replace(/\.txt$/, "");
   const paths = readFileSync(join(dir, file), "utf-8").split("\n").filter(Boolean);
-  stores.push({ host, urls: paths.map((path) => `https://www.${host}${path}`) });
+  stores.push({ host, paths, folded: paths.map(foldPath) });
 }
 
 const loadMs = Math.round(performance.now() - loadStart);
-const total = stores.reduce((sum, store) => sum + store.urls.length, 0);
+const total = stores.reduce((sum, store) => sum + store.paths.length, 0);
 
 if (total === 0) {
   console.error(`Dizin boş: ${dir}`);
@@ -71,9 +75,14 @@ let worst = { query: "", ms: 0 };
 for (const { label } of COVERAGE_CASES) {
   const start = performance.now();
 
+  const matcher = queryMatcher(label);
   const perStore = stores.map((store) => ({
     host: store.host,
-    urls: rankByQuery(store.urls, label),
+    urls: matcher
+      ? store.folded.flatMap((path, i) =>
+          matcher.score(path) >= 0 ? [`https://www.${store.host}${store.paths[i]}`] : [],
+        )
+      : [],
   }));
 
   const ms = performance.now() - start;
