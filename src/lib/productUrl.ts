@@ -44,6 +44,26 @@ const SEARCH_PATTERNS: RegExp[] = [
   /-c-\d+(?:$|[/?#])/i,
   // Shopify koleksiyonu: /collections/pantolon
   /\/collections\//i,
+  /*
+   * Harf işaretli liste yolları — üretimde ölçüldü, `docs/BULUNAMADI.md` 4d.
+   *
+   * Üçü de en gevşek PDP kalıbından (`[_-]\d{4,}` slug sonu) içeri giriyordu ve o
+   * kalıbın kendi yorumu tam olarak bunu öngörmüştü: «öyle bir örnek görüldüğünde
+   * çözüm sınırı yükseltmek değil, o şekli kategori listesine eklemek — çünkü
+   * asıl ayrım şeklin kendisi, hane sayısı değil.» İşte o örnekler:
+   *
+   *   -m-  boyner.com.tr/pabucline-m-2003092903   satıcı sayfası
+   *   -t-  lcw.com/kadin-kolsuz-tisort-t-5112     kategori (LCW ürünü -o-\d{5,})
+   *   -b-  gratis.com/isntree-b-61068             marka sayfası
+   *
+   * Üçü de gerçek arama sonuçlarından geldi ve üçünde de sayfanın işaretlemesi
+   * `ItemList`/`BreadcrumbList`'ti, yani mağazanın kendisi de «bu bir liste»
+   * diyordu.
+   *
+   * Rakamın hemen işaretten sonra gelmesi şart: `beyaz-t-shirt-12345` bir ürün
+   * sayfası ve bu kural ona dokunmuyor.
+   */
+  /-[mtb]-\d{4,}(?:$|[/?#])/i,
 ];
 
 /**
@@ -102,7 +122,21 @@ const PDP_PATTERNS: RegExp[] = [
    * yükseltmek değil, o şekli kategori listesine eklemek — çünkü asıl ayrım
    * şeklin kendisi, hane sayısı değil.
    */
-  /[_-]\d{4,}\/?(?:$|[?#])/i,
+  /*
+   * ...ve yalnızca adres **çıplakken**.
+   *
+   * Beymen'in `/tr/kadin-giyim-10020?indirimliurunler=evet` adresi bu kuralla
+   * ürün sayfası sayılıyordu ve gerçek bir arama sonucundan geliyordu. Şekli
+   * bir ürün sayfasından ayırt edilemiyor — ama sorgu dizesi ayırt ediyor:
+   * `indirimliurunler=evet` bir **süzgeç**, ve süzgeç liste sayfasının işi.
+   *
+   * Ölçüldü: sorgu dizesi taşıyan on iki gerçek ürün sayfasının hiçbiri bu
+   * kurala muhtaç değil — hepsi `-p-`, `/dp/`, `/products/`, `-l\d{7,}` ya da
+   * `vid=` gibi açık bir şekle uyuyor. Yani daraltmanın bedeli sıfır ölçüldü.
+   *
+   * Parça (`#`) da dışarıda: bağlantı çıkarımı zaten parçayı almıyor.
+   */
+  /[_-]\d{4,}\/?$/i,
   /*
    * Harfle başlayan stok kodu: `-nbstr4085`, `-kssz3h76`.
    *

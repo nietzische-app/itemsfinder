@@ -95,4 +95,17 @@ export const LISTING_URLS: readonly string[] = [
   "https://www.neselibutik.com/kadin-blazer",
   "https://gangown.com.tr/kategori/jean",
   "https://www.sephora.com.tr/c/makyaj-ruj",
+  /*
+   * Üretim ölçümünden gelenler — GitHub Actions'taki keşif koşusu, iki tur.
+   *
+   * Dördü de mağazaların gerçek arama sonuçlarından geldi ve dördü de ürün
+   * sayfası sayılıyordu. Ölçüm bunu yakaladı çünkü okunan sayfanın işaretlemesi
+   * yazılıyordu: `ItemList` ve `BreadcrumbList`, yani mağazanın kendisi de «bu
+   * bir liste» diyordu. Dört mağaza (Boyner, LCW, Beymen, Gratis) bu yüzden
+   * «işaretleme yok» diye elenmiş görünüyordu — kusur mağazada değil bizdeydi.
+   */
+  "https://www.boyner.com.tr/pabucline-m-2003092903",
+  "https://www.lcw.com/kadin-kolsuz-tisort-t-5112",
+  "https://www.gratis.com/isntree-b-61068",
+  "https://www.beymen.com/tr/kadin-giyim-10020?indirimliurunler=evet",
 ];

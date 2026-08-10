@@ -206,6 +206,63 @@ mağaza arama sayfalarından PDP adresi toplayıp `markupProducts` ile okumak
 (bot duvarı riski ölçülmedi). Karar verilmeden kod yazılmamalı — bu bölümün
 tamamı, ölçmeden önce yazılmış kodun hikâyesi.
 
+### 4d. Ücretsiz keşif — ⏳ ölçülüyor, mekanizma bir mağazada doğrulandı
+
+Google kapısı kapandıktan sonra (4c) aday bulmanın sağlayıcısı kalmadı. Ücretsiz
+tek ihtimal: mağazanın **kendi arama sayfasından** ürün adresi toplayıp
+`markupProducts` ile okumak. Ölçüm GitHub Actions'tan yapılıyor — bilerek, çünkü
+üretimde istek Vercel'den, yani bir veri merkezi IP'sinden gidiyor ve ev
+bağlantısından alınan cevap fazla iyimser olurdu.
+
+**Birinci koşu (19 mağaza, «gri pantolon»):**
+
+```
+1/19  gerçek ürün satırı   koton.com — 38 aday, 3 sayfa, 3 satır, TL fiyatlı
+5/19  ürün bağlantısı verdi
+6/19  ana sayfada HTTP 403 trendyol, hepsiburada, defacto, hm, watsons, sephora
+8/19  arama adresini ilan etmemiş
+```
+
+Zincirin tamamı **en az bir mağazada uçtan uca çalıştı**: ilan edilmiş arama
+adresi → arama sayfası → adres süzme → indirme → schema.org'dan TL fiyatlı satır.
+Hiçbir satıcıya ödeme yapılmadan. Mekanizmanın çalıştığı artık varsayım değil.
+
+**İkinci koşu, ve asıl bulgu.** Dört mağaza (Boyner, LCW, Beymen, Gratis)
+bağlantı veriyor ama «ürün işaretlemesi yok» diyordu. Sayfa teşhisi eklenince
+sebep çıktı ve **kusur mağazalarda değildi**:
+
+```
+boyner.com.tr/pabucline-m-2003092903   0 ld+json, og:title var, istemci tarafı çatı
+lcw.com/kadin-kolsuz-tisort-t-5112     1 ld+json, tipler: BreadcrumbList
+beymen.com/tr/kadin-10006              1 ld+json, tipler: ItemList
+gratis.com/isntree-b-61068             2 ld+json, tipler: ItemList/BreadcrumbList
+```
+
+Dördü de **liste sayfası** — satıcı, kategori, marka. `isDirectProductUrl` onları
+ürün sayfası sayıyordu, yani okuduğumuz üç sayfa hiçbir zaman ürün sayfası
+olmamıştı. Beymen'in tek arama sayfasından 1254 «aday» çıkarması bu yüzdendi.
+
+Bu yalnızca ölçüm kusuru değil: aynı süzgeç canlı yolda **CTA** üretiyor, yani
+«Ürüne git» düğmesi bir kategori sayfasına gidebilirdi.
+
+Kaynağı, kalıpların en gevşeği (`[_-]\d{4,}` slug sonu) ve o kalıbın kendi yorumu
+bunu öngörmüştü: *«öyle bir örnek görüldüğünde çözüm sınırı yükseltmek değil, o
+şekli kategori listesine eklemek»*. Dördü de eklendi:
+
+- `-m-`, `-t-`, `-b-` + rakam → liste yolu (rakam işaretin hemen ardından
+  gelmeli; `beyaz-t-shirt-12345` bir ürün sayfası ve dokunulmuyor).
+- Gevşek kalıp artık yalnızca **çıplak** adreste geçerli. Beymen'in şekli bir
+  ürün sayfasından ayırt edilemiyor ama sorgu dizesi ayırt ediyor:
+  `?indirimliurunler=evet` bir süzgeç. Ölçüldü — sorgu dizesi taşıyan on iki
+  gerçek ürün sayfasının hiçbiri bu kurala muhtaç değil.
+
+Dördü de `eval/productUrlCases.ts`'e girdi; bağlantı yasağı 67/67.
+
+**Açık kalanlar:** dört mağazanın gerçek ürün sayfalarından satır çıkıp
+çıkmadığı (üçüncü koşu söyleyecek), sekiz sessiz mağaza (yaygın şekiller deneniyor,
+ilk turda hiçbiri tutmadı), ve altı mağazanın veri merkezi IP'sine çıkardığı 403 —
+aralarında Trendyol ve Hepsiburada var, yani Türkiye'nin en büyük ikisi.
+
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 
 Şu an eşleşme filtreleri (`rejectProductTitle`, aile kapısı, renk çelişkisi)
