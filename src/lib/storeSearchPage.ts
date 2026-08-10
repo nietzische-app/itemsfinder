@@ -1,5 +1,7 @@
+import { familyOf, normalizeTr } from "@/lib/itemFamily";
 import { jsonLdNodes } from "@/lib/productMarkup";
 import { isDirectProductUrl } from "@/lib/productUrl";
+import { COLOR_NAMES } from "@/lib/searchQuery";
 
 /**
  * Bir mağazanın arama sayfasını okumanın saf kararları.
@@ -185,8 +187,10 @@ function fold(text: string): string {
  * ## Neden ad şart, renk değil
  *
  * Yalnızca «gri» eşleşmesi gri bir elbiseyi de geçirirdi. Türkçede ad sonda
- * duruyor (`buildSearchQuery` bunu koruyor), o yüzden son iki kelimeden birinin
- * tutması aranıyor — «Bej gömlek bluz» gibi iki adlı sorgular için iki.
+ * duruyor (`buildSearchQuery` bunu koruyor), o yüzden son kelimenin tutması
+ * aranıyor. Sondan ikinci ancak **kendisi de bir ürün adıysa** eşanlamlı sayılıyor
+ * («Bej gömlek bluz» → mağaza «gömlek» yazıyor); niteleyiciler («spor», «rengi»)
+ * ad yerine geçemiyor.
  *
  * Ön ek karşılaştırması yapılıyor çünkü Türkçe ekli: `gozlugu` slug'da `gozluk`
  * olarak geçiyor ve tam eşitlik ikisini ayrı sayardı.
@@ -195,22 +199,62 @@ function fold(text: string): string {
  * geçemez. Ölçülen iki mağazanın ikisinde de slug var; yeni bir mağaza eklemeden
  * önce `npm run check:kesif` bunu zaten gösteriyor.
  */
+/**
+ * Renk sözcükleri — ikinci adın **vetosu**.
+ *
+ * Asıl kural aşağıdaki `familyOf` sınaması; bu küme yalnızca ikisinin
+ * kesiştiği yeri kapatıyor: hem renk hem ürün olan sözcükler. Tek örneği
+ * «pudra» — `face` ailesinde bir ürün (pudra), ve aynı zamanda bir renk. «Mat
+ * pudra ruj» sorgusunda «pudra»yı ad saymak bir fondöteni ruj adayı yapardı.
+ *
+ * Elle yazılmıyor, `COLOR_NAMES`'ten türüyor: palete eklenen bir renk buraya da
+ * kendiliğinden geliyor.
+ */
+const COLOR_WORDS = new Set<string>(
+  COLOR_NAMES.flatMap((entry) => fold(entry.name).split(/\s+/)).filter(Boolean),
+);
+
 export function rankByQuery(urls: string[], query: string): string[] {
-  const tokens = fold(query)
-    .split(/[^a-z0-9]+/)
-    .filter((token) => token.length >= 3);
+  /*
+   * İki dizi, aynı sıra: sözlük sınaması Türkçe harfleri istiyor (`gömlek`
+   * kökü `gomlek`'e uymaz), slug karşılaştırması istemiyor (mağaza slug'ı
+   * zaten `gomlek` yazıyor). `fold` harf sayısını değiştirmediği için uzunluk
+   * süzgeci ikisinde de aynı sözcükleri eliyor ve indisler kaymıyor.
+   */
+  const words = normalizeTr(query)
+    .split(/[^a-z0-9çğıöşü]+/)
+    .filter((word) => word.length >= 3);
+  const tokens = words.map(fold);
 
   if (tokens.length === 0) return urls;
 
   /*
-   * Ad sonda; ikinci ada ancak üç kelimeden sonra bakılıyor.
+   * Ad sonda. Sondan ikinciye ancak **kendisi de bir ürün adıysa** bakılıyor.
    *
-   * İlk hâli her sorguda son **iki** kelimeye bakıyordu ve ölçüm bunu yakaladı:
-   * «Gri pantolon» iki kelime, yani renk de ad sayılıyordu ve gri bir elbise
-   * süzgeci geçiyordu — tam olarak süzgecin engellemek için var olduğu şey.
-   * «Bej gömlek bluz» gibi iki adlı sorgular için ikinci ada hâlâ bakılıyor.
+   * Üç düzeltmenin toplamı, ve üçünü de ölçüm yazdırdı:
+   *
+   *  1. İlk hâli her sorguda son iki kelimeye bakıyordu — «Gri pantolon»da
+   *     «gri» ad sayıldı ve gri bir elbise pantolon adayı oldu.
+   *  2. Kelime sayısı sınırı (≥3) onu çözdü, ama renk iki kelimeli olunca hata
+   *     geri geldi: «Gümüş rengi ayakkabı» üç kelime, «rengi» ad sayıldı, iki
+   *     **şort** ayakkabı adayı oldu (`…-gumus-rengi-386`).
+   *  3. Renk listesi de yetmiyor: «Gümüş spor ayakkabı»da «spor» ne renk ne ad,
+   *     ama `spor-sort`a uyuyor — yine şort.
+   *
+   * Ortak sebep, kuralın kelimenin **yerine** bakıp kendisine bakmaması. İkinci
+   * ada gerçekten ihtiyaç var — «Bej gömlek bluz»da mağaza «gömlek» yazıyor,
+   * bizim adımız «bluz» — ama o ihtiyaç yalnızca **eşanlamlı ürün adları** için.
+   * Ayırt eden şey elde zaten var: aile sözlüğü. `gömlek` ve `bluz` orada,
+   * `spor` ve `rengi` değil. Yeni bir kelime listesi uydurmak yerine ürün adını
+   * tanıyan tek sözlüğe soruluyor — aile kapısının kullandığı sözlüğe.
    */
-  const nouns = tokens.length >= 3 ? tokens.slice(-2) : tokens.slice(-1);
+  const nouns = [tokens[tokens.length - 1]!];
+  if (tokens.length >= 3) {
+    const second = words[words.length - 2]!;
+    if (familyOf(second) !== "unknown" && !COLOR_WORDS.has(fold(second))) {
+      nouns.push(tokens[tokens.length - 2]!);
+    }
+  }
   const scored: Array<{ url: string; hits: number }> = [];
 
   for (const url of urls) {

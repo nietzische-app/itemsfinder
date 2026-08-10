@@ -325,6 +325,49 @@ const t = (c, n) => (c ? pass++ : fails.push(n));
     "iki adlı sorguda ilk ad da tutuyor",
   );
 
+  /*
+   * Sondan ikinci kelime ad değilse ad sayılmıyor.
+   *
+   * Aşağıdaki iki adres üretimden, kırpılmadan: teşhis satırına adres eklendiği
+   * gün ilk yakaladığı kusur bu oldu. «Shoe» için iki **şort** aday olmuştu ve
+   * sebebi slug'da değil sorguda: «Gümüş rengi ayakkabı» üç kelime, kural son
+   * iki kelimeyi ad sayıyordu, ve şortların ikisi de `gumus-rengi` taşıyor.
+   *
+   * Üç sorgu üç ayrı yolu kapatıyor — ve ikisi renk listesiyle **çözülmüyordu**:
+   *
+   *   «Gümüş rengi ayakkabı»       → «rengi» renk eki
+   *   «Gümüş spor ayakkabı»        → «spor» ne renk ne ad, ama `spor-sort`a uyuyor
+   *   «Gümüş rengi spor ayakkabı»  → ikisi bir arada
+   *
+   * İkincisi, renk listesini tek başına yeterli sanmayı bozan ölçüm.
+   */
+  const sortlar = [
+    koton("metalik-spor-sort-kisa-yuksek-bel-lastikli-cep-detayli-gumus-rengi"),
+    koton("spor-sort-bermuda-beli-bagcikli-parasut-kumas-cep-detayli-gumus-rengi"),
+  ];
+  for (const query of ["Gümüş rengi ayakkabı", "Gümüş spor ayakkabı", "Gümüş rengi spor ayakkabı"]) {
+    const kalan = rankByQuery(sortlar, query);
+    t(kalan.length === 0, `«${query}» için şort kalmadı (${kalan.length})`);
+  }
+
+  // Ve gerçek ayakkabı yine geçiyor — kural süzmeyi değil, ayırt etmeyi yapıyor.
+  t(
+    rankByQuery([...sortlar, koton("bagcikli-gumus-rengi-spor-ayakkabi")], "Gümüş rengi spor ayakkabı")
+      .length === 1,
+    "aynı sorguda gerçek ayakkabı geçiyor",
+  );
+
+  /*
+   * Renk vetosu: hem renk hem ürün olan kelime ad sayılmıyor.
+   *
+   * «pudra» aile sözlüğünde bir ürün (`face`), yani sözlük sınaması tek başına
+   * onu ad sayardı ve «Mat pudra ruj» sorgusuna bir fondöten aday olurdu.
+   */
+  t(
+    rankByQuery([koton("mat-pudra-fondoten-30ml")], "Mat pudra ruj").length === 0,
+    "hem renk hem ürün olan kelime ad sayılmıyor",
+  );
+
   // Daha çok kelime tutan öne geçiyor: sıra, hangi sayfanın indirileceğini belirliyor.
   const sirali = rankByQuery(
     [koton("siyah-kumas-pantolon"), koton("gri-yuksek-bel-kumas-pantolon")],

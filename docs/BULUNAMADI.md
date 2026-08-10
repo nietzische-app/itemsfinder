@@ -286,6 +286,30 @@ Türkiye'nin en büyük ikisi). Ölçülmemiş bir kanal daha var: `sitemap.xml`
 Perakendecilerin çoğu ürün adreslerini orada yayımlıyor ve slug'lar arama
 kelimelerini taşıyor — arama sayfasına hiç girmeden aday bulmanın yolu olabilir.
 
+**Canlıya alındıktan sonra — «ürün adı hangi kelime» sorusu.** Aday süzgeci
+sorgunun son iki kelimesini ürün adı sayıyordu. Üretim logu üç turda üç ayrı
+kusur yazdırdı, ve üçü de aynı kökten: kural kelimenin **yerine** bakıp
+kendisine bakmıyordu.
+
+```
+«Gri pantolon»               → «gri» ad sayıldı, gri bir elbise aday oldu
+«Gümüş rengi ayakkabı»       → «rengi» ad sayıldı, iki şort aday oldu
+                               …-gumus-rengi-386  /  …-gumus-rengi-
+«Gümüş spor ayakkabı»        → «spor» ad sayıldı, aynı şortlar (renk listesi geçti)
+```
+
+İlkini kelime sayısı sınırı, ikincisini renk listesi kapattı; üçüncüsü ikisini
+de aştı çünkü «spor» ne renk ne ad. İkinci ada gerçekten ihtiyaç var — «Bej
+gömlek bluz»da mağaza «gömlek» yazıyor, bizim adımız «bluz» — ama yalnızca
+**eşanlamlı ürün adları** için. Ayırt eden şey elde zaten vardı: aile sözlüğü
+(`itemFamily.ts`). `gömlek` ve `bluz` orada, `spor` ve `rengi` değil. Yeni bir
+kelime listesi uydurmak yerine sondan ikinci kelime o sözlüğe soruluyor; renk
+listesi yalnızca kesişimi kapatıyor (`pudra` hem renk hem ürün).
+
+Bu kusurun görünür olmasının sebebi ayrı bir değişiklik: eleme satırına elenen
+adayın **adresi** eklenmişti. Başlık «neden elendi»yi söylüyor, adres «neden
+aday oldu»yu — ve aday seçimi slug'a bakıyor.
+
 ### 4e. Sitemap kanalı — ⏳ ilk koşu: Beymen açıldı
 
 Arama sayfası kanalı 2/19 mağazada çalışıyor. Sitemap ikinci bir yol: bot
