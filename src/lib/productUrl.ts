@@ -55,6 +55,7 @@ const SEARCH_PATTERNS: RegExp[] = [
    *   -m-  boyner.com.tr/pabucline-m-2003092903   satıcı sayfası
    *   -t-  lcw.com/kadin-kolsuz-tisort-t-5112     kategori (LCW ürünü -o-\d{5,})
    *   -b-  gratis.com/isntree-b-61068             marka sayfası
+   *   -u-  lcw.com/seyahat-urunleri-u-300286      ürün grubu (bir sonraki koşuda çıktı)
    *
    * Üçü de gerçek arama sonuçlarından geldi ve üçünde de sayfanın işaretlemesi
    * `ItemList`/`BreadcrumbList`'ti, yani mağazanın kendisi de «bu bir liste»
@@ -63,7 +64,7 @@ const SEARCH_PATTERNS: RegExp[] = [
    * Rakamın hemen işaretten sonra gelmesi şart: `beyaz-t-shirt-12345` bir ürün
    * sayfası ve bu kural ona dokunmuyor.
    */
-  /-[mtb]-\d{4,}(?:$|[/?#])/i,
+  /-[mtbu]-\d{4,}(?:$|[/?#])/i,
 ];
 
 /**

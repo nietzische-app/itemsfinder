@@ -202,8 +202,20 @@ for (const host of stores) {
     continue;
   }
 
-  // Asıl soru bağlantı değil **satır**: fiyatı olan bir kart çıkıyor mu?
-  const top = links.slice(0, 3);
+  /*
+   * Asıl soru bağlantı değil **satır**: fiyatı olan bir kart çıkıyor mu?
+   *
+   * Üç değil altı sayfa okunuyor. Üçüncü koşu sebebini gösterdi: arama
+   * sayfasından çıkan bağlantıların bir kısmı sonuç değil **gezinme** — LCW'nin
+   * dokuz adayının hepsi menüden gelen kategorilerdi. İlk üçü menüye denk gelen
+   * bir mağaza, gerçek sonuç verse bile «0 satır» diye görünürdü.
+   *
+   * Altıda duruyor çünkü bu bir tarama değil ölçüm: on dokuz mağaza × altı sayfa
+   * zaten yüzden fazla istek, ve menüsü bağlantı listesini baştan sona dolduran
+   * bir mağazada (Beymen'de 1175 aday) hiçbir sayı yetmiyor — orada cevap «daha
+   * fazla oku» değil, «bu mağaza sonuçları sunucuda çizmiyor».
+   */
+  const top = links.slice(0, 6);
   const cards = await productsFromMarkup(top);
 
   console.log(
@@ -223,7 +235,7 @@ for (const host of stores) {
    * mağazayı elemek, mağazayı haksız yere suçlamak olur.
    */
   if (cards.length === 0) {
-    for (const url of top) {
+    for (const url of top.slice(0, 3)) {
       const page = await get(url);
       const where = url.replace(/^https?:\/\/(www\.)?/, "");
       console.log(

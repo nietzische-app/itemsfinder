@@ -258,10 +258,33 @@ bunu öngörmüştü: *«öyle bir örnek görüldüğünde çözüm sınırı y
 
 Dördü de `eval/productUrlCases.ts`'e girdi; bağlantı yasağı 67/67.
 
-**Açık kalanlar:** dört mağazanın gerçek ürün sayfalarından satır çıkıp
-çıkmadığı (üçüncü koşu söyleyecek), sekiz sessiz mağaza (yaygın şekiller deneniyor,
-ilk turda hiçbiri tutmadı), ve altı mağazanın veri merkezi IP'sine çıkardığı 403 —
-aralarında Trendyol ve Hepsiburada var, yani Türkiye'nin en büyük ikisi.
+**Üçüncü koşu — süzgeç düzeldikten sonra:**
+
+```
+boyner.com.tr  54 → 25 aday, ve ilk gerçek satır:
+               «Slim Fit Orta Bel Düz Paça Erkek Gri Pantolon» 699.99 TRY
+lcw.com       124 →  9 aday, hepsi menüden: seyahat-urunleri-u-…, bebek-…-u-…
+beymen.com   1254 → 1175 aday, hâlâ ItemList kategorileri
+gratis.com     42 →  0 aday (hepsi marka sayfasıymış)
+```
+
+Yani süzgeç kusuru bir mağazayı kurtardı: **Boyner haksız yere eleniyormuş.**
+Öteki üçü için cevap değişmedi ve artık sebebi biliniyor — LCW'nin dokuz adayının
+hepsi gezinme menüsünden, Beymen'in 1175'i mega menüsünden geliyor. Bu üç mağaza
+arama sonuçlarını **sunucuda çizmiyor**; okunacak bağlantı yok, daha fazla sayfa
+okumak da bir şey değiştirmiyor.
+
+`-u-` de liste işaretlerine katıldı (LCW ürün grubu). Bağlantı yasağı 69/69.
+
+**Ölçülmüş durum: 2/19.** Koton (3 satır) ve Boyner (1 satır) — ikisi de TL
+fiyatlı, gerçek, ücretsiz.
+
+**Açık kalanlar:** sekiz mağaza arama adresini ilan etmiyor ve yedi yaygın şekil
+de tutmadı (Zara, Mango, Bershka, Mavi, Flo, Vakko, Pull&Bear, Stradivarius);
+altı mağaza veri merkezi IP'sine 403 veriyor (Trendyol ve Hepsiburada dahil, yani
+Türkiye'nin en büyük ikisi). Ölçülmemiş bir kanal daha var: `sitemap.xml`.
+Perakendecilerin çoğu ürün adreslerini orada yayımlıyor ve slug'lar arama
+kelimelerini taşıyor — arama sayfasına hiç girmeden aday bulmanın yolu olabilir.
 
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 

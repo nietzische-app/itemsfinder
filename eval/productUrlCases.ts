@@ -108,4 +108,7 @@ export const LISTING_URLS: readonly string[] = [
   "https://www.lcw.com/kadin-kolsuz-tisort-t-5112",
   "https://www.gratis.com/isntree-b-61068",
   "https://www.beymen.com/tr/kadin-giyim-10020?indirimliurunler=evet",
+  // Üçüncü koşu: LCW'nin arama sayfasından gelen gezinme bağlantıları.
+  "https://www.lcw.com/seyahat-urunleri-u-300286",
+  "https://www.lcw.com/outlet/seyahat-urunleri-u-300286",
 ];
