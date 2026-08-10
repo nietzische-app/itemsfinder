@@ -22,6 +22,13 @@
 
 /** Tıklandığında tek bir ürüne giden gerçek adresler. Hepsi kabul edilmeli. */
 export const PDP_URLS: readonly string[] = [
+  /*
+   * Bershka — sitemap ölçümünden gelen gerçek adresler (4e). 2400'ü okundu ve
+   * hiçbiri ürün sayfası sayılmıyordu.
+   */
+  "https://www.bershka.com/tr/straight-fit-jean-c0p189276646.html",
+  "https://www.bershka.com/tr/kargo-bermuda-c0p189276662.html",
+
   "https://www.trendyol.com/fit-women/korse-tayt-4409-p-193934145?boutiqueId=61&merchantId=204106",
   "https://www.amazon.com.tr/dp/B0CJRGT916?th=1&psc=1",
   "https://www.zara.com/tr/tr/pamuklu-keten-relaxed-fit-pantolon-p04470460.html?v1=545461210",

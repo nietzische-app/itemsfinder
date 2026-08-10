@@ -63,6 +63,26 @@ export function isSitemapIndex(xml: string): boolean {
 }
 
 /**
+ * Girdilerin kendisi sitemap mi?
+ *
+ * Kök etiket her zaman doğruyu söylemiyor. Üçüncü koşuda iki mağaza `<urlset>`
+ * içinde **başka sitemap dosyaları** listeledi:
+ *
+ *   boyner  → bynsitemap/product.xml, productimage.xml, category.xml
+ *   lcw     → api.lcwaikiki.com/feed/service/api/TR/TR/Products-1/xml?regionId=1
+ *
+ * İkisi de «12 adres → 0 ürün sayfası» diye göründü, oysa bir kademe daha
+ * inilecekti. Uzantıya bakmak kök etiketten sağlam: bir sayfa `.xml` ile
+ * bitmiyor.
+ */
+export function looksLikeSitemapList(locs: string[]): boolean {
+  if (locs.length === 0) return false;
+
+  const xmlish = locs.filter((loc) => /\.xml(\.gz)?($|\?)|\/xml($|\?)/i.test(loc)).length;
+  return xmlish / locs.length >= 0.8;
+}
+
+/**
  * Ürün adresi taşıması **en olası** sitemap'ler öne alınır.
  *
  * Büyük bir mağazanın sitemap dizini onlarca dosya taşıyor: kategoriler,
@@ -125,11 +145,26 @@ export function rankProductSitemaps(urls: string[]): string[] {
      * kodlar yine aşağı itiliyor.
      */
     const turkish = words.includes("tr") ? -8 : 0;
-    const foreign = !words.includes("tr") && words.some((word) => FOREIGN_LOCALES.includes(word)) ? 4 : 0;
+    /*
+     * Yabancı kod, `tr` yanında dursa bile ceza alıyor.
+     *
+     * İlk hâli `tr` görünce cezayı kapatıyordu ve üçüncü koşu bunu yakaladı:
+     * Zara için seçilen dosya `sitemap-product-tr-en.xml.gz` oldu — Türkiye
+     * mağazası ama **İngilizce**. 10 324 ürün sayfası açıldı ve hiçbiri sorguya
+     * uymadı, çünkü slug'lar İngilizce: «limited-edition-printed-midi-dress».
+     *
+     * İkisi ayrı ayrı sayılınca `tr-tr` (-8), `tr-en`'in (-8+4) önüne geçiyor.
+     */
+    const foreign = words.some((word) => FOREIGN_LOCALES.includes(word)) ? 4 : 0;
 
     if (has("product", "urun", "ürün")) return 0 + foreign + turkish;
     if (has("item", "sku", "detail")) return 1 + foreign + turkish;
-    if (has("categor", "kategori", "blog", "store", "magaza", "mağaza", "page", "sayfa", "brand", "marka")) {
+    /*
+     * `keyword` de bir liste dosyası — üçüncü koşuda Stradivarius için
+     * `sitemap/keyword.xml` seçildi ve içinden `/tr/v/100-pamuk-elbiseler` gibi
+     * kategori adresleri çıktı, tek bir ürün bile yok.
+     */
+    if (has("categor", "kategori", "keyword", "blog", "store", "magaza", "mağaza", "page", "sayfa", "brand", "marka")) {
       return 3 + foreign + turkish;
     }
     return 2 + foreign + turkish;

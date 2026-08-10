@@ -33,8 +33,15 @@ import { gunzipSync } from "node:zlib";
 
 import { USER_AGENT, productLinks, rankByQuery } from "./kesif-lib.mjs";
 
-const { sitemapUrlsFromRobots, locsIn, isSitemapIndex, isGzip, rankProductSitemaps, SITEMAP_GUESSES } =
-  await import("@/lib/sitemapIndex");
+const {
+  sitemapUrlsFromRobots,
+  locsIn,
+  isSitemapIndex,
+  looksLikeSitemapList,
+  isGzip,
+  rankProductSitemaps,
+  SITEMAP_GUESSES,
+} = await import("@/lib/sitemapIndex");
 
 const args = process.argv.slice(2);
 const arg = (name) => {
@@ -152,7 +159,7 @@ for (const host of stores) {
   let target = rankProductSitemaps(found.urls)[0];
   let first = await get(target);
 
-  if (first.status === 200 && isSitemapIndex(first.body)) {
+  if (first.status === 200 && (isSitemapIndex(first.body) || looksLikeSitemapList(locsIn(first.body)))) {
     const children = rankProductSitemaps(locsIn(first.body));
     if (children.length === 0) {
       console.log(`dizin boş (${found.from})`);

@@ -13,8 +13,15 @@
 import { register } from "node:module";
 
 register(new URL("../alias-loader.mjs", import.meta.url).href);
-const { sitemapUrlsFromRobots, locsIn, isSitemapIndex, isGzip, rankProductSitemaps, SITEMAP_GUESSES } =
-  await import("@/lib/sitemapIndex");
+const {
+  sitemapUrlsFromRobots,
+  locsIn,
+  isSitemapIndex,
+  looksLikeSitemapList,
+  isGzip,
+  rankProductSitemaps,
+  SITEMAP_GUESSES,
+} = await import("@/lib/sitemapIndex");
 const { gzipSync } = await import("node:zlib");
 
 let pass = 0;
@@ -163,6 +170,71 @@ sitemap: https://www.magaza.com/sitemap.xml
     rankProductSitemaps(["https://m.com/de/sitemap-products.xml"]).length === 1,
     "tek seçenek yabancıysa yine listede",
   );
+}
+
+/*
+ * 5) Üçüncü koşunun bulduğu üç kusur — hepsi gerçek adreslerle.
+ *
+ * Teşhis satırı eklendikten sonra her sıfırın sebebi okunabilir oldu.
+ */
+{
+  /*
+   * Zara: seçilen dosya `sitemap-product-tr-en.xml.gz` idi — Türkiye mağazası
+   * ama İNGİLİZCE. 10 324 ürün sayfası açıldı, hiçbiri sorguya uymadı, çünkü
+   * slug'lar İngilizce: «limited-edition-printed-midi-dress».
+   *
+   * `tr` görünce yabancı cezasını kapatmak buna yol açıyordu. İkisi ayrı ayrı
+   * sayılınca `tr-tr` öne geçiyor.
+   */
+  const zaraGercek = rankProductSitemaps([
+    "https://www.zara.com/sitemaps/sitemap-product-tr-en.xml.gz",
+    "https://www.zara.com/sitemaps/sitemap-product-tr-tr.xml.gz",
+  ]);
+  t(zaraGercek[0]?.includes("tr-tr"), `Türkçe dosya İngilizceyi geçiyor: ${zaraGercek[0]}`);
+
+  /*
+   * Stradivarius: `sitemap/keyword.xml` seçildi ve içinden `/tr/v/100-pamuk-
+   * elbiseler` gibi kategori adresleri çıktı — 2982 adres, tek ürün yok.
+   */
+  const strad = rankProductSitemaps([
+    "https://www.stradivarius.com/tr/v/nc/sitemap/keyword.xml",
+    "https://www.stradivarius.com/tr/v/nc/sitemap/product.xml",
+  ]);
+  t(strad[0]?.includes("product"), `keyword dosyası ürünün arkasında: ${strad[0]}`);
+
+  /*
+   * Boyner ve LCW `<urlset>` içinde BAŞKA SİTEMAP dosyaları listeledi. Kök
+   * etikete bakan kural bir kademe daha inmedi ve ikisi de «0 ürün sayfası»
+   * göründü.
+   */
+  t(
+    looksLikeSitemapList([
+      "https://sitemap.boyner.com.tr/bynsitemap/product.xml",
+      "https://sitemap.boyner.com.tr/bynsitemap/productimage.xml",
+      "https://sitemap.boyner.com.tr/bynsitemap/category.xml",
+    ]),
+    "Boyner'in dosya listesi sitemap listesi sayılıyor",
+  );
+  t(
+    looksLikeSitemapList([
+      "https://api.lcwaikiki.com/feed/service/api/TR/TR/Products-1/xml?regionId=1",
+      "https://api.lcwaikiki.com/feed/service/api/TR/TR/Products-2/xml?regionId=1",
+    ]),
+    "LCW'nin uzantısız `/xml` uçları da sayılıyor",
+  );
+
+  /*
+   * Ama gerçek ürün adresleri sitemap listesi SAYILMAMALI — sayılsaydı, dolu
+   * bir dosyanın içine inilmeye çalışılır ve mağaza boş görünürdü.
+   */
+  t(
+    !looksLikeSitemapList([
+      "https://www.koton.com/jogger-pantolon-gri-3911563-1/",
+      "https://www.koton.com/chino-pantolon-bej-3911564-1/",
+    ]),
+    "ürün adresleri sitemap listesi sayılmıyor",
+  );
+  t(!looksLikeSitemapList([]), "boş liste sayılmıyor");
 }
 
 console.log(`${pass} ✓ / ${fails.length} ✗`);

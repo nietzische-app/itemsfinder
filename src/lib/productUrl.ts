@@ -100,6 +100,17 @@ const PDP_PATTERNS: RegExp[] = [
   /-o-\d{5,}/i,
   // Inditex ürünü: -l03241999. Kategorisi -l1335.html, o yukarıda reddediliyor.
   /-l\d{7,}/i,
+  /*
+   * Bershka: `/tr/straight-fit-jean-c0p189276646.html`
+   *
+   * Sitemap ölçümünden geldi (docs/BULUNAMADI.md 4e): 2400 gerçek ürün adresi
+   * okundu ve hiçbiri ürün sayfası sayılmadı. `-c\d+p\d+` şekli hiçbir kalıba
+   * uymuyordu — `-p-\d+` tire istiyor, `-p\d{6,}\.html` de öyle.
+   *
+   * `-c-\d+` kategori kuralıyla karışmıyor: orada rakamdan önce ikinci bir tire
+   * var, burada yok.
+   */
+  /-c\d+p\d{6,}\.html?/i,
   // Altınyıldız: /erkek-...-beyaz-tisort-4-p
   /-\d+-p(?:$|[/?#])/i,
   // Gap: /slim-khaki-pantolon-500357-acik-kahverengi/
