@@ -411,7 +411,7 @@ export class ContextDevProductProvider implements ProductProvider {
       if (seen > 0) {
         trace?.degrade(
           "products",
-          `mağaza aramaları ${seen} bağlantı buldu, hiçbiri ürün sayfası değildi`,
+          `mağaza aramaları ${seen} ürün sayfası buldu, hiçbiri sorguyla eşleşmedi`,
         );
       }
     }

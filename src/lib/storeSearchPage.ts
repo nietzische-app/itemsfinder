@@ -147,6 +147,90 @@ export function probeUrls(host: string, term: string): string[] {
   return PROBE_SHAPES.map((shape) => `https://www.${host}${shape}${encodeURIComponent(term)}`);
 }
 
+/**
+ * Türkçe harfleri adres yazımına indirger: `güneş gözlüğü` → `gunes gozlugu`.
+ *
+ * Slug'lar ASCII yazılıyor, sorgu Türkçe geliyor. `normalize("NFD")` tek başına
+ * yetmiyor — `ı` ve `İ` ayrışmıyor, oysa Türkçede en sık karşılaşılan ikisi bu.
+ */
+function fold(text: string): string {
+  return text
+    .replace(/[ğĞ]/g, "g")
+    .replace(/[üÜ]/g, "u")
+    .replace(/[şŞ]/g, "s")
+    .replace(/[ıİ]/g, "i")
+    .replace(/[öÖ]/g, "o")
+    .replace(/[çÇ]/g, "c")
+    .toLowerCase();
+}
+
+/**
+ * Adayları sorguya göre süzer ve sıralar — **sayfayı indirmeden**.
+ *
+ * ## Neden gerekiyor
+ *
+ * Üretimde ölçüldü: mağaza arama sayfasından gelen ilk bağlantılar sonuç değil
+ * **öneri karuseli** oluyor. «Gri pantolon» araması iki bluz, «Gümüş ayakkabı»
+ * iki abiye elbise, «Siyah güneş gözlüğü» aynı denim şortu iki kez getirdi.
+ * Sekiz satırın sekizi de aile kapısında elendi, yani kullanıcı korundu — ama
+ * sekiz sayfa indirildi ve tarama 4.9 saniye sürdü.
+ *
+ * ## Neden slug
+ *
+ * Ürün adresinin slug'ı ürünün adını taşıyor (`…/kolsuz-payetli-mini-abiye-
+ * elbise-p-123`). Yani sayfayı indirmeden önce «bu bağlantının sorguyla ilgisi
+ * var mı» sorusu **bedava** cevaplanabiliyor. İndirilmeyen sayfa hem saniye hem
+ * de yanlış kart demek.
+ *
+ * ## Neden ad şart, renk değil
+ *
+ * Yalnızca «gri» eşleşmesi gri bir elbiseyi de geçirirdi. Türkçede ad sonda
+ * duruyor (`buildSearchQuery` bunu koruyor), o yüzden son iki kelimeden birinin
+ * tutması aranıyor — «Bej gömlek bluz» gibi iki adlı sorgular için iki.
+ *
+ * Ön ek karşılaştırması yapılıyor çünkü Türkçe ekli: `gozlugu` slug'da `gozluk`
+ * olarak geçiyor ve tam eşitlik ikisini ayrı sayardı.
+ *
+ * **Sınırı:** slug'ı olmayan, yalnızca sayı taşıyan adresler bu süzgeçten
+ * geçemez. Ölçülen iki mağazanın ikisinde de slug var; yeni bir mağaza eklemeden
+ * önce `npm run check:kesif` bunu zaten gösteriyor.
+ */
+export function rankByQuery(urls: string[], query: string): string[] {
+  const tokens = fold(query)
+    .split(/[^a-z0-9]+/)
+    .filter((token) => token.length >= 3);
+
+  if (tokens.length === 0) return urls;
+
+  /*
+   * Ad sonda; ikinci ada ancak üç kelimeden sonra bakılıyor.
+   *
+   * İlk hâli her sorguda son **iki** kelimeye bakıyordu ve ölçüm bunu yakaladı:
+   * «Gri pantolon» iki kelime, yani renk de ad sayılıyordu ve gri bir elbise
+   * süzgeci geçiyordu — tam olarak süzgecin engellemek için var olduğu şey.
+   * «Bej gömlek bluz» gibi iki adlı sorgular için ikinci ada hâlâ bakılıyor.
+   */
+  const nouns = tokens.length >= 3 ? tokens.slice(-2) : tokens.slice(-1);
+  const scored: Array<{ url: string; hits: number }> = [];
+
+  for (const url of urls) {
+    let path: string;
+    try {
+      path = fold(decodeURIComponent(new URL(url).pathname));
+    } catch {
+      continue;
+    }
+
+    const has = (token: string) => path.includes(token.slice(0, 5));
+    if (!nouns.some(has)) continue;
+
+    scored.push({ url, hits: tokens.filter(has).length });
+  }
+
+  scored.sort((a, b) => b.hits - a.hits);
+  return scored.map((entry) => entry.url);
+}
+
 export function fillTemplate(template: string, term: string): string {
   return template
     .replace(/\{search_term_string\}/gi, encodeURIComponent(term))

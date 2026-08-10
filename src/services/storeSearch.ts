@@ -7,6 +7,7 @@ import {
   openSearchHref,
   openSearchUrlFromXml,
   productLinks,
+  rankByQuery,
   searchActionTemplate,
 } from "@/lib/storeSearchPage";
 
@@ -176,8 +177,18 @@ export class StoreProductSearch {
     const page = await this.get(fillTemplate(template, query), signal);
     if (page.status !== 200 || looksLikeWall(page.body)) return { urls: [], seen: 0 };
 
+    /*
+     * Sorguyla ilgisi olmayan bağlantı indirilmiyor.
+     *
+     * Arama sayfasındaki ilk bağlantılar çoğu zaman sonuç değil öneri karuseli:
+     * üretimde «Gri pantolon» iki bluz, «Gümüş ayakkabı» iki abiye elbise
+     * getirdi. Sekizi de aile kapısında elendi, yani kullanıcı korundu — ama
+     * sekiz sayfa boşuna indirildi ve ürün aşaması 4.9 saniye sürdü.
+     */
     const links = productLinks(page.body, page.url, hostFilterFor(host));
-    return { urls: links.slice(0, MAX_PER_STORE), seen: links.length };
+    const matching = rankByQuery(links, query);
+
+    return { urls: matching.slice(0, MAX_PER_STORE), seen: links.length };
   }
 
   /**

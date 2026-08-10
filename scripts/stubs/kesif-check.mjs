@@ -22,6 +22,7 @@ import {
   pageDiagnosis,
   probeUrls,
   productLinks,
+  rankByQuery,
   searchActionTemplate,
 } from "../kesif-lib.mjs";
 
@@ -239,6 +240,97 @@ const t = (c, n) => (c ? pass++ : fails.push(n));
     `sorgu kodlanmış hâlde: «${urls[0]}»`,
   );
   t(new Set(urls).size === urls.length, "aynı adres iki kez denenmiyor");
+}
+
+/*
+ * 5d) Sorguyla eşleşmeyen aday indirilmiyor — **üretimden gelen gerçek vakalar**.
+ *
+ * Sağlayıcı canlıya alındıktan sonraki ilk taramada dört parçanın dördü de
+ * sorguyla ilgisiz ürün getirdi ve sekizi de aile kapısında elendi. Sebep:
+ * arama sayfasındaki ilk bağlantılar sonuç değil **öneri karuseli**.
+ *
+ * Aşağıdaki slug'lar o taramanın kendi çıktısından; başlıklar loga yazılmıştı.
+ */
+{
+  const koton = (slug) => `https://www.koton.com/${slug}-p-123456789`;
+
+  // «Gri pantolon» için gelenler: iki bluz. İkisi de düşmeli.
+  const pantolon = rankByQuery(
+    [
+      koton("slim-fit-bisiklet-yaka-biyeli-kolsuz-bluz"),
+      koton("rahat-kesim-kisa-kollu-crop-v-yaka-tisort"),
+      koton("oversize-viskon-cep-detayli-rayon-pileli-kumas-pantolon"),
+    ],
+    "Gri pantolon",
+  );
+
+  t(pantolon.length === 1, `«Gri pantolon» için tek aday kaldı (${pantolon.length})`);
+  t(pantolon[0]?.includes("pantolon"), `kalan gerçekten pantolon: ${pantolon[0]?.slice(-40)}`);
+
+  // «Gümüş ayakkabı» için gelenler: iki abiye elbise. İkisi de düşmeli.
+  const ayakkabi = rankByQuery(
+    [
+      koton("parlak-metalik-midi-abiye-elbise-ince-askili-degaje-yaka"),
+      koton("kolsuz-kalp-yaka-payetli-mini-abiye-elbise"),
+    ],
+    "Gümüş ayakkabı",
+  );
+  t(ayakkabi.length === 0, `«Gümüş ayakkabı» için elbise kalmadı (${ayakkabi.length})`);
+
+  // «Siyah güneş gözlüğü» için gelen: denim şort.
+  const gozluk = rankByQuery([koton("dugmeli-pamuklu-rahat-kalip-mini-denim-sort")], "Siyah güneş gözlüğü");
+  t(gozluk.length === 0, `«Siyah güneş gözlüğü» için şort kalmadı (${gozluk.length})`);
+
+  /*
+   * Türkçe harfler slug'da ASCII yazılıyor ve ekler kelimeyi değiştiriyor:
+   * «gözlüğü» slug'da «gozluk» olarak geçiyor. Tam eşitlik ikisini ayrı sayardı.
+   */
+  const gercekGozluk = rankByQuery(
+    [koton("uv-korumali-metal-cerceveli-gunes-gozlugu"), koton("beyaz-tisort")],
+    "Siyah güneş gözlüğü",
+  );
+  t(gercekGozluk.length === 1, `Türkçe harf ve ek eşleşiyor (${gercekGozluk.length})`);
+  t(gercekGozluk[0]?.includes("gozlugu"), "eşleşen gerçekten gözlük");
+
+  /*
+   * Katlama gerçekten çalışıyor mu?
+   *
+   * Yukarıdaki «gözlüğü» kontrolü katlamayı **ölçmüyor**: alt dize eşleşmesi
+   * affedici, ve katlama kaldırılsa bile «gozlüğü» parçalanıp geriye kalan
+   * «gozl» yine tutuyor. Ölçüm bunu yakaladı — katlamayı bozunca hiçbir kontrol
+   * kırmızıya dönmedi.
+   *
+   * «Gümüş küpe» ayırt ediyor: katlama olmadan iki kelime de üç harfin altına
+   * düşüp tamamen kayboluyor, sorgu boşalıyor ve süzgeç HER adayı geçiriyor —
+   * yani sessizce kapanıyor.
+   */
+  t(
+    rankByQuery([koton("dugmeli-pamuklu-mini-denim-sort")], "Gümüş küpe").length === 0,
+    "katlama olmadan kaybolacak sorgu yine de süzüyor",
+  );
+  t(
+    rankByQuery([koton("gumus-kaplama-halka-kupe")], "Gümüş küpe").length === 1,
+    "ve doğru ürünü geçiriyor",
+  );
+
+  // Renk tek başına yetmiyor: gri bir elbise «Gri pantolon» sayılmamalı.
+  t(
+    rankByQuery([koton("gri-uzun-kollu-abiye-elbise")], "Gri pantolon").length === 0,
+    "yalnızca renk tutması yetmiyor",
+  );
+
+  // İki adlı sorguda ikisinden biri yeter — «Bej gömlek bluz».
+  t(
+    rankByQuery([koton("bej-keten-gomlek")], "Bej gömlek bluz").length === 1,
+    "iki adlı sorguda ilk ad da tutuyor",
+  );
+
+  // Daha çok kelime tutan öne geçiyor: sıra, hangi sayfanın indirileceğini belirliyor.
+  const sirali = rankByQuery(
+    [koton("siyah-kumas-pantolon"), koton("gri-yuksek-bel-kumas-pantolon")],
+    "Gri pantolon",
+  );
+  t(sirali[0]?.includes("gri-yuksek"), `renk de tutan öne geçiyor: ${sirali[0]?.slice(-30)}`);
 }
 
 /*

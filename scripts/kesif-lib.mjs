@@ -24,5 +24,6 @@ export const {
   pageDiagnosis,
   probeUrls,
   productLinks,
+  rankByQuery,
   searchActionTemplate,
 } = await import("@/lib/storeSearchPage");
