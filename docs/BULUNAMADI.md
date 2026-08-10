@@ -381,6 +381,43 @@ görüldü ve bir mağazanın tamamı bunun katları. Tarama anında indirilemez
 dizinin nerede tutulacağı ayrı bir karar — muhtemelen periyodik bir Actions işi
 slug dizinini çıkarıp saklayacak, tarama anında yalnızca yerel arama yapılacak.
 
+### 4f. Dizin boru hattı — ⏳ toplama tarafı yazıldı, boyut ölçülecek
+
+`npm run build:index` (Actions → «Ürün adres dizini») bir mağazanın sitemap
+ağacını gezip ürün yollarını satır satır çıkarıyor. Depoya bir şey yazmıyor:
+**önce boyut**. 4e'nin bıraktığı soru «dizin nerede saklanacak» ve o soru 2 MB
+ile 200 MB arasında farklı cevaplar veriyor; boyutu bilmeden saklama yeri
+seçmek, bu turda dört kez cezası ödenmiş hatanın aynısı olurdu.
+
+Kararlar ikinci bir kopya değil: hangi adresin ürün sayfası olduğunu
+`isDirectProductUrl`, hangi dosyanın ürün dosyası olduğunu `rankProductSitemaps`
+söylüyor — ikisi de kanalın dört koşusunda oturmuş kod. İndirme mantığı
+`check-sitemap.mjs` ile ortak (`scripts/sitemapFetch.mjs`).
+
+**Çıktı düz metin**, satır başına bir yol. JSON değil: tek gereken işlem
+satırlara bölmek, ve büyük bir JSON'u ayrıştırmak soğuk başlangıçta bedava
+değil. Ayrıca düz metin git'te satır satır fark üretiyor — haftaya hangi
+ürünlerin eklendiği okunabiliyor. Ana bilgisayar dosya adında, çünkü aynı bilgi
+on beş bin kez yazılmamalı.
+
+**Gezinme ağsız ölçülüyor** (`index-build-check`, `fetcher` dışarıdan veriliyor),
+ve ölçüm daha ilk koşuda iki kusur buldu — ikisi de gerçek bir mağazaya gidilse
+sayıdan okunamayacak cinsten:
+
+- **Genişlik önceliği dal çeşitliliği vermiyor.** `kadın/` ve `erkek/` diye
+  ayrılmış bir ağaçta bütçe 2 iken iki yaprağın ikisi de `kadın` dalından
+  geliyordu — erkek sorgusuna hiçbir zaman cevap veremeyecek bir dizin. Artık
+  en az yaprak vermiş dizinin çocuğu seçiliyor; eşitlikte kuyruk sırası
+  korunuyor, yani `rankProductSitemaps`'in kararı bozulmuyor.
+- **Derinlik tavanı yaprak üretiyordu.** Tavan yalnızca inişi kesiyordu ve
+  kesilen dizin `<loc>` taşıdığı için yaprak listesine giriyordu. İçindekiler
+  `.xml`, yani `productLinks` hepsini eliyor ve dizine kirli veri girmiyor —
+  ama bütçe boşa gidiyor ve sayı «bir ürün dosyası bulundu» diyor. Sayının
+  yalan söylemesi, verinin bozulmasından daha sinsi.
+
+**Sırada:** koşuyu sürüp toplam satır ve gzip boyutunu görmek. Ondan sonraki
+karar saklama yeri, ve ancak ondan sonra üretim tarafı.
+
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 
 Şu an eşleşme filtreleri (`rejectProductTitle`, aile kapısı, renk çelişkisi)
