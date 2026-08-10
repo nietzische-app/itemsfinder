@@ -108,7 +108,20 @@ export interface ContextDevProductProviderOptions {
    * search plus a few extracts, so this bounds both latency and credits.
    */
   maxLiveItems?: number;
-  /** Detections resolved in parallel. Kept low for the 30 req/min rate limit. */
+  /**
+   * Parçalar kaç tanesi aynı anda çözülüyor.
+   *
+   * Eskiden 2 idi ve gerekçesi context.dev'in dakikada 30 istek sınırıydı. Ölçüm
+   * bunun bedelini gösterdi (`spent`, üretim): bir taramada harcanan iş 6762 ms
+   * ama aşama 3883 ms sürdü — yani iş paralel yapılıyor, **yetince paralel
+   * değil**. Dört parça iki dalga hâlinde çözülüyordu ve ikinci dalga birincinin
+   * bitmesini bekliyordu.
+   *
+   * Dört, `maxLiveItems` ile aynı: bütün parçalar tek dalgada. Sınır aşılmıyor —
+   * en kötü durumda parça başına üç arama, yani on iki istek, ve sınır dakikada
+   * otuz. Mağaza yolunda satıcı sınırı zaten yok; oradaki tek nezaket ölçüsü
+   * mağaza başına eşzamanlı istek sayısı ve o da ikide kalıyor.
+   */
   concurrency?: number;
   /** Wall-clock budget for the whole live stage; anything unfinished stays mock. */
   deadlineMs?: number;
@@ -146,7 +159,7 @@ export class ContextDevProductProvider implements ProductProvider {
     options: ContextDevProductProviderOptions = {},
   ) {
     this.maxLiveItems = options.maxLiveItems ?? 4;
-    this.concurrency = options.concurrency ?? 2;
+    this.concurrency = options.concurrency ?? 4;
     this.deadlineMs = options.deadlineMs ?? 45_000;
     this.maxAlternatives = options.maxAlternatives ?? 3;
     this.visualCandidates = options.visualCandidates ?? 4;

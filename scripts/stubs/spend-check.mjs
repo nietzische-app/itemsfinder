@@ -108,6 +108,43 @@ const result = { items, source: "mock", productSource: "mock", liveItemCount: 0,
   );
 }
 
+/*
+ * 4) Parçalar tek dalgada çözülüyor mu?
+ *
+ * Üretim ölçümü sebebi verdi: bir taramada harcanan iş 6762 ms, aşama 3883 ms
+ * sürdü. Yani iş paralel yapılıyor ama **yetince paralel değil** — dört parça
+ * iki dalga hâlindeydi ve ikinci dalga birincinin bitmesini bekliyordu.
+ *
+ * Ölçülen şey ayar değeri değil **duvar saati**: `concurrency` alanına 4 yazıp
+ * «paralel oldu» saymak, ayarın gerçekten dalgayı birleştirdiğini göstermez.
+ * Sahte sağlayıcı her parçada 150 ms bekletiliyor; tek dalgada toplam süre bir
+ * beklemeye yakın kalmalı, iki dalgada ikiye katlanır.
+ */
+{
+  const DELAY = 150;
+  const trace = createTrace({ detail: false });
+
+  const startedAt = Date.now();
+  await provider(DELAY).enrich(result, { trace });
+  const wall = Date.now() - startedAt;
+
+  const parcalar = Math.min(items.length, 4);
+  t(parcalar >= 3, `ölçüm anlamlı olacak kadar parça var (${parcalar})`);
+
+  /*
+   * Eşik ikisinin **ortasında**, sınırında değil.
+   *
+   * İlk hâli `2×DELAY` idi ve bozarak ölçünce 303 ms çıktı — sınırın üç
+   * milisaniye üstünde. Hızlı bir makinede 299 çıkıp yanlış tarafa düşerdi, yani
+   * kontrol bazen ısırır bazen ısırmazdı. Tek dalga ~DELAY, iki dalga ~2×DELAY;
+   * 1.5 ikisini de rahat ayırıyor.
+   */
+  t(
+    wall < DELAY * 1.5,
+    `parçalar tek dalgada çözülüyor (${wall} ms < ${DELAY * 1.5} ms)`,
+  );
+}
+
 console.log(`${pass} ✓ / ${fails.length} ✗`);
 for (const f of fails) console.log(`  ✗ ${f}`);
 process.exit(fails.length ? 1 : 0);
