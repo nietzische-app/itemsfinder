@@ -162,6 +162,50 @@ yolunda «bu ana bilgisayar mağaza mı» sorusu `includeDomains` ile zaten
 cevaplanıyordu; görsel yolun böyle bir kısıtı yoktu. Artık ikisi de aynı
 perakendeci listesine bakıyor.
 
+### 4c. Google Programmable Search — ❌ kapı kapalı (satıcı kararı)
+
+`web.search`'ün ikinci sağlayıcısı olarak yazıldı (`src/services/googleSearch.ts`),
+çünkü aday bulma zincirin ilk halkası ve tek satıcıya bağlıydı: context.dev
+kredisi bitince (`401 USAGE_EXCEEDED`) çıkarılacak sayfa da kalmıyor, yani
+işaretleme okuma yolu tek başına kurtarmıyor.
+
+Mekanizma sağlamdı — görsel yoldan farkı buydu: bu, alan adına kısıtlanmış bir web
+araması, yani `web.search`'ün birebir aynı şekli. **Ama satıcı kapıyı kapatmış.**
+
+Üretimde üç tur denendi, üç farklı cevap geldi:
+
+```
+1) Requests to this API customsearch method … are blocked.      → anahtar kısıtlaması
+2) (anahtar düzeltildi)
+3) This project does not have the access to Custom Search JSON API.
+```
+
+Üçüncüsü kurulumla ilgili değil. Google, Custom Search JSON API'yi **yeni
+müşterilere kapattı** ve **1 Ocak 2027'de tamamen kapatıyor**; API'yi
+etkinleştirmek de, anahtar kısıtlamasını açmak da bu cevabı değiştirmiyor.
+Konsolda basılacak bir düğme yok. Fiyatlandırma sayfasındaki ifade net: bu API
+yeni müşteriler için kullanılabilir değil.
+
+Yol boyunca kendi teşhisimizde üç kusur çıktı ve üçü de düzeltildi:
+
+- Kapalı bir API'ye **parça başına bir kez** soruluyordu (tek taramada dört
+  özdeş çağrı). Yönergeye çevrilebilen hata artık bir dakika susturuyor.
+- `[scan]` özeti Google'ın hatasını `tr:` diye yazıyordu, yani context.dev'in
+  Türkiye katmanını suçluyordu.
+- Tek bir yönerge iki ayrı Google hatasını karşılıyordu ve **yanlış olanı**
+  söylüyordu: gelen mesaj `API_KEY_SERVICE_BLOCKED` iken kullanıcı Library
+  sayfasına yollandı, oysa çözüm Credentials'taydı.
+
+Kod duruyor, silinmedi: API'ye erişimi olan **eski** bir Google Cloud projesi
+bağlanırsa yol olduğu gibi çalışıyor, ve bayrak varsayılan olarak kapalı. Ölçülmüş
+bir ret, silinmiş bir denemeden değerli.
+
+**Açık kalan soru:** aday bulmayı hangi satıcı üstlenecek. Ölçülmesi gerekenler,
+maliyet sırasıyla: bağımsız indeksi olan ücretsiz katmanlı arama API'leri, ya da
+mağaza arama sayfalarından PDP adresi toplayıp `markupProducts` ile okumak
+(bot duvarı riski ölçülmedi). Karar verilmeden kod yazılmamalı — bu bölümün
+tamamı, ölçmeden önce yazılmış kodun hikâyesi.
+
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 
 Şu an eşleşme filtreleri (`rejectProductTitle`, aile kapısı, renk çelişkisi)

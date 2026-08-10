@@ -154,6 +154,26 @@ export function cseAdvice(message: string): string {
    *  - `SERVICE_DISABLED` → «… has not been used in project N before or it is
    *    disabled» (ve etkinleştirme bağlantısı). Çözüm Library'de.
    */
+  /*
+   * Bu, kurulum hatası değil — **kapı kapalı**.
+   *
+   * Google, Custom Search JSON API'yi yeni müşterilere kapattı ve 1 Ocak 2027'de
+   * tamamen kapatıyor. Yeni bir Google Cloud projesinde API'yi etkinleştirmek de,
+   * anahtar kısıtlamasını açmak da bu cevabı değiştirmiyor: konsolda basılacak
+   * düğme yok.
+   *
+   * Öteki dördünden ayrı durmasının sebebi bu. Onlar «şu düğmeye bas» diyor;
+   * bu ise «bu yol sende hiç açılmayacak, bayrağı kapat» diyor. İkisini aynı
+   * cümleyle karşılamak, olmayan bir düğmeyi aratmak olurdu — üretimde tam
+   * olarak bu oldu, iki tur boyunca yanlış sayfaya yolladı.
+   */
+  if (/does not have the access to Custom Search/i.test(message)) {
+    return (
+      "Custom Search JSON API yeni projelere kapalı (1 Ocak 2027'de tamamen " +
+      "kapanıyor). Kurulum hatası değil, basılacak düğme yok. " +
+      "ENABLE_GOOGLE_CSE=false yapıp başka bir arama sağlayıcısına geçmek gerekiyor."
+    );
+  }
   if (/are blocked|API_KEY_SERVICE_BLOCKED/i.test(message)) {
     /*
      * 200 karakterin altında tutuluyor: bu metin kaydın `error` alanına da

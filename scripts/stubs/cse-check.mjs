@@ -224,6 +224,21 @@ const search = new GoogleProductSearch("stub-key", "stub-engine", 0);
   const disabled = cseAdvice("Custom Search API has not been used in project 123 before or it is disabled");
 
   t(blocked !== disabled, "kapalı anahtar ile kapalı API ayrı yönerge alıyor");
+
+  /*
+   * Üçüncü cevap: kurulum hatası değil, **kapı kapalı**.
+   *
+   * Google, Custom Search JSON API'yi yeni müşterilere kapattı (1 Ocak 2027'de
+   * tamamen kapanıyor). Yeni bir projede API'yi etkinleştirmek de anahtar
+   * kısıtlamasını açmak da bu cevabı değiştirmiyor. Öteki hatalarla aynı cümleyi
+   * vermek, olmayan bir düğmeyi aratmak olurdu — üretimde iki tur boyunca tam
+   * olarak bu oldu.
+   */
+  const closed = cseAdvice("This project does not have the access to Custom Search JSON API.");
+
+  t(closed !== disabled && closed !== blocked, "kapalı kapı öteki iki hatadan ayrı");
+  t(!/Enable|Credentials/.test(closed), `konsolda düğme aratmıyor: «${closed.slice(0, 60)}…»`);
+  t(/ENABLE_GOOGLE_CSE=false/.test(closed), `yapılacak işi söylüyor: «${closed.slice(0, 60)}…»`);
   t(/Credentials/.test(blocked), `anahtar kısıtlaması Credentials'a yolluyor: «${blocked.slice(0, 45)}…»`);
   t(!/^Custom Search API bu projede açık değil/.test(blocked), "kapalı anahtar Library'ye yollanmıyor");
   t(/Library/.test(disabled), `kapalı API Library'ye yolluyor: «${disabled.slice(0, 45)}…»`);
