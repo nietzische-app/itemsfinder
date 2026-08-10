@@ -287,10 +287,31 @@ function summariseSearches(searches: SearchAttempt[]): string[] {
  * read by eye is a log nobody greps. The prefix makes it filterable without a
  * parser.
  */
-export function logScanTrace(trace: ScanTrace, context: { id: string; source: string }): void {
+export function logScanTrace(
+  trace: ScanTrace,
+  context: {
+    id: string;
+    source: string;
+    /**
+     * Ürünler nereden geldi ve kaç parça canlıya çıktı.
+     *
+     * Ürün aşamasının **sonucu** bu, ve satırda yoktu: canlı yol ilk kez gerçek
+     * satır getirdiğinde logdan «kullanıldı mı» sorusunun cevabı okunamadı,
+     * tahmin etmek zorunda kalındı. Bu belgenin tamamı tahmin etmemek üzerine.
+     */
+    productSource?: string;
+    liveItemCount?: number;
+    itemCount?: number;
+  },
+): void {
   const line = {
     id: context.id,
     source: context.source,
+    products: context.productSource,
+    live:
+      context.liveItemCount === undefined
+        ? undefined
+        : `${context.liveItemCount}/${context.itemCount ?? "?"}`,
     ms: trace.timings,
     degraded: trace.degraded.map((entry) => `${entry.stage}:${entry.reason}`),
     ...trace.counts,

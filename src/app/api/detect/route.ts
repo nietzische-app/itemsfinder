@@ -273,7 +273,13 @@ function errorLabel(error: unknown): string {
  */
 function withTrace(result: DetectionResult, trace: TraceCollector, source: string): DetectionResult {
   const snapshot = trace.snapshot();
-  logScanTrace(snapshot, { id: result.id, source });
+  logScanTrace(snapshot, {
+    id: result.id,
+    source,
+    productSource: result.productSource,
+    liveItemCount: result.liveItemCount,
+    itemCount: result.items.length,
+  });
 
   return {
     ...result,
