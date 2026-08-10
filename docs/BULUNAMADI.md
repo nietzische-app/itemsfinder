@@ -552,11 +552,25 @@ Kot Pantolon   koton, zara, bershka, beymen
 Mat Ruj        beymen, gratis, beymen, gratis
 ```
 
-**Sırada:** mağaza başına «kaç aday verdi / kaçı satıra dönüştü» ölçüsü. Bershka
-ürün sayfalarında veri merkezi IP'sine 403 veriyor ve Beymen'de schema.org
-`Product` işaretlemesi yok; ikisi dizinin yarısı (57 bin yol). Sıra düzeldikten
-sonra öteki dört mağaza ilk kez denenecek ve o zaman okunabilirliğe göre
-sıralamak — ya da okunamayanı çıkarmak — ölçüye dayanabilecek.
+**Sıradaki ölçü şansa bırakılmadı.** Bir sonraki üretim taraması başka bir
+fotoğrafla geldi, mağaza araması iki parçada da aday buldu ve dizine hiç sıra
+gelmedi — `searchYield: ["mağaza:0=2 ×2"]`, `live: 2/2`, temiz bir tarama ama
+sorulan soruya dair sıfır bilgi. Üretim trafiği hangi kanalın ölçüleceğini
+seçmiyor; fotoğraf seçiyor.
+
+`npm run check:markup` (Actions → «Ürün adres dizini», `okuma: evet`) soruyu
+sabit bir koşuyla soruyor: dizinden gelen adayları tek tek okuyup **mağaza
+başına** «kaç aday verildi, kaçı satıra dönüştü, düşenler hangi sebeple»
+yazıyor. Sebep uygulamanın kendi cümlesinden okunuyor (`[markup]` satırı),
+çünkü asıl soru «üretimde ne yazıyor».
+
+Sorgular `coverageCases`'ten eşit aralıklarla seçiliyor, baştan değil: liste
+kategoriye göre sıralı ve ilk on ikisini almak yalnızca üst/alt giyimi ölçerdi,
+kozmetik satan Gratis hiç denenmezdi. Az örneği olan mağaza ayrıca uyarıyor —
+«0/1» bir mağazayı listeden çıkarmaya yetmez, «0/8» yeter.
+
+Karar o sayıdan sonra: okunabilirliğe göre sıralamak mı, okunamayanı dizinden
+çıkarmak mı.
 
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 

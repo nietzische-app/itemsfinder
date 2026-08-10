@@ -59,6 +59,14 @@ on:
         options:
           - hayır
           - evet
+      okuma:
+        description: "Adaylar satıra dönüşüyor mu — mağaza başına ölç (mağazalara ek istek)"
+        required: false
+        default: "hayır"
+        type: choice
+        options:
+          - hayır
+          - evet
       yaz:
         description: "Sonucu depoya yaz"
         required: false
@@ -110,6 +118,17 @@ jobs:
       # cevap veremeyen 2 MB'lık bir dizin, cevap veren 20 MB'lıktan kötü.
       - name: Sorulara cevap veriyor mu
         run: npm run check:index 2>&1 | tee -a dizin.txt
+
+      # Dizin aday buluyor; adayın karta dönüşmesi için sayfanın **okunabilmesi**
+      # gerekiyor. Üretim logu Bershka'nın 403 verdiğini ve Beymen'de ürün
+      # işaretlemesi olmadığını gösterdi — ama o iki tarama iki fotoğraf demek ve
+      # öteki mağazalar sıra almamıştı. Bu adım soruyu şansa bırakmıyor.
+      #
+      # Varsayılan kapalı: her gece mağazalara ~50 ek istek atmak, cevabı
+      # değişmeyen bir soruyu her gün yeniden sormak olurdu.
+      - name: Adaylar satıra dönüşüyor mu
+        if: inputs.okuma == 'evet'
+        run: npm run check:markup 2>&1 | tee -a dizin.txt
 
       - name: Boyut
         run: |
