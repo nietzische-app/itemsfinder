@@ -282,15 +282,22 @@ function summariseSearches(searches: SearchAttempt[]): string[] {
      * yanlış yeri suçladı: Google'ın reddettiği dört çağrı `tr:0=HATA…` diye
      * göründü, yani okuyan kişi context.dev'in Türkiye katmanının bozulduğunu
      * sanırdı. Katman metin merdiveninin kavramı; CSE'de karşılığı yok.
+     *
+     * **Ve aynı kusur bir kez daha oldu.** Düzeltmenin ilk hâli kaynakları tek
+     * tek sayan bir zincirdi; `dizin` eklendi, zincire yazılmadı ve katmana
+     * düştü. Üretimde `tr:0=4` göründü — yani log, kredisi bitmiş context.dev'in
+     * dört aday bulduğunu söyledi, oysa onları dizin bulmuştu. Yanlış bir sayı
+     * değil, yanlış bir fail.
+     *
+     * Zincir yerine kural: **katman yalnızca metin merdiveninin kavramı**, geri
+     * kalan her kaynak kendi adıyla yazılıyor. Böylece yeni bir kaynak eklemek
+     * burayı düzenlemeyi gerektirmiyor; unutulacak bir yer kalmıyor.
+     *
+     * `görsel` kısaltması duruyor çünkü `img:` bu depoda ve belgelerde okunan
+     * hâli — kuralı bozmuyor, ona bir takma ad veriyor.
      */
     const where =
-      entry.source === "görsel"
-        ? "img"
-        : entry.source === "cse"
-          ? "cse"
-          : entry.source === "mağaza"
-            ? "mağaza"
-            : entry.tier;
+      entry.source === "metin" ? entry.tier : entry.source === "görsel" ? "img" : entry.source;
     const outcome = entry.error ? `HATA ${errorTag(entry.error)}` : String(entry.found);
     const key = `${where}:${entry.rung}=${outcome}`;
     counts.set(key, (counts.get(key) ?? 0) + 1);

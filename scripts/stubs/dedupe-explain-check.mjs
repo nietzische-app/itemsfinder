@@ -18,6 +18,7 @@ import { register } from "node:module";
 
 register(new URL("../alias-loader.mjs", import.meta.url).href);
 const { dedupeDetections, explainDedupe } = await import("@/lib/detectionFilter");
+const { createTrace, logScanTrace } = await import("@/lib/scanTrace");
 
 let pass = 0;
 const fails = [];
@@ -123,6 +124,62 @@ const box = (x, y, w, h) => ({ x, y, width: w, height: h });
     explained.filter((entry) => entry.reason).length === 0,
     "hiçbiri elenmiş gibi yazılmıyor",
   );
+}
+
+/*
+ * Arama özeti **hangi kanalın** çalıştığını doğru söylüyor mu?
+ *
+ * Aynı kusur iki kez oldu. İlkinde Google'ın reddettiği çağrılar `tr:0=HATA…`
+ * diye göründü ve okuyan kişi context.dev'in Türkiye katmanının bozulduğunu
+ * sandı. Düzeltme kaynakları tek tek sayan bir zincirdi — sonra `dizin` eklendi,
+ * zincire yazılmadı ve yine katmana düştü: üretimde `tr:0=4` göründü, yani log
+ * kredisi bitmiş context.dev'in dört aday bulduğunu söyledi. Onları dizin
+ * bulmuştu.
+ *
+ * Yanlış bir sayı değil, **yanlış bir fail** — ve bu, teşhisin tersini yapıyor.
+ *
+ * Bu yüzden kontrol tek tek kaynak saymıyor: `SearchAttemptRecord.source`
+ * birliğindeki **her** değeri geziyor. Birliğe yeni bir kaynak eklenip buraya
+ * yazılmazsa liste eksik kalır, ama en azından listenin kendisi tek yerde ve
+ * gözle görülür. Ölçülen iddia: metin dışındaki hiçbir kaynak katman adıyla
+ * yazılmıyor.
+ */
+{
+  const SOURCES = ["metin", "görsel", "cse", "mağaza", "dizin"];
+  const trace = createTrace({ detail: false });
+
+  for (const source of SOURCES) {
+    trace.search({ itemId: "a", source, tier: "tr", rung: 0, query: "gri pantolon", found: 1, ms: 5 });
+  }
+
+  const lines = [];
+  const original = console.log;
+  console.log = (line) => lines.push(String(line));
+  try {
+    logScanTrace(trace.snapshot(), { id: "det_test", source: "stub" });
+  } finally {
+    console.log = original;
+  }
+
+  const yielded = JSON.parse(lines.find((line) => line.startsWith("[scan] ")).slice(7)).searchYield;
+
+  t(yielded.length === SOURCES.length, `her kaynak ayrı satır (${yielded.length}/${SOURCES.length})`);
+
+  /*
+   * Metin merdiveninin katmanı var ve `tr:` onun hakkı — asıl iddia, bu etiketin
+   * **başka hiçbir kaynağa** çıkmaması.
+   */
+  const tierLabelled = yielded.filter((entry) => entry.startsWith("tr:"));
+  t(tierLabelled.length === 1, `katman etiketi yalnızca metinde (${tierLabelled.join(", ")})`);
+
+  for (const source of SOURCES) {
+    if (source === "metin" || source === "görsel") continue;
+    t(
+      yielded.some((entry) => entry.startsWith(`${source}:`)),
+      `«${source}» kendi adıyla yazılıyor — ${yielded.join(", ")}`,
+    );
+  }
+  t(yielded.some((entry) => entry.startsWith("img:")), `«görsel» kısaltmasıyla yazılıyor`);
 }
 
 console.log(`${pass} ✓ / ${fails.length} ✗`);
