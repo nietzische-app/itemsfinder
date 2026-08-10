@@ -286,6 +286,53 @@ Türkiye'nin en büyük ikisi). Ölçülmemiş bir kanal daha var: `sitemap.xml`
 Perakendecilerin çoğu ürün adreslerini orada yayımlıyor ve slug'lar arama
 kelimelerini taşıyor — arama sayfasına hiç girmeden aday bulmanın yolu olabilir.
 
+### 4e. Sitemap kanalı — ⏳ ilk koşu: Beymen açıldı
+
+Arama sayfası kanalı 2/19 mağazada çalışıyor. Sitemap ikinci bir yol: bot
+duvarları genelde arama ve ürün sayfalarına konuyor, `sitemap.xml` arama
+motorları için var ve engellenmesi mağazanın kendi çıkarına aykırı; üstelik düz
+XML olduğu için «sonuçları tarayıcıda çiziyor» sorunu da geçersiz.
+
+Eşleştirme için yeni kod yok: `rankByQuery` arama kanalında slug'a bakıp
+sorguyla ilgisizleri zaten eliyor, sitemap adreslerine aynısı uygulanıyor.
+
+**İlk koşu («gri pantolon», 19 mağaza):**
+
+```
+6/19  sitemap açıldı
+3/19  sorguya uyan ürün adresi bulundu
+
+koton.com   15000 adres → 14998 ürün sayfası → 1520 uyan
+beymen.com  10000 adres → 10000 ürün sayfası →  266 uyan
+            beymen.com/tr/p_alexander-wang-koyu-gri-kemerli-jean-pantolon_1954394
+gratis.com  13233 adres → 13233 ürün sayfası →    6 uyan (pantolon çorabı — isabet değil)
+```
+
+**Beymen açıldı** — arama kanalının ulaşamadığı bir mağaza (sonuçları sunucuda
+çizmiyordu) sitemap'ten geliyor, ve örnekler tam isabet. Kanalın ikinci bir yol
+olduğu artık varsayım değil.
+
+Koşu ölçümün kendisinde iki kusur buldu:
+
+- **Gzip.** Altı mağaza «0 adres» dedi (Zara, Pull&Bear, Bershka, Stradivarius,
+  Vakko, Flo). `robots.txt` sitemap ilan ediyordu ve dosya 200 dönüyordu; gövde
+  gzip olduğu için çözücü çöp üretti ve içinde `<loc>` bulunamadı. Ölçüm «bu
+  mağazada sitemap yok» diyordu, oysa vardı. `.xml.gz` taşıma sıkıştırması
+  değil, gövdenin kendisi.
+- **Dil.** Trendyol için seçilen dosya `/bg/sitemap_products1.xml` idi —
+  Bulgarca. Adında «product» geçtiği için en üste çıkmıştı. Yabancı dil kodu
+  taşıyan dosya artık ağır ceza alıyor: yerli bir kategori dosyasının bile
+  arkasına düşüyor, ama elenmiyor.
+
+**Açık kalanlar:** ikinci koşu (gzip ve dil düzeltmesinden sonra) kaç mağazanın
+açıldığını söyleyecek. Trendyol zaman aşımına uğradı, Hepsiburada/DeFacto/Mango/
+Watsons sitemap'e de 403 verdi.
+
+**Üretime bağlanmadan önce cevaplanacak soru:** dosya başına 10–15 bin adres
+görüldü ve bir mağazanın tamamı bunun katları. Tarama anında indirilemez, yani
+dizinin nerede tutulacağı ayrı bir karar — muhtemelen periyodik bir Actions işi
+slug dizinini çıkarıp saklayacak, tarama anında yalnızca yerel arama yapılacak.
+
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 
 Şu an eşleşme filtreleri (`rejectProductTitle`, aile kapısı, renk çelişkisi)

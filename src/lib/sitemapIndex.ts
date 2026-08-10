@@ -73,6 +73,28 @@ export function isSitemapIndex(xml: string): boolean {
  * listede kalıyor: adlandırması tanıdık olmayan bir mağazayı tamamen elemek,
  * ölçmeden reddetmek olurdu.
  */
+/**
+ * Türkiye dışı dil kodları.
+ *
+ * Ölçümde çıktı: Trendyol için seçilen dosya `/bg/sitemap_products1.xml` idi —
+ * Bulgarca. Adında «product» geçtiği için en üste çıkmıştı ve ürün sitemap'i
+ * olduğu doğru; ama Türkiye'den alışveriş yapan biri için Bulgaristan mağazasının
+ * ürünleri bir işe yaramıyor.
+ *
+ * Eleme değil, ağır ceza: yabancı bir ürün dosyası, yerli bir kategori
+ * dosyasının bile arkasına düşüyor. Yine de listede kalıyor — başka hiçbir şey
+ * yoksa ölçülebilsin.
+ */
+const FOREIGN_LOCALES = [
+  "bg", "en", "de", "fr", "es", "it", "ru", "ro", "el", "ar", "az",
+  "nl", "pl", "cs", "hu", "sr", "uk", "sk", "hr", "pt", "sv", "da",
+];
+
+/** Gzip sihirli baytları: `1f 8b`. */
+export function isGzip(bytes: Uint8Array): boolean {
+  return bytes.length > 2 && bytes[0] === 0x1f && bytes[1] === 0x8b;
+}
+
 export function rankProductSitemaps(urls: string[]): string[] {
   /*
    * Kelime kelime, alt dize değil.
@@ -89,12 +111,14 @@ export function rankProductSitemaps(urls: string[]): string[] {
     const has = (...stems: string[]) =>
       words.some((word) => stems.some((stem) => word.startsWith(stem)));
 
-    if (has("product", "urun", "ürün")) return 0;
-    if (has("item", "sku", "detail")) return 1;
+    const foreign = words.some((word) => FOREIGN_LOCALES.includes(word)) ? 4 : 0;
+
+    if (has("product", "urun", "ürün")) return 0 + foreign;
+    if (has("item", "sku", "detail")) return 1 + foreign;
     if (has("categor", "kategori", "blog", "store", "magaza", "mağaza", "page", "sayfa", "brand", "marka")) {
-      return 3;
+      return 3 + foreign;
     }
-    return 2;
+    return 2 + foreign;
   };
 
   return [...urls].sort((a, b) => score(a) - score(b));

@@ -29,9 +29,11 @@
  *
  * Ağ gerektiriyor: Actions → «Ücretsiz keşif ölçümü» → kanal «sitemap».
  */
+import { gunzipSync } from "node:zlib";
+
 import { USER_AGENT, productLinks, rankByQuery } from "./kesif-lib.mjs";
 
-const { sitemapUrlsFromRobots, locsIn, isSitemapIndex, rankProductSitemaps, SITEMAP_GUESSES } =
+const { sitemapUrlsFromRobots, locsIn, isSitemapIndex, isGzip, rankProductSitemaps, SITEMAP_GUESSES } =
   await import("@/lib/sitemapIndex");
 
 const args = process.argv.slice(2);
@@ -72,11 +74,20 @@ async function get(url) {
       return { status: response.status, body: "", url: response.url, tooBig: buffer.byteLength };
     }
 
-    return {
-      status: response.status,
-      body: new TextDecoder("utf-8").decode(buffer),
-      url: response.url,
-    };
+    /*
+     * `.xml.gz` dosyaları TAŞIMA sıkıştırması değil, gövdenin kendisi gzip.
+     *
+     * İlk koşuda altı mağaza «0 adres» dedi — Zara, Pull&Bear, Bershka,
+     * Stradivarius, Vakko, Flo. `robots.txt` sitemap ilan ediyordu ve dosya 200
+     * dönüyordu; gövde gzip olduğu için `TextDecoder` çöp üretti ve içinde
+     * `<loc>` bulunamadı. Ölçüm «bu mağazada sitemap yok» diyordu, oysa vardı.
+     */
+    const bytes = new Uint8Array(buffer);
+    const body = isGzip(bytes)
+      ? gunzipSync(bytes).toString("utf-8")
+      : new TextDecoder("utf-8").decode(bytes);
+
+    return { status: response.status, body, url: response.url };
   } catch (error) {
     return {
       status: 0,

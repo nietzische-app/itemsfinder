@@ -13,8 +13,9 @@
 import { register } from "node:module";
 
 register(new URL("../alias-loader.mjs", import.meta.url).href);
-const { sitemapUrlsFromRobots, locsIn, isSitemapIndex, rankProductSitemaps, SITEMAP_GUESSES } =
+const { sitemapUrlsFromRobots, locsIn, isSitemapIndex, isGzip, rankProductSitemaps, SITEMAP_GUESSES } =
   await import("@/lib/sitemapIndex");
+const { gzipSync } = await import("node:zlib");
 
 let pass = 0;
 const fails = [];
@@ -100,6 +101,48 @@ sitemap: https://www.magaza.com/sitemap.xml
 
   t(rankProductSitemaps([]).length === 0, "boş liste boş dönüyor");
   t(SITEMAP_GUESSES.length > 0 && SITEMAP_GUESSES.every((g) => g.startsWith("/")), "tahminler yol");
+}
+
+/*
+ * 4) İlk gerçek koşunun bulduğu iki kusur.
+ *
+ * Altı mağaza «0 adres» dedi (Zara, Pull&Bear, Bershka, Stradivarius, Vakko,
+ * Flo) ve Trendyol için **Bulgarca** sitemap seçildi. İkisi de ölçümün
+ * kendisini yanlış yapıyordu: birincisi «bu mağazada sitemap yok» diyordu,
+ * ikincisi doğru mağazanın yanlış ülkesini ölçüyordu.
+ */
+{
+  // Gzip: `.xml.gz` taşıma sıkıştırması değil, gövdenin kendisi.
+  const xml = '<urlset><url><loc>https://m.com/gri-pantolon-p-1234</loc></url></urlset>';
+  const packed = gzipSync(Buffer.from(xml, "utf-8"));
+
+  t(isGzip(new Uint8Array(packed)), "gzip gövde tanınıyor");
+  t(!isGzip(new TextEncoder().encode(xml)), "düz XML gzip sayılmıyor");
+  t(!isGzip(new Uint8Array([0x1f])), "tek bayt gzip sayılmıyor");
+
+  /*
+   * Yabancı dil dosyası ağır ceza alıyor: Trendyol'un Bulgarca ürün sitemap'i,
+   * Türkçe olanın arkasına düşmeli. Adında «product» geçtiği için eskiden en
+   * üste çıkıyordu.
+   */
+  const trendyol = rankProductSitemaps([
+    "https://www.trendyol.com/bg/sitemap_products1.xml",
+    "https://www.trendyol.com/sitemap_products1.xml",
+  ]);
+  t(!trendyol[0]?.includes("/bg/"), `yerli ürün dosyası önce: ${trendyol[0]}`);
+
+  // Yabancı ürün dosyası, yerli kategori dosyasının bile arkasında.
+  const karisik = rankProductSitemaps([
+    "https://m.com/en/sitemap-products.xml",
+    "https://m.com/sitemap-kategori.xml",
+  ]);
+  t(!karisik[0]?.includes("/en/"), `yerli kategori bile yabancı üründen önce: ${karisik[0]}`);
+
+  // Ama eleme değil: başka hiçbir şey yoksa yabancı dosya yine ölçülebilmeli.
+  t(
+    rankProductSitemaps(["https://m.com/de/sitemap-products.xml"]).length === 1,
+    "tek seçenek yabancıysa yine listede",
+  );
 }
 
 console.log(`${pass} ✓ / ${fails.length} ✗`);
