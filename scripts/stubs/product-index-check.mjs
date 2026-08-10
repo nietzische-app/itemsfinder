@@ -136,6 +136,39 @@ const { getProductIndex, productIndexStatus, ProductIndexSearch } = await import
 }
 
 /*
+ * 2c) Sayfası okunan mağaza önde.
+ *
+ * **Ölçülmüş bir sıra.** `npm run check:markup` 48 adayı tek tek okudu:
+ *
+ *   koton.com     9 →  9  (%100)      bershka.com  10 → 0  (%0)
+ *   gratis.com    6 →  6  (%100)      zara.com      7 → 0  (%0)
+ *
+ * Aday bulmak yarım iş: sayfası okunamayan bir aday karta dönüşmüyor ve dört
+ * kişilik kotadan bir yer yiyor. Üretimde bu, `4 sayfa → 0 satır` demekti.
+ *
+ * Kurulum bilerek alakanın tersine: Bershka'nın eşleşmesi **daha iyi** (iki
+ * kelime tutuyor), Koton'unki daha zayıf. Yalnızca alakaya bakan bir sıra
+ * Bershka'yı öne alırdı; ölçülen iddia, okunabilirliğin alakayı yenmesi.
+ */
+{
+  const okuma = mkdtempSync(join(tmpdir(), "okuma-"));
+  writeFileSync(join(okuma, "bershka.com.txt"), "/beyaz-keten-gomlek-p-1\n");
+  writeFileSync(join(okuma, "koton.com.txt"), "/gomlek-p-2\n");
+
+  process.env.PRODUCT_INDEX_DIR = okuma;
+  const { urls } = new ProductIndexSearch().findProductPages("Beyaz keten gömlek");
+  process.env.PRODUCT_INDEX_DIR = dir;
+
+  t(urls.length === 2, `iki aday (${urls.length})`);
+  t(
+    urls[0]?.includes("koton.com"),
+    `okunabilir mağaza önde — ${urls.map((u) => new URL(u).hostname).join(", ")}`,
+  );
+
+  rmSync(okuma, { recursive: true, force: true });
+}
+
+/*
  * 3) Sıralama: daha çok kelime tutan öne geçiyor.
  *
  * Sıra burada indirilecek sayfayı belirliyor — ilk ikisi indiriliyor, gerisi

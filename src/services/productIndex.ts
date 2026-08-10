@@ -45,6 +45,48 @@ function indexDir(): string {
 /** Mağaza başına en fazla aday — mağaza arama kanalıyla aynı kural. */
 const MAX_PER_STORE = 2;
 
+/**
+ * Mağazanın adayları **satıra dönüşüyor mu** — ölçülmüş oran.
+ *
+ * `npm run check:markup` (2026-08-10, 48 aday, veri merkezi IP'si):
+ *
+ * ```
+ * koton.com        9 →  9  (%100)
+ * gratis.com       6 →  6  (%100)
+ * beymen.com      13 →  4  (%31)   ürün işaretlemesi yok ×9
+ * bershka.com     10 →  0  (%0)    ürün işaretlemesi yok ×10
+ * zara.com         7 →  0  (%0)    ürün işaretlemesi yok ×7
+ * pullandbear.com  3 →  0  (%0)    yetersiz örnek
+ * ```
+ *
+ * ## Neden sıralama, eleme değil
+ *
+ * Sıfır oranlı mağazayı dizinden çıkarmak daha basit olurdu ve yanlış olurdu:
+ * bir mağazanın schema.org işaretlemesi koyması bir sürüm meselesi, ve
+ * çıkarılmış bir mağaza bunu hiç fark ettirmez. Sıralama geri alınabilir bir
+ * karar, eleme değil. Ayrıca Pull&Bear'ın sıfırı yalnızca üç örneğe dayanıyor —
+ * betiğin kendisi bunu «yetersiz örnek» diye yazıyor.
+ *
+ * ## Ölçüm neden üretimden bağımsız
+ *
+ * Sıralama okunamayan mağazaları arkaya atıyor, yani onlar üretimde bir daha
+ * kolay kolay sıra almayacak. Bu, ölçümü üretim trafiğine bağlasaydık kendi
+ * kuyruğunu yiyen bir kural olurdu: bir daha hiç denenmeyen mağaza, bir daha
+ * hiç ölçülemezdi. `check:markup` tam da bu yüzden ayrı bir koşu — yeniden
+ * ölçmek için üretimden bir şey beklemek gerekmiyor.
+ *
+ * **Listede olmayan mağaza elenmiyor**, yalnızca sona düşüyor: ölçülmemiş olmak
+ * kötü olmak demek değil.
+ */
+const MEASURED_YIELD: Record<string, number> = {
+  "koton.com": 1.0,
+  "gratis.com": 1.0,
+  "beymen.com": 0.31,
+  "bershka.com": 0,
+  "zara.com": 0,
+  "pullandbear.com": 0,
+};
+
 /** Bir sorgu için toplam en fazla aday. */
 const MAX_CANDIDATES = 4;
 
@@ -131,7 +173,11 @@ export class ProductIndexSearch {
     // dördünü döndürmek, sorguyla ilgisi olmayan dört sayfa indirmek demek.
     if (!matcher) return { urls: [], seen };
 
-    const perStore: Array<Array<{ url: string; score: number }>> = [];
+    const perStore: Array<{
+      host: string;
+      hits: Array<{ url: string; score: number }>;
+      yield: number;
+    }> = [];
 
     for (const store of stores) {
       const hits: Array<{ url: string; score: number }> = [];
@@ -147,7 +193,14 @@ export class ProductIndexSearch {
        * uyabiliyor ve indirilecek olan ilk ikisi.
        */
       hits.sort((a, b) => b.score - a.score);
-      if (hits.length > 0) perStore.push(hits.slice(0, MAX_PER_STORE));
+      if (hits.length > 0) {
+        perStore.push({
+          host: store.host,
+          hits: hits.slice(0, MAX_PER_STORE),
+          // Ölçülmemiş mağaza sona düşüyor ama eleniyor değil.
+          yield: MEASURED_YIELD[store.host] ?? 0,
+        });
+      }
     }
 
     /*
@@ -167,20 +220,25 @@ export class ProductIndexSearch {
      * Yani dizin doğru adayları buluyordu ama kotayı okunamayan iki mağaza
      * yiyordu — ve bunun sebebi alakayla değil **alfabeyle** ilgiliydi.
      *
-     * Sıra iki kurala bağlı, ve ikisi de bir şey söylüyor: mağazalar en iyi
-     * eşleşmesine göre sıralanıyor (alaka), sonra sırayla birer aday alınıyor
-     * (temsil). Alfabenin karara girdiği yer kalmadı.
+     * Sıra üç kurala bağlı ve üçü de bir şey söylüyor:
      *
-     * Okunabilirliğe göre sıralamak daha iyi olurdu — ama o veri henüz yok,
-     * çünkü öteki dört mağaza hiç denenmedi. Bu değişiklikten sonra `[markup]`
-     * satırları onu ölçecek.
+     *  1. **Okunabilirlik** — adayları satıra dönüşen mağaza önde
+     *     (`MEASURED_YIELD`, ölçülmüş). Aday bulmak yarım iş; sayfası
+     *     okunamayan bir aday karta dönüşmüyor ve kotadan bir yer yiyor.
+     *  2. **Alaka** — eşit okunabilirlikte, en iyi eşleşmesi olan mağaza önde.
+     *  3. **Temsil** — sonra sırayla birer aday alınıyor, ki tek mağaza kotayı
+     *     yemesin.
+     *
+     * Alfabenin karara girdiği yer kalmadı. Okunabilirlik ölçümü olmadan önce
+     * sıra yalnızca alakaya bakıyordu ve dört adayın üçü okunamayan
+     * mağazalardan geliyordu — `48 aday → 19 satır (%40)`.
      */
-    perStore.sort((a, b) => b[0]!.score - a[0]!.score);
+    perStore.sort((a, b) => b.yield - a.yield || b.hits[0]!.score - a.hits[0]!.score);
 
     const urls: string[] = [];
     for (let round = 0; round < MAX_PER_STORE; round += 1) {
-      for (const hits of perStore) {
-        const hit = hits[round];
+      for (const store of perStore) {
+        const hit = store.hits[round];
         if (hit && urls.length < MAX_CANDIDATES) urls.push(hit.url);
       }
     }

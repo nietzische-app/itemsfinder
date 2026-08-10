@@ -569,8 +569,37 @@ kategoriye göre sıralı ve ilk on ikisini almak yalnızca üst/alt giyimi öl�
 kozmetik satan Gratis hiç denenmezdi. Az örneği olan mağaza ayrıca uyarıyor —
 «0/1» bir mağazayı listeden çıkarmaya yetmez, «0/8» yeter.
 
-Karar o sayıdan sonra: okunabilirliğe göre sıralamak mı, okunamayanı dizinden
-çıkarmak mı.
+**Ölçüldü** (48 aday, veri merkezi IP'si):
+
+```
+koton.com        9 →  9  (%100)
+gratis.com       6 →  6  (%100)
+beymen.com      13 →  4  (%31)   ürün işaretlemesi yok ×9
+bershka.com     10 →  0  (%0)    ürün işaretlemesi yok ×10
+zara.com         7 →  0  (%0)    ürün işaretlemesi yok ×7
+pullandbear.com  3 →  0  (%0)    yetersiz örnek
+
+Toplam: 48 aday → 19 satır (%40)
+```
+
+Aday sıralaması artık üç kurala bağlı: **okunabilirlik**, sonra alaka, sonra
+temsil. Aday bulmak yarım iş — sayfası okunamayan bir aday karta dönüşmüyor ve
+dört kişilik kotadan bir yer yiyor.
+
+Sıralama, eleme değil: bir mağazanın schema.org işaretlemesi koyması bir sürüm
+meselesi ve çıkarılmış bir mağaza bunu hiç fark ettirmez. Ayrıca Pull&Bear'ın
+sıfırı yalnızca üç örneğe dayanıyor, ve betiğin kendisi bunu «yetersiz örnek»
+diye yazıyor.
+
+Ölçümün üretimden bağımsız olması burada karşılığını verdi: sıra okunamayan
+mağazaları arkaya atıyor, yani üretim trafiğine bağlı bir ölçüm kendi kuyruğunu
+yerdi — bir daha hiç denenmeyen mağaza bir daha hiç ölçülemezdi.
+
+Ölçülen orana göre beklenen kazanç, aynı altı sorguda **9,2 → 11,2 satır (%22)**.
+
+**Sırada:** `enrichBrandMetadata` kredisi bitmiş anahtarı her taramada üç kez
+soruyor (üretimde 401 ×3) — `contextDevService`, `googleSearch` ve VLM'de üç kez
+uygulanmış kilit deseni burada eksik.
 
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 
