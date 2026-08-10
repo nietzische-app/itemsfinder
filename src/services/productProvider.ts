@@ -16,6 +16,7 @@ import { buildSearchQuery, relaxedQueries } from "@/lib/searchQuery";
 import { cropRegion } from "@/services/imageCrop";
 import { getVisualLookup, visualLookupStatus } from "@/services/visualLookup";
 import { getGoogleSearch, googleSearchStatus } from "@/services/googleSearch";
+import { getStoreSearch, storeSearchStatus } from "@/services/storeSearch";
 import { markupExtractionEnabled, productsFromMarkup } from "@/services/markupProducts";
 import { productThumbnail } from "@/lib/productThumbnail";
 import { hydrateProduct } from "@/services/mockCatalog";
@@ -169,6 +170,7 @@ export class ContextDevProductProvider implements ProductProvider {
         (context.image ? "" : " (ayrıca bu taramada fotoğraf taşınmadı)"),
     );
     console.log(`[cse] ${googleSearchStatus()}`);
+    console.log(`[mağaza] ${storeSearchStatus()}`);
 
     try {
       // Spend the budget on the detections the user is most likely to act on.
@@ -374,6 +376,43 @@ export class ContextDevProductProvider implements ProductProvider {
       if (urls.length > 0) return urls;
       if (seen > 0) {
         trace?.degrade("products", `Google araması ${seen} sonuç buldu, hiçbiri ürün sayfası değildi`);
+      }
+    }
+
+    /*
+     * Mağazanın kendi arama sayfası — satıcısız ve ücretsiz yol.
+     *
+     * Sıra kasıtlı: context.dev'den önce geliyor çünkü kredi harcamıyor, ve
+     * Google'dan sonra geliyor çünkü Google tek istekte on dokuz mağazayı birden
+     * tarardı. Boş dönerse merdiven olduğu gibi devrede — ölçülmüş bir yolun,
+     * ölçülmüş başka bir yolu kaldırması için gerekçe yok.
+     *
+     * Yalnızca ilk basamak: gevşetme `web.search`'ün sıfır sonucuna karşı
+     * yazılmıştı, burada her basamak mağaza başına bir HTTP isteği demek.
+     */
+    const stores = getStoreSearch();
+
+    if (stores && ladder[0]) {
+      const startedAt = Date.now();
+      const { urls, seen, error } = await stores.findProductPages(ladder[0], signal);
+
+      trace?.search({
+        itemId: item.id,
+        source: "mağaza",
+        tier: "tr",
+        rung: 0,
+        query: ladder[0],
+        found: urls.length,
+        ms: Date.now() - startedAt,
+        error,
+      });
+
+      if (urls.length > 0) return urls;
+      if (seen > 0) {
+        trace?.degrade(
+          "products",
+          `mağaza aramaları ${seen} bağlantı buldu, hiçbiri ürün sayfası değildi`,
+        );
       }
     }
 

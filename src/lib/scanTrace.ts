@@ -79,7 +79,7 @@ export interface SearchAttemptRecord {
    * okunabiliyor — «görsel arama metinden iyi mi» sorusunun cevabı burada
    * birikiyor, tahminde değil.
    */
-  source: "metin" | "görsel" | "cse";
+  source: "metin" | "görsel" | "cse" | "mağaza";
   tier: SearchTier;
   /** Merdiven basamağı: 0 tam sorgu, büyüdükçe gevşiyor. Görsel yolda hep 0. */
   rung: number;
@@ -264,7 +264,14 @@ function summariseSearches(searches: SearchAttempt[]): string[] {
      * göründü, yani okuyan kişi context.dev'in Türkiye katmanının bozulduğunu
      * sanırdı. Katman metin merdiveninin kavramı; CSE'de karşılığı yok.
      */
-    const where = entry.source === "görsel" ? "img" : entry.source === "cse" ? "cse" : entry.tier;
+    const where =
+      entry.source === "görsel"
+        ? "img"
+        : entry.source === "cse"
+          ? "cse"
+          : entry.source === "mağaza"
+            ? "mağaza"
+            : entry.tier;
     const outcome = entry.error ? `HATA ${errorTag(entry.error)}` : String(entry.found);
     const key = `${where}:${entry.rung}=${outcome}`;
     counts.set(key, (counts.get(key) ?? 0) + 1);

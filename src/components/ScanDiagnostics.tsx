@@ -126,9 +126,11 @@ export function ScanDiagnostics({ result }: { result: DetectionResult }) {
                         ? "Görsel"
                         : entry.source === "cse"
                           ? "Google"
-                          : entry.tier === "tr"
-                            ? "TR"
-                            : "Global"}
+                          : entry.source === "mağaza"
+                            ? "Mağaza"
+                            : entry.tier === "tr"
+                              ? "TR"
+                              : "Global"}
                     </span>
                     {/* Basamak metin merdiveninin kavramı; görsel yolda karşılığı yok. */}
                     {entry.source === "metin" ? (

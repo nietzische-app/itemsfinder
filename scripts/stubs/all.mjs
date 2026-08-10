@@ -24,6 +24,7 @@ const SUITES = [
   ["ücretsiz keşif kararları", "kesif-check.mjs"],
   ["ölü VLM anahtarı susuyor", "vlm-latch-check.mjs"],
   ["teşhis aritmetiği kapanıyor", "dedupe-explain-check.mjs"],
+  ["mağaza arama sağlayıcısı", "store-search-check.mjs"],
 ];
 
 let failed = 0;
