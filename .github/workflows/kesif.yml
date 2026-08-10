@@ -1,0 +1,66 @@
+# Ücretsiz aday bulma yolu çalışıyor mu? — tarayıcıdan tek tıkla.
+#
+# Actions sekmesi → «Ücretsiz keşif ölçümü» → «Run workflow».
+#
+# ## Neden burada, yerel makinede değil
+#
+# Ölçüm mağazaların **sunucu taraflı bir isteğe** ne yaptığını soruyor ve
+# üretimde o istek Vercel'den gidiyor: bir veri merkezi IP'sinden. Ev
+# bağlantısından yapılan ölçüm bu yüzden fazla iyimser olurdu — perakendeciler
+# veri merkezi IP'lerine ev bağlantılarından daha sert bot duvarı çıkarıyor.
+#
+# GitHub Actions da bir veri merkezinde çalışıyor, yani buradan alınan cevap
+# üretimdekine yerel makineden alınandan daha yakın.
+name: Ücretsiz keşif ölçümü
+
+on:
+  workflow_dispatch:
+    inputs:
+      sorgu:
+        description: "Aranacak ürün"
+        required: false
+        default: "gri pantolon"
+      magaza:
+        description: "Tek bir mağaza (boş bırakılırsa 19 mağazanın hepsi)"
+        required: false
+      adres:
+        description: "Arama adresi kalıbı — mağaza kendi ilan etmiyorsa. Örn: https://x.com/ara?k={q}"
+        required: false
+
+jobs:
+  olc:
+    name: Mağazalar sunucu taraflı isteğe cevap veriyor mu
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # `--experimental-transform-types` Node 22 istiyor.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Girdiler kabuğa doğrudan gömülmüyor, ortam değişkeni olarak veriliyor:
+      # `${{ }}` ile yazılan bir girdi kabuk kaçışına açık olurdu.
+      - name: Ölçüm
+        env:
+          SORGU: ${{ inputs.sorgu }}
+          MAGAZA: ${{ inputs.magaza }}
+          ADRES: ${{ inputs.adres }}
+        run: |
+          set -o pipefail
+          args=(--q "${SORGU:-gri pantolon}")
+          [ -n "$MAGAZA" ] && args+=(--site "$MAGAZA")
+          [ -n "$ADRES" ] && args+=(--url "$ADRES")
+          npm run check:kesif -- "${args[@]}" 2>&1 | tee kesif.txt
+
+      # Çıktı iş kaydında zaten görünüyor; dosya olarak da indirilebilsin diye.
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kesif-ciktisi
+          path: kesif.txt
