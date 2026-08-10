@@ -26,7 +26,7 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
-import { queryMatcher, foldPath } from "./kesif-lib.mjs";
+import { queryMatcher, foldUrlPath } from "./kesif-lib.mjs";
 import { parseArgs } from "./args.mjs";
 
 const { COVERAGE_CASES } = await import("../eval/coverageCases.ts");
@@ -46,6 +46,10 @@ if (!existsSync(dir)) {
  * başına 239 ms çıktı ve ölçünce işin neredeyse tamamı sorgudan bağımsız çıktı —
  * her sorgu yüz elli iki bin adresi yeniden ayrıştırıp yeniden katlıyordu. Yol
  * dosyada zaten yol olarak duruyor, yani `new URL` de gereksiz.
+ *
+ * `foldUrlPath`, `foldPath` değil: yüzde kaçışı çözülmeden katlanan bir yol
+ * Türkçe harf taşıyan slug'ları kaybediyor. Bir tur boyunca öyleydi ve ölçüm
+ * yakaladı — Bershka 43'ten 30'a düşmüştü.
  */
 const loadStart = performance.now();
 const stores = [];
@@ -53,7 +57,7 @@ const stores = [];
 for (const file of readdirSync(dir).filter((name) => name.endsWith(".txt")).sort()) {
   const host = file.replace(/\.txt$/, "");
   const paths = readFileSync(join(dir, file), "utf-8").split("\n").filter(Boolean);
-  stores.push({ host, paths, folded: paths.map(foldPath) });
+  stores.push({ host, paths, folded: paths.map(foldUrlPath) });
 }
 
 const loadMs = Math.round(performance.now() - loadStart);

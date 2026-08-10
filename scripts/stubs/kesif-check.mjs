@@ -23,6 +23,8 @@ import {
   probeUrls,
   productLinks,
   rankByQuery,
+  queryMatcher,
+  foldUrlPath,
   searchActionTemplate,
 } from "../kesif-lib.mjs";
 
@@ -366,6 +368,33 @@ const t = (c, n) => (c ? pass++ : fails.push(n));
   t(
     rankByQuery([koton("mat-pudra-fondoten-30ml")], "Mat pudra ruj").length === 0,
     "hem renk hem ürün olan kelime ad sayılmıyor",
+  );
+
+  /*
+   * Yüzde kaçışlı yol da eşleşiyor — ve iki yol da aynı cevabı veriyor.
+   *
+   * Sitemap'ler Türkçe harfi kaçışlı yazıyor: `g%C3%B6mlek`. Çözülmeden
+   * katlanınca içinde «gomlek» geçmiyor ve o adres bir gömlek sorgusuna hiçbir
+   * zaman cevap veremiyor.
+   *
+   * Bu kontrol ölçümün yakaladığı bir gerilemeden doğdu. Dizin yolu bir tur
+   * boyunca çözmeyi atlamıştı, dosya bayt bayt aynıyken Bershka'nın cevap
+   * verdiği ürün adı sayısı 43'ten 30'a düştü. **İki yol da** ölçülüyor
+   * (`rankByQuery` ve `queryMatcher` + `foldUrlPath`), çünkü kusur ikisinin
+   * ayrışmasıydı: yalnızca birine bakan bir kontrol yeşil kalırdı.
+   */
+  const kacisli = "/kad%C4%B1n-keten-g%C3%B6mlek-p-1234";
+  t(
+    rankByQuery([`https://www.bershka.com${kacisli}`], "Keten Gömlek").length === 1,
+    "kaçışlı yol arama kanalında eşleşiyor",
+  );
+  t(
+    queryMatcher("Keten Gömlek").score(foldUrlPath(kacisli)) >= 0,
+    "kaçışlı yol dizin yolunda da eşleşiyor",
+  );
+  t(
+    queryMatcher("Keten Gömlek").score(foldUrlPath("/kadin-keten-gomlek-p-1234")) >= 0,
+    "çözülmüş yol da eşleşiyor — çözme kimseyi elemiyor",
   );
 
   // Daha çok kelime tutan öne geçiyor: sıra, hangi sayfanın indirileceğini belirliyor.

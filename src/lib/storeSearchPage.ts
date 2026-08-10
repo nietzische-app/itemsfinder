@@ -176,6 +176,38 @@ export function foldPath(text: string): string {
 const fold = foldPath;
 
 /**
+ * Bir **adres yolunu** karşılaştırılabilir hâle getirir: önce yüzde kaçışını
+ * çözer, sonra katlar.
+ *
+ * Ayrı bir fonksiyon, çünkü çözme yalnızca adreslerde doğru: sorgu metnindeki
+ * `%` gerçek bir yüzde işareti ve onu çözmek metni bozar.
+ *
+ * **Neden var.** Dizin yolu bir tur boyunca bunu yapmıyordu ve ölçüm yakaladı:
+ * dosya bayt bayt aynıyken Bershka'nın cevap verdiği ürün adı sayısı 43'ten
+ * 30'a düştü. Sitemap'ler Türkçe harfi kaçışlı yazıyor — `g%C3%B6mlek` çözülmeden
+ * katlanınca içinde «gomlek» geçmiyor, ve o adres bir gömlek sorgusuna hiçbir
+ * zaman cevap veremiyor.
+ *
+ * Bozuk bir kaçış dizisi `decodeURIComponent`'i patlatıyor; o durumda ham metin
+ * katlanıyor — bir adresin okunamaması, bütün dizinin okunamaması olmamalı.
+ *
+ * **`%` yoksa çözme çağrılmıyor.** `decodeURIComponent` kaçışsız bir metinde
+ * zaten hiçbir şey değiştirmiyor, yani sınama davranışı aynı bırakıyor —
+ * ölçüldüğü için duruyor: yüz elli iki bin yolda çözme 65 ms tutuyor, sınamayla
+ * birlikte 1 ms. Bozuk kaçış da yalnızca `%` taşıyan metinde mümkün, o yüzden
+ * `try` de o dala taşındı.
+ */
+export function foldUrlPath(path: string): string {
+  if (!path.includes("%")) return fold(path);
+
+  try {
+    return fold(decodeURIComponent(path));
+  } catch {
+    return fold(path);
+  }
+}
+
+/**
  * Adayları sorguya göre süzer ve sıralar — **sayfayı indirmeden**.
  *
  * ## Neden gerekiyor
@@ -307,7 +339,7 @@ export function rankByQuery(urls: string[], query: string): string[] {
   for (const url of urls) {
     let path: string;
     try {
-      path = fold(decodeURIComponent(new URL(url).pathname));
+      path = foldUrlPath(new URL(url).pathname);
     } catch {
       continue;
     }
