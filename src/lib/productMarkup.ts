@@ -134,7 +134,7 @@ function absolute(url: string | null, pageUrl: string): string | null {
 /* -------------------------------------------------------------------------- */
 
 /** Sayfadaki bütün `ld+json` bloklarını düz bir nesne listesine açar. */
-function jsonLdNodes(html: string): Record<string, unknown>[] {
+export function jsonLdNodes(html: string): Record<string, unknown>[] {
   const nodes: Record<string, unknown>[] = [];
   const pattern = /<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
 

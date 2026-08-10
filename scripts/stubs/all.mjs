@@ -21,6 +21,7 @@ const SUITES = [
   ["görsel aday bulma", "lens-check.mjs"],
   ["kapalı aşama sessiz kalmıyor", "stage-off-check.mjs"],
   ["Google aday bulma", "cse-check.mjs"],
+  ["ücretsiz keşif kararları", "kesif-check.mjs"],
 ];
 
 let failed = 0;
