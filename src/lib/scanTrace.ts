@@ -231,7 +231,14 @@ function errorTag(text: string): string {
   if (status && code) return `${status} ${code}`;
   if (code) return code;
   if (status) return status;
-  return text.slice(0, 40);
+
+  /*
+   * Yönerge metinleri cümle cümle yazılıyor ve ilk cümle tek başına anlamlı.
+   * Kör bir `slice(0, 40)` onu ortasından kesiyordu — «Anahtar bu API'ye kapalı.
+   * Credentials → » gibi bir kırıntı, özetin işini yapmıyor.
+   */
+  const sentence = /^[^.\n]{1,60}\./.exec(text)?.[0];
+  return sentence ?? text.slice(0, 40);
 }
 
 /**

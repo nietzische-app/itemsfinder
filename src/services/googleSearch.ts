@@ -142,7 +142,30 @@ function isPreferred(host: string): boolean {
  * olmamasından kötü.
  */
 export function cseAdvice(message: string): string {
-  if (/has not been used|is disabled|SERVICE_DISABLED|blocked/i.test(message)) {
+  /*
+   * Google'ın iki ayrı hatası var ve ikisi ayrı düğmeye basılmasını istiyor.
+   * İlk sürüm ikisini tek yönergede topluyordu ve **yanlış olanı** söylüyordu:
+   * üretimde gelen mesaj «are blocked» idi, yani API değil **anahtar** kapalıydı,
+   * ama yönerge Library sayfasına yolluyordu. Oradaki düğmeye basmak durumu
+   * değiştirmiyor — hata aynı kalıyor.
+   *
+   *  - `API_KEY_SERVICE_BLOCKED` → «Requests to this API … are blocked.»
+   *    Anahtarın API kısıtlaması bu servisi içermiyor. Çözüm Credentials'ta.
+   *  - `SERVICE_DISABLED` → «… has not been used in project N before or it is
+   *    disabled» (ve etkinleştirme bağlantısı). Çözüm Library'de.
+   */
+  if (/are blocked|API_KEY_SERVICE_BLOCKED/i.test(message)) {
+    /*
+     * 200 karakterin altında tutuluyor: bu metin kaydın `error` alanına da
+     * giriyor ve orada kırpılıyor. Kırpılan bir yönerge, yönerge değil.
+     */
+    return (
+      "Anahtar bu API'ye kapalı. Cloud Console → Credentials → anahtarın → " +
+      "«API restrictions» içine «Custom Search API» ekle (ya da «Don't restrict " +
+      "key»). Liste doğruysa API kapalı: Library → Enable."
+    );
+  }
+  if (/has not been used|is disabled|SERVICE_DISABLED/i.test(message)) {
     return (
       "Custom Search API bu projede açık değil. Google Cloud Console → " +
       "APIs & Services → Library → «Custom Search API» → Enable. " +

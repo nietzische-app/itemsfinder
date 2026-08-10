@@ -193,7 +193,7 @@ const search = new GoogleProductSearch("stub-key", "stub-engine", 0);
 
   const cases = [
     ["Custom Search API has not been used in project 123 before or it is disabled", /Library.*Enable|Enable/i],
-    ["Requests to this API customsearch method … are blocked", /Enable/i],
+    ["Requests to this API customsearch method … are blocked", /Credentials|API restrictions/i],
     ["Invalid Value", /cx|kimliği/i],
     ["API key not valid. Please pass a valid API key.", /Anahtar geçersiz/i],
     ["Quota exceeded for quota metric 'Queries'", /kota/i],
@@ -208,6 +208,58 @@ const search = new GoogleProductSearch("stub-key", "stub-engine", 0);
   // Tanınmayan hata olduğu gibi kalmalı — uydurulmuş yönerge, yönergesizlikten kötü.
   const unknown = "Something nobody has seen before";
   t(cseAdvice(unknown) === unknown, "tanınmayan hata olduğu gibi bırakılıyor");
+
+  /*
+   * 7b) İki hata **ayrı** düğmeye basılmasını istiyor.
+   *
+   * İlk sürüm ikisini tek yönergede topluyordu ve üretimde yanlış olanı söyledi:
+   * gelen mesaj «are blocked» idi, yani API değil anahtar kapalıydı, ama yönerge
+   * Library sayfasına yolladı. Oradaki düğmeye basmak hatayı değiştirmiyor.
+   *
+   * Aynı metni vermeleri yetmez, **birbirinden farklı** olmaları gerekiyor —
+   * ikisini de `/Enable/` ile ölçen bir kontrol, tek yönergeye geri dönülse bile
+   * yeşil kalırdı.
+   */
+  const blocked = cseAdvice("Requests to this API customsearch method … are blocked.");
+  const disabled = cseAdvice("Custom Search API has not been used in project 123 before or it is disabled");
+
+  t(blocked !== disabled, "kapalı anahtar ile kapalı API ayrı yönerge alıyor");
+  t(/Credentials/.test(blocked), `anahtar kısıtlaması Credentials'a yolluyor: «${blocked.slice(0, 45)}…»`);
+  t(!/^Custom Search API bu projede açık değil/.test(blocked), "kapalı anahtar Library'ye yollanmıyor");
+  t(/Library/.test(disabled), `kapalı API Library'ye yolluyor: «${disabled.slice(0, 45)}…»`);
+}
+
+/*
+ * 7c) Özetteki hata etiketi ilk cümlede kesiliyor.
+ *
+ * `[scan]` satırı özet olsun diye var; kör bir `slice(0, 40)` yönergeyi
+ * ortasından kesip «Anahtar bu API'ye kapalı. Credentials → » gibi bir kırıntı
+ * bırakıyordu.
+ */
+{
+  const { createTrace, logScanTrace } = await import("@/lib/scanTrace");
+  const { cseAdvice } = await import("@/services/googleSearch");
+  const trace = createTrace({ detail: false });
+
+  trace.search({
+    itemId: "a", source: "cse", tier: "tr", rung: 0, query: "gri pantolon",
+    found: 0, ms: 12,
+    error: cseAdvice("Requests to this API customsearch method … are blocked."),
+  });
+
+  const lines = [];
+  const original = console.log;
+  console.log = (line) => lines.push(String(line));
+  try {
+    logScanTrace(trace.snapshot(), { id: "det_test", source: "stub" });
+  } finally {
+    console.log = original;
+  }
+
+  const [entry] = JSON.parse(lines.find((line) => line.startsWith("[scan] ")).slice(7)).searchYield;
+
+  t(/\.$/.test(entry), `etiket cümlenin sonunda bitiyor: «${entry}»`);
+  t(!/→\s*$/.test(entry), `ok işaretiyle yarım kalmıyor: «${entry}»`);
 }
 
 /*
@@ -267,7 +319,7 @@ const search = new GoogleProductSearch("stub-key", "stub-engine", 0);
   const second = await latching.findProductPages("gümüş ayakkabı", "clothing");
 
   t(afterFirst === before + 1, `ilk çağrı gerçekten gidiyor (${afterFirst - before})`);
-  t(/Enable/.test(first.error ?? ""), `ilk çağrının gerekçesi yönerge: «${first.error}»`);
+  t(/Credentials/.test(first.error ?? ""), `ilk çağrının gerekçesi yönerge: «${first.error}»`);
   t(requests === afterFirst, `ikinci çağrı hiç gitmiyor (${requests - afterFirst} istek)`);
   t(
     /çağrı yapılmadı/.test(second.error ?? ""),
