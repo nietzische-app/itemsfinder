@@ -32,6 +32,7 @@ const SUITES = [
   ["dizin ağacı geziliyor", "index-build-check.mjs"],
   ["adres dizini aday üretiyor", "product-index-check.mjs"],
   ["reddedilen anahtar susuyor", "auth-latch-check.mjs"],
+  ["hız sınırı Upstash yolu", "ratelimit-check.mjs"],
 ];
 
 let failed = 0;

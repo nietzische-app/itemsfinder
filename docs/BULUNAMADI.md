@@ -659,6 +659,48 @@ Eşik geniş (0,25) ve yalnızca dört ve üzeri örnekte uygulanıyor: üç ada
 ölçülen bir oran kendi başına gürültü, ve yanlış alarm veren bir kapı bir süre
 sonra bakılmayan kapı.
 
+### 4g. Kapsamı genişletmek — ⏳ üç aday mağaza denemede
+
+Satır üreten mağaza sayısı üç: Koton, Gratis, Beymen. Kapsamın açık ucu,
+sitemap'i **açılan** ama dördüncü koşuda «gri pantolon» sorgusuna karşılık
+vermemiş dört mağaza — ve «uymadı» ile «ürün yok» aynı şey değil: Sephora
+kozmetik satıyor, gri pantolon bulamaması **doğru** cevap, ve ölçüm tek bir
+sorguyla yapılmıştı.
+
+Üçü dizin çıkarmaya eklendi: **boyner.com.tr, lcw.com, sephora.com.tr.**
+Stradivarius bilerek yok — yalnızca `keyword.xml` yayımlıyor ve içinde tek ürün
+yok, o ölçülmüş bir ret.
+
+Bu «ölçmeden değiştirme» kuralının ihlali değil, **ölçümün kendisi**: dizin
+çıkarma bir mağazayı denemenin en ucuz olduğu yer — maliyeti gecelik bir işte
+birkaç indirme, tarama başına sıfır — ve sonuç kendini yazıyor. Üretim tarafı
+da korunuyor: `MEASURED_YIELD`'da olmayan mağaza aday sırasında sona düşüyor,
+yani okunabilirliği ölçülene kadar Koton'un yerini alamıyor.
+
+Çıktı aday mağazaları ayrı yazıyor: ölçülmüş mağazayla denenen mağazayı aynı
+listede eşit göstermek yanıltıcı olurdu. Sıfır çıkan bir aday «kanal daraldı»
+değil, «bu deneme tutmadı» demek.
+
+### 4h. Hız sınırı — ⏳ kod hazır, iki değişken bekliyor
+
+Sayaçlar süreç-yerel ve üretim logu bunu her taramada yazıyor: sunucusuz
+instance'lar hiçbir şey paylaşmıyor, yani «IP başına sınır» aslında «instance
+başına sınır».
+
+Kod Upstash'i destekliyor ve `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`
+bekliyor. Ama o yol bugüne kadar **hiç sürülmemişti**: değişkenler yapıştırıldığı
+an ya çalışacak ya üretimde bozulacaktı, ve arada bir ölçüm yoktu.
+
+`ratelimit-check` sahte bir Upstash REST sunucusuna karşı sürülüyor ve dört şeyi
+ölçüyor: istek şekli (yol, kimlik doğrulama, gövde), sayacın artması,
+**pencerenin kapanması** (`EXPIRE … NX` her istekte ileri kaymıyor — kaysaydı
+sürekli istek atan bir istemcinin penceresi hiç dolmazdı, yani sınır kâğıt
+üstünde kalırdı), ve değişkenler yokken sessizce Upstash'e gidiyormuş gibi
+davranmaması.
+
+İkisini de bozarak sınadım: `NX` düşünce ve yol yanlış yazılınca kontrol
+kırmızıya döndü.
+
 **Kilit düzeltildi.** `enrichBrandMetadata` kredisi bitmiş anahtarı **her**
 taramada yeniden soruyordu (üretimde 401 ×3, tarama tarama). Kilit vardı ve
 doğru yazılmıştı — ama örnek üzerindeydi, ve `getProductProvider()` her taramada

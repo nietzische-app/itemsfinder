@@ -52,11 +52,39 @@ const arg = parseArgs(process.argv.slice(2), {
 /**
  * Sitemap'i ölçülmüş ve **ürün adresi verdiği görülmüş** mağazalar.
  *
- * Dördüncü koşunun sonucu (`docs/BULUNAMADI.md` 4e). Ölçülmemiş mağaza eklemek,
- * her koşuya karşılıksız bir indirme eklemek olurdu; listeye girmenin yolu
- * `npm run check:sitemap`.
+ * Dördüncü koşunun sonucu (`docs/BULUNAMADI.md` 4e).
  */
-const STORES = ["koton.com", "zara.com", "beymen.com", "bershka.com", "pullandbear.com", "gratis.com"];
+const MEASURED = ["koton.com", "zara.com", "beymen.com", "bershka.com", "pullandbear.com", "gratis.com"];
+
+/**
+ * Sitemap'i **açılan** ama «gri pantolon» sorgusuna karşılık vermemiş mağazalar.
+ *
+ * Dördüncü koşuda 10/19 mağazanın sitemap'i açıldı, 6'sı o sorguya uyan ürün
+ * adresi verdi. Kalan dördü kapsamın açık ucu — ve «uymadı» ile «ürün yok» aynı
+ * şey değil: Sephora kozmetik satıyor ve gri pantolon bulamaması **doğru**
+ * cevap, ölçüm ise tek bir sorguyla yapılmıştı.
+ *
+ * ## Neden ölçülmeden ekleniyor
+ *
+ * Bu, «ölçmeden değiştirme» kuralının ihlali değil — **ölçümün kendisi**. Dizin
+ * çıkarma, bir mağazayı denemenin en ucuz olduğu yer: maliyeti gecelik bir işte
+ * birkaç indirme, tarama başına sıfır. Ve sonuç kendini yazıyor: mağaza satırı
+ * kaç yol bulduğunu, sıfırsa sebebini söylüyor.
+ *
+ * Üretim tarafı da korunuyor: `MEASURED_YIELD`'da olmayan mağaza aday sırasında
+ * **sona** düşüyor, yani okunabilirliği ölçülene kadar Koton'un ya da Gratis'in
+ * yerini alamıyor. Hiçbir şey vermezse dosyası boş kalır ve kapsam kapısı
+ * (`check:index`) zaten yerinde duruyor.
+ *
+ * Boyner ve LCW arama kanalında zaten satır üretti; sitemap'leri iç içe olduğu
+ * için üç kademe iniş eklendikten sonra açılabildi. Sephora'nın kozmetik
+ * kataloğu Gratis'in yanında ikinci bir kaynak olabilir. Stradivarius bilerek
+ * yok: yalnızca `keyword.xml` yayımlıyor ve içinde tek ürün yok — o ölçülmüş
+ * bir ret.
+ */
+const CANDIDATES = ["boyner.com.tr", "lcw.com", "sephora.com.tr"];
+
+const STORES = [...MEASURED, ...CANDIDATES];
 
 /**
  * Mağaza başına en fazla kaç sitemap dosyası indirilecek.
@@ -241,6 +269,22 @@ const protectedRows = rows.filter((row) => row.keptOld);
 if (protectedRows.length > 0) {
   console.log(`  ⚠ ${protectedRows.length} mağazada önceki dosya korundu:`);
   for (const row of protectedRows) console.log(`    ${row.host} — bu koşu ${row.fresh} yol getirdi`);
+  console.log("");
+}
+
+/*
+ * Aday mağazalar ayrıca yazılıyor.
+ *
+ * Ölçülmüş mağazayla denenen mağazayı aynı listede eşit göstermek, bir sonraki
+ * okuyanı yanıltırdı: biri kanalın omurgası, öteki bu koşunun sorusu. Sıfır
+ * çıkan bir aday «kanal daraldı» değil «bu deneme tutmadı» demek.
+ */
+const tried = rows.filter((row) => CANDIDATES.includes(row.host));
+if (tried.length > 0) {
+  console.log("  Denenen mağazalar (ölçülmüş listede değiller):");
+  for (const row of tried) {
+    console.log(`    ${row.host.padEnd(18)} ${row.outcome ?? `${row.kept} ürün yolu`}`);
+  }
   console.log("");
 }
 
