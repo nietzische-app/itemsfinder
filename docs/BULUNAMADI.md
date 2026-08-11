@@ -597,9 +597,34 @@ yerdi — bir daha hiç denenmeyen mağaza bir daha hiç ölçülemezdi.
 
 Ölçülen orana göre beklenen kazanç, aynı altı sorguda **9,2 → 11,2 satır (%22)**.
 
-**Sırada:** `enrichBrandMetadata` kredisi bitmiş anahtarı her taramada üç kez
-soruyor (üretimde 401 ×3) — `contextDevService`, `googleSearch` ve VLM'de üç kez
-uygulanmış kilit deseni burada eksik.
+**Kilit düzeltildi.** `enrichBrandMetadata` kredisi bitmiş anahtarı **her**
+taramada yeniden soruyordu (üretimde 401 ×3, tarama tarama). Kilit vardı ve
+doğru yazılmıştı — ama örnek üzerindeydi, ve `getProductProvider()` her taramada
+`new ContextDevService(...)` kuruyor. Yorumu «sunucusuz bir instance dakikalarca
+ayakta kalıyor» diyordu; doğru olan buydu, yanlış olan kilidin instance'la aynı
+ömre sahip olduğunu varsaymaktı. **Instance yaşıyor, servis nesnesi yaşamıyor.**
+
+Kilit modüle taşındı — VLM anahtarında bir kez ödenmiş dersin aynısı. Taramanın
+kendi içindeki üç eşzamanlı çağrıyı kesmiyor (üçü aynı anda yola çıkıyor ve
+hiçbiri ötekinin cevabını görmüyor); kazanç sonraki taramalarda.
+
+Değişiklik bir ölçümü kırdı ve kırması doğruydu: arama merdiveni süiti aynı
+süreçte iki vaka sürüyor ve birincinin kurduğu kilit ikinciyi de susturdu. Bu,
+kilidin çalıştığının kanıtı — üretimde de aynı süreçteki sonraki tarama susacak.
+Süit buna göre kuruldu.
+
+**Sırada — ölçülmüş öncelik.** Son taramada `spent` şunu yazdı:
+
+```
+ms: {vision: 778, products: 5257, total: 6217}
+spent: {arama: 3374, çıkarım: 2483, görsel: 5038}
+```
+
+Görsel yeniden sıralama artık **en büyük kalem** — aramadan da çıkarımdan da
+büyük. Ve zorunlu bir aşama değil: satırın var olması için gerekmiyor, yalnızca
+sıralamayı iyileştiriyor (`VISUAL_RERANK`). Ne kazandırdığı ölçülmeden
+kapatılmamalı, ama 5 saniyelik bir kalemin karşılığı da ölçülmeden
+sürdürülmemeli.
 
 ### 5. Kabul eşiği: yanlış ürün mü, boş ekran mı?
 

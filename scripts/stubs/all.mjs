@@ -31,6 +31,7 @@ const SUITES = [
   ["yanlış bayrak sessiz geçmiyor", "args-check.mjs"],
   ["dizin ağacı geziliyor", "index-build-check.mjs"],
   ["adres dizini aday üretiyor", "product-index-check.mjs"],
+  ["reddedilen anahtar susuyor", "auth-latch-check.mjs"],
 ];
 
 let failed = 0;

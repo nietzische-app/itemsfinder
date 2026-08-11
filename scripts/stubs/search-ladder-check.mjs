@@ -15,6 +15,9 @@ import { register } from "node:module";
 register(new URL("../alias-loader.mjs", import.meta.url).href);
 const { ContextDevService } = await import("@/services/contextDevService");
 
+/** Reddedilen anahtarın kilit süresi — gerçek değeri bir dakika, ölçüm beklemesin. */
+const LATCH_MS = 200;
+
 let pass = 0; const fails = [];
 const t = (c, n) => (c ? pass++ : fails.push(n));
 
@@ -215,7 +218,19 @@ function make(matcher) {
  * çalışmıyor» arasında ayrım yapmıyordu. Sorguyu değiştirmek 401'i çözmez.
  */
 {
-  const svc = new ContextDevService("stub");
+  /*
+   * Kilit süresi kısa tutuluyor çünkü **modül düzeyinde**.
+   *
+   * Üretimde kilit örnek üzerindeydi ve servis her taramada yeniden kurulduğu
+   * için hiç yaşamıyordu — kredisi bitmiş anahtar her taramada yeniden
+   * soruluyordu. Modüle taşındığında bu dosya kırmızıya döndü: 11. vakanın
+   * kurduğu kilit 12. vakayı da susturdu, çünkü ikisi aynı süreçte.
+   *
+   * Bu, kilidin doğru çalıştığının kanıtı — üretimde de aynı süreçteki sonraki
+   * tarama susacak. Ölçüm buna göre kuruldu: 11. vaka kısa bir kilitle sürülüyor
+   * ve 12. vaka süresinin dolmasını bekliyor.
+   */
+  const svc = new ContextDevService("stub", { authCooldownMs: LATCH_MS });
   const calls = [];
   svc.client = {
     web: {
@@ -248,6 +263,9 @@ function make(matcher) {
 
 // 12) Geçici hata merdiveni durdurmuyor — 500 ile 401 aynı şey değil.
 {
+  // 11. vakanın kilidinin dolmasını bekle: modül düzeyinde ve aynı süreçteyiz.
+  await new Promise((resolve) => setTimeout(resolve, LATCH_MS + 50));
+
   const svc = new ContextDevService("stub");
   const calls = [];
   svc.client = {

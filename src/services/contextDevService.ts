@@ -137,6 +137,36 @@ const MAX_INCLUDE_DOMAINS = 10;
 const AUTH_COOLDOWN_MS = 60_000;
 
 /**
+ * Reddedilen anahtarın kilidi — **modül düzeyinde**.
+ *
+ * Örnek üzerindeydi ve hiç yaşamıyordu: `getProductProvider()` her taramada
+ * `new ContextDevService(...)` kuruyor, yani kilit taramanın sonunda ölüyordu.
+ * Üretimde belirtisi buydu — kredisi bittiği ilk günden beri **her** tarama
+ * marka verisini yeniden sordu ve her seferinde `401 USAGE_EXCEEDED` aldı:
+ *
+ *   [context.dev] enrichBrandMetadata failed for "gratis.com": 401 — …depleted
+ *   [context.dev] enrichBrandMetadata failed for "koton.com":  401 — …depleted
+ *   [context.dev] enrichBrandMetadata failed for "beymen.com": 401 — …depleted
+ *
+ * Kilidin yorumu «sunucusuz bir instance dakikalarca ayakta kalıyor» diyordu ve
+ * bu doğru — yanlış olan, kilidin instance'la aynı ömre sahip olduğunu
+ * varsaymaktı. Instance yaşıyor, servis nesnesi yaşamıyor.
+ *
+ * Aynı ders VLM anahtarında bir kez ödendi ve çözümü de aynı: kilit modülde,
+ * çünkü modül instance ömrü boyunca duruyor.
+ *
+ * **Taramanın kendi içindeki üç çağrıyı kesmiyor** — üçü aynı anda yola
+ * çıkıyor ve hiçbiri ötekinin cevabını görmüyor. Kazanç sonraki taramalarda, ve
+ * ölçülen şey de tam olarak bu.
+ */
+let keyRejectedUntil = 0;
+
+/** Kredisi bitmiş anahtar dışarıdan okunabilsin — gerileme notu için. */
+export function contextDevKeyRejected(): boolean {
+  return Date.now() < keyRejectedUntil;
+}
+
+/**
  * Hangi kırpılmış liste için uyarı yazıldı.
  *
  * Süreç ömrü boyunca: kesilen liste yapılandırmadan geliyor ve çalışırken
@@ -250,6 +280,13 @@ export interface ContextDevServiceOptions {
   extractBudgetMs?: number;
   /** TTL for the in-process caches. */
   cacheTtlMs?: number;
+  /**
+   * Reddedilen anahtarın kilit süresi.
+   *
+   * `GoogleProductSearch` ve VLM çıkarıcısıyla aynı gerekçe: gerçek değeri bir
+   * dakika ve onu beklemek ölçümü kullanılamaz hâle getirirdi.
+   */
+  authCooldownMs?: number;
 }
 
 interface CacheEntry<T> {
@@ -264,14 +301,8 @@ export class ContextDevService {
   private readonly extractBudgetMs: number;
   private readonly cacheTtlMs: number;
 
-  /**
-   * Anahtar reddedildiğinde bu ana kadar hiç çağrı yapılmıyor.
-   *
-   * Örnek üzerinde yaşıyor, süreç ömrü boyunca: sunucusuz bir instance dakikalarca
-   * ayakta kalıyor ve o süre boyunca aynı reddi tekrar tekrar almanın hiçbir
-   * karşılığı yok.
-   */
-  private rejectedUntil = 0;
+  /** Kilit süresi — ölçüm bir dakika beklemesin diye parametreye alınabiliyor. */
+  private readonly authCooldownMs: number;
 
   /**
    * Caches live for the lifetime of the server process. Scans repeat the same
@@ -294,6 +325,7 @@ export class ContextDevService {
     this.requestTimeoutMs = options.requestTimeoutMs ?? 20_000;
     this.extractBudgetMs = options.extractBudgetMs ?? 15_000;
     this.cacheTtlMs = options.cacheTtlMs ?? 30 * 60_000;
+    this.authCooldownMs = options.authCooldownMs ?? AUTH_COOLDOWN_MS;
 
     this.client = new ContextDev({
       apiKey,
@@ -461,7 +493,7 @@ export class ContextDevService {
          * Kaydı yine düşülüyor — «yapılmayan çağrı» da muhasebenin bir parçası,
          * ve kredinin neden harcanmadığını okuyabilmek gerekiyor.
          */
-        if (Date.now() < this.rejectedUntil) {
+        if (contextDevKeyRejected()) {
           onAttempt?.({
             source: "metin",
             tier: attempt.tier,
@@ -497,7 +529,7 @@ export class ContextDevService {
           logFailure("searchTier", attempt.query, error);
 
           if (isKeyRejection(error)) {
-            this.rejectedUntil = Date.now() + AUTH_COOLDOWN_MS;
+            keyRejectedUntil = Date.now() + this.authCooldownMs;
             onAttempt?.({
               source: "metin",
               tier: attempt.tier,
@@ -600,7 +632,7 @@ export class ContextDevService {
      * yapılmaya devam etti ve aynı `401 USAGE_EXCEEDED` cevabını aldı. Kredisi
      * bitmiş bir anahtar marka kaydı için de bitmiştir.
      */
-    if (Date.now() < this.rejectedUntil) {
+    if (contextDevKeyRejected()) {
       this.writeCache(this.brandCache, normalized, null);
       return null;
     }
@@ -646,7 +678,7 @@ export class ContextDevService {
       return metadata;
     } catch (error) {
       logFailure("enrichBrandMetadata", normalized, error);
-      if (isKeyRejection(error)) this.rejectedUntil = Date.now() + AUTH_COOLDOWN_MS;
+      if (isKeyRejection(error)) keyRejectedUntil = Date.now() + this.authCooldownMs;
       // Cache the miss too: a domain with no brand record would otherwise be
       // re-queried for every product card on every scan.
       this.writeCache(this.brandCache, normalized, null);
