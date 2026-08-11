@@ -35,6 +35,7 @@ const SUITES = [
   ["hız sınırı Upstash yolu", "ratelimit-check.mjs"],
   ["ücretsiz betimleme sağlayıcısı", "gemini-attributes-check.mjs"],
   ["önbellek boru hattına bağlı", "scan-cache-check.mjs"],
+  ["kırpıma bakan ücretsiz taban", "crop-label-check.mjs"],
 ];
 
 let failed = 0;

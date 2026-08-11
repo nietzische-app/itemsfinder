@@ -37,6 +37,7 @@ export type ScanStage =
   | "regionColor"
   | "crop"
   | "vlm"
+  | "kırpım"
   | "products"
   | "images"
   | "total";
@@ -146,6 +147,15 @@ export interface ScanTrace {
     rawDetections: number;
     keptDetections: number;
     describedItems: number;
+    /**
+     * Kırpımına bakılıp adlandırılan parça sayısı — betimleme dışında.
+     *
+     * `describedItems` ile ayrı tutuluyor çünkü ikisi farklı kalitede: biri
+     * parçayı betimliyor («krem fitilli polo yaka»), diğeri yalnızca
+     * adlandırıyor («polo shirt»). Tek sayaca toplamak, ücretsiz tabanın bir
+     * VLM kadar iş gördüğünü söylerdi.
+     */
+    cropLabels: number;
   };
 }
 
@@ -187,7 +197,7 @@ export function createTrace(options: { detail?: boolean } = {}): TraceCollector 
     rejected: [],
     searches: [],
     spent: {},
-    counts: { rawDetections: 0, keptDetections: 0, describedItems: 0 },
+    counts: { rawDetections: 0, keptDetections: 0, describedItems: 0, cropLabels: 0 },
   };
 
   return {

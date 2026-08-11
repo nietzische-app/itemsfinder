@@ -36,6 +36,7 @@ import {
   attributeProviderStatus,
   selectAttributeProvider,
 } from "@/services/attributeProvider";
+import { cropLabelStatus, getCropLabelReader } from "@/services/cropLabels";
 import { createTrace, type TraceCollector } from "@/lib/scanTrace";
 import { foregroundFilter, learnBackdrop } from "@/services/foreground";
 import { imageSize, regionDominantColor } from "@/services/regionColor";
@@ -611,6 +612,37 @@ export class GoogleVisionSearchService implements VisualSearchService {
     }
 
     /*
+     * Betimleme yoksa kırpım etiketleri — ücretsiz taban.
+     *
+     * Yalnızca betimlenemeyen parçalar için isteniyor: bir VLM kırpıma zaten
+     * baktıysa, Vision'ın etiketi ondan iyi olamaz ve harcanacak birim boşa
+     * gider. Aşama kapalıyken (varsayılan) bu satır hiçbir şey yapmıyor.
+     */
+    const labelReader = input.budgetConstrained ? null : getCropLabelReader();
+    if (!input.budgetConstrained) console.log(`[kırpım] ${cropLabelStatus()}`);
+
+    const undescribed = detections
+      .map((detection, index) => ({ detection, index }))
+      .filter(({ index }) => !attributes.has(String(index)));
+
+    const cropLabels =
+      labelReader && size && undescribed.length > 0
+        ? await trace.stage("kırpım", () =>
+            labelReader.read(
+              imageBuffer,
+              undescribed.map(({ detection, index }) => ({
+                key: String(index),
+                box: detection.box,
+                itemType: detection.name,
+              })),
+              { size, signal: input.signal },
+            ),
+          )
+        : new Map<string, string>();
+
+    trace.count("cropLabels", cropLabels.size);
+
+    /*
      * WEB_DETECTION entities describe the *photograph*, not one garment in it —
      * "street fashion", "photo shoot", sometimes a real product name. They used
      * to be handed out first-come-first-served to whichever detection shared a
@@ -663,21 +695,32 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * the photograph, not the garment; once something has actually looked at this
        * region, that reading wins.
        */
-      const entity = attrs
-        ? undefined
-        : webEntities.find(
-            (candidate) =>
-              !usedEntities.has(candidate.description) &&
-              familyOf(candidate.description) === family &&
-              family !== "unknown",
-          );
+      /*
+       * Kırpım etiketi web varlığından **önce** geliyor.
+       *
+       * İkisi de aynı cinsten bir ifade, ama kaynakları farklı: kırpım etiketi
+       * bu parçanın kendisine bakılarak üretildi, web varlığı fotoğrafın
+       * tamamını adlandırıyor. Aynı yuvaya iki aday geldiğinde, dar olana
+       * bakmak için gerekçe var; geniş olana bakmak için yok.
+       */
+      const cropLabel = attrs ? undefined : cropLabels.get(String(index));
+
+      const entity =
+        attrs || cropLabel
+          ? undefined
+          : webEntities.find(
+              (candidate) =>
+                !usedEntities.has(candidate.description) &&
+                familyOf(candidate.description) === family &&
+                family !== "unknown",
+            );
       if (entity) usedEntities.add(entity.description);
 
       // Measured colour is the fallback; the crop reading is preferred, because the
       // measurement describes the rectangle and this describes the garment.
       const colorHex = attrs?.colorHex ?? regionColors[index] ?? imageDominantHex;
       const colorName = attrs?.colorName ?? colorNameFromHex(colorHex);
-      const phrase = entity?.description;
+      const phrase = cropLabel ?? entity?.description;
       const itemName = attrs?.garmentType ?? name;
 
       const label = [colorName, attrs?.garmentType ?? phrase ?? name]
