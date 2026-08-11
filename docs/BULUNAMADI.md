@@ -635,6 +635,30 @@ Bu, alfabetik sıranın tekrarı değil: orada bölen şey adın baş harfiydi, 
 
 Aynı on iki sorguda beklenen: **48 aday → 35,6 satır (%74)**, ölçülen %48'den.
 
+**Ve ölçüldü: 48 aday → 37 satır (%77).** Zincir kapandı:
+
+```
+%40  →  %48  →  %77
+     sıralama   üretken önce
+
+koton.com    17 → 17  (%100)
+gratis.com   13 → 13  (%100)
+beymen.com   18 →  7   (%39)
+bershka / zara / pullandbear — hiç aday almadı
+```
+
+**Ölçüm artık kendi kendine koşuyor ve saptığında bağırıyor.** `MEASURED_YIELD`
+aday sıralamasını belirliyor ve içindeki sayılar bir günün ölçümünden geliyor;
+bir mağaza schema.org işaretlemesi koyduğunda ya da kaldırdığında o sayılar
+sessizce yalan olur ve sıra yanlış mağazayı öne almaya devam eder. `check:markup`
+artık ölçtüğü oranı koddaki sayıyla karşılaştırıyor ve saptığında **hata
+veriyor** — pazartesileri kendiliğinden koşuyor, yani kimsenin çıktıya bakması
+gerekmiyor.
+
+Eşik geniş (0,25) ve yalnızca dört ve üzeri örnekte uygulanıyor: üç adayla
+ölçülen bir oran kendi başına gürültü, ve yanlış alarm veren bir kapı bir süre
+sonra bakılmayan kapı.
+
 **Kilit düzeltildi.** `enrichBrandMetadata` kredisi bitmiş anahtarı **her**
 taramada yeniden soruyordu (üretimde 401 ×3, tarama tarama). Kilit vardı ve
 doğru yazılmıştı — ama örnek üzerindeydi, ve `getProductProvider()` her taramada

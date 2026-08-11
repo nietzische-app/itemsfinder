@@ -75,7 +75,7 @@ if (!CHANNELS.includes(channel)) {
 process.env.ENABLE_STORE_SEARCH ??= "true";
 
 const { COVERAGE_CASES } = await import("../eval/coverageCases.ts");
-const { ProductIndexSearch } = await import("@/services/productIndex");
+const { ProductIndexSearch, MEASURED_YIELD } = await import("@/services/productIndex");
 const { StoreProductSearch } = await import("@/services/storeSearch");
 const { productsFromMarkup } = await import("@/services/markupProducts");
 
@@ -281,3 +281,49 @@ if (thin.length > 0) {
 } else {
   console.log("");
 }
+
+/*
+ * Koddaki oran hâlâ doğru mu? — **kapı, rapor değil.**
+ *
+ * `MEASURED_YIELD` aday sıralamasını belirliyor ve içindeki sayılar bir günün
+ * ölçümünden geliyor. Bir mağaza schema.org işaretlemesi koyduğunda ya da
+ * kaldırdığında o sayılar sessizce yalan olur, ve sıra yanlış mağazayı öne
+ * almaya devam eder — kimse fark etmeden.
+ *
+ * Bu yüzden burada karşılaştırılıyor ve saptığında **çıkış kodu hata**. Çıktıya
+ * bakmayı ummak bir kural değil bir dilek; periyodik bir işin çıktısına kimse
+ * baştan sona bakmıyor. Bu dersin bedeli bu turda bir kez ödendi (`check:index`
+ * de aynı sebeple kapıya dönüştü).
+ *
+ * Eşik geniş (0,25) ve **yalnızca yeterli örnekte** uygulanıyor: üç adayla
+ * ölçülen bir oran kendi başına gürültü, ve gürültüyle kapı kapatmak yanlış
+ * alarm üretir. Yanlış alarm veren bir kapı, bir süre sonra bakılmayan kapı.
+ */
+const DRIFT = 0.25;
+const MIN_SAMPLE = 4;
+const drifted = [];
+
+for (const [host, stat] of rows) {
+  if (stat.given < MIN_SAMPLE) continue;
+
+  const measured = stat.rows / stat.given;
+  const claimed = MEASURED_YIELD[host];
+  if (claimed === undefined) {
+    drifted.push(`${host}: kodda yok, ölçülen %${Math.round(measured * 100)}`);
+    continue;
+  }
+  if (Math.abs(measured - claimed) > DRIFT) {
+    drifted.push(
+      `${host}: kodda %${Math.round(claimed * 100)}, ölçülen %${Math.round(measured * 100)}`,
+    );
+  }
+}
+
+if (drifted.length > 0) {
+  console.error("  MEASURED_YIELD eskimiş — src/services/productIndex.ts güncellenmeli:");
+  for (const line of drifted) console.error(`    ${line}`);
+  console.error("");
+  process.exit(1);
+}
+
+console.log("  MEASURED_YIELD ölçümle uyuşuyor.\n");

@@ -42,6 +42,16 @@ on:
   schedule:
     # Her gece 03:00 UTC (Türkiye 06:00) — mağazaların sakin saati.
     - cron: "0 3 * * *"
+    # Pazartesi 04:00 UTC: dizine ek olarak **okunabilirlik** de ölçülüyor.
+    #
+    # Ayrı bir cron, çünkü bu ölçüm mağazalara ~50 ek istek atıyor ve cevabı
+    # günden güne değişmiyor. Ama hiç ölçülmezse `MEASURED_YIELD` sessizce
+    # eskir: aday sıralaması ona bağlı ve bir mağazanın işaretleme koyması ya da
+    # kaldırması sırayı yanlış mağazaya çevirir.
+    #
+    # Haftada bir koşup **sapmada hata veriyor**, yani kimsenin çıktıya bakması
+    # gerekmiyor. Elle çalıştırmak için `okuma` girdisi duruyor.
+    - cron: "0 4 * * 1"
   workflow_dispatch:
     inputs:
       # Açıklamalar girdinin **adıyla** başlıyor.
@@ -134,7 +144,7 @@ jobs:
       # Varsayılan kapalı: her gece mağazalara ~50 ek istek atmak, cevabı
       # değişmeyen bir soruyu her gün yeniden sormak olurdu.
       - name: Adaylar satıra dönüşüyor mu
-        if: inputs.okuma == 'evet'
+        if: inputs.okuma == 'evet' || github.event.schedule == '0 4 * * 1'
         run: npm run check:markup 2>&1 | tee -a dizin.txt
 
       - name: Boyut

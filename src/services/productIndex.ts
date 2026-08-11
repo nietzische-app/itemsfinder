@@ -64,6 +64,15 @@ const MAX_PER_STORE = 2;
  * toplam           48 → 19  (%40)   48 → 23  (%48)
  * ```
  *
+ * Üçüncü koşu, üretken mağazalar ikinci adaylarını almaya başladıktan sonra:
+ * `48 aday → 37 satır (%77)`. Beymen 18 → 7 (%39), Koton ve Gratis yine %100,
+ * ötekiler hiç aday almadı.
+ *
+ * **Bu tablo bir iddia, ve `check:markup` onu sınıyor.** Betik ölçtüğü oranı
+ * buradaki sayıyla karşılaştırıyor ve saptığında hata veriyor: bir mağaza
+ * işaretleme koyduğunda ya da kaldırdığında burası sessizce eskimesin. Sayıyı
+ * kodda tutup doğruluğunu dilemek, ölçmemekle aynı şey.
+ *
  * ## Neden sıralama, eleme değil
  *
  * Sıfır oranlı mağazayı dizinden çıkarmak daha basit olurdu ve yanlış olurdu:
@@ -83,7 +92,7 @@ const MAX_PER_STORE = 2;
  * **Listede olmayan mağaza elenmiyor**, yalnızca sona düşüyor: ölçülmemiş olmak
  * kötü olmak demek değil.
  */
-const MEASURED_YIELD: Record<string, number> = {
+export const MEASURED_YIELD: Record<string, number> = {
   "koton.com": 1.0,
   "gratis.com": 1.0,
   "beymen.com": 0.31,
