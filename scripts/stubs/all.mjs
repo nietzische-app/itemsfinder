@@ -34,6 +34,7 @@ const SUITES = [
   ["reddedilen anahtar susuyor", "auth-latch-check.mjs"],
   ["hız sınırı Upstash yolu", "ratelimit-check.mjs"],
   ["ücretsiz betimleme sağlayıcısı", "gemini-attributes-check.mjs"],
+  ["önbellek boru hattına bağlı", "scan-cache-check.mjs"],
 ];
 
 let failed = 0;

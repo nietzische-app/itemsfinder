@@ -166,6 +166,46 @@ export function scanCacheTtlSeconds(): number {
 /* -------------------------------------------------------------------------- */
 
 /**
+ * Boru hattının sürümü — anahtarın parçası.
+ *
+ * ## Neden
+ *
+ * Bu dosyanın kuralı aşağıda yazılı: **sonucu değiştiren her girdi anahtarın
+ * parçası olmalı.** Boru hattının kendisi de öyle bir girdi, ve anahtarda
+ * olmayan tek girdi oydu.
+ *
+ * Bugüne kadar görünmüyordu çünkü önbellek süreç-yereldi: her dağıtım yeni
+ * instance demekti, yani kendiliğinden temizleniyordu. Upstash canlıya geçince
+ * önbellek dağıtımdan uzun yaşamaya başladı ve şu ortaya çıktı — betimleme
+ * aşaması eklendikten sonra bile aynı fotoğraf, aşama yokken hesaplanmış eski
+ * cevabını vermeye devam etti. İki ayrı ölçüm bu yüzden boşa gitti; log'da
+ * görünen tek şey `total: 48ms` ve «önbellekten döndü» idi.
+ *
+ * ## Bedeli
+ *
+ * Her dağıtımdan sonra ilk taramalar yeniden hesaplanıyor. Bu, önbelleğin ne
+ * için var olduğuna göre doğru taraf: amaç **aynı işi iki kez yapmamak**, eski
+ * bir boru hattının cevabını saklamak değil. Değişmeyen bir dağıtımda hiçbir şey
+ * değişmiyor — sürüm sabit kaldıkça anahtar da sabit.
+ *
+ * Sıra: Vercel dağıtım kimliği, yoksa commit, yoksa elle verilen sürüm, yoksa
+ * sabit. Sonuncusu yerel geliştirmeyi kapsıyor — orada her `next dev`
+ * yeniden başlatmasında önbelleği düşürmenin bir faydası olmazdı.
+ */
+function pipelineVersion(): string {
+  const source =
+    process.env.VERCEL_DEPLOYMENT_ID?.trim() ||
+    process.env.VERCEL_GIT_COMMIT_SHA?.trim() ||
+    process.env.SCAN_CACHE_VERSION?.trim();
+
+  if (!source) return "v1";
+
+  // Kısaltılıyor: anahtarın okunabilir kalması teşhiste işe yarıyor, ve
+  // çarpışma riski burada bir sürüm etiketi için anlamsız derecede küçük.
+  return createHash("sha256").update(source).digest("hex").slice(0, 8);
+}
+
+/**
  * Cache key for one scan.
  *
  * The example id is part of it because the same bytes uploaded as a demo and as a
@@ -185,7 +225,7 @@ export function scanCacheKey(
   shopperGender?: string,
 ): string {
   const digest = createHash("sha256").update(imageBytes).digest("hex").slice(0, 32);
-  return `scan:v1:${digest}:${exampleId ?? "-"}:${shopperGender ?? "-"}`;
+  return `scan:${pipelineVersion()}:${digest}:${exampleId ?? "-"}:${shopperGender ?? "-"}`;
 }
 
 /**
