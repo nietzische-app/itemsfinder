@@ -3,6 +3,8 @@
  *
  *   npm run check:markup
  *   npm run check:markup -- --sorgu 12      # kaç ürün adı denensin
+ *   npm run check:markup -- --kanal mağaza  # dizin yerine mağaza aramasını ölç
+ *   npm run check:markup -- --kanal ikisi   # ikisini yan yana
  *
  * ## Hangi soruyu cevaplıyor
  *
@@ -42,12 +44,39 @@ process.env.ENABLE_MARKUP_EXTRACT ??= "true";
 
 register(new URL("./alias-loader.mjs", import.meta.url).href);
 
-const arg = parseArgs(process.argv.slice(2), { queries: ["sorgu"], dir: ["dizin"] });
+const arg = parseArgs(process.argv.slice(2), {
+  queries: ["sorgu"],
+  dir: ["dizin"],
+  channel: ["kanal"],
+});
 
 if (arg("dir")) process.env.PRODUCT_INDEX_DIR = arg("dir");
 
+/**
+ * Hangi aday kanalı ölçülecek.
+ *
+ * `ikisi` asıl soruyu cevaplıyor: **aynı sorgularda** iki kanal kaç aday veriyor,
+ * kaçı satıra dönüşüyor ve kaç milisaniye tutuyor. Üretim logu bu karşılaştırmayı
+ * yapmaya yetmiyor, çünkü her tarama başka bir fotoğraf ve iki kanal aynı parçada
+ * hiç yan yana çalışmıyor — dizin, mağaza araması boş dönünce devreye giriyor.
+ *
+ * Sıra kararı buna bağlı: mağaza kanalı üretimde ~180 kat pahalı görünüyor ama
+ * aday başına isabeti daha yüksek. İkisi de tek bir taramanın gözlemi, ve tek
+ * gözlemle sıra değiştirmek bu turda üç kez cezası ödenmiş hata.
+ */
+const CHANNELS = ["dizin", "mağaza", "ikisi"];
+const channel = arg("channel") ?? "dizin";
+
+if (!CHANNELS.includes(channel)) {
+  console.error(`--kanal şunlardan biri olmalı: ${CHANNELS.join(", ")} (verilen: ${channel})`);
+  process.exit(2);
+}
+
+process.env.ENABLE_STORE_SEARCH ??= "true";
+
 const { COVERAGE_CASES } = await import("../eval/coverageCases.ts");
 const { ProductIndexSearch } = await import("@/services/productIndex");
+const { StoreProductSearch } = await import("@/services/storeSearch");
 const { productsFromMarkup } = await import("@/services/markupProducts");
 
 /**
@@ -83,6 +112,8 @@ console.log(`\n${queries.length} ürün adı, dizinden gelen adaylar okunuyor.`)
 console.log("Yalnızca mağazalara gidiyor; hiçbir yere veri göndermiyor.\n");
 
 const index = new ProductIndexSearch();
+/** Ölçülmüş iki mağaza — `storeSearch.ts`'in kendi varsayılanı. */
+const storeSearch = new StoreProductSearch(["koton.com", "boyner.com.tr"]);
 
 /** Mağaza başına: verilen aday, okunan satır, düşme sebepleri. */
 const stores = new Map();
@@ -91,10 +122,56 @@ const bucket = (host) => {
   return stores.get(host);
 };
 
+/** Kanal başına: aday, satır, aday bulmanın süresi. */
+const channels = new Map();
+const channelStat = (name) => {
+  if (!channels.has(name)) channels.set(name, { given: 0, rows: 0, ms: 0, empty: 0 });
+  return channels.get(name);
+};
+
+/**
+ * Bir kanaldan aday listesi — ve bulmanın süresi.
+ *
+ * Süre ölçülüyor çünkü karşılaştırmanın yarısı o: mağaza kanalı ağa çıkıyor,
+ * dizin çıkmıyor. Yalnızca satır sayan bir karşılaştırma iki kanalı eşit
+ * maliyetliymiş gibi gösterirdi.
+ */
+async function candidates(name, query) {
+  const startedAt = Date.now();
+  const urls =
+    name === "dizin"
+      ? index.findProductPages(query).urls
+      : (await storeSearch.findProductPages(query)).urls;
+
+  return { urls, ms: Date.now() - startedAt };
+}
+
+const running = channel === "ikisi" ? ["dizin", "mağaza"] : [channel];
+
+/*
+ * İki kanal da ölçümden önce ısıtılıyor.
+ *
+ * İkisinin de bir kerelik kurulum maliyeti var ve ikisi de ilk sorguya
+ * yazılırdı: dizin dosyaları okuyup katlıyor (~70 ms), mağaza araması her
+ * mağazanın arama kalıbını ana sayfadan okuyor (bir gidiş dönüş). Isıtılmadan
+ * ölçülen «sorgu başına süre», ilk sorgunun sırtına yüklenmiş bir kurulum
+ * olurdu — ve karşılaştırmanın tamamı süre üzerine.
+ *
+ * Kurulum maliyeti kaybolmuyor, başka yerde ölçülüyor: `check:index` yüklemeyi
+ * ayrıca yazıyor.
+ */
+for (const name of running) await candidates(name, "ısınma sorgusu pantolon");
+
 for (const query of queries) {
-  const { urls } = index.findProductPages(query);
+ for (const name of running) {
+  const { urls, ms } = await candidates(name, query);
+  const stat = channelStat(name);
+  stat.ms += ms;
+  stat.given += urls.length;
+
   if (urls.length === 0) {
-    console.log(`  ${query.padEnd(20)} aday yok`);
+    stat.empty += 1;
+    console.log(`  ${query.padEnd(20)} ${running.length > 1 ? `[${name}] ` : ""}aday yok`);
     continue;
   }
 
@@ -135,6 +212,7 @@ for (const query of queries) {
 
     if (rows.length > 0) {
       bucket(host).rows += 1;
+      channelStat(name).rows += 1;
       outcomes.push(`${host} ✓`);
       continue;
     }
@@ -147,7 +225,23 @@ for (const query of queries) {
     outcomes.push(`${host} ✗`);
   }
 
-  console.log(`  ${query.padEnd(20)} ${outcomes.join("  ")}`);
+  console.log(
+    `  ${query.padEnd(20)} ${running.length > 1 ? `[${name}] ` : ""}${outcomes.join("  ")}`,
+  );
+ }
+}
+
+if (channels.size > 1) {
+  console.log("");
+  console.log("  Kanal başına — aynı sorgular:");
+  for (const [name, stat] of channels) {
+    const pct = stat.given > 0 ? Math.round((stat.rows / stat.given) * 100) : 0;
+    console.log(
+      `    ${name.padEnd(8)} ${String(stat.given).padStart(3)} aday → ` +
+        `${String(stat.rows).padStart(3)} satır (%${pct})   ` +
+        `aday bulma ${stat.ms} ms, boş dönen sorgu ${stat.empty}/${queries.length}`,
+    );
+  }
 }
 
 console.log("");

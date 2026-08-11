@@ -70,7 +70,18 @@ register(new URL("../alias-loader.mjs", import.meta.url).href);
 const { ContextDevService, contextDevKeyRejected } = await import("@/services/contextDevService");
 
 const COOLDOWN = 400;
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Kilidin dolmasını **durumu yoklayarak** bekliyor, sabit bir uykuyla değil.
+ *
+ * `sleep(COOLDOWN + 100)` yavaş bir makinede yetmeyebilirdi ve kapı kırmızıya
+ * dönerdi — kodda bir kusur olduğunu söyleyerek, oysa söyleyeceği tek şey
+ * makinenin o an meşgul olduğu olurdu. Yanlış alarm veren bir ölçüm, bir süre
+ * sonra bakılmayan bir ölçüm.
+ */
+const untilUnlocked = async () => {
+  while (contextDevKeyRejected()) await new Promise((resolve) => setTimeout(resolve, 20));
+};
 
 /**
  * Her tarama **yeni bir servis nesnesi** kuruyor — üretimde `getProductProvider()`
@@ -111,7 +122,7 @@ const scan = (domain) =>
  */
 {
   mode = "ok";
-  await sleep(COOLDOWN + 100);
+  await untilUnlocked();
 
   requests = 0;
   const brand = await scan("koton.com");
@@ -148,7 +159,7 @@ const scan = (domain) =>
  */
 {
   mode = "ok";
-  await sleep(COOLDOWN + 100);
+  await untilUnlocked();
   await scan("mavi.com");
   t(!contextDevKeyRejected(), "çalışan anahtarda uyarı yok");
 

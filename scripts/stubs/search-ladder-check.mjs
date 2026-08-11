@@ -13,7 +13,9 @@
  */
 import { register } from "node:module";
 register(new URL("../alias-loader.mjs", import.meta.url).href);
-const { ContextDevService } = await import("@/services/contextDevService");
+const { ContextDevService, contextDevKeyRejected } = await import(
+  "@/services/contextDevService"
+);
 
 /** Reddedilen anahtarın kilit süresi — gerçek değeri bir dakika, ölçüm beklemesin. */
 const LATCH_MS = 200;
@@ -263,8 +265,17 @@ function make(matcher) {
 
 // 12) Geçici hata merdiveni durdurmuyor — 500 ile 401 aynı şey değil.
 {
-  // 11. vakanın kilidinin dolmasını bekle: modül düzeyinde ve aynı süreçteyiz.
-  await new Promise((resolve) => setTimeout(resolve, LATCH_MS + 50));
+  /*
+   * 11. vakanın kilidinin dolmasını bekle: kilit modül düzeyinde ve aynı
+   * süreçteyiz.
+   *
+   * Sabit bir `sleep` değil, **durumun kendisi** yoklanıyor. `LATCH_MS + 50`
+   * yazılmıştı ve yavaş bir makinede yetmeyebilirdi: kırmızıya dönen bir kapı,
+   * kodda bir kusur olduğunu söylerdi — oysa söyleyeceği tek şey makinenin o an
+   * meşgul olduğu olurdu. Yanlış alarm veren bir ölçüm, bir süre sonra
+   * bakılmayan bir ölçüm.
+   */
+  while (contextDevKeyRejected()) await new Promise((resolve) => setTimeout(resolve, 20));
 
   const svc = new ContextDevService("stub");
   const calls = [];

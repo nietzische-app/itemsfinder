@@ -613,6 +613,27 @@ süreçte iki vaka sürüyor ve birincinin kurduğu kilit ikinciyi de susturdu. 
 kilidin çalıştığının kanıtı — üretimde de aynı süreçteki sonraki tarama susacak.
 Süit buna göre kuruldu.
 
+**Kilit üretimde ölçüldü ve tasarlandığı gibi davrandı** — bir taramada hâlâ üç
+401 çıkıyor, çünkü üç çağrı aynı anda yola çıkıyor ve hiçbiri ötekinin cevabını
+görmüyor. Kazanç sonraki taramada. Bu üç çağrı **eşzamanlı** olduğu için duvar
+saatine maliyeti bir gidiş dönüş; onları teke indirmek için ek makine yazmak,
+ölçülmüş bir kazancı olmayan bir iş olurdu.
+
+**İki kanal yan yana ölçülebiliyor artık.** Üretim logu şunu gösterdi:
+
+```
+mağaza kanalı   2 parçada 2'şer aday → 4 satır     arama toplam 8748 ms
+dizin kanalı    2 parçada 4'er aday → 3 satır      sorgu başına ~12 ms
+```
+
+Yani mağaza kanalı yüz kat pahalı ama aday başına isabeti daha yüksek. Sıra
+kararı buna bağlı — ve bu tek bir taramanın gözlemi. `npm run check:markup --
+--kanal ikisi` **aynı sorgularda** iki kanalı yan yana ölçüyor: aday, satır,
+aday bulma süresi, boş dönen sorgu sayısı. İki kanal da önce ısıtılıyor, çünkü
+ikisinin de bir kerelik kurulum maliyeti var (dizin dosyaları okuyor, mağaza
+araması arama kalıbını ilan sayfasından okuyor) ve ısıtılmadan ölçülen «sorgu
+başına süre» ilk sorgunun sırtına yüklenmiş bir kurulum olurdu.
+
 **Sırada — ölçülmüş öncelik.** Son taramada `spent` şunu yazdı:
 
 ```
