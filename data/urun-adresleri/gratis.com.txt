@@ -11526,9 +11526,11 @@
 /toka-tac/eklips-3lu-siyah-gecisli-lastik-toka-p-10217991
 /toka-tac/eklips-6li-desenli-havlu-toka-seti-p-10202592
 /toka-tac/eklips-6li-sac-lastigi-siyah-p-10202452
+/toka-tac/eklips-6li-sac-lastigi-yesil-p-10202456
 /toka-tac/eklips-altin-rengi-tel-toka-24lu-p-10329923
 /toka-tac/eklips-bej-tac-p-10204174
 /toka-tac/eklips-beyaz-kirmizi-kalp-mandal-toka-p-10208120
+/toka-tac/eklips-buyuk-havlu-toka-4lu-asortili-p-10133767
 /toka-tac/eklips-buzlu-dikdortgen-toka-pembe-kahve-p-10216054
 /toka-tac/eklips-buzlu-kurdele-mandal-toka-yesil-mavi-p-10216060
 /toka-tac/eklips-buzlu-yildiz-toka-natural-p-10216005
@@ -11635,8 +11637,6 @@
 /toka/eklips-6li-sac-lastigi-kahve-p-10202455
 /toka/eklips-6li-sac-lastigi-lila-p-10202454
 /toka/eklips-6li-sac-lastigi-pembe-p-10202453
-/toka/eklips-6li-sac-lastigi-yesil-p-10202456
-/toka/eklips-buyuk-havlu-toka-4lu-asortili-p-10133767
 /toka/eklips-lacivert-lastik-toka-15li-p-10207919
 /toka/eklips-mor-lastik-toka-15li-p-10207941
 /toka/eklips-otomatik-fiyonk-toka-leopar-p-10208433
