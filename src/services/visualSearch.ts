@@ -37,6 +37,8 @@ import {
   selectAttributeProvider,
 } from "@/services/attributeProvider";
 import { cropLabelStatus, getCropLabelReader } from "@/services/cropLabels";
+import { storeSearchEnabled } from "@/services/storeSearch";
+import { productIndexEnabled } from "@/services/productIndex";
 import { createTrace, type TraceCollector } from "@/lib/scanTrace";
 import { foregroundFilter, learnBackdrop } from "@/services/foreground";
 import { imageSize, regionDominantColor } from "@/services/regionColor";
@@ -938,17 +940,32 @@ function getDetector(): VisualSearchService {
  * It is chosen independently of the detector so live pricing can be exercised
  * in development without a Vision key; in production both should be live.
  */
-function getProductProvider(): ProductProvider {
+export function getProductProvider(): ProductProvider {
   const apiKey = process.env.CONTEXT_DEV_API_KEY;
+  const contextDevLive = Boolean(apiKey) && process.env.ENABLE_CONTEXT_DEV_LIVE === "true";
 
-  if (!apiKey || process.env.ENABLE_CONTEXT_DEV_LIVE !== "true") {
+  /*
+   * Canlı yol, **herhangi bir** kanal yapılandırılmışsa açılıyor.
+   *
+   * Eskiden yalnızca `CONTEXT_DEV_API_KEY`'e bakıyordu, ve bu ölçülmüş bir
+   * kusura dönüştü: kredisi bitmiş satıcının anahtarı ortamdan silindiğinde
+   * mağaza araması, adres dizini ve işaretleme okuma — hiçbiri o satıcıya
+   * ihtiyaç duymayan üç kanal — birlikte kapandı.
+   *
+   *   {"products":"mock","live":"0/2","ms":{"products":0},"searchYield":[]}
+   *
+   * Ücretli kanal artık kanallardan **biri**, kapısı değil.
+   */
+  if (!contextDevLive && !storeSearchEnabled() && !productIndexEnabled()) {
     return new MockProductProvider();
   }
 
   return new ContextDevProductProvider(
-    new ContextDevService(apiKey, {
-      extractsPerQuery: readInt(process.env.CONTEXT_DEV_EXTRACTS_PER_QUERY, 3),
-    }),
+    contextDevLive && apiKey
+      ? new ContextDevService(apiKey, {
+          extractsPerQuery: readInt(process.env.CONTEXT_DEV_EXTRACTS_PER_QUERY, 3),
+        })
+      : null,
     {
       maxLiveItems: readInt(process.env.CONTEXT_DEV_MAX_LIVE_ITEMS, 4),
       deadlineMs: readInt(process.env.CONTEXT_DEV_DEADLINE_MS, 45_000),

@@ -29,8 +29,16 @@ export type Merchant =
 /** How close a product is to the thing we detected in the screenshot. */
 export type MatchType = "exact" | "alternative";
 
-/** Where the *products* came from, independent of which detector ran. */
-export type ProductSource = "mock" | "context-dev";
+/**
+ * Where the *products* came from, independent of which detector ran.
+ *
+ * `"live"` yerine eskiden `"context-dev"` yazıyordu ve bu, bir satıcının adını
+ * bir yeteneğin adı yerine kullanmaktı. Canlı kartların çoğu bugün mağaza
+ * aramasından ve ürün işaretlemesinden geliyor; context.dev anahtarı hiç
+ * yokken bile log `products: "context-dev"` diyordu. Bir satıcı adı, kanal
+ * listesi değiştiğinde yanlışa dönüşür — yetenek adı dönmez.
+ */
+export type ProductSource = "mock" | "live";
 
 /** Retailer branding resolved from a product URL's domain via the Brand API. */
 export interface BrandMetadata {

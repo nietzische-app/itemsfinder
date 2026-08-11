@@ -44,8 +44,46 @@ import {
  * yolun ölçülmüş bir yolu kaldırması için gerekçe yok; **eksiği kapatıyor**.
  */
 
-/** Ücretsiz kademede sunulan görme yeteneği olan model. */
-const DEFAULT_MODEL = "gemini-2.0-flash";
+/**
+ * Denenecek modeller, sırayla — tek bir sabit isim değil.
+ *
+ * Üretimde ölçüldü: `gemini-2.0-flash` emekli oldu ve aşama 404 ile durdu.
+ *
+ *   404 This model models/gemini-2.0-flash is no longer available.
+ *
+ * Bunun bir dağıtım gerektirmesi yanlış. Model emekliliği öngörülebilir ve
+ * tekrarlanabilir bir olay; ona her seferinde kod değişikliğiyle cevap veren bir
+ * tasarım, kullanıcıyı satıcının takvimine bağlıyor. Liste sırayla deneniyor ve
+ * çalışan model **modül düzeyinde hatırlanıyor**, yani bedel taramada bir kez
+ * değil instance ömründe bir kez ödeniyor.
+ *
+ * Hepsi görme yeteneğine sahip ve ücretsiz kademede sunuluyor. `GEMINI_MODEL`
+ * verildiyse liste hiç kullanılmıyor — operatörün açık seçimi denenip
+ * geçilecek bir öneri değil.
+ */
+const MODEL_CANDIDATES = ["gemini-3.5-flash", "gemini-2.5-flash"] as const;
+
+/**
+ * Ölçüm listeyi kendi yazmasın diye dışa açık.
+ *
+ * Kontrolde adları elle yazmak, liste değiştiğinde sessizce **hiçbir şey
+ * ölçmeyen** bir kontrol bırakırdı: sahte sunucu var olmayan bir modeli emekli
+ * ilan eder, kod başka bir modeli sorar, ikisi de yeşil görünür.
+ */
+export const MODEL_CANDIDATES_FOR_TEST: readonly string[] = MODEL_CANDIDATES;
+
+/**
+ * Çalıştığı görülen model. Instance ömrü boyunca kalıyor.
+ *
+ * Aday listesi kısa ve emeklilik nadir, ama hatırlamamak her taramanın ilk
+ * isteğini ölü bir modele göndermek demekti.
+ */
+let resolvedModel: string | null = null;
+
+/** Emekli model mi? Kotayla ya da anahtarla ilgisi yok — susmayı gerektirmiyor. */
+function isRetiredModel(status: number, body: string): boolean {
+  return status === 404 && /no longer available|not found|is not supported/i.test(body);
+}
 
 /**
  * Susmanın sebebi. İkisinin **çözümü farklı**, o yüzden ikisi ayrı.
@@ -110,8 +148,15 @@ function rejectionKind(status: number, body: string): GeminiBlockKind | null {
   return null;
 }
 
+/** Bir gidiş dönüşün sonucu — emeklilik, çağıranın devam etmesi gereken tek dal. */
+type SendOutcome =
+  | { kind: "ok"; attributes: GarmentAttributes | null }
+  | { kind: "emekli" }
+  | { kind: "hata" };
+
 export class GeminiAttributeExtractor implements AttributeExtractor {
-  private readonly model: string;
+  /** Operatörün açık seçimi; verilmediyse aday listesi sürülüyor. */
+  private readonly pinnedModel: string | null;
   private readonly maxItems: number;
   private readonly deadlineMs: number;
   private readonly requestTimeoutMs: number;
@@ -122,7 +167,7 @@ export class GeminiAttributeExtractor implements AttributeExtractor {
     private readonly apiKey: string,
     options: GeminiAttributeOptions = {},
   ) {
-    this.model = options.model ?? DEFAULT_MODEL;
+    this.pinnedModel = options.model ?? null;
     this.maxItems = options.maxItems ?? 4;
     this.deadlineMs = options.deadlineMs ?? 15_000;
     this.requestTimeoutMs = options.requestTimeoutMs ?? 15_000;
@@ -191,7 +236,11 @@ export class GeminiAttributeExtractor implements AttributeExtractor {
      * sınıfı tümden kaldırıyor — `rateLimitStatus`'ta jetonun yazılmaması ile
      * aynı gerekçe.
      */
-    const url = `${this.baseUrl}/v1beta/models/${encodeURIComponent(this.model)}:generateContent`;
+    const models = this.pinnedModel
+      ? [this.pinnedModel]
+      : resolvedModel
+        ? [resolvedModel, ...MODEL_CANDIDATES.filter((name) => name !== resolvedModel)]
+        : [...MODEL_CANDIDATES];
 
     /*
      * Alan listesi isteme yazılıyor.
@@ -242,7 +291,27 @@ export class GeminiAttributeExtractor implements AttributeExtractor {
      */
     const perRequest = withDeadline(this.requestTimeoutMs, signal);
     try {
-      return await this.send(url, body, request, perRequest.signal);
+      /*
+       * Emekli model listede bir sonrakine geçiriyor; başka her sonuç — başarı,
+       * kota, anahtar reddi, sunucu hatası — döngüyü bitiriyor. Yalnızca
+       * emeklilikte devam etmek önemli: her hatada sıradaki modeli denemek,
+       * kotası dolmuş bir anahtarla aynı isteği iki katına çıkarırdı.
+       */
+      for (const model of models) {
+        const outcome = await this.send(model, body, request, perRequest.signal);
+        if (outcome.kind !== "emekli") {
+          if (outcome.kind === "ok") resolvedModel = model;
+          return outcome.kind === "ok" ? outcome.attributes : null;
+        }
+
+        console.warn(`[gemini] "${model}" emekli — listedeki bir sonraki model deneniyor`);
+      }
+
+      console.warn(
+        `[gemini] denenen modellerin hepsi emekli (${models.join(", ")}) — ` +
+          "GEMINI_MODEL ile güncel bir model verin",
+      );
+      return null;
     } finally {
       perRequest.dispose();
     }
@@ -270,13 +339,22 @@ export class GeminiAttributeExtractor implements AttributeExtractor {
     return withoutOwn.replace(/api_key:[A-Za-z0-9._-]+/g, "api_key:«anahtar»");
   }
 
-  /** Tek gidiş dönüş: gönder, oku, doğrula. Asla fırlatmıyor. */
+  /**
+   * Tek gidiş dönüş: gönder, oku, doğrula. Asla fırlatmıyor.
+   *
+   * Sonuç `null` değil bir **etiket** dönüyor, çünkü çağıranın ayırması gereken
+   * iki başarısızlık var: emekli model (listede devam et) ve başka her şey (dur).
+   * `null` ikisini aynı gösterirdi ve döngü ya hiç ilerlemez ya da kotası dolmuş
+   * bir anahtarla her modeli tek tek denerdi.
+   */
   private async send(
-    url: string,
+    model: string,
     body: unknown,
     request: AttributeRequest,
     signal: AbortSignal,
-  ): Promise<GarmentAttributes | null> {
+  ): Promise<SendOutcome> {
+    const url = `${this.baseUrl}/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+
     let response: Response;
     try {
       response = await fetch(url, {
@@ -290,7 +368,7 @@ export class GeminiAttributeExtractor implements AttributeExtractor {
         `[gemini] "${request.itemType}" betimlenemedi: ` +
           this.redact(error instanceof Error ? error.message.slice(0, 80) : "istek başarısız"),
       );
-      return null;
+      return { kind: "hata" };
     }
 
     if (!response.ok) {
@@ -303,12 +381,14 @@ export class GeminiAttributeExtractor implements AttributeExtractor {
        * kilit hiçbir zaman kurulmazdı — `attributeExtractor`'da bir kez ödenmiş
        * ders.
        */
+      if (isRetiredModel(response.status, text)) return { kind: "emekli" };
+
       const kind = rejectionKind(response.status, text);
       if (kind) {
         geminiBlockedUntil = Date.now() + this.cooldownMs;
         geminiBlockKind = kind;
       }
-      return null;
+      return { kind: "hata" };
     }
 
     try {
@@ -321,18 +401,26 @@ export class GeminiAttributeExtractor implements AttributeExtractor {
         .join("")
         .trim();
 
-      if (!text) return null;
+      if (!text) return { kind: "hata" };
 
       // Çalıştı — varsa eski kilit kalkıyor.
       geminiBlockedUntil = 0;
 
-      return normalizeAttributes(JSON.parse(text));
+      const attributes = normalizeAttributes(JSON.parse(text));
+
+      /*
+       * Model **cevap verdi**, yani emekli değil — betimlemesi reddedilmiş olsa
+       * bile. `attributes` null olduğunda «hata» demek, çalışan bir modeli emekli
+       * sayıp listede ilerletmezdi ama `resolvedModel`i de kurmazdı; sonraki her
+       * tarama listeyi baştan sürerdi.
+       */
+      return { kind: "ok", attributes };
     } catch (error) {
       console.warn(
         `[gemini] "${request.itemType}" cevabı okunamadı: ` +
           this.redact(error instanceof Error ? error.message.slice(0, 80) : "ayrıştırılamadı"),
       );
-      return null;
+      return { kind: "hata" };
     }
   }
 }

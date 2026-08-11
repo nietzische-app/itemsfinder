@@ -17,12 +17,12 @@ interface EngineBadgeProps {
  */
 export function EngineBadge({ result, className }: EngineBadgeProps) {
   const isLiveDetection = result.source === "google-vision";
-  const isLiveProducts = result.productSource === "context-dev";
+  const isLiveProducts = result.productSource === "live";
 
   const label = isLiveProducts
     ? isLiveDetection
-      ? "Canlı Motor (Vision + Context.dev)"
-      : "Canlı Motor (Context.dev ürünleri)"
+      ? "Canlı Motor (Vision + canlı ürünler)"
+      : "Canlı Motor (canlı ürünler)"
     : isLiveDetection
       ? "Vision tespiti · örnek ürünler"
       : "Demo Modu (Örnek Veri)";

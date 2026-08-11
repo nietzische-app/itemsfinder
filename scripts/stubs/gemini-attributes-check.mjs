@@ -33,6 +33,9 @@ const t = (c, n) => (c ? pass++ : fails.push(n));
 const seen = [];
 let mode = "ok"; // "ok" | "quota" | "askı" | "badkey" | "server" | "bozuk"
 
+/** Emekli sayılan modeller — istek yoluna göre 404 döndürülüyor. */
+let retired = new Set();
+
 /**
  * Anahtarın **şekli**, kendisi değil.
  *
@@ -56,6 +59,29 @@ const server = createServer((req, res) => {
       contentType: req.headers["content-type"],
       body: JSON.parse(body || "{}"),
     });
+
+    /*
+     * Emekli model — üretimden alınmış gerçek gövde.
+     *
+     *   404 This model models/gemini-2.0-flash is no longer available.
+     *
+     * Kotadan ve anahtar reddinden önce sınanıyor çünkü ayrı bir sınıf: susmayı
+     * değil, listede ilerlemeyi gerektiriyor.
+     */
+    const askedModel = /models\/([^:]+):/.exec(req.url ?? "")?.[1];
+    if (askedModel && retired.has(askedModel)) {
+      res.writeHead(404, { "content-type": "application/json" });
+      res.end(
+        JSON.stringify({
+          error: {
+            code: 404,
+            message: `This model models/${askedModel} is no longer available. Please update your code to use a newer model.`,
+            status: "NOT_FOUND",
+          },
+        }),
+      );
+      return;
+    }
 
     if (mode === "quota") {
       res.writeHead(429, { "content-type": "application/json" });
@@ -177,7 +203,7 @@ const untilUnlocked = async () => {
 
   t(seen.length === 2, `iki parça için iki istek (${seen.length})`);
   t(
-    seen[0]?.path === "/v1beta/models/gemini-2.0-flash:generateContent",
+    /^\/v1beta\/models\/gemini-[\w.-]+:generateContent$/.test(seen[0]?.path ?? ""),
     `doğru yol: ${seen[0]?.path}`,
   );
 
@@ -382,6 +408,72 @@ const untilUnlocked = async () => {
   t(seen.length === 2, `bozuk cevapta da istek gidiyor (${seen.length})`);
   t(result.size === 0, `ayrıştırılamayan cevap kabul edilmiyor (${result.size})`);
   t(!geminiBlocked(), "bozuk cevap kilit kurmuyor");
+}
+
+/*
+ * 5b) **Emekli model listede bir sonrakine geçiriyor.**
+ *
+ * Üretimde ölçüldü: `gemini-2.0-flash` emekli oldu ve aşama 404 ile durdu.
+ * Bunun bir dağıtım gerektirmesi yanlış — model emekliliği öngörülebilir ve
+ * tekrarlanabilir bir olay.
+ */
+{
+  mode = "ok";
+  await untilUnlocked();
+  seen.length = 0;
+
+  // Listedeki ilk model emekli; ikincisi çalışıyor.
+  const { MODEL_CANDIDATES_FOR_TEST } = await import("@/services/geminiAttributes");
+  retired = new Set([MODEL_CANDIDATES_FOR_TEST[0]]);
+
+  const result = await scan();
+  const asked = seen.map((entry) => /models\/([^:]+):/.exec(entry.path)?.[1]);
+
+  t(asked.includes(MODEL_CANDIDATES_FOR_TEST[0]), "emekli model bir kez deneniyor");
+  t(asked.includes(MODEL_CANDIDATES_FOR_TEST[1]), "sonraki model deneniyor");
+  t(result.size === 2, `emeklilikten sonra betimleme geliyor (${result.size})`);
+  t(!geminiBlocked(), "emeklilik kilit kurmuyor — kota da anahtar da değil");
+
+  /*
+   * Ve çalışan model **hatırlanıyor**: sonraki tarama ölü modele hiç gitmiyor.
+   * Hatırlamamak, her taramanın ilk isteğini boşa harcamak demekti.
+   */
+  seen.length = 0;
+  await scan();
+  const askedAgain = seen.map((entry) => /models\/([^:]+):/.exec(entry.path)?.[1]);
+  t(
+    !askedAgain.includes(MODEL_CANDIDATES_FOR_TEST[0]),
+    `çalışan model hatırlanıyor (${[...new Set(askedAgain)].join(", ")})`,
+  );
+
+  retired = new Set();
+}
+
+/*
+ * 5c) `GEMINI_MODEL` verildiyse liste hiç sürülmüyor.
+ *
+ * Operatörün açık seçimi, denenip geçilecek bir öneri değil. Sessizce başka bir
+ * modele geçmek, faturayı ya da davranışı onun bilmediği bir yere taşırdı.
+ */
+{
+  mode = "ok";
+  seen.length = 0;
+  retired = new Set(["gemini-sabit-secim"]);
+
+  const { GeminiAttributeExtractor } = await import("@/services/geminiAttributes");
+  await new GeminiAttributeExtractor(KEY, {
+    baseUrl: base,
+    model: "gemini-sabit-secim",
+    cooldownMs: COOLDOWN,
+  }).extract(image, boxes);
+
+  const asked = [...new Set(seen.map((entry) => /models\/([^:]+):/.exec(entry.path)?.[1]))];
+  t(
+    asked.length === 1 && asked[0] === "gemini-sabit-secim",
+    `yalnızca verilen model deneniyor: ${asked.join(", ")}`,
+  );
+
+  retired = new Set();
 }
 
 /*

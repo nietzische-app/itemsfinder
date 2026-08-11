@@ -147,7 +147,7 @@ export interface ContextDevProductProviderOptions {
  * can tell the truth rather than claiming a blanket "live".
  */
 export class ContextDevProductProvider implements ProductProvider {
-  readonly source: ProductSource = "context-dev";
+  readonly source: ProductSource = "live";
 
   private readonly maxLiveItems: number;
   private readonly concurrency: number;
@@ -157,7 +157,21 @@ export class ContextDevProductProvider implements ProductProvider {
   private readonly visualRerank: boolean;
 
   constructor(
-    private readonly context: ContextDevService,
+    /**
+     * Ücretli çıkarım servisi — **isteğe bağlı**.
+     *
+     * `null` olabilmesi ölçülmüş bir kusurdan doğdu. Bu sınıf dört kanal
+     * sürüyor (metin, görsel, mağaza araması, adres dizini) ve yalnızca sonuncu
+     * çareler context.dev'e gidiyor; ama sağlayıcı seçimi `CONTEXT_DEV_API_KEY`
+     * yokken tümüyle sahte kataloğa düşüyordu. Yani kredisi bitmiş bir satıcının
+     * anahtarını ortamdan **silmek**, ücretsiz kanalların hepsini birden
+     * kapatıyordu:
+     *
+     *   {"products":"mock","live":"0/2","ms":{"products":0},"searchYield":[]}
+     *
+     * Ölü bir anahtarı yerinde tutmayı gerektiren bir tasarım, tasarım değil.
+     */
+    private readonly context: ContextDevService | null,
     options: ContextDevProductProviderOptions = {},
   ) {
     this.maxLiveItems = options.maxLiveItems ?? 4;
@@ -241,7 +255,7 @@ export class ContextDevProductProvider implements ProductProvider {
         ...result,
         items,
         // Claiming "live" with zero live rows would be a lie; say mock instead.
-        productSource: liveItemCount > 0 ? "context-dev" : "mock",
+        productSource: liveItemCount > 0 ? "live" : "mock",
         liveItemCount,
       };
     } finally {
@@ -531,6 +545,13 @@ export class ContextDevProductProvider implements ProductProvider {
       }
     }
 
+    /*
+     * Ücretli aday bulma son basamak. Yoksa merdiven ücretsiz kanallarda
+     * bitiyor — boş dönmek, sahte kataloğa düşmek demek ve bu doğru sonuç:
+     * hiçbir kanal aday üretmediyse uydurulacak bir şey yok.
+     */
+    if (!this.context) return [];
+
     return this.context.findCandidateUrls(
       ladder,
       item.category,
@@ -589,6 +610,19 @@ export class ContextDevProductProvider implements ProductProvider {
         "products",
         `${urls.length} sayfanın işaretlemesi okunamadı — çıkarıma düşüldü`,
       );
+    }
+
+    /*
+     * Ücretli çıkarım yoksa işaretleme okuma tek yol. Sessizce boş dönmüyor:
+     * «adaylar bulundu ama karta dönüşmedi» ile «aday bulunamadı» panelde
+     * ayırt edilemezdi, ve ikisine bakarken yapılacak iş farklı.
+     */
+    if (!this.context) {
+      trace?.degrade(
+        "products",
+        `${urls.length} aday karta dönüşmedi — ürün işaretlemesi yok ve ücretli çıkarım kapalı`,
+      );
+      return [];
     }
 
     return this.context.productsFromUrls(urls, signal);
@@ -885,11 +919,15 @@ export class ContextDevProductProvider implements ProductProvider {
     );
     const brands = new Map<string, BrandMetadata | null>();
 
-    await Promise.all(
-      domains.map(async (domain) => {
-        brands.set(domain, await this.context.enrichBrandMetadata(domain, signal));
-      }),
-    );
+    // Marka verisi süs: logo ve renk. Yoksa kart marka adıyla çiziliyor.
+    const contextService = this.context;
+    if (contextService) {
+      await Promise.all(
+        domains.map(async (domain) => {
+          brands.set(domain, await contextService.enrichBrandMetadata(domain, signal));
+        }),
+      );
+    }
 
     return {
       ...item,
