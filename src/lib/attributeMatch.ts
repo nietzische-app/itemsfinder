@@ -67,6 +67,14 @@ export interface TitleAgreement {
   nounOverlap: number;
   /** Fraction of the expected descriptors present in the title. */
   descriptorOverlap: number;
+  /**
+   * Ürün adının **dışında** en az bir kanıt uyuştu mu?
+   *
+   * Renk, malzeme ya da bir niteleyici. Ad tek başına sayılmıyor: bir tespitin
+   * ürün adı zaten sorgunun kendisi ve aile kapısı onu çoktan geçirdi, yani adın
+   * tutması «doğru raftayız» demek — «bu, o parça» demek değil.
+   */
+  corroborated: boolean;
   /** Short human-readable reason, for logs. */
   reason: string;
 }
@@ -88,7 +96,25 @@ const COLOR_CONFLICT = -0.3;
 const MATERIAL_AGREE = 0.1;
 const MATERIAL_CONFLICT = -0.2;
 
-/** Below this a live row may not hold the exact-match slot. */
+/**
+ * Below this a live row may not hold the exact-match slot.
+ *
+ * **Tek başına yetmiyor, ve aritmetiği bu.** `BASE + NOUN_WEIGHT` tam olarak
+ * 0,55 ediyor: yalnızca ürün adı tutan bir satır tabanı **tam** olarak geçiyor
+ * ve birebir eşleşme ilan ediliyordu. Üretimde görünen hâli, bir erkek
+ * kombininin sonuçlarında üç satırın %56, %57 ve %60 ile yan yana durmasıydı:
+ *
+ *   «Tabanex Ayakkabı ve Çanta Koku Topu»   %60   — beyaz sneaker için
+ *   «Uzun Kollu Volanlı … V Yaka Bluz»      %57   — bej ribana polo için
+ *   «Normal Bel … Skinny Fit Jean Pantolon» %56   — geniş bej pantolon için
+ *
+ * Üçünün ortak yanı, tutan tek şeyin ürün adı olması. Öznitelik betimlemesi
+ * kapalıyken (`describedItems: 0`) elde niteleyici de kalmıyor, yani neredeyse
+ * her aday tam tabana oturuyor — sonuçların «tutarsız» görünmesinin sebebi
+ * puanların dalgalanması değil, hepsinin aynı yere yığılması.
+ *
+ * Bu yüzden taban tek koşul değil: `corroborated` de gerekiyor.
+ */
 export const EXACT_MATCH_FLOOR = 0.55;
 
 /**
@@ -122,6 +148,58 @@ function hasStem(tokens: string[], stem: string): boolean {
  * A multi-word palette entry ("Kırık Beyaz") counts only when every one of its
  * words is present, so "Beyaz Gömlek" does not get read as off-white.
  */
+/**
+ * Mağazaların kullandığı ama `COLOR_NAMES` paletinde olmayan renk sözcükleri.
+ *
+ * **Yalnızca başlık okumak için.** Palet iki iş yapıyor: ölçülen bir rengi
+ * adlandırmak (sorgu metni) ve başlıktaki rengi tanımak. İkincisinin sözlüğü
+ * birincisinden geniş olmalı — biz «Kırık Beyaz» diye ararız, mağaza «Krem»
+ * yazar, ve ikisi aynı rengi anlatır. Palete eklemek sorgu metnini de
+ * değiştirirdi; bu liste onu değiştirmiyor.
+ *
+ * **Neden gerekiyor.** Üretimde krem bir polo ve bej bir pantolon tarandı; hiçbir
+ * satırda renk uyuşmadı, çünkü mağazalar «krem» yazıyor ve o kelime sözlükte
+ * yoktu. Renk, birebir eşleşme için gereken ek kanıtın en sık bulunanı — sözlük
+ * boşluğu doğrudan «birebir eşleşme yok» demek.
+ *
+ * Her kelime bir aileye bağlanıyor, yeni bir aile açılmıyor: bunlar var olan
+ * ailelerin mağaza dilindeki adları, yeni renkler değil.
+ *
+ * **Tam kelime eşleşiyor, ön ek değil** — ve bu, ilk hâlin ürettiği kusurdan
+ * geliyor. `hasStem` ön ek arıyor ve «kum» (renk) Türkçe giysi başlıklarının en
+ * sık kelimesini yedi: **«kumaş»**. Her «Kumaş Pantolon» sahte bir bej uyumu
+ * kazanıyordu, yani sıkılaştırdığım kural tam da yanlış satırları geçirmeye
+ * başlıyordu.
+ *
+ * Bu depoda aynı hata sınıfı iki kez kayıtlı — «Chair» içindeki «hair», ve
+ * «sitemap» içindeki «item». Renk adları ekli kullanılmıyor («Krem Rengi
+ * Pantolon» başlığında kelime yine «krem»), o yüzden tam eşleşme bir şey
+ * kaybettirmiyor.
+ */
+const COLOR_SYNONYMS: Array<[string, ColorFamily]> = [
+  // Sıcak nötrler — beyazdan ayrı, `warmNeutral` bu ayrımı zaten yapıyor.
+  ["krem", "bej"],
+  ["ekru", "bej"],
+  ["ten", "bej"],
+  ["vizon", "bej"],
+  ["taş", "bej"],
+  ["kum", "bej"],
+  // Koyu nötrler.
+  ["antrasit", "gri"],
+  ["füme", "gri"],
+  ["melanj", "gri"],
+  // Doygun tonlar.
+  ["fuşya", "pembe"],
+  ["somon", "pembe"],
+  ["petrol", "mavi"],
+  ["indigo", "mavi"],
+  ["saks", "mavi"],
+  ["mint", "yesil"],
+  ["zeytin", "yesil"],
+  ["tarçın", "kahve"],
+  ["bronz", "kahve"],
+];
+
 export function colorFamiliesIn(title: string): ColorFamily[] {
   const tokens = tokensOf(title);
   const found = new Set<ColorFamily>();
@@ -132,6 +210,10 @@ export function colorFamiliesIn(title: string): ColorFamily[] {
 
     const [r, g, b] = entry.rgb;
     found.add(colorFamilyOf(`#${[r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("")}`));
+  }
+
+  for (const [word, family] of COLOR_SYNONYMS) {
+    if (tokens.includes(normalizeTr(word))) found.add(family);
   }
 
   return Array.from(found);
@@ -225,6 +307,7 @@ export function scoreTitleAgreement(
     material,
     nounOverlap,
     descriptorOverlap,
+    corroborated: color === "agree" || material === "agree" || descriptorHits.length > 0,
     reason: notes.length > 0 ? notes.join("; ") : "ek kanıt yok",
   };
 }

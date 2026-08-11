@@ -827,8 +827,26 @@ export class ContextDevProductProvider implements ProductProvider {
      * the slot: a worse price for a product that is actually what they scanned, and
      * the live rows are still offered as alternatives.
      */
+    /*
+     * Ve **ürün adının dışında** en az bir kanıt.
+     *
+     * `BASE + NOUN_WEIGHT` tam olarak tabana eşit, yani adı tutan her satır
+     * birebir eşleşme ilan ediliyordu. Adın tutması «doğru raftayız» demek —
+     * aile kapısı onu zaten geçirdi — ama «bu, o parça» demek değil. Üretimde
+     * beyaz bir sneaker için «Ayakkabı ve Çanta Koku Topu» %60 ile birebir
+     * eşleşme oldu; tutan tek şey «ayakkabı» kelimesiydi.
+     *
+     * Yorumun kendisi bunu zaten söylüyordu: «doğrulayabildiğimiz hiçbir şey
+     * yok» birebir eşleşme ilan etmek için gerekçe değil. Aritmetik o sözü
+     * tutmuyordu.
+     *
+     * Satır kaybolmuyor, **muadil** oluyor: elde kalanı dürüstçe etiketlemek,
+     * süzgeci gevşetmekten de katılaştırmaktan da doğru.
+     */
     const leaderQualifies =
-      leader.agreement.score >= EXACT_MATCH_FLOOR && leader.agreement.color !== "conflict";
+      leader.agreement.score >= EXACT_MATCH_FLOOR &&
+      leader.agreement.color !== "conflict" &&
+      leader.agreement.corroborated;
 
     if (!leaderQualifies) {
       console.warn(

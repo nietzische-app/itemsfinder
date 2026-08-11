@@ -178,6 +178,84 @@ const score = (item, title) => scoreTitleAgreement(title, expectedAttributesOf(i
   t(!contradictsShopper("Mango Kadife Pantolon", "kadın"), "kelime içindeki dizi kitle sayılmıyor");
 }
 
+/*
+ * Ürün adı tek başına birebir eşleşme ilan ettirmiyor.
+ *
+ * **Üretimde görülen kusur.** `BASE + NOUN_WEIGHT` tam olarak
+ * `EXACT_MATCH_FLOOR` ediyor (0,35 + 0,20 = 0,55), yani yalnızca ürün adı tutan
+ * bir satır tabanı **tam** olarak geçiyor ve birebir eşleşme oluyordu. Bir erkek
+ * kombininin sonuçlarında üç satır yan yana durdu:
+ *
+ *   «Tabanex Ayakkabı ve Çanta Koku Topu»   %60   beyaz sneaker için
+ *   «Uzun Kollu Volanlı … V Yaka Bluz»      %57   bej ribana polo için
+ *   «Normal Bel … Skinny Fit Jean Pantolon» %56   geniş bej pantolon için
+ *
+ * Üçünde de tutan tek şey ürün adı. Öznitelik betimlemesi kapalıyken elde
+ * niteleyici de kalmıyor, yani neredeyse her aday tam tabana oturuyor —
+ * sonuçların «tutarsız» görünmesinin sebebi puanların dalgalanması değil,
+ * hepsinin aynı yere yığılması.
+ *
+ * Adın tutması «doğru raftayız» demek; aile kapısı onu zaten geçirdi. «Bu, o
+ * parça» demek için adın **dışında** bir kanıt gerekiyor.
+ *
+ * Başlıklar üretimden, uydurma değil.
+ */
+{
+  const sneaker = { itemType: "Ayakkabı", label: "", colorHex: "#f2f2f0", attributes: "" };
+  const koku = score(sneaker, "Tabanex Ayakkabı ve Çanta Koku Topu");
+
+  t(koku.score >= EXACT_MATCH_FLOOR, `taban geçiliyor (%${Math.round(koku.score * 100)})`);
+  t(!koku.corroborated, `ama ad dışında kanıt yok: ${koku.reason}`);
+
+  /*
+   * Kanıtın **her biri** tek başına yetiyor: renk, malzeme ya da niteleyici.
+   * Üçünü birden şart koşmak, betimleme kapalıyken hiçbir satırı geçirmezdi.
+   */
+  const bejPantolon = { itemType: "Pantolon", label: "", colorHex: "#e8e0cd", attributes: "" };
+  const renkli = score(bejPantolon, "Bej Geniş Paça Pantolon");
+  t(renkli.corroborated, `renk tek başına kanıt sayılıyor: ${renkli.reason}`);
+
+  /*
+   * **«Krem» de renk sayılıyor** — ve bu, sıkılaştırmayla birlikte gelmek
+   * zorundaydı.
+   *
+   * Palet iki iş yapıyor: ölçülen rengi adlandırmak ve başlıktaki rengi tanımak.
+   * İkincisinin sözlüğü daha geniş olmalı — biz «Kırık Beyaz» diye ararız,
+   * mağaza «Krem» yazar. Üretimde krem bir polo ve bej bir pantolon tarandı ve
+   * hiçbir satırda renk uyuşmadı, çünkü o kelime sözlükte yoktu.
+   *
+   * Renk, ek kanıtın en sık bulunanı: sözlük boşluğu, sıkılaştırılmış kuralla
+   * birleşince doğru satırları da düşürürdü.
+   */
+  const krem = score(bejPantolon, "Krem Keten Geniş Paça Pantolon");
+  t(krem.corroborated, `«krem» renk sayılıyor: ${krem.reason}`);
+
+  const ekru = score(bejPantolon, "Ekru Kumaş Pantolon");
+  t(ekru.corroborated, `«ekru» renk sayılıyor: ${ekru.reason}`);
+
+  /*
+   * **«Kumaş» renk sayılmıyor** — eş anlamlı listesinin ilk hâlinin ürettiği
+   * kusur.
+   *
+   * `hasStem` ön ek arıyor ve «kum» (renk) Türkçe giysi başlıklarının en sık
+   * kelimesini yedi. Her «Kumaş Pantolon» sahte bir bej uyumu kazanıyordu, yani
+   * sıkılaştırılmış kural tam da yanlış satırları geçirmeye başlıyordu — bir
+   * düzeltmenin kendi kusurunu üretmesi.
+   *
+   * Bu depoda aynı hata sınıfı iki kez kayıtlı: «Chair» içindeki «hair»,
+   * «sitemap» içindeki «item».
+   */
+  const kumas = score(bejPantolon, "Kumaş Pantolon");
+  t(!kumas.corroborated, `«kumaş» renk sanılmıyor: ${kumas.reason}`);
+
+  /*
+   * Renk **çelişkisi** kanıt değil — zaten ayrı bir kapı, ama `corroborated`ın
+   * onu doğru sayması sessiz bir kusur olurdu.
+   */
+  const celisen = score(bejPantolon, "Siyah Kumaş Pantolon");
+  t(!celisen.corroborated, `renk çelişkisi kanıt sayılmıyor: ${celisen.reason}`);
+}
+
 console.log(`${pass} ✓ / ${fails.length} ✗`);
 for (const f of fails) console.log(`  ✗ ${f}`);
 process.exit(fails.length ? 1 : 0);
