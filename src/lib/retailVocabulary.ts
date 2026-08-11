@@ -44,6 +44,7 @@ const PHRASES: Record<string, string> = {
   "ankle boot": "bilekte bot",
   "ankle boots": "bilekte bot",
   "knee high boots": "çizme",
+  "running shoe": "koşu ayakkabısı",
   "running shoes": "koşu ayakkabısı",
   "sports shoes": "spor ayakkabı",
   "athletic shoe": "spor ayakkabı",
@@ -60,6 +61,12 @@ const PHRASES: Record<string, string> = {
   "biker jacket": "deri biker ceket",
   "bomber jacket": "bomber ceket",
   "polo shirt": "polo tişört",
+  /*
+   * «t-shirt» iki kelimeye ayrılıyor ve «shirt» tek başına «gömlek» —
+   * yani sorguya **«t gömlek»** yazılıyordu. Türk mağazalarında öyle bir şey
+   * yok; ölçüm bunu `fullyTranslatedRetailTerm` eklenirken ortaya çıkardı.
+   */
+  "t shirt": "tişört",
   "button down": "düğmeli gömlek",
   "tank top": "atlet",
   "crop top": "crop bluz",
@@ -95,6 +102,42 @@ const PHRASES: Record<string, string> = {
 };
 
 /**
+ * Türk perakendesinin **zaten kullandığı** İngilizce kökenli kelimeler.
+ *
+ * Yukarıdaki yorum bunu düzyazı olarak söylüyordu: «"sneaker", "blazer", "body",
+ * "crop", "oversize", "jean", "loafer", "sweatshirt" hepsi Trendyol'da canlı
+ * arama terimleri». Doğruydu, ama düzyazı olduğu için hiçbir şey ona göre karar
+ * veremiyordu — ve `TERMS`'te olmamalarıyla sözlükte hiç bulunmayan bir kelime
+ * ayırt edilemiyordu.
+ *
+ * Ayrım üretimde bir kusur olarak ortaya çıktı. Vision bir kırpıma «Tube top»
+ * dedi; çeviri yarısını tuttu ve «Tube bluz» Koton'da iki **parfüm** sayfası
+ * buldu, çünkü «tube» kelimesi «tubereuse»ün içinde geçiyor. «Tube» ile
+ * «sneaker» aynı görünüyordu: ikisi de tabloda yok. Oysa biri Türkçe arama
+ * kutusunun tanıdığı bir kelime, diğeri değil.
+ *
+ * Liste bilerek dar. Bir kelime buraya ancak Türk mağazalarının ürün adlarında
+ * o hâliyle geçtiği biliniyorsa giriyor; şüpheli olan dışarıda kalıyor ve
+ * dışarıda kalmanın bedeli yalnızca bir etiketin kullanılmaması.
+ */
+const TURKISH_LOANWORDS = new Set(
+  [
+    // Ayakkabı
+    "sneaker", "sneakers", "loafer", "mule", "chelsea", "espadril", "bot",
+    // Üst giyim
+    "blazer", "body", "crop", "polo", "sweatshirt", "tişört", "triko", "kazak",
+    // Alt giyim
+    "jean", "denim", "tayt", "şort", "pantolon",
+    // Dış giyim
+    "parka", "trençkot", "mont", "ceket", "kaban",
+    // Kalıp ve nitelik
+    "oversize", "slim", "regular", "fit", "basic",
+    // Diğer
+    "bikini", "mayo", "elbise", "etek", "çanta",
+  ].map((word) => normalizeTr(word)),
+);
+
+/**
  * Single tokens.
  *
  * **Only words Turkish retail does not already use.** Turkish e-commerce speaks a
@@ -109,6 +152,10 @@ const PHRASES: Record<string, string> = {
  * spelling differs ("espadrille" -> "espadril"), or when a plural or a phrase needs
  * normalising ("loafers" -> "loafer"). Identity mappings are left out — a word not
  * in the table already passes through unchanged.
+ *
+ * Hangi kelimelerin «zaten kullanılıyor» sayıldığı artık `TURKISH_LOANWORDS`'te
+ * veri olarak duruyor — bu paragraf onu yalnızca anlatıyordu ve anlatılan bir
+ * kural, kod tarafından uygulanamaz.
  */
 const TERMS: Record<string, string> = {
   // --- Footwear ---
@@ -195,9 +242,14 @@ const TERMS: Record<string, string> = {
   pant: "pantolon",
   pants: "pantolon",
   jeans: "jean",
+  // Vision bunları sık döndürüyor ve hiçbiri Türk mağazalarında İngilizce geçmiyor.
+  tights: "tayt",
+  sweatpants: "eşofman altı",
+  tracksuit: "eşofman",
   short: "şort",
   shorts: "şort",
   skirt: "etek",
+  swimsuit: "mayo",
   miniskirt: "mini etek",
   legging: "tayt",
   leggings: "tayt",
@@ -424,10 +476,18 @@ function lookup(table: Record<string, string>, keys: string[]): string | undefin
  * would rewrite the colour names the query is built to lead with. Turkish input
  * is unaffected: none of the keys are Turkish words.
  */
-export function toTurkishRetailTerms(text: string): string {
+/**
+ * Çeviri, artı **neyin çevrilemediği**.
+ *
+ * Tek bir döngü var ve iki genel fonksiyon da onu kullanıyor. İkinci bir kopya
+ * yazmak, zamanla ayrışan iki sözlük davranışı demekti: biri «high heels»i tek
+ * ürün sayarken diğeri iki kelime sayar, ve fark ancak üretimde görünürdü.
+ */
+function translateWithCoverage(text: string): { text: string; uncovered: string[] } {
   const words = wordsOf(text);
   const folded = words.map(normalizeTr);
   const out: string[] = [];
+  const uncovered: string[] = [];
 
   let index = 0;
   while (index < words.length) {
@@ -451,11 +511,48 @@ export function toTurkishRetailTerms(text: string): string {
     if (matched) continue;
 
     const word = words[index]!;
-    out.push(lookup(TERMS, keysFor(word)) ?? word);
+    const replacement = lookup(TERMS, keysFor(word));
+    if (replacement) out.push(replacement);
+    else {
+      out.push(word);
+      // Türk perakendesinin zaten kullandığı kelime «çevrilememiş» sayılmıyor:
+      // tabloda olmaması bir eksiklik değil, tasarım (bkz. `TURKISH_LOANWORDS`).
+      if (!TURKISH_LOANWORDS.has(normalizeTr(word))) uncovered.push(word);
+    }
     index += 1;
   }
 
-  return out.join(" ");
+  return { text: out.join(" "), uncovered };
+}
+
+export function toTurkishRetailTerms(text: string): string {
+  return translateWithCoverage(text).text;
+}
+
+/**
+ * Çevirinin **tamamı** Türkçeye oturduysa sonucu, oturmadıysa `null`.
+ *
+ * ## Neden gerekiyor
+ *
+ * Üretimde ölçüldü. Vision bir kırpıma «Tube top» dedi; ailesi doğruydu ve
+ * çeviri yarısını tuttu: «Tube bluz». O sorgu Koton'da iki **parfüm** sayfası
+ * buldu — çünkü «tube», «tubereuse»ün içinde geçiyor:
+ *
+ *   «Antrasit Tube bluz» → parfum-fleur-de-tubereuse-50-ml, parfum-sunset-dance
+ *
+ * Bu dosyanın kuralı zaten şuydu: «yanlış bir isim İngilizce olanından kötüdür,
+ * çünkü kendinden emin biçimde yanlış giysiyi arar.» Ölçüm kuralı genişletti —
+ * **İngilizce bir sıfat da öyle.** Türkçe bir arama kutusunda tanınmayan bir
+ * kelime eşleşmiyor değil; başka bir şeyle eşleşiyor.
+ *
+ * `toTurkishRetailTerms` geçirgen kalıyor: ürün başlıklarını ve model
+ * çıktılarını süzmek onun işi değil, ve orada tanınmayan kelime çoğu zaman
+ * marka ya da özel ad. Ayrım çağıranın: **uydurulmuş** bir metni geçirmekle,
+ * bir arama kutusuna İngilizce kelime yazmak aynı şey değil.
+ */
+export function fullyTranslatedRetailTerm(text: string): string | null {
+  const { text: translated, uncovered } = translateWithCoverage(text);
+  return uncovered.length === 0 ? translated : null;
 }
 
 /* -------------------------------------------------------------------------- */

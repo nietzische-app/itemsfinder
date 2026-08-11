@@ -5,7 +5,12 @@ import {
   vlmCreditExhausted,
   type AttributeExtractor,
 } from "@/services/attributeExtractor";
-import { geminiBlocked, geminiBlockReason, getGeminiExtractor } from "@/services/geminiAttributes";
+import {
+  geminiBlocked,
+  geminiBlockReason,
+  geminiModelLabel,
+  getGeminiExtractor,
+} from "@/services/geminiAttributes";
 
 /**
  * Öznitelik betimlemesini hangi sağlayıcının yapacağı.
@@ -64,10 +69,24 @@ export function attributeProviderStatus(): string {
   const provider = selectAttributeProvider();
   if (!provider) return `kapalı — ${attributeProviderOffReason()}`;
 
+  /*
+   * Model adı **tek yerden** okunuyor.
+   *
+   * Burada `"gemini-2.0-flash"` sabiti duruyordu ve üretimde tam olarak
+   * beklenmesi gereken şeyi yaptı: aday listesi güncellendikten sonra istek
+   * yeni modele gitti, durum satırı hâlâ eskisini yazdı.
+   *
+   *   [vlm] gemini (gemini-2.0-flash)
+   *   [gemini] "Top" — HTTP 429: …        ← aslında gemini-3.5-flash'a gitti
+   *
+   * Aynı bilgiyi iki yerde tutmak, ikisinin ayrışmasına açık davetiye — ve
+   * ayrışan taraf teşhis satırı olduğunda, yanlış yönlendirir. `visionKey.ts`
+   * ile aynı ders.
+   */
   const model =
     provider.name === "anthropic"
       ? process.env.VLM_MODEL?.trim() || "claude-opus-5"
-      : process.env.GEMINI_MODEL?.trim() || "gemini-2.0-flash";
+      : geminiModelLabel();
 
   const other = provider.name === "anthropic" ? "gemini" : "anthropic";
   const fallback =
@@ -135,8 +154,19 @@ export function attributeProviderRemedy(name: AttributeProviderName): string {
    * beklemek, aşamayı süresiz kapalı bırakırdı ve panelde her şey normal
    * görünürdü.
    */
-  return geminiBlockReason() === "kota"
-    ? " (Gemini günlük ücretsiz kotası doldu — bir süre sonra kendiliğinden açılıyor)"
-    : " (Gemini anahtarı reddedildi: askıya alınmış ya da geçersiz — kendiliğinden " +
-        "düzelmez, aistudio.google.com/apikey adresinde yeni bir anahtar oluşturun)";
+  switch (geminiBlockReason()) {
+    case "kota":
+      return " (Gemini günlük ücretsiz kotası doldu — bir süre sonra kendiliğinden açılıyor)";
+    case "ödeme":
+      return (
+        " (Gemini projesinin ön ödemeli kredisi bitmiş — bu proje ücretsiz kademede " +
+        "değil. Faturalandırma açmak projeyi ücretsiz kademeden çıkarıyor, yani " +
+        "sorunu büyütür: faturalandırması olmayan yeni bir projede anahtar oluşturun)"
+      );
+    default:
+      return (
+        " (Gemini anahtarı reddedildi: askıya alınmış ya da geçersiz — kendiliğinden " +
+        "düzelmez, aistudio.google.com/apikey adresinde yeni bir anahtar oluşturun)"
+      );
+  }
 }

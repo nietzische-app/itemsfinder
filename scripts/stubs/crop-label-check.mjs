@@ -211,6 +211,51 @@ const requests = [
 }
 
 /*
+ * 3b) **Yarım çevrilen etiket alınmıyor** — üretimde ölçülen kusur.
+ *
+ * Vision bir kırpıma «Tube top» dedi. Ailesi doğruydu (top) ve skoru yüksekti,
+ * yani iki süzgeci de geçti. Çeviri yarısını tuttu: «Tube bluz». O sorgu
+ * Koton'da iki **parfüm** sayfası buldu — çünkü «tube», «tubereuse»ün içinde
+ * geçiyor:
+ *
+ *   «Antrasit Tube bluz» → parfum-fleur-de-tubereuse-50-ml, parfum-sunset-dance
+ *
+ * Türkçe bir arama kutusunda tanınmayan İngilizce bir kelime eşleşmiyor değil;
+ * **başka bir şeyle** eşleşiyor. Kötü bir etiket, hiç etiket olmamasından kötü:
+ * geri düşülen yer Vision'ın kaba sınıfı, yani bu aşama eklenmeden önceki
+ * davranış.
+ */
+{
+  mode = "ok";
+  labelSets = [
+    [
+      { description: "Tube top", score: 0.94 },
+      { description: "polo shirt", score: 0.71 },
+    ],
+    [
+      { description: "Work boots", score: 0.93 },
+      { description: "sneakers", score: 0.68 },
+    ],
+  ];
+
+  const result = await reader().read(image, requests);
+
+  t(
+    result.get("ust") === "polo shirt",
+    `yarım çevrilen en yüksek skorlu eleniyor: ${result.get("ust")}`,
+  );
+  t(
+    result.get("ayakkabi") === "sneakers",
+    `«Work boots» de eleniyor: ${result.get("ayakkabi")}`,
+  );
+
+  // Ve tamamı çevrilemiyorsa geriye hiçbir şey kalmıyor — uydurulmuyor.
+  labelSets = [[{ description: "Tube top", score: 0.94 }], []];
+  const only = await reader().read(image, requests);
+  t(!only.has("ust"), "tek aday yarım çeviriyse etiket hiç alınmıyor");
+}
+
+/*
  * 4) Bilinmeyen aile hiç sorulmuyor.
  *
  * Ailesi çözülemeyen bir tespitte süzgecin dayanağı yok — her etiket eşit

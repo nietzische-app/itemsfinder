@@ -31,7 +31,7 @@ const fails = [];
 const t = (c, n) => (c ? pass++ : fails.push(n));
 
 const seen = [];
-let mode = "ok"; // "ok" | "quota" | "askı" | "badkey" | "server" | "bozuk"
+let mode = "ok"; // "ok" | "quota" | "ödeme" | "askı" | "badkey" | "server" | "bozuk"
 
 /** Emekli sayılan modeller — istek yoluna göre 404 döndürülüyor. */
 let retired = new Set();
@@ -86,6 +86,27 @@ const server = createServer((req, res) => {
     if (mode === "quota") {
       res.writeHead(429, { "content-type": "application/json" });
       res.end(JSON.stringify({ error: { message: "Quota exceeded", status: "RESOURCE_EXHAUSTED" } }));
+      return;
+    }
+    /*
+     * Ön ödemeli kredinin bitmesi — üretimden alınmış gerçek gövde.
+     *
+     * Bu da 429, ama kotayla ilgisi yok: proje ücretsiz kademede değil. Aynı
+     * durum koduna iki farklı iş düşüyor ve ayıran tek şey gövde.
+     */
+    if (mode === "ödeme") {
+      res.writeHead(429, { "content-type": "application/json" });
+      res.end(
+        JSON.stringify({
+          error: {
+            code: 429,
+            message:
+              "Your prepayment credits are depleted. Please go to AI Studio at " +
+              "https://ai.studio/projects to manage your project and billing.",
+            status: "RESOURCE_EXHAUSTED",
+          },
+        }),
+      );
       return;
     }
     if (mode === "badkey") {
@@ -372,6 +393,43 @@ const untilUnlocked = async () => {
 }
 
 /*
+ * 3d) **Ön ödemeli kredinin bitmesi kota değil** — aynı 429, başka iş.
+ *
+ * Üretimde ölçüldü:
+ *
+ *   429 Your prepayment credits are depleted. Please go to AI Studio … billing.
+ *
+ * Not o sırada «günlük ücretsiz kota doldu, bir süre sonra açılıyor» diyordu.
+ * Oysa proje ücretsiz kademede değil ve bekleyerek düzelmiyor; üstelik çözümü
+ * kotanınkinin **tersi** — faturalandırma açmak projeyi ücretsiz kademeden
+ * çıkarıyor, yani sorunu büyütüyor.
+ */
+{
+  const { attributeProviderRemedy } = await import("@/services/attributeProvider");
+  const { geminiBlockReason } = await import("@/services/geminiAttributes");
+
+  mode = "ödeme";
+  await untilUnlocked();
+  seen.length = 0;
+
+  await scan();
+  const afterFirst = seen.length;
+  await scan();
+
+  t(afterFirst === 2, `ödeme reddinde istek gidiyor (${afterFirst})`);
+  t(seen.length === afterFirst, "ödeme reddinden sonra susuluyor");
+  t(geminiBlockReason() === "ödeme", `429 ödeme olarak ayrılıyor (${geminiBlockReason()})`);
+
+  const remedy = attributeProviderRemedy("gemini");
+  t(!/kendiliğinden açılıyor/.test(remedy), `beklemek önerilmiyor: ${remedy}`);
+  t(/ücretsiz kademede\s+değil/.test(remedy), "projenin ücretsiz kademede olmadığı söyleniyor");
+  t(
+    /faturalandırma/i.test(remedy) && /yeni bir proje/i.test(remedy),
+    "faturalandırmanın sorunu büyüttüğü ve ne yapılacağı yazılıyor",
+  );
+}
+
+/*
  * 4) Geçici hata kilitlemiyor.
  *
  * Kilit «bu anahtar çalışmıyor» demek, «bu istek tutmadı» demek değil. 503'te
@@ -502,7 +560,21 @@ const untilUnlocked = async () => {
 
   set({ ENABLE_VLM_ATTRIBUTES: "true", GEMINI_API_KEY: "g" });
   t(selectAttributeProvider()?.name === "gemini", "Anthropic yoksa Gemini seçiliyor");
-  t(/gemini-2\.0-flash/.test(attributeProviderStatus()), "hangi model olduğu görünüyor");
+
+  /*
+   * **Durum satırı gerçekten sorulan modeli yazıyor.**
+   *
+   * Burada sabit bir isim aranıyordu ve üretimde tam olarak beklenmesi gereken
+   * şey oldu: aday listesi güncellendi, istek yeni modele gitti, satır hâlâ
+   * eskisini yazdı. Artık aday listesinden okunuyor — kontrolün kendisi de
+   * listeyi elle yazmıyor.
+   */
+  const { MODEL_CANDIDATES_FOR_TEST: candidates } = await import("@/services/geminiAttributes");
+  const line = attributeProviderStatus();
+  t(
+    candidates.some((name) => line.includes(name)),
+    `satır aday listesinden bir model yazıyor: ${line}`,
+  );
   t(!/\bg\b/.test(attributeProviderStatus()), "anahtar durum satırına düşmüyor");
 
   set({ GEMINI_API_KEY: "g" });

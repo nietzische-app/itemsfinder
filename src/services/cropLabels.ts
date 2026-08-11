@@ -1,6 +1,7 @@
 import "server-only";
 
 import { familyOf, type ItemFamily } from "@/lib/itemFamily";
+import { fullyTranslatedRetailTerm } from "@/lib/retailVocabulary";
 import { cropRegion } from "@/services/imageCrop";
 import { visionApiKey } from "@/services/visionKey";
 import type { AttributeRequest } from "@/services/attributeExtractor";
@@ -173,6 +174,22 @@ export class CropLabelReader {
       const score = label.score ?? 0;
       if (!description || score < this.minScore) continue;
       if (familyOf(description) !== family) continue;
+
+      /*
+       * **Tamamı Türkçeye oturmayan etiket alınmıyor.**
+       *
+       * Üretimde ölçüldü: Vision «Tube top» dedi, ailesi doğruydu, çeviri
+       * yarısını tuttu — «Tube bluz». O sorgu Koton'da iki parfüm sayfası buldu,
+       * çünkü «tube» kelimesi «tubereuse»ün içinde geçiyor. Tanınmayan bir
+       * İngilizce kelime Türkçe arama kutusunda eşleşmiyor değil; **başka bir
+       * şeyle** eşleşiyor.
+       *
+       * Yarım çeviriyi kabul etmektense etiketi hiç almamak: geri düşülen yer
+       * Vision'ın kaba sınıfı, yani bu aşama eklenmeden önceki davranış. Kötü bir
+       * etiket ise hiç etiket olmamasından kötü.
+       */
+      if (!fullyTranslatedRetailTerm(description)) continue;
+
       if (!best || score > best.score) best = { description, score };
     }
 

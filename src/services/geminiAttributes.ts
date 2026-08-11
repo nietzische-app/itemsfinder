@@ -73,6 +73,20 @@ const MODEL_CANDIDATES = ["gemini-3.5-flash", "gemini-2.5-flash"] as const;
 export const MODEL_CANDIDATES_FOR_TEST: readonly string[] = MODEL_CANDIDATES;
 
 /**
+ * Durum satırında yazılacak model adı — **tek kaynak**.
+ *
+ * Sabitlenmişse o; çalıştığı görülmüşse o; hiçbiri değilse listenin ilki, artı
+ * daha denenmediğini söyleyen bir işaret. «gemini-3.5-flash» yazıp aslında
+ * başkasına gitmek, teşhis satırının yapabileceği en kötü şey.
+ */
+export function geminiModelLabel(): string {
+  const pinned = process.env.GEMINI_MODEL?.trim();
+  if (pinned) return pinned;
+  if (resolvedModel) return resolvedModel;
+  return `${MODEL_CANDIDATES[0]}?`;
+}
+
+/**
  * Çalıştığı görülen model. Instance ömrü boyunca kalıyor.
  *
  * Aday listesi kısa ve emeklilik nadir, ama hatırlamamak her taramanın ilk
@@ -90,13 +104,18 @@ function isRetiredModel(status: number, body: string): boolean {
  *
  * `"kota"`  — ücretsiz kademenin günlük sınırı. Kendiliğinden açılıyor; yapılacak
  *             bir şey yok, beklemek yeterli.
+ * `"ödeme"` — proje ücretsiz kademede **değil** ve ön ödemeli kredisi bitmiş.
+ *             Üretimde ölçüldü: `429 … Your prepayment credits are depleted`.
+ *             Bu da 429 ile geliyor ama kotayla ilgisi yok ve beklemekle
+ *             geçmiyor; üstelik çözümü kotanınkinin **tersi** — faturalandırma
+ *             açmak projeyi ücretsiz kademeden çıkarıyor, yani sorunu büyütüyor.
  * `"anahtar"` — anahtar reddedildi: askıya alınmış, silinmiş ya da hiç geçerli
  *             değil. **Kendiliğinden düzelmiyor.** Üretimde ölçüldü:
  *             `403 … Consumer 'api_key:…' has been suspended`. Bunu «kota doldu,
  *             bir süre sonra açılır» diye yazmak, operatörü hiç gelmeyecek bir
  *             şeyi beklemeye gönderirdi — aşama sessizce kapalı kalırdı.
  */
-export type GeminiBlockKind = "kota" | "anahtar";
+export type GeminiBlockKind = "kota" | "ödeme" | "anahtar";
 
 /**
  * Reddedilen anahtarın kilidi — `attributeExtractor` ile aynı desen, ayrı sayaç.
@@ -142,7 +161,18 @@ const AUTH_COOLDOWN_MS = 60_000;
  * anahtarı kota sanmak aşamayı süresiz kapalı bırakır ve kimse fark etmez.
  */
 function rejectionKind(status: number, body: string): GeminiBlockKind | null {
-  if (status === 429) return "kota";
+  /*
+   * 429'un iki anlamı var ve gövde ayırıyor.
+   *
+   * Günlük ücretsiz sınır beklemekle geçer; ön ödemeli kredinin bitmesi geçmez.
+   * İkisini «kota» diye toplamak, faturalandırma açık bir projeyi bekleyerek
+   * düzelmeye gönderirdi — ve o bekleyiş hiç bitmezdi.
+   */
+  if (status === 429) {
+    return /prepayment|billing|credits? (are|is) depleted|payment method/i.test(body)
+      ? "ödeme"
+      : "kota";
+  }
   if (status === 401 || status === 403) return "anahtar";
   if (status === 400 && /API key not valid|API_KEY_INVALID/i.test(body)) return "anahtar";
   return null;
