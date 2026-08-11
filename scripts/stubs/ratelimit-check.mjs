@@ -84,7 +84,9 @@ await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
 const base = `http://127.0.0.1:${server.address().port}`;
 
 register(new URL("../alias-loader.mjs", import.meta.url).href);
-const { getRateLimitStore, resetRateLimitStore } = await import("@/services/rateLimitStore");
+const { getRateLimitStore, resetRateLimitStore, rateLimitStatus } = await import(
+  "@/services/rateLimitStore"
+);
 
 /*
  * 1) Değişkenler varken Upstash'e gidiliyor — ve istek şekli doğru.
@@ -200,6 +202,36 @@ const { getRateLimitStore, resetRateLimitStore } = await import("@/services/rate
     errors.some((line) => /UPSTASH_REDIS_REST_URL/.test(line)),
     `eksiklik yüksek sesle yazılıyor: ${errors[0]?.slice(0, 60)}`,
   );
+}
+
+/*
+ * 6) Durum satırı üç durumu ayırt ediyor mu?
+ *
+ * Bugüne kadar tek sinyal, eksiklik uyarısının **görünmemesiydi** — ve o
+ * sessizlik üç ayrı şey demek olabiliyordu: değişkenler doğru mu, dağıtım
+ * yenilendi mi, Redis gerçekten cevap veriyor mu. Kurulumu yapan kişinin
+ * «çalışıyor mu» sorusuna bakacağı bir satır olmalı.
+ *
+ * Jetonun yazılmadığı ayrıca ölçülüyor: log'a sır düşmesi, teşhis uğruna
+ * ödenecek bir bedel değil.
+ */
+{
+  process.env.UPSTASH_REDIS_REST_URL = "https://eu2-brave-mole-12345.upstash.io";
+  process.env.UPSTASH_REDIS_REST_TOKEN = "çok-gizli-jeton";
+
+  const line = rateLimitStatus();
+  t(/Upstash/.test(line), `kurulduğunda Upstash yazıyor: ${line}`);
+  t(/eu2-brave-mole-12345\.upstash\.io/.test(line), "hangi örnek olduğu görünüyor");
+  t(!/çok-gizli-jeton/.test(line), "jeton log'a düşmüyor");
+
+  delete process.env.UPSTASH_REDIS_REST_TOKEN;
+  const half = rateLimitStatus();
+  t(/TOKEN/.test(half) && !/URL/.test(half), `eksik olan tek tek yazılıyor: ${half}`);
+
+  delete process.env.UPSTASH_REDIS_REST_URL;
+  const none = rateLimitStatus();
+  t(/URL \+ TOKEN/.test(none), `ikisi de yoksa ikisi de yazılıyor: ${none}`);
+  t(/hız sınırı değil/.test(none), "süreç-yerel sayacın ne olmadığı söyleniyor");
 }
 
 resetRateLimitStore();

@@ -18,6 +18,7 @@ import { cropRegion } from "@/services/imageCrop";
 import { getVisualLookup, visualLookupStatus } from "@/services/visualLookup";
 import { getGoogleSearch, googleSearchStatus } from "@/services/googleSearch";
 import { getProductIndex, productIndexStatus } from "@/services/productIndex";
+import { rateLimitStatus } from "@/services/rateLimitStore";
 import { getStoreSearch, storeSearchStatus } from "@/services/storeSearch";
 import { markupExtractionEnabled, productsFromMarkup } from "@/services/markupProducts";
 import { productThumbnail } from "@/lib/productThumbnail";
@@ -195,6 +196,7 @@ export class ContextDevProductProvider implements ProductProvider {
     console.log(`[cse] ${googleSearchStatus()}`);
     console.log(`[mağaza] ${storeSearchStatus()}`);
     console.log(`[dizin] ${productIndexStatus()}`);
+    console.log(`[ratelimit] ${rateLimitStatus()}`);
 
     try {
       // Spend the budget on the detections the user is most likely to act on.

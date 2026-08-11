@@ -191,6 +191,38 @@ export function getRateLimitStore(): RateLimitStore {
   return cached;
 }
 
+/**
+ * Hangi sayaç deposunun kullanıldığı — insan okuyabilir hâlde.
+ *
+ * **Yokluk kanıt değil.** Bugüne kadar tek sinyal, eksiklik uyarısının
+ * *görünmemesiydi*: değişkenler doğru mu, Vercel yeniden dağıttı mı, Redis
+ * gerçekten cevap veriyor mu — üçünün de cevabı aynı sessizlikti. Bu depoda o
+ * sınıftan kusurlar defalarca çıktı (`[lens]`, `[cse]`, `[mağaza]`, `[dizin]`
+ * satırlarının hepsi aynı sebeple var).
+ *
+ * Bağlantıyı **kanıtlamıyor**, yapılandırmayı söylüyor: gerçek gidiş dönüş ilk
+ * istekte yapılıyor ve başarısız olursa `[ratelimit] counter store unreachable`
+ * satırı zaten yazılıyor. İkisi birlikte üç durumu ayırt ediyor — kurulmamış,
+ * kurulmuş ama ulaşılamıyor, çalışıyor.
+ *
+ * Ana bilgisayar yazılıyor, jeton **yazılmıyor**: log'a sır düşmemeli.
+ */
+export function rateLimitStatus(): string {
+  const url = process.env.UPSTASH_REDIS_REST_URL?.trim();
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN?.trim();
+
+  if (!url || !token) {
+    const missing = [!url && "URL", !token && "TOKEN"].filter(Boolean).join(" + ");
+    return `süreç-yerel sayaç — UPSTASH_REDIS_REST_${missing} yok, sunucusuz dağıtımda bu hız sınırı değil`;
+  }
+
+  try {
+    return `Upstash — ${new URL(url).hostname}`;
+  } catch {
+    return `Upstash — adres ayrıştırılamadı: ${url.slice(0, 40)}`;
+  }
+}
+
 /** Test seam: drops the memoised store so a suite can swap the environment. */
 export function resetRateLimitStore(): void {
   cached = null;
