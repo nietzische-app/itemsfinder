@@ -1,0 +1,304 @@
+import "server-only";
+
+import { cropRegion } from "@/services/imageCrop";
+import {
+  ATTRIBUTE_SYSTEM_PROMPT,
+  describePosition,
+  normalizeAttributes,
+  withDeadline,
+  type AttributeExtractor,
+  type AttributeRequest,
+  type GarmentAttributes,
+} from "@/services/attributeExtractor";
+
+/**
+ * Kırpıma bakıp giysiyi betimleyen ikinci sağlayıcı — **Google Gemini**.
+ *
+ * ## Neden var
+ *
+ * Öznitelik çıkarımı bu boru hattındaki tek «kırpıma bakan» aşama ve kapalıyken
+ * elde yalnızca Vision'ın kaba sınıfı ile kutunun ölçülen rengi kalıyor. Ölçülen
+ * sonucu şuydu: üç aday da yalnızca ürün adıyla tam tabana oturdu ve beyaz bir
+ * sneaker için «Ayakkabı ve Çanta Koku Topu» birebir eşleşme oldu
+ * (`docs/BULUNAMADI.md`). Yani kalite tavanını belirleyen şey bu aşama.
+ *
+ * Anthropic anahtarının kredisi bitti ve **bu projede ödeme bir kısıt**: bütün
+ * tur boyunca kural, satıcıya para vermeden çalışmaktı (Google CSE, context.dev,
+ * sitemap kanalı — hepsi aynı gerekçeyle). Gemini'nin ücretsiz kademesi bu
+ * aşamayı ödeme yapmadan geri açıyor.
+ *
+ * ## Neden ayrı bir dosya, neden SDK yok
+ *
+ * Karar ve çıktı ortak: sistem istemi, `GarmentAttributes` şekli ve
+ * `normalizeAttributes` doğrulaması `attributeExtractor.ts`'ten geliyor. Ayrışan
+ * tek şey **taşıma** — hangi adrese, hangi gövdeyle. İkinci bir istem yazmak, iki
+ * sağlayıcının sessizce farklı şeyler betimlemesi demekti.
+ *
+ * SDK yok, düz `fetch`: tek uç nokta ve tek gövde şekli için bir bağımlılık
+ * eklemek, dağıtım paketine karşılıksız yük bindirirdi.
+ *
+ * ## Sağlayıcı sırası
+ *
+ * Anthropic anahtarı varsa o kullanılıyor — ölçülmüş ve bu projede sürülmüş yol
+ * o. Gemini, o anahtar yokken ya da kredisi bittiğinde devreye giriyor. Yeni bir
+ * yolun ölçülmüş bir yolu kaldırması için gerekçe yok; **eksiği kapatıyor**.
+ */
+
+/** Ücretsiz kademede sunulan görme yeteneği olan model. */
+const DEFAULT_MODEL = "gemini-2.0-flash";
+
+/**
+ * Reddedilen anahtarın kilidi — `attributeExtractor` ile aynı desen, ayrı sayaç.
+ *
+ * Ayrı olmasının sebebi: iki sağlayıcının kotası ayrı. Anthropic'in kredisi
+ * bittiğinde Gemini'yi de susturmak, çalışan bir aşamayı kapatmak olurdu.
+ */
+let geminiBlockedUntil = 0;
+
+/** Kredisi/kotası dolmuş anahtar dışarıdan okunabilsin — gerileme notu için. */
+export function geminiBlocked(): boolean {
+  return Date.now() < geminiBlockedUntil;
+}
+
+export interface GeminiAttributeOptions {
+  model?: string;
+  maxItems?: number;
+  deadlineMs?: number;
+  requestTimeoutMs?: number;
+  /** Sahte sunucuya yönlendirmek için — `VISION_BASE_URL` ile aynı gerekçe. */
+  baseUrl?: string;
+  /** Kilit süresi; ölçüm bir dakika beklemesin diye parametreye alınabiliyor. */
+  cooldownMs?: number;
+}
+
+const AUTH_COOLDOWN_MS = 60_000;
+
+/**
+ * Kota ya da anahtar reddi mi?
+ *
+ * Gemini kotayı 429 ile, geçersiz anahtarı 400/403 ile söylüyor. Geçici sunucu
+ * hatası (5xx) kilitlemiyor: kilit «bu anahtar çalışmıyor» demek, «bu istek
+ * tutmadı» demek değil — `contextDevService` ve VLM'de üç kez ödenmiş ders.
+ */
+function isQuotaOrAuthRejection(status: number, body: string): boolean {
+  if (status === 429 || status === 401 || status === 403) return true;
+  if (status === 400 && /API key not valid|API_KEY_INVALID/i.test(body)) return true;
+  return false;
+}
+
+export class GeminiAttributeExtractor implements AttributeExtractor {
+  private readonly model: string;
+  private readonly maxItems: number;
+  private readonly deadlineMs: number;
+  private readonly requestTimeoutMs: number;
+  private readonly baseUrl: string;
+  private readonly cooldownMs: number;
+
+  constructor(
+    private readonly apiKey: string,
+    options: GeminiAttributeOptions = {},
+  ) {
+    this.model = options.model ?? DEFAULT_MODEL;
+    this.maxItems = options.maxItems ?? 4;
+    this.deadlineMs = options.deadlineMs ?? 15_000;
+    this.requestTimeoutMs = options.requestTimeoutMs ?? 15_000;
+    this.baseUrl = (options.baseUrl ?? "https://generativelanguage.googleapis.com").replace(
+      /\/$/,
+      "",
+    );
+    this.cooldownMs = options.cooldownMs ?? AUTH_COOLDOWN_MS;
+  }
+
+  /** `ClaudeAttributeExtractor.extract` ile aynı sözleşme. */
+  async extract(
+    imageBuffer: Buffer,
+    requests: AttributeRequest[],
+    options: { size?: { width: number; height: number }; signal?: AbortSignal } = {},
+  ): Promise<Map<string, GarmentAttributes>> {
+    const results = new Map<string, GarmentAttributes>();
+    const selected = requests.slice(0, this.maxItems);
+    if (selected.length === 0) return results;
+
+    const remaining = geminiBlockedUntil - Date.now();
+    if (remaining > 0) {
+      console.warn(
+        `[gemini] ${selected.length} parça atlandı — kota/anahtar reddi, ` +
+          `${Math.ceil(remaining / 1000)} sn sonra yeniden denenecek`,
+      );
+      return results;
+    }
+
+    const budget = withDeadline(this.deadlineMs, options.signal);
+
+    try {
+      const settled = await Promise.allSettled(
+        selected.map(async (request) => {
+          const crop = await cropRegion(imageBuffer, request.box, { size: options.size });
+          if (!crop) return null;
+
+          const attributes = await this.describe(request, crop, budget.signal);
+          return attributes ? ([request.key, attributes] as const) : null;
+        }),
+      );
+
+      for (const outcome of settled) {
+        if (outcome.status === "fulfilled" && outcome.value) {
+          results.set(outcome.value[0], outcome.value[1]);
+        }
+      }
+    } finally {
+      budget.dispose();
+    }
+
+    return results;
+  }
+
+  private async describe(
+    request: AttributeRequest,
+    crop: { base64: string; mediaType: "image/jpeg" },
+    signal: AbortSignal,
+  ): Promise<GarmentAttributes | null> {
+    /*
+     * Anahtar başlıkta, sorgu dizesinde değil.
+     *
+     * Google iki yolu da kabul ediyor ama `?key=…` anahtarı **adresin bir
+     * parçası** yapıyor: ağ hatasının mesajı, ara sunucu kaydı ya da bir yığın
+     * izi adresi olduğu gibi yazdığında sır loga düşer. `x-goog-api-key` bu
+     * sınıfı tümden kaldırıyor — `rateLimitStatus`'ta jetonun yazılmaması ile
+     * aynı gerekçe.
+     */
+    const url = `${this.baseUrl}/v1beta/models/${encodeURIComponent(this.model)}:generateContent`;
+
+    /*
+     * Alan listesi isteme yazılıyor.
+     *
+     * Gemini'nin `responseSchema`sı JSON Schema'nın kendisi değil, OpenAPI'nin
+     * bir alt kümesi — lehçeyi yanlış yazmak istemi sessizce reddettirir ve bu,
+     * «model betimleyemedi» gibi görünür. `responseMimeType` JSON'u garantiliyor,
+     * alanların doğruluğunu ise `normalizeAttributes` zaten sınıyor: eksik ya da
+     * boş bir betimleme kabul edilmiyor.
+     */
+    const body = {
+      systemInstruction: { parts: [{ text: ATTRIBUTE_SYSTEM_PROMPT }] },
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { inline_data: { mime_type: crop.mediaType, data: crop.base64 } },
+            {
+              text:
+                `Kaba sınıf: "${request.itemType}".\n` +
+                `Bu kırpım, fotoğrafın ${describePosition(request.box)} bölgesinden alındı.\n` +
+                "Bu sınıfa uyan parçanın özniteliklerini çıkar.\n\n" +
+                "Yalnızca şu alanları taşıyan bir JSON nesnesi döndür: " +
+                "visible (boolean), garmentType (string), colorName (string), " +
+                "colorHex (string, #rrggbb), material (string), pattern (string), " +
+                "details (string dizisi), fit (string), confidence (0..1 sayı).",
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        responseMimeType: "application/json",
+        // Betimleme algı işi, üretim değil: aynı kırpım aynı cevabı vermeli.
+        temperature: 0,
+        maxOutputTokens: 1024,
+      },
+    };
+
+    /*
+     * Aşama bütçesi ile istek bütçesi iç içe: `withDeadline` ikisini tek bir
+     * sinyalde birleştiriyor. `AbortSignal.any` bunu tek satırda yapardı ama
+     * `attributeExtractor` orada zaten aynı kararı verdi — çalışması gereken
+     * çalışma zamanlarından yeni.
+     *
+     * Kaynak **gövde okunduktan sonra** bırakılıyor. Yanıt başlıkları gelir
+     * gelmez bırakmak, gövdeyi süresiz bırakırdı: `dispose` dış sinyalin
+     * iletimini de söküyor, yani aşama bütçesi dolsa bile akış devam ederdi.
+     */
+    const perRequest = withDeadline(this.requestTimeoutMs, signal);
+    try {
+      return await this.send(url, body, request, perRequest.signal);
+    } finally {
+      perRequest.dispose();
+    }
+  }
+
+  /** Tek gidiş dönüş: gönder, oku, doğrula. Asla fırlatmıyor. */
+  private async send(
+    url: string,
+    body: unknown,
+    request: AttributeRequest,
+    signal: AbortSignal,
+  ): Promise<GarmentAttributes | null> {
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-goog-api-key": this.apiKey },
+        body: JSON.stringify(body),
+        signal,
+      });
+    } catch (error) {
+      console.warn(
+        `[gemini] "${request.itemType}" betimlenemedi: ` +
+          (error instanceof Error ? error.message.slice(0, 80) : "istek başarısız"),
+      );
+      return null;
+    }
+
+    if (!response.ok) {
+      const text = (await response.text().catch(() => "")).slice(0, 200);
+      console.warn(`[gemini] "${request.itemType}" — HTTP ${response.status}: ${text}`);
+
+      /*
+       * Kilit burada kuruluyor, dış döngüde değil: hatalar bu dalda `null`
+       * dönüyor ve `allSettled` tarafına hiç ulaşmıyor. Dış döngüye yazılmış bir
+       * kilit hiçbir zaman kurulmazdı — `attributeExtractor`'da bir kez ödenmiş
+       * ders.
+       */
+      if (isQuotaOrAuthRejection(response.status, text)) {
+        geminiBlockedUntil = Date.now() + this.cooldownMs;
+      }
+      return null;
+    }
+
+    try {
+      const payload = (await response.json()) as {
+        candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+      };
+
+      const text = (payload.candidates?.[0]?.content?.parts ?? [])
+        .map((part) => part.text ?? "")
+        .join("")
+        .trim();
+
+      if (!text) return null;
+
+      // Çalıştı — varsa eski kilit kalkıyor.
+      geminiBlockedUntil = 0;
+
+      return normalizeAttributes(JSON.parse(text));
+    } catch (error) {
+      console.warn(
+        `[gemini] "${request.itemType}" cevabı okunamadı: ` +
+          (error instanceof Error ? error.message.slice(0, 80) : "ayrıştırılamadı"),
+      );
+      return null;
+    }
+  }
+}
+
+export function geminiAttributesEnabled(): boolean {
+  return Boolean(process.env.GEMINI_API_KEY?.trim());
+}
+
+export function getGeminiExtractor(): GeminiAttributeExtractor | null {
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
+  if (!apiKey || process.env.ENABLE_VLM_ATTRIBUTES !== "true") return null;
+
+  return new GeminiAttributeExtractor(apiKey, {
+    model: process.env.GEMINI_MODEL?.trim() || undefined,
+    baseUrl: process.env.GEMINI_BASE_URL?.trim() || undefined,
+  });
+}

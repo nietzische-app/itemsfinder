@@ -33,6 +33,7 @@ const SUITES = [
   ["adres dizini aday üretiyor", "product-index-check.mjs"],
   ["reddedilen anahtar susuyor", "auth-latch-check.mjs"],
   ["hız sınırı Upstash yolu", "ratelimit-check.mjs"],
+  ["ücretsiz betimleme sağlayıcısı", "gemini-attributes-check.mjs"],
 ];
 
 let failed = 0;

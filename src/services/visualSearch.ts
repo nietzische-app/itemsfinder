@@ -28,11 +28,14 @@ import {
   retargetSearchQuery,
 } from "@/services/mockCatalog";
 import { ContextDevService } from "@/services/contextDevService";
+import { type GarmentAttributes } from "@/services/attributeExtractor";
 import {
-  getAttributeExtractor,
-  vlmCreditExhausted,
-  type GarmentAttributes,
-} from "@/services/attributeExtractor";
+  attributeProviderExhausted,
+  attributeProviderOffReason,
+  attributeProviderRemedy,
+  attributeProviderStatus,
+  selectAttributeProvider,
+} from "@/services/attributeProvider";
 import { createTrace, type TraceCollector } from "@/lib/scanTrace";
 import { foregroundFilter, learnBackdrop } from "@/services/foreground";
 import { imageSize, regionDominantColor } from "@/services/regionColor";
@@ -543,10 +546,12 @@ export class GoogleVisionSearchService implements VisualSearchService {
      * every item that fails to be described keeps the measured colour and Vision's
      * class, which is exactly what shipped before this stage existed.
      */
-    const extractor = input.budgetConstrained ? null : getAttributeExtractor();
+    const provider = input.budgetConstrained ? null : selectAttributeProvider();
+    const extractor = provider?.extractor ?? null;
+    if (!input.budgetConstrained) console.log(`[vlm] ${attributeProviderStatus()}`);
     if (input.budgetConstrained) {
       trace.degrade("vlm", "günlük bütçe eşiğinde — ücretli aşama atlandı");
-    } else if (!extractor) {
+    } else if (!provider) {
       /*
        * Kapalı bir aşama, sessiz bir aşama olmamalı.
        *
@@ -560,13 +565,10 @@ export class GoogleVisionSearchService implements VisualSearchService {
        * Hangi koşulun eksik olduğu ayrı ayrı yazılıyor, çünkü «kapalı» demek
        * kullanıcıyı iki ayrı ortam değişkenini de kontrol etmeye gönderirdi.
        */
-      const reason = !process.env.ANTHROPIC_API_KEY?.trim()
-        ? "ANTHROPIC_API_KEY yok"
-        : "ENABLE_VLM_ATTRIBUTES=true değil";
-
       trace.degrade(
         "vlm",
-        `öznitelik betimlemesi kapalı (${reason}) — ölçülen renge ve Vision sınıfına düşüldü`,
+        `öznitelik betimlemesi kapalı (${attributeProviderOffReason()}) — ` +
+          "ölçülen renge ve Vision sınıfına düşüldü",
       );
     }
 
@@ -589,7 +591,7 @@ export class GoogleVisionSearchService implements VisualSearchService {
         : new Map<string, GarmentAttributes>();
 
     trace.count("describedItems", attributes.size);
-    if (extractor && attributes.size < detections.length) {
+    if (provider && attributes.size < detections.length) {
       /*
        * Sebep bilinebiliyorsa yazılıyor.
        *
@@ -600,10 +602,10 @@ export class GoogleVisionSearchService implements VisualSearchService {
        */
       trace.degrade(
         "vlm",
-        `${detections.length - attributes.size}/${detections.length} parça betimlenemedi — ` +
-          "ölçülen renge ve Vision sınıfına düşüldü" +
-          (vlmCreditExhausted()
-            ? " (Anthropic kredisi bitti — boşa harcamayı durdurmak için ENABLE_VLM_ATTRIBUTES=false)"
+        `${detections.length - attributes.size}/${detections.length} parça betimlenemedi ` +
+          `(${provider.name}) — ölçülen renge ve Vision sınıfına düşüldü` +
+          (attributeProviderExhausted(provider.name)
+            ? attributeProviderRemedy(provider.name)
             : ""),
       );
     }

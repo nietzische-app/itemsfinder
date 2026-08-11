@@ -72,6 +72,22 @@ export interface AttributeExtractorOptions {
   cooldownMs?: number;
 }
 
+/**
+ * Bir sağlayıcıdan beklenen tek şey.
+ *
+ * İki sağlayıcı var (Anthropic ve Gemini) ve çağıran taraf hangisi olduğunu
+ * bilmemeli: seçim yapılandırmanın işi, tarama akışının değil. Sözleşme burada
+ * duruyor ki ikisi ayrışırsa `tsc` söylesin — çağıran tarafta `any`'ye düşmek,
+ * farkı çalışma zamanına ertelemek olurdu.
+ */
+export interface AttributeExtractor {
+  extract(
+    imageBuffer: Buffer,
+    requests: AttributeRequest[],
+    options?: { size?: { width: number; height: number }; signal?: AbortSignal },
+  ): Promise<Map<string, GarmentAttributes>>;
+}
+
 /* -------------------------------------------------------------------------- */
 /*  Schema                                                                    */
 /* -------------------------------------------------------------------------- */
@@ -157,7 +173,15 @@ const ATTRIBUTE_SCHEMA = {
   additionalProperties: false,
 } as const;
 
-const SYSTEM_PROMPT = [
+/**
+ * Ortak sistem istemi — sağlayıcıdan bağımsız.
+ *
+ * Dışa açık, çünkü ikinci bir sağlayıcı (`geminiAttributes.ts`) aynı işi
+ * yapıyor. İkinci bir istem yazmak, iki sağlayıcının sessizce farklı şeyler
+ * betimlemesi demekti: aynı fotoğraf, hangi anahtarın kurulu olduğuna göre
+ * başka bir sorgu üretirdi ve fark hiçbir logda görünmezdi.
+ */
+export const ATTRIBUTE_SYSTEM_PROMPT = [
   "Türk e-ticaret siteleri için ürün özniteliği çıkaran bir görsel analiz",
   "sistemisin. Sana bir moda fotoğrafından kesilmiş tek bir bölge ve o bölgede",
   "bulunduğu söylenen kaba ürün sınıfı verilir.",
@@ -179,7 +203,7 @@ const SYSTEM_PROMPT = [
 /*  Extractor                                                                 */
 /* -------------------------------------------------------------------------- */
 
-export class ClaudeAttributeExtractor {
+export class ClaudeAttributeExtractor implements AttributeExtractor {
   private readonly client: Anthropic;
   private readonly model: string;
   private readonly maxItems: number;
@@ -275,7 +299,7 @@ export class ClaudeAttributeExtractor {
         {
           model: this.model,
           max_tokens: 1024,
-          system: SYSTEM_PROMPT,
+          system: ATTRIBUTE_SYSTEM_PROMPT,
           /*
            * Attribute extraction from a single crop is perception, not reasoning,
            * and four of these run in parallel inside a 60s function. Thinking buys
@@ -427,7 +451,7 @@ function hex(value: unknown): string | null {
 }
 
 /** Coarse position words, so the model knows where in the frame the crop came from. */
-function describePosition(box: BoundingBox): string {
+export function describePosition(box: BoundingBox): string {
   const centreY = box.y + box.height / 2;
   if (centreY < 0.25) return "en üst";
   if (centreY < 0.5) return "üst";
@@ -440,7 +464,7 @@ function describePosition(box: BoundingBox): string {
  * whichever comes first. `AbortSignal.any` would do this in one line but is newer
  * than the runtimes this has to work on.
  */
-function withDeadline(
+export function withDeadline(
   deadlineMs: number,
   signal?: AbortSignal,
 ): { signal: AbortSignal; dispose: () => void } {

@@ -21,44 +21,80 @@ const fails = [];
 const t = (c, n) => (c ? pass++ : fails.push(n));
 
 const { createTrace } = await import("@/lib/scanTrace");
-const { getAttributeExtractor } = await import("@/services/attributeExtractor");
+const { selectAttributeProvider, attributeProviderOffReason } = await import(
+  "@/services/attributeProvider"
+);
 
 /**
  * `visualSearch` içindeki karar, aynı koşullarla.
  *
  * Boru hattının tamamını sürmek bir Vision anahtarı ister; ölçülen şey ise o
  * kararın kendisi — hangi durumda hangi not düşülüyor.
+ *
+ * Koşullar **elle taklit edilmiyor**, gerçek fonksiyonlar çağrılıyor. Önceki
+ * hâli seçim mantığını buraya kopyalamıştı ve sağlayıcı ikiye çıktığında yeşil
+ * kalmaya devam ederdi: üretimde artık iki anahtardan biri yetiyor, kopya ise
+ * hâlâ tek anahtara bakıyordu. Üretim kodunu yeniden yazan bir ölçüm, üretimi
+ * ölçmüyor.
  */
 function noteFor({ budgetConstrained }) {
   const trace = createTrace({ detail: false });
-  const extractor = budgetConstrained ? null : getAttributeExtractor();
+  const provider = budgetConstrained ? null : selectAttributeProvider();
 
   if (budgetConstrained) {
     trace.degrade("vlm", "günlük bütçe eşiğinde — ücretli aşama atlandı");
-  } else if (!extractor) {
-    const reason = !process.env.ANTHROPIC_API_KEY?.trim()
-      ? "ANTHROPIC_API_KEY yok"
-      : "ENABLE_VLM_ATTRIBUTES=true değil";
+  } else if (!provider) {
     trace.degrade(
       "vlm",
-      `öznitelik betimlemesi kapalı (${reason}) — ölçülen renge ve Vision sınıfına düşüldü`,
+      `öznitelik betimlemesi kapalı (${attributeProviderOffReason()}) — ` +
+        "ölçülen renge ve Vision sınıfına düşüldü",
     );
   }
 
   return trace.snapshot().degraded.filter((entry) => entry.stage === "vlm");
 }
 
-// 1) Anahtar yok → gerekçe anahtarı adıyla söylüyor.
+/*
+ * 1) Hiç anahtar yok → gerekçe **ücretsiz** seçeneği adıyla söylüyor.
+ *
+ * Gemini anahtarı da siliniyor: kalsaydı aşama açılırdı ve kontrol yanlış
+ * sebepten yeşil kalırdı. Ve gerekçe artık yalnızca ANTHROPIC_API_KEY'i
+ * anmıyor — bu projede ödeme bir kısıt, «anahtar yok» demek kullanıcıyı kredi
+ * yüklemeye gönderirdi.
+ */
 {
   delete process.env.ANTHROPIC_API_KEY;
+  delete process.env.GEMINI_API_KEY;
   process.env.ENABLE_VLM_ATTRIBUTES = "true";
 
   const notes = noteFor({ budgetConstrained: false });
   t(notes.length === 1, `anahtarsızken not düşülüyor (${notes.length})`);
   t(
-    /ANTHROPIC_API_KEY yok/.test(notes[0]?.reason ?? ""),
-    `eksik olan anahtar adıyla yazılıyor: «${notes[0]?.reason}»`,
+    /GEMINI_API_KEY/.test(notes[0]?.reason ?? "") &&
+      /ANTHROPIC_API_KEY/.test(notes[0]?.reason ?? ""),
+    `iki anahtar da adıyla yazılıyor: «${notes[0]?.reason}»`,
   );
+  t(
+    /ücretsiz/.test(notes[0]?.reason ?? ""),
+    "ücretsiz seçeneğin ücretsiz olduğu söyleniyor",
+  );
+}
+
+/*
+ * 1b) Yalnızca Gemini anahtarı yetiyor.
+ *
+ * Asıl iddia bu: ücretsiz kademe tek başına aşamayı açmalı. Anthropic'e bağlı
+ * kalan bir kontrol, tam da çözmeye çalıştığımız durumu — kredisi bitmiş
+ * anahtar — kapalı gösterirdi.
+ */
+{
+  process.env.GEMINI_API_KEY = "stub";
+  process.env.ENABLE_VLM_ATTRIBUTES = "true";
+
+  const notes = noteFor({ budgetConstrained: false });
+  t(notes.length === 0, `tek başına Gemini aşamayı açıyor (${JSON.stringify(notes)})`);
+
+  delete process.env.GEMINI_API_KEY;
 }
 
 // 2) Anahtar var ama bayrak kapalı → gerekçe bayrağı söylüyor, anahtarı değil.
