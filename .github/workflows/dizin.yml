@@ -44,15 +44,22 @@ on:
     - cron: "0 3 * * *"
   workflow_dispatch:
     inputs:
+      # Açıklamalar girdinin **adıyla** başlıyor.
+      #
+      # GitHub'ın «Run workflow» kutusu yalnızca `description`ı gösteriyor, adı
+      # değil. Bir turda karşılığı ödendi: «okuma: evet yap» dedim, ekranda
+      # «okuma» diye bir şey görünmediği için seçenek yok sanıldı — oysa
+      # oradaydı, açıklamasıyla duruyordu. Adı yazmak, konuştuğumuz şeyle
+      # tıklanan şeyi aynı kelimeye bağlıyor.
       magaza:
-        description: "Tek bir mağaza (boş bırakılırsa ölçülmüş altı mağaza)"
+        description: "magaza — tek bir mağaza (boş bırakılırsa ölçülmüş altı mağaza)"
         required: false
       dosya:
-        description: "Mağaza başına en fazla sitemap dosyası"
+        description: "dosya — mağaza başına en fazla sitemap dosyası"
         required: false
         default: "8"
       zorla:
-        description: "Küçülme korumasını atla — yalnızca daralma bilerek yapılıyorsa"
+        description: "zorla — küçülme korumasını atla (yalnızca daralma bilerek yapılıyorsa)"
         required: false
         default: "hayır"
         type: choice
@@ -60,7 +67,7 @@ on:
           - hayır
           - evet
       okuma:
-        description: "Adaylar satıra dönüşüyor mu — mağaza başına ölç (mağazalara ek istek)"
+        description: "okuma — adaylar satıra dönüşüyor mu, mağaza başına ölç (mağazalara ek istek)"
         required: false
         default: "hayır"
         type: choice
@@ -68,7 +75,7 @@ on:
           - hayır
           - evet
       yaz:
-        description: "Sonucu depoya yaz"
+        description: "yaz — sonucu depoya yaz"
         required: false
         default: "evet"
         type: choice
