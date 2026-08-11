@@ -169,6 +169,44 @@ const { getProductIndex, productIndexStatus, ProductIndexSearch } = await import
 }
 
 /*
+ * 2d) Üretken mağaza ikinci adayını, üretmeyenin birincisinden önce alıyor.
+ *
+ * **Sıralama düzeldikten sonra ölçümün gösterdiği ikinci kusur.** Kota dört ve
+ * dörtten fazla mağaza eşleştiğinde ilk tur kotayı tek başına dolduruyordu:
+ * herkese birer aday. Yani %100'lük Koton ikinci adayını alamıyor, %0'lık
+ * Bershka birincisini alıyordu. Üretimde ölçülen hâli (48 aday):
+ *
+ *   koton + gratis                        19 aday → 19 satır
+ *   beymen + bershka + zara + pullandbear 28 aday →  4 satır
+ *
+ * Temsil kuralı aşırıya kaçmıştı: satır ürettiği ölçülmüş bir mağazayla,
+ * üretmediği ölçülmüş bir mağazayı eşit saymak çeşitlilik değil kayıp.
+ *
+ * Kurulum üçünün de ikişer eşleşmesi olacak şekilde: turlu dağıtım Bershka'ya
+ * bir yer verirdi, ölçülen iddia vermemesi.
+ */
+{
+  const kota = mkdtempSync(join(tmpdir(), "uretken-"));
+  writeFileSync(join(kota, "koton.com.txt"), "/keten-gomlek-bir-p-1\n/keten-gomlek-iki-p-2\n");
+  writeFileSync(join(kota, "gratis.com.txt"), "/keten-gomlek-uc-p-3\n/keten-gomlek-dort-p-4\n");
+  writeFileSync(join(kota, "bershka.com.txt"), "/keten-gomlek-bes-p-5\n/keten-gomlek-alti-p-6\n");
+
+  process.env.PRODUCT_INDEX_DIR = kota;
+  const { urls } = new ProductIndexSearch().findProductPages("Keten Gömlek");
+  process.env.PRODUCT_INDEX_DIR = dir;
+
+  const hosts = urls.map((u) => new URL(u).hostname.replace(/^www\./, ""));
+  t(urls.length === 4, `kota doluyor (${urls.length})`);
+  t(!hosts.includes("bershka.com"), `üretmeyen mağaza yer almadı — ${hosts.join(", ")}`);
+  t(
+    hosts.filter((h) => h === "koton.com").length === 2,
+    `üretken mağaza ikinci adayını aldı — ${hosts.join(", ")}`,
+  );
+
+  rmSync(kota, { recursive: true, force: true });
+}
+
+/*
  * 3) Sıralama: daha çok kelime tutan öne geçiyor.
  *
  * Sıra burada indirilecek sayfayı belirliyor — ilk ikisi indiriliyor, gerisi

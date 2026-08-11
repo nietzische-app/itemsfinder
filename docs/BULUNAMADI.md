@@ -597,6 +597,44 @@ yerdi — bir daha hiç denenmeyen mağaza bir daha hiç ölçülemezdi.
 
 Ölçülen orana göre beklenen kazanç, aynı altı sorguda **9,2 → 11,2 satır (%22)**.
 
+**Ve üretim verisi tahmini doğruladı** — ikinci `check:markup` koşusu, sıralama
+canlıya alındıktan sonra:
+
+```
+                 1. koşu           2. koşu
+koton.com         9 →  9 (%100)   10 → 10 (%100)
+gratis.com        6 →  6 (%100)    9 →  9 (%100)
+beymen.com       13 →  4  (%31)   13 →  4  (%31)
+bershka.com      10 →  0   (%0)    8 →  0   (%0)
+zara.com          7 →  0   (%0)    7 →  0   (%0)
+pullandbear.com   3 →  0   (%0)    1 →  0   (%0)
+
+toplam           48 → 19  (%40)   48 → 23  (%48)   — tahmin +%22, ölçülen +%21
+```
+
+Oranların iki koşuda da aynı çıkması ayrıca bir şey söylüyor: bunlar tesadüf
+değil, mağazaların kalıcı özellikleri.
+
+**Ölçüm bir kusur daha gösterdi.** Kota dört ve dörtten fazla mağaza
+eşleştiğinde ilk tur kotayı tek başına dolduruyordu — herkese birer aday. Yani
+%100'lük Koton ikinci adayını alamıyor, %0'lık Bershka birincisini alıyordu:
+
+```
+koton + gratis                        19 aday → 19 satır
+beymen + bershka + zara + pullandbear 28 aday →  4 satır
+```
+
+Temsil kuralı aşırıya kaçmıştı: satır ürettiği ölçülmüş bir mağazayla,
+üretmediği ölçülmüş bir mağazayı eşit saymak çeşitlilik değil kayıp. Üretken
+mağazalar artık ikinci adaylarını, üretmeyenlerin birincisinden önce alıyor —
+turlu dağıtım üretkenlerin **arasında** duruyor, yani tek mağaza kotayı yine
+yiyemiyor, ve üretmeyenler elenmeyip kalan yeri dolduruyor.
+
+Bu, alfabetik sıranın tekrarı değil: orada bölen şey adın baş harfiydi, burada
+ölçülmüş satır oranı.
+
+Aynı on iki sorguda beklenen: **48 aday → 35,6 satır (%74)**, ölçülen %48'den.
+
 **Kilit düzeltildi.** `enrichBrandMetadata` kredisi bitmiş anahtarı **her**
 taramada yeniden soruyordu (üretimde 401 ×3, tarama tarama). Kilit vardı ve
 doğru yazılmıştı — ama örnek üzerindeydi, ve `getProductProvider()` her taramada

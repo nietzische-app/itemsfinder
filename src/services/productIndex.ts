@@ -48,15 +48,20 @@ const MAX_PER_STORE = 2;
 /**
  * Mağazanın adayları **satıra dönüşüyor mu** — ölçülmüş oran.
  *
- * `npm run check:markup` (2026-08-10, 48 aday, veri merkezi IP'si):
+ * `npm run check:markup`, iki koşu (48'er aday, veri merkezi IP'si). İkincisi
+ * sıralama düzeldikten sonra, yani aday dağılımı değişmiş — **oranlar aynı
+ * kaldı**, ve bu oranların tesadüf olmadığının ölçüsü:
  *
  * ```
- * koton.com        9 →  9  (%100)
- * gratis.com       6 →  6  (%100)
- * beymen.com      13 →  4  (%31)   ürün işaretlemesi yok ×9
- * bershka.com     10 →  0  (%0)    ürün işaretlemesi yok ×10
- * zara.com         7 →  0  (%0)    ürün işaretlemesi yok ×7
- * pullandbear.com  3 →  0  (%0)    yetersiz örnek
+ *                  1. koşu           2. koşu
+ * koton.com         9 →  9 (%100)   10 → 10 (%100)
+ * gratis.com        6 →  6 (%100)    9 →  9 (%100)
+ * beymen.com       13 →  4  (%31)   13 →  4  (%31)   ürün işaretlemesi yok ×9
+ * bershka.com      10 →  0   (%0)    8 →  0   (%0)   ürün işaretlemesi yok ×8
+ * zara.com          7 →  0   (%0)    7 →  0   (%0)   ürün işaretlemesi yok ×7
+ * pullandbear.com   3 →  0   (%0)    1 →  0   (%0)   yetersiz örnek
+ *
+ * toplam           48 → 19  (%40)   48 → 23  (%48)
  * ```
  *
  * ## Neden sıralama, eleme değil
@@ -235,11 +240,38 @@ export class ProductIndexSearch {
      */
     perStore.sort((a, b) => b.yield - a.yield || b.hits[0]!.score - a.hits[0]!.score);
 
+    /*
+     * **Üretken mağaza ikinci adayını, üretmeyen birincisinden önce alıyor.**
+     *
+     * Sıra düzeldikten sonra ölçüm bir kusur daha gösterdi. Kota dört ve dörtten
+     * fazla mağaza eşleştiğinde ilk tur kotayı tek başına dolduruyordu: herkese
+     * birer aday, yani %100'lük Koton ikinci adayını alamıyor ve %0'lık Bershka
+     * birincisini alıyordu. Ölçülen hâli (48 aday):
+     *
+     *   koton + gratis                        19 aday → 19 satır
+     *   beymen + bershka + zara + pullandbear 28 aday →  4 satır
+     *
+     * Temsil kuralı aşırıya kaçmıştı: satır ürettiği ölçülmüş bir mağazayla,
+     * üretmediği ölçülmüş bir mağazayı eşit saymak çeşitlilik değil kayıp.
+     *
+     * Bu, alfabetik sıranın tekrarı **değil**: orada bölen şey adın baş harfiydi,
+     * burada ölçülmüş satır oranı. Ve turlu dağıtım üretkenlerin **arasında**
+     * duruyor, yani tek bir mağaza kotayı yine yiyemiyor.
+     *
+     * Üretmeyenler elenmiyor, kalan yeri dolduruyorlar: bir mağazanın
+     * işaretleme koyması bir sürüm meselesi ve elenmiş bir mağaza bunu hiç fark
+     * ettirmez.
+     */
+    const productive = perStore.filter((store) => store.yield > 0);
+    const rest = perStore.filter((store) => store.yield === 0);
+
     const urls: string[] = [];
-    for (let round = 0; round < MAX_PER_STORE; round += 1) {
-      for (const store of perStore) {
-        const hit = store.hits[round];
-        if (hit && urls.length < MAX_CANDIDATES) urls.push(hit.url);
+    for (const group of [productive, rest]) {
+      for (let round = 0; round < MAX_PER_STORE; round += 1) {
+        for (const store of group) {
+          const hit = store.hits[round];
+          if (hit && urls.length < MAX_CANDIDATES) urls.push(hit.url);
+        }
       }
     }
 
