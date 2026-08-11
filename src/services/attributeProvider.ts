@@ -5,7 +5,7 @@ import {
   vlmCreditExhausted,
   type AttributeExtractor,
 } from "@/services/attributeExtractor";
-import { geminiBlocked, getGeminiExtractor } from "@/services/geminiAttributes";
+import { geminiBlocked, geminiBlockReason, getGeminiExtractor } from "@/services/geminiAttributes";
 
 /**
  * Öznitelik betimlemesini hangi sağlayıcının yapacağı.
@@ -75,10 +75,18 @@ export function attributeProviderStatus(): string {
       ? `, ${other} yedekte`
       : "";
 
-  return (
-    `${provider.name} (${model})${fallback}` +
-    (attributeProviderExhausted(provider.name) ? " — kota/kredi kilidi açık" : "")
-  );
+  /*
+   * Kilit açıksa **neden** açık olduğu yazılıyor. «Kilitli» tek başına, bir
+   * dakika bekleyip geçecek bir kota ile hiç geçmeyecek bir anahtar reddini aynı
+   * kelimeye indirirdi — ve ikisine bakarken yapılacak iş farklı.
+   */
+  const lock = !attributeProviderExhausted(provider.name)
+    ? ""
+    : provider.name === "gemini"
+      ? ` — kilitli (${geminiBlockReason() ?? "ret"})`
+      : " — kilitli (kredi)";
+
+  return `${provider.name} (${model})${fallback}${lock}`;
 }
 
 /**
@@ -111,8 +119,24 @@ export function attributeProviderExhausted(name: AttributeProviderName): boolean
  * kotanın dolması — ikincisi kendiliğinden geçiyor.
  */
 export function attributeProviderRemedy(name: AttributeProviderName): string {
-  return name === "anthropic"
-    ? " (Anthropic kredisi bitti — GEMINI_API_KEY tanımlayın ya da " +
-        "boşa harcamayı durdurmak için ENABLE_VLM_ATTRIBUTES=false)"
-    : " (Gemini kotası doldu — ücretsiz kademe günlük sınırı, bir süre sonra açılıyor)";
+  if (name === "anthropic") {
+    return (
+      " (Anthropic kredisi bitti — GEMINI_API_KEY tanımlayın ya da " +
+      "boşa harcamayı durdurmak için ENABLE_VLM_ATTRIBUTES=false)"
+    );
+  }
+
+  /*
+   * Gemini'nin iki susma sebebi var ve **çözümleri zıt**.
+   *
+   * Üretimde ölçüldü: `403 … Consumer 'api_key:…' has been suspended`. Bu not
+   * o sırada «kota doldu, bir süre sonra açılıyor» diyordu — yani askıya alınmış
+   * bir anahtar için operatörü beklemeye gönderiyordu. Hiç gelmeyecek bir şeyi
+   * beklemek, aşamayı süresiz kapalı bırakırdı ve panelde her şey normal
+   * görünürdü.
+   */
+  return geminiBlockReason() === "kota"
+    ? " (Gemini günlük ücretsiz kotası doldu — bir süre sonra kendiliğinden açılıyor)"
+    : " (Gemini anahtarı reddedildi: askıya alınmış ya da geçersiz — kendiliğinden " +
+        "düzelmez, aistudio.google.com/apikey adresinde yeni bir anahtar oluşturun)";
 }

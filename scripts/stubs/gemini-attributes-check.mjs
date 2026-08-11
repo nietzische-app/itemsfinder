@@ -31,7 +31,20 @@ const fails = [];
 const t = (c, n) => (c ? pass++ : fails.push(n));
 
 const seen = [];
-let mode = "ok"; // "ok" | "quota" | "server" | "bozuk" | "badkey"
+let mode = "ok"; // "ok" | "quota" | "askı" | "badkey" | "server" | "bozuk"
+
+/**
+ * Anahtarın **şekli**, kendisi değil.
+ *
+ * İlk hâlinde üretim logundan alınmış gerçek anahtar buraya yapıştırılmıştı ve
+ * GitHub itmeyi reddetti — doğru yaptı. Sızıntıyı ölçen bir dosyanın sızıntının
+ * kendisi olması, ölçümün anlamını tersine çevirirdi.
+ *
+ * Ölçülen şey uzunluk ya da içerik değil, `redact`'in bu diziyi ve Google'ın
+ * `api_key:…` biçimini bulup bulmadığı. Ön ek ve karakter kümesi gerçek AI
+ * Studio anahtarlarıyla aynı; gerisi belli ki uydurma.
+ */
+const KEY = "AQ.SAHTE_anahtar-bu-bir-olcum-degeri_0123456789";
 
 const server = createServer((req, res) => {
   let body = "";
@@ -52,6 +65,26 @@ const server = createServer((req, res) => {
     if (mode === "badkey") {
       res.writeHead(400, { "content-type": "application/json" });
       res.end(JSON.stringify({ error: { message: "API key not valid", status: "INVALID_ARGUMENT" } }));
+      return;
+    }
+    /*
+     * Askıya alınmış anahtar — üretimden alınmış gerçek gövde şekli.
+     *
+     * Google anahtarı hata mesajında **geri yazıyor**. Kelimesi kelimesine
+     * taklit ediliyor, çünkü ölçülecek şey tam olarak bu: gövdeyi olduğu gibi
+     * loga basmak anahtarı sızdırıyordu.
+     */
+    if (mode === "askı") {
+      res.writeHead(403, { "content-type": "application/json" });
+      res.end(
+        JSON.stringify({
+          error: {
+            code: 403,
+            message: `Permission denied: Consumer 'api_key:${KEY}' has been suspended.`,
+            status: "PERMISSION_DENIED",
+          },
+        }),
+      );
       return;
     }
     if (mode === "server") {
@@ -117,7 +150,7 @@ const COOLDOWN = 400;
  * `auth-latch-check`'te bir kez ödenmiş ders.
  */
 const scan = () =>
-  new GeminiAttributeExtractor("gizli-anahtar", {
+  new GeminiAttributeExtractor(KEY, {
     baseUrl: base,
     deadlineMs: 8_000,
     requestTimeoutMs: 8_000,
@@ -153,16 +186,28 @@ const untilUnlocked = async () => {
    * parçası yapardı: ağ hatası mesajı ya da ara sunucu kaydı adresi olduğu gibi
    * yazdığında sır loga düşerdi. Adreste anahtar olmadığı ayrıca ölçülüyor.
    */
-  t(seen[0]?.key === "gizli-anahtar", "anahtar x-goog-api-key başlığında");
-  t(!/gizli-anahtar/.test(seen[0]?.path ?? ""), "anahtar adreste geçmiyor");
+  t(seen[0]?.key === KEY, "anahtar x-goog-api-key başlığında");
+  t(!(seen[0]?.path ?? "").includes(KEY), "anahtar adreste geçmiyor");
 
   const parts = seen[0]?.body?.contents?.[0]?.parts ?? [];
   const inline = parts.find((part) => part.inline_data);
   t(inline?.inline_data?.mime_type === "image/jpeg", "kırpım JPEG olarak gidiyor");
   t((inline?.inline_data?.data?.length ?? 0) > 100, "kırpım gerçekten dolu");
+  /*
+   * Sınıflar **iki isteğin toplamında** aranıyor, `seen[0]` içinde değil.
+   *
+   * İki parça paralel gidiyor, yani hangisinin önce ulaştığı yarışın sonucu.
+   * `seen[0]`'ın "Top" olduğunu varsaymak, makine yükü değiştiğinde kırmızıya
+   * dönen bir ölçüm demekti — ve yanlış alarm veren bir ölçüm, bir süre sonra
+   * bakılmayan bir ölçüm.
+   */
+  const prompts = seen.flatMap((entry) =>
+    (entry.body?.contents?.[0]?.parts ?? []).map((part) => part.text ?? ""),
+  );
   t(
-    parts.some((part) => /Kaba sınıf: "Top"/.test(part.text ?? "")),
-    "kaba sınıf isteme yazılıyor",
+    prompts.some((text) => /Kaba sınıf: "Top"/.test(text)) &&
+      prompts.some((text) => /Kaba sınıf: "Trousers"/.test(text)),
+    "her parçanın kaba sınıfı kendi istemine yazılıyor",
   );
 
   /*
@@ -229,6 +274,75 @@ const untilUnlocked = async () => {
 
   t(afterFirst === 2, `geçersiz anahtar bir kez soruluyor (${afterFirst})`);
   t(seen.length === afterFirst, "geçersiz anahtardan sonra susuluyor");
+}
+
+/*
+ * 3b) **Anahtar loga düşmüyor** — hata gövdesi onu geri yazsa bile.
+ *
+ * Üretimde ölçüldü ve tam da kapattığımızı sandığımız sınıftan:
+ *
+ *   [gemini] "Jeans" — HTTP 403: {"error":{"code":403,"message":
+ *   "Permission denied: Consumer 'api_key:AQ.…' has been suspended."}}
+ *
+ * Anahtarı `x-goog-api-key` başlığına taşımak **giden** yolu kapatmıştı; bu
+ * **dönen** yol. Sızıntının iki ucu var ve biri açıkken diğerini kapatmanın
+ * hiçbir değeri yok — anahtar yine Vercel loguna, oradan da panoya düşüyor.
+ */
+{
+  mode = "askı";
+  await untilUnlocked();
+  seen.length = 0;
+
+  const lines = [];
+  const originalWarn = console.warn;
+  console.warn = (...args) => lines.push(args.map(String).join(" "));
+  try {
+    await scan();
+  } finally {
+    console.warn = originalWarn;
+  }
+
+  t(lines.length > 0, `hata yine de yazılıyor (${lines.length} satır)`);
+  t(
+    lines.every((line) => !line.includes(KEY)),
+    `anahtar hiçbir satıra düşmüyor: ${lines.find((line) => line.includes(KEY))?.slice(0, 90) ?? "—"}`,
+  );
+  t(
+    lines.some((line) => /api_key:«anahtar»/.test(line)),
+    "yerine ne olduğu görünüyor — satır teşhis için hâlâ okunabilir",
+  );
+  t(
+    lines.some((line) => /suspended/.test(line)),
+    "hatanın kendisi korunuyor — sansür teşhisi yutmuyor",
+  );
+}
+
+/*
+ * 3c) Askıya alınmış anahtar «kota» diye anlatılmıyor.
+ *
+ * İkisinin çözümü zıt: kota beklemekle geçer, askı geçmez. Not «bir süre sonra
+ * açılıyor» dediğinde operatör hiç gelmeyecek bir şeyi bekler ve aşama süresiz
+ * kapalı kalır — panelde her şey normal görünerek.
+ */
+{
+  const { attributeProviderRemedy } = await import("@/services/attributeProvider");
+  const { geminiBlockReason } = await import("@/services/geminiAttributes");
+
+  t(geminiBlockReason() === "anahtar", `403 anahtar reddi sayılıyor (${geminiBlockReason()})`);
+
+  const remedy = attributeProviderRemedy("gemini");
+  t(/kendiliğinden düzelmez/.test(remedy), `askıda beklemek önerilmiyor: ${remedy}`);
+  t(/aistudio\.google\.com/.test(remedy), "ne yapılacağı adresiyle yazılıyor");
+  t(!/kota/.test(remedy), "kota denmiyor");
+
+  // Kota gerçekten kota olduğunda ise beklemek doğru cevap.
+  mode = "quota";
+  await untilUnlocked();
+  await scan();
+
+  const quotaRemedy = attributeProviderRemedy("gemini");
+  t(geminiBlockReason() === "kota", `429 kota sayılıyor (${geminiBlockReason()})`);
+  t(/kendiliğinden açılıyor/.test(quotaRemedy), `kotada beklemek öneriliyor: ${quotaRemedy}`);
 }
 
 /*

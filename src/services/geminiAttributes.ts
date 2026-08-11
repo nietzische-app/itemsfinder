@@ -48,16 +48,35 @@ import {
 const DEFAULT_MODEL = "gemini-2.0-flash";
 
 /**
+ * Susmanın sebebi. İkisinin **çözümü farklı**, o yüzden ikisi ayrı.
+ *
+ * `"kota"`  — ücretsiz kademenin günlük sınırı. Kendiliğinden açılıyor; yapılacak
+ *             bir şey yok, beklemek yeterli.
+ * `"anahtar"` — anahtar reddedildi: askıya alınmış, silinmiş ya da hiç geçerli
+ *             değil. **Kendiliğinden düzelmiyor.** Üretimde ölçüldü:
+ *             `403 … Consumer 'api_key:…' has been suspended`. Bunu «kota doldu,
+ *             bir süre sonra açılır» diye yazmak, operatörü hiç gelmeyecek bir
+ *             şeyi beklemeye gönderirdi — aşama sessizce kapalı kalırdı.
+ */
+export type GeminiBlockKind = "kota" | "anahtar";
+
+/**
  * Reddedilen anahtarın kilidi — `attributeExtractor` ile aynı desen, ayrı sayaç.
  *
  * Ayrı olmasının sebebi: iki sağlayıcının kotası ayrı. Anthropic'in kredisi
  * bittiğinde Gemini'yi de susturmak, çalışan bir aşamayı kapatmak olurdu.
  */
 let geminiBlockedUntil = 0;
+let geminiBlockKind: GeminiBlockKind | null = null;
 
-/** Kredisi/kotası dolmuş anahtar dışarıdan okunabilsin — gerileme notu için. */
+/** Kotası/anahtarı düşmüş sağlayıcı dışarıdan okunabilsin — gerileme notu için. */
 export function geminiBlocked(): boolean {
   return Date.now() < geminiBlockedUntil;
+}
+
+/** Kilit açıksa **neden** açık olduğu; değilse `null`. */
+export function geminiBlockReason(): GeminiBlockKind | null {
+  return geminiBlocked() ? geminiBlockKind : null;
 }
 
 export interface GeminiAttributeOptions {
@@ -74,16 +93,21 @@ export interface GeminiAttributeOptions {
 const AUTH_COOLDOWN_MS = 60_000;
 
 /**
- * Kota ya da anahtar reddi mi?
+ * Bu cevap susmayı gerektiriyor mu, gerektiriyorsa hangi sebeple?
  *
- * Gemini kotayı 429 ile, geçersiz anahtarı 400/403 ile söylüyor. Geçici sunucu
+ * Gemini kotayı 429, anahtar sorununu 400/401/403 ile söylüyor. Geçici sunucu
  * hatası (5xx) kilitlemiyor: kilit «bu anahtar çalışmıyor» demek, «bu istek
  * tutmadı» demek değil — `contextDevService` ve VLM'de üç kez ödenmiş ders.
+ *
+ * Şüphede kalan durum bilerek `"anahtar"` tarafına yazılıyor. İki yanlışın
+ * bedeli eşit değil: kotayı anahtar sanmak operatöre bir bakış pahasına gelir,
+ * anahtarı kota sanmak aşamayı süresiz kapalı bırakır ve kimse fark etmez.
  */
-function isQuotaOrAuthRejection(status: number, body: string): boolean {
-  if (status === 429 || status === 401 || status === 403) return true;
-  if (status === 400 && /API key not valid|API_KEY_INVALID/i.test(body)) return true;
-  return false;
+function rejectionKind(status: number, body: string): GeminiBlockKind | null {
+  if (status === 429) return "kota";
+  if (status === 401 || status === 403) return "anahtar";
+  if (status === 400 && /API key not valid|API_KEY_INVALID/i.test(body)) return "anahtar";
+  return null;
 }
 
 export class GeminiAttributeExtractor implements AttributeExtractor {
@@ -122,7 +146,7 @@ export class GeminiAttributeExtractor implements AttributeExtractor {
     const remaining = geminiBlockedUntil - Date.now();
     if (remaining > 0) {
       console.warn(
-        `[gemini] ${selected.length} parça atlandı — kota/anahtar reddi, ` +
+        `[gemini] ${selected.length} parça atlandı — ${geminiBlockKind ?? "ret"}, ` +
           `${Math.ceil(remaining / 1000)} sn sonra yeniden denenecek`,
       );
       return results;
@@ -224,6 +248,28 @@ export class GeminiAttributeExtractor implements AttributeExtractor {
     }
   }
 
+  /**
+   * Loga yazılacak metinden anahtarı siliyor.
+   *
+   * Üretimde ölçüldü — ve tam da kapattığımı sandığım sınıftan:
+   *
+   *   [gemini] "Jeans" — HTTP 403: {"error":{"code":403,"message":
+   *   "Permission denied: Consumer 'api_key:AQ.…' has been suspended."}}
+   *
+   * Anahtarı adresten çıkarıp `x-goog-api-key` başlığına taşımak **giden** yolu
+   * kapatmıştı; bu **dönen** yol. Google hata gövdesinde anahtarı geri yazıyor
+   * ve gövde olduğu gibi yazdırılıyordu. Sızıntının iki ucu var, ikisi de
+   * kapatılmalı.
+   *
+   * İki tarama: yapılandırılmış anahtarın kendisi (kesin), ve Google'ın
+   * biçimindeki her `api_key:…` (anahtar başka bir hesaba ait olsa bile —
+   * mesela ara sunucununkine).
+   */
+  private redact(text: string): string {
+    const withoutOwn = this.apiKey ? text.split(this.apiKey).join("«anahtar»") : text;
+    return withoutOwn.replace(/api_key:[A-Za-z0-9._-]+/g, "api_key:«anahtar»");
+  }
+
   /** Tek gidiş dönüş: gönder, oku, doğrula. Asla fırlatmıyor. */
   private async send(
     url: string,
@@ -242,14 +288,14 @@ export class GeminiAttributeExtractor implements AttributeExtractor {
     } catch (error) {
       console.warn(
         `[gemini] "${request.itemType}" betimlenemedi: ` +
-          (error instanceof Error ? error.message.slice(0, 80) : "istek başarısız"),
+          this.redact(error instanceof Error ? error.message.slice(0, 80) : "istek başarısız"),
       );
       return null;
     }
 
     if (!response.ok) {
       const text = (await response.text().catch(() => "")).slice(0, 200);
-      console.warn(`[gemini] "${request.itemType}" — HTTP ${response.status}: ${text}`);
+      console.warn(`[gemini] "${request.itemType}" — HTTP ${response.status}: ${this.redact(text)}`);
 
       /*
        * Kilit burada kuruluyor, dış döngüde değil: hatalar bu dalda `null`
@@ -257,8 +303,10 @@ export class GeminiAttributeExtractor implements AttributeExtractor {
        * kilit hiçbir zaman kurulmazdı — `attributeExtractor`'da bir kez ödenmiş
        * ders.
        */
-      if (isQuotaOrAuthRejection(response.status, text)) {
+      const kind = rejectionKind(response.status, text);
+      if (kind) {
         geminiBlockedUntil = Date.now() + this.cooldownMs;
+        geminiBlockKind = kind;
       }
       return null;
     }
@@ -282,7 +330,7 @@ export class GeminiAttributeExtractor implements AttributeExtractor {
     } catch (error) {
       console.warn(
         `[gemini] "${request.itemType}" cevabı okunamadı: ` +
-          (error instanceof Error ? error.message.slice(0, 80) : "ayrıştırılamadı"),
+          this.redact(error instanceof Error ? error.message.slice(0, 80) : "ayrıştırılamadı"),
       );
       return null;
     }
