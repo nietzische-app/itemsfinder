@@ -1800,6 +1800,7 @@
 /dis-macunlari/oralb-professional-densify-hassas-beyazlik-dis-macunu-65-ml-p-10383604
 /dis-macunlari/oralb-proscience-advanced-hassasiyet-ve-dis-eti-rahatlama-orijinal-dis-macunu-75-ml-p-10518517
 /dis-macunlari/oralb-proscience-clinical-densify-curuk-kalkani-yogun-temizlik-dis-macunu-65-ml-p-10200774
+/dis-macunlari/parodontax-aktif-dis-eti-onarimi-beyazlatici-dis-macunu-75-ml-p-10203983
 /dis-macunlari/parodontax-beyazlatici-dis-macunu-75-ml-x-2-p-10752620
 /dis-macunlari/parodontax-dis-eti-guclendirme-ve-koruma-beyazlatici-dis-macunu-75-ml-p-10203768
 /dis-macunlari/parodontax-dis-eti-hassasiyet-ve-ferahlik-dis-macunu-75-ml-p-10468056
@@ -3775,6 +3776,7 @@
 /erkek-parfum/giorgio-armani-ga-armani-code-edp-erkek-parfum-75-ml-p-10218332
 /erkek-parfum/givenchy-gentleman-edp-erkek-parfum-100-ml-p-10203839
 /erkek-parfum/givenchy-gentleman-society-edp-erkek-parfum-100-ml-p-10213643
+/erkek-parfum/guess-iconic-edp-erkek-parfum-100-ml-p-10213644
 /erkek-parfum/guess-seductive-homme-edt-erkek-parfum-100-ml-p-10212146
 /erkek-parfum/hermes-h24-edp-erkek-parfum-100-ml-p-10213645
 /erkek-parfum/hermes-h24-edt-erkek-parfum-100-ml-p-10213647
@@ -5849,6 +5851,7 @@
 /hijyenik-ped/sleepy-bio-natural-premium-plus-boy-1-mega-normal-hijyenik-ped-46li-p-10212586
 /hijyenik-ped/sleepy-bio-natural-premium-plus-boy-2-eco-uzun-hijyenik-ped-12li-p-10212584
 /hijyenik-ped/sleepy-bio-natural-premium-plus-boy-2-mega-uzun-hijyenik-ped-36li-p-10212587
+/hijyenik-ped/sleepy-bio-natural-premium-plus-boy-2-super-eco-uzun-hijyenik-ped-18li-p-10212539
 /hijyenik-ped/sleepy-bio-natural-premium-plus-boy-3-eco-gece-hijyenik-ped-10lu-p-10212583
 /hijyenik-ped/sleepy-bio-natural-premium-plus-boy-3-mega-gece-hijyenik-ped-30lu-p-10212588
 /hijyenik-ped/sleepy-bio-natural-premium-plus-boy-3-super-eco-gece-hijyenik-ped-16li-p-10212409
@@ -10695,6 +10698,7 @@
 /set-boyalar/bee-beauty-deluxe-color-kit-sac-boyasi-8-73-sicak-kapucino-kahve-p-10201236
 /set-boyalar/bee-beauty-deluxe-color-kit-sac-boyasi-9-0-sari-p-10203363
 /set-boyalar/bee-beauty-deluxe-color-kit-sac-boyasi-9-1-ekstra-acik-kullu-sari-p-10203365
+/set-boyalar/eklips-sac-boyama-seti-p-10215189
 /set-boyalar/loreal-paris-excellence-cool-creme-sac-boyasi-3-11-ekstra-kullu-koyu-kahve-p-10356381
 /set-boyalar/loreal-paris-excellence-cool-creme-sac-boyasi-4-11-ekstra-kullu-kahve-p-10356382
 /set-boyalar/loreal-paris-excellence-cool-creme-sac-boyasi-5-11-ekstra-kullu-acik-kahve-p-10741314
@@ -11226,6 +11230,7 @@
 /tampon/tampax-pearl-compak-tampon-super-16li-p-10212580
 /tampon/tampax-pearl-compak-tampon-super-16li-p-10213015
 /tarak/eklips-dalgali-sac-taragi-p-10202920
+/tarak/eklips-genis-disli-sac-taragi-p-10218694
 /tarak/eklips-kolay-temizlenebilir-tarak-p-10205721
 /tarak/eklips-krepe-tarak-p-10038693
 /tarak/eklips-tarakli-sac-boyasi-ve-bakim-yagi-uygulama-sisesi-asortili-p-10203455
@@ -11314,7 +11319,6 @@
 /tiras-jel-kopuk-kremleri/nivea-men-deep-dimension-erkek-tiras-kopugu-200-ml-p-10083994
 /tiras-jel-kopuk-kremleri/nivea-men-deep-dimension-tiras-jeli-200-ml-p-10083999
 /tiras-jel-kopuk-kremleri/nivea-men-erkek-hassas-ciltler-icin-koruyucu-tiras-jeli-200-ml-p-16000063
-/tiras-jel-kopuk-kremleri/nivea-men-erkek-protect-care-koruyucu-tiras-jeli-200-ml-p-16000064
 /tiras-jel-kopuk-kremleri/nivea-men-hassas-tiras-kopugu-200-ml-p-16000065
 /tiras-jel-kopuk-kremleri/orien-aloe-wave-tiras-kopugu-100-ml-p-10211182
 /tiras-jel-kopuk-kremleri/orien-aqua-tiras-kopugu-200-ml-p-10387394
@@ -11362,6 +11366,7 @@
 /tirnak-bakim-urunleri/flormar-max-length-uzamaya-yardimci-oje-bazi-tirnak-cilasi-000-transparent-p-10206160
 /tirnak-bakim-urunleri/flormar-moisture-boost-yogun-nemlendirme-etkili-besleyici-oje-bazi-tirnak-cilasi-000-transparent-p-10216491
 /tirnak-bakim-urunleri/flormar-nail-hardener-tirnak-bakim-bazi-p-10207752
+/tirnak-bakim-urunleri/flormar-no-more-breaks-base-coat-p-10089585
 /tirnak-bakim-urunleri/flormar-nourishing-oil-vitamin-besleyici-tirnak-tirnak-eti-bakim-yagi-000-p-10089586
 /tirnak-bakim-urunleri/flormar-ridge-vanisher-puruzsuz-gorunum-veren-oje-bazi-000-transparent-p-10202258
 /tirnak-bakim-urunleri/flormar-total-repair-besleyici-etkili-oje-bazi-tirnak-cilasi-000-transparent-p-10206159
@@ -11548,6 +11553,18 @@
 /toka-tac/eklips-ekru-tac-p-10204175
 /toka-tac/eklips-fiyonk-klips-toka-sari-p-10218743
 /toka-tac/eklips-incili-ucgen-citcit-toka-p-10201373
+/toka-tac/eklips-istiridye-balik-kuyrugu-cocuk-pens-toka-01-p-10217571
+/toka-tac/eklips-istiridye-balik-kuyrugu-cocuk-pens-toka-02-p-10217572
+/toka-tac/eklips-istiridye-balik-kuyrugu-cocuk-pens-toka-03-p-10217573
+/toka-tac/eklips-istiridye-balik-kuyrugu-cocuk-pens-toka-04-p-10217574
+/toka-tac/eklips-istiridye-balik-kuyrugu-cocuk-pens-toka-05-p-10217575
+/toka-tac/eklips-istiridye-balik-kuyrugu-cocuk-pens-toka-06-p-10217576
+/toka-tac/eklips-istiridye-balik-kuyrugu-cocuk-pens-toka-07-p-10217577
+/toka-tac/eklips-istiridye-balik-kuyrugu-cocuk-pens-toka-08-p-10217578
+/toka-tac/eklips-istiridye-balik-kuyrugu-cocuk-pens-toka-09-p-10217584
+/toka-tac/eklips-istiridye-balik-kuyrugu-cocuk-pens-toka-10-p-10217585
+/toka-tac/eklips-istiridye-cocuk-citcit-toka-01-p-10217549
+/toka-tac/eklips-istiridye-cocuk-citcit-toka-02-p-10217548
 /toka-tac/eklips-istiridye-cocuk-citcit-toka-kirmizi-p-10217555
 /toka-tac/eklips-istiridye-cocuk-citcit-toka-pembe-p-10217554
 /toka-tac/eklips-kahve-tasli-tac-p-10217595
@@ -11558,6 +11575,7 @@
 /toka-tac/eklips-kirazli-mandal-toka-p-10215678
 /toka-tac/eklips-kivrimli-beyaz-mandal-toka-p-10215679
 /toka-tac/eklips-kivrimli-mandal-toka-fume-p-10096909
+/toka-tac/eklips-kivrimli-mandal-toka-p-10215668
 /toka-tac/eklips-kivrimli-mandal-toka-simli-seffaf-p-10096911
 /toka-tac/eklips-kivrimli-mandal-toka-simli-turuncu-p-10096910
 /toka-tac/eklips-kivrimli-yesil-mandal-toka-p-10215358
@@ -11575,6 +11593,7 @@
 /toka-tac/eklips-mavi-gecisli-mandal-toka-p-10215682
 /toka-tac/eklips-mavi-kurdela-mandal-toka-p-10217599
 /toka-tac/eklips-mermer-2li-toka-p-10220084
+/toka-tac/eklips-mermer-2li-toka-p-10220085
 /toka-tac/eklips-mermer-3lu-kivrimli-toka-p-10220089
 /toka-tac/eklips-mermer-3lu-kurdela-toka-kahve-p-10220087
 /toka-tac/eklips-mermer-3lu-kurdela-toka-mavi-p-10220086
@@ -11596,6 +11615,7 @@
 /toka-tac/eklips-pembe-kurdela-mandal-toka-p-10217603
 /toka-tac/eklips-pembe-lastik-toka-15li-p-10207940
 /toka-tac/eklips-pembe-lastik-toka-2li-p-10218728
+/toka-tac/eklips-pembe-tasli-tac-p-10217558
 /toka-tac/eklips-premium-ahtapot-pembe-mandal-toka-p-10215670
 /toka-tac/eklips-premium-bulut-beyaz-mandal-toka-p-10215671
 /toka-tac/eklips-premium-dikdortgen-sedef-beyaz-mandal-toka-p-10215667
