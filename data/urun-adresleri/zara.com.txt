@@ -1,5 +1,6 @@
 /tr/tr/--disney-denim-ince-ceket-p04441550.html
 /tr/tr/--disney-pixar-denim-bermuda-p04441576.html
+/tr/tr/--disney-pixar-islemeli-sapka-p05213567.html
 /tr/tr/--rolling-stones-baskili-t-shirt-p01277502.html
 /tr/tr/-1-l--basilicum-dus-jeli-p44435769.html
 /tr/tr/-1-l--cedar-wood-vucut-sampuani-p44438769.html
@@ -165,6 +166,7 @@
 /tr/tr/-220-g--sea-salt---cedar-kokulu-mum-p43460705.html
 /tr/tr/-220-g--sicak-baharatlar-kokulu-mum-p43464705.html
 /tr/tr/-220-g--spicy-sandalwood-kokulu-mum-p43463705.html
+/tr/tr/-220-g--warm-cherry-kokulu-mum-p43461705.html
 /tr/tr/-230-ml--aqua-bergamota-mikado-oda-kokusu-p46448703.html
 /tr/tr/-230-ml--arabian-bloom-oda-kokusu-spreyi-p45479706.html
 /tr/tr/-230-ml--luminous-saffron-oda-kokusu-spreyi-p45482706.html
@@ -185,7 +187,6 @@
 /tr/tr/-250-ml--white-jasmine-sivi-sabun-p43500700.html
 /tr/tr/-30-ml--fleur-blossom-el-kremi-p43495701.html
 /tr/tr/-30-ml--vibrant-wood-el-kremi-p43494701.html
-/tr/tr/-30-ml--white-jasmine-el-kremi-p40406701.html
 /tr/tr/-300-g--vanilla---nut-kokulu-mum-p44471705.html
 /tr/tr/-300-g--vetiver-mango-kokulu-mum-p44470705.html
 /tr/tr/-300-iplikli--pamuklu-perkal-yastik-kilifi-p40030091.html
@@ -316,6 +317,7 @@
 /tr/tr/1-1-2-6-yas--3-lu-duz-kulot-paketi-p08501480.html
 /tr/tr/1-1-2-6-yas--3-lu-spidey---marvel-kulot-paketi-p08501598.html
 /tr/tr/1-1-2-6-yas--6-li-kopek-desenli-kulot-paketi-p01913597.html
+/tr/tr/1-1-2-6-yas--6-li-puantiye-desenli-kulot-paketi-p07099546.html
 /tr/tr/1-1-2-6-yas--cicek-desenli-pijama-p06061597.html
 /tr/tr/1-1-2-6-yas--cizgili-pijama-p01716593.html
 /tr/tr/1-1-2-6-yas--cizgili-pijama-takimi-p01716495.html
@@ -465,6 +467,7 @@
 /tr/tr/100-keten-v-yaka-gomlek-p03071352.html
 /tr/tr/100-keten-vatkali-blazer-p02601832.html
 /tr/tr/100-keten-zw-collection-barrel-pantolon-p04344045.html
+/tr/tr/100-keten-zw-collection-sort-p04344040.html
 /tr/tr/100-liyosel-relaxed-fit-pantolon-p08574310.html
 /tr/tr/100-pamuk-dugmeli-t-shirt-p00858016.html
 /tr/tr/100-pamuk-elastik-bel-bermuda-p08372230.html
@@ -494,7 +497,6 @@
 /tr/tr/100-yun-kravat-p02241407.html
 /tr/tr/100-yun-oversize-kazak-p02893005.html
 /tr/tr/100-yun-oversize-kazak-p03644101.html
-/tr/tr/100-yun-regular-fit-ince-ceket-p08491401.html
 /tr/tr/100-yun-regular-fit-pantolon-p04579156.html
 /tr/tr/100-yun-regular-fit-takim-blazer-p01220767.html
 /tr/tr/100-yun-regular-fit-takim-blazer-p01223554.html
@@ -535,7 +537,6 @@
 /tr/tr/2-6-yas--gofre-kumas-papatya-desenli-mayo-p04354596.html
 /tr/tr/2-6-yas--hello-kitty---sanrio-pijama-takimi-p08501585.html
 /tr/tr/2-6-yas--kontrast-biyeli-puantiye-desenli-mayo-p05644264.html
-/tr/tr/2-6-yas--krose-fitilli-mayo-p03391513.html
 /tr/tr/2-6-yas--maui-vaiana---disney-baskili-deniz-sortu-p05644549.html
 /tr/tr/2-6-yas--nakisli-cicek-pijama-p03772549.html
 /tr/tr/2-6-yas--smileyworld---deniz-sortu-p05644596.html
@@ -609,7 +610,6 @@
 /tr/tr/2-li-ripndip---x-zara-kids-islemeli-orta-boy-corap-paketi-p02496789.html
 /tr/tr/2-li-s-boy-tabak-seti-p43266202.html
 /tr/tr/2-li-seramik-boncuklu-ip-kolye-seti-p04548207.html
-/tr/tr/2-li-sert-metal-bileklik-seti-p04548250.html
 /tr/tr/2-li-sert-ve-charm-zincir-bileklik-seti-p04548255.html
 /tr/tr/2-li-silikon-cocuk-kasik-takimi-p48600303.html
 /tr/tr/2-li-smileyworld---kareli-kisa-corap-paketi-p04547588.html
@@ -862,6 +862,7 @@
 /tr/tr/6-14-yas--cizgili-gomlek-pijama-p03772566.html
 /tr/tr/6-14-yas--dama-desenli-smileyworld---deniz-sortu-p05644798.html
 /tr/tr/6-14-yas--dantel-askili-pijama-p03772565.html
+/tr/tr/6-14-yas--deniz-yildizi-desenli-bikini-p01492550.html
 /tr/tr/6-14-yas--duz-renk-uzun-ic-camasiri-p07099788.html
 /tr/tr/6-14-yas--duz-renkli-pijama-takimi-p07099569.html
 /tr/tr/6-14-yas--etiket-detayli-dokulu-pijama-p01716799.html
@@ -871,6 +872,7 @@
 /tr/tr/6-14-yas--kalpli-pijama-p00722697.html
 /tr/tr/6-14-yas--kombine-pijama-takimi-p07099557.html
 /tr/tr/6-14-yas--kontrast-biyeli-bikini-p04354698.html
+/tr/tr/6-14-yas--kontrast-cicek-detayli-cutout-mayo-p01492698.html
 /tr/tr/6-14-yas--kontrast-dalgali-dokulu-pijama-p01618699.html
 /tr/tr/6-14-yas--kontrast-dantel-mayo-p01492630.html
 /tr/tr/6-14-yas--kontrast-logolu-mayo-t-shirt-p01492798.html
@@ -896,6 +898,7 @@
 /tr/tr/6-14-yas-potikareli-pijama-takimi-p07099795.html
 /tr/tr/6-14-yas-tie-dye-hibiskus-bikini-p04354630.html
 /tr/tr/6-ay-3-yas--uclu-uzun-kollu-body-paketi-p08501546.html
+/tr/tr/6-li-metal-parcali-elastik-bileklik-seti-p04736239.html
 /tr/tr/6-li-renkli-borosilikat-dondurma-kasigi-seti-p48246042.html
 /tr/tr/6-li-white-powdery-kokulu-seramik-seti-p41444768.html
 /tr/tr/7--kosu-sortu-p04387357.html
@@ -927,7 +930,9 @@
 /tr/tr/a3-kirtasiye-dosyasi-p44314728.html
 /tr/tr/a5-defter-seti--3-lu-paket--p44310111.html
 /tr/tr/a5-defter-ve-kalemlik-p44304111.html
+/tr/tr/a5-dinozorlu-cocuk-defteri-p42620111.html
 /tr/tr/a5-goz-tasarimli-defter-%7C-marisa-berenson-p46879728.html
+/tr/tr/a5-unicorn-cocuk-defteri-p42621111.html
 /tr/tr/a6-goz-desenli-defter-%7C-marisa-berenson-p46878728.html
 /tr/tr/aaron-levine-edp-40-ml--1-35-fl--oz---p20210464.html
 /tr/tr/aaron-levine-x-zara-100-ipek-hafif-kazak-p00077418.html
@@ -1074,6 +1079,7 @@
 /tr/tr/ahsap-mutfak-gerecleri-kavanozu-p48271352.html
 /tr/tr/ahsap-mutfak-kesme-tahtasi-p46260754.html
 /tr/tr/ahsap-mutfak-makasi-p42274479.html
+/tr/tr/ahsap-nihale-p47240494.html
 /tr/tr/ahsap-oyuncak-mutfak-p49640052.html
 /tr/tr/ahsap-pahali-orta-sehpa-p49273072.html
 /tr/tr/ahsap-pecetelik-p47205039.html
@@ -1110,6 +1116,7 @@
 /tr/tr/ahsap-ve-kilifli-berjer-p48311073.html
 /tr/tr/ahsap-ve-metal-doner-tabure-p44210073.html
 /tr/tr/ahsap-ve-metal-kitap-destegi-p44328043.html
+/tr/tr/ahsap-ve-metal-masa-lambasi-p44302047.html
 /tr/tr/ahsap-ve-metal-tekerlekli-saklama-unitesi-p43215072.html
 /tr/tr/ahsap-ve-metal-utu-masasi-p43292762.html
 /tr/tr/ahsap-ve-pamuklu-katlanir-tabure-p48345073.html
@@ -1186,8 +1193,10 @@
 /tr/tr/akrilik-cicek-desenli-bardak-p40280402.html
 /tr/tr/akrilik-cicek-kase-p40280211.html
 /tr/tr/akrilik-cicek-kulplar--2-li-paket--p45288555.html
+/tr/tr/akrilik-cizgili-kase-p48238211.html
 /tr/tr/akrilik-mesrubat-bardagi-p48209402.html
 /tr/tr/akrilik-noktali-bardak-p48205402.html
+/tr/tr/aksesuarli-genis-kollu-kisa-tulum-p03897126.html
 /tr/tr/aksesuarli-krose-midi-elbise-p00387068.html
 /tr/tr/alcak-ayakli-sehpa-p48383072.html
 /tr/tr/alcak-kristal-konik-bardak-p49219410.html
@@ -1201,6 +1210,7 @@
 /tr/tr/altin-aksesuarli-triko-elbise-p09598075.html
 /tr/tr/altin-dugmeli-kruvaze-blazer-p01564655.html
 /tr/tr/altin-dugmeli-palazzo-pantolon-p01608054.html
+/tr/tr/altin-dugmeli-palazzo-pantolon-p07761782.html
 /tr/tr/altin-kenarli-kabartma-cam-kase-p42288211.html
 /tr/tr/altin-kenarli-kabartma-cam-servis-tabagi-p42288205.html
 /tr/tr/altin-kenarli-kabartmali-cam-salata-kasesi-p42288216.html
@@ -1246,6 +1256,7 @@
 /tr/tr/aplikeli-capraz-askili-canta-marisa-berenson-x-zara-p16702810.html
 /tr/tr/aplikeli-top-p04424624.html
 /tr/tr/aplikeli-topuklu-sandalet-p12302810.html
+/tr/tr/aplikeli-uzun-dokumlu-elbise-p03067231.html
 /tr/tr/aplikeli-ve-dikisli-kirlent-kilifi-p46369008.html
 /tr/tr/apolet-detayli-crop-fit-ceket-p02634804.html
 /tr/tr/apolet-detayli-safari-ceket-p07781745.html
@@ -1262,6 +1273,7 @@
 /tr/tr/arjantin-desenli-bermuda-p09007721.html
 /tr/tr/arjantin-fifa-dunya-kupasi---2026-baskili-bermuda-p06208718.html
 /tr/tr/arjantin-fifa-dunya-kupasi--2026-t-shirt-p06208601.html
+/tr/tr/arkadan-bagcikli-kombine-top-p02865777.html
 /tr/tr/arkasi-acik-ayakkabi-p12213810.html
 /tr/tr/arkasi-acik-ayakkabi-p12257710.html
 /tr/tr/arkasi-acik-ayakkabi-p13209710.html
@@ -1271,7 +1283,6 @@
 /tr/tr/arkasi-acik-deri-tekne-ayakkabisi-p12507810.html
 /tr/tr/arkasi-acik-deri-topuklu-ayakkabi-p12242710.html
 /tr/tr/arkasi-acik-dolgu-topuk-ayakkabi-p12266710.html
-/tr/tr/arkasi-acik-incili-ayakkabi-p12514730.html
 /tr/tr/arkasi-acik-kisa-sivri-topuklu-ayakkabi-p12230710.html
 /tr/tr/arkasi-acik-makosen-p12681820.html
 /tr/tr/arkasi-acik-topuklu-ayakkabi-p12206810.html
@@ -1316,6 +1327,7 @@
 /tr/tr/asimetrik-incili-tunik-bluz-p05029144.html
 /tr/tr/asimetrik-kalin-pamuklu-top-p02335187.html
 /tr/tr/asimetrik-kapamali-triko-top-p05536050.html
+/tr/tr/asimetrik-kenarli-orgu-t-shirt-p04231420.html
 /tr/tr/asimetrik-kenarli-seramik-cukur-tabak-p48286201.html
 /tr/tr/asimetrik-kenarli-seramik-kase-p48286211.html
 /tr/tr/asimetrik-kenarli-seramik-kupa-p48286210.html
@@ -1334,6 +1346,7 @@
 /tr/tr/asimetrik-midi-etek-p02299563.html
 /tr/tr/asimetrik-midi-etek-p05770227.html
 /tr/tr/asimetrik-midi-etek-p08546536.html
+/tr/tr/asimetrik-midi-saten-elbise-p07235645.html
 /tr/tr/asimetrik-muslin-pelerin-p02675635.html
 /tr/tr/asimetrik-omuz-cantasi-p13340820.html
 /tr/tr/asimetrik-pacali-tulum-p08415771.html
@@ -1372,6 +1385,8 @@
 /tr/tr/askili-city-canta-p16411710.html
 /tr/tr/askili-cizgili-top-p00858156.html
 /tr/tr/askili-dokulu-triko-top-p08779120.html
+/tr/tr/askili-dokumlu-uzun-tulum-p02180200.html
+/tr/tr/askili-halter-yaka-tulum-p08695391.html
 /tr/tr/askili-kisa-tulum-p02876333.html
 /tr/tr/askili-midi-elbise-p02321741.html
 /tr/tr/askili-pamuklu-top-p44152120.html
@@ -1414,12 +1429,12 @@
 /tr/tr/ayicik-baskili-sweatshirt-p06061501.html
 /tr/tr/ayicik-bornoz-canta-p11131830.html
 /tr/tr/ayicik-cocuk-kulplari-paketi--2-li-paket--p43698555.html
-/tr/tr/ayicik-desenli-denim-etek-p04441613.html
 /tr/tr/ayicik-islemeli-cizgili-t-shirt-p00722332.html
 /tr/tr/ayicik-nakisli-genis-paca-pelus-pantolon-p04424508.html
 /tr/tr/ayicik-nakisli-kisa-t-shirt-p05644141.html
 /tr/tr/ayicikli-ahsap-cocuk-masasi-p45628072.html
 /tr/tr/ayicikli-ahsap-sandalye-p45626073.html
+/tr/tr/ayicikli-denim-etek-p04441613.html
 /tr/tr/aylik-planlayici-paketi--12-li-paket--p44312112.html
 /tr/tr/aynali-kisa-tulum-p04441846.html
 /tr/tr/aynali-ve-boncuklu-tig-isi-kupe-p01011224.html
@@ -1471,6 +1486,7 @@
 /tr/tr/bagcikli-orgu-sapka-p01023005.html
 /tr/tr/bagcikli-pamuklu-bermuda-sort-p00858733.html
 /tr/tr/bagcikli-pamuklu-ceket-p05854730.html
+/tr/tr/bagcikli-poplin-top-p02903272.html
 /tr/tr/bagcikli-poplin-top-p04772021.html
 /tr/tr/bagcikli-relaxed-fit-pamuklu-viskoz-gomlek-p04016302.html
 /tr/tr/bagcikli-relaxed-straight-fit-pantolon-p08727304.html
@@ -1493,7 +1509,6 @@
 /tr/tr/baggy-fit-dikis-detayli-denim-bermuda-p06045485.html
 /tr/tr/baggy-fit-jean-p03409597.html
 /tr/tr/baggy-fit-jean-p06045495.html
-/tr/tr/baggy-fit-soyut-desenli-bermuda-p05862418.html
 /tr/tr/baggy-fluid-pantolon-p05644709.html
 /tr/tr/baggy-jean-p06855550.html
 /tr/tr/baggy-jean-p08614521.html
@@ -1547,7 +1562,6 @@
 /tr/tr/balikli-cam-bardak-p48260401.html
 /tr/tr/balikli-cizgili-ekmek-sepeti-p49253049.html
 /tr/tr/baliksirti-battaniye-p46394004.html
-/tr/tr/baliksirti-dokulu-kargo-pantolon-p05862318.html
 /tr/tr/baliksirti-keten---yun-klasik-relaxed-fit-pantolon-p01013731.html
 /tr/tr/baliksirti-straight-fit-jean-p03991399.html
 /tr/tr/balina-yamali-t-shirt-p06208504.html
@@ -1768,7 +1782,7 @@
 /tr/tr/baskili-t-shirt-p00722563.html
 /tr/tr/baskili-t-shirt-p01716530.html
 /tr/tr/baskili-t-shirt-p01716704.html
-/tr/tr/baskili-t-shirt-p02614628.html
+/tr/tr/baskili-t-shirt-p04424623.html
 /tr/tr/baskili-t-shirt-p04456552.html
 /tr/tr/baskili-t-shirt-p04805784.html
 /tr/tr/baskili-t-shirt-p05048762.html
@@ -1896,7 +1910,6 @@
 /tr/tr/blok-baski-desenli-pamuklu-hali-p47140029.html
 /tr/tr/blok-renkli--baskili-ve-yikama-efektli-t-shirt-p06224304.html
 /tr/tr/blok-renkli-baskili-sweatshirt-p05643705.html
-/tr/tr/blok-renkli-baskili-t-shirt-p06208772.html
 /tr/tr/blok-renkli-ceket-p08614574.html
 /tr/tr/blok-renkli-cicek-islemeli-limited-edisyon-triko-hirka-p03284611.html
 /tr/tr/blok-renkli-cropped-fit-t-shirt-p04087033.html
@@ -1907,7 +1920,6 @@
 /tr/tr/blok-renkli-islemeli-sweatshirt-p06208512.html
 /tr/tr/blok-renkli-kese-sapka-p01879640.html
 /tr/tr/blok-renkli-orgu-top-p02142116.html
-/tr/tr/blok-renkli-regular-fit-t-shirt-p00722631.html
 /tr/tr/blok-renkli-regular-fit-t-shirt-p04805333.html
 /tr/tr/blok-renkli-relaxed-fit-kazak-p05755315.html
 /tr/tr/blok-renkli-slim-cropped-fit-t--shirt-p04087032.html
@@ -1927,6 +1939,7 @@
 /tr/tr/blue-zenith-edp-100ml--3-4-fl-oz--p20220330.html
 /tr/tr/bluey---ludo-studio-desenli-bermuda-p07878821.html
 /tr/tr/bluey---ludo-studio-edt-100-ml--3-4-fl--oz--p20310397.html
+/tr/tr/bluey---ludo-studio-t-shirt-p07878775.html
 /tr/tr/blzr-flwrs-p07839221.html
 /tr/tr/bnn-flwrs-pnt-p07842211.html
 /tr/tr/bnn-pnt-16-p08105228.html
@@ -1941,8 +1954,9 @@
 /tr/tr/bohemian-oud-edp-80-ml--2-72-fl--oz---p20110384.html
 /tr/tr/bol-kesim-bagcikli-jean-p07147502.html
 /tr/tr/bol-kesim-bermuda-p05584631.html
+/tr/tr/bol-kesim-crop-sweatshirt-p05584351.html
 /tr/tr/bol-kesim-denim-bermuda-p08574603.html
-/tr/tr/bol-kesim-jean-p04806330.html
+/tr/tr/bol-kesim-kapri-pantolon-p06929407.html
 /tr/tr/bol-kollu-cizgili-t-shirt-p04424629.html
 /tr/tr/bolmeli-bulasik-deterjani-sabunlugu-p42295466.html
 /tr/tr/bolmeli-duzenleyici-sepet-p47294099.html
@@ -1955,6 +1969,7 @@
 /tr/tr/boncuk-detayli-kontrast-etek-p00392702.html
 /tr/tr/boncuk-detayli-pencereli-triko-elbise-p09874011.html
 /tr/tr/boncuk-detayli-sal-desenli-fular-p00653211.html
+/tr/tr/boncuk-detayli-sirt-dekolteli-saten-elbise-p03293156.html
 /tr/tr/boncuk-detayli-teknik-sandalet-p12611730.html
 /tr/tr/boncuk-islemeli-cicek-desenli-saten-crop-blazer-p03183710.html
 /tr/tr/boncuk-islemeli-duz-sandalet-p12613810.html
@@ -1971,6 +1986,7 @@
 /tr/tr/boncuk-ve-pullu-tie-dye-sort---sinirli-uretim-p01377122.html
 /tr/tr/boncuklu-baklava-dilimi-kupe-p04736234.html
 /tr/tr/boncuklu-cicek-desenli-bluz-p02298063.html
+/tr/tr/boncuklu-cicek-desenli-elbise-p05770229.html
 /tr/tr/boncuklu-cicek-islemeli-top-p03183605.html
 /tr/tr/boncuklu-cicekli-mini-file-etek-p04772128.html
 /tr/tr/boncuklu-clutch-p16062810.html
@@ -1980,7 +1996,6 @@
 /tr/tr/boncuklu-deniz-kabuklu-kolye-p01856227.html
 /tr/tr/boncuklu-desenli-babet-p12516810.html
 /tr/tr/boncuklu-dokumlu-elbise-p05029244.html
-/tr/tr/boncuklu-el-cantasi-p16014810.html
 /tr/tr/boncuklu-el-cantasi-p16016810.html
 /tr/tr/boncuklu-el-cantasi-p16170710.html
 /tr/tr/boncuklu-elastik-bileklik-seti-p01856323.html
@@ -2004,6 +2019,7 @@
 /tr/tr/boncuklu-sacakli-ajurlu-pareo-marisa-berenson-x-zara-p00653217.html
 /tr/tr/boncuklu-sandalet-p12650730.html
 /tr/tr/boncuklu-sort-etek-p04772409.html
+/tr/tr/boncuklu-top-p05770222.html
 /tr/tr/boncuklu-tul-sutyen-p07521140.html
 /tr/tr/boncuklu-ve-dantel-kontrastli-ucgen-sutyen-p07521152.html
 /tr/tr/boncuklu-ve-tasli-cicek-kupe-p01011223.html
@@ -2034,8 +2050,10 @@
 /tr/tr/borosilikat-kupa-p40244210.html
 /tr/tr/borosilikat-matcha-cay-takimi-p47257041.html
 /tr/tr/borosilikat-meyveli-pipet-seti--6-li--p48207042.html
+/tr/tr/borosilikat-sabunluk-p44539466.html
 /tr/tr/borosilikat-saklama-kavanozu-p46201428.html
 /tr/tr/borosilikat-samdan-p41244368.html
+/tr/tr/borosilikat-shot-bardak-takimi--4-lu--p40225449.html
 /tr/tr/borosilikat-sise-p48224439.html
 /tr/tr/borosilikat-sise-ve-bardak-takimi-p44277414.html
 /tr/tr/borosilikat-sutluk-p48224214.html
@@ -2052,6 +2070,7 @@
 /tr/tr/botanik-desenli-pecete--2-li-set--p44212022.html
 /tr/tr/botonato-pamuk-karisimli-kazak-p05755453.html
 /tr/tr/boucle-cizgili-pantolon-p02298463.html
+/tr/tr/boucle-cizgili-top-p02298465.html
 /tr/tr/boucle-kaz-ayagi-blazer-p04217299.html
 /tr/tr/bowling-joma--mundial-kanada-p11413830.html
 /tr/tr/boxy-fit-100-keten-polo-gomlek-p02634324.html
@@ -2177,6 +2196,8 @@
 /tr/tr/buzgulu-midi-elbise-p02394619.html
 /tr/tr/buzgulu-midi-etek-p05029051.html
 /tr/tr/buzgulu-midi-etek-p05584230.html
+/tr/tr/buzgulu-nakisli-triko-top-p01223711.html
+/tr/tr/buzgulu-omuz-detayli-uzun-elbise-p07341768.html
 /tr/tr/buzgulu-pamuklu-yorgan-p45151005.html
 /tr/tr/buzgulu-rustik-t-shirt-p06912250.html
 /tr/tr/buzgulu-su-gecirmez-parka-p03153701.html
@@ -2224,6 +2245,7 @@
 /tr/tr/can-paca-cepli-jean-p06103700.html
 /tr/tr/can-paca-cizgili-pantolon-p06092035.html
 /tr/tr/can-paca-cizgili-takim-pantolonu-p04164601.html
+/tr/tr/can-paca-fitilli-kadife-pantolon-p04575404.html
 /tr/tr/can-paca-interlok-pantolon-p03641815.html
 /tr/tr/can-paca-jean-p00840353.html
 /tr/tr/can-paca-jean-p00840429.html
@@ -2256,6 +2278,7 @@
 /tr/tr/capraz-deri-sandalet-p12798720.html
 /tr/tr/capraz-dikis-nakisli-baskili-fular-p03920290.html
 /tr/tr/capraz-halter-yaka-tulum-p07989536.html
+/tr/tr/capraz-seritli-cepli-kisa-elbise-p04764230.html
 /tr/tr/capraz-yaka-spor-top-p05580702.html
 /tr/tr/capyfun---capibara-banyo-sandaleti-p12700830.html
 /tr/tr/capyfun---capybara-desenli-bermuda-p05431704.html
@@ -2296,6 +2319,7 @@
 /tr/tr/casual-spor-ayakkabi-p12346820.html
 /tr/tr/casual-spor-ayakkabi-p14450730.html
 /tr/tr/cat-eye-gunes-gozlugu-p02727202.html
+/tr/tr/cat-eye-gunes-gozlugu-p02727204.html
 /tr/tr/cat-eye-gunes-gozlugu-p04646203.html
 /tr/tr/catlak-gorunumlu-topuklu-ayakkabi-p13202810.html
 /tr/tr/catlak-seyahat-cantasi-p13105820.html
@@ -2306,6 +2330,7 @@
 /tr/tr/celik-duvar-agirlik-sehpasi-p43382043.html
 /tr/tr/celik-ekmek-tabagi-p42269206.html
 /tr/tr/celik-kamp-lambasi-aski-aparati-p49304043.html
+/tr/tr/celik-komodin-p48105072.html
 /tr/tr/celik-kupa--kasik-ve-tepsi-seti-p45266042.html
 /tr/tr/celik-mutfak-rende-p46263784.html
 /tr/tr/celik-suzgec-p42265042.html
@@ -2314,6 +2339,8 @@
 /tr/tr/celik-ve-cam-depolama-unitesi-p42576077.html
 /tr/tr/celik-ve-cam-havluluk-p42577077.html
 /tr/tr/cep-boyu-haftalik-planlayici-p44305112.html
+/tr/tr/cep-detayli-bermuda-sort-etek-p01186092.html
+/tr/tr/cep-detayli-duz-kesim-crop-pantolon-p01255418.html
 /tr/tr/cepli--yikamali-regular-fit-ince-ceket-p08281594.html
 /tr/tr/cepli-crop-gomlek-p01121329.html
 /tr/tr/cepli-dar-kesim-pantolon-p05584633.html
@@ -2450,6 +2477,7 @@
 /tr/tr/cicek-desenli-gomlek-p06085560.html
 /tr/tr/cicek-desenli-gomlek-p07084111.html
 /tr/tr/cicek-desenli-gomlek-p07086348.html
+/tr/tr/cicek-desenli-halter-mini-elbise-p07845289.html
 /tr/tr/cicek-desenli-halter-top-p02010728.html
 /tr/tr/cicek-desenli-halter-top-p09037038.html
 /tr/tr/cicek-desenli-halter-yaka-mini-elbise-p02743300.html
@@ -2471,6 +2499,7 @@
 /tr/tr/cicek-desenli-kirlent-kilifi-p46374008.html
 /tr/tr/cicek-desenli-kirlent-kilifi-p46385008.html
 /tr/tr/cicek-desenli-kisa-poplin-elbise-p02050307.html
+/tr/tr/cicek-desenli-kombine-elbise-p09036801.html
 /tr/tr/cicek-desenli-krose-orgu-elbise-p01473530.html
 /tr/tr/cicek-desenli-liberty-kumas-baggy-pantolon-p06130821.html
 /tr/tr/cicek-desenli-liberty-kumas-salvar-pantolon-p01527806.html
@@ -2488,6 +2517,7 @@
 /tr/tr/cicek-desenli-pamuklu-battaniye-p46366004.html
 /tr/tr/cicek-desenli-pamuklu-bebek-cantasi-p41628019.html
 /tr/tr/cicek-desenli-pamuklu-bebek-cantasi-p44613019.html
+/tr/tr/cicek-desenli-pamuklu-bornoz--380-g-m---p46599014.html
 /tr/tr/cicek-desenli-pamuklu-keten-yastik-kilifi-%7C-katharine-pole-p47108091.html
 /tr/tr/cicek-desenli-pamuklu-perkal-nevresim--200-iplikli--p46146088.html
 /tr/tr/cicek-desenli-patik-p18020830.html
@@ -2502,6 +2532,7 @@
 /tr/tr/cicek-desenli-recineli-masa-ortusu-p45298021.html
 /tr/tr/cicek-desenli-relaxed-fit-gomlek-p04333325.html
 /tr/tr/cicek-desenli-ribana-t-shirt-ve-bisikletci-tayt-takimi-p00722566.html
+/tr/tr/cicek-desenli-sal-p03920531.html
 /tr/tr/cicek-desenli-salvar-pantolon-p07836802.html
 /tr/tr/cicek-desenli-saten-gomlek-p01165152.html
 /tr/tr/cicek-desenli-saten-gomlek-p03040194.html
@@ -2519,6 +2550,7 @@
 /tr/tr/cicek-desenli-t-shirt-ve-bermuda-takimi-p04424101.html
 /tr/tr/cicek-desenli-tayt-p06061625.html
 /tr/tr/cicek-desenli-top-p06102149.html
+/tr/tr/cicek-desenli-top-p08675617.html
 /tr/tr/cicek-desenli-triko-top-p02893029.html
 /tr/tr/cicek-desenli-tulum-p04786571.html
 /tr/tr/cicek-desenli-uzun-deniz-sortu-p00495315.html
@@ -2636,8 +2668,6 @@
 /tr/tr/cicekli-biyeli-saten-nevresim-p47109088.html
 /tr/tr/cicekli-biyeli-saten-yastik-kilifi-p47109091.html
 /tr/tr/cicekli-blazer-p07838135.html
-/tr/tr/cicekli-boncuklu-kolye-p07243710.html
-/tr/tr/cicekli-buzgulu-top-p01627294.html
 /tr/tr/cicekli-cocuk-kisa-pantolon-p45671584.html
 /tr/tr/cicekli-cocuk-makyaj-cantasi-p44613126.html
 /tr/tr/cicekli-cocuk-plaj-mayosu-p45624586.html
@@ -2648,7 +2678,6 @@
 /tr/tr/cicekli-jakarli-banyo-havlusu-p42518013.html
 /tr/tr/cicekli-jakarli-pike-p41386004.html
 /tr/tr/cicekli-jut-hali-p47142029.html
-/tr/tr/cicekli-kaplamali-su-gecirmez-yagmurluk-p00874551.html
 /tr/tr/cicekli-kirlent-kilifi-p43174008.html
 /tr/tr/cicekli-kirlent-kilifi-p46347008.html
 /tr/tr/cicekli-krose-babet-p12501810.html
@@ -2704,7 +2733,6 @@
 /tr/tr/cift-cidarli-borosilikat-espresso-fincani-p48210464.html
 /tr/tr/cift-cidarli-borosilikat-kupa-p48210210.html
 /tr/tr/cift-cidarli-cizgili-borosilikat-bardak-p48208210.html
-/tr/tr/cift-cizgili-banyo-havlusu-p49547013.html
 /tr/tr/cift-cizgili-banyo-paspasi-p49547015.html
 /tr/tr/cift-cizgili-kirlent-kilifi-p46192008.html
 /tr/tr/cift-cizgili-pamuk-nevresim-p44122088.html
@@ -2777,6 +2805,9 @@
 /tr/tr/cift-yuzlu-kareli-cocuk-yorgan-p44601005.html
 /tr/tr/cift-yuzlu-kareli-evcil-hayvan-bandanasi-p42300149.html
 /tr/tr/cift-yuzlu-kareli-yastik-kilifi-p49120091.html
+/tr/tr/cift-yuzlu-pamuk-nevresim-p45167088.html
+/tr/tr/cift-yuzlu-pamuklu-perkal-nevresim-p45165088.html
+/tr/tr/cift-yuzlu-pamuklu-perkal-yastik-kilifi-p45165091.html
 /tr/tr/cift-yuzlu-saten-pecete--2-li-set--%7C-marisa-berenson-p46845022.html
 /tr/tr/cift-yuzlu-suni-suet-ceket-p08281200.html
 /tr/tr/cift-yuzlu-uzay-temali-cocuk-yastik-kilifi-p46611091.html
@@ -2808,6 +2839,7 @@
 /tr/tr/cilek-yuzucu-gozlugu-p00009549.html
 /tr/tr/cinnamoroll---sanrio-edt-40ml--1-35-fl-oz--p20310388.html
 /tr/tr/cinnomoroll---sanrio-baskili-bermuda-p02614704.html
+/tr/tr/civciv-bebek-silikon-dislik-p44605052.html
 /tr/tr/civciv-desenli-silikon-bebek-onlugu-p48600487.html
 /tr/tr/civciv-desenli-silikon-cocuk-kasigi-p48600304.html
 /tr/tr/civciv-desenli-silikon-cocuk-tabagi-p48600202.html
@@ -2821,6 +2853,8 @@
 /tr/tr/cizgili--pullu-aplikeli--buzgulu-gomlek-ve-top-seti-p04786721.html
 /tr/tr/cizgili-100-ipek-kravat-p02241416.html
 /tr/tr/cizgili-agir-kumas-bermuda-p01716702.html
+/tr/tr/cizgili-akrilik-bardak-p48238401.html
+/tr/tr/cizgili-akrilik-kadeh-p48238409.html
 /tr/tr/cizgili-amerikan-servis--2-li-paket--p49250023.html
 /tr/tr/cizgili-asimetrik-etek-p01131305.html
 /tr/tr/cizgili-asimetrik-top-p00387076.html
@@ -2922,6 +2956,7 @@
 /tr/tr/cizgili-dokulu-bermuda-p01971812.html
 /tr/tr/cizgili-dokulu-bermuda-p06345512.html
 /tr/tr/cizgili-dokulu-gomlek-p00975259.html
+/tr/tr/cizgili-dokulu-gomlek-p06345502.html
 /tr/tr/cizgili-dokulu-pamuklu-kirlent-kilifi-%7C-katharine-pole-p45152008.html
 /tr/tr/cizgili-dokulu-regular-fit-polo-t-shirt-p04442434.html
 /tr/tr/cizgili-dokulu-triko-top-p03991010.html
@@ -2952,12 +2987,12 @@
 /tr/tr/cizgili-firfirli-poplin-top-p04772036.html
 /tr/tr/cizgili-fitilli-kumas-kisa-snoopy-peanuts--salopet-p04441512.html
 /tr/tr/cizgili-fitilli-salopet-p04441460.html
-/tr/tr/cizgili-fitilli-t-shirt-lu-top-p08741645.html
 /tr/tr/cizgili-fitilli-t-shirt-p00722457.html
 /tr/tr/cizgili-fitilli-t-shirt-p04424706.html
 /tr/tr/cizgili-fitilli-t-shirt-p04805114.html
 /tr/tr/cizgili-fitilli-tulum-p04441637.html
 /tr/tr/cizgili-fitilli-uzun-salopet-p04441595.html
+/tr/tr/cizgili-fitilli-uzun-salopet-p06987558.html
 /tr/tr/cizgili-fiyonklu-gomlek-p07079320.html
 /tr/tr/cizgili-genis-paca-bermuda-p03991331.html
 /tr/tr/cizgili-genis-paca-kargo-pantolon-p04333601.html
@@ -2992,7 +3027,6 @@
 /tr/tr/cizgili-halter-poplin-top-p02010746.html
 /tr/tr/cizgili-halter-top-p07941139.html
 /tr/tr/cizgili-halter-yaka-akiskan-top-p03067001.html
-/tr/tr/cizgili-halter-yaka-midi-elbise-p07484158.html
 /tr/tr/cizgili-halter-yaka-top-p07484110.html
 /tr/tr/cizgili-havlu-cocuk-terligi-p13101800.html
 /tr/tr/cizgili-havlu-mutfak-bezi-p40253026.html
@@ -3019,13 +3053,16 @@
 /tr/tr/cizgili-kabartmali-jakarli-gomlek-p07036400.html
 /tr/tr/cizgili-kadife-kirlent-kilifi-p47318008.html
 /tr/tr/cizgili-kalpli-yamali-sweatshirt-p01037578.html
+/tr/tr/cizgili-kanvas-canta-p03921203.html
 /tr/tr/cizgili-kapri-pantolon-p06929504.html
 /tr/tr/cizgili-kapusonlu-bornoz-p41515014.html
 /tr/tr/cizgili-kapusonlu-bornoz-p43542014.html
 /tr/tr/cizgili-kapusonlu-dokumlu-ince-ceket-p01038876.html
+/tr/tr/cizgili-kapusonlu-gomlek-p42128579.html
 /tr/tr/cizgili-kapusonlu-sweatshirt-p05584350.html
 /tr/tr/cizgili-kapusonlu-triko-hirka-p03471710.html
 /tr/tr/cizgili-karma-kupe-p04736254.html
+/tr/tr/cizgili-kemerli-elbise-p01131302.html
 /tr/tr/cizgili-kemerli-midi-elbise-p07536309.html
 /tr/tr/cizgili-kemerli-tulum-p07845520.html
 /tr/tr/cizgili-kemerli-wide-fit-pantolon-p04514305.html
@@ -3042,7 +3079,6 @@
 /tr/tr/cizgili-keten-top-p07057661.html
 /tr/tr/cizgili-keten-ve-kasmir-kazak-p02893401.html
 /tr/tr/cizgili-keten-ve-pamuklu-besik-koruyucu-p44614527.html
-/tr/tr/cizgili-keten-ve-pamuklu-cocuk-makyaj-cantasi-p44615019.html
 /tr/tr/cizgili-keten-ve-pamuklu-cocuk-yorgan-p44617005.html
 /tr/tr/cizgili-keten-ve-pamuklu-orgu-t-shirt-p03166414.html
 /tr/tr/cizgili-keten-ve-pamuklu-uzun-kollu-t-shirt-p05868402.html
@@ -3128,6 +3164,7 @@
 /tr/tr/cizgili-pamuklu-bez-p49254026.html
 /tr/tr/cizgili-pamuklu-keten-denim-gomlek-p06124395.html
 /tr/tr/cizgili-pamuklu-keten-denim-pantolon-p03991322.html
+/tr/tr/cizgili-pamuklu-keten-pantolon-%7C-katharine-pole-p44114122.html
 /tr/tr/cizgili-pamuklu-keten-pantolon-p06917552.html
 /tr/tr/cizgili-pamuklu-keten-pantolon-p06917850.html
 /tr/tr/cizgili-pamuklu-keten-polo-gomlek-p07545102.html
@@ -3176,6 +3213,7 @@
 /tr/tr/cizgili-polo-takim-ve-bermuda-p07878485.html
 /tr/tr/cizgili-polo-yaka-triko-kazak-p03471709.html
 /tr/tr/cizgili-polo-yaka-triko-kazak-p09874702.html
+/tr/tr/cizgili-poplin-pamuklu-pantolon-p44151122.html
 /tr/tr/cizgili-poplin-sort-p01255504.html
 /tr/tr/cizgili-poplin-sort-p02180503.html
 /tr/tr/cizgili-poplin-sort-p06929502.html
@@ -3200,6 +3238,7 @@
 /tr/tr/cizgili-sac-orgulu-kazak-p06427019.html
 /tr/tr/cizgili-salvar-pantolon-p03153815.html
 /tr/tr/cizgili-salvar-pantolon-zw-collection-p01976363.html
+/tr/tr/cizgili-sandalye-minderi-p46369009.html
 /tr/tr/cizgili-sandik-canta-p03920211.html
 /tr/tr/cizgili-sapli-catal-kasik-bicak-takimi--4-lu-set--p46250311.html
 /tr/tr/cizgili-saten-halter-top-p07088399.html
@@ -3300,8 +3339,6 @@
 /tr/tr/cizgili-tulum-p08614504.html
 /tr/tr/cizgili-uzun-carpenter-bermuda-p00327703.html
 /tr/tr/cizgili-uzun-deniz-sortu-p08574321.html
-/tr/tr/cizgili-uzun-elbise-p07937139.html
-/tr/tr/cizgili-uzun-kollu-t-shirt-p01887416.html
 /tr/tr/cizgili-uzun-kollu-t-shirt-p04805117.html
 /tr/tr/cizgili-uzun-triko-sort-etek-p02893057.html
 /tr/tr/cizgili-uzun-tulum-p01476636.html
@@ -3369,6 +3406,7 @@
 /tr/tr/clara-cebrian---baskili-t-shirt-p06208777.html
 /tr/tr/clara-cebrian---cizgili-havlu-dokulu-bermuda-p05431772.html
 /tr/tr/clara-cebrian---desenli-bandana-p04805799.html
+/tr/tr/clara-cebrian---islemeli-sapka-p01879798.html
 /tr/tr/clara-cebrian---islemeli-t-shirt-p06208778.html
 /tr/tr/clara-cebrian---kareli-bermuda-p04805663.html
 /tr/tr/clara-cebrian---nakis-ve-baski-detayli-t-shirt-p04805697.html
@@ -3407,11 +3445,10 @@
 /tr/tr/cocuk-cift-kapili-ahsap-buzdolabi-p49641052.html
 /tr/tr/cocuk-cizgili-pamuklu-plaj-havlusu-p45625013.html
 /tr/tr/cocuk-cizgili-pijama-takimi-p45630117.html
-/tr/tr/cocuk-cizgili-plaj-pancosu-p45625446.html
 /tr/tr/cocuk-cizgili-yastik-kilifi-p41612091.html
 /tr/tr/cocuk-dantel-elbise-p45663538.html
-/tr/tr/cocuk-demir-askilik-p48652517.html
 /tr/tr/cocuk-deri-terlik-p13310700.html
+/tr/tr/cocuk-dinozorlu-pazen-pijama-p46624117.html
 /tr/tr/cocuk-dis-fircalik-recine-glitter-p46662104.html
 /tr/tr/cocuk-dogum-gunu-celenk-p47611722.html
 /tr/tr/cocuk-dokulu-deniz-mayosu-p45625586.html
@@ -3421,6 +3458,7 @@
 /tr/tr/cocuk-ekosili-deniz-sortu-p45625587.html
 /tr/tr/cocuk-elbise-askisi-balon-paketi--6-li-paket--p46608018.html
 /tr/tr/cocuk-enstruman-oyuncak-gitar-p40635052.html
+/tr/tr/cocuk-esofman-alti-p46632548.html
 /tr/tr/cocuk-ev-seklinde-sepet-p40615049.html
 /tr/tr/cocuk-fare-desenli-havlu-p44698013.html
 /tr/tr/cocuk-fare-desenli-nevresim-p42631088.html
@@ -3447,10 +3485,12 @@
 /tr/tr/cocuk-mike-monster-inc---disney-pixar-sapkasi-p47625585.html
 /tr/tr/cocuk-mikrofiber-yorgan--125-gxm---p40171010.html
 /tr/tr/cocuk-mini-canta-oyuncak-p45699052.html
+/tr/tr/cocuk-monstruos--s-a---disney-pixar-sweatshirt-p46632542.html
 /tr/tr/cocuk-nevresimi-yesil-kareli-p41611088.html
 /tr/tr/cocuk-oyuncak-araba-simulatoru-p42631052.html
 /tr/tr/cocuk-oyuncak-balikcilik-takimi-p42695052.html
 /tr/tr/cocuk-oyuncak-bebek-evi-banyo-takim-p44660052.html
+/tr/tr/cocuk-oyuncak-bebek-evi-p44669052.html
 /tr/tr/cocuk-oyuncak-bebek-evi-yatak-odasi-takimi-p44674052.html
 /tr/tr/cocuk-oyuncak-bisiklet-x-banwood-p42665052.html
 /tr/tr/cocuk-oyuncak-enstrumani-harmonika-p40627052.html
@@ -3507,6 +3547,7 @@
 /tr/tr/cocuklar-icin-cicekli-ve-cizgili-nevresim-p41604088.html
 /tr/tr/cocuklar-icin-cift-yuzlu-jersey-kirlent-kilifi-p44600007.html
 /tr/tr/cocuklar-icin-cift-yuzlu-sevimli-canavarlar--disney-pixar-yastik-kilifi-p41620091.html
+/tr/tr/cocuklar-icin-cift-yuzlu-tek-boynuzlu-at-desenli-nevresim-p41626088.html
 /tr/tr/cocuklar-icin-cizgili-kirlent-kilifi-p44612007.html
 /tr/tr/cocuklar-icin-cizgili-muslin-yastik-kilifi-p42600091.html
 /tr/tr/cocuklar-icin-cizgili-nevresim-p41612088.html
@@ -3552,6 +3593,7 @@
 /tr/tr/cok-cepli-denim-bermuda-p01879706.html
 /tr/tr/cok-cepli-jean-p01879703.html
 /tr/tr/cok-cepli-jogger-pantolon-p06917760.html
+/tr/tr/cok-cepli-pantolon-p04575425.html
 /tr/tr/cok-dusuk-isik-gecirgenlikli-tul-perde-p41302032.html
 /tr/tr/cok-parcali-bilekli-spor-ayakkabi-p12202830.html
 /tr/tr/cok-parcali-bilekli-spor-ayakkabi-p14202730.html
@@ -3606,6 +3648,7 @@
 /tr/tr/crop-fit-deri-ceket-p04720203.html
 /tr/tr/crop-fit-dugmeli-yaka-sweatshirt-p03253378.html
 /tr/tr/crop-fit-fermuarli-ince-ceket-p04209400.html
+/tr/tr/crop-fit-suni-deri-ceket-p03833200.html
 /tr/tr/crop-fit-teknik-ceket-p00155450.html
 /tr/tr/crop-sweatshirt-p05039639.html
 /tr/tr/crop-top-p05584630.html
@@ -3635,6 +3678,7 @@
 /tr/tr/dalgali-cocuk-fotograf-cercevesi-p49600045.html
 /tr/tr/dalgali-dekoratif-mum-paketi--2-li-paket--p43363065.html
 /tr/tr/dalgali-demir-samdan-p41222468.html
+/tr/tr/dalgali-demir-samdan-p44323468.html
 /tr/tr/dalgali-deniz-kabugu-cam-kase-p48265211.html
 /tr/tr/dalgali-dokulu-top-p05767639.html
 /tr/tr/dalgali-duz-masa-ortusu-p46276021.html
@@ -3665,7 +3709,6 @@
 /tr/tr/dalgali-seritli-cizgili-pantolon-p04012508.html
 /tr/tr/dalgali-seritli-triko-hirka-p09598038.html
 /tr/tr/dalgali-ve-kontrast-kenarli-tatli-tabagi-p43207202.html
-/tr/tr/dalgali-ve-renkli-kenarli-seramik-duz-tabak-p43207200.html
 /tr/tr/dalgali-yazi-triko-yelek-p09598555.html
 /tr/tr/dalgali-yun-hali-p41368029.html
 /tr/tr/dalgali-yun-hali-p47102029.html
@@ -3685,15 +3728,16 @@
 /tr/tr/dantel-askili-top-p01067019.html
 /tr/tr/dantel-babet-p12527810.html
 /tr/tr/dantel-bermuda-p08741224.html
+/tr/tr/dantel-body-p01067701.html
 /tr/tr/dantel-cicek-nakisli-bermuda-p06895110.html
 /tr/tr/dantel-detayl%C4%B1-cizgili-sort-p42127123.html
 /tr/tr/dantel-detayl%C4%B1-top-p04770468.html
 /tr/tr/dantel-detayli-100-keten-bluz-p01039566.html
 /tr/tr/dantel-detayli-100-keten-tulum-p06231393.html
-/tr/tr/dantel-detayli-asimetrik-saten-etek-p05344147.html
 /tr/tr/dantel-detayli-asimetrik-t-shirt-p04770707.html
 /tr/tr/dantel-detayli-banyo-havlusu-p42516013.html
 /tr/tr/dantel-detayli-bermuda-p07811733.html
+/tr/tr/dantel-detayli-cicek-desenli-bluz-p01336465.html
 /tr/tr/dantel-detayli-cicek-desenli-sort-p01165222.html
 /tr/tr/dantel-detayli-cicek-islemeli-bermuda-p01072171.html
 /tr/tr/dantel-detayli-cizgili-kapri-pantolon-p05344106.html
@@ -3721,7 +3765,6 @@
 /tr/tr/dantel-detayli-midi-etek-p08741266.html
 /tr/tr/dantel-detayli-mini-pointelle-elbise-p01223716.html
 /tr/tr/dantel-detayli-omuz-pedli-blazer-p02665507.html
-/tr/tr/dantel-detayli-organze-top-p01758704.html
 /tr/tr/dantel-detayli-orgu-kazak-p02582524.html
 /tr/tr/dantel-detayli-pamuklu-gecelik-p44154121.html
 /tr/tr/dantel-detayli-pamuklu-sort-p44148123.html
@@ -3752,7 +3795,6 @@
 /tr/tr/dantel-detayli-triko-tayt-p05536587.html
 /tr/tr/dantel-dokulu-bluz-p06061591.html
 /tr/tr/dantel-dokulu-ucgen-sutyen-top-p01758190.html
-/tr/tr/dantel-etek-p42130720.html
 /tr/tr/dantel-fitilli-pantolon-p01067011.html
 /tr/tr/dantel-gorunumlu-dugmeli-ust-p05584804.html
 /tr/tr/dantel-gorunumlu-yazili-gomlek-p00794301.html
@@ -3771,6 +3813,7 @@
 /tr/tr/dantel-kulot-p02678711.html
 /tr/tr/dantel-midi-etek-p02558563.html
 /tr/tr/dantel-mini-elbise-p01223718.html
+/tr/tr/dantel-nakisli-bandana-p03920533.html
 /tr/tr/dantel-pantolon-p04813318.html
 /tr/tr/dantel-papatya-t-shirt-p00722701.html
 /tr/tr/dantel-seritli-askili-top-p01067620.html
@@ -3782,6 +3825,7 @@
 /tr/tr/dantel-seritli-keten-yorgan-p42112005.html
 /tr/tr/dantel-seritli-romantik-gomlek-p08741237.html
 /tr/tr/dantel-seritli-romantik-top-p07915827.html
+/tr/tr/dantel-seritli-saten-kamisol-top-p05344143.html
 /tr/tr/dantel-seritli-saten-sort-p05919713.html
 /tr/tr/dantel-sutyen-top-p01223123.html
 /tr/tr/dantel-tanga-p01223124.html
@@ -3805,6 +3849,7 @@
 /tr/tr/dantelli-drapeli-top-p01223454.html
 /tr/tr/dantelli-drapeli-uzun-elbise-p07521160.html
 /tr/tr/dantelli-ekmek-sepeti-p47258049.html
+/tr/tr/dantelli-etek-p01365626.html
 /tr/tr/dantelli-file-kulot-p01500731.html
 /tr/tr/dantelli-file-sutyen-p01500700.html
 /tr/tr/dantelli-file-tanga-p01500701.html
@@ -3832,6 +3877,7 @@
 /tr/tr/dantelli-saten-yuzeyli-sort-p05344144.html
 /tr/tr/dantelli-straplez-sutyen-p01355728.html
 /tr/tr/dantelli-tanga-p01067716.html
+/tr/tr/dantelli-tanga-p01355149.html
 /tr/tr/dantelli-tanga-p01355751.html
 /tr/tr/dantelli-tanga-p01758193.html
 /tr/tr/dantelli-tanga-p01758716.html
@@ -3880,6 +3926,7 @@
 /tr/tr/delikli-orgu-bebek-battaniyesi-p44623004.html
 /tr/tr/delikli-topuklu-arkasi-acik-ayakkabi-p12224710.html
 /tr/tr/demir-aski-p48336517.html
+/tr/tr/demir-askilik-p48652517.html
 /tr/tr/demir-kanca-p46195517.html
 /tr/tr/demir-rustik-p46137077.html
 /tr/tr/demir-samdan-p44322468.html
@@ -3965,7 +4012,6 @@
 /tr/tr/deri-babet-p16541830.html
 /tr/tr/deri-babet-p18010830.html
 /tr/tr/deri-bagcikli-bot-p12109830.html
-/tr/tr/deri-bakim-cantasi-p13709720.html
 /tr/tr/deri-bakim-cantasi-p13718820.html
 /tr/tr/deri-bakim-cantasi-p13719820.html
 /tr/tr/deri-bakim-cantasi-p16773710.html
@@ -4009,6 +4055,7 @@
 /tr/tr/deri-barefoot-spor-ayakkabi-p12242720.html
 /tr/tr/deri-barefoot-spor-ayakkabi-p12434730.html
 /tr/tr/deri-barefoot-spor-ayakkabi-p14406830.html
+/tr/tr/deri-barefoot-spor-ayakkabi-p14444830.html
 /tr/tr/deri-barefoot-spor-ayakkabi-p14446830.html
 /tr/tr/deri-barefoot-spor-ayakkabi-p16411830.html
 /tr/tr/deri-barefoot-spor-ayakkabi-p17405730.html
@@ -4093,7 +4140,6 @@
 /tr/tr/deri-kopek-tasmasi-p41393149.html
 /tr/tr/deri-kovboy-bilekte-bot-p12106830.html
 /tr/tr/deri-kovboy-cizme-p12054810.html
-/tr/tr/deri-makosen-p12594630.html
 /tr/tr/deri-makosen-p12612820.html
 /tr/tr/deri-makosen-p12615820.html
 /tr/tr/deri-makosen-p12631820.html
@@ -4130,6 +4176,7 @@
 /tr/tr/deri-sabo-p17500830.html
 /tr/tr/deri-sabo-tokali-dikis-detayli-p11200700.html
 /tr/tr/deri-sabo-tokali-dikis-detayli-p12103700.html
+/tr/tr/deri-sandalet-p12626730.html
 /tr/tr/deri-sandalet-p12632830.html
 /tr/tr/deri-sandalet-p12749720.html
 /tr/tr/deri-seyahat-cantasi-m-p13101720.html
@@ -4137,7 +4184,6 @@
 /tr/tr/deri-seyahat-cantasi-p13142620.html
 /tr/tr/deri-shopper-canta-p13313620.html
 /tr/tr/deri-sirt-cantasi-p13212620.html
-/tr/tr/deri-sirt-cantasi-p13270620.html
 /tr/tr/deri-spor-ayakkabi-p11301700.html
 /tr/tr/deri-spor-ayakkabi-p12209820.html
 /tr/tr/deri-spor-ayakkabi-p12227720.html
@@ -4178,6 +4224,7 @@
 /tr/tr/deri-topuklu-arkasi-acik-ayakkabi-p11268810.html
 /tr/tr/deri-topuklu-ayakkabi-p12217810.html
 /tr/tr/deri-topuklu-babet-p13205810.html
+/tr/tr/deri-topuklu-sandalet-p11302810.html
 /tr/tr/deri-topuklu-sandalet-p11321810.html
 /tr/tr/deri-topuklu-sandalet-p12354710.html
 /tr/tr/deri-topuklu-sandalet-p13310810.html
@@ -4188,6 +4235,7 @@
 /tr/tr/deri-tote-canta-p13354720.html
 /tr/tr/deri-tote-canta-p13358820.html
 /tr/tr/deri-tote-canta-p13363820.html
+/tr/tr/deri-tote-canta-p13371720.html
 /tr/tr/deri-tote-canta-p13380820.html
 /tr/tr/deri-tote-canta-p16167810.html
 /tr/tr/deri-uclu-anahtarlik-p13895720.html
@@ -4214,6 +4262,7 @@
 /tr/tr/desenli-barefoot-spor-ayakkabi-p12440830.html
 /tr/tr/desenli-bikini-alti-p02910010.html
 /tr/tr/desenli-bomber-ceket-p07911155.html
+/tr/tr/desenli-deniz-sortu-p08574432.html
 /tr/tr/desenli-deri-babet-p13570710.html
 /tr/tr/desenli-duz-sandalet-p12615810.html
 /tr/tr/desenli-duz-sandalet-p12616810.html
@@ -4238,6 +4287,7 @@
 /tr/tr/desenli-kurk-dokulu-deri-sandalet-p13318810.html
 /tr/tr/desenli-midi-kamisol-elbise-p03897116.html
 /tr/tr/desenli-midi-pareo-etek-p08015156.html
+/tr/tr/desenli-midi-poplin-elbise-p03152202.html
 /tr/tr/desenli-omuz-askili-tote-canta-p16224810.html
 /tr/tr/desenli-omuz-cantasi-p16203810.html
 /tr/tr/desenli-omuz-cantasi-p16223810.html
@@ -4288,6 +4338,7 @@
 /tr/tr/dikdortgen-cam-servis-tabagi-p44202220.html
 /tr/tr/dikdortgen-celik-tepsi-p46285040.html
 /tr/tr/dikdortgen-deniz-sazi-sepet-p46188049.html
+/tr/tr/dikdortgen-epoksi-gunes-gozlugu-p00475696.html
 /tr/tr/dikdortgen-gunes-gozlugu-p02727203.html
 /tr/tr/dikdortgen-gunes-gozlugu-p02727304.html
 /tr/tr/dikdortgen-gunes-gozlugu-p02727307.html
@@ -4305,6 +4356,7 @@
 /tr/tr/dikdortgen-gunes-gozlugu-p04431209.html
 /tr/tr/dikdortgen-gunes-gozlugu-p04646201.html
 /tr/tr/dikdortgen-jut-hali-p41369029.html
+/tr/tr/dikdortgen-mermer-tepsi-p45288040.html
 /tr/tr/dikdortgen-metal-gunes-gozlugu-p04431206.html
 /tr/tr/dikdortgen-omuz-cantasi-p16821710.html
 /tr/tr/dikdortgen-sepet-p47376049.html
@@ -4343,6 +4395,7 @@
 /tr/tr/dikissiz-askili-top-p05063819.html
 /tr/tr/dikissiz-can-paca-pantolon-p00347153.html
 /tr/tr/dikissiz-crop-top-p03253318.html
+/tr/tr/dikissiz-dantel-body-p08779130.html
 /tr/tr/dikissiz-dantel-sort-p08779109.html
 /tr/tr/dikissiz-dantel-tanga-p08779131.html
 /tr/tr/dikissiz-duz-renk-tanga-p05919514.html
@@ -4355,6 +4408,7 @@
 /tr/tr/dikissiz-ucgen-bralet-p05919513.html
 /tr/tr/dikizdortgen-biseli-duvar-aynasi-p46176106.html
 /tr/tr/dinozor-kimlik-karti-p11526730.html
+/tr/tr/dinozorlu-kapusonlu-cocuk-banyo-havlusu-p46626423.html
 /tr/tr/dinozorlu-t-shirt-ve-bermuda-takimi-p04805809.html
 /tr/tr/dis-mekan-ferforje-masa-p48320072.html
 /tr/tr/dis-mekan-ferforje-sandalye-p41392073.html
@@ -4383,7 +4437,6 @@
 /tr/tr/distressed-dusuk-bel-baggy-jean-p04441508.html
 /tr/tr/distressed-flare-fit-jean-p00840523.html
 /tr/tr/distressed-krop-kesim-ceket-p06987463.html
-/tr/tr/distressed-relaxed-fit-denim-sort-p06987336.html
 /tr/tr/distressed-relaxed-fit-jean-p04060444.html
 /tr/tr/distressed-skinny-denim-p04110708.html
 /tr/tr/distressed-skinny-fit-jean-p06045343.html
@@ -4409,6 +4462,7 @@
 /tr/tr/dokulu-bere-p09065300.html
 /tr/tr/dokulu-bermuda-p00722576.html
 /tr/tr/dokulu-boyunluk-p04387348.html
+/tr/tr/dokulu-can-pantolon-p05039183.html
 /tr/tr/dokulu-capraz-askili-canta-p13502720.html
 /tr/tr/dokulu-capraz-askili-canta-p13516820.html
 /tr/tr/dokulu-capraz-askili-canta-p13604720.html
@@ -4468,7 +4522,6 @@
 /tr/tr/dokulu-oversize-triko-kazak-p01509011.html
 /tr/tr/dokulu-pamuklu-banyo-havlusu-p44587013.html
 /tr/tr/dokulu-pamuklu-banyo-havlusu-p47583013.html
-/tr/tr/dokulu-pamuklu-can-paca-pantolon-p04575440.html
 /tr/tr/dokulu-pamuklu-kazak-p03332302.html
 /tr/tr/dokulu-pamuklu-keten-gomlek-p07545180.html
 /tr/tr/dokulu-pamuklu-yastik-kilifi-p46148091.html
@@ -4478,6 +4531,7 @@
 /tr/tr/dokulu-pilili-relaxed-fit-pantolon-p00706920.html
 /tr/tr/dokulu-polo-yaka-ust-p02298470.html
 /tr/tr/dokulu-pukas-surf-kisa-tulum-p03198500.html
+/tr/tr/dokulu-rahat-ince-ceket-p01034450.html
 /tr/tr/dokulu-regular-fit-bermuda-p01618450.html
 /tr/tr/dokulu-regular-fit-bermuda-p04188353.html
 /tr/tr/dokulu-regular-fit-bermuda-p07147476.html
@@ -4519,6 +4573,7 @@
 /tr/tr/dokulu-triko-polo-t-shirt-p02142408.html
 /tr/tr/dokulu-triko-polo-t-shirt-p03471650.html
 /tr/tr/dokulu-triko-sort-p08779121.html
+/tr/tr/dokulu-triko-top-p02488612.html
 /tr/tr/dokulu-triko-yelek-p05536301.html
 /tr/tr/dokulu-triko-yelek-p05755307.html
 /tr/tr/dokulu-triko-yelek-p07140311.html
@@ -4528,7 +4583,6 @@
 /tr/tr/dokulu-ve-islemeli-boxy-fit-ince-ceket-p05644414.html
 /tr/tr/dokulu-volanli-cocuk-kirlent-kilifi-p44626007.html
 /tr/tr/dokulu-yatak-ortusu-p45165006.html
-/tr/tr/dokulu-yumusak-kazak-p05755325.html
 /tr/tr/dokulu-yun-kazak-p05755414.html
 /tr/tr/dokum-sos-tenceresi-p48252753.html
 /tr/tr/dokuma-bantli-banyo-havlusu-p45550013.html
@@ -4546,10 +4600,9 @@
 /tr/tr/dokumlu-dik-yaka-gomlek-p02370559.html
 /tr/tr/dokumlu-drapeli-top-p06050811.html
 /tr/tr/dokumlu-genis-paca-pantolon-p04387265.html
-/tr/tr/dokumlu-geometrik-desenli-gomlek-p04224147.html
 /tr/tr/dokumlu-halter-elbise-p02935210.html
 /tr/tr/dokumlu-kruvaze-gomlek-p01437354.html
-/tr/tr/dokumlu-midi-etek-p05644285.html
+/tr/tr/dokumlu-midi-etek-p06929424.html
 /tr/tr/dokumlu-oversize-gomlek-p06929267.html
 /tr/tr/dokumlu-oversize-t-shirt-p05580004.html
 /tr/tr/dokumlu-palazzo-pantolon-p05427434.html
@@ -4570,7 +4623,6 @@
 /tr/tr/dokumlu-uzun-tulum-p03067346.html
 /tr/tr/dokumlu-uzun-tulum-p06929282.html
 /tr/tr/dokumlu-uzun-tulum-p06929286.html
-/tr/tr/dolce-nostalgia-vanilla---incense-edp-30-ml--1-01-fl--oz---p20210386.html
 /tr/tr/dolgu-topuk-sandalet-p12309810.html
 /tr/tr/dolgu-topuk-sandalet-p13320710.html
 /tr/tr/dolgu-topuklu-sandalet-p12304810.html
@@ -4604,6 +4656,8 @@
 /tr/tr/dovulmus-cam-surahi-p40232213.html
 /tr/tr/dovulmus-dekoratif-kase-%7C-marisa-berenson-p46806043.html
 /tr/tr/dovulmus-efektli-akrilik-bardak-p40281401.html
+/tr/tr/dovulmus-efektli-cam-bardak-p40243401.html
+/tr/tr/dovulmus-efektli-cam-mesrubat-bardagi-p40243402.html
 /tr/tr/drape-detayli-midi-elbise-p07754623.html
 /tr/tr/drape-detayli-top-p01131807.html
 /tr/tr/drape-midi-etek-p05039011.html
@@ -4613,6 +4667,7 @@
 /tr/tr/drapeli-asimetrik-top-p08741084.html
 /tr/tr/drapeli-balon-askili-top-p03666151.html
 /tr/tr/drapeli-balon-top-p03666151.html
+/tr/tr/drapeli-cizgili-pareo-etek-p04758206.html
 /tr/tr/drapeli-desenli-pantolon-zw-collection-p02338008.html
 /tr/tr/drapeli-etek-marisa-berenson-x-zara-p00350150.html
 /tr/tr/drapeli-halter-yaka-salvar-tulum-p01165729.html
@@ -4625,7 +4680,6 @@
 /tr/tr/drapeli-orgu-top-p03921048.html
 /tr/tr/drapeli-parlak-mini-halter-elbise-p04772383.html
 /tr/tr/drapeli-top-marisa-berenson-x-zara-p00858002.html
-/tr/tr/drapeli-triko-top-p01509007.html
 /tr/tr/drapeli-triko-top-p03921062.html
 /tr/tr/drapeli-triko-top-p05755101.html
 /tr/tr/drapeli-uzun-elbise-marisa-berenson-x-zara-p00858004.html
@@ -4673,6 +4727,7 @@
 /tr/tr/dugmeli-pamuk-karisimli-sort-p08779113.html
 /tr/tr/dugmeli-pamuklu-t-shirt-p44157120.html
 /tr/tr/dugmeli-pamuklu-ust-p05644129.html
+/tr/tr/dugmeli-patli-t-shirt-p03253113.html
 /tr/tr/dugmeli-penye-sweatshirt-p05644123.html
 /tr/tr/dugmeli-puskullu-crop-top-p05644316.html
 /tr/tr/dugmeli-ribana-yelek-p04174633.html
@@ -4727,6 +4782,7 @@
 /tr/tr/dugumlu-kulp-paketi--2-li-paket--p46383555.html
 /tr/tr/dugumlu-metalik-topuklu-sandalet-p11307710.html
 /tr/tr/dugumlu-mini-sort-etek-p08912741.html
+/tr/tr/dugumlu-pareo-etek-p01639609.html
 /tr/tr/dugumlu-seritli-bikini-alti-p00167207.html
 /tr/tr/dusuk-bel-distressed-straight-jean-p01416552.html
 /tr/tr/dusuk-bel-duz-pantolon-p03067449.html
@@ -4749,6 +4805,7 @@
 /tr/tr/duz-bermuda-p04174514.html
 /tr/tr/duz-bermuda-sort-etek-p01330206.html
 /tr/tr/duz-bikini-alti-p00167054.html
+/tr/tr/duz-bikini-alti-p02856043.html
 /tr/tr/duz-bikini-alti-p02910037.html
 /tr/tr/duz-bikini-alti-p02910041.html
 /tr/tr/duz-bohemia-crystal-kadeh-p49263409.html
@@ -4811,6 +4868,7 @@
 /tr/tr/duz-renk-cok-amacli-battaniye-p42379004.html
 /tr/tr/duz-renk-comfort-pantolon-p03183507.html
 /tr/tr/duz-renk-fitilli-kumas-sapka-p00653065.html
+/tr/tr/duz-renk-interlock-t-shirt-p04174608.html
 /tr/tr/duz-renk-kalin-jersy-bermuda-p05048702.html
 /tr/tr/duz-renk-kenar-detayli-plaj-havlu-p43517013.html
 /tr/tr/duz-renk-keten-masa-ortusu-p46270021.html
@@ -4822,6 +4880,7 @@
 /tr/tr/duz-renk-kolsuz-top-p00722562.html
 /tr/tr/duz-renk-konforlu-pantolon-p03183501.html
 /tr/tr/duz-renk-kulotlu-corap-p01554749.html
+/tr/tr/duz-renk-pamuklu-sort-p44131123.html
 /tr/tr/duz-renk-pamuklu-ve-modal-t-shirt-p03641700.html
 /tr/tr/duz-renk-pantolon-p04174515.html
 /tr/tr/duz-renk-penye-bermuda-p01880665.html
@@ -4841,6 +4900,7 @@
 /tr/tr/duz-renk-uzun-kollu-t-shirt-p00895706.html
 /tr/tr/duz-renkli-fitilli-kulotlu-corap-p06068739.html
 /tr/tr/duz-renkli-interlok-t-shirt-p00722580.html
+/tr/tr/duz-renkli-pamuklu-gomlek-p44131579.html
 /tr/tr/duz-renkli-sweatshirt-ve-tayt-takimi-p09940101.html
 /tr/tr/duz-renkli-t-shirt-p00722519.html
 /tr/tr/duz-renkli-t-shirt-p06224691.html
@@ -4953,7 +5013,7 @@
 /tr/tr/elastik-potikareli-gomlek-p02180020.html
 /tr/tr/elastik-spor-babet-p15238810.html
 /tr/tr/elastik-teknik-kumas-pantolon-p04391505.html
-/tr/tr/elastik-topuklu-spor-ayakkabi-p15045810.html
+/tr/tr/elegantly-tokyo-edp-100-ml-p20110989.html
 /tr/tr/elegantly-tokyo-edp-100ml--3-4-fl-oz---p20110709.html
 /tr/tr/elegantly-tokyo-edp-100ml--3-4-fl-oz--p20210799.html
 /tr/tr/elegantly-tokyo-edp-30-ml--1-01-fl--oz---p20110990.html
@@ -4994,7 +5054,6 @@
 /tr/tr/etiket-detayli-reglan-sweatshirt-p01880562.html
 /tr/tr/etiket-detayli-sisme-mont-p08614581.html
 /tr/tr/etiket-detayli-yikama-efektli-t-shirt-p04729773.html
-/tr/tr/etiket-yamali-t-shirt-p06224327.html
 /tr/tr/etiketli-basic-jogging-sweatshirt-ve-jogger-pantolon-takimi-p01971545.html
 /tr/tr/etiketli-carpenter-bermuda-p08614701.html
 /tr/tr/etiketli-cizgili-t-shirt-p04424517.html
@@ -5040,6 +5099,7 @@
 /tr/tr/fare-cocuk-pelus-oyuncak-p48628051.html
 /tr/tr/fare-motifli-amerikan-servis-ve-pecete-p49625023.html
 /tr/tr/fare-temali-cocuk-minderi-p46651051.html
+/tr/tr/fashionably-london-edp-100-ml--3-4-fl--oz---p20110988.html
 /tr/tr/fashionably-london-edp-100-ml--3-4-fl-oz--p20210888.html
 /tr/tr/fashionably-london-edp-100-ml-p20110711.html
 /tr/tr/fashionably-london-edp-30-ml--1-01-fl--oz---p20110996.html
@@ -5049,7 +5109,6 @@
 /tr/tr/fashionably-london-elixir-parfum-100ml--3-4-fl--oz--p20210319.html
 /tr/tr/fashionably-london-elixir-parfum-100ml--3-4-fl-oz---p20110820.html
 /tr/tr/fashionably-london-elixir-parfum-30-ml--1-01-fl--oz---p20210382.html
-/tr/tr/fashionably-london-kati-parfum-4g--0-14-oz---p20110927.html
 /tr/tr/fashionably-london-limited-edition-edp-60-ml--2-3-fl-oz---p20110739.html
 /tr/tr/feminine-spell-parfum-80ml--2-72-fl--oz---p20110959.html
 /tr/tr/femme-edt---nuit-edp-2x90ml--3-04-fl--oz---p20120853.html
@@ -5076,7 +5135,6 @@
 /tr/tr/fermuarli-interlok-polo-sweatshirt-p04092380.html
 /tr/tr/fermuarli-kapusonlu-sweatshirt-p00039676.html
 /tr/tr/fermuarli-kapusonlu-sweatshirt-p01880325.html
-/tr/tr/fermuarli-kareli-polo-t-shirt-p07545459.html
 /tr/tr/fermuarli-kareli-relaxed-fit-gomlek-p06103357.html
 /tr/tr/fermuarli-kumas-ceket-p03286215.html
 /tr/tr/fermuarli-omuz-cantasi-p11120830.html
@@ -5157,8 +5215,10 @@
 /tr/tr/firfirli-bebe-yaka-triko-hirka-p05536546.html
 /tr/tr/firfirli-cepli-mini-etek-p05854514.html
 /tr/tr/firfirli-cicek-desenli-elbise-p02596466.html
+/tr/tr/firfirli-cicek-desenli-elbise-p09040821.html
 /tr/tr/firfirli-cizgili-culotte-pantolon-p04441017.html
 /tr/tr/firfirli-cizgili-gomlek-p02137520.html
+/tr/tr/firfirli-cizgili-gomlek-p07034543.html
 /tr/tr/firfirli-culotte-jean-p08614005.html
 /tr/tr/firfirli-dantel-bluz-p05029066.html
 /tr/tr/firfirli-dantel-pantolon-p01165478.html
@@ -5173,11 +5233,14 @@
 /tr/tr/firfirli-genis-paca-pantolon-p07783313.html
 /tr/tr/firfirli-gofre-kumas-culotte-pantolon-p04012505.html
 /tr/tr/firfirli-halter-elbise-p03152380.html
+/tr/tr/firfirli-halter-mini-elbise-p07779109.html
 /tr/tr/firfirli-islemeli-culotte-jean-p04441018.html
 /tr/tr/firfirli-jakarli-kirlent-kilifi-p42118007.html
 /tr/tr/firfirli-kenarli-mini-elbise-p03641307.html
 /tr/tr/firfirli-kisa-elbise-p03666118.html
+/tr/tr/firfirli-kontrast-top-p01067621.html
 /tr/tr/firfirli-korse-tarzi-mini-elbise-p05063225.html
+/tr/tr/firfirli-korse-top-p04770802.html
 /tr/tr/firfirli-pamuklu-yastik-kilifi-p45110091.html
 /tr/tr/firfirli-pelerin-p01067705.html
 /tr/tr/firfirli-pullu-elbise-p03772630.html
@@ -5185,6 +5248,7 @@
 /tr/tr/firfirli-top-marisa-berenson-x-zara-p04491219.html
 /tr/tr/firfirli-triko-mini-etek-p04192079.html
 /tr/tr/firfirli-triko-tayt-p05536585.html
+/tr/tr/firfirli-ve-bagcikli-mini-elbise-p00881211.html
 /tr/tr/firfirli-ve-delikli-bluz-p00387058.html
 /tr/tr/firfirli-ve-dugmeli-mini-elbise-p05063228.html
 /tr/tr/firfirli-ve-jakarli-yatak-ortusu-p42118006.html
@@ -5221,7 +5285,6 @@
 /tr/tr/fisto-islemeli-midi-etek-p08520726.html
 /tr/tr/fisto-islemeli-pantolon-p07830704.html
 /tr/tr/fisto-islemeli-peplum-top-p08010705.html
-/tr/tr/fisto-islemeli-salvar-pantolon-p03153765.html
 /tr/tr/fisto-islemeli-t-shirt-p01165701.html
 /tr/tr/fisto-islemeli-top-p02675623.html
 /tr/tr/fisto-islemeli-top-p07020663.html
@@ -5232,6 +5295,7 @@
 /tr/tr/fitilli-askili-t-shirt-p05039001.html
 /tr/tr/fitilli-askili-top-p01044156.html
 /tr/tr/fitilli-askili-top-p04424300.html
+/tr/tr/fitilli-balikci-yaka-t-shirt-p05048714.html
 /tr/tr/fitilli-belli-straight-fit-pantolon-p03183760.html
 /tr/tr/fitilli-can-tayt-p09003701.html
 /tr/tr/fitilli-cizgili-triko-top-p02142273.html
@@ -5247,7 +5311,6 @@
 /tr/tr/fitilli-kese-sapka-p04441505.html
 /tr/tr/fitilli-kisa-cilek-islemeli-tulum-p04575558.html
 /tr/tr/fitilli-kopek-ve-yazi-detayli-sapka-p00653233.html
-/tr/tr/fitilli-kruvaze-balerin-t-shirt-p08054613.html
 /tr/tr/fitilli-kruvaze-fiyonklu-top-p01037519.html
 /tr/tr/fitilli-kumas-baggy-pantolon-p04441539.html
 /tr/tr/fitilli-kumas-dokumlu-straight-pantolon-p07147602.html
@@ -5260,9 +5323,11 @@
 /tr/tr/fitilli-orgu-hirka-p03471035.html
 /tr/tr/fitilli-orgu-hirka-p05755029.html
 /tr/tr/fitilli-orgu-polo-t-shirt-p04938435.html
+/tr/tr/fitilli-orgu-yelek-p06771113.html
 /tr/tr/fitilli-orta-boy-corap-p02496553.html
 /tr/tr/fitilli-pamuklu-top-p03641406.html
 /tr/tr/fitilli-pareo-p03391584.html
+/tr/tr/fitilli-rustik-etek-p04174149.html
 /tr/tr/fitilli-straight-fit-pantolon-p03641380.html
 /tr/tr/fitilli-t-shirt-lu-cizgili-top-p08741646.html
 /tr/tr/fitilli-t-shirt-p00061527.html
@@ -5283,6 +5348,7 @@
 /tr/tr/fitilli-uzun-kollu-t-shirt-p04174757.html
 /tr/tr/fitilli-yaka-triko-polo-t-shirt-p02142577.html
 /tr/tr/fitilli-yamali-t-shirt-p04424555.html
+/tr/tr/fitilli-yelek-suveter-p44136544.html
 /tr/tr/fiyonk-aplikeli-tac-p02326715.html
 /tr/tr/fiyonk-aplikeli-top-p06181222.html
 /tr/tr/fiyonk-detayli-can-orgu-pantolon-p05536583.html
@@ -5304,6 +5370,7 @@
 /tr/tr/fiyonklu-babet-p16509830.html
 /tr/tr/fiyonklu-babet-p16567830.html
 /tr/tr/fiyonklu-babet-p16569830.html
+/tr/tr/fiyonklu-buzgulu-crop-top-p03564116.html
 /tr/tr/fiyonklu-cizgili-pantolon-p07878503.html
 /tr/tr/fiyonklu-deri-babet-p12538830.html
 /tr/tr/fiyonklu-deri-duz-sandalet-p11621810.html
@@ -5317,10 +5384,12 @@
 /tr/tr/fiyonklu-pointelle-askili-top-p01223151.html
 /tr/tr/fiyonklu-puantiye-desenli-kolsuz-gomlek-p06022166.html
 /tr/tr/fiyonklu-romantik-top-p09874005.html
+/tr/tr/fiyonklu-sandalet-p16609731.html
 /tr/tr/fiyonklu-t-shirt-p05767706.html
 /tr/tr/fiyonklu-t-shirt-p07950500.html
 /tr/tr/fiyonklu-top-p01377454.html
 /tr/tr/fiyonklu-triko-etek-p05536536.html
+/tr/tr/fiyonklu-ve-burusuk-dokulu-triko-kazak-p02142060.html
 /tr/tr/fiyonklu-ve-firfirli-can-orgu-pantolon-p05536526.html
 /tr/tr/fiyonklu-yumusak-dokulu-fitilli-tayt-p04805507.html
 /tr/tr/flamli-buzgulu-top-p03641381.html
@@ -5340,7 +5409,6 @@
 /tr/tr/floklu-kalpli-sapka-p01879644.html
 /tr/tr/floklu-kirazli-sweatshirt%C2%A0capibara-capyfun---p00208605.html
 /tr/tr/floransa-genis-paca-pantolon-p05643114.html
-/tr/tr/florasan-kabuk-desenli-bermuda-p01037582.html
 /tr/tr/florence-piazza-della-signoria-edt-100ml--3-04-fl--oz--p20210661.html
 /tr/tr/floresan-dugmeli-t-shirt-p05644137.html
 /tr/tr/florusan-sort-p05644117.html
@@ -5381,6 +5449,7 @@
 /tr/tr/formula-1--sirt-cantasi-p11404830.html
 /tr/tr/fortnite---epic-games-t-shirt-p00722705.html
 /tr/tr/fotograf-baskili-interlok-sweatshirt-p06224477.html
+/tr/tr/fotograf-baskili-t-shirt-p06224702.html
 /tr/tr/fotograf-baskili-tasli-t-shirt-p01165645.html
 /tr/tr/fransa-98-fifa-dunya-kupasi--fifa-classics-teknik-polo-p04087531.html
 /tr/tr/fransa-98-fifa-dunya-kupasi--kontrast-sort-p04087537.html
@@ -5393,13 +5462,13 @@
 /tr/tr/fular-detayli-peplum-top-p01165151.html
 /tr/tr/fular-fiyonklu-t-shirt-p05431851.html
 /tr/tr/fularli-islemeli-dantel-top-p05063813.html
+/tr/tr/fularli-kombine-midi-elbise-p05029157.html
 /tr/tr/furufurlu-pamuklu-ve-ipek-yarim-corap-p02582559.html
 /tr/tr/futbol-kapusonlu-sweatshirt-p06224782.html
 /tr/tr/futbol-spor-ayakkabi-p14402830.html
 /tr/tr/g-harf-nakisli-keten-kirlent-p41181009.html
 /tr/tr/g-harfli-borosilikat-cam-kupa-p45214210.html
 /tr/tr/gabby-s-dollhouse-edt-60-ml--2-03-fl--oz---p20310575.html
-/tr/tr/gaby-s-dollhouse---dream-works-kabartma-t-shirt-p07878593.html
 /tr/tr/galactic-dream-bebek-polar-battaniyesi-p44628004.html
 /tr/tr/gardenia-edp-30ml--1-01-fl--oz---p20120825.html
 /tr/tr/gardenia-edp-90-ml--3-04-fl--oz---p20120824.html
@@ -5412,6 +5481,7 @@
 /tr/tr/genis-askili-poliamid-t-shirt-p03905681.html
 /tr/tr/genis-askili-poliamit-t-shirt-p03905531.html
 /tr/tr/genis-askili-top-p05644745.html
+/tr/tr/genis-bantli-sandalet-p17614730.html
 /tr/tr/genis-bel-orgu-kazak-p03920167.html
 /tr/tr/genis-cizgili-banyo-havlusu-p45546013.html
 /tr/tr/genis-karaagac-ahsap-boy-aynasi-p46167106.html
@@ -5437,6 +5507,7 @@
 /tr/tr/genis-paca-jogging-pantolon-p05431738.html
 /tr/tr/genis-paca-keten-kordonlu-pantolon-p04786775.html
 /tr/tr/genis-paca-keten-pantolon-p08372222.html
+/tr/tr/genis-paca-krose-triko-pantolon-p01473608.html
 /tr/tr/genis-paca-pamuklu-pantolon-p44155122.html
 /tr/tr/genis-paca-pantolon-p00858765.html
 /tr/tr/genis-paca-pantolon-p05039642.html
@@ -5511,9 +5582,9 @@
 /tr/tr/george-uzun-elbise-p02717109.html
 /tr/tr/georgette-dantel-sutyen-p01758702.html
 /tr/tr/georgette-dantelli-kulot-p01758703.html
-/tr/tr/georgette-firfirli-ve-isiltili-elbise-p07521309.html
 /tr/tr/georgette-halter-top-p04661038.html
 /tr/tr/geri-donusturulmus-plastik-dikdortgen-sepet-p43566049.html
+/tr/tr/geri-donusturulmus-plastik-saklama-unitesi-p43564077.html
 /tr/tr/gezegen-desenli-bebek-battaniyesi-p44618004.html
 /tr/tr/gezegen-desenli-cocuk-banyo-havlusu-p46600013.html
 /tr/tr/gezegen-desenli-cocuk-bornozu-p46600014.html
@@ -5522,7 +5593,7 @@
 /tr/tr/gilda-islemeli-mikro-fitilli-corap-p03920173.html
 /tr/tr/ginger-lemon-araba-ve-dolap-kokusu-p45408707.html
 /tr/tr/go-fruity-edt-90-ml--3-04-fl--oz---p20120692.html
-/tr/tr/godet-dantel-kisa-elbise-p00881303.html
+/tr/tr/godet-detayli-poplin-midi-elbise-p03067235.html
 /tr/tr/godetli-midi-etek-p05427415.html
 /tr/tr/gofre-dokulu-banyo-paspasi-p42595015.html
 /tr/tr/gofre-dokulu-kapusonlu-sweatshirt-p00526351.html
@@ -5570,6 +5641,7 @@
 /tr/tr/golden-ibiza-edt-75-ml--2-5-fl--oz---p20310511.html
 /tr/tr/golden-sweet-decade-edp-80-ml-p20110707.html
 /tr/tr/golgeli-file-kazak-p01473603.html
+/tr/tr/gomlek-elbise-zw-collection-p04786297.html
 /tr/tr/gomlek-soshiotsuki-x-zara-p05644969.html
 /tr/tr/gomlek-yaka-ust-p00264806.html
 /tr/tr/goofy---disney-makyaj-cantasi-p11238730.html
@@ -5696,6 +5768,7 @@
 /tr/tr/halter-yaka-saten-tulum-p08562372.html
 /tr/tr/halter-yaka-saten-yuzeyli-elbise-zw-collection-p02111987.html
 /tr/tr/halter-yaka-sirt-acik-kemerli-tulum-p07905841.html
+/tr/tr/halter-yaka-sirt-dekolteli-elbise-p04772320.html
 /tr/tr/halter-yaka-suslu-dugmeli-tulum-p02657536.html
 /tr/tr/halter-yaka-yelek-p04813802.html
 /tr/tr/hannah-montana---disney-edt-90-ml--3-04-fl--oz--p20320102.html
@@ -5742,6 +5815,7 @@
 /tr/tr/hayvan-desenli-georgette-halter-yaka-uzun-elbise-p07841399.html
 /tr/tr/hayvan-desenli-gomlek-p08540307.html
 /tr/tr/hayvan-desenli-jakar-corap-p03739002.html
+/tr/tr/hayvan-desenli-mayo-p02910217.html
 /tr/tr/hayvan-desenli-plaj-bikini-alti-p42150610.html
 /tr/tr/hayvan-desenli-plaj-bikini-ustu-p42150609.html
 /tr/tr/hayvan-desenli-plaj-mayosu-p42150605.html
@@ -5852,6 +5926,7 @@
 /tr/tr/ince-askili-body-p05644131.html
 /tr/tr/ince-askili-poliamid-t-shirt-p03905532.html
 /tr/tr/ince-askili-poliamid-t-shirt-p03905682.html
+/tr/tr/ince-askili-top-p03253803.html
 /tr/tr/ince-askili-top-p05644744.html
 /tr/tr/ince-cizgili-100-yun-regular-fit-takim-blazer-p01564770.html
 /tr/tr/ince-cizgili-baggy-fit-bermuda-p00840411.html
@@ -5865,8 +5940,6 @@
 /tr/tr/ince-cizgili-kirlent-kilifi-p47303008.html
 /tr/tr/ince-cizgili-kisa-elbise-p03644175.html
 /tr/tr/ince-cizgili-pantolon-p07714461.html
-/tr/tr/ince-cizgili-relaxed-fit-ceket-p06917423.html
-/tr/tr/ince-cizgili-relaxed-fit-jorts-p04048420.html
 /tr/tr/ince-cizgili-takim-pantolonu-p01564110.html
 /tr/tr/ince-cizgili-takim-pantolonu-p01564112.html
 /tr/tr/ince-epoksi-gunes-gozlugu-p00475548.html
@@ -5908,6 +5981,7 @@
 /tr/tr/ingiltere-66-fifa-dunya-kupasi--fifa-classics-teknik-polo-p04087532.html
 /tr/tr/ingiltere-66-fifa-dunya-kupasi--fifa-classics-yamali-t-shirt-p04442325.html
 /tr/tr/ingiltere-fifa-dunya-kupasi---2026-baskili-t-shirt-p06208607.html
+/tr/tr/inter-miami-cf-mls-kapusonlu-sweatshirt-p03854602.html
 /tr/tr/interlock-balon-pantolon-p03641806.html
 /tr/tr/interlock-carrot-fit-pantolon-p00264702.html
 /tr/tr/interlock-duz-kesim-koton-pantolon-p00039762.html
@@ -5918,7 +5992,9 @@
 /tr/tr/interlok-baskili-t-shirt-p00722568.html
 /tr/tr/interlok-dugmeli-blazer-p05039465.html
 /tr/tr/interlok-dugmeli-pantolon-p05039466.html
+/tr/tr/interlok-duz-kesim-koton-pantolon-p00039762.html
 /tr/tr/interlok-duz-t-shirt-p05584771.html
+/tr/tr/interlok-esofman-alti-p08054551.html
 /tr/tr/interlok-fermuarli-sweatshirt-p08054556.html
 /tr/tr/interlok-genis-paca-pantolon-p04174700.html
 /tr/tr/interlok-islemeli-t-shirt-p00039725.html
@@ -5968,7 +6044,6 @@
 /tr/tr/isiltili-mekik-yuzuk-p01856270.html
 /tr/tr/isiltili-mini-elbise-p01067453.html
 /tr/tr/isiltili-tasli-oval-yuzuk-p01856275.html
-/tr/tr/isiltili-tasli-yuzuk-p01856235.html
 /tr/tr/isiltili-topuklu-sandalet-p12301810.html
 /tr/tr/isim-etiketi-cikartma-defteri-p44312728.html
 /tr/tr/islemeli---disney-pixar-sweatshirt-p07878575.html
@@ -6014,7 +6089,6 @@
 /tr/tr/islemeli-cicek-genis-paca-jean-p04441646.html
 /tr/tr/islemeli-cicekli-balon-bluz-p01381700.html
 /tr/tr/islemeli-cicekli-bikini-alti-p00167222.html
-/tr/tr/islemeli-cicekli-culotte-jean-p06987555.html
 /tr/tr/islemeli-cicekli-dokumlu-denim-bermuda-p05854561.html
 /tr/tr/islemeli-cicekli-dokumlu-denim-elbise-p05854555.html
 /tr/tr/islemeli-cicekli-keten-fular-p01023055.html
@@ -6041,9 +6115,7 @@
 /tr/tr/islemeli-desenli-halter-top-p07521027.html
 /tr/tr/islemeli-desenli-organze-elbise-p01377111.html
 /tr/tr/islemeli-desenli-sort-etek-p01377700.html
-/tr/tr/islemeli-desenli-uzun-elbise-p01377123.html
 /tr/tr/islemeli-dokulu-atlet-p03665304.html
-/tr/tr/islemeli-dokulu-gomlek-p06085425.html
 /tr/tr/islemeli-dokulu-polo-yaka-t-shirt-p06085320.html
 /tr/tr/islemeli-dokulu-top-p01639502.html
 /tr/tr/islemeli-dokumlu-gomlek-p07545430.html
@@ -6064,6 +6136,7 @@
 /tr/tr/islemeli-fitilli-kumas-sapka-p01023217.html
 /tr/tr/islemeli-fiyonklu-sandalet-p16625730.html
 /tr/tr/islemeli-fiyonklu-top-p08741611.html
+/tr/tr/islemeli-gecelik-p42140121.html
 /tr/tr/islemeli-genis-paca-jean-p00103551.html
 /tr/tr/islemeli-genis-paca-jean-p04441764.html
 /tr/tr/islemeli-genis-paca-pantolon-p06121118.html
@@ -6075,6 +6148,7 @@
 /tr/tr/islemeli-halter-yaka-elbise-p01381564.html
 /tr/tr/islemeli-halter-yaka-midi-elbise-p07661703.html
 /tr/tr/islemeli-halter-yaka-muslin-top-p00881035.html
+/tr/tr/islemeli-jakarli-gomlek-p04583493.html
 /tr/tr/islemeli-jakarli-relaxed-fit-sort-p03798404.html
 /tr/tr/islemeli-kalp-cizgili-triko-kazak-p02621503.html
 /tr/tr/islemeli-kalpli-fitilli-kumas-ceket-p04441827.html
@@ -6083,6 +6157,7 @@
 /tr/tr/islemeli-kapusonlu-bebek-banyo-havlusu-p45679423.html
 /tr/tr/islemeli-kareli-gomlek-p00340351.html
 /tr/tr/islemeli-kareli-gomlek-p04302405.html
+/tr/tr/islemeli-kareli-pazen-gomlek-p07446444.html
 /tr/tr/islemeli-kargo-pantolon-zw-collection-p07521064.html
 /tr/tr/islemeli-kenarli-yastik-kilifi-p45191091.html
 /tr/tr/islemeli-kese-sapka-p01023056.html
@@ -6106,6 +6181,7 @@
 /tr/tr/islemeli-kopek-desenli-polo-t-shirt-p02209573.html
 /tr/tr/islemeli-kuslu-gofre-kumas-hakim-yaka-gomlek-p08574502.html
 /tr/tr/islemeli-lale-desenli-triko-bermuda-p03153519.html
+/tr/tr/islemeli-lingerie-elbise-p03666123.html
 /tr/tr/islemeli-meyveli-cizgili-t-shirt-ve-bermuda-takimi-p06208564.html
 /tr/tr/islemeli-meyveli-potikareli-kisa-tulum-p06031690.html
 /tr/tr/islemeli-mini-canta-p16171710.html
@@ -6124,7 +6200,6 @@
 /tr/tr/islemeli-pamuklu-top-p44122120.html
 /tr/tr/islemeli-papatya-denim-bermuda-p04575556.html
 /tr/tr/islemeli-paperbag-bermuda-p04433002.html
-/tr/tr/islemeli-pencere-detayli-t-shirt-p01165807.html
 /tr/tr/islemeli-plaj-t-shirt-p05048504.html
 /tr/tr/islemeli-poplin-boxer-p08501306.html
 /tr/tr/islemeli-poplin-gomlek-p05770230.html
@@ -6191,7 +6266,6 @@
 /tr/tr/islemeli-yama-file-sapka-p05213799.html
 /tr/tr/islemeli-yamali-cizgili-triko-polo-t-shirt-p03166434.html
 /tr/tr/islemeli-yamali-sweatshirt-p05643562.html
-/tr/tr/islemeli-yazili-t-shirt-p06224454.html
 /tr/tr/islemeli-yildizli-gomlek-p08574596.html
 /tr/tr/islemeli-yonca-mutfak-bezi-p43291026.html
 /tr/tr/islemeli-yonca-ve-papatya-pecete--2-li-set--p43236022.html
@@ -6221,7 +6295,6 @@
 /tr/tr/jakarli-dokumlu-gomlek-p03201825.html
 /tr/tr/jakarli-ev-terligi-p11012600.html
 /tr/tr/jakarli-gecelik-p41131121.html
-/tr/tr/jakarli-kareli-relaxed-fit-gomlek-p07545457.html
 /tr/tr/jakarli-kimono-marisa-berenson-x-zara-p04786122.html
 /tr/tr/jakarli-kirlent-kilifi-altin-rengi-%7C-marisa-berenson-p46837008.html
 /tr/tr/jakarli-kirlent-kilifi-p44313008.html
@@ -6241,10 +6314,10 @@
 /tr/tr/jakarli-peplum-blazer-p07824130.html
 /tr/tr/jakarli-ponponlu-banyo-havlusu-p43519013.html
 /tr/tr/jakarli-relaxed-fit-polo-yaka-t-shirt-p00794573.html
-/tr/tr/jakarli-sal-desenli-gomlek-p01006475.html
 /tr/tr/jakarli-saten-nevresim-p46175088.html
 /tr/tr/jakarli-saten-yastik-kilifi-p46175091.html
 /tr/tr/jakarli-sonil-battaniye-p46359004.html
+/tr/tr/jakarli-straight-fit-pantolon-p04575435.html
 /tr/tr/jakarli-yonca-baskili-pecete-paketi--2-li-set--p41200022.html
 /tr/tr/jakarli-yonca-desenli-masa-ortusu-p41200021.html
 /tr/tr/japonya-fifa-dunya-kupasi--2026-baskili-t-shirt-p06208613.html
@@ -6378,6 +6451,7 @@
 /tr/tr/kadife-elbise-soshiotsuki-x-zara-p09742780.html
 /tr/tr/kadife-kirlent-kilifi-p44171008.html
 /tr/tr/kadife-kirlent-kilifi-p47326008.html
+/tr/tr/kadife-platform-terlik-p11035600.html
 /tr/tr/kadife-puf-p46195073.html
 /tr/tr/kadife-tekli-katlanir-koltuk-p47380073.html
 /tr/tr/kagit-amerikan-servis--2-li-paket--p46202023.html
@@ -6390,6 +6464,7 @@
 /tr/tr/kalin-kumas-bermuda-p05048548.html
 /tr/tr/kalin-kumas-bermuda-p05431700.html
 /tr/tr/kalin-kumas-bermuda-p05431702.html
+/tr/tr/kalin-kumas-bermuda-p05431703.html
 /tr/tr/kalin-orgu-patik-p18018730.html
 /tr/tr/kalin-orgu-top-p00014017.html
 /tr/tr/kalin-pamuklu-pecete--2-li-set--p49245022.html
@@ -6491,6 +6566,7 @@
 /tr/tr/kanvas-kargo-pukas-surf-pantolon-p06917519.html
 /tr/tr/kanvas-relaxed-fit-kargo-bermuda-p02634801.html
 /tr/tr/kanvas-wide-leg-pantolon-p06186702.html
+/tr/tr/kap-dokulu-top-p05067283.html
 /tr/tr/kapakli-borosilikat-surahi-p47266213.html
 /tr/tr/kapakli-camasir-sepeti-p49573049.html
 /tr/tr/kapakli-capraz-askili-canta-p13515820.html
@@ -6556,7 +6632,6 @@
 /tr/tr/kaplamali-sirt-cantasi-p11445830.html
 /tr/tr/kaplamali-sirt-cantasi-p13207820.html
 /tr/tr/kaplamali-sisme-yelek-p05644705.html
-/tr/tr/kaplamali-su-gecirmez-yagmurluk-p05475553.html
 /tr/tr/kaplamali-teknik-sirt-cantasi-p13202820.html
 /tr/tr/kaplamali-tokali-capraz-askili-canta-p13519820.html
 /tr/tr/kapli-dugmeli-yelek-p05584632.html
@@ -6573,6 +6648,7 @@
 /tr/tr/kapusonlu-cizgili-dokulu-gomlek-p01608503.html
 /tr/tr/kapusonlu-denim-ince-ceket-p01879700.html
 /tr/tr/kapusonlu-denim-ince-ceket-p04551505.html
+/tr/tr/kapusonlu-dikisli-denim-ceket-p04365482.html
 /tr/tr/kapusonlu-fare-desenli-cocuk-havlusu-p44698423.html
 /tr/tr/kapusonlu-fermuarli-sweatshirt-p01880559.html
 /tr/tr/kapusonlu-gofre-kumas-spor-ceket-p03183707.html
@@ -6606,6 +6682,7 @@
 /tr/tr/kare-metal-gunes-gozlugu-p02727306.html
 /tr/tr/kare-metal-gunes-gozlugu-p04431205.html
 /tr/tr/kare-metal-gunes-gozlugu-p05183202.html
+/tr/tr/kare-paslanmaz-sehpa-p48306072.html
 /tr/tr/kare-rattan-sepet-p42325049.html
 /tr/tr/kare-rattan-sepet-p46665049.html
 /tr/tr/kare-sepet-p43346049.html
@@ -6656,7 +6733,6 @@
 /tr/tr/kareli-dokulu-islemeli-elbise-p06037804.html
 /tr/tr/kareli-dokulu-relaxed-fit-gomlek-p03772305.html
 /tr/tr/kareli-dokulu-relaxed-fit-gomlek-p03990400.html
-/tr/tr/kareli-dokumlu-bermuda-p04303169.html
 /tr/tr/kareli-dokumlu-pantolon-zw-collection-p02217310.html
 /tr/tr/kareli-elastik-belli-pantolon-p01608158.html
 /tr/tr/kareli-elastik-gomlek-p03067024.html
@@ -6679,8 +6755,10 @@
 /tr/tr/kareli-pamuklu-kirlent-kilifi-p44100007.html
 /tr/tr/kareli-pamuklu-masa-ortusu-p44222021.html
 /tr/tr/kareli-pamuklu-masa-ortusu-p44249021.html
+/tr/tr/kareli-pamuklu-pantolon-p44145122.html
 /tr/tr/kareli-pamuklu-pecete--2-li-set--p44215022.html
 /tr/tr/kareli-pamuklu-pecete--2-li-set--p44249022.html
+/tr/tr/kareli-pamuklu-sort-p44145123.html
 /tr/tr/kareli-pamuklu-yorgan-p44100005.html
 /tr/tr/kareli-pantolon-p05767565.html
 /tr/tr/kareli-pantolon-p42136122.html
@@ -6759,13 +6837,13 @@
 /tr/tr/katlanir-kareli-cocuk-sepeti-p40609049.html
 /tr/tr/katlanir-kollu-kisa-ceket-p02753535.html
 /tr/tr/katlanir-plaj-siltesi-p42573073.html
+/tr/tr/katlanir-silikon-evcil-hayvan-mama-kabi-p41318211.html
 /tr/tr/katman-efektli-metal-yuzuk-p05502303.html
 /tr/tr/katmanli-gorunumlu-t-shirt-p00722323.html
 /tr/tr/katmanli-gorunumlu-t-shirt-p05584322.html
 /tr/tr/katmanli-keten-ve-pamuklu-t-shirt-p04174223.html
 /tr/tr/katmanli-yapili-midi-etek-p02521806.html
 /tr/tr/kaucuk-bantli-ayakkabi-p16713730.html
-/tr/tr/kaucuk-bot-p17106630.html
 /tr/tr/kaucuk-kaplama-aski--6-li-paket--p41127018.html
 /tr/tr/kavak-agaci-duvar-aynasi-p46347106.html
 /tr/tr/kavisli-boy-aynasi-p46305106.html
@@ -6812,6 +6890,7 @@
 /tr/tr/kemerli-cizgili-jakarli-bermuda-sort-p01437226.html
 /tr/tr/kemerli-cizgili-kombine-midi-elbise-p03564084.html
 /tr/tr/kemerli-cizgili-pantolon-p01478934.html
+/tr/tr/kemerli-cizgili-pantolon-p04387092.html
 /tr/tr/kemerli-cizgili-paperbag-pantolon-p07784493.html
 /tr/tr/kemerli-cizgili-salvar-pantolon-p00264614.html
 /tr/tr/kemerli-crop-pantolon-p09929122.html
@@ -6850,6 +6929,7 @@
 /tr/tr/kemerli-pensli-pantolon-p09929022.html
 /tr/tr/kemerli-pilili-bermuda-p06275052.html
 /tr/tr/kemerli-pilili-relaxed-fit-pantolon-p00122800.html
+/tr/tr/kemerli-poplin-midi-elbise-p05029270.html
 /tr/tr/kemerli-poplin-pantolon-p04387041.html
 /tr/tr/kemerli-potikareli-duz-paca-pantolon-p01478335.html
 /tr/tr/kemerli-puantiye-elbise-p05039268.html
@@ -6931,7 +7011,6 @@
 /tr/tr/keten-burnu-kapali-terlik-p12003700.html
 /tr/tr/keten-burnu-kapali-terlik-p12007800.html
 /tr/tr/keten-buzgulu-halter-yaka-top-p08741222.html
-/tr/tr/keten-buzgulu-top-p04786622.html
 /tr/tr/keten-camasir-sepeti-p47561049.html
 /tr/tr/keten-dalgali-genis-paca-pantolon-p03153775.html
 /tr/tr/keten-dokulu-amerikan-servisi-p49228023.html
@@ -6944,6 +7023,7 @@
 /tr/tr/keten-gecelik-p41178121.html
 /tr/tr/keten-gomlek-p42100579.html
 /tr/tr/keten-halter-tulum-p02646712.html
+/tr/tr/keten-halter-yaka-midi-elbise-p07004709.html
 /tr/tr/keten-halter-yaka-midi-elbise-p07241801.html
 /tr/tr/keten-halter-yaka-midi-elbise-p07894712.html
 /tr/tr/keten-halter-yaka-top-p01353041.html
@@ -6971,15 +7051,16 @@
 /tr/tr/keten-karisimli-duz-paca-pantolon-p07743454.html
 /tr/tr/keten-karisimli-duz-paca-pantolon-p08372029.html
 /tr/tr/keten-karisimli-duz-paca-pantolon-p09929141.html
+/tr/tr/keten-karisimli-gomlek-elbise-p05029266.html
 /tr/tr/keten-karisimli-islemeli-pamuklu-pantolon-p44191122.html
 /tr/tr/keten-karisimli-kareli-kisa-tulum-p06025501.html
 /tr/tr/keten-karisimli-kemerli-pantolon-p07801398.html
 /tr/tr/keten-karisimli-kolsuz-gomlek-p07969051.html
 /tr/tr/keten-karisimli-kontrast-dikisli-anvelop-etek-p07027753.html
-/tr/tr/keten-karisimli-midi-elbise-p07561727.html
 /tr/tr/keten-karisimli-midi-elbise-p08741229.html
 /tr/tr/keten-karisimli-midi-etek-zw-collection-p04043242.html
 /tr/tr/keten-karisimli-puantiyeli-midi-elbise-p07925716.html
+/tr/tr/keten-karisimli-rustik-tisort-p04174155.html
 /tr/tr/keten-karisimli-suslu-dugmeli-gomlek-p07097734.html
 /tr/tr/keten-karisimli-t-shirt-p09000633.html
 /tr/tr/keten-karisimli-top-p04441511.html
@@ -6989,6 +7070,7 @@
 /tr/tr/keten-karisimli-zw-collection-bomber-ceket-p07023980.html
 /tr/tr/keten-kilifli-yuvarlak-yatak-basi-p46150077.html
 /tr/tr/keten-kirlent-kilifi-p44164008.html
+/tr/tr/keten-kisa-kollu-t-shirt-p04174254.html
 /tr/tr/keten-kivrik-kollu-blazer-p02753530.html
 /tr/tr/keten-kolsuz-gomlek-p07042369.html
 /tr/tr/keten-kordonlu-bermuda-p09065823.html
@@ -7038,6 +7120,7 @@
 /tr/tr/keten-ve-pamuk-karisimli-fitilli-polo-t-shirt-p02893307.html
 /tr/tr/keten-ve-pamuklu-bowling-gomlek-p05644439.html
 /tr/tr/keten-ve-pamuklu-dantel-detayli-bluz-ve-kulot-takimi-p05767507.html
+/tr/tr/keten-ve-pamuklu-duz-renk-t-shirt-p03284751.html
 /tr/tr/keten-ve-pamuklu-gomlek-p01063431.html
 /tr/tr/keten-ve-pamuklu-hakim-yaka-gomlek-p05644550.html
 /tr/tr/keten-ve-pamuklu-polo-t-shirt-p03284752.html
@@ -7104,6 +7187,7 @@
 /tr/tr/kisa-dokumlu-tulum-p01452546.html
 /tr/tr/kisa-duz-renk-ceket-p06188081.html
 /tr/tr/kisa-fitilli-tayt-p09006650.html
+/tr/tr/kisa-fitilli-triko-elbise-p03921067.html
 /tr/tr/kisa-genis-kollu-gomlek-p08372231.html
 /tr/tr/kisa-gomlek-elbise-p04764311.html
 /tr/tr/kisa-gravel-kulot-p02966306.html
@@ -7152,6 +7236,7 @@
 /tr/tr/kisa-kollu-sweatshirt-p04174188.html
 /tr/tr/kisa-kollu-t-shirt-p00085702.html
 /tr/tr/kisa-kollu-t-shirt-p03431633.html
+/tr/tr/kisa-kollu-t-shirt-p04805109.html
 /tr/tr/kisa-kollu-t-shirt-p44120120.html
 /tr/tr/kisa-kollu-triko-hirka-p03646100.html
 /tr/tr/kisa-kollu-triko-hirka-p06427023.html
@@ -7173,10 +7258,12 @@
 /tr/tr/kisa-lastikli-trenckot-p01255701.html
 /tr/tr/kisa-orgu-eldiven-p03739259.html
 /tr/tr/kisa-paca-genis-pantolon-p05644134.html
+/tr/tr/kisa-pamuklu-gomlek-p44132120.html
 /tr/tr/kisa-pelerin-stili-triko-kazak-p02756044.html
 /tr/tr/kisa-saten-elbise-p03897152.html
 /tr/tr/kisa-saten-yuzeyli-bomber-ceket-p05320703.html
 /tr/tr/kisa-sivri-topuklu-bantli-sandalet-p12308810.html
+/tr/tr/kisa-sivri-topuklu-sandalet-p12321810.html
 /tr/tr/kisa-skater-elbise-p05584291.html
 /tr/tr/kisa-spor-tayt-p00673624.html
 /tr/tr/kisa-su-ve-ruzgar-gecirmez-kapitone-anorak-p04341821.html
@@ -7201,7 +7288,6 @@
 /tr/tr/klapasiz-relaxed-fit-takim-blazer-p00706864.html
 /tr/tr/klasik-ahsap-besik-p41629518.html
 /tr/tr/klasik-ahsap-besik-yatagi-p45678523.html
-/tr/tr/klasik-ayakkabi-p12401521.html
 /tr/tr/klasik-babet-p16519830.html
 /tr/tr/klasik-deri-ayakkabi-p12412720.html
 /tr/tr/klasik-deri-kemer-p02823302.html
@@ -7230,6 +7316,7 @@
 /tr/tr/kolyeli-tulum-p01165156.html
 /tr/tr/kombin-bikini-ustu-p02856217.html
 /tr/tr/kombin-cicek-desenli-gomlek-p07484159.html
+/tr/tr/kombin-triko-halter-elbise-p04192070.html
 /tr/tr/kombine-askili-body-p05039801.html
 /tr/tr/kombine-askili-elbise-p00264719.html
 /tr/tr/kombine-askili-top-p05063814.html
@@ -7250,7 +7337,9 @@
 /tr/tr/kombine-deri-maxi-canta-p16027810.html
 /tr/tr/kombine-deri-spor-ayakkabi-p12258820.html
 /tr/tr/kombine-desenli-elbise-%7C-katharine-pole-p44113121.html
+/tr/tr/kombine-desenli-kirlent-kilifi-%7C-katharine-pole-p45154007.html
 /tr/tr/kombine-desenli-limited-edition-deniz-sortu-p02856052.html
+/tr/tr/kombine-desenli-pantolon-%7C-katharine-pole-p44113122.html
 /tr/tr/kombine-desenli-pareo-pantolon---limited-edition-p05675034.html
 /tr/tr/kombine-desenli-sabahlik-%7C-katharine-pole-p44113434.html
 /tr/tr/kombine-desenli-uzun-bandana-p03920463.html
@@ -7269,6 +7358,8 @@
 /tr/tr/kombine-kumas-top-p05580452.html
 /tr/tr/kombine-kumasli-hirka-p06236022.html
 /tr/tr/kombine-lingerie-elbise-p02938533.html
+/tr/tr/kombine-metal-yuzuk-2-li-set-p08435333.html
+/tr/tr/kombine-midi-elbise-p00387159.html
 /tr/tr/kombine-midi-etek-p07332584.html
 /tr/tr/kombine-naylon-bakim-cantasi-p13716820.html
 /tr/tr/kombine-omuz-cantasi-p16302810.html
@@ -7368,6 +7459,7 @@
 /tr/tr/kontrast-biyeli-spor-t-shirt-p05048763.html
 /tr/tr/kontrast-biyeli-suslu-dugmeli-midi-elbise-p03897153.html
 /tr/tr/kontrast-biyeli-top-p05584451.html
+/tr/tr/kontrast-biyeli-top-p05644133.html
 /tr/tr/kontrast-biyeli-top-p07046331.html
 /tr/tr/kontrast-biyeli-triko-crop-top-p03519011.html
 /tr/tr/kontrast-biyeli-uzun-bermuda-p07750331.html
@@ -7448,8 +7540,10 @@
 /tr/tr/kontrast-dikisli-kisa-elbise-p07960536.html
 /tr/tr/kontrast-dikisli-oversize-blazer-p02571765.html
 /tr/tr/kontrast-dikisli-poplin-top-p03897121.html
+/tr/tr/kontrast-dikisli-relaxed-fit-bermuda-p02634209.html
 /tr/tr/kontrast-dikisli-relaxed-fit-pantolon-p01195300.html
 /tr/tr/kontrast-dikisli-uzun-bermuda-p07930736.html
+/tr/tr/kontrast-dikisli-ve-kemerli-keten-midi-elbise-p07645771.html
 /tr/tr/kontrast-dikisli-yelek-top-p08372323.html
 /tr/tr/kontrast-dokulu-bikini-alti-p00167073.html
 /tr/tr/kontrast-duble-pacali-straight-fit-jean-p00840321.html
@@ -7499,15 +7593,12 @@
 /tr/tr/kontrast-kareli-uzun-deniz-sortu-p00495319.html
 /tr/tr/kontrast-kasket-sapka-p01023213.html
 /tr/tr/kontrast-katman-detayli-relaxed-fit-gomlek-p06085303.html
-/tr/tr/kontrast-kenar-detayli-boxy-fit-dokulu-ceket-p03918425.html
 /tr/tr/kontrast-kenarli-keten-nevresim-p44126088.html
 /tr/tr/kontrast-kenarli-plaj-semsiyesi--160-cm--p42575712.html
 /tr/tr/kontrast-kese-sapka-p01023211.html
-/tr/tr/kontrast-keten-karisimli-orgu-t-shirt-p05755442.html
 /tr/tr/kontrast-keten-midi-elbise-p07920466.html
 /tr/tr/kontrast-keten-yastik-kilifi-p44126091.html
 /tr/tr/kontrast-kisa-kollu-top-p08779620.html
-/tr/tr/kontrast-kivrimli-bikini-ustu-p02910201.html
 /tr/tr/kontrast-kollu-relaxed-fit-t-shirt-p03992473.html
 /tr/tr/kontrast-korse-tarzi-elbise-p01355801.html
 /tr/tr/kontrast-kravatli-cizgili-gomlek-p04205138.html
@@ -7613,6 +7704,7 @@
 /tr/tr/kontrast-tullu-mini-halter-elbise-p07760111.html
 /tr/tr/kontrast-ucgen-bikini-ustu-p02910221.html
 /tr/tr/kontrast-uzun-kollu-t-shirt-p03641110.html
+/tr/tr/kontrast-uzun-tulum-p01165155.html
 /tr/tr/kontrast-v-yaka-t-shirt-p01058801.html
 /tr/tr/kontrast-v-yaka-t-shirt-p05584324.html
 /tr/tr/kontrast-vintage-etkili-atlet-p04087304.html
@@ -7631,6 +7723,7 @@
 /tr/tr/kontrast-yakali-teknik-ceket-p08281102.html
 /tr/tr/kontrast-yakali-yikamali-ceket-p05762440.html
 /tr/tr/kontrast-yamali-cizgili-ince-ceket-p07446422.html
+/tr/tr/kontrast-yamali-sweatshirt-p05644465.html
 /tr/tr/kontrast-yaprak-islemeli-top-p01088059.html
 /tr/tr/kontrast-yazili-relaxed-fit-gomlek-p06987390.html
 /tr/tr/kontrast-yazili-t-shirt-p05431903.html
@@ -7677,17 +7770,20 @@
 /tr/tr/korse-detayli-top-p04770801.html
 /tr/tr/korse-kesim-poplin-gomlek-p04772017.html
 /tr/tr/korse-tarzi-dantelli-bagcikli-elbise-p01067703.html
+/tr/tr/korse-tarzi-dantelli-top-p04661093.html
 /tr/tr/korse-tarzi-dokulu-ust-p05039818.html
 /tr/tr/korse-tarzi-dugmeli-top-p04661001.html
 /tr/tr/korse-tarzi-fitilli-top-p00085803.html
 /tr/tr/korse-tarzi-hacimli-elbise-p01131324.html
 /tr/tr/korse-tarzi-kombine-mini-elbise-p02892777.html
 /tr/tr/korse-tarzi-kombine-top-p04770804.html
+/tr/tr/korse-tarzi-orgu-top-p05802012.html
 /tr/tr/korse-tarzi-saten-straplez-top-p03067026.html
 /tr/tr/korse-tarzi-triko-top-p02142122.html
 /tr/tr/koseleri-yuvarlatilmis-cerceveli-buyuk-boy-aynasi-p43131106.html
 /tr/tr/kosta-rika-baskili-atlet-p06224873.html
 /tr/tr/kosu-atleti-p04387361.html
+/tr/tr/kosu-ayakkabisi-p12314820.html
 /tr/tr/kosu-ayakkabisi-p12352720.html
 /tr/tr/kosu-ayakkabisi-p12382720.html
 /tr/tr/kosu-ayakkabisi-p12397720.html
@@ -7706,6 +7802,7 @@
 /tr/tr/koyu-renkli-tekli-ahsap-tamamlayici-mobilya-p46152077.html
 /tr/tr/kpop-demon-hunters--netflix---baskili-sweatshirt-p00208701.html
 /tr/tr/kpop-demon-hunters--netflix---baskili-sweatshirt-p06333703.html
+/tr/tr/kpop-demon-hunters--netflix---baskili-sweatshirt-p08675733.html
 /tr/tr/kpop-demon-hunters--netflix---baskili-t-shirt-p05431400.html
 /tr/tr/kpop-demon-hunters--netflix---baskili-t-shirt-p05643702.html
 /tr/tr/kpop-demon-hunters--netflix---baskili-t-shirt-p06208701.html
@@ -7716,6 +7813,7 @@
 /tr/tr/kpop-demon-hunters--netflix---cuzdan-p11297830.html
 /tr/tr/kpop-demon-hunters--netflix---cuzdan-p11418730.html
 /tr/tr/kpop-demon-hunters--netflix---denim-kese-sapka-p00653642.html
+/tr/tr/kpop-demon-hunters--netflix---etek-detayli-can-pantolon-p05431594.html
 /tr/tr/kpop-demon-hunters--netflix---genis-paca-jean-p04441723.html
 /tr/tr/kpop-demon-hunters--netflix---islemeli-sapka-p01879565.html
 /tr/tr/kpop-demon-hunters--netflix---kostum-eldiveni-p00653586.html
@@ -7743,7 +7841,7 @@
 /tr/tr/kpop-demon-hunters--netflix--telefon-cantasi-p11156830.html
 /tr/tr/krepe-drape-top-p05039645.html
 /tr/tr/krepe-kemerli-pantolon-p03641723.html
-/tr/tr/kristal-detayli-kolye-p04736228.html
+/tr/tr/kristal-detayli-kupe-p04736232.html
 /tr/tr/kristal-kokteyl-kadehi-p49264472.html
 /tr/tr/kristal-selale-kupe-p04548206.html
 /tr/tr/kristal-selale-kupe-p04548263.html
@@ -7776,6 +7874,7 @@
 /tr/tr/krose-duz-sandalet-p12618810.html
 /tr/tr/krose-duz-sandalet-p13657710.html
 /tr/tr/krose-duz-sandalet-p13670710.html
+/tr/tr/krose-islemeli-gomlek-p42134579.html
 /tr/tr/krose-islemeli-triko-bermuda-p03920515.html
 /tr/tr/krose-kalpli-cizgili-pantolon-p04493564.html
 /tr/tr/krose-kalpli-triko-elbise-p05536625.html
@@ -7883,9 +7982,9 @@
 /tr/tr/kurdele-detayli-halter-top-p07036130.html
 /tr/tr/kurdele-detayli-triko-hirka-p05536535.html
 /tr/tr/kurdeleli-babet-p13529810.html
-/tr/tr/kurdeleli-cizgili-t-shirt-p04805606.html
 /tr/tr/kurdeleli-omuz-cantasi-p16139810.html
 /tr/tr/kurdeleli-toka-ve-sac-lastigi-p02326716.html
+/tr/tr/kurdeleli-triko-etek-p05536536.html
 /tr/tr/kurk-dokulu-kedi-sirt-cantasi-p11548830.html
 /tr/tr/kurklu-bowling-capraz-askili-canta-p11231630.html
 /tr/tr/kurklu-deri-duz-sandalet-p12604710.html
@@ -7916,6 +8015,7 @@
 /tr/tr/lake-ahsap-aski--3-lu-paket--p41281552.html
 /tr/tr/lake-ahsap-cocuk-rafi-p41681080.html
 /tr/tr/lake-ahsap-sehpa-p41683080.html
+/tr/tr/lake-mango-agaci-sehpa-p48110072.html
 /tr/tr/lake-metal-bulasiklik-p47275762.html
 /tr/tr/lake-pirinc-kulluk-p44327043.html
 /tr/tr/lale-islemeli-gomlek-ve-triko-yelek-kombini-p02756521.html
@@ -7947,6 +8047,7 @@
 /tr/tr/leopar-desenli-tul-elbise-p05039846.html
 /tr/tr/leopar-desenli-tul-etek-p05039408.html
 /tr/tr/leopar-desenli-tul-top-p05039405.html
+/tr/tr/leopar-desenli-yirtmacli-uzun-elbise-p05039845.html
 /tr/tr/leopar-spor-ayakkabi-p12418830.html
 /tr/tr/liberty-kumasli-cicek-desenli-bluz-ve-kulot-takimi-p01617817.html
 /tr/tr/liberty-kumasli-cicek-desenli-elbise-p01532807.html
@@ -8017,7 +8118,6 @@
 /tr/tr/little-book-of-louis-vuitton-kitabi--ingilizce--p42327054.html
 /tr/tr/little-miss-sunshine-flamli-t-shirt-p00085126.html
 /tr/tr/liyosel-karisimli-relaxed-fit-bermuda-p06861852.html
-/tr/tr/liyosel-pamuklu-barrel-fit-pantolon-p07484219.html
 /tr/tr/lm-drss-p06094409.html
 /tr/tr/lm-shrt-p06114408.html
 /tr/tr/lng-slv-chck-shrt-p06077001.html
@@ -8057,7 +8157,6 @@
 /tr/tr/loveseat-01-p47330073.html
 /tr/tr/loveseat-01-pamuklu-kilif-p46311149.html
 /tr/tr/lthr-bg-p13358720.html
-/tr/tr/lthr-crssvr-sndls-p12652730.html
 /tr/tr/lthr-shldr%C2%A0bg-p13632820.html
 /tr/tr/lthr-sndls-p12783820.html
 /tr/tr/lthr-trnrs-p12267820.html
@@ -8166,7 +8265,6 @@
 /tr/tr/mavi-kabarcikli-cam-sabunluk-p44531466.html
 /tr/tr/mavi-lake-ahsap-besik-p41680518.html
 /tr/tr/mavi-roket-seramik-dis-fircaligi-p44530104.html
-/tr/tr/mavi-roket-seramik-sabunluk-p44530466.html
 /tr/tr/mavi-seffaf-cam-dis-fircalik-p43513104.html
 /tr/tr/maxi-deri-canta-willy-chavarria-x-zara-p16707710.html
 /tr/tr/meaningful-memories-edp-100-ml--3-4-fl--oz---p20113031.html
@@ -8197,6 +8295,7 @@
 /tr/tr/mermer-gorunumlu-pecetelik-p43523099.html
 /tr/tr/mermer-gorunumlu-sivi-sabunluk-p43523466.html
 /tr/tr/mermer-gorunumlu-sivi-sabunluk-p44534466.html
+/tr/tr/mermer-kasiklik-p45288326.html
 /tr/tr/mermer-kitap-tutucu-p49359043.html
 /tr/tr/mermer-mumluk-p46387048.html
 /tr/tr/mermer-satranc-tahtali-tik-sehpa-p46744072.html
@@ -8205,7 +8304,6 @@
 /tr/tr/mermer-ve-metal-mumluk-p44348048.html
 /tr/tr/merserize-crop-t-shirt-p04092480.html
 /tr/tr/merserize-pamuk-karisimli-corap-p03992330.html
-/tr/tr/merserize-uzun-kollu-t-shirt-p04092481.html
 /tr/tr/mese-agaci-bufe-p47154077.html
 /tr/tr/mese-agacindan-manuel-sarimsak-ezici-p45215759.html
 /tr/tr/mese-ahsap-ekmek-kutusu-p45229049.html
@@ -8216,6 +8314,7 @@
 /tr/tr/mese-ahsap-sapli-celik-kevgir-p45215338.html
 /tr/tr/mese-ahsap-sapli-celik-makarna-kasigi-p45215312.html
 /tr/tr/mese-ahsap-sinav-tutacagi--2-li-paket--p43342043.html
+/tr/tr/mese-ahsap-tirbuson-p45215042.html
 /tr/tr/mese-ahsap-tuzluk-p45229551.html
 /tr/tr/mese-celik-dumbell-standi-p43357043.html
 /tr/tr/mese-kapakli-borosilikat-sise-p46589439.html
@@ -8350,7 +8449,10 @@
 /tr/tr/metalik-gorunumlu-balenli-bikini-ustu-p06501201.html
 /tr/tr/metalik-gorunumlu-bikini-alti-p06501202.html
 /tr/tr/metalik-gorunumlu-firfirli-elbise-p04786604.html
+/tr/tr/metalik-gorunumlu-korse-tarzi-mini-elbise-p04772395.html
+/tr/tr/metalik-ipli-kristal-choker-p01049205.html
 /tr/tr/metalik-iplikli-ajurlu-triko-kazak-p06771023.html
+/tr/tr/metalik-iplikli-asimetrik-panco-p05039021.html
 /tr/tr/metalik-iplikli-cizgili-bagcikli-bluz-p07029810.html
 /tr/tr/metalik-iplikli-cizgili-fiyonklu-top-p04015805.html
 /tr/tr/metalik-iplikli-cizgili-genis-paca-pantolon-p07940660.html
@@ -8465,6 +8567,7 @@
 /tr/tr/mini-ahsap-dovulmus-tabure-p43562073.html
 /tr/tr/mini-besik-yatagi-p45698523.html
 /tr/tr/mini-besik-yatagi-p46698523.html
+/tr/tr/mini-can-keten-pantolon-p02635723.html
 /tr/tr/mini-canta-charm-p16817810.html
 /tr/tr/mini-capraz-askili-canta-p16056810.html
 /tr/tr/mini-cicek-desenli-saten-yastik-kilifi-p45116091.html
@@ -8485,11 +8588,13 @@
 /tr/tr/mini-hasir-tote-canta-p16398710.html
 /tr/tr/mini-kareli-yastik-kilifi-%7C-katharine-pole-p47106091.html
 /tr/tr/mini-krose-cicekli-hasir-canta-p00653201.html
+/tr/tr/mini-mercan-catal-seti--8-li-paket--p42276042.html
 /tr/tr/mini-mouse---disney-cok-amacli-canta-p11565730.html
 /tr/tr/mini-mouse---disney-islemeli-fitilli-kumas-kulot-pantolon-p04433554.html
 /tr/tr/mini-mouse-ve-arkadaslari---disney-islemeli-sweatshirt-p06061535.html
 /tr/tr/mini-mutfak-kutusu-p40234762.html
 /tr/tr/mini-orgu-el-cantasi-p16084710.html
+/tr/tr/mini-rustik-sort-p05063359.html
 /tr/tr/mini-seramik-masa-lambasi-p46188047.html
 /tr/tr/mini-sert-deri-makyaj-cantasi-p14000800.html
 /tr/tr/mini-sort-etek-p03152500.html
@@ -8515,6 +8620,7 @@
 /tr/tr/minnie-mouse---disney-fisto-detayli-cepli-t-shirt-p06061521.html
 /tr/tr/minnie-mouse---disney-kaplamali-terlik-p16701830.html
 /tr/tr/minnie-mouse---disney-kombine-t-shirt-p05431512.html
+/tr/tr/minnie-mouse---disney-nakisli-cizgili-bisiklet-tayti-p06224929.html
 /tr/tr/minnie-mouse---disney-potikaresiz-bebe-yakali-sweatshirt-p05431523.html
 /tr/tr/minnie-mouse---disney-sirt-cantasi-p11564730.html
 /tr/tr/minnie-mouse---disney-spor-ayakkabi-p16307730.html
@@ -8528,7 +8634,6 @@
 /tr/tr/minnie-mouse--disney-spor-ayakkabi-p16419730.html
 /tr/tr/minnie-mouse--disney-sweatshirt-ve-tayt-takimi-p07878523.html
 /tr/tr/minnie-mouse--disney-teknik-sandalet-p16609830.html
-/tr/tr/mltpckt-pnt-16-p01424406.html
 /tr/tr/mn-shppr-bg-p16706810.html
 /tr/tr/mndrn-jckt-16-p01433055.html
 /tr/tr/mochi-baskili-t-shirt-p06208616.html
@@ -8536,6 +8641,7 @@
 /tr/tr/modal-icerikli-dokumlu-spor-t-shirt-p02236798.html
 /tr/tr/modal-icerikli-sportif-dokumlu-bermuda-p02236797.html
 /tr/tr/modal-ipek-karisimli-desenli-sal-p04758208.html
+/tr/tr/modal-ipek-karisimli-desenli-sal-p04758258.html
 /tr/tr/modal-karisimli-cizgili-etek-p01639810.html
 /tr/tr/modal-karisimli-dokumlu-gomlek-p07545114.html
 /tr/tr/modal-karisimli-sporty-sweatshirt-p05302760.html
@@ -8586,6 +8692,7 @@
 /tr/tr/mumsu-gorunumlu-keten---pamuk-ceket-p05854405.html
 /tr/tr/musk-au-lait-parfum-100ml--3-4-fl--oz---p20110884.html
 /tr/tr/muslin-dantel-bebek-battaniyesi-p41623004.html
+/tr/tr/muslin-midi-elbise-p07521304.html
 /tr/tr/muslin-midi-etek-p01111069.html
 /tr/tr/mutfak-icin-buyuk-cop-kutusu-p42228762.html
 /tr/tr/mutfak-icin-kucuk-cop-kutusu-p47228762.html
@@ -8605,7 +8712,6 @@
 /tr/tr/nakisli-barrel-pamuklu-pantolon-p03854508.html
 /tr/tr/nakisli-bebek-seti-p45666735.html
 /tr/tr/nakisli-cicek-culotte-pantolon-p01053181.html
-/tr/tr/nakisli-cicek-poplin-gomlek-p08741600.html
 /tr/tr/nakisli-cicekli-denim-paperbag-bermuda-p04433003.html
 /tr/tr/nakisli-cicekli-potikareli-bermuda-p06061576.html
 /tr/tr/nakisli-cizgili-amerikan-servis-p49214023.html
@@ -8613,7 +8719,6 @@
 /tr/tr/nakisli-cizgili-masa-runner-p49219024.html
 /tr/tr/nakisli-cizgili-orta-boy-deniz-sortu-p08574317.html
 /tr/tr/nakisli-cizgili-polo-t-shirt-p03854507.html
-/tr/tr/nakisli-cizgili-triko-polo-p06208585.html
 /tr/tr/nakisli-cocuk-kiyafet-cantasi-p44610019.html
 /tr/tr/nakisli-crop-fit-ceket-p06987409.html
 /tr/tr/nakisli-dantel-sort-p06173101.html
@@ -8664,7 +8769,6 @@
 /tr/tr/naylon-pilili-bermuda-etek-p03153845.html
 /tr/tr/naylon-sirt-cantasi-p13230820.html
 /tr/tr/naylon-takim-elbise-kilifi-p13957620.html
-/tr/tr/naylon-tote-canta-p13398820.html
 /tr/tr/nba---golden-state-warriors-baskili-t-shirt-p00039844.html
 /tr/tr/nba---los-angeles-lakers-baskili-t-shirt-p00039734.html
 /tr/tr/nba---los-angeles-lakers-penye-bermuda-p00039731.html
@@ -8689,7 +8793,6 @@
 /tr/tr/nirvana---baskili-t-shirt-p02335666.html
 /tr/tr/noktali-dolgulu-keten-yorgan-p41140005.html
 /tr/tr/noktali-kapitone-keten-kirlent-kilifi-p41140007.html
-/tr/tr/normal-kesim-uzun-kollu-t-shirt-p04092442.html
 /tr/tr/north-carolina-park-fields---baskili-t-shirt-p01165730.html
 /tr/tr/north-carolina-park-fields---cizgili-polo-t-shirt-p01165745.html
 /tr/tr/north-carolina-park-fields---kolsuz-sweatshirt-p06208688.html
@@ -8796,12 +8899,12 @@
 /tr/tr/orgulu-maksi-tote-canta-p16011710.html
 /tr/tr/orgulu-midi-triko-etek-p09874014.html
 /tr/tr/orgulu-puskullu-kese-sapka-p00653207.html
+/tr/tr/orgulu-siperlik-p03920003.html
 /tr/tr/orgulu-tik-agaci-dis-mekan-katlanir-sandalye-p47381073.html
 /tr/tr/origins-origins-fitilli-kumas-chino-pantolon-p05862573.html
 /tr/tr/orme-bebek-patigi-p13801800.html
 /tr/tr/orme-bere-p02209516.html
 /tr/tr/orme-duz-sandalet-p12644710.html
-/tr/tr/orme-kese-sapka-p03920224.html
 /tr/tr/orme-kumas-espadril-p12740720.html
 /tr/tr/orme-makyaj-cantasi-p14401800.html
 /tr/tr/orme-metal-cerceveli-acik-berjer-koltuk-p48385073.html
@@ -8833,7 +8936,6 @@
 /tr/tr/orta-opak-keten-cift-en-perde-p41359032.html
 /tr/tr/orta-opak-keten-perde-p49823032.html
 /tr/tr/otomatik-seffaf-semsiye-p05177203.html
-/tr/tr/oud-vibrant-leather-edp-60-ml--2-03-fl--oz--p20210134.html
 /tr/tr/oval-ahsap-fotograf-cercevesi-p46348045.html
 /tr/tr/oval-ahsap-rattan-tepsi-p45238040.html
 /tr/tr/oval-ahsap-tepsi-p43461040.html
@@ -8868,6 +8970,7 @@
 /tr/tr/overloklu-ve-pamuklu-banyo-havlusu-p44547013.html
 /tr/tr/overloklu-ve-pamuklu-el-havlusu-seti--3-lu-set--p44547002.html
 /tr/tr/oversize-bomber-yelek-willy-chavarria-x-zara-p08281804.html
+/tr/tr/oversize-cizgili-gomlek-p07484107.html
 /tr/tr/oversize-crop-t-shirt-p03253335.html
 /tr/tr/oversize-denim-ceket-p04551444.html
 /tr/tr/oversize-dikisli-bermuda-p04174513.html
@@ -8980,6 +9083,7 @@
 /tr/tr/pamuklu-cocuk-lastikli-alt-carsaf-p48610900.html
 /tr/tr/pamuklu-cropped-fit-polo-t-shirt-p04090035.html
 /tr/tr/pamuklu-culotte-pantolon-p04174649.html
+/tr/tr/pamuklu-dik-yaka-t-shirt-p44134120.html
 /tr/tr/pamuklu-doner-berjer-p46185073.html
 /tr/tr/pamuklu-dugmeli-sweatshirt-p04174636.html
 /tr/tr/pamuklu-dugmeli-t-shirt-p00264058.html
@@ -9002,7 +9106,9 @@
 /tr/tr/pamuklu-halter-top-p01198451.html
 /tr/tr/pamuklu-islemeli-gecelik-p41193121.html
 /tr/tr/pamuklu-kadife-klipsli-ceket-p06318355.html
+/tr/tr/pamuklu-kapri-pantolon-p44134122.html
 /tr/tr/pamuklu-kareli-gomlek-p07545573.html
+/tr/tr/pamuklu-kareli-nevresim-p45166088.html
 /tr/tr/pamuklu-kendir-hafif-jean-p03991462.html
 /tr/tr/pamuklu-kenevir-polo-t-shirt-p02142401.html
 /tr/tr/pamuklu-kenevir-straight-relaxed-fit-jean-p03991300.html
@@ -9032,6 +9138,7 @@
 /tr/tr/pamuklu-kisa-kollu-t-shirt-p44156120.html
 /tr/tr/pamuklu-kombine-t-shirt-p00264705.html
 /tr/tr/pamuklu-liyosel-boxy-fit-gomlek-p07446801.html
+/tr/tr/pamuklu-liyosel-pilili-pantolon-p01437454.html
 /tr/tr/pamuklu-liyosel-regular-fit-ceket-p03046520.html
 /tr/tr/pamuklu-liyoselli-genis-paca-bermuda-p00706250.html
 /tr/tr/pamuklu-midi-etek-p44158720.html
@@ -9102,6 +9209,7 @@
 /tr/tr/pamuklu-vual-gomlek-p04008509.html
 /tr/tr/pamuklu-vual-gomlek-p04009509.html
 /tr/tr/pamuklu-yaprak-desenli-bebek-besik-koruyucu-p44606527.html
+/tr/tr/pamuklu-yastik-kilifi-p45166091.html
 /tr/tr/pamuklu-yun-dugum-detayli-hali-p42309029.html
 /tr/tr/panda-tasarimli-ev-terligi-p12708830.html
 /tr/tr/panelli-uzun-elbise-p07914827.html
@@ -9191,6 +9299,7 @@
 /tr/tr/paslanmaz-celik-miknatisli-kalemlik-p41267043.html
 /tr/tr/paslanmaz-celik-plak-duzenleyici-p48312049.html
 /tr/tr/paslanmaz-celik-sehpa-p48390073.html
+/tr/tr/paslanmaz-celik-tabure-p44564073.html
 /tr/tr/paslanmaz-celik-yuksek-tabure-p47396073.html
 /tr/tr/paspartulu-fotograf-cercevesi-p44317045.html
 /tr/tr/paspas-ve-kova-seti-p42205762.html
@@ -9199,6 +9308,7 @@
 /tr/tr/patchwork-balon-pantolon-p06153136.html
 /tr/tr/patchwork-cicek-desenli-body-p01165608.html
 /tr/tr/patchwork-cicekli-denim-bermuda-p04441503.html
+/tr/tr/patchwork-desenli-relaxed-fit-gomlek-p03098115.html
 /tr/tr/patchwork-desenli-sapka-p03739207.html
 /tr/tr/patchwork-desenli-saten-bandana-p03920366.html
 /tr/tr/patchwork-desenli-uzun-bandana-p03920458.html
@@ -9227,6 +9337,7 @@
 /tr/tr/pencere-detayli-kisa-kollu-top-p05584262.html
 /tr/tr/pencere-detayli-kisa-saten-elbise-p07808341.html
 /tr/tr/pencere-detayli-poliamid-body-p00962701.html
+/tr/tr/pencere-detayli-saten-elbise-p07840332.html
 /tr/tr/pencere-detayli-strec-triko-elbise-p06050315.html
 /tr/tr/pencere-detayli-strec-triko-top-p04938011.html
 /tr/tr/pencere-detayli-triko-top-p04938007.html
@@ -9314,6 +9425,7 @@
 /tr/tr/pilili-genis-paca-pantolon%C2%A0zw-collection-p02342326.html
 /tr/tr/pilili-genis-paca-pantolon-p01437398.html
 /tr/tr/pilili-genis-paca-pantolon-p01478039.html
+/tr/tr/pilili-genis-paca-pantolon-p01639610.html
 /tr/tr/pilili-genis-paca-pantolon-p04189102.html
 /tr/tr/pilili-hafif-denim-bermuda-p06987415.html
 /tr/tr/pilili-havlu-banyo-terligi-p11007700.html
@@ -9323,7 +9435,6 @@
 /tr/tr/pilili-midi-etek-p01255516.html
 /tr/tr/pilili-midi-etek-p02459613.html
 /tr/tr/pilili-midi-etek-p06325601.html
-/tr/tr/pilili-midi-etek-p06325603.html
 /tr/tr/pilili-mule-terlik-p11011800.html
 /tr/tr/pilili-pamuk-saten-yastik-kilifi--1000-iplikli--p46118091.html
 /tr/tr/pilili-pantolon-p02335633.html
@@ -9366,6 +9477,7 @@
 /tr/tr/pippi-uzuncorap---astrid-lindgren-company-sweatshirt-p05431733.html
 /tr/tr/pippi-uzuncorap---astrid-lindgren-company-t-shirt-p06224517.html
 /tr/tr/pirinc-kulp-seti--2-li--p42579555.html
+/tr/tr/pirinc-metal-kutu-p44307043.html
 /tr/tr/pirinc-miknatislar--12-li-paket--p43344728.html
 /tr/tr/pirinc-orgu-banyo-paspasi-p41540015.html
 /tr/tr/pirinc-samdan-p43325048.html
@@ -9435,6 +9547,7 @@
 /tr/tr/pontel-triko-top-p06236028.html
 /tr/tr/pop-it-klavye-cocuk-oyuncagi-p44642052.html
 /tr/tr/popelin-barrel-bermuda-p09959602.html
+/tr/tr/popelin-cizgili-pamuklu-gomlek-p44151579.html
 /tr/tr/poplin-barrel-pantolon-p01608240.html
 /tr/tr/poplin-barrel-pantolon-p01689221.html
 /tr/tr/poplin-cizgili-mendil-gomlek-p02225456.html
@@ -9449,6 +9562,7 @@
 /tr/tr/portekiz-desenli-top-p09006702.html
 /tr/tr/portekiz-kisa-tayt-p09007710.html
 /tr/tr/portfoy-p03920330.html
+/tr/tr/potikare-yakali-minnie-mouse---disney-sweatshirt-p05431523.html
 /tr/tr/potikare-yamali-t-shirt-p02614705.html
 /tr/tr/potikareli-baggy-pantolon-p06061551.html
 /tr/tr/potikareli-baggy-pantolon-p06345517.html
@@ -9521,6 +9635,7 @@
 /tr/tr/psg--bakim-cantasi-p11443730.html
 /tr/tr/psg--baskili-t-shirt-p02335590.html
 /tr/tr/psg--baskili-t-shirt-p03854620.html
+/tr/tr/psg--havuz-terligi-p14706830.html
 /tr/tr/psg--kapusonlu-sweatshirt-p03854514.html
 /tr/tr/psg--sirt-cantasi-p11442730.html
 /tr/tr/psp--capraz-askili-canta-p11400830.html
@@ -9593,7 +9708,7 @@
 /tr/tr/puantiyeli-velur-cocuk-havlu-p44694013.html
 /tr/tr/puantiyeli-yatak-ortusu-p41163006.html
 /tr/tr/puantiyeli-yuksek-bel-pantolon-p01478931.html
-/tr/tr/puantiyeli-yuksek-bel-sort-p04661436.html
+/tr/tr/pudra-tonlarinda-cizgili-banyo-paspasi-p42521015.html
 /tr/tr/pudra-tonlu-cizgili-banyo-havlusu-p42521013.html
 /tr/tr/pukas---canta-p11425730.html
 /tr/tr/pukas-surf-baskili-t-shirt-p05431855.html
@@ -9602,6 +9717,7 @@
 /tr/tr/pukas-surf-cizgili-bisikletci-tayti-p09000710.html
 /tr/tr/pukas-surf-cizgili-t-shirt-p06208549.html
 /tr/tr/pukas-surf-cizgili-t-shirt-p06208800.html
+/tr/tr/pukas-surf-desenli-havlu-p00231548.html
 /tr/tr/pukas-surf-duz-top-p05431516.html
 /tr/tr/pukas-surf-fermuarli-sweatshirt-p06722823.html
 /tr/tr/pukas-surf-fitilli-t-shirt-p09000707.html
@@ -9638,7 +9754,6 @@
 /tr/tr/pullu-cizgili-triko-top-p05755107.html
 /tr/tr/pullu-crop-top-p03210006.html
 /tr/tr/pullu-crop-top-p08452961.html
-/tr/tr/pullu-drapeli-halter-mini-elbise-p03210302.html
 /tr/tr/pullu-dugumlu-pareo-marisa-berenson-x-zara-p00167215.html
 /tr/tr/pullu-esarp-detayli-kisa-elbise-p00881213.html
 /tr/tr/pullu-firfirli-etek-p02511701.html
@@ -9648,7 +9763,6 @@
 /tr/tr/pullu-mini-elbise-p08585961.html
 /tr/tr/pullu-mini-etek-p02568834.html
 /tr/tr/pullu-mini-etek-p03210401.html
-/tr/tr/pullu-mini-etek-p08005961.html
 /tr/tr/pullu-relaxed-fit-pantolon-p05085100.html
 /tr/tr/pullu-straplez-top-p04772057.html
 /tr/tr/pullu-ust-marisa-berenson-x-zara-p06895200.html
@@ -9687,6 +9801,7 @@
 /tr/tr/puskullu-triko-elbise-p03500002.html
 /tr/tr/puskullu-triko-kazak-p02756609.html
 /tr/tr/puskullu-triko-top-p06771025.html
+/tr/tr/puskullu-uzun-triko-elbise-p03500007.html
 /tr/tr/puskullu-wallabee-ayakkabi-p12539830.html
 /tr/tr/puturlu-aluminyum-dekoratif-servis-tabagi-p46184046.html
 /tr/tr/q-harfi-islemeli-keten-kirlent-p41190009.html
@@ -9695,7 +9810,6 @@
 /tr/tr/rafli-depolama-mobilyasi-p41257077.html
 /tr/tr/rafya-bardak-altligi--4-lu-set--p47225025.html
 /tr/tr/rahat-dokulu-takim-blazer-i-p06861100.html
-/tr/tr/rahat-takim-blazer-i-p05686070.html
 /tr/tr/rahat-takim-pantolonu-p05687070.html
 /tr/tr/rakamsal-pop-it-cocuk-oyuncagi-p42627052.html
 /tr/tr/rami-amerikan-servis-p49288023.html
@@ -9788,6 +9902,7 @@
 /tr/tr/regular-fit-bermuda-sort-p05552889.html
 /tr/tr/regular-fit-blok-renkli-t-shirt-p05372405.html
 /tr/tr/regular-fit-bomber-ceket-p03918410.html
+/tr/tr/regular-fit-cepli-ceket-p09621373.html
 /tr/tr/regular-fit-cepli-ince-ceket-p00155325.html
 /tr/tr/regular-fit-cepli-ince-ceket-p04454989.html
 /tr/tr/regular-fit-cepli-ince-ceket-p08574850.html
@@ -9795,11 +9910,11 @@
 /tr/tr/regular-fit-chino-bermuda-p00706006.html
 /tr/tr/regular-fit-cizgili-gomlek-p00975401.html
 /tr/tr/regular-fit-cizgili-gomlek-p03758230.html
-/tr/tr/regular-fit-cizgili-gomlek-p07545274.html
 /tr/tr/regular-fit-cizgili-jakarli-gomlek-p04187352.html
 /tr/tr/regular-fit-cizgili-kazak-p02621304.html
 /tr/tr/regular-fit-cizgili-polo-t-shirt-p05372325.html
 /tr/tr/regular-fit-cizgili-polo-t-shirt-p05372419.html
+/tr/tr/regular-fit-color-block-t-shirt-p00722631.html
 /tr/tr/regular-fit-denim-bermuda-p00774400.html
 /tr/tr/regular-fit-denim-bermuda-p00774410.html
 /tr/tr/regular-fit-denim-bermuda-p05585326.html
@@ -9827,6 +9942,7 @@
 /tr/tr/regular-fit-hafif-origins-t-shirt-p04231413.html
 /tr/tr/regular-fit-hafif-poplin-ceket-p03046501.html
 /tr/tr/regular-fit-ince-ceket-p06345300.html
+/tr/tr/regular-fit-jean-p04048340.html
 /tr/tr/regular-fit-jean-p04048440.html
 /tr/tr/regular-fit-jean-p04060353.html
 /tr/tr/regular-fit-jean-p04470350.html
@@ -9982,6 +10098,7 @@
 /tr/tr/relaxed-fit-kabartmali-gomlek-p02548320.html
 /tr/tr/relaxed-fit-kabartmali-gomlek-p04200810.html
 /tr/tr/relaxed-fit-kabartmali-gomlek-p07380102.html
+/tr/tr/relaxed-fit-kabartmali-kareli-gomlek-p07545304.html
 /tr/tr/relaxed-fit-kanguru-denim-sweatshirt-p03991319.html
 /tr/tr/relaxed-fit-kanguru-ruzgarlik-ceket-p03046457.html
 /tr/tr/relaxed-fit-kapusonlu-denim-ceket-p04365303.html
@@ -9996,9 +10113,9 @@
 /tr/tr/relaxed-fit-kareli-gomlek-p03794100.html
 /tr/tr/relaxed-fit-kareli-gomlek-p04226125.html
 /tr/tr/relaxed-fit-kareli-gomlek-p04310024.html
+/tr/tr/relaxed-fit-kareli-gomlek-p04366711.html
 /tr/tr/relaxed-fit-kareli-gomlek-p04367751.html
 /tr/tr/relaxed-fit-kareli-gomlek-p04379682.html
-/tr/tr/relaxed-fit-kareli-gomlek-p04437337.html
 /tr/tr/relaxed-fit-kareli-gomlek-p04462213.html
 /tr/tr/relaxed-fit-kareli-gomlek-p06103414.html
 /tr/tr/relaxed-fit-kareli-gomlek-p07446397.html
@@ -10037,6 +10154,7 @@
 /tr/tr/relaxed-fit-pamuklu-keten-pantolon-p01023402.html
 /tr/tr/relaxed-fit-pamuklu-ve-keten-atlet-p00722313.html
 /tr/tr/relaxed-fit-parachute-pantolon-p02342400.html
+/tr/tr/relaxed-fit-parasut-pantolon-p06786420.html
 /tr/tr/relaxed-fit-pileli-denim-chino-bermuda-p05585327.html
 /tr/tr/relaxed-fit-pilili-chino-pantolon-p02003302.html
 /tr/tr/relaxed-fit-pilili-chino-pantolon-p04015640.html
@@ -10077,10 +10195,13 @@
 /tr/tr/relaxed-fit-yikama-efektli-baskili-sweatshirt-p04374310.html
 /tr/tr/relaxed-fit-yikama-efektli-cicek-desenli-gomlek-p02553310.html
 /tr/tr/relaxed-fit-yikama-renkli-jean-p01171300.html
+/tr/tr/relaxed-fit-yikamali-cepli-ceket-p06987400.html
 /tr/tr/relaxed-fit-yikamali-chino-pantolon-p02005203.html
 /tr/tr/relaxed-fit-yikamali-dokulu-kazak-p02621311.html
 /tr/tr/relaxed-fit-yikamali-esofman-alti-p00526322.html
+/tr/tr/relaxed-fit-yun-karisimli-blazer-p04453546.html
 /tr/tr/relaxed-fit-zimba-detayli-ceket-p07563406.html
+/tr/tr/reluxe-fit-cizgili-t-shirt-p05372431.html
 /tr/tr/renk-bloklu-fermuar-yakali-sweatshirt-p04087303.html
 /tr/tr/renk-bloklu-gofre-kumas-ford---t-shirt-p00526455.html
 /tr/tr/renk-bloklu-koton-keten-t-shirt-p06264301.html
@@ -10214,6 +10335,7 @@
 /tr/tr/rustik-fitilli-top-p04174165.html
 /tr/tr/rustik-genis-paca-pantolon-p01058143.html
 /tr/tr/rustik-genis-paca-pantolon-p05067950.html
+/tr/tr/rustik-hacimli-t-shirt-p05039388.html
 /tr/tr/rustik-kareli-gomlek-p06085640.html
 /tr/tr/rustik-kisa-kollu-top-p05067951.html
 /tr/tr/rustik-kolsuz-top-p01165104.html
@@ -10225,14 +10347,15 @@
 /tr/tr/rustik-pantolon-p05580251.html
 /tr/tr/rustik-pelerin-kollu-top-p01044158.html
 /tr/tr/rustik-polo-t-shirt-p02298701.html
+/tr/tr/rustik-puskullu-top-p05580250.html
 /tr/tr/rustik-salvar-pantolon-p05107210.html
+/tr/tr/rustik-triko-polo-t-shirt-p06216759.html
 /tr/tr/rustik-uzun-elbise-p05580010.html
 /tr/tr/ruzgar-gecirmez-su-gecirmez-sisme-mont-p04749812.html
 /tr/tr/s-boy-naylon-omuz-cantasi-p13612820.html
 /tr/tr/s-harfi-nakisli-keten-kirlent-p41192009.html
 /tr/tr/s-harfli-borosilikat-cam-kupa-p45234210.html
 /tr/tr/sac-derisi-masaj-aleti-p46518489.html
-/tr/tr/sac-orgulu-kazak-triko-tayt-p05536429.html
 /tr/tr/sac-orgulu-polo-blauz-p02756622.html
 /tr/tr/sac-orgulu-triko-top-p03921604.html
 /tr/tr/sacakli-dokulu-blazer-p07827114.html
@@ -10258,8 +10381,6 @@
 /tr/tr/sal-desenli-bandana-p09967700.html
 /tr/tr/sal-desenli-orta-boy-deniz-sortu-p09569303.html
 /tr/tr/sal-desenli-orta-boy-deniz-sortu-p09569305.html
-/tr/tr/sal-desenli-sal-p04758253.html
-/tr/tr/sal-desenli-sirt-cantasi-p11104830.html
 /tr/tr/sal-desenli-uzun-deniz-sortu-p08574319.html
 /tr/tr/salty-ocean-bouquet-edp-100-ml--3-4-fl--oz--p20210983.html
 /tr/tr/salvar-jean-p05359602.html
@@ -10303,6 +10424,7 @@
 /tr/tr/saten-halter-top-p08020566.html
 /tr/tr/saten-kemerli-tulum-p03897154.html
 /tr/tr/saten-kombine-mini-elbise-p02873332.html
+/tr/tr/saten-kruvaze-yelek-p05247710.html
 /tr/tr/saten-lastikli-alt-carsaf-%7C-40-cm-yukseklik--300-iplikli--p40035095.html
 /tr/tr/saten-makyaj-cantasi-p14004700.html
 /tr/tr/saten-makyaj-cantasi-p14006700.html
@@ -10415,7 +10537,6 @@
 /tr/tr/seramik-duvar-apligi-p41373047.html
 /tr/tr/seramik-duvar-apligi-p48534047.html
 /tr/tr/seramik-duz-servis-tabagi-p48236216.html
-/tr/tr/seramik-duz-tabak-p42227200.html
 /tr/tr/seramik-duz-tabak-p42448200.html
 /tr/tr/seramik-duz-tabak-p48262200.html
 /tr/tr/seramik-ekmek-tabagi-p42227206.html
@@ -10433,7 +10554,6 @@
 /tr/tr/seramik-kulp-seti--2-li-set--p43421555.html
 /tr/tr/seramik-kupa-p42227210.html
 /tr/tr/seramik-kupa-p42448210.html
-/tr/tr/seramik-kupa-p48262210.html
 /tr/tr/seramik-makarna-tabagi-p42448203.html
 /tr/tr/seramik-makarna-tabagi-p48262203.html
 /tr/tr/seramik-masa-lambasi-p47148047.html
@@ -10524,6 +10644,7 @@
 /tr/tr/simli-saten-elbise-p02713332.html
 /tr/tr/simli-saten-straplez-bagcikli-top-p07752051.html
 /tr/tr/simli-sirt-cantasi-p11248830.html
+/tr/tr/siren-baskili-relaxed-fit-t-shirt-p06224809.html
 /tr/tr/sirk-tasarimli-kagit-cocuk-sepeti-p42614049.html
 /tr/tr/sirk-temali-cocuk-kagit-sepeti-p44667049.html
 /tr/tr/sirt-cantasi-arabasi-p11409430.html
@@ -10658,6 +10779,7 @@
 /tr/tr/soluk-efektli-carrot-fit-pantolon-p04302422.html
 /tr/tr/soluk-efektli-cizgili-keten-masa-ortusu-p45292021.html
 /tr/tr/soluk-efektli-cizgili-keten-pecete--2-li-set--p45292022.html
+/tr/tr/soluk-efektli-cizgili-pamuklu-nevresim-p46161088.html
 /tr/tr/soluk-efektli-crop-deri-ceket-p05388888.html
 /tr/tr/soluk-efektli-deniz-temali-sweatshirt-p00495330.html
 /tr/tr/soluk-efektli-desenli-straight-fit-pantolon-p04470400.html
@@ -10699,12 +10821,14 @@
 /tr/tr/soluk-efektli-sloganli-boxy-fit-t-shirt-p06224460.html
 /tr/tr/soluk-efektli-sloganli-t-shirt-p00495311.html
 /tr/tr/soluk-efektli-spor-t-shirt-p03253661.html
+/tr/tr/soluk-efektli-sweatshirt-kpop-demon-hunters--netflix---p01165605.html
 /tr/tr/soluk-efektli-t-shirt-p03284704.html
 /tr/tr/soluk-efektli-takim-elbise-pantolonu-p04154228.html
 /tr/tr/soluk-efektli-ters-detayli-t-shirt-p04090036.html
 /tr/tr/soluk-efektli-yazili-sweatshirt-p00495331.html
 /tr/tr/soluk-efektli-yazili-t-shirt-p00531760.html
 /tr/tr/soluk-efektli-yazili-t-shirt-p06050123.html
+/tr/tr/soluk-efeltili-cizgili-pamuklu-nevresim-p47191088.html
 /tr/tr/soluk-gorunumlu-baskili-orgu-t-shirt-p04805417.html
 /tr/tr/soluk-gorunumlu-dikisli-yelek-p00122331.html
 /tr/tr/soluk-gorunumlu-interlok-sweatshirt-p04424152.html
@@ -10718,7 +10842,6 @@
 /tr/tr/sonil-battaniye-p49325004.html
 /tr/tr/sonil-kirlent-kilifi-p47328008.html
 /tr/tr/sorf-desenli-sweatshirt-p06224797.html
-/tr/tr/sorf-desenli-top-p00895615.html
 /tr/tr/sorf-yapan-hayvan-desenli-t-shirt-p06224515.html
 /tr/tr/sorrento-yazili-t-shirt-p00962460.html
 /tr/tr/sort-etek-p03152400.html
@@ -10865,12 +10988,12 @@
 /tr/tr/straplez-balon-elbise-p02311133.html
 /tr/tr/straplez-bantli-mini-elbise-p03152204.html
 /tr/tr/straplez-body-p01355014.html
-/tr/tr/straplez-buzgulu-tulum-p04661227.html
 /tr/tr/straplez-midi-elbise-p01067005.html
 /tr/tr/straplez-midi-tulum-p08596769.html
 /tr/tr/straplez-pullu-top-p04764139.html
 /tr/tr/straplez-top-p05063811.html
 /tr/tr/strass-lilo---stitch---disney-baskili-t-shirt-p09001609.html
+/tr/tr/straz-tasli-denim-yelek-p00327622.html
 /tr/tr/straz-tasli-denim-yelek-p04551651.html
 /tr/tr/strec-can-paca-pantolon-p05584191.html
 /tr/tr/strec-fuseau-pantolon-p03641813.html
@@ -10897,19 +11020,23 @@
 /tr/tr/su-gecirmez-jarse-yastik-koruyucu-p40052087.html
 /tr/tr/su-gecirmez-kapitone-ceket-p00732312.html
 /tr/tr/su-gecirmez-kapitone-ceket-p05644574.html
-/tr/tr/su-gecirmez-kaplamali-salopet-p05854552.html
 /tr/tr/su-gecirmez-kapusonlu-ceket-p05644754.html
 /tr/tr/su-gecirmez-kapusonlu-hafif-yelek-p08073765.html
 /tr/tr/su-gecirmez-kapusonlu-sisme-mont-p05992761.html
 /tr/tr/su-gecirmez-kapusonlu-yagmurluk-p08073705.html
 /tr/tr/su-gecirmez-kisa-kesim-ceket-p00155369.html
 /tr/tr/su-gecirmez-naylon-bot-p17128630.html
+/tr/tr/su-gecirmez-polar-astarli-salopet-p00874554.html
 /tr/tr/su-gecirmez-renk-bloklu-sisme-mont-p05992559.html
 /tr/tr/su-gecirmez-ruzgar-gecirmez-80-kus-tuyu-20-kaz-tuyu-dolgulu-recco--teknolojili-kayak-anoragi-p08073023.html
+/tr/tr/su-gecirmez-salopet-p05854552.html
 /tr/tr/su-gecirmez-sisme-kaban-p05992564.html
 /tr/tr/su-gecirmez-sisme-yelek-p03411552.html
 /tr/tr/su-gecirmez-teknik-yagmurluk-p05644560.html
 /tr/tr/su-gecirmez-ve-ruzgar-gecirmez-recco--sistemli-uzun-tulum-kayak-koleksiyonu-p08073773.html
+/tr/tr/su-gecirmez-yagmurluk-p00874551.html
+/tr/tr/su-gecirmez-yagmurluk-p00874566.html
+/tr/tr/su-gecirmez-yagmurluk-p05475553.html
 /tr/tr/su-ve-ruzgar-gecirmez-uzun-puantiye-desenli-salopet-p05644644.html
 /tr/tr/sublime-epoque-edp-30-ml--1-01-fl--oz---p20110984.html
 /tr/tr/sublime-epoque-edp-80-ml--2-71-fl--oz---p20110785.html
@@ -10948,6 +11075,8 @@
 /tr/tr/suet-puskullu-duz-makosen-p13552810.html
 /tr/tr/suet-puskullu-makosen-p12566710.html
 /tr/tr/suet-tekne-makoseni-p12511810.html
+/tr/tr/suet-topuklu-sandalet-p11312710.html
+/tr/tr/suet-topuklu-sandalet-p12319810.html
 /tr/tr/suet-topuklu-sandalet-p13317710.html
 /tr/tr/suet-topuklu-sandalet-p13381710.html
 /tr/tr/sulley--disney-pixar-monstruos--s-a--cocuk-taci-p47623722.html
@@ -10992,7 +11121,6 @@
 /tr/tr/suni-suet-ince-ceket-p03046460.html
 /tr/tr/suni-suet-ince-ceket-p04302505.html
 /tr/tr/suni-suet-islemeli-yazili-bomber-ceket-p06318760.html
-/tr/tr/suni-suet-regular-fit-ince-ceket-p03548322.html
 /tr/tr/suni-suet-suslu-dugmeli-ceket-p06318245.html
 /tr/tr/suni-suet-ve-dantel-detayli-ceket-p03183554.html
 /tr/tr/suni-yunlu-kapusonlu-tulum-p00248503.html
@@ -11004,6 +11132,7 @@
 /tr/tr/supima--cift-katmanli-t-shirt-p00858026.html
 /tr/tr/supima--crop-t-shirt-p00858040.html
 /tr/tr/supima--firfirli-top-p03641019.html
+/tr/tr/supima--kisa-kollu-t-shirt-p00264046.html
 /tr/tr/supima--kolsuz-top-p00264041.html
 /tr/tr/supima--kontrast-kollu-t-shirt-p00264110.html
 /tr/tr/supima--puantiyeli-uzun-kollu-t-shirt-p00264034.html
@@ -11055,6 +11184,7 @@
 /tr/tr/t-bantli-babet-p16511830.html
 /tr/tr/t-bantli-babet-p18838730.html
 /tr/tr/t-deri-sabo-ayakkabi-p16531830.html
+/tr/tr/t-dy-pnt-16-p01434054.html
 /tr/tr/t-harfi-nakisli-keten-kirlent-p41193009.html
 /tr/tr/t-harfli-borosilikat-cam-kupa-p45239210.html
 /tr/tr/t-shirt-ve-bermuda-takimi-p00935700.html
@@ -11062,6 +11192,7 @@
 /tr/tr/t-shirt-ve-bloomer-takimi-p04174440.html
 /tr/tr/table-01-p43274072.html
 /tr/tr/table-03-p43277072.html
+/tr/tr/table-lamp-01-p45351047.html
 /tr/tr/table-runner-01-p42200024.html
 /tr/tr/tablecloth-01-p42200021.html
 /tr/tr/tablecloth-01-p42201021.html
@@ -11071,6 +11202,7 @@
 /tr/tr/takim-elbise-pantolonu-p07484866.html
 /tr/tr/taktik-sirt-cantasi-p11447830.html
 /tr/tr/tapered-fit-tirmanis-pantolonu-p01732302.html
+/tr/tr/tarihli-yapiskan-etiket-rulosu--2-li-paket--p46281042.html
 /tr/tr/tas-detayli-vatkali-top-p03920104.html
 /tr/tr/tas-dugmeli-etek-p01148492.html
 /tr/tr/tas-dugmeli-etek-p01161492.html
@@ -11106,7 +11238,6 @@
 /tr/tr/tavsan-desenli-cocuk-catal-kasik-bicak-takimi-p48660311.html
 /tr/tr/tavsan-desenli-kapusonlu-muslin-bebek-havlusu-p45673423.html
 /tr/tr/tavsan-desenli-pantolon-p01165545.html
-/tr/tr/tavsan-kafali-cocuk-pelus-cingirak-p48607052.html
 /tr/tr/tavsan-metal-cocuk-tabagi-p47603202.html
 /tr/tr/tavsan-sekilli-silikon-cocuk-gece-lambasi-p46675047.html
 /tr/tr/tavsan-seklinde-cocuk-kapi-tutucu-p41660060.html
@@ -11116,7 +11247,6 @@
 /tr/tr/tavsancik-welcome-baby-karti-p48601728.html
 /tr/tr/tavsancikli-cocuk-duzenleyici-p44609049.html
 /tr/tr/tavsanli-bebek-besik-koruyucu-p44609527.html
-/tr/tr/tavsanli-bebek-doudou-p48601051.html
 /tr/tr/tavsanli-bebek-onlugu-p44614437.html
 /tr/tr/tavsanli-bebek-uyku-arkadasi-p47605051.html
 /tr/tr/tavsanli-bebek-uyku-arkadasi-p47607051.html
@@ -11139,12 +11269,14 @@
 /tr/tr/team-six-seven-felpa-bermuda-p06224696.html
 /tr/tr/team-six-seven-reglan-kollu-t-shirt-p06224682.html
 /tr/tr/teddy-baskili-sweatshirt-p04424541.html
+/tr/tr/tek-boynuzlu-at-baskili-pazen-cocuk-pijama-takimi-p46622117.html
 /tr/tr/tek-kisilik-kapitone-uyku-tulumu-p49301501.html
 /tr/tr/tek-renk-kalin-tabanli-spor-ayakkabi-p12201820.html
 /tr/tr/tek-renk-kalin-tabanli-spor-ayakkabi-p12215520.html
 /tr/tr/tek-renk-kalin-tabanli-spor-ayakkabi-p12215723.html
 /tr/tr/tek-renkli-kablosuz-masa-lambasi-p46174047.html
 /tr/tr/tek-renkli-kalin-tabanli-spor-ayakkabi-p12215620.html
+/tr/tr/tekerlekli-ahsap-sifonyer-p48355077.html
 /tr/tr/tekerlekli-metal-cocuk-sepeti-p42625049.html
 /tr/tr/tekerlekli-ofis-sandalyesi-p48288073.html
 /tr/tr/tekerlekli-oyma-ahsap-besik-p47672518.html
@@ -11158,7 +11290,6 @@
 /tr/tr/teknik-bel-cantasi-p11481730.html
 /tr/tr/teknik-blok-renkli-dokulu-t-shirt-p04387304.html
 /tr/tr/teknik-bomber-ceket-p04302360.html
-/tr/tr/teknik-bomber-ceket-p04302460.html
 /tr/tr/teknik-cep-telefonu-cantasi-p11165730.html
 /tr/tr/teknik-cicek-desenli-t-shirt-p04387381.html
 /tr/tr/teknik-cok-cepli-sirt-cantasi-p13200820.html
@@ -11270,6 +11401,8 @@
 /tr/tr/tig-isi-firfirli-elbise-p02756534.html
 /tr/tr/tig-isi-gorunumlu-babet-p12521810.html
 /tr/tr/tig-isi-sort-p03798121.html
+/tr/tr/tik-agaci-gloss-calisma-masasi-p48393072.html
+/tr/tr/tik-agaci-gloss-calisma-masasi-p49386072.html
 /tr/tr/timsah-desenli-spor-ayakkab%C4%B1-p17404830.html
 /tr/tr/tirtikli-tabanli-babet-p12513830.html
 /tr/tr/tirtikli-tabanli-chelsea-bot-p12020820.html
@@ -11407,7 +11540,6 @@
 /tr/tr/trf-mini-cizgili-denim-sort-p06929203.html
 /tr/tr/trf-orta-bel-bagcikli-duz-kesim-jean-p06929049.html
 /tr/tr/trf-orta-bel-baggy-denim-bermuda-p04730206.html
-/tr/tr/trf-orta-bel-baggy-denim-jean-p01300212.html
 /tr/tr/trf-orta-bel-baggy-jean-p01300212.html
 /tr/tr/trf-orta-bel-balon-denim-jorts-bermuda-p08727205.html
 /tr/tr/trf-orta-bel-balon-jean-p05575245.html
@@ -11505,6 +11637,11 @@
 /tr/tr/ultralif-su-gecirmez-mont-p03918761.html
 /tr/tr/ultralight-su-gecirmez-mont-p05992550.html
 /tr/tr/ultralight-water-repellent-ceket-p05992551.html
+/tr/tr/unicorn-cocuk-battaniyesi-p44645004.html
+/tr/tr/unicorn-desenli-cocuk-alt-carsaf-p41626900.html
+/tr/tr/unicorn-desenli-cocuk-ust-carsaf-p41626089.html
+/tr/tr/unicorn-desenli-cocuk-yastik-kilifi-p41626091.html
+/tr/tr/unicorn-tasarimli-kapusonlu-cocuk-havlusu-p46628423.html
 /tr/tr/uno-kart-oyunu-baskili-t-shirt-p07878838.html
 /tr/tr/urban-capraz-sirt-cantasi-p11440830.html
 /tr/tr/urban-desenli-t-shirt-p00294618.html
@@ -11585,6 +11722,7 @@
 /tr/tr/uzun-kollu-relaxed-fit-t-shirt-p04161301.html
 /tr/tr/uzun-kollu-ribana-t-shirt-p03253804.html
 /tr/tr/uzun-kollu-teknik-gravel-t-shirt-p04387345.html
+/tr/tr/uzun-kollu-transparan-t-shirt-p42121120.html
 /tr/tr/uzun-kollu-yamali-ve-baskili-t-shirt-p00962324.html
 /tr/tr/uzun-kosu-tayti-p01943306.html
 /tr/tr/uzun-kuzu-pelus-oyuncak-p48616051.html
@@ -11633,6 +11771,7 @@
 /tr/tr/vanity-canta-p16206710.html
 /tr/tr/vantuzlu-bileme-aparati-p44235041.html
 /tr/tr/varisity-yamali-triko-polo-t-shirt-p06216718.html
+/tr/tr/varisty-yazili-t-shirt-p05431536.html
 /tr/tr/varsity-baskili-t-shirt-p05580703.html
 /tr/tr/varsity-baskili-top-p01165804.html
 /tr/tr/varsity-bowling-canta-p11201830.html
@@ -11686,6 +11825,7 @@
 /tr/tr/vidali-kapakli-cam-saklama-kavanozu-p42282428.html
 /tr/tr/vinil-bantli-dolgu-topuklu-sandalet-p13326710.html
 /tr/tr/vinil-gorunumlu-dolgu-topuk-sandalet-p13352710.html
+/tr/tr/vinil-topuklu-sandalet-p13822810.html
 /tr/tr/vintage-ayna-p44318106.html
 /tr/tr/vintage-celik-catal-kasik-bicak-takimi--4-lu-set--p46243311.html
 /tr/tr/vintage-cicek-desenli-hali-p42308029.html
@@ -11809,6 +11949,7 @@
 /tr/tr/yamali-ve-cikarilabilir-kapusonlu-bomber-ceket-p05854767.html
 /tr/tr/yamali-ve-islemeli-boxy-fit-ince-ceket-p06987301.html
 /tr/tr/yan-bagcikli-bikini-alti-p02856028.html
+/tr/tr/yan-dugmeli-saten-top-p02751051.html
 /tr/tr/yan-kemer-koprulu-dusuk-bel-pantolon-p02456542.html
 /tr/tr/yan-pileli-balon-fit-pantolon-p01437308.html
 /tr/tr/yan-seritli-duz-kesim-pantolon-p07484220.html
@@ -11823,6 +11964,8 @@
 /tr/tr/yanlari-acik-barefoot-spor-ayakkabi-p16317730.html
 /tr/tr/yanlari-bagcikli-halter-elbise-p07829111.html
 /tr/tr/yanlari-baglamali-mini-sort-p04391519.html
+/tr/tr/yanlari-buzgulu-cizgili-mayo-p02910060.html
+/tr/tr/yanlari-buzgulu-top-p04174222.html
 /tr/tr/yanlari-buzgulu-top-p04174361.html
 /tr/tr/yanlari-dantel-eklemeli-pantolon-p08372226.html
 /tr/tr/yanlari-dantel-eklemeli-ust-p08372326.html
@@ -11918,6 +12061,8 @@
 /tr/tr/yazili-ve-etiketli-spor-t-shirt-p05048674.html
 /tr/tr/yazili-ve-kontrast-biyeli-bermuda-p05431710.html
 /tr/tr/yazili-yikanmis-pamuklu-keten-t-shirt-p06224300.html
+/tr/tr/yazili-yikanmis-t-shirt-p06224810.html
+/tr/tr/yazili-yikanmis-t-shirt-p06224817.html
 /tr/tr/yazlik-100-pamuk-islemeli-sapka-p03739065.html
 /tr/tr/yazlik-mikrofiber-yorgan--125-gxm---p40152010.html
 /tr/tr/yedek-firca-kili--2-li-set--p47273762.html
@@ -12001,7 +12146,6 @@
 /tr/tr/yikamali-yazi-nakisli-sapka-p03920352.html
 /tr/tr/yikamali-yildizli-genis-paca-pantolon-p05879700.html
 /tr/tr/yikanmis-balikci-sapkasi-p03921403.html
-/tr/tr/yikanmis-baskili-orgu-t-shirt-p04090440.html
 /tr/tr/yikanmis-baskili-sloganli-sapka-p03920350.html
 /tr/tr/yikanmis-boxy-fit-ince-ceket-p02634208.html
 /tr/tr/yikanmis-cepli-relaxed-fit-ceket-p07563402.html
@@ -12025,7 +12169,6 @@
 /tr/tr/yikanmis-numarali-baskili-t-shirt-p00962423.html
 /tr/tr/yikanmis-pamuklu-dokulu-parka-p02634200.html
 /tr/tr/yikanmis-pamuklu-polo-ince-ceket-p01437482.html
-/tr/tr/yikanmis-pamuklu-relaxed-fit-ceket-p02634205.html
 /tr/tr/yikanmis-pamuklu-sapka-p03920426.html
 /tr/tr/yikanmis-pamuklu-sapka-p04988300.html
 /tr/tr/yikanmis-pamuklu-sapka-p05875300.html
@@ -12033,9 +12176,9 @@
 /tr/tr/yikanmis-regular-fit-bermuda-p03991354.html
 /tr/tr/yikanmis-relaxed-fit-polo-yaka-gomlek-p00706666.html
 /tr/tr/yikanmis-utility-cepli-ceket-p01437504.html
+/tr/tr/yikanmis-yazili-baskili-sweatshirt-p09144400.html
 /tr/tr/yilan-desenli-bros-marisa-berenson-x-zara-p01856217.html
 /tr/tr/yilan-desenli-ip-kolye-p04548204.html
-/tr/tr/yilan-desenli-kelepce-bileklik-p04548209.html
 /tr/tr/yilan-detayli-bandeau-bikini-ustu-marisa-berenson-x-zara-p00167210.html
 /tr/tr/yilan-detayli-bikini-alti-marisa-berenson-x-zara-p00167211.html
 /tr/tr/yilanli-borosilikat-samdan-%7C-marisa-berenson-p46811468.html
@@ -12151,12 +12294,12 @@
 /tr/tr/yumusak-dokulu-relaxed-fit-t-shirt-p08054414.html
 /tr/tr/yumusak-dokulu-salvar-pantolon-p05767582.html
 /tr/tr/yumusak-dokulu-triko-top-p05755130.html
-/tr/tr/yumusak-dugmeli-crop-top-p05039352.html
 /tr/tr/yumusak-dugmeli-yaka-t-shirt-p04853402.html
 /tr/tr/yumusak-fitilli-bagcikli-t-shirt-p04805508.html
 /tr/tr/yumusak-havlu-banyo-paspasi-p44546015.html
 /tr/tr/yumusak-havlu-dokulu-banyo-paspasi-p44546015.html
 /tr/tr/yumusak-kontrast-tul-cicek-desenli-elbise-p04012556.html
+/tr/tr/yumusak-midi-etek-p00858470.html
 /tr/tr/yumusak-pamuklu-gomlek-p00975477.html
 /tr/tr/yumusak-suet-makosen-p11505810.html
 /tr/tr/yumusak-triko-hirka-p05536149.html
@@ -12191,6 +12334,7 @@
 /tr/tr/yunlu-regular-fit-takim-pantolonu-p06565830.html
 /tr/tr/yunus-ve-hibiskus-uclu-2-li-kolye-seti-p04319557.html
 /tr/tr/yusufcuk-cikartmali-cam-kadeh-p42218409.html
+/tr/tr/yusufcuk-desenli-bardak-p42218401.html
 /tr/tr/yuvalak-lake-tepsi-p41224040.html
 /tr/tr/yuvarlak-ahsap-kutu-p46170099.html
 /tr/tr/yuvarlak-amerikan-servis--2-li-paket--p45206023.html
@@ -12325,7 +12469,6 @@
 /tr/tr/zara-timeless---100-kasmir-corap-p05059517.html
 /tr/tr/zara-timeless---100-kasmir-kazak-p05059588.html
 /tr/tr/zara-timeless---100-kasmir-kazak-p05059589.html
-/tr/tr/zara-timeless---100-kasmir-sal-p05059749.html
 /tr/tr/zara-timeless---100-kasmir-tayt-p05059514.html
 /tr/tr/zara-timeless---100-kasmir-tulum-p05059515.html
 /tr/tr/zara-timeless---100-keten-duz-bermuda-p01410487.html
@@ -12333,7 +12476,6 @@
 /tr/tr/zara-timeless---3-lu-cizgili-boxer-paketi-p08501579.html
 /tr/tr/zara-timeless---3-lu-cizgili-fitilli-t-shirt-paketi-p08501576.html
 /tr/tr/zara-timeless---3-lu-cizgili-uzun-corap-paketi-p01554596.html
-/tr/tr/zara-timeless---3-lu-duz-fitilli-t-shirt-paketi-p08501567.html
 /tr/tr/zara-timeless---3-lu-duz-renk-ribana-kulot-paketi-p08501573.html
 /tr/tr/zara-timeless---3-lu-etiketli-boxer-paketi-p08501557.html
 /tr/tr/zara-timeless---3-lu-uzun-kollu-body-paketi-p08501565.html
@@ -12345,6 +12487,7 @@
 /tr/tr/zara-timeless---cicekli-pijama-p01618504.html
 /tr/tr/zara-timeless---cizgili--cikarilabilir-kapusonlu-kaban-p05644563.html
 /tr/tr/zara-timeless---cizgili--cikarilabilir-kapusonlu-naylon-tulum-p05644582.html
+/tr/tr/zara-timeless---cizgili-balon-fitilli-pantolon-p06201243.html
 /tr/tr/zara-timeless---cizgili-balon-pantolon-p06177175.html
 /tr/tr/zara-timeless---cizgili-balon-pantolon-p06917516.html
 /tr/tr/zara-timeless---cizgili-balon-pantolon-p06917536.html
@@ -12425,6 +12568,7 @@
 /tr/tr/zimba-detayli-yari-transparan-gomlek-p03564153.html
 /tr/tr/zimbali-acik-sirt-detayli-top-p05941004.html
 /tr/tr/zimbali-bandana-detayli-deri-bot-p12116830.html
+/tr/tr/zimbali-bandeau-p04772063.html
 /tr/tr/zimbali-bootcut-jean-p06917611.html
 /tr/tr/zimbali-bowling-canta-p16658810.html
 /tr/tr/zimbali-buzgulu-bikini-ustu-p02856214.html
@@ -12432,6 +12576,7 @@
 /tr/tr/zimbali-capraz-askili-canta-p11119830.html
 /tr/tr/zimbali-capraz-canta-p11221830.html
 /tr/tr/zimbali-civili-bikini-ustu-p02856025.html
+/tr/tr/zimbali-civili-pantolon-p00108406.html
 /tr/tr/zimbali-civili-sandalet-p12548730.html
 /tr/tr/zimbali-cizgili-denim-bermuda-p00327614.html
 /tr/tr/zimbali-denim-bermuda-etek-p03333704.html
@@ -12440,6 +12585,7 @@
 /tr/tr/zimbali-deri-sandalet-p11643710.html
 /tr/tr/zimbali-deri-sandalet-p13671710.html
 /tr/tr/zimbali-duz-sandalet-p11631710.html
+/tr/tr/zimbali-duz-sandalet-p15514810.html
 /tr/tr/zimbali-genis-paca-jean-p04551642.html
 /tr/tr/zimbali-halter-top-p05063328.html
 /tr/tr/zimbali-halter-top-p05968100.html
@@ -12525,6 +12671,7 @@
 /tr/tr/zw-collection-boncuklu-desenli-ust-p06895241.html
 /tr/tr/zw-collection-boncuklu-duz-etek-p05344244.html
 /tr/tr/zw-collection-boncuklu-top-p07521249.html
+/tr/tr/zw-collection-buzgulu-bomber-ceket-p07521202.html
 /tr/tr/zw-collection-buzgulu-midi-elbise-p02225304.html
 /tr/tr/zw-collection-can-paca-pantolon-p07149082.html
 /tr/tr/zw-collection-ceket-p07018304.html
@@ -12636,6 +12783,7 @@
 /tr/tr/zw-collection-ekose-gomlek-elbise-p02678242.html
 /tr/tr/zw-collection-ekose-gomlek-p04786258.html
 /tr/tr/zw-collection-ekose-oversize-gomlek-p01324655.html
+/tr/tr/zw-collection-firfirli-islemeli-elbise-p07521250.html
 /tr/tr/zw-collection-firfirli-midi-elbise-p02252281.html
 /tr/tr/zw-collection-fiyonklu-gomlek-p07521252.html
 /tr/tr/zw-collection-fularli-kisa-kollu-gomlek-p01111184.html
@@ -12653,6 +12801,7 @@
 /tr/tr/zw-collection-halter-yaka-elbise-p09035037.html
 /tr/tr/zw-collection-halter-yaka-midi-elbise-p02070100.html
 /tr/tr/zw-collection-halter-yaka-tulum-p02247459.html
+/tr/tr/zw-collection-halter-yaka-uzun-elbise-p02072987.html
 /tr/tr/zw-collection-ipekli-cizgili-gomlek-p01337036.html
 /tr/tr/zw-collection-islemeli-bluz-p07521054.html
 /tr/tr/zw-collection-islemeli-keten-gomlek-p04786148.html
@@ -12678,6 +12827,7 @@
 /tr/tr/zw-collection-katlamali-poplin-elbise-p02507042.html
 /tr/tr/zw-collection-katmanli-midi-etek-p02732776.html
 /tr/tr/zw-collection-kazayagi-pareo-pantolon-p01904033.html
+/tr/tr/zw-collection-kemerli-gomlek-elbise-p02266015.html
 /tr/tr/zw-collection-kemerli-gomlek-p04437200.html
 /tr/tr/zw-collection-kemerli-midi-etek-p02507246.html
 /tr/tr/zw-collection-kemerli-pensli-bermuda-p01914117.html
@@ -12766,7 +12916,9 @@
 /tr/tr/zw-collection-orta-bel-cizgili-slim-jean-p09632066.html
 /tr/tr/zw-collection-orta-bel-crop-bootcut-can-jean-p09632056.html
 /tr/tr/zw-collection-orta-bel-denim-bermuda-p06840242.html
+/tr/tr/zw-collection-orta-bel-denim-bermuda-p07223241.html
 /tr/tr/zw-collection-orta-bel-denim-bermuda-p09632244.html
+/tr/tr/zw-collection-orta-bel-duz-paca-cizgili-jean-p09632070.html
 /tr/tr/zw-collection-orta-bel-kargo-kapri-jean-p08246250.html
 /tr/tr/zw-collection-orta-bel-kulot-jean-p04001243.html
 /tr/tr/zw-collection-orta-bel-tapered-jean-p04676240.html
@@ -12818,6 +12970,9 @@
 /tr/tr/zw-collection-pullu-elbise-p02150108.html
 /tr/tr/zw-collection-pullu-etek-p02787116.html
 /tr/tr/zw-collection-pullu-kisa-elbise-p02073102.html
+/tr/tr/zw-collection-pullu-lingerie-elbise-p05344242.html
+/tr/tr/zw-collection-pullu-midi-elbise-p02253108.html
+/tr/tr/zw-collection-puskullu-islemeli-bluz-p06895246.html
 /tr/tr/zw-collection-puskullu-jakarli-ust-p07521244.html
 /tr/tr/zw-collection-rami-karisimli-oversize-gomlek-p04786032.html
 /tr/tr/zw-collection-relaxed-fit-crop-paca-orta-bel-jean-p09632095.html
@@ -12830,11 +12985,11 @@
 /tr/tr/zw-collection-saten-blazer-p07020388.html
 /tr/tr/zw-collection-saten-halter-elbise-p02067934.html
 /tr/tr/zw-collection-saten-yuzeyli-barrel-pantolon-p01974383.html
-/tr/tr/zw-collection-saten-yuzeyli-drape-elbise-p02229098.html
 /tr/tr/zw-collection-saten-yuzeyli-elbise-p02240100.html
 /tr/tr/zw-collection-saten-yuzeyli-halter-yaka-tulum-p02278560.html
 /tr/tr/zw-collection-saten-yuzeyli-lingerie-elbise-p02075100.html
 /tr/tr/zw-collection-saten-yuzeyli-midi-elbise-p02241789.html
+/tr/tr/zw-collection-saten-yuzeyli-midi-elbise-p04786254.html
 /tr/tr/zw-collection-sirt-dekolteli-top-p01098767.html
 /tr/tr/zw-collection-sirt-dugmeli-gomlek-p01218985.html
 /tr/tr/zw-collection-smokin-yaka-gomlek-p01233619.html
