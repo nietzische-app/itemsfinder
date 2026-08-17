@@ -92,6 +92,7 @@
 /p/1-million-royal---eau-de-parfum-P10048288.html
 /p/10-dagitma-fircasi---sezgisel-uygulama--kusursuz-sonuc-P10059961.html
 /p/101-delicious-bites---mini-boy-dudak-balsamlari-P1000214013.html
+/p/101-delicious-mini-treats---%25100-dogal.-101-kullanim-P10062039.html
 /p/101-ointment-multi-balm---dudak-balsami-ve-karpuz-kuru-cilt-P10015255.html
 /p/101-ointment-multi-balm-coconutter-dudak-balmi-P3340041.html
 /p/101-ointment-multi-balm-glazed-donut---dudak-bakimi-P10058198.html
@@ -2703,6 +2704,7 @@
 /p/cc-colored-clay---goz-alti-duzeltici-315041.html
 /p/cc-colored-clay---goz-alti-duzeltici-P3643116.html
 /p/cc-creme-x-skin-therapy---yuz-bakim-seti-P1000212644.html
+/p/cc-creme-x-super-bb-concealer---yuz-bakim-seti-P1000212643.html
 /p/cc-dull-correct-482069.html
 /p/cc-dull-correct-P3793007.html
 /p/cc-family-cc-eye-clair-10ml-465275.html
@@ -5146,7 +5148,6 @@
 /p/euphoria---eau-de-toilette-P10049665.html
 /p/euphoria-woman-edp-265535.html
 /p/euphoria-woman-edp-P9201.html
-/p/euphoria-women---set-P1000214164.html
 /p/even-better-all-over-528956.html
 /p/even-better-all-over-530751.html
 /p/even-better-all-over-532599.html
@@ -5574,7 +5575,6 @@
 /p/ferragamo-bright-leather---eau-de-toilette-615423.html
 /p/ferragamo-bright-leather---eau-de-toilette-P10025942.html
 /p/ferragamo-intense-leather---eau-de-parfum-547407.html
-/p/ferragamo-intense-leather---eau-de-parfum-P10014280.html
 /p/ferragamo-spicy-leather---parfum-P10020799.html
 /p/fiamma---eau-de-parfum-767333.html
 /p/fiamma---eau-de-parfum-P1000207211.html
@@ -6177,6 +6177,7 @@
 /p/glossed-lip-gloss-479743.html
 /p/glossed-lip-gloss-719557.html
 /p/glossiest-gloss-trio---dudak-makyaji-seti-P1000205399.html
+/p/glossy-posse-viii---3-lu-lip-gloss-seti-P10062849.html
 /p/glossy-pout-lip-oil---renkli-dudak-yagi-785277.html
 /p/glossy-pout-lip-oil---renkli-dudak-yagi-785278.html
 /p/glossy-pout-lip-oil---renkli-dudak-yagi-785279.html
@@ -6816,7 +6817,6 @@
 /p/honey-milk-active-repair---durulanmayan-onarici-sac-bakim-spreyi-P1000213449.html
 /p/honey-whip-moisturizer-mini-564965.html
 /p/hoodie-22%C2%A0-lengthie-lash-takma-ki%CC%87rpi%CC%87k-P3878102.html
-/p/hoodie-flares--25---klasik-kirpikler-P10042892.html
 /p/hoola---toasted-585621.html
 /p/hoola---toasted-762493.html
 /p/hoola---toasted-762494.html
@@ -7418,7 +7418,6 @@
 /p/instant-sculpt-brow-pencil---aninda-belirginlestirici-kas-kalemi-760001.html
 /p/instant-sculpt-brow-pencil---aninda-belirginlestirici-kas-kalemi-760002.html
 /p/instant-sculpt-brow-pencil---aninda-belirginlestirici-kas-kalemi-P1000211788.html
-/p/intense-hydrating-mask-P10010754.html
 /p/intense-ink-liner---mat-ve-yogun-likit-eyeliner-709352.html
 /p/intense-ink-liner---mat-ve-yogun-likit-eyeliner-709353.html
 /p/intense-ink-liner---mat-ve-yogun-likit-eyeliner-709354.html
@@ -7843,7 +7842,11 @@
 /p/kit-7-jours-tropical-P10014408.html
 /p/kit-aqua-bomb-hydratation-heroes-P10014047.html
 /p/kit-bb-creme-x-super-bb-concealer---yuz-bakim-seti-P1000210831.html
+/p/kit-cc-creme-x-skin-therapy-oil-x-super-bb-concealer---yuz-bakim-seti-P10062964.html
+/p/kit-cc-creme-x-super-bb-concealer---kusursuz-cilt-ikilisi-P1000206456.html
+/p/kit-cc-red-correct-x-skin-therapy---yuz-bakim-seti-P1000210832.html
 /p/kit-duo-de-manucure---tirnak-bakim-seti-P10055788.html
+/p/kit-let-s-glow-heroes---aydinlatici-allik-P1000207616.html
 /p/kit-skin-therapy-eye-x-skin-therapy-oil-c-cc-eye---yuz-bakim-seti-P10062965.html
 /p/kit-week-end-P10016476.html
 /p/kok-cakra----premium-kokulu-mum-609687.html
@@ -8052,6 +8055,7 @@
 /p/l-interdit-edp-732087.html
 /p/l-interdit-edp-804135.html
 /p/l-interdit-edp-P3444023.html
+/p/l-interdit-elixir---eau-de-parfum-P10064415.html
 /p/l-interdit-rouge-ultime---eau-de-parfum-P10052722.html
 /p/l-interdit-solid-perfume---kati-parfum-P1000213433.html
 /p/l-ombre-des-merveilles--eau-de-parfum-511078.html
@@ -8548,7 +8552,6 @@
 /p/legendary-brows---kas-jeli-695832.html
 /p/legendary-brows---kas-jeli-695833.html
 /p/legendary-brows---kas-jeli-P3462072.html
-/p/legendary-lashes---hacim-veren-maskara-P3462082.html
 /p/les-4-ombres---ombre-a-paupieres-effets-multiples-284945.html
 /p/les-4-ombres---ombre-a-paupieres-effets-multiples-284950.html
 /p/les-4-ombres---ombre-a-paupieres-effets-multiples-284951.html
@@ -9644,6 +9647,7 @@
 /p/maracuja-juicy-lip-plump---dudak-dolgunlastirici-P10025111.html
 /p/maracuja-juicy-lip-plump-liner---dolgunlastirici-dudak-kalemi-803611.html
 /p/maracuja-juicy-lip-plump-liner---dolgunlastirici-dudak-kalemi-803612.html
+/p/maracuja-juicy-lip-plump-liner---dolgunlastirici-dudak-kalemi-P1000212027.html
 /p/maracuja-juicy-lip-plump-liner---dolgunlastirici-dudak-kalemi-P1000213411.html
 /p/maracuja-juicy-lip-shimmer-glass-plump---dolgunlastirici-gloss-P10056353.html
 /p/maracuja-juicy-lip-vinyl---yogun-isiltili-dudak-parlaticisi-717717.html
@@ -10008,6 +10012,7 @@
 /p/mini-eye-primer-P3742091.html
 /p/mini-eye-sculpt-palette---goz-fari-paleti-793101.html
 /p/mini-eye-sculpt-palette---goz-fari-paleti-P1000205270.html
+/p/mini-find-comfort--awaken-confidence---vucut-icin-temel-bakim-urunleri-seti-P10062967.html
 /p/mini-gloss-bomb-universal-lip-luminizer---shea-yagli-dudak-parlatici-738185.html
 /p/mini-gloss-bomb-universal-lip-luminizer---shea-yagli-dudak-parlatici-738186.html
 /p/mini-gloss-bomb-universal-lip-luminizer---shea-yagli-dudak-parlatici-738187.html
@@ -10330,7 +10335,6 @@
 /p/my-comfy-matte---aninda-renk-veren-nemlendirici-ruj-748357.html
 /p/my-comfy-matte---aninda-renk-veren-nemlendirici-ruj-P10060816.html
 /p/my-dream---dudak-parlaticisi-P10043579.html
-/p/my-dream-palette---far-paleti-P10043255.html
 /p/my-euphoria-for-women---eau-de-parfum-708280.html
 /p/my-euphoria-for-women---eau-de-parfum-708281.html
 /p/my-euphoria-for-women---eau-de-parfum-P10053632.html
@@ -11695,7 +11699,6 @@
 /p/precisely-power-up---kas-makyaji-seti-P10063574.html
 /p/precision-concealer-brush-180-firca-P3595010.html
 /p/precision-foundation-brush-145---makyaj-fircasi-P10057914.html
-/p/precision-makyaj-sungeri-P3079038.html
 /p/precision-sculpt-shaping-balm-contour-stick---stick-kontur-780992.html
 /p/precision-sculpt-shaping-balm-contour-stick---stick-kontur-780993.html
 /p/precision-sculpt-shaping-balm-contour-stick---stick-kontur-780994.html
@@ -12477,7 +12480,6 @@
 /p/ritual-cleansing-mist-P10053202.html
 /p/rituals-homme---arac-parfumu-yedegi-P1000204649.html
 /p/rituals-homme---gunluk-yuz-bakim-rutini-seti-P1000212577.html
-/p/rituals-homme---kopuk-dus-jeli-P1000214531.html
 /p/rituals-homme---m-vucut-ve-banyo-hediye-seti-P1000209234.html
 /p/rituals-homme---nazik-yuz-temizleme-jeli-P1000214529.html
 /p/rituals-homme---nemlendirici-konsantre-yuz-serumu-P1000214530.html
@@ -13712,6 +13714,7 @@
 /p/skin-therapy---coklu-mukemmellestirici-gece-serumu-748490.html
 /p/skin-therapy---coklu-mukemmellestirici-gece-serumu-P1000205706.html
 /p/skin-therapy--eye---coklu-mukemmellestirici-goz-kremi-P1000205708.html
+/p/skin-therapy-duo-x-cc-eye---yuz-bakim-seti-P1000212645.html
 /p/skincare-lovr-z-set---bakim-seti-P10062706.html
 /p/skinologist-0-5-%25---retinol-ve-peptit-i%CC%87ceren-yenileyici-serum-P1000205014.html
 /p/skualenli-temizleyici---temizleyici-ve-makyaj-cikarici-P3921105.html
@@ -13891,7 +13894,6 @@
 /p/soft-pinch---stick-dudak-yagi-818287.html
 /p/soft-pinch---stick-dudak-yagi-818288.html
 /p/soft-pinch---stick-dudak-yagi-P10064334.html
-/p/soft-pinch-cheek-et-lip-trio---uclu-dudak-ve-yanak-seti-P10062946.html
 /p/soft-pinch-liquid---pinceau-blush-P10023965.html
 /p/soft-pinch-liquid-contour---sivi-kontur-746943.html
 /p/soft-pinch-liquid-contour---sivi-kontur-746944.html
