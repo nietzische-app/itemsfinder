@@ -172,6 +172,8 @@
 /allik/flormar-puffy-liquid-blush-likit-allik-003-rosy-glow-p-10209067
 /allik/flormar-puffy-liquid-blush-likit-allik-004-wish-p-10220824
 /allik/flormar-puffy-liquid-blush-likit-allik-007-passion-p-10220825
+/allik/flormar-yumusak-dokulu-yari-mat-bitisli-asansorlu-stick-kontur-002-medium-p-10222371
+/allik/flormar-yumusak-dokulu-yari-mat-bitisli-asansorlu-stick-kontur-003-medium-deep-p-10222372
 /allik/fwee-mellow-dual-allik-mv01-no-more-cupid-p-10220128
 /allik/fwee-mellow-dual-allik-nd01-lazy-tempo-p-10220129
 /allik/fwee-mellow-dual-allik-pk01-love-me-highkey-p-10220036
@@ -270,6 +272,7 @@
 /allik/maruderm-make-up-sunkissed-likit-allik-rose-petal-p-10218954
 /allik/maruderm-make-up-sunshine-likit-bronzer-coco-brown-p-10218678
 /allik/maruderm-make-up-sunshine-likit-bronzer-mocha-brown-p-10218880
+/allik/maybelline-new-york-cloudtopia-kopuk-dokulu-mat-allik-01-twilight-berry-p-10221035
 /allik/maybelline-new-york-cloudtopia-kopuk-dokulu-mat-allik-03-divine-crimson-p-10215810
 /allik/maybelline-new-york-cloudtopia-kopuk-dokulu-mat-allik-04-pink-daydream-p-10215811
 /allik/maybelline-new-york-cloudtopia-kopuk-dokulu-mat-allik-05-coral-illusion-p-10215812
@@ -1514,6 +1517,7 @@
 /corap/ozzy-socks-erkek-12li-dikissiz-patik-corap-siyah-40-44-p-10205057
 /corap/ozzy-socks-erkek-4lu-dikissiz-babet-corabi-43-46-p-10205076
 /corap/ozzy-socks-erkek-5li-dikissiz-pamuklu-patik-corap-renkli-40-44-p-10205052
+/corap/ozzy-socks-erkek-5li-dikissiz-pamuklu-patik-corap-siyah-40-44-p-10205051
 /corap/ozzy-socks-erkek-5li-yunlu-corap-renkli-40-44-p-10205101
 /corap/ozzy-socks-erkek-5li-yunlu-corap-siyah-40-44-p-10205102
 /corap/ozzy-socks-kadin-12li-cizgili-tenis-corabi-36-40-p-10205095
@@ -1842,7 +1846,6 @@
 /dis-macunlari/oralb-pro-3d-white-advanced-luxe-perfection-dis-macunu-75-ml-p-10202874
 /dis-macunlari/oralb-pro-3d-white-clinical-yogun-beyazlik-parlak-beyaz-dis-macunu-75-ml-p-10202878
 /dis-macunlari/oralb-pro-3d-white-clinical-yogun-beyazlik-parlak-mukemmellik-dis-macunu-75-ml-p-10213968
-/dis-macunlari/oralb-proexpert-advanced-ekstra-beyazlik-dis-macunu-75-ml-p-10202873
 /dis-macunlari/oralb-proexpert-profesyonel-koruma-dis-macunu-75-ml-p-10202879
 /dis-macunlari/oralb-professional-densify-gunluk-koruma-dis-macunu-65-ml-p-10383603
 /dis-macunlari/oralb-professional-densify-hassas-beyazlik-dis-macunu-65-ml-p-10383604
@@ -1890,6 +1893,7 @@
 /dis-macunlari/signal-white-now-dis-macunu-original-uzun-suren-beyazlik-75-ml-x-2-p-10199779
 /dis-macunlari/signal-white-now-extra-fresh-aninda-beyazlatici-dis-macunu-75-ml-p-13000300
 /dis-macunlari/signal-white-now-lekesiz-beyazlik-aninda-beyazlatici-leke-karsiti-dis-macunu-75-ml-p-10022782
+/dis-macunlari/signal-white-system-arindirici-beyazlik-dis-macunu-2-x-75-ml-p-10216939
 /dis-macunlari/signal-white-system-dis-macunu-75-ml-white-now-original-75-ml-p-10200706
 /dis-macunlari/signal-white-system-dis-macunu-arindirici-beyazlik-75-ml-p-10076658
 /dis-macunlari/signal-white-system-dis-macunu-beyazlatici-75-ml-p-10642344
@@ -2601,6 +2605,7 @@
 /dudak-parlaticisi/golden-rose-sweet-kiss-lip-oil-gloss-dudak-parlaticisi-no-06-coco-chocolate-p-10211693
 /dudak-parlaticisi/golden-rose-sweet-kiss-lip-oil-gloss-dudak-parlaticisi-no-07-blueberry-acai-p-10211694
 /dudak-parlaticisi/golden-rose-sweet-kiss-lip-oil-gloss-dudak-parlaticisi-no-08-black-cherry-p-10211695
+/dudak-parlaticisi/gosh-juicy-lip-butter-dudak-parlaticisi-002-sweet-treat-p-10218288
 /dudak-parlaticisi/gosh-juicy-lip-butter-dudak-parlaticisi-003-autumn-brown-p-10218289
 /dudak-parlaticisi/gosh-lip-filler-dudak-parlaticisi-001-baby-p-10218290
 /dudak-parlaticisi/gosh-lip-filler-dudak-parlaticisi-003-crystal-p-10218291
@@ -3105,6 +3110,7 @@
 /durulanan-sac-kremleri/john-frieda-frizz-ease-dream-curls-seyahat-boy-sac-kremi-75-ml-p-10200245
 /durulanan-sac-kremleri/john-frieda-frizz-ease-miraculous-recovery-mini-sac-bakim-kremi-75-ml-p-10220227
 /durulanan-sac-kremleri/john-frieda-frizz-ease-miraculous-recovery-mucizevi-onarim-sac-bakim-kremi-250-ml-p-10220213
+/durulanan-sac-kremleri/john-frieda-frizzease-flawless-straight-duzlestirici-etkili-sac-bakim-kremi-250-ml-p-12000693
 /durulanan-sac-kremleri/john-frieda-profiller-for-fine-hair-hacim-veren-sac-kremi-250-ml-p-10220210
 /durulanan-sac-kremleri/john-frieda-profiller-sac-kremi-250-ml-p-10200715
 /durulanan-sac-kremleri/john-frieda-sheer-blonde-go-blonder-sari-saclara-ozel-isilti-veren-sac-kremi-250-ml-p-10220214
@@ -3400,11 +3406,13 @@
 /dus-jeli/urban-care-pink-grapefruit-pomelo-canlandirici-ve-nemlendirici-dus-jeli-750-ml-p-10199760
 /dus-jeli/urban-care-turmeric-honey-cilt-tonu-esitleyici-ve-aydinlatici-dus-jeli-500-ml-p-10732481
 /dus-jeli/urban-care-turmeric-honey-cilt-tonu-esitleyici-ve-aydinlatici-dus-jeli-750-ml-p-10199758
+/dus-jeli/ziaja-argan-yagli-krem-dus-jeli-500-ml-p-10217455
 /dus-jeli/ziaja-hindistan-cevizi-dus-jeli-500-ml-p-10217457
 /dus-jeli/ziaja-hindistan-cevizi-portakal-vibes-dus-ve-banyo-jeli-200-ml-p-10217454
 /dus-jeli/ziaja-kakao-yagi-kremli-dus-jeli-500-ml-p-10208736
 /dus-jeli/ziaja-kasmir-proteinli-krem-dus-jeli-500-ml-p-10217456
 /dus-jeli/ziaja-keci-sutu-kremli-dus-jeli-500-ml-p-10208739
+/dus-jeli/ziaja-marshmallow-dus-jeli-strawberry-fluff-500-ml-p-10217375
 /dus-jeli/ziaja-portakal-yagli-dus-jeli-500-ml-p-10208741
 /dus-jeli/ziaja-zeytinyagli-dus-jeli-500-ml-p-10209049
 /duzenleyici-hurc/bee-home-piramit-kozmetik-urun-duzenleyicisi-organizer-p-10205295
@@ -4410,6 +4418,7 @@
 /far/colorgram-tintin-dory-far-paleti-05-fairy-tory-p-10214400
 /far/colorgram-tintin-dory-far-paleti-06-mochi-tory-p-10214401
 /far/elroel-barely-mood-shadow-far-paleti-01-brown-mauve-p-10221604
+/far/flormar-eye-shadow-palette-kremsi-dokulu-isiltili-goz-fari-paleti-003-sunset-p-10219984
 /far/flormar-mono-yogun-renk-veren-metalik-tekli-goz-fari-004-fireball-p-10209062
 /far/flormar-mono-yogun-renk-veren-metalik-tekli-goz-fari-005-star-light-p-10209061
 /far/flormar-mono-yuksek-pigmentli-tekli-sedefli-goz-fari-003-nude-beach-p-10218561
@@ -4848,6 +4857,7 @@
 /fondoten/gosh-dewy-fondoten-004-fair-p-10218600
 /fondoten/gosh-dextreme-foundation-pudra-002-ivory-p-10218483
 /fondoten/gosh-dextreme-foundation-pudra-004-natural-p-10218482
+/fondoten/gosh-dextreme-foundation-pudra-006-honey-p-10218601
 /fondoten/gosh-hydramatt-fondoten-004r-p-10218602
 /fondoten/gosh-hydramatt-fondoten-006n-p-10218603
 /fondoten/gosh-hydramatt-fondoten-008r-p-10218604
@@ -4976,6 +4986,9 @@
 /fondoten/note-3-in-1-glowing-skin-tinted-moisturizer-50-spf-isiltili-aydinlatici-krem-p-10204602
 /fondoten/note-3-in-1-healthy-skin-tinted-moisturizer-p-10822716
 /fondoten/note-3-in-1-tinted-moisturizer-fondoten-00-light-p-10211245
+/fondoten/note-daily-skin-perfector-skin-tint-fondoten-100-p-10212090
+/fondoten/note-daily-skin-perfector-skin-tint-fondoten-120-p-10212091
+/fondoten/note-daily-skin-perfector-skin-tint-fondoten-140-p-10212092
 /fondoten/note-detox-protect-foundation-fondoten-01-beige-p-10033040
 /fondoten/note-detox-protect-foundation-fondoten-02-natural-beige-p-10033041
 /fondoten/note-detox-protect-foundation-fondoten-03-medium-beige-p-10033042
@@ -6862,6 +6875,9 @@
 /kadin-vucut-spreyi/body-fantasies-vucut-spreyi-vanilla-94-ml-p-10752538
 /kadin-vucut-spreyi/body-fantasies-vucut-spreyi-wedding-day-fantasy-94-ml-p-10031082
 /kadin-vucut-spreyi/eda-taspinar-femme-fatale-vucut-spreyi-200-ml-p-10195330
+/kadin-vucut-spreyi/lumiere-joy-elixir-sac-ve-vucut-spreyi-200-ml-p-10220513
+/kadin-vucut-spreyi/lumiere-red-rouge-sac-ve-vucut-spreyi-200-ml-p-10220512
+/kadin-vucut-spreyi/lumiere-vanilla-whisper-sac-ve-vucut-spreyi-200-ml-p-10220511
 /kadin-vucut-spreyi/mimani-aqua-sorbet-kadin-sac-ve-vucut-spreyi-38-ml-p-10219261
 /kadin-vucut-spreyi/mimani-berry-caramel-kadin-sac-ve-vucut-spreyi-38-ml-p-10219264
 /kadin-vucut-spreyi/mimani-mocha-sip-kadin-sac-ve-vucut-spreyi-38-ml-p-10219262
@@ -6877,9 +6893,6 @@
 /kadin-vucut-spreyi/mov-sweat-mirage-vucut-spreyi-250-ml-p-10212857
 /kadin-vucut-spreyi/mov-tropical-crush-vucut-spreyi-250-ml-p-10212858
 /kadin-vucut-spreyi/mov-vanilla-dream-vucut-spreyi-250-ml-p-10212856
-/kadin-vucut-spreyi/selin-lumiere-vucut-spreyi-joy-elixir-200-ml-p-10220513
-/kadin-vucut-spreyi/selin-lumiere-vucut-spreyi-red-rouge-200-ml-p-10220512
-/kadin-vucut-spreyi/selin-lumiere-vucut-spreyi-vanillia-whisper-200-ml-p-10220511
 /kadin-vucut-spreyi/she-angel-kadin-vucut-spreyi-200-ml-p-10215445
 /kadin-vucut-spreyi/she-clubber-kadin-vucut-spreyi-200-ml-p-10215443
 /kadin-vucut-spreyi/she-cool-kadin-vucut-spreyi-200-ml-p-10215469
@@ -6990,6 +7003,10 @@
 /kapatici-concealer/flormar-perfect-coverage-mavi-isik-korumali-yari-mat-kapatici-005-soft-beige-p-10216513
 /kapatici-concealer/flormar-perfect-coverage-mavi-isik-korumali-yari-mat-kapatici-020-fair-light-p-10216511
 /kapatici-concealer/flormar-perfect-coverage-mavi-isik-korumali-yari-mat-kapatici-030-light-p-10216512
+/kapatici-concealer/flormar-perfect-glow-nemli-ve-aydinlik-bitisli-serum-kapatici-002-w2-cream-p-10222117
+/kapatici-concealer/flormar-perfect-glow-nemli-ve-aydinlik-bitisli-serum-kapatici-005-n1-nude-p-10222118
+/kapatici-concealer/flormar-perfect-glow-nemli-ve-aydinlik-bitisli-serum-kapatici-006-n2-shell-p-10222119
+/kapatici-concealer/flormar-perfect-glow-nemli-ve-aydinlik-bitisli-serum-kapatici-010-c4-fawn-p-10222120
 /kapatici-concealer/flormar-stay-perfect-yogun-pigmentli-kapatici-003-soft-beige-p-10201066
 /kapatici-concealer/gosh-cover-up-corrector-001-soft-green-p-10218078
 /kapatici-concealer/gosh-eye-brightn-kapatici-002-soft-pink-p-10218079
@@ -8873,6 +8890,14 @@
 /oje/flormar-glitter-yari-saydam-simli-oje-gl39-red-in-silver-p-10034192
 /oje/flormar-glitter-yari-saydam-simli-oje-gl40-golden-orchid-p-10022624
 /oje/flormar-glitter-yari-saydam-simli-oje-gl43-rose-gold-p-10217294
+/oje/flormar-higloss-uzun-sure-kalici-jel-gorunumlu-oje-001-soft-ivory-p-10221948
+/oje/flormar-higloss-uzun-sure-kalici-jel-gorunumlu-oje-003-antique-pink-p-10221949
+/oje/flormar-higloss-uzun-sure-kalici-jel-gorunumlu-oje-004-sweet-blush-p-10221950
+/oje/flormar-higloss-uzun-sure-kalici-jel-gorunumlu-oje-006-coral-kiss-p-10221946
+/oje/flormar-higloss-uzun-sure-kalici-jel-gorunumlu-oje-007-fire-ruby-p-10221947
+/oje/flormar-higloss-uzun-sure-kalici-jel-gorunumlu-oje-008-burgundy-velvet-p-10221953
+/oje/flormar-higloss-uzun-sure-kalici-jel-gorunumlu-oje-009-olive-leaf-p-10221954
+/oje/flormar-higloss-uzun-sure-kalici-jel-gorunumlu-oje-010-deep-ocean-p-10221955
 /oje/flormar-jelly-look-yogun-pigmentli-ve-jel-gorunumlu-oje-jl01-pure-milk-p-10019511
 /oje/flormar-jelly-look-yogun-pigmentli-ve-jel-gorunumlu-oje-jl04-scarlet-p-10019513
 /oje/flormar-jelly-look-yogun-pigmentli-ve-jel-gorunumlu-oje-jl09-sky-blue-p-10027727
@@ -9633,6 +9658,7 @@
 /pudra/note-luminous-silk-cream-powder-01-p-10201075
 /pudra/note-luminous-silk-cream-powder-02-p-10201076
 /pudra/note-pink-loose-powder-pudra-pembe-p-10218913
+/pudra/note-pure-guard-compact-powder-pudra-120-beige-harmony-p-10218912
 /pudra/note-translucent-setting-powder-makyaj-sabitleyici-transparan-pudra-p-10680002
 /pudra/pastel-profashion-fixing-powder-00-p-10167794
 /pudra/pastel-profashion-fixing-powder-01-p-10167795
@@ -10755,6 +10781,7 @@
 /sampuan/dove-keratin-uzun-sac-terapisi-sampuan-375-ml-p-10217278
 /sampuan/dove-peptit-bond-repair-sampuan-375-ml-p-10217264
 /sampuan/dove-yogun-onarici-seyahat-boy-sampuan-90-ml-p-10211013
+/sampuan/dp-pamuk-sutu-ve-bugday-proteini-sac-bakim-seti-sampuan-425-ml-sivi-sac-kremi-200-ml-p-10221099
 /sampuan/dp-pro-detox-sampuani-500-ml-p-10107922
 /sampuan/dp-sampuan-bond-repair-425-ml-p-10207852
 /sampuan/dp-sampuan-cam-terebentin-425-ml-p-10107903
@@ -10930,6 +10957,7 @@
 /sampuan/otaci-botanics-onarici-ve-guclendirici-bitkisel-bakim-sampuani-bal-kabagi-ve-bitkisel-keratin-375-ml-p-10211096
 /sampuan/otaci-botanics-yaglanma-karsiti-bitkisel-bakim-sampuani-isirgan-otu-ve-salisilik-asit-375-ml-p-10211095
 /sampuan/otaci-lab-no-2-hacim-ve-dolgunlastirici-sampuan-250-ml-p-10202346
+/sampuan/otaci-lab-no-3-elektriklenme-karsiti-duzlestirici-sampuan-250-ml-p-10202347
 /sampuan/otaci-naturway-kepek-ve-dokulme-karsiti-sarimsakli-sampuan-500-ml-p-10504485
 /sampuan/otaci-naturway-sampuan-sarimsakli-500-ml-p-10015423
 /sampuan/otaci-naturway-sarimsak-ozlu-dokulmeye-karsi-sac-bakim-seti-sampuan-500-ml-serum-100-ml-p-10219131
@@ -11704,6 +11732,7 @@
 /tirnak-bakim-urunleri/flormar-calcium-gel-tirnak-guclendirme-etkili-oje-bazi-tirnak-cilasi-000-p-10089583
 /tirnak-bakim-urunleri/flormar-extra-days-soyulma-ve-deformasyon-onleyici-son-kat-tirnak-cilasi-000-p-10089594
 /tirnak-bakim-urunleri/flormar-gentle-cuticle-remover-tirnak-eti-yumusatici-bakim-jeli-000-p-10089588
+/tirnak-bakim-urunleri/flormar-higloss-parlaklik-ve-koruma-sunan-top-coat-000-transparan-p-10221956
 /tirnak-bakim-urunleri/flormar-max-length-uzamaya-yardimci-oje-bazi-tirnak-cilasi-000-transparent-p-10206160
 /tirnak-bakim-urunleri/flormar-moisture-boost-yogun-nemlendirme-etkili-besleyici-oje-bazi-tirnak-cilasi-000-transparent-p-10216491
 /tirnak-bakim-urunleri/flormar-nail-hardener-tirnak-bakim-bazi-p-10207752
