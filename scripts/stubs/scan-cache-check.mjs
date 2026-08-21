@@ -145,6 +145,33 @@ const set = (values) => {
   t(!scanCacheKey(photo).includes("dpl_gizli_olabilir"), "dağıtım kimliği özetleniyor");
 }
 
+/*
+ * 7) Sürüm etiketi ile önbellek anahtarı **aynı kaynaktan** okunuyor.
+ *
+ * İkisi ayrı ayrı okusaydı ayrışabilirlerdi: log bir dağıtımı gösterirken
+ * önbellek başkasına göre anahtarlanır ve fark ancak üretimde görünürdü. Bu
+ * ders bu depoda üç kez ödendi — `visionKey.ts`, durum satırındaki model adı,
+ * ve `retailVocabulary`'nin düzyazı kuralı.
+ */
+{
+  const { buildIdLabel } = await import("@/lib/buildId");
+
+  set({ VERCEL_DEPLOYMENT_ID: "dpl_bir" });
+  const keyA = scanCacheKey(photo);
+  const labelA = buildIdLabel();
+
+  set({ VERCEL_DEPLOYMENT_ID: "dpl_iki" });
+  t(scanCacheKey(photo) !== keyA, "sürüm değişince anahtar da değişiyor");
+  t(buildIdLabel() !== labelA, `etiket de değişiyor (${labelA} → ${buildIdLabel()})`);
+
+  set({});
+  t(/yerel/.test(buildIdLabel()), `yerelde uydurma kimlik yazılmıyor: ${buildIdLabel()}`);
+
+  // Commit tek kaynaksa iki kez yazılmıyor.
+  set({ VERCEL_GIT_COMMIT_SHA: "abcdef1234567890" });
+  t(buildIdLabel() === "abcdef1", `commit kısaltılıyor, tekrarlanmıyor: ${buildIdLabel()}`);
+}
+
 set(env);
 console.log(`${pass} ✓ / ${fails.length} ✗`);
 for (const f of fails) console.log(`  ✗ ${f}`);

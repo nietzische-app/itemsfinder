@@ -3,6 +3,7 @@ import "server-only";
 import { createHash } from "node:crypto";
 
 import type { DetectionResult } from "@/types";
+import { buildIdSource } from "@/lib/buildId";
 
 /**
  * Result cache, keyed by the image itself.
@@ -193,10 +194,10 @@ export function scanCacheTtlSeconds(): number {
  * yeniden başlatmasında önbelleği düşürmenin bir faydası olmazdı.
  */
 function pipelineVersion(): string {
-  const source =
-    process.env.VERCEL_DEPLOYMENT_ID?.trim() ||
-    process.env.VERCEL_GIT_COMMIT_SHA?.trim() ||
-    process.env.SCAN_CACHE_VERSION?.trim();
+  // Kimlik `lib/buildId` tek yerinden okunuyor: log bir dağıtımı gösterirken
+  // önbelleğin başkasına göre anahtarlanması, ancak üretimde görülebilecek bir
+  // ayrışma olurdu.
+  const source = buildIdSource();
 
   if (!source) return "v1";
 

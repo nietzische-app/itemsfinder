@@ -21,6 +21,7 @@ import { getProductIndex, productIndexStatus } from "@/services/productIndex";
 import { rateLimitStatus } from "@/services/rateLimitStore";
 import { getStoreSearch, storeSearchStatus } from "@/services/storeSearch";
 import { markupExtractionEnabled, productsFromMarkup } from "@/services/markupProducts";
+import { buildIdLabel } from "@/lib/buildId";
 import { productThumbnail } from "@/lib/productThumbnail";
 import { hydrateProduct } from "@/services/mockCatalog";
 import { fetchRemoteImage } from "@/services/remoteImage";
@@ -203,6 +204,15 @@ export class ContextDevProductProvider implements ProductProvider {
      * tahmin etmek zorunda kaldık. Artık tahmin yok: bayrak, anahtar ve fotoğraf
      * koşullarının hangisinin eksik olduğu burada yazılı.
      */
+    /*
+     * Hangi kodun çalıştığı — durum bloğunun **ilk** satırı.
+     *
+     * Bu turda aynı belirsizlik altı kez tekrarlandı: değişiklik gönderildi,
+     * üretim logu geldi, ve log'a bakarak «bu, yeni kod mu?» sorusuna cevap
+     * verilemedi. İki kez yanlış tahmin edildi. Tahmini kaldırmanın maliyeti
+     * tarama başına bir satır.
+     */
+    console.log(`[sürüm] ${buildIdLabel()}`);
     console.log(
       `[lens] ${visualLookupStatus()}` +
         (context.image ? "" : " (ayrıca bu taramada fotoğraf taşınmadı)"),
