@@ -40,6 +40,7 @@ const SUITES = [
   ["mağazaya giden dize", "search-query-check.mjs"],
   ["mağaza kanalı geri çekiliyor", "store-ladder-check.mjs"],
   ["fotoğraf ne zaman kanıt", "visual-corroboration-check.mjs"],
+  ["görsel ölçüm bütçesi", "visual-budget-check.mjs"],
 ];
 
 let failed = 0;

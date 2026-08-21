@@ -90,6 +90,35 @@ export interface ProductProvider {
   enrich(result: DetectionResult, context?: EnrichContext): Promise<DetectionResult>;
 }
 
+/**
+ * Fotoğrafı ölçülecek satırlar — **süz, sonra kes**.
+ *
+ * Sıra tersiydi: `slice(0, bütçe)` sonra `filter(görseli var mı)`. En iyi dört
+ * satırın görseli yoksa hiçbir şey ölçülmüyordu, beşinci satırın fotoğrafı elde
+ * dururken. Bütçe, kullanılamayan satırlara harcanıyordu — `MEASURED_YIELD`
+ * tahsisinde bir kez ödenmiş ders.
+ *
+ * Bunun bedeli artık yalnızca sıralama değil: bu aşama bir satırın «birebir
+ * eşleşme» olup olmadığını da belirliyor (`visuallyCorroborated`), yani
+ * ölçülmeyen satır kanıtsız kalıyor.
+ *
+ * Ayrı ve dışa açık, çünkü karar saf: girdiler satırlar ve bütçe, çıktı
+ * satırlar. Bütün `enrich` akışını sürmeden ölçülebilmesi gerekiyordu — ürün
+ * görselleri yalnızca `https` üzerinden indiriliyor (`remoteImage`, kasıtlı) ve
+ * bir ölçüm bu kuralı gevşetmek için gerekçe değil.
+ */
+export function visualCandidateRows<
+  T extends { card: { imageUrl?: string | null }; agreement: { score: number } },
+>(
+  scored: T[],
+  budget: number,
+): T[] {
+  return [...scored]
+    .filter((entry) => Boolean(entry.card.imageUrl))
+    .sort((a, b) => b.agreement.score - a.agreement.score)
+    .slice(0, budget);
+}
+
 /* -------------------------------------------------------------------------- */
 /*  Mock provider                                                             */
 /* -------------------------------------------------------------------------- */
@@ -303,7 +332,7 @@ export class ContextDevProductProvider implements ProductProvider {
 
     const startedAt = Date.now();
     try {
-      return await this.measureVisualRows(scored, item, signal, image, siblings);
+      return await this.measureVisualRows(scored, item, signal, image, siblings, trace);
     } finally {
       trace?.spend("görsel", Date.now() - startedAt);
     }
@@ -316,36 +345,62 @@ export class ContextDevProductProvider implements ProductProvider {
     signal: AbortSignal,
     image: NonNullable<EnrichContext["image"]>,
     siblings: BoundingBox[],
+    trace?: TraceCollector,
   ): Promise<Map<string, VisualAgreement>> {
     const measured = new Map<string, VisualAgreement>();
+
+    /*
+     * Ölçüm yapılamadığında **sebebi yazılıyor.**
+     *
+     * Bu aşama artık yalnızca sıralamayı değil, bir satırın «birebir eşleşme»
+     * olup olmadığını da belirliyor (`visuallyCorroborated`). Sessizce boş dönmesi
+     * o kararı görünmez biçimde değiştiriyor: üretimde `görsel %` hiç yazmayan
+     * bir satır görüldü ve «adres yok», «indirilemedi», «betimlenemedi» ile
+     * «zaten benzemiyordu» arasında ayrım yapmanın yolu yoktu. Dördü ayrı iş.
+     */
+    const fail = (reason: string) => {
+      trace?.degrade("products", `«${item.itemType}» için görsel ölçüm yapılamadı — ${reason}`);
+      return measured;
+    };
 
     const crop = await cropRegion(image.buffer, item.boundingBox, {
       size: image.size,
       exclude: siblings,
     });
-    if (!crop) return measured;
+    if (!crop) return fail("tespit kırpılamadı");
 
     const reference = await describeImage(Buffer.from(crop.base64, "base64"), {
       exclude: crop.masks,
     });
-    if (!reference) return measured;
+    if (!reference) return fail("kırpımın betimleyicisi üretilemedi");
 
-    const candidates = [...scored]
-      .sort((a, b) => b.agreement.score - a.agreement.score)
-      .slice(0, this.visualCandidates)
-      .filter((entry) => Boolean(entry.card.imageUrl));
+    const candidates = visualCandidateRows(scored, this.visualCandidates);
+
+    if (candidates.length === 0) {
+      return fail(`${scored.length} satırın hiçbirinde ürün görseli yok`);
+    }
+    let fetched = 0;
+    let described = 0;
 
     await Promise.all(
       candidates.map(async (entry) => {
         const bytes = await fetchRemoteImage(entry.card.imageUrl!, { signal });
         if (!bytes) return;
+        fetched += 1;
 
         const descriptor = await describeImage(bytes);
         if (!descriptor) return;
+        described += 1;
 
         measured.set(entry.card.productUrl, visualAgreement(reference, descriptor));
       }),
     );
+
+    if (measured.size === 0) {
+      return fail(
+        `${candidates.length} ürün görseli denendi — ${fetched} indirildi, ${described} betimlendi`,
+      );
+    }
 
     return measured;
   }
