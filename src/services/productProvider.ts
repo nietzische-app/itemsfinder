@@ -457,29 +457,48 @@ export class ContextDevProductProvider implements ProductProvider {
      * tarardı. Boş dönerse merdiven olduğu gibi devrede — ölçülmüş bir yolun,
      * ölçülmüş başka bir yolu kaldırması için gerekçe yok.
      *
-     * Yalnızca ilk basamak: gevşetme `web.search`'ün sıfır sonucuna karşı
-     * yazılmıştı, burada her basamak mağaza başına bir HTTP isteği demek.
+     * **Merdiven burada da yürünüyor** — ama yalnızca bir önceki basamak boş
+     * döndüğünde, yani ek istek ancak zaten başarısız olmuş bir aramanın bedeli.
+     *
+     * Eskiden yalnızca ilk basamak deneniyordu ve gerekçesi «her basamak mağaza
+     * başına bir HTTP isteği» idi. Makul bir öngörüydü; ölçüm çürüttü:
+     *
+     *   «Antrasit bot»   → 62 ürün sayfası, hiçbiri eşleşmedi (eşofman)
+     *   «Antrasit şapka» → 35 ürün sayfası, hiçbiri eşleşmedi (tişört)
+     *
+     * Mağazanın kendi arama motoru sorguyu VEYA olarak okuyor ve renk baskın
+     * çıkıyor: «antrasit» yüzlerce üründe geçiyor, «bot» birkaçında. Merdivenin
+     * son basamağı tam da bunun için var — renksiz, yalnız isim: «bot». O
+     * basamak hiç denenmiyordu, yani hazır bir çözüm kullanılmadan duruyordu.
      */
     const stores = getStoreSearch();
 
-    if (stores && ladder[0]) {
-      const startedAt = Date.now();
-      const { urls, seen, samples, error } = await stores.findProductPages(ladder[0], signal);
+    if (stores) {
+      // En dar sorgunun sonucu bildiriliyor: «bot» bile bulamıyorsa asıl sinyal o.
+      let lastReport: { query: string; seen: number; samples: string[] } | null = null;
 
-      trace?.search({
-        itemId: item.id,
-        source: "mağaza",
-        tier: "tr",
-        rung: 0,
-        query: ladder[0],
-        found: urls.length,
-        ms: Date.now() - startedAt,
-        error,
-      });
-      trace?.spend("arama", Date.now() - startedAt);
+      for (let rung = 0; rung < ladder.length; rung += 1) {
+        const query = ladder[rung]!;
+        const startedAt = Date.now();
+        const { urls, seen, samples, error } = await stores.findProductPages(query, signal);
 
-      if (urls.length > 0) return urls;
-      if (seen > 0) {
+        trace?.search({
+          itemId: item.id,
+          source: "mağaza",
+          tier: "tr",
+          rung,
+          query,
+          found: urls.length,
+          ms: Date.now() - startedAt,
+          error,
+        });
+        trace?.spend("arama", Date.now() - startedAt);
+
+        if (urls.length > 0) return urls;
+        if (seen > 0) lastReport = { query, seen, samples };
+      }
+
+      if (lastReport) {
         trace?.degrade(
           "products",
           /*
@@ -490,8 +509,11 @@ export class ContextDevProductProvider implements ProductProvider {
            * turda iki kez ödendi; ikincisinde eleme satırına eklenen adres
            * «gumus-rengi» kusurunu ilk turda yakaladı.
            */
-          `«${ladder[0]}» için mağaza aramaları ${seen} ürün sayfası buldu, hiçbiri eşleşmedi` +
-            (samples.length > 0 ? ` — ${samples.map(where).join(", ")}` : ""),
+          `«${lastReport.query}» için mağaza aramaları ${lastReport.seen} ürün sayfası buldu, ` +
+            "hiçbiri eşleşmedi" +
+            (lastReport.samples.length > 0
+              ? ` — ${lastReport.samples.map(where).join(", ")}`
+              : ""),
         );
       }
     }

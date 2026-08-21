@@ -38,6 +38,7 @@ const SUITES = [
   ["kırpıma bakan ücretsiz taban", "crop-label-check.mjs"],
   ["canlı yolu ne açıyor", "provider-gate-check.mjs"],
   ["mağazaya giden dize", "search-query-check.mjs"],
+  ["mağaza kanalı geri çekiliyor", "store-ladder-check.mjs"],
 ];
 
 let failed = 0;
