@@ -1,3 +1,4 @@
+import { familyOf } from "@/lib/itemFamily";
 import { toTurkishRetailTerms } from "@/lib/retailVocabulary";
 
 /**
@@ -244,7 +245,74 @@ export function buildSearchQuery(parts: SearchQueryParts): string {
     noun.unshift(...tokens.splice(at, 1));
   }
 
-  return [...tokens.slice(0, Math.max(1, MAX_TOKENS - noun.length)), ...noun].join(" ");
+  /*
+   * Şemsiye isim, özel isim varken düşüyor.
+   *
+   * Vision üç kategori sınıfı döndürüyor — «Footwear», «Outerwear», «Top» — ve
+   * `retailVocabulary` bunları bilerek geniş birer terime çeviriyor: ayakkabı,
+   * ceket, bluz. Bu, elde başka hiçbir şey yokken doğru; ama etiket ya da
+   * betimleme aynı ailede **daha dar** bir isim verdiğinde ikisi birden sorguya
+   * giriyordu:
+   *
+   *   «Gri ayakkabı bot»        ← üretimde 48 sayfa buldu, hiçbiri eşleşmedi
+   *   «Krem polo tişört bluz»   ← polo ararken düz bluz getirir
+   *
+   * Türk mağazalarında kimse «ayakkabı bot» yazmıyor. İki isim, aramayı
+   * daraltmıyor: mağazanın kendi arama motoru bunları VEYA olarak okuyup
+   * kategorinin tamamını döndürüyor, ve dar olan isim gürültüde kayboluyor.
+   *
+   * Yalnızca **bir alternatif varken** düşüyor: tek isim şemsiyeyse kalıyor,
+   * çünkü o durumda elde başka bir şey yok.
+   */
+  const assemble = (head: string[], tail: string[]) =>
+    [...head.slice(0, Math.max(1, MAX_TOKENS - tail.length)), ...tail];
+
+  const specific = [...tokens, ...noun]
+    .map((token) => token.toLocaleLowerCase("tr"))
+    .filter((key) => !UMBRELLA_NOUNS.has(key));
+
+  const dropUmbrella = (list: string[]) =>
+    list.filter((token) => {
+      const key = token.toLocaleLowerCase("tr");
+      if (!UMBRELLA_NOUNS.has(key)) return true;
+      return !hasSameFamilyAs(key, specific);
+    });
+
+  const trimmed = assemble(dropUmbrella(tokens), dropUmbrella(noun));
+
+  /*
+   * Güvenlik ağı **çıktının üzerinde**, dizilerin üzerinde değil.
+   *
+   * İlk yazdığımda «isim dizisi boş kaldıysa geri al» diye kurmuştum ve iki
+   * durumda yanlış ateşledi: özel isim `tokens` tarafında durduğunda `noun` boş
+   * kalıyor, koruma tetikleniyor ve şemsiye geri geliyordu —
+   * «Krem polo tişört bluz» tam da böyle hayatta kaldı. Önemli olan hangi dizide
+   * durduğu değil, **sorguda bir giysi ismi kalıp kalmadığı**.
+   *
+   * Kesme sınırı özel ismi yemişse şemsiye geri geliyor: isimsiz bir sorgu,
+   * geniş bir isimden kötü.
+   */
+  if (trimmed.some((token) => familyOf(token) !== "unknown")) return trimmed.join(" ");
+
+  return assemble(tokens, noun).join(" ");
+}
+
+/**
+ * Vision'ın kategori sınıflarının Türkçe karşılıkları.
+ *
+ * `retailVocabulary` bunları «hiç yoktan iyidir» gerekçesiyle üretiyor ve
+ * gerekçe orada yazılı: «Hiçbir Türk alışverişçi kategori adını aramıyor
+ * ("dış giyim"); "ceket" dış giyimi gerçekten döndüren terim». Doğru — ama
+ * yalnızca elde daha iyisi yokken.
+ */
+const UMBRELLA_NOUNS = new Set(["ayakkabı", "ceket", "bluz"]);
+
+/** Listede, verilen şemsiye ismin ailesinden başka bir sözcük var mı? */
+function hasSameFamilyAs(umbrella: string, others: string[]): boolean {
+  const family = familyOf(umbrella);
+  if (family === "unknown") return false;
+
+  return others.some((other) => familyOf(other) === family);
 }
 
 /**

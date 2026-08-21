@@ -37,6 +37,7 @@ const SUITES = [
   ["önbellek boru hattına bağlı", "scan-cache-check.mjs"],
   ["kırpıma bakan ücretsiz taban", "crop-label-check.mjs"],
   ["canlı yolu ne açıyor", "provider-gate-check.mjs"],
+  ["mağazaya giden dize", "search-query-check.mjs"],
 ];
 
 let failed = 0;
