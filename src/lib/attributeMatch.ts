@@ -129,6 +129,51 @@ export const EXACT_MATCH_FLOOR = 0.55;
  */
 export const ALTERNATIVE_FLOOR = 0.2;
 
+/**
+ * Ürün fotoğrafının, addan bağımsız bir kanıt sayılması için gereken benzerlik.
+ *
+ * `EXACT_MATCH_FLOOR`'un yanında duruyor çünkü aynı kapıyı besliyor: biri metin
+ * uyumunun tabanı, öteki metin dışı kanıtın tabanı.
+ *
+ * **Ölçülmüş bir optimum değil.** Üretimde görülen üç *doğru* satırın görsel
+ * puanı %23–%67 arasına yayıldı, yani betimleyici doğru satırları tek bir eşiğin
+ * altında toplamıyor. Bu sayı güvenli tarafta duruyor: o üçünden yalnızca birini
+ * geçirir.
+ *
+ * Yanlış tarafa düşmenin bedeli simetrik değil — gevşek bir eşik yanlış ürünü
+ * kendinden emin biçimde «birebir eşleşme» yapar (`docs/BULUNAMADI.md`), katı
+ * bir eşik doğru ürüne «muadil» yazar. İkincisi eksik, birincisi yanlış.
+ */
+export const VISUAL_CORROBORATION_FLOOR = 0.65;
+
+/**
+ * Ve yapı uyumu — **tesadüfün belirgin biçimde üstünde**.
+ *
+ * Tek başına harmanlanmış puan bu işi göremez, ve sebebi `visualDescriptor`'ın
+ * kendi başında yazılı: «iki alakasız bej ürünü memnuniyetle benzer olarak
+ * puanlar». Renk ağırlığı 0,7, yani yapı sıfırken bile yalnızca renkle 0,65'e
+ * ulaşılabiliyor — beyaz bir koku topu ile beyaz bir sneaker tam olarak bu, ve
+ * o satır zaten `docs/BULUNAMADI.md`'de kayıtlı.
+ *
+ * Yani «yüksek eşik» demek, eşiği yükseltmek değil: renk ucuz bir uyum, yapı
+ * değil. İkisini ayrı ayrı istemek, tek sayıyı yükseltmekten farklı bir şey
+ * söylüyor — «aynı renkte» değil, «aynı renkte **ve** aynı kaba biçimde».
+ *
+ * Yapı puanı tesadüfe göre yeniden ölçekli (0 = rastgele iki görselin beklenen
+ * uyumu), yani buradaki eşik doğrudan «rastgeleden ne kadar iyi» demek.
+ */
+export const VISUAL_STRUCTURE_FLOOR = 0.35;
+
+/** Fotoğraf, addan bağımsız bir kanıt sayılacak kadar benziyor mu? */
+export function visuallyCorroborated(
+  visual: { score: number; structure: number } | null | undefined,
+): boolean {
+  if (!visual) return false;
+  return (
+    visual.score >= VISUAL_CORROBORATION_FLOOR && visual.structure >= VISUAL_STRUCTURE_FLOOR
+  );
+}
+
 function tokensOf(text: string): string[] {
   return normalizeTr(text)
     .split(/[^a-z0-9çğıöşü]+/)

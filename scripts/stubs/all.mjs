@@ -39,6 +39,7 @@ const SUITES = [
   ["canlı yolu ne açıyor", "provider-gate-check.mjs"],
   ["mağazaya giden dize", "search-query-check.mjs"],
   ["mağaza kanalı geri çekiliyor", "store-ladder-check.mjs"],
+  ["fotoğraf ne zaman kanıt", "visual-corroboration-check.mjs"],
 ];
 
 let failed = 0;

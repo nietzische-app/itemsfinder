@@ -9,6 +9,7 @@ import {
   EXACT_MATCH_FLOOR,
   expectedAttributesOf,
   scoreTitleAgreement,
+  visuallyCorroborated,
 } from "@/lib/attributeMatch";
 import { rejectProductTitle } from "@/lib/retailVocabulary";
 import { contradictsShopper, type ShopperGender } from "@/lib/shopperGender";
@@ -25,7 +26,11 @@ import { buildIdLabel } from "@/lib/buildId";
 import { productThumbnail } from "@/lib/productThumbnail";
 import { hydrateProduct } from "@/services/mockCatalog";
 import { fetchRemoteImage } from "@/services/remoteImage";
-import { describeImage, visualSimilarity } from "@/services/visualDescriptor";
+import {
+  describeImage,
+  visualAgreement,
+  type VisualAgreement,
+} from "@/services/visualDescriptor";
 import type {
   BoundingBox,
   BrandMetadata,
@@ -292,8 +297,8 @@ export class ContextDevProductProvider implements ProductProvider {
     image?: EnrichContext["image"],
     siblings: BoundingBox[] = [],
     trace?: TraceCollector,
-  ): Promise<Map<string, number>> {
-    const measured = new Map<string, number>();
+  ): Promise<Map<string, VisualAgreement>> {
+    const measured = new Map<string, VisualAgreement>();
     if (!image || !this.visualRerank) return measured;
 
     const startedAt = Date.now();
@@ -311,8 +316,8 @@ export class ContextDevProductProvider implements ProductProvider {
     signal: AbortSignal,
     image: NonNullable<EnrichContext["image"]>,
     siblings: BoundingBox[],
-  ): Promise<Map<string, number>> {
-    const measured = new Map<string, number>();
+  ): Promise<Map<string, VisualAgreement>> {
+    const measured = new Map<string, VisualAgreement>();
 
     const crop = await cropRegion(image.buffer, item.boundingBox, {
       size: image.size,
@@ -338,7 +343,7 @@ export class ContextDevProductProvider implements ProductProvider {
         const descriptor = await describeImage(bytes);
         if (!descriptor) return;
 
-        measured.set(entry.card.productUrl, visualSimilarity(reference, descriptor));
+        measured.set(entry.card.productUrl, visualAgreement(reference, descriptor));
       }),
     );
 
@@ -859,7 +864,7 @@ export class ContextDevProductProvider implements ProductProvider {
           score:
             seen === undefined
               ? entry.agreement.score
-              : Math.round((0.6 * entry.agreement.score + 0.4 * seen) * 100) / 100,
+              : Math.round((0.6 * entry.agreement.score + 0.4 * seen.score) * 100) / 100,
         };
       })
       /*
@@ -909,17 +914,52 @@ export class ContextDevProductProvider implements ProductProvider {
      * Satır kaybolmuyor, **muadil** oluyor: elde kalanı dürüstçe etiketlemek,
      * süzgeci gevşetmekten de katılaştırmaktan da doğru.
      */
+    /*
+     * Kanıt metinden gelebilir, **ya da fotoğraftan**.
+     *
+     * Görsel benzerlik zaten ölçülüyor ve puana giriyor; bu kapıda sayılmıyordu.
+     * Yukarıdaki harmanlama yorumu sebebini yazıyor ve haklı — ama yalnızca bir
+     * yön için: «doğru bir satır dürüst sebeplerle fotoğrafa benzemeyebilir»
+     * (stüdyo ışığı, düz çekim, farklı poz), yani **düşük** görsel puan aleyhte
+     * kanıt değil. Bundan «yüksek görsel puan lehte kanıt değil» sonucu çıkmıyor.
+     * Ürün fotoğrafının taranan kırpıma ölçülebilir biçimde benzemesi, tam olarak
+     * `corroborated`'ın istediği şey: addan bağımsız ikinci bir kanıt.
+     *
+     * ## Eşik neden 0.65, ve neden bu kadar yüksek
+     *
+     * Üretimde ölçülen üç **doğru** satırın görsel puanı %23 ile %67 arasına
+     * yayılıyor:
+     *
+     *   %67  «Örgü Detaylı Hasır Tabanlı Espadril Sandalet Ayakkabı»
+     *   %57  «… Slim Fit Pantolon»
+     *   %23  «Normal Bel Cepli Slim Fit Jean Pantolon - Brad Jean»
+     *
+     * Yani betimleyici gürültülü ve doğru satırları kapsayacak bir eşik, yanlış
+     * satırları da kapsardı. Üç noktadan eşik seçmek kalibrasyon değil; bu sayı
+     * **ölçülmüş bir optimum değil, güvenli taraf**: üçünden yalnızca birini
+     * geçiriyor ve gerisini muadil bırakıyor.
+     *
+     * Yanlış tarafa düşmenin bedeli simetrik değil. Gevşek bir eşik
+     * `docs/BULUNAMADI.md`'deki kusuru geri getirir — beyaz bir sneaker için
+     * «Ayakkabı ve Çanta Koku Topu»nun kendinden emin biçimde birebir eşleşme
+     * ilan edilmesi. Katı bir eşiğin bedeli ise doğru bir satırın «muadil»
+     * yazması: eksik ama yanlış değil.
+     *
+     * Kalıcı çözüm bu değil. Kırpıma bakan bir model açıldığında renk ve malzeme
+     * uyumu gerçek kanıt sağlıyor ve bu dal gereksizleşiyor.
+     */
     const leaderQualifies =
       leader.agreement.score >= EXACT_MATCH_FLOOR &&
       leader.agreement.color !== "conflict" &&
-      leader.agreement.corroborated;
+      (leader.agreement.corroborated || visuallyCorroborated(leader.visual));
 
     if (!leaderQualifies) {
       console.warn(
         `[products] «${item.itemType}» için canlı birebir eşleşme yok: en iyi satır ` +
           `"${leader.card.title}" %${Math.round(leader.agreement.score * 100)} ` +
           `(${leader.agreement.reason}` +
-          `${leader.visual === null ? "" : `; görsel %${Math.round(leader.visual * 100)}`}` +
+          `${leader.visual === null ? "" : `; görsel %${Math.round(leader.visual.score * 100)}` +
+            ` (renk %${Math.round(leader.visual.color * 100)}, yapı %${Math.round(leader.visual.structure * 100)})`}` +
           `); katalog satırı korunuyor`,
       );
     }

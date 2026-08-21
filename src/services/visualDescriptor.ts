@@ -321,19 +321,50 @@ function hammingDistance(a: string, b: string): number | null {
  * make the term almost constant.
  */
 export function visualSimilarity(a: VisualDescriptor, b: VisualDescriptor): number {
-  if (a.histogram.length !== b.histogram.length) return 0;
+  return visualAgreement(a, b).score;
+}
+
+/**
+ * Aynı karşılaştırma, ama **bileşenleri ayrı**.
+ *
+ * ## Neden gerekiyor
+ *
+ * Harmanlanmış tek sayı, bu dosyanın başında yazılı uyarıyı gizliyor: «iki
+ * alakasız bej ürünü memnuniyetle benzer olarak puanlar». Renk ağırlığı 0,7,
+ * yani yapı sıfırken bile yalnızca renkle 0,65'e ulaşılabiliyor — beyaz bir koku
+ * topu ile beyaz bir sneaker tam olarak bu.
+ *
+ * Sıralama için sorun değil: orada bu sayı öznitelik uyumuyla harmanlanıyor ve
+ * aile kapısı önünde duruyor. Ama tek sayıyı **kanıt** olarak kullanan bir
+ * çağıran, uyarının tarif ettiği kusuru aynen üretir. O yüzden karar veren
+ * taraf ikisini ayrı görebilmeli: renk uyumu ucuz, yapı uyumu değil.
+ */
+export interface VisualAgreement {
+  /** Harmanlanmış puan — sıralama ve gösterim için. */
+  score: number;
+  /** Renk histogramlarının kosinüs benzerliği, 0..1. */
+  color: number;
+  /** Kaba yapı uyumu, rastgeleye göre yeniden ölçeklenmiş: 0 = tesadüf. */
+  structure: number;
+}
+
+export function visualAgreement(a: VisualDescriptor, b: VisualDescriptor): VisualAgreement {
+  if (a.histogram.length !== b.histogram.length) return { score: 0, color: 0, structure: 0 };
 
   let dot = 0;
   for (let i = 0; i < a.histogram.length; i += 1) {
     dot += a.histogram[i]! * b.histogram[i]!;
   }
 
+  const color = clamp01(dot);
   const distance = hammingDistance(a.hash, b.hash);
   const agreement = distance === null ? 0.5 : 1 - distance / 64;
   // Rescale [0.5, 1] onto [0, 1]; chance agreement is worth nothing.
   const structure = clamp01((agreement - 0.5) * 2);
 
-  return (
-    Math.round((COLOR_WEIGHT * clamp01(dot) + STRUCTURE_WEIGHT * structure) * 1000) / 1000
-  );
+  return {
+    score: Math.round((COLOR_WEIGHT * color + STRUCTURE_WEIGHT * structure) * 1000) / 1000,
+    color: Math.round(color * 1000) / 1000,
+    structure: Math.round(structure * 1000) / 1000,
+  };
 }
