@@ -846,7 +846,6 @@
 /p/ambient-soft-glow---isiltili-fondoten-P10041216.html
 /p/ambre-royal---parfum-intense-P1000212953.html
 /p/aminexil-full-et-strong-serum---guclendirici-aktivator-serum-P10048750.html
-/p/amino%E2%84%A2---durulanmayan-sac-derisi-bakim-kopugu-P1000212705.html
 /p/amino%E2%84%A2---durulanmayan-sac-derisi-bakim-kopugu-P1000212754.html
 /p/amino-asitler-b5---nemlendirici-serum-P3921115.html
 /p/amino-rain%E2%84%A2-glasswater-serum---nemlendirici-yuz-serumu-P1000209184.html
@@ -1277,6 +1276,7 @@
 /p/banane-delice---eau-de-parfum-P10064109.html
 /p/bande-nettoyante-2-en-1-pour-les-pores---2%E2%80%99si-1-arada-gozenek-temizleyici-bant-P1000213660.html
 /p/baobab-oil-P10053199.html
+/p/bare-wash---detoks-sampuani-P1000215079.html
 /p/barenia---sac-spreyi-P1000206806.html
 /p/barenia-eau-de-parfum-15ml-735121.html
 /p/barenia-eau-de-parfum-15ml-735122.html
@@ -2908,7 +2908,6 @@
 /p/charlotte-s-beauty-soulmates-face-palette---yuz-paleti-763125.html
 /p/charlotte-s-beauty-soulmates-face-palette---yuz-paleti-P1000207297.html
 /p/charlotte-s-hollywood-skin-secrets-immediate-eye-revival-patches---goz-bantlari-P10059214.html
-/p/charlotte-s-magic-body-cream---vucut-kremi-P10052299.html
 /p/charlotte-s-magic-cream---nemlendirici-krem-800198.html
 /p/charlotte-s-magic-cream---nemlendirici-krem-800202.html
 /p/charlotte-s-magic-cream---nemlendirici-krem-800203.html
@@ -3141,6 +3140,7 @@
 /p/classique---eau-de-toilette-16553.html
 /p/classique---eau-de-toilette-P54205.html
 /p/clean-screen-spf30-P10024442.html
+/p/cleanser----c-vitaminli--mochi-dokulu-isilti-veren-temizleyici-P1000214795.html
 /p/cleanser---yuz-temizleme-kopugu-P10026458.html
 /p/cleansing-foam-P2266030.html
 /p/cleansing-gel-water---yuz-temizleme-jeli-P1000213829.html
@@ -3155,6 +3155,10 @@
 /p/clear-brow-gel---seffaf-kas-sabitleyici-jel-P1000210974.html
 /p/clear-cut-liquid-eyeliner---black-onyx-P1000203570.html
 /p/clear-et-cover-479026.html
+/p/clear-et-purify---mandelik-asit-ve-ektoin-i%CC%87ceren-kusur-karsiti-bakim-pudrasi-P1000214792.html
+/p/clear-et-purify---mandelik-asit-ve-prebiyotikler-i%CC%87ceren-kusur-karsiti-serum-P1000214791.html
+/p/clear-et-purify---poliglutamik-asit-prebiyotikli-matlastiran-nemlendirici-likit-P1000214794.html
+/p/clear-et-purify---poliglutamik-asit-ve-prebiyotikli-dengeleyici-cift-fazli-losyon-P1000214793.html
 /p/clear-eyelash-glue---dayanikli--gorunmez--seffaf-takma-kirpik-yapistiricisi-P1000211852.html
 /p/clear-improvement%E2%84%A2---sivilce-karsiti-nemlendirici-losyon-P1000203429.html
 /p/clear-improvement%E2%84%A2---siyah-nokta-karsiti-peeling-et-mask-P1000203426.html
@@ -4610,6 +4614,7 @@
 /p/discover-color-care---sac-bakim-seti-688299.html
 /p/discovery-layering-set---kesif-seti-P1000210454.html
 /p/discovery-set-5x2ml---eau-de-parfum-P1000214633.html
+/p/disques-de-soin---ferahlatici-jel-pedler-P1000214918.html
 /p/disques-poils-incarnes---P10055774.html
 /p/dissolvant-douceur---nail-polish-remover-P10052776.html
 /p/divine---eau-de-parfum-703133.html
@@ -5404,7 +5409,6 @@
 /p/face-mask-caramel-macchiato---karamel-macchiato-yuz-maskesi-P10061395.html
 /p/face-palette-P10016521.html
 /p/face-palette-glam-light-558135.html
-/p/face-palette-glam-light-P10018761.html
 /p/face-sculpt---nemlendirici-jel-krem-P1000205696.html
 /p/face-setter---hibrit-sabitleyici-sprey-P10060134.html
 /p/face-tape---uzun-sure-kalici-fondoten-470892.html
@@ -6867,6 +6871,7 @@
 /p/hugo-man-269539.html
 /p/hugo-man-287808.html
 /p/hugo-man-P2264.html
+/p/huile-a-levres-hydratante---tarcinli-corek-kokulu-nemlendirici-dudak-yagi-P1000214790.html
 /p/huile-abricot---nail-and-cuticle-serum-P10052773.html
 /p/huile-au-retinol---hassas-ciltler-icin-retinol-iceren-bakim-yagi-P10055883.html
 /p/huile-precieuse-cheveux-P3254033.html
@@ -7229,6 +7234,7 @@
 /p/i%CC%87stanbul-parfum--12ml-seyahat-boy-P10019402.html
 /p/i%CC%87stanbul-sivi-sabun-P10019401.html
 /p/i%CC%87stanbul-zengi%CC%87nlesti%CC%87ri%CC%87lmi%CC%87s-eletvucut-losyonu-P10019405.html
+/p/i-need-a-cool-eyeshadow-palette---far-paleti-P1000215455.html
 /p/i-need-a-nude---far-paleti-P10052647.html
 /p/i-need-a-nude-lip-535603.html
 /p/i-need-a-nude-lip-643992.html
@@ -9688,11 +9694,12 @@
 /p/masque-fesses-ou-decollete-hydratant-et-apaisant---gunes-sonrasi-vucut-maskesi-P1000213367.html
 /p/masque-peeling-532083.html
 /p/masque-peeling-532084.html
-/p/masque-peeling-P10023028.html
 /p/masque-purifiant-profond-P2860008.html
 /p/masque-soin-regenerant-P3254032.html
 /p/masque-visage-hydratant-et-apaisant---gunes-sonrasi-yuz-maskesi-P1000213368.html
+/p/masque-visage-nourrissant-et-apaisant---tarcinli-corek-kokulu-yuz-maskesi-P1000214916.html
 /p/masques-a-transformation---hidrojel-yuz-maskeleri-P10064325.html
+/p/masques-yeux-anti-fatigue---tarcinli-corek-kokulu-goz-maskesi-P1000214915.html
 /p/master-blade%C2%AE-brow-pencil---kas-kalemi-570501.html
 /p/master-blade%C2%AE-brow-pencil---kas-kalemi-570502.html
 /p/master-blade%C2%AE-brow-pencil---kas-kalemi-570503.html
@@ -9992,7 +9999,6 @@
 /p/mini-eye-primer-P3742091.html
 /p/mini-eye-sculpt-palette---goz-fari-paleti-793101.html
 /p/mini-eye-sculpt-palette---goz-fari-paleti-P1000205270.html
-/p/mini-find-comfort--awaken-confidence---vucut-icin-temel-bakim-urunleri-seti-P10062967.html
 /p/mini-gloss-bomb-universal-lip-luminizer---shea-yagli-dudak-parlatici-738185.html
 /p/mini-gloss-bomb-universal-lip-luminizer---shea-yagli-dudak-parlatici-738186.html
 /p/mini-gloss-bomb-universal-lip-luminizer---shea-yagli-dudak-parlatici-738187.html
@@ -13234,6 +13240,7 @@
 /p/sculpt-et-pop-on-the-go---i%CC%87kili-mini-kontur-ve-allik-747991.html
 /p/sculpt-et-pop-on-the-go---i%CC%87kili-mini-kontur-ve-allik-795387.html
 /p/sculpt-et-pop-on-the-go---i%CC%87kili-mini-kontur-ve-allik-P10061426.html
+/p/sculpt-it-mask---lifting-etkili-cene-ve-boyun-maskesi-P1000214914.html
 /p/sculpt-stick---kontur-cubugu-657509.html
 /p/sculpt-stick---kontur-cubugu-657510.html
 /p/sculpt-stick---kontur-cubugu-660245.html
@@ -13259,11 +13266,11 @@
 /p/sedir-agaci-sac-derisi-taragi-P1000204502.html
 /p/sekillendirici-vucut-yagi-%7C-sculpt-body-oil-P1000204507.html
 /p/sel-ocean---sac-ve-vucut-sprey-parfumu-P1000210031.html
-/p/selena-s-fav-mini-set---mini-parfum-et-allik-seti-P10062948.html
 /p/self-tan-sunny-serum-body---bronzlastirici-serum-P10062022.html
 /p/self-tanning-drops---bronzlastirici-damlalar-P10046089.html
 /p/sensai-cellular-performance-P10014205.html
 /p/sensai-cellular-performance-advanced-day-cream-P10010641.html
+/p/sensai-cellular-performance-extra-intensive-essence-P100020018.html
 /p/sensai-essence-day-veil-refill-P10013829.html
 /p/sensai-expert-P10013828.html
 /p/sensai-luminous-sheer-fd-ls202-413906.html
@@ -15050,6 +15057,7 @@
 /p/the-porefect-pad-%E2%80%93-gul-suyu--aha--bha-ve-pha-li-canlandirici-peeling-pedleri-P1000208387.html
 /p/the-porefessional-all-clear---cleansing-oil-et-clay-mask-duo-set-P1000214656.html
 /p/the-porefessional-all-in-one-mask-wand---maske-fircasi-ve-yuz-temizleme-fircasi-P10047876.html
+/p/the-porefessional-concealer---24-saat-filtre-etkili-kapatici-P1000215077.html
 /p/the-porefessional-deep-retreat---gozenek-arindirici-kil-maskesi-652362.html
 /p/the-porefessional-deep-retreat---gozenek-arindirici-kil-maskesi-P10047878.html
 /p/the-porefessional-degunker---siyah-nokta-ve-gozenek-arindirici-sistem-P1000211619.html
@@ -15460,6 +15468,7 @@
 /p/trace-d-out---dudak-kalemi-P10059612.html
 /p/traitement-reparateur-barrier----cilt-bariyerini-guclendiren-yuz-bakimi-P10055882.html
 /p/tranexamic-acid-night-treatment-P10017364.html
+/p/transformation-masks---hidrojel-yuz-maskeleri-P1000215397.html
 /p/travel-size-shape-tape-concealer-478762.html
 /p/travel-size-shape-tape-concealer-478764.html
 /p/travel-size-shape-tape-concealer-495928.html
@@ -15469,6 +15478,7 @@
 /p/travel-size-tartlette%E2%84%A2-xl-tubing-mascara---seyahat-boy-maskara-P10058369.html
 /p/treatment-softener-P3473037.html
 /p/treatment-softener-enrich-P3473038.html
+/p/treble-maker-3-in-1---maskara-P1000215234.html
 /p/tresor-92113.html
 /p/tresor-P14214.html
 /p/tresor-l-intense---eau-de-parfum-P1000211945.html
@@ -16471,7 +16481,6 @@
 /p/yagsiz-nemlendirici-et-matlastirici-jel-krem---nemlendirici-ve-matlastirici-bakim-P10059966.html
 /p/yaslanma-karsiti-bitkisel-kolajen-serum-cilt-sikilastirici-ve-sarkma-karsiti-P10024826.html
 /p/yaslanma-karsiti-mi%CC%87sel-solusyon-P2997017.html
-/p/yeni-cilt-etkili-vucut-kremi---12-saat-nemlendirici-P10059992.html
 /p/yenileyici-sikilastirici-gece-yagi---yeniler-sikiligi-artirir-P10061365.html
 /p/ylang-ylang-essential-oil---ylang-ylang-ucucu-yagi-P1000211743.html
 /p/yogun-bukle-kremi---kivirciktan-kabarik-saclara-P1000206994.html
