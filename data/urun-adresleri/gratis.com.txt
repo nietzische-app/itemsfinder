@@ -12,7 +12,6 @@
 /agiz-dis-bakimi/benri-dent-agiz-bakim-seti-p-10199409
 /agiz-dis-bakimi/benri-dent-dil-temizleyici-yesil-1-adet-p-10638887
 /agiz-dis-bakimi/benri-dent-dis-temizleme-pedi-7li-p-10200970
-/agiz-dis-bakimi/philips-sonicare-3000-agiz-dusu-hx3826-31-p-10214891
 /agiz-dis-bakimi/signal-white-now-sensitive-dis-macunu-75-ml-profesyone-bakim-dis-fircasi-p-10216938
 /agiz-dis-bakimi/steriball-celik-dil-temizleyicisi-p-10066601
 /agiz-dis-bakimi/steriball-portable-oral-irrigator-agiz-dusu-lila-p-10221140
@@ -154,8 +153,6 @@
 /allik/bourjois-little-round-pot-allik-18-rouge-ravissant-p-10217649
 /allik/bourjois-little-round-pot-allik-33-lilas-dor-p-10217651
 /allik/bourjois-little-round-pot-allik-85-sienne-p-10217655
-/allik/bourjois-macaron-melt-lips-cheek-allik-02-honey-nougat-p-10217657
-/allik/bourjois-macaron-melt-lips-cheek-allik-03-peach-tatin-p-10217659
 /allik/etude-heart-pop-blusher-allik-cool-punch-ade-p-10214140
 /allik/etude-heart-pop-blusher-allik-lovely-frappe-p-10214077
 /allik/etude-heart-pop-blusher-allik-milk-drizzle-p-10214141
@@ -1183,9 +1180,6 @@
 /bebek-kremi-yaglari/dalin-vazelin-100-ml-p-10014578
 /bebek-kremi-yaglari/ecowell-bebek-yagi-100-ml-p-10201993
 /bebek-kremi-yaglari/incia-100-dogal-bebek-yagi-110-ml-p-10212992
-/bebek-kremi-yaglari/johnsons-baby-bedtime-yag-300-ml-p-19000242
-/bebek-kremi-yaglari/johnsons-baby-normal-oil-bebek-yagi-200-ml-p-10567198
-/bebek-kremi-yaglari/johnsons-vazelin-parfumlu-100-ml-p-10007001
 /bebek-kremi-yaglari/mamaaura-bebek-yagi-150-ml-p-10211111
 /bebek-kremi-yaglari/mamaaura-nemlendirici-bebek-kremi-200-ml-p-10211112
 /bebek-kremi-yaglari/phlox-nemlendirici-yuz-ve-vucut-bebek-losyonu-400-ml-p-10214019
@@ -1204,7 +1198,10 @@
 /bebek-kremleri-yaglar-losyonlar/ecowell-bebek-yuz-ve-vucut-losyonu-300-ml-p-10201992
 /bebek-kremleri-yaglar-losyonlar/johnsons-baby-aloe-vera-bebek-yagi-500-ml-p-10548080
 /bebek-kremleri-yaglar-losyonlar/johnsons-baby-aloe-verali-bebek-yagi-300-ml-p-19000245
+/bebek-kremleri-yaglar-losyonlar/johnsons-baby-bedtime-yag-300-ml-p-19000242
+/bebek-kremleri-yaglar-losyonlar/johnsons-baby-normal-oil-bebek-yagi-200-ml-p-10567198
 /bebek-kremleri-yaglar-losyonlar/johnsons-baby-vazelin-parfumsuz-100-ml-p-10167251
+/bebek-kremleri-yaglar-losyonlar/johnsons-vazelin-parfumlu-100-ml-p-10007001
 /bebek-kremleri-yaglar-losyonlar/phlox-besleyici-bebek-masaj-yagi-100-ml-p-10214020
 /bebek-kremleri-yaglar-losyonlar/sudocrem-bebek-bakim-kremi-125-gr-p-10203604
 /bebek-kremleri-yaglar-losyonlar/sudocrem-bebek-bakim-kremi-250-gr-p-10203605
@@ -1598,7 +1595,6 @@
 /diger-kisisel-bakim-urunleri/eklips-3lu-organizer-p-10215011
 /diger-kisisel-bakim-urunleri/eklips-akne-ve-siyah-nokta-temizleme-aparati-2li-p-10369057
 /diger-kisisel-bakim-urunleri/eklips-beyaz-cok-amacli-fircalik-p-10318391
-/diger-kisisel-bakim-urunleri/eklips-damat-bohcasi-beyaz-p-10215142
 /diger-kisisel-bakim-urunleri/eklips-disk-pamuk-organizer-p-10068795
 /diger-kisisel-bakim-urunleri/eklips-firca-duzenleyici-organizer-p-10068798
 /diger-kisisel-bakim-urunleri/eklips-iki-katli-pamukluk-p-10591896
@@ -1974,7 +1970,13 @@
 /dogal-sac-boyalari/sea-color-amonyaksiz-sac-boyasi-70-kumral-p-10216765
 /dogal-sac-boyalari/sea-color-amonyaksiz-sac-boyasi-80-acik-kumral-p-10216766
 /dogal-sac-boyalari/sea-color-amonyaksiz-sac-boyasi-83-bal-kopugu-p-10216769
+/dogal-sac-boyalari/sea-color-sampuan-express-sac-boyasi-10-siyah-p-10216790
 /dogal-sac-boyalari/sea-color-sampuan-express-sac-boyasi-30-koyu-kahve-p-10216791
+/dogal-sac-boyalari/sea-color-sampuan-express-sac-boyasi-40-kahve-p-10216792
+/dogal-sac-boyalari/sea-color-sampuan-express-sac-boyasi-50-acik-kahve-p-10216793
+/dogal-sac-boyalari/sea-color-sampuan-express-sac-boyasi-60-koyu-kumral-p-10216794
+/dogal-sac-boyalari/sea-color-sampuan-express-sac-boyasi-67-cikolta-kahve-p-10216795
+/dogal-sac-boyalari/sea-color-sampuan-express-sac-boyasi-70-kumral-p-10216796
 /dudak-bakim-paket-maskeler/bee-beauty-aha-peeling-tonik-ped-5li-p-10634404
 /dudak-bakim-paket-maskeler/dermal-cleansing-rice-bubble-pad-pirinc-ozlu-yuz-gozenek-temizleme-pedi-8-adet-p-10215961
 /dudak-bakim-paket-maskeler/dermal-madecassoside-blemish-control-pad-kizariklik-karsiti-ton-esitleyici-ped-12-adet-p-10215964
@@ -3608,9 +3610,9 @@
 /el-vucut-kremleri/neutrogena-yogun-bakim-kremi-200-ml-p-14000650
 /el-vucut-kremleri/neutrogena-yogun-nemlendirici-vucut-losyonu-75-ml-p-10931812
 /el-vucut-kremleri/nivea-cocoa-butter-el-ve-vucut-bakim-kremi-400-ml-p-10946571
-/el-vucut-kremleri/nivea-creme-bakim-yapan-koruma-nemlendirici-krem-250-ml-p-10550419
+/el-vucut-kremleri/nivea-creme-nemlendirici-el-yuz-ve-vucut-bakim-kremi-250-ml-p-10550419
+/el-vucut-kremleri/nivea-creme-nemlendirici-el-yuz-ve-vucut-bakim-kremi-30-ml-p-14000355
 /el-vucut-kremleri/nivea-creme-yogun-nemlendirici-el-ve-vucut-bakim-kremi-150-ml-p-14000354
-/el-vucut-kremleri/nivea-creme-yogun-nemlendirici-vucut-bakim-kremi-30-ml-p-14000355
 /el-vucut-kremleri/nivea-creme-yogun-nemlendirici-vucut-bakim-kremi-75-ml-p-14000356
 /el-vucut-kremleri/nivea-express-hydration-el-ve-vucut-bakim-kremi-400-ml-p-10677755
 /el-vucut-kremleri/nivea-koruyucu-ve-nemlendirici-el-bakim-kremi-bal-mumu-75-ml-p-10019841
@@ -3659,7 +3661,9 @@
 /elektrikli-dis-fircasi-yedekleri/oralb-yedek-baslik-floss-action-2li-p-10006009
 /elektrikli-dis-fircasi-yedekleri/oralb-yedek-baslik-sensitive-2-adet-p-10836623
 /elektrikli-dis-fircasi-yedekleri/philips-sonicare-2100-series-sonic-sarjli-dis-fircasi-hx3651-12-p-10200408
+/elektrikli-dis-fircasi-yedekleri/philips-sonicare-3000-agiz-dusu-hx3826-31-p-10214891
 /elektrikli-dis-fircasi-yedekleri/philips-sonicare-sonic-dis-fircasi-hx6859-29-p-10200400
+/elektrikli-dis-fircasi-yedekleri/polosmart-agiz-dusu-psc500-p-10216569
 /elektrikli-dis-fircasi-yedekleri/polosmart-dis-fircasi-yedek-basligi-4lu-p-10211236
 /elektrikli-dis-fircasi-yedekleri/polosmart-sarjli-dis-fircasi-p-10095258
 /elektrikli-dis-fircasi-yedekleri/steriball-electric-toothbrush-elektrikli-dis-fircasi-lila-p-10221143
@@ -3701,7 +3705,7 @@
 /epilasyon/braun-epilasyon-cihazi-se-911-fc-p-10216532
 /epilasyon/braun-face-mini-tuy-alma-makinesi-beyaz-fs1000-p-10199621
 /epilasyon/braun-ipl-epilasyon-seti-pl-5146-p-10216530
-/epilasyon/braun-ipl-silk-expert-pro-5-epilasyon-seti-pl5351-braun-ipl-cihazi-smart-flex-baslik-2-yedek-bas-p-10221194
+/epilasyon/braun-ipl-silk-expert-pro-5-epilasyon-seti-pl5251-braun-ipl-cihazi-smart-flex-baslik-2-yedek-baslik-p-10221194
 /epilasyon/kiwi-ipl-tuy-alma-cihazi-kep6833-p-10200794
 /epilasyon/kiwi-ipl-tuy-alma-cihazi-kep6842-p-10215974
 /epilasyon/kiwi-pro-ipl-lazer-epilasyon-cihazi-999-900-atim-tum-vucut-epilasyon-cihazi-kep6836-p-10214588
@@ -3715,9 +3719,9 @@
 /erkek-bakim/eklips-erkek-kisisel-bakim-seti-p-10199190
 /erkek-bakim/philips-oneblade-vucut-ve-yuz-tiras-makinesi-qp1624-10-p-10214223
 /erkek-bakim/philips-oneblade-yedek-bicak-2li-qp220-51-p-10214222
-/erkek-cilt-bakim/nivea-men-deep-dimension-yuz-ve-sakal-temizleme-jeli-100-ml-p-10084105
+/erkek-cilt-bakim/nivea-men-deep-erkek-sakal-ve-yuz-temizleme-jeli-100-ml-p-10084105
+/erkek-cilt-bakim/nivea-men-erkek-creme-nemlendirici-el-yuz-ve-vucut-bakim-kremi-75-ml-p-10026378
 /erkek-cilt-bakim/nivea-men-erkek-deep-el-ve-vucut-bakim-kremi-400-ml-p-10864782
-/erkek-cilt-bakim/nivea-men-erkek-yogun-nemlendirici-krem-75-ml-p-10026378
 /erkek-cilt-bakim/orien-dengeleyici-ferahlatici-kagit-yuz-maskesi-20-ml-p-10207646
 /erkek-cilt-bakim/orien-erkek-serinletici-etkili-akne-yara-bandi-36li-p-10207648
 /erkek-cilt-bakim/orien-nemlendirici-ve-serinletici-jel-goz-maskesi-p-10207737
@@ -7575,6 +7579,7 @@
 /kayganlastirici-jeller/okey-masaj-jeli-kayganlastirici-ginseng-200-ml-p-10043882
 /kayganlastirici-jeller/okey-max-silikonlu-kayganlastirici-jel-50-ml-p-10213238
 /kisisel-bakim/eklips-ayakli-ceyiz-sandigi-p-10885158
+/kisisel-bakim/eklips-damat-bohcasi-beyaz-p-10215142
 /kisisel-bakim/eklips-damat-bohcasi-siyah-p-10215141
 /kisisel-bakim/eklips-midye-ceyiz-sandigi-p-10885159
 /kolonyalar/agarta-aqua-kolonya-150-ml-p-10213480
@@ -9739,7 +9744,6 @@
 /renk-acicilar/arifoglu-papatya-suyu-sise-sprey-100-ml-p-10938137
 /renk-acicilar/ashley-joy-renk-acici-sprey-110-ml-p-10208239
 /renk-acicilar/john-frieda-sheer-blonde-go-blonder-sari-saclara-ozel-renk-acici-sac-spreyi-100-ml-p-10220232
-/renk-acicilar/palette-deluxe-sac-boyasi-uil-ultra-yogun-renk-acici-p-12000951
 /renk-acicilar/palette-kalici-dogal-renkler-renk-acici-sprey-150-ml-p-10268760
 /renk-acicilar/sea-color-smooth-effect-yogun-sac-acici-p-10854965
 /renk-acicilar/the-ceel-saf-papatya-cicegi-suyu-100-ml-p-10211248
@@ -9763,6 +9767,8 @@
 /ruj-allik/beaulis-proof-it-lip-cheek-tint-229-marsala-p-10202471
 /ruj-allik/beaulis-proof-it-lip-cheek-tint-231-crimson-p-10202472
 /ruj-allik/beaulis-proof-it-lip-cheek-tint-232-mulberry-p-10202473
+/ruj-allik/bourjois-macaron-melt-lips-cheek-allik-02-honey-nougat-p-10217657
+/ruj-allik/bourjois-macaron-melt-lips-cheek-allik-03-peach-tatin-p-10217659
 /ruj-allik/bourjois-macaron-melt-lips-cheek-allik-05-berry-smoothy-p-10217661
 /ruj-allik/colorgram-multi-jelly-stick-ruj-allik-01-clear-jelly-p-10214138
 /ruj-allik/colorgram-multi-jelly-stick-ruj-allik-02-tangerine-jelly-p-10214135
@@ -10536,9 +10542,6 @@
 /sac-maskeleri/bioxcin-keratin-argan-onarici-sac-bakim-maskesi-225-ml-p-10205368
 /sac-maskeleri/botanica-comfort-eternisse-bliss-luxury-sac-bakim-maskesi-50-ml-p-10214797
 /sac-maskeleri/botanica-comfort-ultimate-precious-luxury-sac-bakim-maskesi-50-ml-p-10214796
-/sac-maskeleri/dove-amino-serum-yogun-onarici-sac-bakim-maskesi-265-ml-p-10217261
-/sac-maskeleri/dove-coconut-oil-besleyici-terapi-sac-bakim-maskesi-265-ml-p-10217274
-/sac-maskeleri/dove-peptit-bond-repair-sac-bakim-maskesi-265-ml-p-10217266
 /sac-maskeleri/duru-nem-bombasi-yogun-onarim-sac-bakim-maskesi-200-ml-p-10214960
 /sac-maskeleri/elidor-aninda-onarici-sac-maskesi-220-ml-p-10212782
 /sac-maskeleri/elidor-brezilya-keratin-terapisi-yogun-onarici-sac-bakim-maskesi-220-ml-p-10205551
@@ -10915,6 +10918,7 @@
 /sampuan/head-shoulders-dermaxpro-yatistirici-kepek-karsiti-sampuan-aloe-vera-ozu-ve-seramid-ile-300-ml-p-10804413
 /sampuan/head-shoulders-ekstra-hacim-dolgunluk-kepege-karsi-etkili-sampuan-330-ml-p-10743472
 /sampuan/head-shoulders-kadinlara-ozel-dokulme-karsiti-kepege-karsi-etkili-sampuan-330-ml-p-10014699
+/sampuan/head-shoulders-klasik-bakim-2si-1-arada-kepek-karsiti-sampuan-625-ml-p-10205364
 /sampuan/head-shoulders-klasik-bakim-kepege-karsi-etkili-sampuan-330-ml-p-10014695
 /sampuan/head-shoulders-klasik-bakim-sampuan-800-ml-p-10208530
 /sampuan/head-shoulders-limon-ferahligi-kepege-karsi-etkili-sampuan-330-ml-p-10014697
@@ -11267,12 +11271,6 @@
 /set-boyalar/schwarzkopf-creme-supreme-yogun-bakim-full-kit-sac-boyasi-916-kullu-soguk-sari-p-10210552
 /set-boyalar/sea-color-home-colorist-set-boya-70-kum-firtinasi-p-10535405
 /set-boyalar/sea-color-home-colorist-set-boya-80-bebek-kumrali-p-10535406
-/set-boyalar/sea-color-sampuan-express-sac-boyasi-10-siyah-p-10216790
-/set-boyalar/sea-color-sampuan-express-sac-boyasi-40-kahve-p-10216792
-/set-boyalar/sea-color-sampuan-express-sac-boyasi-50-acik-kahve-p-10216793
-/set-boyalar/sea-color-sampuan-express-sac-boyasi-60-koyu-kumral-p-10216794
-/set-boyalar/sea-color-sampuan-express-sac-boyasi-67-cikolta-kahve-p-10216795
-/set-boyalar/sea-color-sampuan-express-sac-boyasi-70-kumral-p-10216796
 /set-boyalar/sea-color-set-boya-01-platin-sarisi-p-10177297
 /set-boyalar/sea-color-set-boya-10-siyah-p-10177296
 /set-boyalar/sea-color-set-boya-11-mavi-siyah-p-10177286
@@ -13168,15 +13166,15 @@
 /yuz-makyaj-temizleme-suyu/neutrogena-hydro-boost-micellar-water-makyaj-temizleme-suyu-400-ml-p-10156534
 /yuz-makyaj-temizleme-suyu/neutrogena-skin-detox-uc-etkili-micellar-temizleme-suyu-400-ml-p-10167524
 /yuz-makyaj-temizleme-suyu/nivea-aqua-rose-micellar-gul-suyu-iceren-cift-fazli-makyaj-temizleme-suyu-400-ml-p-10090309
-/yuz-makyaj-temizleme-suyu/nivea-arindirici-micellar-makyaj-temizleme-suyu-400-ml-p-10758946
+/yuz-makyaj-temizleme-suyu/nivea-arindirici-micellar-makyaj-temizleme-suyu-400-ml-yagli-ve-karma-cilt-p-10758946
 /yuz-makyaj-temizleme-suyu/nivea-canlandirici-micellar-makyaj-temizleme-suyu-400-ml-p-10033691
 /yuz-makyaj-temizleme-suyu/nivea-derma-skin-clear-serum-etkili-cift-fazli-micellar-makyaj-temizleme-suyu-400-ml-p-10212008
 /yuz-makyaj-temizleme-suyu/nivea-luminous630-skin-glow-parlaklik-etkili-micellar-makyaj-temizleme-suyu-400-ml-p-10218690
 /yuz-makyaj-temizleme-suyu/nivea-micellar-besleyici-yuz-goz-ve-dudak-icin-makyaj-temizleme-suyu-400-ml-p-10574765
-/yuz-makyaj-temizleme-suyu/nivea-micellar-makyaj-temizleme-suyu-yatistirici-400-ml-p-10033690
 /yuz-makyaj-temizleme-suyu/nivea-serum-etkili-aydinlatici-micellar-makyaj-temizleme-suyu-200-ml-p-10218163
 /yuz-makyaj-temizleme-suyu/nivea-serum-icerikli-aydinlatici-micellar-makyaj-temizleme-suyu-400-ml-p-10202186
 /yuz-makyaj-temizleme-suyu/nivea-serum-icerikli-yenileyici-micellar-makyaj-temizleme-suyu-400-ml-p-10202188
+/yuz-makyaj-temizleme-suyu/nivea-yatistirici-micellar-makyaj-temizleme-suyu-400-ml-hassas-cilt-p-10033690
 /yuz-makyaj-temizleme-suyu/otaci-gul-kuru-gul-suyu-bazli-dogal-micellar-makyaj-temizleme-suyu-400-ml-p-10340171
 /yuz-makyaj-temizleme-suyu/petite-maison-misel-su-200-ml-p-10628472
 /yuz-makyaj-temizleme-suyu/planet-essence-gold-nemlendirici-makyaj-temizleme-suyu-400-ml-p-10211867
@@ -13777,7 +13775,7 @@
 /yuz-temizleme-kopukleri/mary-may-houttuynia-cordata-ve-cay-agaci-icerikli-yuz-temizleme-kopugu-150-ml-p-10214660
 /yuz-temizleme-kopukleri/neutrogena-soothing-clear-yuz-temizleme-kopugu-150-ml-p-10267048
 /yuz-temizleme-kopukleri/nivea-aqua-rose-organik-gul-suyu-iceren-yuz-yikama-kopugu-150-ml-p-10671143
-/yuz-temizleme-kopukleri/nivea-canlandirici-yuz-temizleme-kopugu-150-ml-p-10013175
+/yuz-temizleme-kopukleri/nivea-canlandirici-yuz-temizleme-ve-yikama-kopugu-150-ml-normal-karma-cilt-p-10013175
 /yuz-temizleme-kopukleri/nivea-yatistirici-yuz-temizleme-kopugu-150-ml-kuru-ve-hassas-ciltler-p-10013176
 /yuz-temizleme-kopukleri/otaci-gul-kuru-yuz-temizleme-kopugu-150-ml-p-10126399
 /yuz-temizleme-kopukleri/ourwhy-yulaf-icerikli-nemlendirici-yuz-temizleme-kopugu-200-ml-p-10211855
