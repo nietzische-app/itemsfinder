@@ -7,7 +7,6 @@
 /tr/ajurlu-triko-kazak-l07540500
 /tr/altn-rengi-platform-topuklu-sandalet-l11609740
 /tr/askl-tisort-l03232502
-/tr/askl-tisort-l07152710
 /tr/ayarlanabilir-askl-basic-top-l03230394
 /tr/aynal-kimono-l03720350
 /tr/aynal-shopper-canta-l14019840
@@ -45,6 +44,7 @@
 /tr/boncuk-detayl-el-cantas-l14094740
 /tr/boncuk-detayl-omuz-cantas-l14025840
 /tr/boncuk-detayl-shopper-canta-l14004840
+/tr/boncuk-islemeli-omuz-cantas-l14166740
 /tr/boncuklu-omuz-cantas-l14014840
 /tr/boncuklu-omuz-cantas-l14029840
 /tr/bootcut-jean-l07660308
@@ -54,13 +54,13 @@
 /tr/capraz-bel-straight-fit-jean-l03661305
 /tr/capraz-belli-beyaz-baggy-jean-l07670306
 /tr/casual-loafer-l12435740
-/tr/casual-spor-ayakkab-l11300740
 /tr/casual-tote-canta-l14064840
 /tr/cepli-denim-ceket-l07721544
 /tr/cepli-sisme-mont-l07720340
 /tr/cepli-uzun-kollu-tisort-l03230513
 /tr/cicek-desenli-el-cantas-l14034840
 /tr/cicekli-kahverengi-tg-isi-pantolon-l07670338
+/tr/cicekli-suni-deri-ceket-l03721509
 /tr/cift-tarafl-ksa-ceket-l07700337
 /tr/cizgili-barrel-jean-l07670332
 /tr/cizgili-denim-ceket-l07721526
@@ -93,6 +93,7 @@
 /tr/dokulu-relaxed-tisort-l07230505
 /tr/dokumlu-baggy-jean-l07670303
 /tr/dokumlu-pelerin-bluz-l03720374
+/tr/dugme-detayl-canta-l14168740
 /tr/dusuk-bel-barrel-jean-l07660305
 /tr/dusuk-bel-barrel-jean-l07660310
 /tr/dusuk-bel-barrel-jean-l07670310
@@ -111,9 +112,6 @@
 /tr/gomlek-yakal-bomber-ceket-l07720514
 /tr/gorunumu-satn-al-l91022888062BSBS
 /tr/gorunumu-tamamla-l97553750153BSBS
-/tr/grafik-baskl-polo-yaka-sweatshirt-l03550508
-/tr/hacimli-deri-tekne-ayakkabs-l12413740
-/tr/hacimli-makosen-ayakkab-l12428640
 /tr/hacimli-spor-ayakkab-l11303740
 /tr/hafif-bomber-ceket-l03720520
 /tr/hafif-bomber-ceket-l07720301
@@ -142,6 +140,7 @@
 /tr/isltl-bootcut-jean-l03660178
 /tr/isltl-genis-paca-jean-l07660309
 /tr/jelly-sandalet-l11900740
+/tr/jut-deri-tekne-ayakkabs-l12430740
 /tr/kaln-tabanl-spor-ayakkab-l11315640
 /tr/kanvas-shopper-canta-l14101740
 /tr/kapitone-stwd-yelek-l07720599
@@ -241,9 +240,7 @@
 /tr/ksa-suni-suet-trenckot-l07720355
 /tr/kumas-spor-ayakkab-l11315740
 /tr/kumas-spor-ayakkab-l12301740
-/tr/lazer-baskl-baggy-jean-l03670506
 /tr/leopar-desenli-baggy-jean-l07670372
-/tr/long-sleeve-boxy-fit-tisort-l07152303
 /tr/looku-satn-al-l96621470641BSBS
 /tr/loose-fit-tisort-l03231507
 /tr/maxi-shopper-canta-l14144740
@@ -257,7 +254,6 @@
 /tr/modal-icerikli-can-pantolon-l07670320
 /tr/modal-icerikli-genis-paca-pantolon-l07670319
 /tr/modal-icerikli-yarasa-kollu-tisort-l07558306
-/tr/moher-gorunumlu-maksi-atk-l07940312
 /tr/mom-fit-yuksek-bel-jean-l07687305
 /tr/multicepli-konfor-jogger-pantolon-l03670503
 /tr/muscle-fit-tisort-l09247599
@@ -265,7 +261,6 @@
 /tr/naksl-relaxed-fit-tisort-l03231508
 /tr/naksl-shopper-canta-l14023840
 /tr/naylon-cuzdan-l15107640
-/tr/naylon-cuzdan-stwd-l15111640
 /tr/naylon-suslemeli-tote-canta-l14058840
 /tr/on-dikisli-barrel-jean-l07662504
 /tr/orme-eldivenler-l07942500
@@ -305,7 +300,6 @@
 /tr/relaxed-fit-baggy-jean-l07662515
 /tr/relaxed-fit-bermuda-sort-l07665505
 /tr/relaxed-fit-overlok-dikisli-tisort-l03231509
-/tr/retro-blok-spor-ayakkab-l11305740
 /tr/retro-bowling-canta-l15079740
 /tr/retro-capraz-askl-canta-l15078740
 /tr/retro-tasarml-hacimli-spor-ayakkab-l11318740
@@ -350,11 +344,9 @@
 /tr/suni-deri-biker-ceket-l03720325
 /tr/suni-deri-ceket-l07721513
 /tr/suni-deri-dad-ceket-l07720381
-/tr/suni-suet-ceket-l07700509
 /tr/suni-suet-ceket-l07720512
 /tr/suni-yunlu-yakal-denim-ceket-l07701519
 /tr/suslemeli-capraz-askl-canta-l15051740
-/tr/suslemeli-cuzdan-l14102740
 /tr/suslemeli-file-tote-canta-l14191740
 /tr/suslemeli-omuz-cantas-l14006840
 /tr/suslemeli-omuz-cantas-l14096740
@@ -368,9 +360,7 @@
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-blok-sandalet-l11705740
 /tr/tokal-deri-sabo-l12419740
-/tr/tokal-deri-topuklu-sandalet-l11612640
 /tr/tokal-omuz-cantas-l14128740
-/tr/tokal-sabo-terlik-l12406740
 /tr/tokal-topuklu-ayakkab-l11514740
 /tr/tokal-topuklu-sandalet-l11617640
 /tr/tokal-tote-canta-l14147840
@@ -378,9 +368,7 @@
 /tr/topuklu-sabo-terlik-l11610740
 /tr/total-look-l92207538202BSBS
 /tr/trucker-ceket-l07720516
-/tr/trucker-denim-ceket-l03720505
 /tr/trucker-denim-ceket-l07720518
-/tr/turuncu-kareli-gomlek-l03460510
 /tr/ucgen-bikini-ustu-l03000335
 /tr/uzun-denim-tulum-l03021300
 /tr/uzun-kollu-boxy-tisort-l07230388
@@ -402,6 +390,7 @@
 /tr/zmba-detayl-kol-cantas-l14044740
 /tr/zmba-detayl-omuz-cantas-l14037840
 /tr/zmba-detayl-topuklu-sandalet-l11619740
+/tr/zmbal-babet-l11404740
 /tr/zmbal-baggy-jean-l07670305
 /tr/zmbal-bel-cantas-l14105740
 /tr/zmbal-genis-paca-jean-l03660389
