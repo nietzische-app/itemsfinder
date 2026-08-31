@@ -3698,6 +3698,7 @@
 /elektrikli-kisisel-bakim/tabanex-smart-tag-tabanlik-p-10213036
 /elektrikli-supurge/aprilla-sarjli-el-supurgesi-avc4034-p-10221239
 /elektrikli-urunler/kiwi-otomatik-tuz-karabiber-ogutucu-p-10197417
+/elektrikli-urunler/varta-longlife-42-li-aaa-ince-kalem-pil-p-10595042
 /epilasyon-yayi/eklips-epilasyon-yayi-p-10098273
 /epilasyon-yayi/lionesse-epilasyon-yayi-4212-p-17000497
 /epilasyon-yayi/nascita-helezon-kil-alma-yayi-asortili-p-10034179
@@ -3922,6 +3923,7 @@
 /erkek-parfum/calvin-klein-man-edt-erkek-parfum-100-ml-p-10203806
 /erkek-parfum/calvin-klein-obsession-edt-erkek-parfum-125-ml-p-10225908
 /erkek-parfum/christian-dior-homme-intense-edp-erkek-parfum-50-ml-p-10270680
+/erkek-parfum/christian-dior-sauvage-elixir-edp-erkek-parfum-60-ml-p-10270669
 /erkek-parfum/costume-national-edp-erkek-parfum-100-ml-p-10555257
 /erkek-parfum/costume-national-scent-intense-edp-erkek-parfum-100-ml-p-10212143
 /erkek-parfum/davidoff-adventure-edt-erkek-parfum-100-ml-p-10555230
@@ -4014,6 +4016,7 @@
 /erkek-parfum/paco-rabanne-invictus-victory-elixir-edp-erkek-parfum-200-ml-p-10212189
 /erkek-parfum/paco-rabanne-invictus-victory-elixir-erkek-parfum-50-ml-p-10213669
 /erkek-parfum/paco-rabanne-million-gold-elixir-intense-erkek-parfum-100-ml-p-10213655
+/erkek-parfum/paco-rabanne-one-million-edp-erkek-parfum-100-ml-p-10771068
 /erkek-parfum/paco-rabanne-one-million-edt-erkek-parfum-100-ml-p-10270694
 /erkek-parfum/paco-rabanne-one-million-edt-erkek-parfum-200-ml-p-10555255
 /erkek-parfum/pierre-cardin-comme-le-roi-edp-erkek-parfum-100-ml-p-10445757
@@ -4765,6 +4768,7 @@
 /firca-sunger-lif-kese/letscrub-dogal-at-kili-selulit-fircasi-p-10210504
 /firca-sunger-lif-kese/letscrub-ekru-banyo-kesesi-p-10202880
 /firca-sunger-lif-kese/letscrub-krep-sirt-kesesi-p-10210502
+/firca-sunger-lif-kese/letscrub-mavi-banyo-lifi-p-10210507
 /firca-sunger-lif-kese/letscrub-premium-zebra-banyo-kesesi-asortili-p-10212338
 /firca-sunger-lif-kese/letscrub-premium-zebra-gri-banyo-kesesi-p-10210500
 /firca-sunger-lif-kese/letscrub-premium-zebra-turuncu-banyo-kesesi-p-10210499
@@ -4961,11 +4965,13 @@
 /fondoten/lykd-2-in-1-fondoten-133-rose-almond-p-10225607
 /fondoten/lykd-2-in-1-fondoten-136-warm-sand-p-10225606
 /fondoten/lykd-2-in-1-fondoten-140-natural-beige-p-10225605
+/fondoten/lykd-fondoten-109-rose-sand-p-10225600
 /fondoten/lykd-glow-perfector-4u-1-arada-fondoten-fair-p-10203492
 /fondoten/lykd-glow-perfector-4u-1-arada-fondoten-light-p-10203493
 /fondoten/lykd-high-coverage-fondoten-165-bare-almond-p-10211358
 /fondoten/lykd-high-coverage-fondoten-166-silk-ivory-p-10211359
 /fondoten/lykd-high-coverage-fondoten-167-butter-fair-p-10211360
+/fondoten/lykd-renkli-nemlendirici-108-fair-p-10172705
 /fondoten/lykd-stick-fondoten-116-soft-nude-p-10209216
 /fondoten/lykd-stick-fondoten-128-light-beige-p-10209213
 /fondoten/lykd-stick-fondoten-131-linen-p-10209215
@@ -5769,10 +5775,12 @@
 /gunessiz-bronzlastiricilar/cire-aseptine-0spf-bronzlastirici-yag-200-ml-p-10216974
 /gunessiz-bronzlastiricilar/nivea-sun-spf6-bronzlastirici-gunes-yagi-200-ml-p-10216940
 /gunluk-nemlendirici-kremler-spreyler/anyong-akne-karsiti-set-tonik-50-ml-krem-20-ml-serum-12-ml-p-10213918
+/gunluk-nemlendirici-kremler-spreyler/anyong-arindirici-yagsiz-nemlendirici-krem-50-ml-p-10213930
 /gunluk-nemlendirici-kremler-spreyler/anyong-bariyer-onarici-set-tonik-50-ml-krem-20-ml-serum-12-ml-p-10213919
 /gunluk-nemlendirici-kremler-spreyler/anyong-cica-calm-spf20-renkli-krem-30-ml-acik-ton-p-10213934
 /gunluk-nemlendirici-kremler-spreyler/anyong-cica-calm-spf20-renkli-krem-30-ml-orta-ton-p-10213943
 /gunluk-nemlendirici-kremler-spreyler/anyong-cilt-tonu-esitleyici-seti-tonik-50-ml-krem-20-ml-serum-12-ml-p-10213917
+/gunluk-nemlendirici-kremler-spreyler/anyong-leke-giderici-krem-50-ml-p-10213927
 /gunluk-nemlendirici-kremler-spreyler/anyong-nem-isiltisi-seti-tonik-50-ml-krem-20-ml-serum-12-ml-p-10213920
 /gunluk-nemlendirici-kremler-spreyler/anyong-yogun-nem-kremi-50-ml-p-10213940
 /gunluk-nemlendirici-kremler-spreyler/authoriderm-nemlendirici-yuz-kremi-50-ml-p-10214835
@@ -5858,6 +5866,7 @@
 /gunluk-nemlendirici-kremler-spreyler/janssen-cosmetics-yagli-ve-karma-ciltler-dengeleyici-krem-50-ml-p-10724113
 /gunluk-nemlendirici-kremler-spreyler/janssen-cosmetics-yaslilik-lekeleri-karsiti-serum-30-ml-p-10133433
 /gunluk-nemlendirici-kremler-spreyler/janssen-cosmetics-yuksek-sebumlu-kuru-cilt-nemlendiricisi-50-ml-p-10133420
+/gunluk-nemlendirici-kremler-spreyler/jeuvenile-leke-karsiti-bakim-kremi-50-ml-p-10724025
 /gunluk-nemlendirici-kremler-spreyler/jumiso-2-niasinamid-sebum-kontrol-yuz-kremi-80-ml-p-10218058
 /gunluk-nemlendirici-kremler-spreyler/jumiso-salyangoz-ozlu-ve-peptit-icerikli-yuz-kremi-100-ml-p-10211634
 /gunluk-nemlendirici-kremler-spreyler/jumiso-su-bazli-hyaluronik-asitli-krem-50-ml-p-10204822
@@ -5881,6 +5890,8 @@
 /gunluk-nemlendirici-kremler-spreyler/maruderm-pirinc-ozlu-aydinlatici-nemlendirici-krem-50-ml-p-10211521
 /gunluk-nemlendirici-kremler-spreyler/mary-may-hassas-ciltler-icin-nemlendirici-jel-yuz-kremi-70-gr-p-10213064
 /gunluk-nemlendirici-kremler-spreyler/mary-may-idebenon-ve-bogurtlen-icerikli-yogun-nemlendirici-yuz-kremi-70-gr-p-10213063
+/gunluk-nemlendirici-kremler-spreyler/mary-may-spikul-azelaik-pdrn-leke-kremi-15-gr-p-10221076
+/gunluk-nemlendirici-kremler-spreyler/mary-may-spikul-kolajen-pdrn-guclendirici-yuz-bakim-kremi-15-gr-p-10221075
 /gunluk-nemlendirici-kremler-spreyler/mia-klinika-72-saat-etkili-su-bazli-yogun-nemlendirici-krem-50-ml-p-10214849
 /gunluk-nemlendirici-kremler-spreyler/mia-klinika-akne-kurutucu-losyon-30-ml-p-10202971
 /gunluk-nemlendirici-kremler-spreyler/mia-klinika-bariyer-guclendirici-onarici-canlandirici-ve-nemlendirici-krem-50-ml-p-10202952
@@ -5895,6 +5906,7 @@
 /gunluk-nemlendirici-kremler-spreyler/nivea-ferahlatici-hydro-jel-hyaluronik-asit-yuz-bakim-kremi-100-ml-p-10199196
 /gunluk-nemlendirici-kremler-spreyler/nivea-hafif-dokulu-cilt-tonu-esitleyici-yuz-bakim-kremi-100-ml-p-10171592
 /gunluk-nemlendirici-kremler-spreyler/nivea-hafif-dokulu-yaslanma-karsiti-yuz-bakim-kremi-100-ml-p-10145646
+/gunluk-nemlendirici-kremler-spreyler/niveac-vitamini-iceren-ultra-hafif-enerji-nemlendirici-yuz-bakim-kremi-100-ml-p-10222985
 /gunluk-nemlendirici-kremler-spreyler/olalabc-vitaminli-aydinlatici-leke-karsiti-gunluk-su-bazli-nemlendirici-krem-50-ml-p-10211143
 /gunluk-nemlendirici-kremler-spreyler/otaci-gul-kuru-gul-suyu-yuz-spreyi-50-ml-p-10126532
 /gunluk-nemlendirici-kremler-spreyler/otaci-gul-kuru-yuz-ve-boyun-kremi-50-ml-p-10126531
@@ -6355,6 +6367,7 @@
 /kadin-parfum/chloe-intense-edp-kadin-parfum-50-ml-p-10216627
 /kadin-parfum/chloe-love-story-edp-kadin-parfum-75-ml-p-10423723
 /kadin-parfum/chloe-nomade-edp-kadin-parfum-50-ml-p-10302964
+/kadin-parfum/chloe-nomade-edp-kadin-parfum-75-ml-p-10302965
 /kadin-parfum/chloe-nomade-edp-kadin-parfum-seti-parfum-75-ml-vucut-losyonu-100-ml-seyahat-boy-parfum-5-ml-p-10214709
 /kadin-parfum/chloe-nomade-jasmin-naturel-intense-edp-kadin-parfum-75-ml-p-10212225
 /kadin-parfum/chloe-nomade-lumiere-degypte-edp-kadin-parfum-50-ml-p-10216629
@@ -6413,6 +6426,7 @@
 /kadin-parfum/dolce-gabbana-q-by-dg-edp-intense-kadin-parfum-50-ml-p-10216643
 /kadin-parfum/dolce-gabbana-q-edp-kadin-parfum-100-ml-p-10203783
 /kadin-parfum/dolce-gabbana-q-edp-kadin-parfum-50-ml-p-10216642
+/kadin-parfum/dolce-gabbana-the-one-edp-kadin-parfum-75-ml-p-10837913
 /kadin-parfum/dolce-luna-edt-kadin-parfum-100-ml-p-10208338
 /kadin-parfum/elie-saab-le-parfum-absolu-edp-kadin-parfum-50-ml-p-10216646
 /kadin-parfum/elie-saab-le-parfum-edp-kadin-parfum-50-ml-p-10216645
@@ -7899,6 +7913,7 @@
 /likit-ruj/lykd-born-tinted-lip-tint-685-bloom-crush-p-10218972
 /likit-ruj/lykd-born-tinted-lip-tint-687-cotton-dive-p-10218966
 /likit-ruj/lykd-cloud-fluffy-powder-lip-cream-297-crew-p-10206276
+/likit-ruj/lykd-dolgun-gorunum-veren-ruj-905-glittery-p-10095825
 /likit-ruj/lykd-double-sided-lipstick-gloss-213-peach-nude-p-10703982
 /likit-ruj/lykd-double-sided-lipstick-gloss-330-warm-brown-p-10703981
 /likit-ruj/lykd-double-sided-lipstick-gloss-371-deep-raspberry-p-10703985
@@ -8101,6 +8116,7 @@
 /makyaj-bazi/lykd-far-bazi-999-transparan-p-10128507
 /makyaj-bazi/lykd-grip-primer-p-10202677
 /makyaj-bazi/lykd-honey-prime-glow-makyaj-bazi-999-transparan-p-10128506
+/makyaj-bazi/lykd-hydrating-jelly-makyaj-bazi-999-transparan-p-10128504
 /makyaj-bazi/lykd-kopuk-makyaj-bazi-p-10210171
 /makyaj-bazi/lykd-retrolicious-vanilla-whipped-cream-makyaj-bazi-101-white-p-10213996
 /makyaj-bazi/lykd-vitamin-base-makyaj-bazi-p-10210875
@@ -12484,6 +12500,8 @@
 /vucut-peelingi/organic-shop-citrus-vucut-scrubi-360-ml-p-10137859
 /vucut-peelingi/organic-shop-lychee-bubble-gum-vucut-scrubi-360-ml-p-10137860
 /vucut-peelingi/sesu-el-vucut-peelingi-250-ml-p-10199704
+/vucut-peelingi/sesu-el-vucut-peelingi-aqua-fresh-250-gr-p-10222617
+/vucut-peelingi/sesu-el-vucut-peelingi-blueberry-250-gr-p-10222618
 /vucut-peelingi/sinoz-avocado-bomb-nemlendirici-ve-arindirici-vucut-peelingi-300-gr-p-10215249
 /vucut-peelingi/sinoz-vucut-peelingi-300-gr-p-10200613
 /vucut-peelingi/thalia-kokteyl-vucut-peelingi-ahududu-300-gr-p-10220285
@@ -12751,6 +12769,7 @@
 /yuz-bakim-kremleri/janssen-cosmetics-cilt-yapilandirici-yogun-bakim-kremi-50-ml-p-10169112
 /yuz-bakim-kremleri/janssen-cosmetics-hucre-yenileyici-anti-age-krem-50-ml-p-10133430
 /yuz-bakim-kremleri/janssen-cosmetics-leke-karsiti-renk-acici-krem-50-ml-p-10169125
+/yuz-bakim-kremleri/jowe-onarici-cilt-bakim-kremi-40-ml-p-10214684
 /yuz-bakim-kremleri/loreal-paris-revitalift-filler-yogun-dolgunlastirici-hyaluronik-asit-yaslanma-karsiti-gunduz-kremi-5-p-10268663
 /yuz-bakim-kremleri/loreal-paris-revitalift-lazer-x3-leke-ve-kirisiklik-karsiti-bakim-kremi-25gkf-50-ml-p-10027091
 /yuz-bakim-kremleri/loreal-paris-revitalift-lazer-x3-yogun-yaslanma-karsiti-gunduz-bakim-kremi-50-ml-p-10008294
@@ -13154,6 +13173,7 @@
 /yuz-makyaj-temizleme-suyu/nivea-luminous630-skin-glow-parlaklik-etkili-micellar-makyaj-temizleme-suyu-400-ml-p-10218690
 /yuz-makyaj-temizleme-suyu/nivea-micellar-besleyici-yuz-goz-ve-dudak-icin-makyaj-temizleme-suyu-400-ml-p-10574765
 /yuz-makyaj-temizleme-suyu/nivea-serum-etkili-aydinlatici-micellar-makyaj-temizleme-suyu-200-ml-p-10218163
+/yuz-makyaj-temizleme-suyu/nivea-serum-etkili-derma-skin-clear-micellar-makyaj-temizleme-suyu-200-ml-p-10218164
 /yuz-makyaj-temizleme-suyu/nivea-serum-icerikli-aydinlatici-micellar-makyaj-temizleme-suyu-400-ml-p-10202186
 /yuz-makyaj-temizleme-suyu/nivea-serum-icerikli-yenileyici-micellar-makyaj-temizleme-suyu-400-ml-p-10202188
 /yuz-makyaj-temizleme-suyu/nivea-yatistirici-micellar-makyaj-temizleme-suyu-400-ml-hassas-cilt-p-10033690
@@ -13393,6 +13413,7 @@
 /yuz-serumlari-cilt-serumu-yaglari/janssen-cosmetics-kizariklik-karsiti-ampul-3lu-p-10073558
 /yuz-serumlari-cilt-serumu-yaglari/janssen-cosmetics-kok-hucre-antiage-ampul-3lu-p-10073565
 /yuz-serumlari-cilt-serumu-yaglari/janssen-cosmetics-leke-acici-ve-renk-dengeleyici-ampul-3lu-p-10724821
+/yuz-serumlari-cilt-serumu-yaglari/janssen-cosmetics-leke-karsiti-tam-cilt-bakim-seti-p-10292907
 /yuz-serumlari-cilt-serumu-yaglari/janssen-cosmetics-probiyotik-dijital-yaslanma-karsiti-serum-30-ml-p-10133435
 /yuz-serumlari-cilt-serumu-yaglari/janssen-cosmetics-sebum-karsiti-matlastirici-cilt-serumu-30-ml-p-10133428
 /yuz-serumlari-cilt-serumu-yaglari/janssen-cosmetics-toparlamaya-yardimci-ampul-3lu-p-10073566
