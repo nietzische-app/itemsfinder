@@ -349,7 +349,6 @@
 /p/absolut-repair-molecular---tum-yipranmis-saclar-icin-durulanmayan-maske-747656.html
 /p/absolut-repair-molecular---tum-yipranmis-saclar-icin-durulanmayan-maske-P10053863.html
 /p/absolut-repair-molecular-shampoo---tum-yipranmis-saclar-icin-onarici-sampuan-P10053865.html
-/p/absolut-repair-molecular-shampoo---tum-yipranmis-saclar-icin-onarici-sampuan-P10053866.html
 /p/absolut-repair-shampoo---besleyici-sampuan-610324.html
 /p/absolut-repair-shampoo---besleyici-sampuan-P10017058.html
 /p/absolute-silk---aydinlatici-krem-P10026083.html
@@ -1191,7 +1190,6 @@
 /p/baby-bake-mini-easy-bake-loose-powder---mini-easy-bake-sabitleyici-toz-pudra-P1000208898.html
 /p/baby-bake-mini-easy-bake-sponge-set.---mini-guzellik-sungeri-seti-P10062503.html
 /p/baby-blush-duo-intense-mocktail---allik-seti-P10064026.html
-/p/baby-blush-duo-mild-mocktail---allik-seti-P10064027.html
 /p/backstage-concealer---goz-alti-kapaticisi-578156.html
 /p/backstage-concealer---goz-alti-kapaticisi-578157.html
 /p/backstage-concealer---goz-alti-kapaticisi-578158.html
@@ -1767,6 +1765,8 @@
 /p/big-lip-plumpgasm---nemlendirici-dudak-dolgunlastirici-723784.html
 /p/big-lip-plumpgasm---nemlendirici-dudak-dolgunlastirici-P10058030.html
 /p/big-lip-plumpgasm---nemlendirici-dudak-dolgunlastirici-P10063091.html
+/p/bio-active-ceramide-eye-cream---biyoaktif-seramidler-i%CC%87ceren-goz-cevresi-kremi-P10064501.html
+/p/bio-active-ceramide-neck-stick---biyoaktif-seramidli-boyun-stick-i-P10064502.html
 /p/bio-active-ceramide-repairing-and-plumping-moisturizer---nemlendirici-bakim-P10056398.html
 /p/bio-blurring-loose-setting-powder---sabitleyici-toz-pudra-P10050990.html
 /p/bio-collagen-radiance-facial-mask---isilti-veren-bio-kolajen-yuz-maskesi-P1000212931.html
@@ -3140,6 +3140,7 @@
 /p/clarins-men---yaslanma-karsiti-krem-P1000206152.html
 /p/clarins-men-P10014064.html
 /p/clarins-self-tanning-tinted-gel--self-tan-P1000212293.html
+/p/clarins-skin-illusion-all-in-one-concealer---concealer-P1000214857.html
 /p/clarins-skin-illusion-velvet-570001.html
 /p/clarins-skin-illusion-velvet-570002.html
 /p/clarins-skin-illusion-velvet-570003.html
@@ -5095,7 +5096,6 @@
 /p/emporio-classic-he---eau-de-toilette-P10060750.html
 /p/emporio-classic-she---eau-de-parfum-P10060751.html
 /p/empowered-eye-lift-et-contour-double-peptide---goz-maskesi-638437.html
-/p/empowered-eyeshadow-palette---far-paleti-P10043945.html
 /p/emulsion-exquise-a-la-rose-noire-P10014992.html
 /p/encens-supreme---eau-de-parfum-natural-spray-P10053066.html
 /p/english-oak-et-hazelnut---cologne-P1000215100.html
@@ -5340,7 +5340,6 @@
 /p/extra-firming---kuru-ciltler-i%CC%87cin-yaslanma-karsiti-gece-kremi-P1000205767.html
 /p/extra-firming---tum-cilt-tipleri-i%CC%87cin-yaslanma-karsiti-gece-kremi-P1000205766.html
 /p/extra-firming-energy-6---sikilastirici-et-isilti-artirici-gunduz-krem-P1000211919.html
-/p/extra-fu%24%24y---dudak-seti-P1000213137.html
 /p/extra-rich-cleansing-milk-P3473036.html
 /p/extra-volume-conditioner-P10010765.html
 /p/extreme-screen---vucut-ve-eller-icin-nemlendirici-gunes-kremi-spf50--P1000206825.html
@@ -6058,13 +6057,13 @@
 /p/givenchy-rouge-a-levres-ruj-483854.html
 /p/givenchy-rouge-a-levres-ruj-517939.html
 /p/givenchy-rouge-a-levres-ruj-517940.html
-/p/glam-palette-P10011393.html
 /p/glass-balm---dudak-bakimi-isiltili-et-nemlendirme-767914.html
 /p/glass-balm---dudak-bakimi-isiltili-et-nemlendirme-767915.html
 /p/glass-balm---dudak-bakimi-isiltili-et-nemlendirme-767916.html
 /p/glass-balm---dudak-bakimi-isiltili-et-nemlendirme-778388.html
 /p/glass-balm---dudak-bakimi-isiltili-et-nemlendirme-778392.html
 /p/glass-balm---dudak-bakimi-isiltili-et-nemlendirme-778393.html
+/p/glass-balm---dudak-bakimi-isiltili-et-nemlendirme-P1000207694.html
 /p/glass-nail-file---cam-tirnak-torpusu-P10052151.html
 /p/glaze-balm---isiltili-parlaklik-veren-renkli-dudak-balsami-731451.html
 /p/glaze-balm---isiltili-parlaklik-veren-renkli-dudak-balsami-731453.html
@@ -9678,7 +9677,6 @@
 /p/maracuja-juicy-lip---dudak-parlaticisi-P10013538.html
 /p/maracuja-juicy-lip-gloss---dudak-parlaticisi-803282.html
 /p/maracuja-juicy-lip-gloss---dudak-parlaticisi-803283.html
-/p/maracuja-juicy-lip-gloss---dudak-parlaticisi-P1000212026.html
 /p/maracuja-juicy-lip-gloss---dudak-parlaticisi-P1000213410.html
 /p/maracuja-juicy-lip-liner---dudak-kalemi-646906.html
 /p/maracuja-juicy-lip-liner---dudak-kalemi-759931.html
@@ -10125,7 +10123,6 @@
 /p/mini-ultimate-detangler---sac-fircasi-P1000209395.html
 /p/mini-ultimate-detangler---sac-fircasi-P1000209960.html
 /p/mini-ultimate-detangler-chrome---sac-fircasi-P1000214037.html
-/p/mini-xenon-palette-P10017664.html
 /p/minis-a.m.-glow-%E2%80%93-cilt-bariyeri-guclendirici-rutin-uclu-P1000211760.html
 /p/minis-p.m.-glow-%E2%80%93-cilt-bariyeri-onarici-gece-uclusu-P1000211813.html
 /p/mint-essential-oil---nane-ucucu-yagi-P1000211750.html
@@ -10752,7 +10749,6 @@
 /p/nutriplenish%E2%84%A2---bukle-belirginlestirici-nemlendirici-jel-krem-560395.html
 /p/nutriplenish%E2%84%A2---bukle-belirginlestirici-nemlendirici-jel-krem-P10017489.html
 /p/nutriplenish%E2%84%A2---cok-amacli-sac-bakim-yagi-P3994126.html
-/p/nutriplenish%E2%84%A2---gunluk-sac-nemlendirici-bakim-P10013573.html
 /p/nutriplenish%E2%84%A2---hafif-nemlendirici-sac-kremi-506829.html
 /p/nutriplenish%E2%84%A2---hafif-nemlendirici-sac-kremi-P3994119.html
 /p/nutriplenish%E2%84%A2---hafif-nemlendirici-sac-kremi-P3994120.html
@@ -11011,7 +11007,6 @@
 /p/p.m.-glow-midnight-glow-%E2%80%93-onarici-gece-yagi-P1000211764.html
 /p/p.m.-glow-pillow-prep-%E2%80%93-yaban-mersinli--arindirici-tonik-P1000211767.html
 /p/p7-sakayik-zencefil-seti---vucut-bakim-seti-P1000213198.html
-/p/pai-avocado-et-jojoba-day-cream-gunduz-kremi%CC%87-50ml-P3175013.html
 /p/paint-me-up----cok-amacli-pigment-794126.html
 /p/paint-me-up----cok-amacli-pigment-794127.html
 /p/paint-me-up----cok-amacli-pigment-794128.html
@@ -12554,7 +12549,6 @@
 /p/rituals-homme---arac-parfumu-yedegi-P1000204649.html
 /p/rituals-homme---gunluk-yuz-bakim-rutini-seti-P1000212577.html
 /p/rituals-homme---m-vucut-ve-banyo-hediye-seti-P1000209234.html
-/p/rituals-homme---nazik-yuz-temizleme-jeli-P1000214529.html
 /p/rituals-homme---nemlendirici-konsantre-yuz-serumu-P1000214530.html
 /p/rituals-homme---s-vucut-ve-banyo-hediye-seti-P1000209233.html
 /p/rituals-homme---sakal-icin-2%E2%80%99si-1-arada-sampuan-et-sac-kremi-P10049447.html
@@ -13230,7 +13224,6 @@
 /p/santal-supreme---eau-de-parfum-P1000210032.html
 /p/sap-moss---nemlendirici-sampuan-P3874118.html
 /p/sari--beyaz-ve-gri-saclar-i%CC%87cin-canlandirici-bakim-maskesi---sac-bakim-urunleri-P1000212617.html
-/p/satin-hair-wrap---saten-sac-bonesi-P10062063.html
 /p/satin-lipstick---saten-bitisli-ruj-574947.html
 /p/satin-lipstick---saten-bitisli-ruj-574952.html
 /p/satin-lipstick---saten-bitisli-ruj-574953.html
