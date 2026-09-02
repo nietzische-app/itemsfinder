@@ -39,7 +39,6 @@
 /tr/bisiklet-yaka-sweatshirt-l07558311
 /tr/boncuk-detayl-duz-sandalet-l11706740
 /tr/boncuk-detayl-el-cantas-l14012840
-/tr/boncuk-detayl-el-cantas-l14069840
 /tr/boncuk-detayl-omuz-cantas-l14025840
 /tr/boncuk-detayl-shopper-canta-l14004840
 /tr/boncuklu-omuz-cantas-l14014840
@@ -50,7 +49,6 @@
 /tr/boxy-tisort-l03248501
 /tr/capraz-bel-straight-fit-jean-l03661305
 /tr/capraz-belli-beyaz-baggy-jean-l07670306
-/tr/casual-tote-canta-l14064840
 /tr/cepli-denim-ceket-l07721540
 /tr/cepli-denim-ceket-l07721544
 /tr/cepli-sisme-mont-l07720340
@@ -76,7 +74,6 @@
 /tr/dantel-detayl-atlet-l07230300
 /tr/dar-kesim-ksa-kollu-tisort-l07150305
 /tr/deri-sabo-terlik-l12404840
-/tr/detayl-shopper-canta-l14094840
 /tr/dik-yakal-vucuda-oturan-ceket-l07720382
 /tr/dikis-detayl-baggy-balon-jean-l07662407
 /tr/dikis-detayl-relaxed-fit-denim-bermuda-l07667512
@@ -95,6 +92,7 @@
 /tr/fermuarl-dik-yaka-sweatshirt-l07558508
 /tr/fermuarl-kapusonlu-sentetik-kaucuk-etkili-sweatshirt-l07720501
 /tr/fermuarl-kapusonlu-sweatshirt-l07558305
+/tr/fermuarl-kapusonlu-sweatshirt-l07558309
 /tr/fermuarl-sentetik-kaucuk-kumas-gorunumlu-ceket-l07721518
 /tr/fitilli-ksa-kollu-t-shirt-l03230346
 /tr/frfrl-uzun-kimono-l03721301
@@ -105,10 +103,11 @@
 /tr/gorunumu-satn-al-l91022888062BSBS
 /tr/gorunumu-satn-al-l99003235000BSBS
 /tr/gorunumu-tamamla-l97553750153BSBS
+/tr/gunluk-tote-canta-l14064840
 /tr/hacimli-spor-ayakkab-l11303740
 /tr/hafif-bomber-ceket-l07720301
 /tr/hafif-kapusonlu-sisme-mont-l07720597
-/tr/halka-detayl-tote-canta-l14088840
+/tr/halka-detayl-shopper-canta-l14088840
 /tr/halkal-denim-tote-canta-l14056840
 /tr/halter-askl-body-l07230350
 /tr/halter-yaka-buzgulu-top-l07230347
@@ -142,7 +141,7 @@
 /tr/kat-detayl-baggy-relaxed-jean-l07662411
 /tr/kemer-koprulu-balon-jean-l07660301
 /tr/kemer-koprulu-super-genis-paca-jean-l07662301
-/tr/kemerli-bel-cantas-l14149840
+/tr/kemer-tipi-bel-cantas-l14149840
 /tr/kemerli-relaxed-baggy-jean-l07662406
 /tr/keten-ksa-kollu-gomlek-l03460515
 /tr/kimono-tunik-l03720369
@@ -197,7 +196,6 @@
 /tr/kontrast-yakal-denim-ceket-l07720306
 /tr/koruklu-balon-fit-bol-paca-jean-l07683440
 /tr/kot-jogger-pantolon-l03660518
-/tr/kruvaze-boncuklu-gomlek-l03671306
 /tr/kruvaze-kase-kaban-l07755302
 /tr/ksa-balon-trenckot-l07721321
 /tr/ksa-denim-tulum-l03021100
@@ -292,6 +290,7 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
+/tr/tokal-tote-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
