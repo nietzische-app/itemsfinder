@@ -163,8 +163,6 @@
 /allik/flormar-baked-blushon-allik-044-pink-bronze-p-10110744
 /allik/flormar-baked-blushon-allik-050-peachy-bronze-p-10110745
 /allik/flormar-baked-blushon-allik-059-dusty-rose-p-10200077
-/allik/flormar-contour-stick-mat-bitisli-kremsi-stick-kontur-002-medium-p-10222371
-/allik/flormar-contour-stick-mat-bitisli-kremsi-stick-kontur-003-medium-deep-p-10222372
 /allik/flormar-mood-booster-yogun-renk-veren-dogal-isiltili-allik-002-immortal-flower-p-10208916
 /allik/flormar-mood-booster-yogun-renk-veren-dogal-isiltili-allik-003-thats-rosewood-p-10208914
 /allik/flormar-mood-booster-yogun-renk-veren-dogal-isiltili-allik-004-feel-the-red-p-10208673
@@ -270,8 +268,6 @@
 /allik/maruderm-make-up-sunkissed-likit-allik-coral-p-10218952
 /allik/maruderm-make-up-sunkissed-likit-allik-hibiscus-p-10218953
 /allik/maruderm-make-up-sunkissed-likit-allik-rose-petal-p-10218954
-/allik/maruderm-make-up-sunshine-likit-bronzer-coco-brown-p-10218678
-/allik/maruderm-make-up-sunshine-likit-bronzer-mocha-brown-p-10218880
 /allik/maybelline-new-york-cloudtopia-kopuk-dokulu-mat-allik-01-twilight-berry-p-10221035
 /allik/maybelline-new-york-cloudtopia-kopuk-dokulu-mat-allik-03-divine-crimson-p-10215810
 /allik/maybelline-new-york-cloudtopia-kopuk-dokulu-mat-allik-04-pink-daydream-p-10215811
@@ -279,8 +275,6 @@
 /allik/maybelline-new-york-cloudtopia-kopuk-dokulu-mat-allik-07-moonlit-rose-p-10215814
 /allik/maybelline-new-york-cloudtopia-kopuk-dokulu-mat-allik-08-enchanted-mauve-p-10215813
 /allik/maybelline-new-york-cloudtopia-kopuk-dokulu-mat-allik-09-dreamy-dawn-p-10215815
-/allik/maybelline-new-york-lifter-stix-yuz-sekillendirici-stick-45-p-10208989
-/allik/maybelline-new-york-lifter-stix-yuz-sekillendirici-stick-55-p-10208990
 /allik/maybelline-new-york-sunkisser-hazy-matte-likit-allik-34-peachy-quench-p-10213092
 /allik/maybelline-new-york-sunkisser-hazy-matte-likit-allik-40-rose-burst-p-10213095
 /allik/maybelline-new-york-sunkisser-likit-allik-02-uptown-glow-p-10202744
@@ -831,8 +825,6 @@
 /aydinlatici/pastel-daylight-cream-highlighter-13-sunrose-p-10165244
 /aydinlatici/pastel-daylight-cream-highlighter-14-milkyway-p-10198212
 /aydinlatici/pastel-moonlight-highlighter-p-10026207
-/aydinlatici/pastel-profashion-bronzer-highlighter-set-sun-kissed-no-01-natural-bronze-soft-glow-p-10823255
-/aydinlatici/pastel-profashion-bronzer-highlighter-set-sun-kissed-no-02-tan-bronze-soft-glow-p-10823256
 /aydinlatici/pastel-profashion-stardust-highlighter-320-vega-p-10038300
 /aydinlatici/pastel-profashion-stardust-highlighter-321-nova-p-10038301
 /aydinlatici/pastel-profashion-stardust-highlighter-322-spica-p-10038302
@@ -1251,9 +1243,13 @@
 /bronzer/loreal-paris-lumi-stick-bronzer-130-sunset-dore-p-10216526
 /bronzer/lykd-krem-bronzer-158-golden-fondue-p-10211827
 /bronzer/lykd-krem-bronzer-159-sunset-fondue-p-10211828
+/bronzer/maruderm-make-up-sunshine-likit-bronzer-coco-brown-p-10218678
+/bronzer/maruderm-make-up-sunshine-likit-bronzer-mocha-brown-p-10218880
 /bronzer/note-terracotta-powder-bronzer-01-stardust-p-10169778
 /bronzer/pastel-liquid-bronzer-10-nude-p-10443897
 /bronzer/pastel-liquid-bronzer-20-sun-shine-p-10443898
+/bronzer/pastel-profashion-bronzer-highlighter-set-sun-kissed-no-01-natural-bronze-soft-glow-p-10823255
+/bronzer/pastel-profashion-bronzer-highlighter-set-sun-kissed-no-02-tan-bronze-soft-glow-p-10823256
 /bronzer/pastel-x-arzu-sabanci-isiltili-ve-dogal-bronz-gorunum-liquid-bronzer-p-10219663
 /bronzer/physicians-formula-butter-glow-bronzing-serum-sunkissed-glow-30-ml-p-10202683
 /bronzer/physicians-formula-butter-glow-go-multiuse-stick-bronzer-beach-bum-plum-p-10209001
@@ -1657,6 +1653,7 @@
 /diger-kisisel-bakim-urunleri/polosmart-elektronik-el-ve-ayak-bakim-seti-p-10793055
 /diger-kisisel-bakim-urunleri/polosmart-elektronik-kas-duzeltme-cihazi-p-10793056
 /diger-kisisel-bakim-urunleri/polosmart-erkek-kisisel-bakim-cihazi-psc67-p-10207531
+/diger-kisisel-bakim-urunleri/polosmart-led-isikli-yuz-maskesi-psc503-p-10216548
 /diger-kisisel-bakim-urunleri/polosmart-makyaj-fircasi-temizleme-cihazi-p-10200308
 /diger-kisisel-bakim-urunleri/polosmart-masaj-tabancasi-psc504-p-10216550
 /diger-kisisel-bakim-urunleri/polosmart-sac-masasi-pbs811-p-10216549
@@ -2933,6 +2930,7 @@
 /dudak-parlaticisi/rom-nd-glasting-water-tint-renkli-dudak-parlaticisi-04-vintage-ocean-p-10204317
 /dudak-parlaticisi/rom-nd-glasting-water-tint-renkli-dudak-parlaticisi-05-rose-splash-p-10204318
 /dudak-parlaticisi/rom-nd-glasting-water-tint-renkli-dudak-parlaticisi-08-rose-stream-p-10204319
+/dudak-parlaticisi/rom-nd-glasting-water-tint-renkli-dudak-parlaticisi-14-mauve-moon-p-10204320
 /dudak-parlaticisi/rom-nd-glasting-water-tint-renkli-dudak-parlaticisi-16-figrise-p-10204321
 /dudak-parlaticisi/rom-nd-glasting-water-tint-renkli-dudak-parlaticisi-17-woody-sunset-p-10204322
 /dudak-parlaticisi/rom-nd-juicy-lasting-tint-renkli-dudak-parlaticisi-06-figfig-p-10204460
@@ -4643,10 +4641,10 @@
 /far/note-flawless-eyeshadow-far-paleti-02-romantic-date-p-10459897
 /far/note-love-at-first-sight-eyeshadow-far-paleti-201-p-10064678
 /far/note-love-at-first-sight-eyeshadow-far-paleti-203-p-10064680
-/far/pastel-profashion-glow-liquid-eyeshadow-goz-fari-221-p-10367113
-/far/pastel-profashion-glow-liquid-eyeshadow-goz-fari-222-p-10367110
-/far/pastel-profashion-glow-liquid-eyeshadow-goz-fari-223-p-10367111
-/far/pastel-profashion-glow-liquid-eyeshadow-goz-fari-224-p-10151851
+/far/pastel-profashion-glow-liquid-eyeshadow-goz-fari-221-dreamland-p-10367113
+/far/pastel-profashion-glow-liquid-eyeshadow-goz-fari-222-golden-cage-p-10367110
+/far/pastel-profashion-glow-liquid-eyeshadow-goz-fari-223-eyecatching-p-10367111
+/far/pastel-profashion-glow-liquid-eyeshadow-goz-fari-224-rainforest-p-10151851
 /far/pastel-profashion-glow-liquid-eyeshadow-goz-fari-225-champagne-p-10199472
 /far/pastel-profashion-glow-liquid-eyeshadow-goz-fari-226-life-core-p-10199473
 /far/pastel-profashion-so-in-love-far-paleti-201-great-start-p-10761466
@@ -7372,6 +7370,7 @@
 /kas-kalemi/stellary-kas-kalemi-classic-04-p-10219686
 /kas-kalemi/stellary-professional-brow-set-01-blond-complete-brow-grooming-kit-p-10210256
 /kas-kalemi/stellary-professional-brow-set-02-brunette-complete-brow-grooming-kit-p-10209445
+/kas-kalemi/thebalm-sustainably-gorgeous-kas-kalemi-blonde-p-10961318
 /kas-kalemi/vivienne-sabo-brow-arcade-automatic-kas-kalemi-02-chocolate-brown-precise-microstrokes-allday-p-10209116
 /kas-kalemi/vivienne-sabo-brow-arcade-automatic-kas-kalemi-03-soft-brown-precise-microstrokes-allday-wear-p-10209117
 /kas-kalemi/vivienne-sabo-coup-de-genie-brow-pencil-kas-kalemi-001-blond-natural-matte-finish-longlasting-w-p-10209119
@@ -7518,7 +7517,6 @@
 /kas/flormar-brow-up-yumusak-dokulu-yogun-isiltili-asansorlu-kas-alti-aydinlatma-kalemi-000-champagne-p-10882291
 /kas/flormar-brow-up-yumusak-dokulu-yogun-isiltili-asansorlu-kas-alti-aydinlatma-kalemi-001-diamond-p-10202205
 /kas/flormar-brow-up-yumusak-dokulu-yogun-isiltili-asansorlu-kas-alti-aydinlatma-kalemi-002-rose-gold-p-10203727
-/kas/thebalm-sustainably-gorgeous-kas-kalemi-blonde-p-10961318
 /kati-sabun/balmy-cilekli-limonata-esansli-kati-sabun-110-gr-p-10877845
 /kati-sabun/balmy-dogal-kabak-lifli-sabun-amber-125-gr-p-10199400
 /kati-sabun/balmy-dogal-kabak-lifli-sabun-fresh-coco-125-gr-p-10199487
@@ -7559,7 +7557,7 @@
 /kati-sabun/dr-ea-salis-leke-karsiti-aydinlatici-sabun-70-gr-p-10210440
 /kati-sabun/duru-diamonds-series-green-kati-sabun-90-gr-x4-p-10198293
 /kati-sabun/duru-fresh-okyanus-ferahligi-kati-sabun-150-gr-p-10038902
-/kati-sabun/duru-fresh-sensational-extra-yagmur-ormani-dus-sabunu-600-gr-p-10198296
+/kati-sabun/duru-fresh-sensational-extra-yagmur-ormani-dus-sabunu-4x-150-gr-p-10198296
 /kati-sabun/duru-fresh-sensations-cicek-tazeligi-banyo-sabunu-150-gr-p-10226079
 /kati-sabun/duru-fresh-sensations-cicek-tazeligi-dus-sabunu-4x150-gr-p-10149678
 /kati-sabun/duru-fresh-sensations-cicek-tazeligi-guzellik-sabunu-4x100-gr-p-10226085
@@ -7716,6 +7714,8 @@
 /kontur/colorgram-reforming-contour-stick-01-warm-tone-p-10214356
 /kontur/colorgram-reforming-contour-stick-02-cool-tone-p-10214357
 /kontur/colorgram-reforming-contour-stick-03-neutral-p-10214358
+/kontur/flormar-contour-stick-mat-bitisli-kremsi-stick-kontur-002-medium-p-10222371
+/kontur/flormar-contour-stick-mat-bitisli-kremsi-stick-kontur-003-medium-deep-p-10222372
 /kontur/flormar-puffy-liquid-likit-kontur-001-amber-p-10209063
 /kontur/flormar-puffy-liquid-likit-kontur-003-deep-p-10209064
 /kontur/golden-rose-chubby-contour-stick-02-medium-tan-p-10887349
@@ -7734,6 +7734,8 @@
 /kontur/lykd-contour-sculpt-182-dark-p-10202679
 /kontur/lykd-double-sided-contour-stick-p-10132499
 /kontur/lykd-kontur-paleti-p-10203256
+/kontur/maybelline-new-york-lifter-stix-yuz-sekillendirici-stick-45-p-10208989
+/kontur/maybelline-new-york-lifter-stix-yuz-sekillendirici-stick-55-p-10208990
 /kontur/new-well-porcelain-make-up-stick-contour-03-p-10213758
 /kontur/new-well-porcelain-make-up-stick-contour-no-01-p-10606235
 /kontur/new-well-porcelain-make-up-stick-contour-no-02-p-10606236
@@ -8837,6 +8839,8 @@
 /oda-araba-kokulari/air-wick-freshmatic-bahar-cicekleri-yedek-sprey-250-ml-p-21000352
 /oda-araba-kokulari/air-wick-freshmatic-lavanta-yedek-sprey-250-ml-p-21000355
 /oda-araba-kokulari/air-wick-lavanta-freshmatic-oda-kokusu-makine-yedek-250-ml-p-21000514
+/oda-araba-kokulari/benri-koku-kesesi-beyaz-sabun-21-gr-p-10220388
+/oda-araba-kokulari/benri-koku-kesesi-cicek-buketi-21-gr-p-10220387
 /oda-araba-kokulari/eklips-aerosol-oda-kokusu-bouquet-300-ml-p-10198096
 /oda-araba-kokulari/eklips-cubuk-tutsu-20li-amber-p-10199307
 /oda-araba-kokulari/eklips-cubuk-tutsu-20li-lavanta-p-10199305
@@ -11096,8 +11100,10 @@
 /sampuan/pantene-onarici-koruyucu-sampuan-400-ml-p-10207311
 /sampuan/pantene-onarici-koruyucu-sampuan-800-ml-p-10208529
 /sampuan/pantene-onarici-ve-koruyucu-sampuan-400-ml-argan-ozlu-sac-bakim-yagi-100-ml-p-10219166
+/sampuan/pantene-prov-guc-parlaklik-sampuan-625-ml-p-10222348
 /sampuan/pantene-prov-miracles-frizz-no-more-kivircik-saclar-icin-sampuan-325-ml-p-10204663
 /sampuan/pantene-prov-miracles-molecular-bond-repair-sampuan-yipranmis-saclar-icin-250-ml-p-10204661
+/sampuan/pantene-prov-onarici-koruyucu-sampuan-625-ml-p-10222347
 /sampuan/pantene-temel-bakim-sampuan-400-ml-p-10207319
 /sampuan/restorex-7-besleyici-yag-besleyici-sac-bakim-sampuani-500-ml-p-10948879
 /sampuan/restorex-7-besleyici-yag-sac-bakim-sampuani-900-ml-p-10214714

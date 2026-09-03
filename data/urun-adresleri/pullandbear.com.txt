@@ -120,7 +120,6 @@
 /tr/ipli-genis-paca-jean-l07660302
 /tr/islemeli-ay-detayl-baggy-jean-l07662310
 /tr/islemeli-ceket-l07721500
-/tr/islemeli-tote-canta-l14052840
 /tr/isltl-bootcut-jean-l03660178
 /tr/isltl-genis-paca-jean-l07660309
 /tr/kapitone-stwd-yelek-l07720599
@@ -136,6 +135,7 @@
 /tr/kapusonlu-sisme-stwd-mont-l07700501
 /tr/kapusonlu-suni-kurk-ceket-l07700324
 /tr/kapusonlu-suni-kurk-ceket-l07720324
+/tr/kapusonlu-suni-suet-bomber-ceket-l07720354
 /tr/kapusonlu-syla-muhurlenmis-sisme-ceket-l07700505
 /tr/kareli-grafikli-bermuda-sort-l07665502
 /tr/kat-detayl-baggy-relaxed-jean-l07662411
@@ -196,6 +196,7 @@
 /tr/kontrast-yakal-denim-ceket-l07720306
 /tr/koruklu-balon-fit-bol-paca-jean-l07683440
 /tr/kot-jogger-pantolon-l03660518
+/tr/kruvaze-boncuklu-gomlek-l03671306
 /tr/kruvaze-kase-kaban-l07755302
 /tr/ksa-balon-trenckot-l07721321
 /tr/ksa-denim-tulum-l03021100
@@ -221,7 +222,6 @@
 /tr/muscle-fit-tisort-l09247599
 /tr/naks-detayl-grafikli-tisort-l03231548
 /tr/naksl-relaxed-fit-tisort-l03231508
-/tr/naksl-shopper-canta-l14023840
 /tr/naylon-suslemeli-tote-canta-l14058840
 /tr/on-dikisli-barrel-jean-l07662504
 /tr/orta-bel-baggy-jean-l07660319
