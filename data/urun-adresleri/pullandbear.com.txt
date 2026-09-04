@@ -13,7 +13,6 @@
 /tr/baggy-jean-l03660516
 /tr/baggy-jean-l07660500
 /tr/baggy-jean-l07662510
-/tr/baggy-jogger-pantolon-l07670507
 /tr/baggy-straight-payetli-jean-l03661306
 /tr/balon-bomber-ceket-l03720372
 /tr/balon-bomber-ceket-l07720320
@@ -25,11 +24,11 @@
 /tr/barrel-kesim-jogger-pantolon-l07670324
 /tr/basic-atlet-l03230316
 /tr/basic-blazer-l03790308
+/tr/basic-bol-kesim-spor-pantolon-l07670507
 /tr/basic-kapusonlu-sweatshirt-l07551501
 /tr/basic-ksa-kollu-pamuklu-tisort-l08242500
 /tr/basic-mayo-l03000500
 /tr/basic-short-sleeve-tisort-l03230337
-/tr/basic-skinny-fit-jean-l07687500
 /tr/basic-slim-fit-tisort-l03231506
 /tr/basic-trenckot-l07721300
 /tr/beli-buzgulu-ceket-l07720368
@@ -39,6 +38,7 @@
 /tr/bisiklet-yaka-sweatshirt-l07558311
 /tr/boncuk-detayl-duz-sandalet-l11706740
 /tr/boncuk-detayl-el-cantas-l14012840
+/tr/boncuk-detayl-el-cantas-l14069840
 /tr/boncuk-detayl-omuz-cantas-l14025840
 /tr/boncuk-detayl-shopper-canta-l14004840
 /tr/boncuklu-omuz-cantas-l14014840
@@ -78,6 +78,7 @@
 /tr/dikis-detayl-baggy-balon-jean-l07662407
 /tr/dikis-detayl-relaxed-fit-denim-bermuda-l07667512
 /tr/dikisli-cizgili-balon-jean-l07660304
+/tr/dokulu-omuz-cantas-l14145840
 /tr/dokulu-relaxed-tisort-l07230505
 /tr/dokumlu-baggy-jean-l07670303
 /tr/dokumlu-pelerin-bluz-l03720374
@@ -120,6 +121,7 @@
 /tr/ipli-genis-paca-jean-l07660302
 /tr/islemeli-ay-detayl-baggy-jean-l07662310
 /tr/islemeli-ceket-l07721500
+/tr/islemeli-tote-canta-l14052840
 /tr/isltl-bootcut-jean-l03660178
 /tr/isltl-genis-paca-jean-l07660309
 /tr/kapitone-stwd-yelek-l07720599
@@ -190,13 +192,13 @@
 /tr/kombini-tamamla-l99473103375BSBS
 /tr/kombinini-tamamla-l92230762123BSBS
 /tr/kontrast-biyeli-dokumlu-ceket-l07558302
+/tr/kontrast-detayl-omuz-cantas-l14144840
 /tr/kontrast-detayl-shopper-canta-l14103840
 /tr/kontrast-dikisli-hafif-ceket-l07721503
 /tr/kontrast-ribana-tisort-l03230503
 /tr/kontrast-yakal-denim-ceket-l07720306
 /tr/koruklu-balon-fit-bol-paca-jean-l07683440
 /tr/kot-jogger-pantolon-l03660518
-/tr/kruvaze-boncuklu-gomlek-l03671306
 /tr/kruvaze-kase-kaban-l07755302
 /tr/ksa-balon-trenckot-l07721321
 /tr/ksa-denim-tulum-l03021100
@@ -222,6 +224,7 @@
 /tr/muscle-fit-tisort-l09247599
 /tr/naks-detayl-grafikli-tisort-l03231548
 /tr/naksl-relaxed-fit-tisort-l03231508
+/tr/naksl-shopper-canta-l14023840
 /tr/naylon-suslemeli-tote-canta-l14058840
 /tr/on-dikisli-barrel-jean-l07662504
 /tr/orta-bel-baggy-jean-l07660319
