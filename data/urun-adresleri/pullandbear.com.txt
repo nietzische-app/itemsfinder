@@ -38,7 +38,6 @@
 /tr/bisiklet-yaka-sweatshirt-l07558311
 /tr/boncuk-detayl-duz-sandalet-l11706740
 /tr/boncuk-detayl-el-cantas-l14012840
-/tr/boncuk-detayl-el-cantas-l14069840
 /tr/boncuk-detayl-omuz-cantas-l14025840
 /tr/boncuk-detayl-shopper-canta-l14004840
 /tr/boncuklu-omuz-cantas-l14014840
@@ -74,6 +73,7 @@
 /tr/dantel-detayl-atlet-l07230300
 /tr/dar-kesim-ksa-kollu-tisort-l07150305
 /tr/deri-sabo-terlik-l12404840
+/tr/detayl-shopper-canta-l14094840
 /tr/dik-yakal-vucuda-oturan-ceket-l07720382
 /tr/dikis-detayl-baggy-balon-jean-l07662407
 /tr/dikis-detayl-relaxed-fit-denim-bermuda-l07667512
@@ -224,7 +224,6 @@
 /tr/muscle-fit-tisort-l09247599
 /tr/naks-detayl-grafikli-tisort-l03231548
 /tr/naksl-relaxed-fit-tisort-l03231508
-/tr/naksl-shopper-canta-l14023840
 /tr/naylon-suslemeli-tote-canta-l14058840
 /tr/on-dikisli-barrel-jean-l07662504
 /tr/orta-bel-baggy-jean-l07660319
@@ -269,6 +268,13 @@
 /tr/slim-fit-jean-l07660503
 /tr/srt-bantl-halter-yaka-top-l03231369
 /tr/standart-kesim-jean-l07660501
+/tr/stili-kesfet-l90470499944BSBS
+/tr/stili-kesfet-l93586429563BSBS
+/tr/stili-kesfet-l93853896536BSBS
+/tr/stili-kesfet-l94246416890BSBS
+/tr/stili-kesfet-l94276538778BSBS
+/tr/stili-kesfet-l95925852603BSBS
+/tr/stili-kesfet-l99097778562BSBS
 /tr/stili-tamamla-l92251482076BSBS
 /tr/stili-tamamla-l93776912463BSBS
 /tr/stili-tamamla-l96823333420BSBS

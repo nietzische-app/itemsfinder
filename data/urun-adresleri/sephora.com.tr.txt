@@ -587,7 +587,6 @@
 /p/airbrush-setting-spray---makyaj-sabitleyici-sprey-693844.html
 /p/airbrush-setting-spray---makyaj-sabitleyici-sprey-734682.html
 /p/airbrush-setting-spray---makyaj-sabitleyici-sprey-P10018525.html
-/p/airstrait%E2%84%A2---sac-duzlestirici-P1000207632.html
 /p/airwash-kuru-sampuan---yaglanmayi-azaltir-kokuyu-ortadan-kaldirir-719062.html
 /p/airwash-kuru-sampuan---yaglanmayi-azaltir-kokuyu-ortadan-kaldirir-P1000205354.html
 /p/airy-texture-spray---hacimli--belirgin-ve-esnek-saclar-icin-sprey-P1000212054.html
@@ -4074,7 +4073,6 @@
 /p/deodorant---neroli-ve-feslegen-kokulu-deodorant-P10054505.html
 /p/deodorant---safran-ve-sedir-kokulu-deodorant-P1000205805.html
 /p/deodorant---sandal-agaci-ve-vetiver-kokulu-deodorant-P10054503.html
-/p/deodorant---siyah-gul-ve-oud-deodorant-P10062322.html
 /p/deodorant-douceur---24-saat-etkili-P10061377.html
 /p/dermaclear%E2%84%A2---nazik-peeling-etkili-temizleyici-P1000215961.html
 /p/dermaclear%E2%84%A2---nemlendirici-ph-jel-temizleyici-P10064740.html
@@ -5087,7 +5085,6 @@
 /p/el-kremi---10-saat-nemlendirme-P10057541.html
 /p/el-maskeleri--emdirilmis-eldivenler---15-dakikada-el-nemlendirme-690819.html
 /p/el-maskeleri--emdirilmis-eldivenler---15-dakikada-el-nemlendirme-P10057542.html
-/p/el-sabunu---peeling-yapan-el-temizleyici-P10014724.html
 /p/el-sensuous-edp-100ml-3.4floz-P103812.html
 /p/el-temizleme-spreyi---yapiskan-olmayan-formul--hizli-kurur-768968.html
 /p/el-temizleme-spreyi---yapiskan-olmayan-formul--hizli-kurur-768971.html
@@ -5159,7 +5156,6 @@
 /p/eros-najim---parfum-763457.html
 /p/eros-najim---parfum-763458.html
 /p/eros-najim---parfum-P10061558.html
-/p/eros-najim---set-parfum-P1000213048.html
 /p/essential-drip---dudak-yagi-653727.html
 /p/essential-drip---dudak-yagi-653730.html
 /p/essential-drip---dudak-yagi-P10047911.html
@@ -5467,7 +5463,6 @@
 /p/face-body-bestsellers---seyahat-boy-set-P1000210057.html
 /p/face-cleanse---2%E2%80%99si-1-arada-makyaj-temizleyici-ve-nemlendirici-P1000205697.html
 /p/face-cleansing-stick-P4058126.html
-/p/face-et-body-kabuki-160-firca-P3469002.html
 /p/face-glow-kit-P10025090.html
 /p/face-jewels-makeup-accessories---makyaj-aksesuari-650874.html
 /p/face-jewels-makeup-accessories---makyaj-aksesuari-650876.html
@@ -5831,7 +5826,6 @@
 /p/freedom-musk-santal-34---eau-de-parfum-794161.html
 /p/freedom-musk-santal-34---eau-de-parfum-P1000211362.html
 /p/fresh-scrub---arindirici-et-yenileyici-peeling-P1000206864.html
-/p/frizz-control-conditioner-%E2%80%93-kabarmayi-onleyici-sac-kremi-P10058455.html
 /p/frizz-me-not---elektriklenmeyi-onleyici-nemlendirici-bakim-767669.html
 /p/frizz-me-not---elektriklenmeyi-onleyici-nemlendirici-bakim-P1000208193.html
 /p/fruit-du-dragon---parfumlu-sac-ve-vucut-spreyi-P1000209653.html
@@ -5841,7 +5835,6 @@
 /p/fruit-et-plant-hyalurinc-acid-mask---kagit-yuz-maskesi-532075.html
 /p/fruit-et-plant-hyalurinc-acid-mask---kagit-yuz-maskesi-532076.html
 /p/fruit-et-plant-hyalurinc-acid-mask---kagit-yuz-maskesi-P10047981.html
-/p/fruit-quench-rz--nemlendirici-ve-guclendirici-dudak-yagi-uclusu-P10060660.html
 /p/full-conditioner---hacim-veren-sac-kremi-P1000207035.html
 /p/full-cover-flesh-kapatici-n05-198761.html
 /p/full-cover-flesh-kapatici-n05-P19035.html
@@ -6007,7 +6000,6 @@
 /p/ghd-halo---genis-duzlestirici-konsantre-baslik-88-mm-P1000212373.html
 /p/ghd-halo---sekillendirici-konsantre-baslik-65-mm-803866.html
 /p/ghd-halo---sekillendirici-konsantre-baslik-65-mm-P1000212372.html
-/p/ghd-jelly-chronos---sac-duzlestirici-P1000213447.html
 /p/ghd-jelly-chronos-curve-max-wand---sac-masasi-P1000213828.html
 /p/ghd-jelly-chronos-max---sac-duzlestirici-P1000213827.html
 /p/ghd-jelly-duet-blowdry---i%CC%87kisi-bir-arada-P1000213448.html
@@ -6128,6 +6120,7 @@
 /p/glidr-shadow-stick---stick-goz-fari-P1000212524.html
 /p/glikolipidli-temizleme-kremi---yuz-temizleme-kremi-P10049631.html
 /p/glikozidli-kopuk-temizleyici---nazik-kopuklu-yuz-temizleyici-P10049630.html
+/p/glimmer--eau-de-parfum-spray-P1000215249.html
 /p/glitter-under-the-sun---3%E2%80%99lu-goz-fari-seti-709361.html
 /p/glitter-under-the-sun---3%E2%80%99lu-goz-fari-seti-709362.html
 /p/glitter-under-the-sun---cok-kullanimli-tekli-yapay-elmaslar-P10058956.html
@@ -6162,6 +6155,7 @@
 /p/gloss-bomb-cream---dudak-parlaticisi-689685.html
 /p/gloss-bomb-cream---dudak-parlaticisi-689686.html
 /p/gloss-bomb-cream---dudak-parlaticisi-P10051031.html
+/p/gloss-bomb-heat---sinirli-uretim-dolgunlastirici-dudak-parlaticisi-P10064773.html
 /p/gloss-bomb-ice---dudak-parlaticisi-P10044225.html
 /p/gloss-bomb-ice-fruitz---serinletici-dudak-parlaticisi-757514.html
 /p/gloss-bomb-ice-fruitz---serinletici-dudak-parlaticisi-757515.html
@@ -8837,7 +8831,6 @@
 /p/lights--camera--lashes%E2%84%A2-platinum-mascara---maskara-P10061299.html
 /p/lights--camera--lashes---4-u-1-arada-maskara-P3643093.html
 /p/ligne-noire---goz-kalemi-P1000203586.html
-/p/lil-precision-makeup-sponge-duo-P3595011.html
 /p/lime-basil-et-mandarin---cologne-819438.html
 /p/lime-basil-et-mandarin---cologne-P1000213889.html
 /p/lime-basil-et-mandarin-body-et-hand-lotion-P3400004.html
@@ -9633,7 +9626,6 @@
 /p/magic-vanish---uzun-sure-kalici-renk-duzeltici-759809.html
 /p/magic-vanish---uzun-sure-kalici-renk-duzeltici-766516.html
 /p/magic-vanish---uzun-sure-kalici-renk-duzeltici-P1000211631.html
-/p/magnificient---yogun-hacim-veren-maskara--24-saat-kalici-P10023231.html
 /p/mahamane---durulama-gerektirmeyen-dolasiklik-acici-bakim-P10053273.html
 /p/make-it-bronze---stick-bronzer-618208.html
 /p/make-it-bronze---stick-bronzer-618209.html
@@ -11551,7 +11543,6 @@
 /p/plum-plump%E2%84%A2-hyaluronic---nemlendirici-jel-krem-P10024312.html
 /p/plum-plump-hyaluronic---nemlendirici-serum-P10018698.html
 /p/plum-plump-hyaluronic---parlak-dudak-balsami-P10050790.html
-/p/plump-and-prime-P10011346.html
 /p/plump-c%E2%84%A2-tripeptide-lippe-mask---plump-c%E2%84%A2-dudak-bakimi-P1000208803.html
 /p/plump-juicy-lip-booster---dudaklar-icin-dolgunlastirici-bakim-780402.html
 /p/plump-juicy-lip-booster---dudaklar-icin-dolgunlastirici-bakim-P10048935.html
@@ -11823,6 +11814,7 @@
 /p/precision-sculpt-shaping-balm-contour-stick---stick-kontur-780999.html
 /p/precision-sculpt-shaping-balm-contour-stick---stick-kontur-P1000210675.html
 /p/precision-sculpt-shaping-brush---kontur-fircasi-P1000210674.html
+/p/preen-screen-spf50---gunes-koruyucu-sprey-P10051670.html
 /p/premiere----yipranma-karsiti-uclu-set-P1000213800.html
 /p/premiere---kirilma-karsiti-onarim-saglayan-bakim-maskesi-789178.html
 /p/premiere---kirilma-karsiti-onarim-saglayan-bakim-maskesi-P10056760.html
@@ -12175,7 +12167,6 @@
 /p/pro-pencil-308071.html
 /p/pro-pencil-P2678025.html
 /p/professional-brush---pro-fondoten-fircasi--70-P10024030.html
-/p/protect-et-prevent-spray---sac-koyucu-sprey-P10043851.html
 /p/protini-polypeptide-cream%C2%A0-529258.html
 /p/protini-polypeptide-cream%C2%A0-541986.html
 /p/protini-polypeptide-cream%C2%A0-713243.html
@@ -12470,7 +12461,6 @@
 /p/retractable-brow-pencil---asansorlu-kas-kalemi-P1000215350.html
 /p/retractable-brow-pencil---asansorlu-kas-kalemi-P10062752.html
 /p/retro-glam---goz-fari-paleti-P10044860.html
-/p/retro-palette-far-paleti-P10018758.html
 /p/reusable-cleansing-pads---yeniden-kullanilabilir-makyaj-temizleme-pamuklari-P1000204685.html
 /p/reusable-cotton-pad---yikanabilir-pamuk-P1000209429.html
 /p/reve-dudak-yagi---renkli-nemlendirici-dudak-yagi-720227.html
@@ -12611,7 +12601,6 @@
 /p/rituals-homme---sakal-icin-2%E2%80%99si-1-arada-sampuan-et-sac-kremi-P10049447.html
 /p/rituals-homme---seyahat-seti-P1000212575.html
 /p/rituals-homme---terleme-onleyici-sprey-deodorant-P1000214526.html
-/p/rituals-homme---tiras-sonrasi-yatistirici-balm-P1000214528.html
 /p/rituals-homme---yaslanma-karsiti-yuz-kremi-P1000214525.html
 /p/rive-gauche-P29305.html
 /p/roberto-cavalli-sweet-ferocious---eau-de-parfum-P1000205604.html
@@ -15581,6 +15570,7 @@
 /p/tinted-pressed-powder---renkli-kompakt-pudra-770268.html
 /p/tinted-pressed-powder---renkli-kompakt-pudra-P1000203433.html
 /p/tirnak-eti-yagi-%7C-nail-hardener-et-cuticle-oil-P1000204503.html
+/p/tirnak-torpuleri%CC%87-19--x2-P3856128.html
 /p/tirnak-torpusu---manikur-aletleri-P10059965.html
 /p/tobacco-vanille-all-over-body-spray-P3267007.html
 /p/tobacco-vanille-eau-de-parfum--seyahat-boy-P3492042.html
@@ -16605,7 +16595,6 @@
 /p/weightless-lip-color---besleyici-satensi-ruj-P10053871.html
 /p/weightless-nourishing-mask---i%CC%87nce-telli-saclar-icin-yogun-nemlendirici-maske-P1000209223.html
 /p/well-off-gentle-eye-makeup-remover-150-ml-P2387079.html
-/p/wet-detangler---lilac-et-mint-P10025997.html
 /p/wet-lines---detangling-spray-P10026003.html
 /p/wet-lines---kids-detangling-spray-P10026001.html
 /p/wet-lip-oil---peptitlerle-zenginlestirilmis-dolgunlastirici-dudak-parlaticisi-664607.html
