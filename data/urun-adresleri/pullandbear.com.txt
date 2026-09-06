@@ -73,7 +73,6 @@
 /tr/dantel-detayl-atlet-l07230300
 /tr/dar-kesim-ksa-kollu-tisort-l07150305
 /tr/deri-sabo-terlik-l12404840
-/tr/detayl-shopper-canta-l14094840
 /tr/dik-yakal-vucuda-oturan-ceket-l07720382
 /tr/dikis-detayl-baggy-balon-jean-l07662407
 /tr/dikis-detayl-relaxed-fit-denim-bermuda-l07667512
@@ -224,6 +223,7 @@
 /tr/muscle-fit-tisort-l09247599
 /tr/naks-detayl-grafikli-tisort-l03231548
 /tr/naksl-relaxed-fit-tisort-l03231508
+/tr/naksl-shopper-canta-l14023840
 /tr/naylon-suslemeli-tote-canta-l14058840
 /tr/on-dikisli-barrel-jean-l07662504
 /tr/orta-bel-baggy-jean-l07660319
