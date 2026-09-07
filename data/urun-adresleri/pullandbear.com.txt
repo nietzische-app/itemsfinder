@@ -2,7 +2,6 @@
 /tr/100-keten-suslu-dugmeli-ceket-l07720366
 /tr/100-pamuklu-barrel-jean-l07662520
 /tr/ajurlu-ksa-kollu-gomlek-l07460513
-/tr/ajurlu-space-dye-kazak-l07540313
 /tr/ajurlu-triko-kazak-l07540500
 /tr/askl-tisort-l03232502
 /tr/ayarlanabilir-askl-basic-top-l03230394
@@ -223,7 +222,6 @@
 /tr/muscle-fit-tisort-l09247599
 /tr/naks-detayl-grafikli-tisort-l03231548
 /tr/naksl-relaxed-fit-tisort-l03231508
-/tr/naksl-shopper-canta-l14023840
 /tr/naylon-suslemeli-tote-canta-l14058840
 /tr/on-dikisli-barrel-jean-l07662504
 /tr/orta-bel-baggy-jean-l07660319
@@ -313,6 +311,7 @@
 /tr/vucuda-oturan-100-keten-blazer-ceket-l07790324
 /tr/yrtk-detayl-straight-jean-l07662506
 /tr/yrtk-mom-fit-jean-l03660302
+/tr/yuksek-bel-balon-jean-l07660320
 /tr/yuksek-bel-genis-duz-paca-jean-l03660308
 /tr/yuksek-bel-skinny-jean-l03660305
 /tr/yuksek-bel-slim-fit-jean-l07662400

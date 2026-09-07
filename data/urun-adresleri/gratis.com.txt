@@ -82,9 +82,6 @@
 /allik/astra-pure-beauty-krem-allik-02-p-10215271
 /allik/astra-pure-beauty-krem-allik-03-p-10215272
 /allik/astra-pure-beauty-krem-allik-04-p-10215273
-/allik/astra-stick-krem-allik-berry-being-p-10209731
-/allik/astra-stick-krem-allik-pink-profile-p-10209729
-/allik/astra-stick-krem-allik-rust-root-p-10209733
 /allik/aztk-liquid-blush-jole-etkili-likit-allik-jc01-sakura-milk-jelly-p-10220687
 /allik/aztk-liquid-blush-jole-etkili-likit-allik-jc02-blueberry-milkshake-p-10220688
 /allik/aztk-liquid-blush-jole-etkili-likit-allik-jc03-raspberry-milk-candy-p-10218895
@@ -699,9 +696,6 @@
 /aydinlatici-highlighter/astra-light-therapy-likit-aydinlatici-ai-champagne-p-10209955
 /aydinlatici-highlighter/astra-light-therapy-likit-aydinlatici-filler-rose-p-10209958
 /aydinlatici-highlighter/astra-light-therapy-likit-aydinlatici-mainstream-bronze-p-10209961
-/aydinlatici-highlighter/astra-stick-aydinlatici-01-champagne-core-p-10215075
-/aydinlatici-highlighter/astra-stick-aydinlatici-02-rose-reveal-p-10215072
-/aydinlatici-highlighter/astra-stick-aydinlatici-03-lilac-legacy-p-10215073
 /aydinlatici-highlighter/beaulis-amaze-it-jel-aydinlatici-915-hang-out-p-10202813
 /aydinlatici-highlighter/beaulis-amaze-it-jel-aydinlatici-920-live-online-p-10202814
 /aydinlatici-highlighter/beaulis-fun-deep-glimmer-toz-aydinlatici-749-gold-radiance-p-10203097
@@ -7759,8 +7753,6 @@
 /kolonyalar/selin-nemlendiricili-sprey-kolonya-400-ml-pet-sise-p-10212546
 /kolonyalar/selin-okyanus-esintisi-kolonya-400-ml-pet-sise-p-10202330
 /kolonyalar/selin-okyanus-esintisi-sprey-kolonya-100-ml-p-10212544
-/kontur/astra-stick-krem-kontur-fair-p-10209787
-/kontur/astra-stick-krem-kontur-light-p-10209789
 /kontur/beaulis-must-have-it-mini-kontur-paleti-153-light-to-medium-p-10173164
 /kontur/beauty-bomb-kontur-paleti-contouring-queen-01-p-10209542
 /kontur/beauty-bomb-kontur-paleti-contouring-queen-02-p-10209544
