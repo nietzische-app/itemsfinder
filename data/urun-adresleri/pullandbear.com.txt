@@ -1,6 +1,7 @@
 /tr/100-keten-jogger-pantolon-l03671507
 /tr/100-pamuklu-barrel-jean-l07662520
 /tr/ajurlu-ksa-kollu-gomlek-l07460513
+/tr/ajurlu-space-dye-kazak-l07540313
 /tr/ajurlu-triko-kazak-l07540500
 /tr/askl-tisort-l03232502
 /tr/ayarlanabilir-askl-basic-top-l03230394
@@ -35,6 +36,7 @@
 /tr/boncuklu-omuz-cantas-l14014840
 /tr/boncuklu-omuz-cantas-l14029840
 /tr/bootcut-jean-l07660308
+/tr/boxy-bomber-ceket-l07720514
 /tr/boxy-kesim-ksa-kollu-tisort-l03230339
 /tr/boxy-tisort-l03248501
 /tr/capraz-bel-straight-fit-jean-l03661305
@@ -60,6 +62,7 @@
 /tr/dantel-detayl-atlet-l07230300
 /tr/dar-kesim-ksa-kollu-tisort-l07150305
 /tr/deri-sabo-terlik-l12404840
+/tr/detayl-shopper-canta-l14094840
 /tr/dikis-detayl-baggy-balon-jean-l07662407
 /tr/dikis-detayl-relaxed-fit-denim-bermuda-l07667512
 /tr/dikisli-cizgili-balon-jean-l07660304
@@ -83,7 +86,6 @@
 /tr/fitilli-ksa-kollu-t-shirt-l03230346
 /tr/genis-paca-jean-l07662511
 /tr/genis-yaka-atlet-l03231308
-/tr/gomlek-yakal-bomber-ceket-l07720514
 /tr/gorunumu-satin-al-l97359849211BSBS
 /tr/gorunumu-satn-al-l91022888062BSBS
 /tr/gorunumu-satn-al-l99003235000BSBS
@@ -106,6 +108,7 @@
 /tr/islemeli-ay-detayl-baggy-jean-l07662310
 /tr/islemeli-barrel-jean-l07662522
 /tr/islemeli-ceket-l07721500
+/tr/islemeli-tote-canta-l14052840
 /tr/isltl-bootcut-jean-l03660178
 /tr/isltl-genis-paca-jean-l07660309
 /tr/kapitone-stwd-yelek-l07720599
@@ -190,10 +193,10 @@
 /tr/muscle-fit-tisort-l09247599
 /tr/naks-detayl-grafikli-tisort-l03231548
 /tr/naksl-relaxed-fit-tisort-l03231508
+/tr/naksl-shopper-canta-l14023840
 /tr/naylon-suslemeli-tote-canta-l14058840
 /tr/on-dikisli-barrel-jean-l07662504
 /tr/orta-bel-baggy-jean-l07660319
-/tr/orta-bel-straight-fit-jean-l07683323
 /tr/oversize-baggy-jean-l03660311
 /tr/oversize-short-sleeve-tisort-l03230327
 /tr/pacalar-kvrk-baggy-balon-jean-l07662302
@@ -269,6 +272,7 @@
 /tr/utility-parka-l07721523
 /tr/uzun-denim-tulum-l03021300
 /tr/uzun-kollu-boxy-tisort-l07230388
+/tr/uzun-kollu-reglan-tisort-l07230387
 /tr/uzun-kollu-vucuda-oturan-tisort-l07230386
 /tr/v-neck-tisort-l03230317
 /tr/v-yaka-buzgulu-top-l07230317
