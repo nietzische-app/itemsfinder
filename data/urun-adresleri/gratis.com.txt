@@ -45,8 +45,6 @@
 /agiz-gargarasi-bakim-suyu/listerine-total-care-hafif-tat-dis-korumasi-agiz-gargarasi-250-ml-p-10064921
 /agiz-gargarasi-bakim-suyu/listerine-total-care-hafif-tat-dis-korumasi-agiz-gargarasi-500-ml-p-10064923
 /agiz-gargarasi-bakim-suyu/listerine-total-care-stay-white-hafif-tat-agiz-gargarasi-250-ml-p-10064916
-/agiz-gargarasi-bakim-suyu/parodontax-ekstra-ferah-agiz-bakim-suyu-500-ml-p-10196012
-/agiz-gargarasi-bakim-suyu/parodontax-nane-ferahligi-agiz-bakim-suyu-500-ml-p-10196013
 /agiz-gargarasi-bakim-suyu/splat-agiz-bakim-suyu-total-care-ada-cayi-275-ml-p-10202571
 /agiz-gargarasi-bakim-suyu/splat-oral-care-2si-1-arada-nane-agiz-temizleme-kopugu-50-ml-p-10207526
 /agiz-gargarasi-bakim-suyu/splat-professional-complex-3-in-1-agiz-bakim-suyu-275-ml-p-10219350
@@ -82,6 +80,9 @@
 /allik/astra-pure-beauty-krem-allik-02-p-10215271
 /allik/astra-pure-beauty-krem-allik-03-p-10215272
 /allik/astra-pure-beauty-krem-allik-04-p-10215273
+/allik/astra-stick-krem-allik-berry-being-p-10209731
+/allik/astra-stick-krem-allik-pink-profile-p-10209729
+/allik/astra-stick-krem-allik-rust-root-p-10209733
 /allik/aztk-liquid-blush-jole-etkili-likit-allik-jc01-sakura-milk-jelly-p-10220687
 /allik/aztk-liquid-blush-jole-etkili-likit-allik-jc03-raspberry-milk-candy-p-10218895
 /allik/aztk-liquid-blush-jole-etkili-likit-allik-jc04-fig-coffee-p-10218896
@@ -679,6 +680,9 @@
 /aydinlatici-highlighter/astra-light-therapy-likit-aydinlatici-ai-champagne-p-10209955
 /aydinlatici-highlighter/astra-light-therapy-likit-aydinlatici-filler-rose-p-10209958
 /aydinlatici-highlighter/astra-light-therapy-likit-aydinlatici-mainstream-bronze-p-10209961
+/aydinlatici-highlighter/astra-stick-aydinlatici-01-champagne-core-p-10215075
+/aydinlatici-highlighter/astra-stick-aydinlatici-02-rose-reveal-p-10215072
+/aydinlatici-highlighter/astra-stick-aydinlatici-03-lilac-legacy-p-10215073
 /aydinlatici-highlighter/beaulis-amaze-it-jel-aydinlatici-915-hang-out-p-10202813
 /aydinlatici-highlighter/beaulis-amaze-it-jel-aydinlatici-920-live-online-p-10202814
 /aydinlatici-highlighter/beaulis-fun-deep-glimmer-toz-aydinlatici-749-gold-radiance-p-10203097
@@ -709,7 +713,10 @@
 /aydinlatici-highlighter/cheeryep-pillow-gem-highlighting-powder-sh01-treasure-pond-p-10221657
 /aydinlatici-highlighter/cheeryep-pillow-gem-highlighting-powder-sh02-drinking-galaxy-p-10221656
 /aydinlatici-highlighter/colorgram-milk-bling-heartlighter-aydinlatici-01-peach-heart-p-10214192
+/aydinlatici-highlighter/colorgram-milk-bling-heartlighter-aydinlatici-02-pink-heart-p-10214193
+/aydinlatici-highlighter/colorgram-milk-bling-heartlighter-aydinlatici-05-spring-pink-blossom-p-10214194
 /aydinlatici-highlighter/colorgram-milk-bling-heartlighter-aydinlatici-06-bubbles-blue-p-10214196
+/aydinlatici-highlighter/colorgram-milk-bling-heartlighter-aydinlatici-07-buttercup-ivory-p-10214195
 /aydinlatici-highlighter/flormar-mood-booster-dogal-isiltili-likit-aydinlatici-002-sun-goddess-p-10208672
 /aydinlatici-highlighter/fwee-glitz-stone-aydinlatici-hl01-fever-garnet-p-10214148
 /aydinlatici-highlighter/fwee-glitz-stone-aydinlatici-hl02-heroine-purple-p-10214149
@@ -750,7 +757,9 @@
 /aydinlatici-highlighter/new-well-glow-creamy-highlighter-dogal-isiltili-krem-aydinlatici-30-ml-pearl-p-10218906
 /aydinlatici-highlighter/new-well-glow-creamy-highlighter-dogal-isiltili-krem-aydinlatici-30-ml-sandstone-p-10218907
 /aydinlatici-highlighter/note-baked-moonlight-highlighter-p-10288320
+/aydinlatici-highlighter/note-liquid-highlighter-nemlendirici-etkili-likit-aydinlatici-100-soft-pink-p-10216479
 /aydinlatici-highlighter/note-liquid-highlighter-nemlendirici-etkili-likit-aydinlatici-110-true-gold-p-10217687
+/aydinlatici-highlighter/note-stick-highlighter-nemlendirici-yumusak-stick-aydinlatici-00-pearly-p-10216480
 /aydinlatici-highlighter/physicians-formula-butter-highlighter-pearl-p-10149684
 /aydinlatici-highlighter/physicians-formula-powder-palette-mineral-glow-pearls-highlighter-p-10211974
 /aydinlatici-highlighter/rom-nd-seethrough-veillighter-aydinlatici-01-sun-kissed-veil-p-10204419
@@ -778,9 +787,6 @@
 /aydinlatici-highlighter/wet-n-wild-megaglo-stick-highlighter-moon-p-10201012
 /aydinlatici/beaulis-glare-it-mini-stick-aydinlatici-953-fairy-dust-p-10162329
 /aydinlatici/beaulis-glare-it-mini-stick-aydinlatici-954-pink-dust-p-10162330
-/aydinlatici/colorgram-milk-bling-heartlighter-aydinlatici-02-pink-heart-p-10214193
-/aydinlatici/colorgram-milk-bling-heartlighter-aydinlatici-05-spring-pink-blossom-p-10214194
-/aydinlatici/colorgram-milk-bling-heartlighter-aydinlatici-07-buttercup-ivory-p-10214195
 /aydinlatici/flormar-mood-booster-dogal-isiltili-likit-aydinlatici-001-moon-glow-p-10208671
 /aydinlatici/golden-rose-nude-look-highlighting-glow-pen-nude-radiance-p-10175182
 /aydinlatici/golden-rose-smart-glow-liquid-highlighter-no-201-p-10206023
@@ -797,8 +803,6 @@
 /aydinlatici/note-drop-highlighter-likit-aydinlatici-01-pearl-rose-p-10823258
 /aydinlatici/note-drop-highlighter-likit-aydinlatici-02-charming-desert-p-10823259
 /aydinlatici/note-drop-highlighter-likit-aydinlatici-03-candlelight-p-10204601
-/aydinlatici/note-liquid-highlighter-nemlendirici-etkili-likit-aydinlatici-100-soft-pink-p-10216479
-/aydinlatici/note-stick-highlighter-nemlendirici-yumusak-stick-aydinlatici-00-pearly-p-10216480
 /aydinlatici/pastel-daylight-cream-highlighter-11-sunrise-p-10169272
 /aydinlatici/pastel-daylight-cream-highlighter-13-sunrose-p-10165244
 /aydinlatici/pastel-daylight-cream-highlighter-14-milkyway-p-10198212
@@ -1532,7 +1536,6 @@
 /diger-kisisel-bakim-materyalleri/glow-lift-ice-roller-kalibi-p-10213988
 /diger-kisisel-bakim-materyalleri/glow-lift-yesim-tasi-masaj-seti-p-10214743
 /diger-kisisel-bakim-materyalleri/glow-lift-yuz-germe-bandi-p-10211712
-/diger-kisisel-bakim-materyalleri/lionesse-jade-roller-masaj-aleti-yesim-tasi-391-p-10217451
 /diger-kisisel-bakim-materyalleri/nascita-3u-1-arada-tuy-alma-ve-sekillendirme-seti-p-10064662
 /diger-kisisel-bakim-materyalleri/nascita-ayak-bakim-seti-p-10206733
 /diger-kisisel-bakim-materyalleri/nascita-elektrikli-topuk-torpusu-p-10064658
@@ -1575,6 +1578,7 @@
 /diger-kisisel-bakim-urunleri/eklips-yag-emici-volkanik-tas-p-10199441
 /diger-kisisel-bakim-urunleri/glow-lift-goz-pedi-seti-4lu-p-10217450
 /diger-kisisel-bakim-urunleri/glow-lift-yesim-tasi-gua-sha-p-10218420
+/diger-kisisel-bakim-urunleri/lionesse-jade-roller-masaj-aleti-yesim-tasi-391-p-10217451
 /diger-kisisel-bakim-urunleri/manifest-beauty-makyaj-fircasi-koruyucu-p-10213993
 /diger-kisisel-bakim-urunleri/manifest-beauty-mekanizmali-krem-kutusu-p-10212361
 /diger-kisisel-bakim-urunleri/manifest-cok-amacli-kutu-p-10212360
@@ -1671,8 +1675,6 @@
 /dis-fircalari/oralb-proexpert-advanced-derinlemesine-temizlik-dis-fircasi-11-orta-p-10009979
 /dis-fircalari/oralb-proexpert-derinlemesine-temizlik-dis-fircasi-11-orta-p-10009978
 /dis-fircalari/oralb-prosensitive-advanced-hassas-temizlik-dis-fircasi-ekstra-11-yumusak-p-10020045
-/dis-fircalari/parodontax-dis-eti-uzmani-dis-fircasi-2li-yumusak-p-10131743
-/dis-fircalari/parodontax-uzman-bakim-dis-fircasi-2li-yumusak-p-10131744
 /dis-fircalari/rocs-black-edition-dis-fircasi-orta-p-10038291
 /dis-fircalari/rocs-smokers-leke-silici-dis-fircasi-asortili-p-10204563
 /dis-fircalari/sensodyne-gentle-dis-fircasi-yumusak-p-10006949
@@ -1811,11 +1813,6 @@
 /dis-macunlari/oralb-professional-densify-hassas-beyazlik-dis-macunu-65-ml-p-10383604
 /dis-macunlari/oralb-proscience-advanced-hassasiyet-ve-dis-eti-rahatlama-orijinal-dis-macunu-75-ml-p-10518517
 /dis-macunlari/oralb-proscience-clinical-densify-curuk-kalkani-yogun-temizlik-dis-macunu-65-ml-p-10200774
-/dis-macunlari/parodontax-aktif-dis-eti-onarimi-beyazlatici-dis-macunu-75-ml-p-10203983
-/dis-macunlari/parodontax-beyazlatici-dis-macunu-75-ml-x2-p-10752620
-/dis-macunlari/parodontax-dis-eti-guclendirme-ve-koruma-beyazlatici-dis-macunu-75-ml-p-10203768
-/dis-macunlari/parodontax-dis-eti-hassasiyet-ve-ferahlik-dis-macunu-75-ml-p-10468056
-/dis-macunlari/parodontax-tam-koruma-beyazlatici-dis-macunu-75-ml-p-10214807
 /dis-macunlari/piu-cosmetic-aktif-karbon-dis-beyazlatma-macunu-75-ml-p-10215939
 /dis-macunlari/rocs-aktif-kalsiyum-ekstra-beyazlatici-dis-macunu-94-gr-p-10204559
 /dis-macunlari/rocs-coffee-tobacco-lekelere-karsi-dis-macunu-74-gr-p-10204560
@@ -5458,6 +5455,7 @@
 /goz-kremleri/the-purest-solutions-kirisiklik-karsiti-goz-cevresi-bakim-kremi-12-ml-p-10215603
 /goz-kremleri/vt-cosmetics-reedle-shot-lifting-goz-kremi-15-ml-p-10214509
 /goz-kremleri/vt-cosmetics-reedle-shot-vitalight-goz-kremi-15-ml-p-10213288
+/goz-kremleri/yoskine-zen-lift-goz-ve-agiz-cevresi-puruzsuzlestirici-krem-30-ml-p-10219559
 /goz-makyaji-temizleyiciler/bee-beauty-cift-fazli-goz-makyaj-temizleyicisi-150-ml-p-10200449
 /goz-makyaji-temizleyiciler/cosnori-micro-active-dudak-ve-goz-makyaj-temizleme-suyu-100-ml-p-10212042
 /goz-makyaji-temizleyiciler/garnier-goz-makyaj-temizleyici-125-ml-p-10213654
@@ -5903,6 +5901,7 @@
 /gunluk-nemlendirici-kremler-spreyler/vt-cosmetics-reedle-shot-lifting-yuz-kremi-50-ml-p-10214039
 /gunluk-nemlendirici-kremler-spreyler/vt-cosmetics-reedle-shot-vitalight-yuz-kremi-50-ml-p-10214511
 /gunluk-nemlendirici-kremler-spreyler/vt-cosmetics-txtoning-yuz-kremi-50-ml-p-10214037
+/gunluk-nemlendirici-kremler-spreyler/yoskine-zen-lift-hafif-dokulu-yaslanma-karsiti-yuz-kremi-50-ml-p-10219551
 /gunluk-nemlendirici-kremler-spreyler/ziaja-keci-sutu-nemlendirici-gunduz-kremi-50-ml-p-10270840
 /gunluk-nemlendirici-kremler-spreyler/ziaja-multivitamin-nemlendirici-yuz-kremi-50-ml-p-10468397
 /gunluk-nemlendirici-kremler-spreyler/ziaja-normal-kuru-ve-hassas-ciltler-acik-ton-bb-krem-50-ml-p-10283606
@@ -5951,7 +5950,6 @@
 /hasere-ilaclari/off-sinekkovar-losyon-100-ml-p-10001879
 /hasere-ilaclari/off-sinekkovar-okaliptus-vucut-losyonu-100-ml-p-10221039
 /hasere-ilaclari/siveno-100-sivrisinek-ve-kene-kovucu-sprey-krem-50-ml-p-10217210
-/hasta-bezi/sleepy-sensitive-antibakteriyel-super-emici-kulot-large-8-adet-p-10215997
 /hidrofil-pamuk/benri-hidrofil-pamuk-100-gr-p-10005051
 /hijyen/eklips-ped-saklama-kutusu-p-10014978
 /hijyenik-ped/benri-hijyenik-ped-gece-7li-p-10733637
@@ -6806,6 +6804,7 @@
 /kadin-vucut-spreyi/she-cool-kadin-vucut-spreyi-200-ml-p-10215469
 /kadin-vucut-spreyi/she-fun-kadin-vucut-spreyi-200-ml-p-10215466
 /kadin-vucut-spreyi/she-love-kadin-vucut-spreyi-200-ml-p-10215470
+/kadin-vucut-spreyi/she-pretty-kadin-vucut-spreyi-200-ml-p-10215442
 /kadin-vucut-spreyi/she-sexy-kadin-vucut-spreyi-200-ml-p-10215468
 /kadin-vucut-spreyi/she-sweet-kadin-vucut-spreyi-200-ml-p-10215467
 /kadin-vucut-spreyi/soda-unicorns-approve-magical-vucut-spreyi-150-ml-p-10207048
@@ -6893,6 +6892,7 @@
 /kapatici-concealer/beaulis-cover-it-kapatici-132-pale-almond-p-10726725
 /kapatici-concealer/beaulis-cover-it-kapatici-135-light-beige-p-10726727
 /kapatici-concealer/beaulis-cover-it-kapatici-137-fair-p-10726726
+/kapatici-concealer/beaulis-filter-it-kapatici-paleti-p-10211631
 /kapatici-concealer/beauty-bomb-kapatici-smiley-01-p-10210086
 /kapatici-concealer/beauty-bomb-kapatici-smiley-03-p-10210090
 /kapatici-concealer/beauty-bomb-liquid-kapatici-no-troubles-02-mediumcoverage-for-blemish-correction-p-10210084
@@ -6918,6 +6918,8 @@
 /kapatici-concealer/flormar-perfect-glow-nemli-ve-aydinlik-bitisli-serum-kapatici-006-n2-shell-p-10222119
 /kapatici-concealer/flormar-perfect-glow-nemli-ve-aydinlik-bitisli-serum-kapatici-010-c4-fawn-p-10222120
 /kapatici-concealer/flormar-stay-perfect-yogun-pigmentli-kapatici-003-soft-beige-p-10201066
+/kapatici-concealer/flormar-stay-perfect-yogun-pigmentli-kapatici-011-matcha-veil-p-10216509
+/kapatici-concealer/flormar-stay-perfect-yogun-pigmentli-kapatici-012-salmon-cover-p-10216510
 /kapatici-concealer/gosh-cover-up-corrector-001-soft-green-p-10218078
 /kapatici-concealer/gosh-eye-brightn-kapatici-002-soft-pink-p-10218079
 /kapatici-concealer/gosh-high-coverage-kapatici-001-porcelain-p-10218232
@@ -6946,6 +6948,12 @@
 /kapatici-concealer/maruderm-make-up-cover-crush-kapatici-no-03-p-10218396
 /kapatici-concealer/maruderm-make-up-cover-crush-kapatici-no-04-p-10218397
 /kapatici-concealer/maybelline-new-york-instant-anti-age-eraser-kapatici-04-honey-p-10256084
+/kapatici-concealer/maybelline-new-york-lifter-kafein-ve-peptitler-iceren-nemlendiren-ve-aydinlatan-kapatici-05-p-10215482
+/kapatici-concealer/maybelline-new-york-lifter-kafein-ve-peptitler-iceren-nemlendiren-ve-aydinlatan-kapatici-15-p-10215483
+/kapatici-concealer/maybelline-new-york-lifter-kafein-ve-peptitler-iceren-nemlendiren-ve-aydinlatan-kapatici-20-p-10215484
+/kapatici-concealer/maybelline-new-york-lifter-kafein-ve-peptitler-iceren-nemlendiren-ve-aydinlatan-kapatici-25-p-10215485
+/kapatici-concealer/maybelline-new-york-lifter-kafein-ve-peptitler-iceren-nemlendiren-ve-aydinlatan-kapatici-30-p-10215486
+/kapatici-concealer/maybelline-new-york-lifter-kafein-ve-peptitler-iceren-nemlendiren-ve-aydinlatan-kapatici-35-p-10215487
 /kapatici-concealer/new-well-pink-concealer-p-10213745
 /kapatici-concealer/pastel-makeup-to-skincare-eye-cream-hydrating-satin-concealer-goz-kremi-goz-alti-kapaticisi-61-vanilla-p-10186020
 /kapatici-concealer/pastel-makeup-to-skincare-eye-cream-hydrating-satin-concealer-goz-kremi-goz-alti-kapaticisi-62-ivory-p-10186021
@@ -6987,7 +6995,6 @@
 /kapatici/beaulis-close-it-likit-kapatici-134-sand-p-10136519
 /kapatici/beaulis-close-it-likit-kapatici-650-pink-sand-p-10207992
 /kapatici/beaulis-cover-it-kapatici-136-light-honey-p-10726728
-/kapatici/beaulis-filter-it-kapatici-paleti-p-10211631
 /kapatici/beaulis-fun-cover-or-bare-kapatici-137-almond-p-10202910
 /kapatici/beaulis-fun-cover-or-bare-kapatici-144-creamy-beige-p-10202911
 /kapatici/beaulis-fun-cover-or-bare-kapatici-160-fairy-light-p-10202912
@@ -6998,8 +7005,6 @@
 /kapatici/flormar-stay-perfect-yogun-pigmentli-kapatici-002-light-p-10200075
 /kapatici/flormar-stay-perfect-yogun-pigmentli-kapatici-006-medium-beige-p-10200076
 /kapatici/flormar-stay-perfect-yogun-pigmentli-kapatici-007-light-beige-p-10203726
-/kapatici/flormar-stay-perfect-yogun-pigmentli-kapatici-011-matcha-veil-p-10216509
-/kapatici/flormar-stay-perfect-yogun-pigmentli-kapatici-012-salmon-cover-p-10216510
 /kapatici/golden-rose-just-touch-liquid-concealer-no-1-p-10081253
 /kapatici/golden-rose-just-touch-liquid-concealer-no-3-p-10081254
 /kapatici/golden-rose-just-touch-liquid-concealer-no-5-p-10081255
@@ -7036,12 +7041,6 @@
 /kapatici/maybelline-new-york-instant-anti-age-eraser-kapatici-07-sand-p-10081190
 /kapatici/maybelline-new-york-instant-anti-age-eraser-kapatici-121-light-honey-p-10256083
 /kapatici/maybelline-new-york-instant-anti-age-eraser-renk-esitleyici-kapatici-p-10206627
-/kapatici/maybelline-new-york-lifter-kafein-ve-peptitler-iceren-nemlendiren-ve-aydinlatan-kapatici-05-p-10215482
-/kapatici/maybelline-new-york-lifter-kafein-ve-peptitler-iceren-nemlendiren-ve-aydinlatan-kapatici-15-p-10215483
-/kapatici/maybelline-new-york-lifter-kafein-ve-peptitler-iceren-nemlendiren-ve-aydinlatan-kapatici-20-p-10215484
-/kapatici/maybelline-new-york-lifter-kafein-ve-peptitler-iceren-nemlendiren-ve-aydinlatan-kapatici-25-p-10215485
-/kapatici/maybelline-new-york-lifter-kafein-ve-peptitler-iceren-nemlendiren-ve-aydinlatan-kapatici-30-p-10215486
-/kapatici/maybelline-new-york-lifter-kafein-ve-peptitler-iceren-nemlendiren-ve-aydinlatan-kapatici-35-p-10215487
 /kapatici/new-well-sun-protective-eye-area-care-yaslanma-karsiti-goz-cevresi-kremi-p-10213746
 /kapatici/note-3in1-serum-concealer-00-light-p-10212093
 /kapatici/note-3in1-serum-concealer-10-medium-p-10212094
@@ -7539,6 +7538,8 @@
 /kolonyalar/selin-muge-misk-sprey-kolonya-50-ml-p-10201658
 /kolonyalar/selin-okyanus-esintisi-kolonya-400-ml-pet-sise-p-10202330
 /kolonyalar/selin-okyanus-esintisi-sprey-kolonya-100-ml-p-10212544
+/kontur/astra-stick-krem-kontur-fair-p-10209787
+/kontur/astra-stick-krem-kontur-light-p-10209789
 /kontur/beaulis-must-have-it-mini-kontur-paleti-153-light-to-medium-p-10173164
 /kontur/beauty-bomb-kontur-paleti-contouring-queen-01-p-10209542
 /kontur/beauty-bomb-kontur-paleti-contouring-queen-02-p-10209544
@@ -8095,6 +8096,7 @@
 /makyaj-fircalari/eklips-natural-pudra-fircasi-p-10069362
 /makyaj-fircalari/eklips-natural-yuvarlak-far-fircasi-p-10118640
 /makyaj-fircalari/eklips-oval-kapatici-fircasi-p-10212451
+/makyaj-fircalari/eklips-pink-edition-5li-makyaj-firca-seti-p-10213995
 /makyaj-fircalari/eklips-pro-shine-acili-fondoten-fircasi-p-10108482
 /makyaj-fircalari/eklips-pro-shine-duz-kontur-fircasi-p-10108481
 /makyaj-fircalari/eklips-pro-shine-fan-fircasi-p-10108487
@@ -8494,6 +8496,7 @@
 /maskara/loreal-paris-panorama-hacim-veren-maskara-all-night-black-siyah-p-10208086
 /maskara/loreal-paris-panorama-hacim-veren-maskara-siyah-p-10208076
 /maskara/loreal-paris-paradise-big-deal-maskara-siyah-p-10208087
+/maskara/loreal-paris-telescopic-carbon-black-maskara-p-10208217
 /maskara/loreal-paris-telescopic-extensionist-maskara-p-10215840
 /maskara/loreal-paris-telescopic-lift-maskara-extra-black-p-10208088
 /maskara/loreal-paris-telescopic-lift-maskara-p-10208089
@@ -8723,6 +8726,10 @@
 /oje/beaulis-cloud-veil-oje-713-lemon-icing-p-10216845
 /oje/beaulis-cloud-veil-oje-777-almost-aqua-p-10217161
 /oje/beaulis-cloud-veil-oje-864-ice-melt-p-10216849
+/oje/beaulis-color-blast-oje-300-fire-red-p-10220682
+/oje/beaulis-color-blast-oje-568-pink-splash-p-10220677
+/oje/beaulis-color-blast-oje-676-cosmic-plum-p-10220680
+/oje/beaulis-color-blast-oje-784-juicy-lime-p-10220683
 /oje/beaulis-paint-it-oje-100-black-p-10129315
 /oje/beaulis-paint-it-oje-101-white-p-10129300
 /oje/beaulis-paint-it-oje-113-full-white-p-10120688
@@ -11522,6 +11529,7 @@
 /termos-matara/stevig-2-moods-termos-900-ml-st239-bisque-p-10216908
 /termos-matara/stevig-bubble-celik-termos-600-ml-st245-lilac-hint-p-10216920
 /termos-matara/stevig-bubble-celik-termos-600-ml-st247-lightest-sky-p-10216912
+/termos-matara/stevig-bubble-celik-termos-600-ml-st248-soft-quartz-p-10216913
 /termos-matara/stevig-bubble-celik-termos-600-ml-st249-white-stone-p-10216914
 /termos-matara/vpw-motivasyon-matarasi-2-li-set-uv-kaplama-asortili-p-10455791
 /tiras-bicaklari/bic-flex3-hybrid-3-bicakli-1-sap-4-kartus-tiras-bicagi-p-10116779
@@ -12512,6 +12520,7 @@
 /yedek-bicaklar/gillette-sensor3-comfort-8li-yedek-bicak-basligi-p-10208360
 /yetiskin-bezi/sleepy-antibakteriyel-super-emici-kulot-small-9-adet-p-10217030
 /yetiskin-bezi/sleepy-antibakteriyel-super-emici-kulot-xlarge-7-adet-p-10217032
+/yetiskin-bezi/sleepy-sensitive-antibakteriyel-super-emici-kulot-large-8-adet-p-10215997
 /yuz-bakim-bandi/bee-beauty-akne-vucut-yara-bandi-4-adet-p-10219961
 /yuz-bakim-bandi/bee-beauty-akne-yara-bandi-36-adet-p-10198351
 /yuz-bakim-bandi/bee-beauty-ayicik-desenli-akne-bandi-20-adet-p-10207789
@@ -12739,6 +12748,7 @@
 /yuz-bakim-maskesi-paket/pure-korean-collagen-plus-3x-active-yuz-maskesi-p-10213233
 /yuz-bakim-maskesi-paket/pure-korean-collagen-yuz-maskesi-p-10204969
 /yuz-bakim-maskesi-paket/pure-korean-ginseng-yuz-maskesi-p-10213230
+/yuz-bakim-maskesi-paket/pure-korean-glutathione-melting-hydrogel-yuz-maskesi-p-10222453
 /yuz-bakim-maskesi-paket/pure-korean-glutathione-x-collagen-serum-yuz-maskesi-p-10222454
 /yuz-bakim-maskesi-paket/pure-korean-hyaluronic-acid-serum-yuz-maskesi-p-10213231
 /yuz-bakim-maskesi-paket/pure-korean-hydrogel-lip-mask-p-10200375
@@ -12797,6 +12807,7 @@
 /yuz-gunes-kremleri/bee-beauty-yuz-kremic-vitmini-50spf-50-ml-p-10205485
 /yuz-gunes-kremleri/bolbe-spf-50-sun-drop-yuksek-korumali-leke-karsiti-ve-gunluk-gunes-serumu-30-ml-invisible-sun-fluid-p-10215165
 /yuz-gunes-kremleri/bolbe-spf-50-yuksek-korumali-leke-karsiti-gunluk-gunes-kremi-50-ml-p-10215164
+/yuz-gunes-kremleri/calliel-gorunmeyen-seffaf-dogal-bitisli-nemlendirici-etkili-spf50-yuz-gunes-kremi-80-ml-p-10221285
 /yuz-gunes-kremleri/calliel-hafif-yapi-ton-esitleyen-50-spf-gunluk-renkli-likit-yuz-gunes-kremi-50-ml-m02-p-10221287
 /yuz-gunes-kremleri/calliel-leke-karsiti-glutatyon-etkili-tum-ciltler-icin-yuksek-korumali-spf50-yuz-gunes-kremi-50-ml-p-10221295
 /yuz-gunes-kremleri/calliel-spf50-yuksek-koruma-ve-nemlendirici-etkili-leke-karsiti-gunluk-gunes-koruyucu-yuz-gunes-kremi-80-ml-p-10221282
@@ -13052,6 +13063,7 @@
 /yuz-nemlendirici-gece-kremleri/dermoten-stemage-onarici-eksozom-gece-kremi-50-ml-p-10214615
 /yuz-nemlendirici-gece-kremleri/guinot-newhite-aydinlatici-yuz-gece-kremi-50-ml-p-10219890
 /yuz-nemlendirici-gece-kremleri/guinot-night-logic-yuz-gece-kremi-50-ml-p-10219880
+/yuz-nemlendirici-gece-kremleri/hada-labo-tokyo-aydinlatici-canlandirici-hidrojel-gece-ve-gunduz-kremi-50-ml-p-10197549
 /yuz-nemlendirici-gece-kremleri/hada-labo-tokyo-glow-nemlendirici-gece-ve-gunduz-kremi-50-ml-p-10197548
 /yuz-nemlendirici-gece-kremleri/hada-labo-tokyo-puruzsuzlestirici-ve-nemlendirici-gunduz-ve-gece-kremi-50-ml-p-10085166
 /yuz-nemlendirici-gece-kremleri/janssen-cosmetics-melanin-dengeleyici-gece-bakim-kremi-50-ml-p-10777820
@@ -13165,6 +13177,7 @@
 /yuz-serumlari-cilt-serumu-yaglari/ethereal-procomplex-yuz-serumu-30-ml-p-10214005
 /yuz-serumlari-cilt-serumu-yaglari/eyewake-yaslanma-karsiti-goz-cevresi-bakim-jeli-30-ml-p-10671129
 /yuz-serumlari-cilt-serumu-yaglari/farm-rx-ananas-vec-vitamini-icerikli-aydinlatici-serum-30-ml-p-10211852
+/yuz-serumlari-cilt-serumu-yaglari/garnierc-vitamini-3-etki-1-arada-spf-25-serum-krem-50-ml-p-10222465
 /yuz-serumlari-cilt-serumu-yaglari/garnierc-vitamini-parlak-super-aydinlatici-serum-30-ml-p-10268688
 /yuz-serumlari-cilt-serumu-yaglari/garnierc-vitamini-super-aydinlatici-gece-serumu-30-ml-p-10199657
 /yuz-serumlari-cilt-serumu-yaglari/guinot-acnilogic-yuz-serumkremi-30-ml-p-10219866
@@ -13180,6 +13193,7 @@
 /yuz-serumlari-cilt-serumu-yaglari/guinot-longue-vie-antiaging-yuz-serumu-30-ml-p-10219820
 /yuz-serumlari-cilt-serumu-yaglari/guinot-neurolife-influx-konsantre-yuz-serumu-30-ml-p-10219830
 /yuz-serumlari-cilt-serumu-yaglari/guinot-nouvelle-vie-yuz-serumu-30-ml-p-10219829
+/yuz-serumlari-cilt-serumu-yaglari/hada-labo-antiaging-yuz-bakim-seti-p-10219541
 /yuz-serumlari-cilt-serumu-yaglari/hada-labo-tokyo-alpha-kirisiklik-karsiti-jel-losyon-150-ml-p-10327950
 /yuz-serumlari-cilt-serumu-yaglari/hada-labo-tokyo-kirisiklik-karsiti-jel-losyon-150-ml-p-10085170
 /yuz-serumlari-cilt-serumu-yaglari/hada-labo-tokyo-kirisiklik-karsiti-nemlendirici-serum-30-ml-p-10085167
@@ -13382,6 +13396,8 @@
 /yuz-serumlari-cilt-serumu-yaglari/vt-cosmetics-vitalight-reedle-shot-100-yuz-kremi-50-ml-p-10214562
 /yuz-serumlari-cilt-serumu-yaglari/yoskine-japon-pure-nemlendirici-stick-krem-30-ml-p-10211873
 /yuz-serumlari-cilt-serumu-yaglari/yoskine-japon-pure-pirinc-serumu-30-ml-p-10211872
+/yuz-serumlari-cilt-serumu-yaglari/yoskine-zen-lift-blur-esans-200-ml-p-10219557
+/yuz-serumlari-cilt-serumu-yaglari/yoskine-zen-lift-yaslanma-karsiti-yuz-serumu-30-ml-p-10219555
 /yuz-temizleme-bantlari/bee-beauty-aktif-karbon-siyah-nokta-bandi-6li-p-10394248
 /yuz-temizleme-bantlari/bee-beauty-aloe-vera-siyah-nokta-bandi-6li-p-10225570
 /yuz-temizleme-bantlari/nivea-siyah-nokta-temizleyici-ve-gozenek-arindirici-burun-tbant-1-kutu-p-10379287
