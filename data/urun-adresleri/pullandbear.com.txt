@@ -19,7 +19,7 @@
 /tr/balon-kargo-pantolon-l07670353
 /tr/balon-kesim-baggy-jean-l07662505
 /tr/balon-kesim-suni-deri-bomber-ceket-l07720317
-/tr/bambi-desenli-dusuk-bel-duz-kesim-jean-l07671309
+/tr/balon-relaxed-fit-kvrlms-belli-dusuk-bel-jean-l07662411
 /tr/barrel-jean-l07660507
 /tr/basic-atlet-l03230316
 /tr/basic-blazer-l03790308
@@ -28,7 +28,6 @@
 /tr/bikini-alt-l03000301
 /tr/boncuk-detayl-duz-sandalet-l11706740
 /tr/boncuk-detayl-el-cantas-l14012840
-/tr/boncuk-detayl-el-cantas-l14069840
 /tr/boncuk-detayl-omuz-cantas-l14025840
 /tr/boncuk-detayl-shopper-canta-l14004840
 /tr/boncuklu-omuz-cantas-l14014840
@@ -59,10 +58,10 @@
 /tr/cizgili-oversize-tisort-l07230381
 /tr/cizgili-pijama-pantolon-l07662502
 /tr/cizgili-relaxed-fit-kargo-jean-l07662507
-/tr/cizgili-uzun-kollu-oversize-tisort-l07231399
 /tr/cizgili-ve-cicek-islemeli-tote-canta-l14157740
 /tr/crop-denim-ceket-l07221301
 /tr/deri-sabo-terlik-l12404840
+/tr/desenli-dusuk-bel-straight-fit-jean-l07671309
 /tr/detayl-shopper-canta-l14094840
 /tr/dik-yaka-sisme-mont-l07720318
 /tr/dik-yaka-suni-deri-ceket-l07720357
@@ -90,6 +89,7 @@
 /tr/frfrl-uzun-kimono-l03721301
 /tr/genis-paca-jean-l07662511
 /tr/genis-yaka-atlet-l03231308
+/tr/gorunumu-kesfet-l97910558281BSBS
 /tr/gorunumu-satn-al-l91022888062BSBS
 /tr/gorunumu-satn-al-l99003235000BSBS
 /tr/gorunumu-tamamla-l97553750153BSBS
@@ -128,7 +128,6 @@
 /tr/kapusonlu-suni-suet-bomber-ceket-l07720354
 /tr/kapusonlu-syla-muhurlenmis-sisme-ceket-l07700505
 /tr/kareli-grafikli-bermuda-sort-l07665502
-/tr/kat-detayl-baggy-relaxed-jean-l07662411
 /tr/kemer-koprulu-balon-jean-l07660301
 /tr/kemer-koprulu-super-genis-paca-jean-l07662301
 /tr/kemer-tipi-bel-cantas-l14149840
@@ -136,6 +135,7 @@
 /tr/kemerli-uzun-kaban-l07755351
 /tr/kimono-tunik-l03720369
 /tr/kombin-cift-tarafl-ceket-l07700508
+/tr/kombini-kesfet-l90201114350BSBS
 /tr/kombini-kesfet-l95326071753BSBS
 /tr/kombini-satn-al-l93765627746BSBS
 /tr/kombini-satn-al-l94944175378BSBS
@@ -167,6 +167,7 @@
 /tr/kontrast-yakal-denim-ceket-l07720306
 /tr/koruklu-balon-fit-bol-paca-jean-l07683440
 /tr/kot-jogger-pantolon-l03660518
+/tr/krokodil-suni-deri-ceket-l07750370
 /tr/kruvaze-kase-kaban-l07755302
 /tr/ksa-balon-trenckot-l07721321
 /tr/ksa-denim-tulum-l03021100
@@ -230,6 +231,7 @@
 /tr/stili-kesfet-l90527995791BSBS
 /tr/stili-kesfet-l90633383796BSBS
 /tr/stili-kesfet-l91139017060BSBS
+/tr/stili-kesfet-l93173424754BSBS
 /tr/stili-kesfet-l99123615612BSBS
 /tr/stili-kesfet-l99946702797BSBS
 /tr/stili-satin-al-l91531749432BSBS
@@ -241,11 +243,12 @@
 /tr/suni-deri-balon-ceket-l07700317
 /tr/suni-deri-biker-ceket-l03720323
 /tr/suni-deri-biker-ceket-l03720325
+/tr/suni-deri-ceket-l07720507
 /tr/suni-deri-ceket-l07721513
 /tr/suni-deri-dad-ceket-l07720381
 /tr/suni-suet-ceket-l07720512
 /tr/suni-yunlu-yakal-denim-ceket-l07701519
-/tr/super-genis-paca-jean-l07660317
+/tr/super-genis-paca-comfort-jean-l07660317
 /tr/suslemeli-file-tote-canta-l14191740
 /tr/suslemeli-omuz-cantas-l14006840
 /tr/suslu-dugmeli-ceket-l07721501
@@ -253,7 +256,6 @@
 /tr/suslu-dugmeli-denim-ceket-l07720309
 /tr/suslu-dugmeli-yelek-l07778300
 /tr/tapered-fit-jean-l07662501
-/tr/timsah-desenli-suni-deri-ceket-l07750370
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
 /tr/tokal-tote-canta-l14147840

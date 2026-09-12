@@ -6127,7 +6127,7 @@
 /kadin-deodorant-sprey/rexona-shower-fresh-ustun-koruma-kadin-sprey-deodorant-150-ml-roll-on-20-ml-p-10203660
 /kadin-deodorant-sprey/rexona-thermocool-kadin-sprey-deodorant-eucalyptus-magnolia-150-ml-p-10215987
 /kadin-deodorant-sprey/rexona-thermocool-kadin-sprey-deodorant-frozen-acai-jasmine-150-ml-p-10215986
-/kadin-deodorant-sprey/sebamed-kadin-deodorant-sprey-active-75-ml-p-10028121
+/kadin-deodorant-sprey/sebamed-unisex-deodorant-sprey-active-75-ml-p-10028121
 /kadin-deodorant-sprey/she-fun-kadin-deodorant-sprey-150-ml-p-18000126
 /kadin-deodorant-sprey/she-sexy-kadin-deodorant-sprey-150-ml-p-18000129
 /kadin-deodorant-sprey/slazenger-perfumed-kadin-deodorant-sprey-yesil-150-ml-p-10200725
@@ -11680,6 +11680,8 @@
 /toka-tac/eklips-dogum-gunu-happy-birthday-taci-lila-p-10217604
 /toka-tac/eklips-dogum-gunu-happy-birthday-taci-pembe-p-10217605
 /toka-tac/eklips-dugumlu-tac-lila-p-10202549
+/toka-tac/eklips-dugumlu-tac-mor-p-10217591
+/toka-tac/eklips-dugumlu-tac-pembe-p-10217592
 /toka-tac/eklips-fiyonk-klips-toka-pembe-p-10218741
 /toka-tac/eklips-fiyonk-klips-toka-sari-p-10218743
 /toka-tac/eklips-istiridye-balik-kuyrugu-cocuk-pens-toka-01-p-10217571
