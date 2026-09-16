@@ -42,7 +42,6 @@
 /tr/bisiklet-yaka-sweatshirt-l07558311
 /tr/boncuk-detayl-duz-sandalet-l11706740
 /tr/boncuk-detayl-el-cantas-l14012840
-/tr/boncuk-detayl-el-cantas-l14069840
 /tr/boncuk-detayl-omuz-cantas-l14025840
 /tr/boncuk-detayl-shopper-canta-l14004840
 /tr/boncuklu-omuz-cantas-l14014840
@@ -72,7 +71,6 @@
 /tr/cizgili-havlu-kumas-shopper-canta-l14013840
 /tr/cizgili-ksa-kollu-gomlek-l07460510
 /tr/cizgili-orgu-tote-canta-l14020840
-/tr/cizgili-oversize-tisort-l07230375
 /tr/cizgili-oversize-tisort-l07230381
 /tr/cizgili-pijama-pantolon-l07662502
 /tr/cizgili-relaxed-fit-kargo-jean-l07662507
@@ -342,7 +340,6 @@
 /tr/suni-suet-ceket-l07720512
 /tr/suni-yunlu-yakal-denim-ceket-l07701519
 /tr/super-genis-paca-comfort-jean-l07660317
-/tr/suslemeli-file-tote-canta-l14191740
 /tr/suslemeli-omuz-cantas-l14006840
 /tr/suslu-dugmeli-ceket-l07721501
 /tr/suslu-dugmeli-dar-kesim-ceket-l07720356
@@ -351,6 +348,7 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
+/tr/tokal-tote-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
