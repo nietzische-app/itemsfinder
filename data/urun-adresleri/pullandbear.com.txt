@@ -15,7 +15,6 @@
 /tr/baggy-jean-l07660500
 /tr/baggy-jean-l07662510
 /tr/baggy-relaxed-fit-jean-l07660508
-/tr/baggy-straight-payetli-jean-l03661306
 /tr/balon-bomber-ceket-l03720372
 /tr/balon-bomber-ceket-l07720320
 /tr/balon-kargo-pantolon-l07670353
@@ -85,6 +84,7 @@
 /tr/dik-yaka-buzgulu-ceket-l07720375
 /tr/dik-yaka-oversize-bomber-ceket-l07720353
 /tr/dik-yaka-sisme-mont-l07720318
+/tr/dik-yaka-suni-deri-ceket-l07720323
 /tr/dik-yaka-suni-deri-ceket-l07720357
 /tr/dik-yakal-vucuda-oturan-ceket-l07720382
 /tr/dikis-detayl-baggy-balon-jean-l07662407
@@ -141,6 +141,7 @@
 /tr/islemeli-tote-canta-l14052840
 /tr/isltl-bootcut-jean-l03660178
 /tr/isltl-genis-paca-jean-l07660309
+/tr/isltl-straight-fit-jean-l03661306
 /tr/kapitone-stwd-yelek-l07720599
 /tr/kapusonlu-bomber-ceket-l07720511
 /tr/kapusonlu-dolgulu-ceket-l07700369
@@ -227,7 +228,6 @@
 /tr/koruklu-balon-fit-bol-paca-jean-l07683440
 /tr/kot-jogger-pantolon-l03660518
 /tr/krokodil-suni-deri-ceket-l07750370
-/tr/kruvaze-boncuklu-gomlek-l03671306
 /tr/kruvaze-kase-kaban-l07755302
 /tr/ksa-balon-trenckot-l07721321
 /tr/ksa-denim-tulum-l03021100
@@ -250,7 +250,6 @@
 /tr/modal-icerikli-can-pantolon-l07670320
 /tr/modal-icerikli-genis-paca-pantolon-l07670319
 /tr/modal-icerikli-yarasa-kollu-tisort-l07558306
-/tr/mom-fit-jean-l07687305
 /tr/mumlu-gorunumlu-bomber-ceket-l07720302
 /tr/muscle-fit-tisort-l09247599
 /tr/naks-detayl-grafikli-tisort-l03231548
@@ -357,7 +356,6 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
-/tr/tokal-tote-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
@@ -378,6 +376,7 @@
 /tr/yrtk-detayl-straight-jean-l07662506
 /tr/yrtk-mom-fit-jean-l03660302
 /tr/yuksek-bel-balon-jean-l07660320
+/tr/yuksek-bel-mom-fit-jean-l07687305
 /tr/yuksek-bel-skinny-jean-l03660305
 /tr/yuksek-bel-slim-fit-jean-l07662400
 /tr/yuksek-bel-wide-straight-jean-l03660308
