@@ -3,6 +3,7 @@
 /tr/100-pamuklu-barrel-jean-l07662520
 /tr/100-pamuklu-ceket-l07721311
 /tr/ajurlu-ksa-kollu-gomlek-l07460513
+/tr/ajurlu-space-dye-kazak-l07540313
 /tr/ajurlu-triko-kazak-l07540500
 /tr/askl-tisort-l03232502
 /tr/ayarlanabilir-askl-basic-top-l03230394
@@ -42,7 +43,6 @@
 /tr/boncuk-detayl-duz-sandalet-l11706740
 /tr/boncuk-detayl-el-cantas-l14012840
 /tr/boncuk-detayl-omuz-cantas-l14025840
-/tr/boncuk-detayl-shopper-canta-l14004840
 /tr/boncuklu-omuz-cantas-l14014840
 /tr/boncuklu-omuz-cantas-l14029840
 /tr/bootcut-jean-l07660308
@@ -71,6 +71,7 @@
 /tr/cizgili-havlu-kumas-shopper-canta-l14013840
 /tr/cizgili-ksa-kollu-gomlek-l07460510
 /tr/cizgili-orgu-tote-canta-l14020840
+/tr/cizgili-orgu-tote-canta-l14057840
 /tr/cizgili-oversize-tisort-l07230381
 /tr/cizgili-pijama-pantolon-l07662502
 /tr/cizgili-relaxed-fit-kargo-jean-l07662507
@@ -254,6 +255,7 @@
 /tr/muscle-fit-tisort-l09247599
 /tr/naks-detayl-grafikli-tisort-l03231548
 /tr/naksl-relaxed-fit-tisort-l03231508
+/tr/naksl-shopper-canta-l14023840
 /tr/naylon-suslemeli-tote-canta-l14058840
 /tr/on-dikisli-barrel-jean-l07662504
 /tr/orta-bel-baggy-jean-l07660319
@@ -356,6 +358,7 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
+/tr/tokal-tote-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
