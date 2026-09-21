@@ -113,6 +113,7 @@
 /tr/fermuarl-tailored-fit-ceket-l07721519
 /tr/fitilli-ksa-kollu-t-shirt-l03230346
 /tr/frfrl-uzun-kimono-l03721301
+/tr/genis-paca-jean-l07660340
 /tr/genis-paca-jean-l07662511
 /tr/genis-yaka-atlet-l03231308
 /tr/gorunumu-kesfet-l97910558281BSBS
@@ -139,7 +140,6 @@
 /tr/islemeli-ay-detayl-baggy-jean-l07662310
 /tr/islemeli-barrel-jean-l07662522
 /tr/islemeli-ceket-l07721500
-/tr/islemeli-tote-canta-l14052840
 /tr/isltl-bootcut-jean-l03660178
 /tr/isltl-genis-paca-jean-l07660309
 /tr/isltl-straight-fit-jean-l03661306
