@@ -18,6 +18,7 @@
 /tr/baggy-relaxed-fit-jean-l07660508
 /tr/balon-bomber-ceket-l03720372
 /tr/balon-bomber-ceket-l07720320
+/tr/balon-jakarl-kumas-baggy-jean-l07662521
 /tr/balon-kargo-pantolon-l07670353
 /tr/balon-kesim-baggy-jean-l07662505
 /tr/balon-kesim-suni-deri-bomber-ceket-l07720317
@@ -36,7 +37,6 @@
 /tr/basic-tisort-l08242500
 /tr/basic-trenckot-l07721300
 /tr/beli-buzgulu-ceket-l07720368
-/tr/bikini-alt-l03000301
 /tr/bisiklet-yaka-atlet-l03230353
 /tr/bisiklet-yaka-relaxed-fit-sweatshirt-l07558514
 /tr/bisiklet-yaka-sweatshirt-l07558311
@@ -81,12 +81,12 @@
 /tr/dar-kesim-ksa-kollu-tisort-l07150305
 /tr/deri-sabo-terlik-l12404840
 /tr/desenli-dusuk-bel-straight-fit-jean-l07671309
-/tr/detayl-shopper-canta-l14094840
 /tr/dik-yaka-buzgulu-ceket-l07720375
 /tr/dik-yaka-oversize-bomber-ceket-l07720353
 /tr/dik-yaka-sisme-mont-l07720318
 /tr/dik-yaka-suni-deri-ceket-l07720323
 /tr/dik-yaka-suni-deri-ceket-l07720357
+/tr/dik-yakal-ksa-parka-l07720371
 /tr/dik-yakal-vucuda-oturan-ceket-l07720382
 /tr/dikis-detayl-baggy-balon-jean-l07662407
 /tr/dikis-detayl-relaxed-fit-denim-bermuda-l07667512
@@ -158,9 +158,11 @@
 /tr/kapusonlu-sisme-stwd-mont-l07700501
 /tr/kapusonlu-suni-kurk-ceket-l07700324
 /tr/kapusonlu-suni-kurk-ceket-l07720324
+/tr/kapusonlu-suslu-dugmeli-ceket-l07721511
 /tr/kapusonlu-syla-muhurlenmis-sisme-ceket-l07700505
 /tr/kareli-grafikli-bermuda-sort-l07665502
 /tr/kareli-paca-devetli-jean-l07662508
+/tr/kareli-suni-yunlu-ceket-l07720372
 /tr/kareli-uzun-kollu-overshirt-l07460551
 /tr/kase-ceket-l07720303
 /tr/kemer-koprulu-balon-jean-l07660301
@@ -176,6 +178,7 @@
 /tr/kombini-kesfet-l92628726381BSBS
 /tr/kombini-kesfet-l92690678655BSBS
 /tr/kombini-kesfet-l93461769649BSBS
+/tr/kombini-kesfet-l93560766513BSBS
 /tr/kombini-kesfet-l95326071753BSBS
 /tr/kombini-kesfet-l99354103823BSBS
 /tr/kombini-satin-al-l91695832161BSBS
@@ -192,7 +195,6 @@
 /tr/kombini-satn-al-l94065025099BSBS
 /tr/kombini-satn-al-l94944175378BSBS
 /tr/kombini-satn-al-l95159006858BSBS
-/tr/kombini-satn-al-l95458652442BSBS
 /tr/kombini-satn-al-l95748338530BSBS
 /tr/kombini-satn-al-l96707424074BSBS
 /tr/kombini-satn-al-l96963257941BSBS
@@ -258,6 +260,7 @@
 /tr/naksl-shopper-canta-l14023840
 /tr/naylon-suslemeli-tote-canta-l14058840
 /tr/on-dikisli-barrel-jean-l07662504
+/tr/orta-bel-baggy-jean-l07660312
 /tr/orta-bel-baggy-jean-l07660319
 /tr/orta-bel-straight-fit-jean-l07683323
 /tr/oversize-akskan-ceket-l03720373
@@ -267,6 +270,7 @@
 /tr/oversize-uzun-kollu-tisort-l07231322
 /tr/pacalar-kvrk-baggy-balon-jean-l07662302
 /tr/pacas-dubleli-jean-l07660306
+/tr/pacas-katl-baggy-jean-l07660318
 /tr/panelli-baggy-relaxed-fit-jean-l07662518
 /tr/panelli-suni-deri-ceket-l07721506
 /tr/patchwork-barrel-jean-l07662300
@@ -335,6 +339,7 @@
 /tr/stili-tamamla-l96823333420BSBS
 /tr/straight-jean-l07660502
 /tr/stwd-jogger-bermuda-sort-l03665509
+/tr/stwd-kare-desenli-ceket-l07721521
 /tr/stwd-kontrast-panelli-esofman-ceketi-l07721539
 /tr/stwd-ksa-kollu-sweatshirt-l03232501
 /tr/stwd-logolu-boxy-kesim-tisort-l03232500
@@ -346,11 +351,13 @@
 /tr/suni-deri-ceket-l07721513
 /tr/suni-deri-dad-ceket-l07720381
 /tr/suni-deri-ksa-trenckot-l07720351
+/tr/suni-deri-suni-kurk-yakal-bomber-ceket-l07720363
 /tr/suni-suet-bomber-ceket-l07720354
 /tr/suni-suet-ceket-l07720512
 /tr/suni-yunlu-yakal-denim-ceket-l07701519
 /tr/super-genis-paca-comfort-jean-l07660317
 /tr/suslemeli-omuz-cantas-l14006840
+/tr/suslu-dugme-detayl-dar-kesim-ceket-l07720373
 /tr/suslu-dugmeli-ceket-l07721501
 /tr/suslu-dugmeli-dar-kesim-ceket-l07720356
 /tr/suslu-dugmeli-denim-ceket-l07720309
@@ -358,7 +365,7 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
-/tr/tokal-tote-canta-l14147840
+/tr/tokal-shopper-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
@@ -372,6 +379,7 @@
 /tr/v-neck-tisort-l03230317
 /tr/v-yaka-buzgulu-top-l07230317
 /tr/vucuda-oturan-100-keten-blazer-ceket-l07790324
+/tr/yars-grafik-desenli-sisme-mont-l07721535
 /tr/yazl-ve-cizgili-oversize-tisort-l07230374
 /tr/ykamal-efektli-ceket-l07721520
 /tr/yrtk-detayl-baggy-jean-l07662303
