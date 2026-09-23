@@ -3936,7 +3936,6 @@
 /p/curator----goz-fari-paleti-P1000208802.html
 /p/curl-anti-humidity-gel-oil-P10012050.html
 /p/curl-creme---bukle-olusturucu-krem-P10016514.html
-/p/curl-defining-cream-P10012049.html
 /p/curl-manifesto---besleyici-ve-bukle-belirginlestirici-sampuan-P10016329.html
 /p/curl-manifesto---kivircik-saclar-icin-bukle-belirginlestirici-jel-krem-P10016334.html
 /p/curl-manifesto---kivircik-saclar-icin-sac-bakim-maskesi-P10016331.html
@@ -5012,7 +5011,6 @@
 /p/eden-juicy-apple-574164.html
 /p/eden-juicy-apple-574165.html
 /p/eden-juicy-apple-P10022665.html
-/p/eden-obsessions---mini-kadin-parfum-seti-P1000213144.html
 /p/eden-plush-pear---eau-de-parfum-805095.html
 /p/eden-plush-pear---eau-de-parfum-805096.html
 /p/eden-plush-pear---eau-de-parfum-P1000213145.html
@@ -5938,7 +5936,9 @@
 /p/ghd-halo---genis-duzlestirici-konsantre-baslik-88-mm-P1000212373.html
 /p/ghd-halo---sekillendirici-konsantre-baslik-65-mm-803866.html
 /p/ghd-halo---sekillendirici-konsantre-baslik-65-mm-P1000212372.html
+/p/ghd-jelly-chronos---sac-duzlestirici-P1000213447.html
 /p/ghd-jelly-chronos-curve-max-wand---sac-masasi-P1000213828.html
+/p/ghd-jelly-chronos-max---sac-duzlestirici-P1000213827.html
 /p/ghd-jelly-duet-blowdry---i%CC%87kisi-bir-arada-P1000213448.html
 /p/ghd-speed---hassas-sekillendirici-konsantre-baslik-66-mm-P1000212374.html
 /p/ghd-speed---profesyonel-kivircik-sac-difuzoru-P1000212375.html
@@ -6410,7 +6410,6 @@
 /p/gucci-guilty-pour-homme-edp-150ml-504366.html
 /p/gucci-guilty-pour-homme-edp-150ml-P4057084.html
 /p/gucci-oud-intense-eau-de-parfum-for-her-and-for-him-90ml-P10007832.html
-/p/guclendi%CC%87ri%CC%87ci%CC%87-sac-serumu-P10014997.html
 /p/guclendirici-onarici-maske---onarici-bakim-P10061371.html
 /p/guclendirici-onarici-sac-kremi---onarici-bakim-P10061372.html
 /p/guclendirici-onarici-sampuan---onarici-temizleyici-P10061373.html
@@ -10548,6 +10547,7 @@
 /p/nemlendirici-sutlu-losyon---ektoin-icerikli-P1000213397.html
 /p/nemlendirici-temizleyici-dus-jeli---argan-yagi-P1000206991.html
 /p/nemlendirici-vucut-losyonu---argan-yagi-P1000206992.html
+/p/neo-essential-blurring-finish-powder---blur-etkili-toz-pudra-P1000214414.html
 /p/neroli-portofino-all-over-body-spray-P2872016.html
 /p/neroli-portofino-atomizer-10ml--seyahat-boy-P3492040.html
 /p/neroli-portofino-edp-50ml-220616.html
@@ -12008,7 +12008,6 @@
 /p/pro-filt-r-soft-matte-longwear-fondoten-614655.html
 /p/pro-filt-r-soft-matte-longwear-fondoten-P3079040.html
 /p/pro-kiss-r-lip-loving-scrubstick-P3714028.html
-/p/pro-kiss-r-luscious-lip-balm-P3714029.html
 /p/pro-longer-mask---sac-uclarinin-gorunumunu-yenileyici-ve-yogunlastirici-maske-P10017070.html
 /p/pro-pencil-308070.html
 /p/pro-pencil-308071.html
@@ -12433,6 +12432,7 @@
 /p/rio-deo-62---refill-deodorant-P10053860.html
 /p/rio-radiance---kokulu-sprey-657575.html
 /p/rio-radiance---kokulu-sprey-P10049235.html
+/p/rise-isitmali-hacim-verici-firca-P10010985.html
 /p/rise-mascara-579610.html
 /p/rise-mascara-P10024036.html
 /p/ritual-cleansing-mist---aura-spreyi-P1000209436.html
@@ -13973,6 +13973,7 @@
 /p/solar-the-protective-oil-spf15---gunes-koruyucu-yuz-ve-vucut-yagi-P10048875.html
 /p/solar-the-sublimating-oil---nemlendirici-ve-aydinlatici-yag-P10048873.html
 /p/soleil-blanc-all-over-body-spray-P3175011.html
+/p/soleil-blanc-atomizer-10ml-P3492039.html
 /p/soleil-blanc-edp-30ml-352078.html
 /p/soleil-blanc-edp-30ml-352079.html
 /p/soleil-blanc-edp-30ml-452040.html
@@ -14214,7 +14215,6 @@
 /p/summer-best-friends-kit-%E2%80%93-makyaj-seti-P1000207087.html
 /p/summer-skin-glow---yuz-bakim-seti-P10061943.html
 /p/sumoclay-P2916001.html
-/p/sumotech-P666045.html
 /p/sumptuous-extreme-maskara-P364013.html
 /p/sumptuous-extreme-waterproof-P1388034.html
 /p/sumptuous-rebel-length-lift-maskara-P3874093.html
@@ -14870,7 +14870,6 @@
 /p/the-concentrate-serum-P10011096.html
 /p/the-controlling-type---konturlar-icin-sabitleyici-jel-P1000205501.html
 /p/the-cool-micellar-cleanser---yuz-temizleme-suyu-P10056214.html
-/p/the-curl-crew---bukle-onarim-seti-P10061502.html
 /p/the-daily-duo---cilt-bakim-seti-P10053639.html
 /p/the-day-light-%E2%80%93-gul-suyu--misk-otu-ve-niasinamid-i%CC%87ceren-yagsiz-nemlendirici-P10061726.html
 /p/the-depuff-eyespresso-%E2%80%93-sislik-azaltici-kafein-ve-yesil-cay-goz-maskeleri-P10061722.html
@@ -14923,6 +14922,7 @@
 /p/the-hand-treatment-P2701059.html
 /p/the-homecurl---bukle-tanimlayici-krem-756434.html
 /p/the-homecurl---bukle-tanimlayici-krem-P1000205504.html
+/p/the-hotel-beneville----yilbasi-ozel-makyaj-ve--cilt-bakimi-hediye-seti-P10064656.html
 /p/the-hydrating-infused-emulsion-494160.html
 /p/the-hydrating-infused-emulsion-P10017452.html
 /p/the-impossible-glow-P10014664.html
@@ -15176,6 +15176,7 @@
 /p/the-ritual-of-karma---yuz-gunes-kremi-spf-50--P10051184.html
 /p/the-ritual-of-karma-sun---gunes-koruyucu-kopuk-spf-50-P1000213253.html
 /p/the-ritual-of-karma-sun---yuz-i%CC%87cin-gunes-koruyucu-stick-spf-50--P1000213254.html
+/p/the-ritual-of-sakura---arac-parfumu-tutucu-ve-2-yedek-dolum-P10024347.html
 /p/the-ritual-of-sakura---dogal-deodorant-P1000208185.html
 /p/the-ritual-of-sakura---dus-kopugu-P10057499.html
 /p/the-ritual-of-sakura---el-balmi-P10052740.html

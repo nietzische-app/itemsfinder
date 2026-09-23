@@ -3,7 +3,6 @@
 /tr/100-pamuklu-barrel-jean-l07662520
 /tr/100-pamuklu-ceket-l07721311
 /tr/ajurlu-ksa-kollu-gomlek-l07460513
-/tr/ajurlu-space-dye-kazak-l07540313
 /tr/ajurlu-triko-kazak-l07540500
 /tr/askl-tisort-l03232502
 /tr/ayarlanabilir-askl-basic-top-l03230394
@@ -43,6 +42,7 @@
 /tr/boncuk-detayl-duz-sandalet-l11706740
 /tr/boncuk-detayl-el-cantas-l14012840
 /tr/boncuk-detayl-omuz-cantas-l14025840
+/tr/boncuk-detayl-shopper-canta-l14004840
 /tr/boncuklu-omuz-cantas-l14014840
 /tr/boncuklu-omuz-cantas-l14029840
 /tr/bootcut-jean-l07660308
@@ -75,13 +75,13 @@
 /tr/cizgili-oversize-tisort-l07230381
 /tr/cizgili-pijama-pantolon-l07662502
 /tr/cizgili-relaxed-fit-kargo-jean-l07662507
+/tr/cizgili-uzun-kollu-oversize-tisort-l07231399
 /tr/cizgili-ve-cicek-islemeli-tote-canta-l14157740
 /tr/crop-denim-ceket-l07221301
 /tr/dantel-detayl-atlet-l07230300
 /tr/dar-kesim-ksa-kollu-tisort-l07150305
 /tr/deri-sabo-terlik-l12404840
 /tr/desenli-dusuk-bel-straight-fit-jean-l07671309
-/tr/dik-yaka-buzgulu-ceket-l07720375
 /tr/dik-yaka-oversize-bomber-ceket-l07720353
 /tr/dik-yaka-sisme-mont-l07720318
 /tr/dik-yaka-suni-deri-ceket-l07720323
@@ -160,6 +160,7 @@
 /tr/kapusonlu-suni-kurk-ceket-l07720324
 /tr/kapusonlu-suslu-dugmeli-ceket-l07721511
 /tr/kapusonlu-syla-muhurlenmis-sisme-ceket-l07700505
+/tr/kareli-dik-yakal-ceket-l07720375
 /tr/kareli-grafikli-bermuda-sort-l07665502
 /tr/kareli-paca-devetli-jean-l07662508
 /tr/kareli-suni-yunlu-ceket-l07720372
@@ -356,6 +357,7 @@
 /tr/suni-suet-ceket-l07720512
 /tr/suni-yunlu-yakal-denim-ceket-l07701519
 /tr/super-genis-paca-comfort-jean-l07660317
+/tr/suslemeli-file-tote-canta-l14191740
 /tr/suslemeli-omuz-cantas-l14006840
 /tr/suslu-dugme-detayl-dar-kesim-ceket-l07720373
 /tr/suslu-dugmeli-ceket-l07721501
@@ -365,7 +367,6 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
-/tr/tokal-shopper-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
