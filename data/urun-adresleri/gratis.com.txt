@@ -108,6 +108,7 @@
 /allik/beaulis-pure-flush-allik-595-violet-dream-p-10215032
 /allik/beaulis-touch-it-toz-allik-282-peach-p-10130892
 /allik/beaulis-touch-it-toz-allik-291-sunset-p-10130894
+/allik/beaulis-touch-it-toz-allik-629-sweet-p-10195966
 /allik/beaulis-vibe-it-krem-toz-allik-261-peachy-glow-p-10207741
 /allik/beaulis-vibe-it-krem-toz-allik-361-scarlet-blaze-p-10207739
 /allik/beaulis-vibe-it-krem-toz-allik-667-pink-mirage-p-10207740
@@ -280,6 +281,7 @@
 /allik/nuse-liquid-care-cheek-allik-05-veil-bay-p-10214239
 /allik/nuse-liquid-care-cheek-allik-07-plum-pot-p-10214339
 /allik/nuse-mousse-care-cheek-handy-allik-02-fairy-blush-p-10214242
+/allik/nuse-mousse-care-cheek-handy-allik-03-shy-me-p-10214236
 /allik/nuse-mousse-care-cheek-handy-allik-04-appley-p-10214237
 /allik/nuse-mousse-care-cheek-handy-allik-05-dimdumb-p-10214243
 /allik/pastel-profashion-cream-blush-krem-allik-no-41-p-10794374
@@ -1352,11 +1354,7 @@
 /corap/penti-ten-mat-20-kulotlu-corap-57-3-p-10133856
 /dekoratif-aksesuar/eklips-tutsu-kayigi-p-10200217
 /diger-kisisel-bakim-materyalleri/eklips-15li-organizer-p-10200704
-/diger-kisisel-bakim-materyalleri/eklips-seyahat-seti-3lu-renkli-sise-p-10823595
-/diger-kisisel-bakim-materyalleri/eklips-silikon-makyaj-firca-saklama-kabi-buyuk-p-10203042
-/diger-kisisel-bakim-materyalleri/eklips-silikon-seyahat-sise-3lu-60-ml-p-10198753
 /diger-kisisel-bakim-materyalleri/eklips-silikon-seyahat-sise-3lu-90-ml-p-10198754
-/diger-kisisel-bakim-materyalleri/eklips-taki-duzenleyicisi-p-10259334
 /diger-kisisel-bakim-materyalleri/glow-lift-ice-roller-kalibi-p-10213988
 /diger-kisisel-bakim-materyalleri/glow-lift-yesim-tasi-masaj-seti-p-10214743
 /diger-kisisel-bakim-materyalleri/glow-lift-yuz-germe-bandi-p-10211712
@@ -1386,10 +1384,14 @@
 /diger-kisisel-bakim-urunleri/eklips-masaj-kuresi-p-10201955
 /diger-kisisel-bakim-urunleri/eklips-maske-surme-fircasi-p-10203024
 /diger-kisisel-bakim-urunleri/eklips-seyahat-seti-2li-sa70931-p-10002298
+/diger-kisisel-bakim-urunleri/eklips-seyahat-seti-3lu-renkli-sise-p-10823595
 /diger-kisisel-bakim-urunleri/eklips-seyahat-seti-6-parca-p-10017353
 /diger-kisisel-bakim-urunleri/eklips-seyahat-seti-6-parcali-p-10012776
 /diger-kisisel-bakim-urunleri/eklips-seyahat-seti-renkli-3lu-p-10014758
 /diger-kisisel-bakim-urunleri/eklips-seyahat-seti-renkli-sise-4lu-p-10002300
+/diger-kisisel-bakim-urunleri/eklips-silikon-makyaj-firca-saklama-kabi-buyuk-p-10203042
+/diger-kisisel-bakim-urunleri/eklips-silikon-seyahat-sise-3lu-60-ml-p-10198753
+/diger-kisisel-bakim-urunleri/eklips-taki-duzenleyicisi-p-10259334
 /diger-kisisel-bakim-urunleri/eklips-travel-4lu-sise-seti-90-60-ml-p-10215019
 /diger-kisisel-bakim-urunleri/eklips-yag-emici-volkanik-tas-p-10199441
 /diger-kisisel-bakim-urunleri/glow-lift-goz-pedi-seti-4lu-p-10217450
@@ -1574,7 +1576,6 @@
 /dis-macunlari/colgate-optic-white-aninda-beyazlik-dis-macunu-75-ml-p-10206514
 /dis-macunlari/colgate-optic-white-kahve-cay-ve-tutun-kullananlar-icin-dis-macunu-75-ml-p-10206513
 /dis-macunlari/colgate-optic-white-kahve-cay-ve-tutun-kullanicilari-icin-beyazlatici-dis-macunu-50-ml-x2-p-10740199
-/dis-macunlari/colgate-optic-white-oxygen-dis-macunu-50-ml-p-10097071
 /dis-macunlari/colgate-optic-white-parildayan-beyazlik-beyazlatici-dis-macunu-75-ml-p-10009185
 /dis-macunlari/colgate-optic-white-purple-reveal-dis-macunu-75-ml-p-10203723
 /dis-macunlari/colgate-optic-white-radiant-dis-macunu-100-ml-p-10214742
@@ -1684,6 +1685,7 @@
 /dogal-sac-boyalari/green-therapy-krem-sac-boyasi-47-bitter-p-10288254
 /dogal-sac-boyalari/green-therapy-krem-sac-boyasi-5-15-buzlu-kahve-p-10302720
 /dogal-sac-boyalari/green-therapy-krem-sac-boyasi-53-findik-kahve-p-10765882
+/dogal-sac-boyalari/green-therapy-krem-sac-boyasi-54-acik-kestane-p-10302717
 /dogal-sac-boyalari/green-therapy-krem-sac-boyasi-57-turk-kahvesi-p-10069338
 /dogal-sac-boyalari/green-therapy-krem-sac-boyasi-6-15-buzlu-cikolata-kahve-p-10302721
 /dogal-sac-boyalari/green-therapy-krem-sac-boyasi-6-43-kizil-bakir-p-10167381
@@ -3323,6 +3325,7 @@
 /epilasyon/philips-5000-series-yuz-epilasyon-aleti-brr454-00-p-10200783
 /epilasyon/philips-8000-serisi-islak-kuru-epilasyon-aleti-bre700-05-p-10347683
 /epilasyon/philips-epilasyon-aleti-bre247-05-p-10214676
+/epilasyon/philips-epilasyon-aleti-mavi-bre228-05-p-10214675
 /epilasyon/philips-lumea-advanced-ipl-lazer-epilasyon-aleti-bri921-00-p-10200780
 /erkek-bakim/eklips-erkek-kisisel-bakim-seti-p-10199190
 /erkek-bakim/philips-oneblade-vucut-ve-yuz-tiras-makinesi-qp1624-10-p-10214223
@@ -4583,9 +4586,7 @@
 /gida-takviyeleri-vitaminler/life-in-vitaminc-iceren-takviye-edici-gida-30-tablet-p-10202742
 /gida-takviyeleri-vitaminler/life-in-zinc-tablet-p-10042905
 /gida-takviyeleri-vitaminler/life-in-zinc-vitaminc-iceren-efervesan-takviye-edici-gida-20-tablet-p-10954375
-/gida-takviyeleri-vitaminler/meksmar-natur-limon-aromalic-vitaminli-pastil-75-gr-p-23000139
 /gida-takviyeleri-vitaminler/meksmar-natur-nane-limon-okaliptus-aromali-pastil-75-gr-p-23000137
-/gida-takviyeleri-vitaminler/meksmar-natur-zencefilli-pastil-75-gr-p-23000138
 /gida-takviyeleri-vitaminler/naturagen-beauty-assist-seftali-aromali-kolajen-30lu-sase-p-10445323
 /gida-takviyeleri-vitaminler/naturagen-beauty-gummy-kolajen-iceren-cignenebilir-takviye-edici-gida-60-gummies-p-10677662
 /gida-takviyeleri-vitaminler/naturagen-bromelain-2400-gdu-takviye-edici-gida-60-kapsul-1000mg-p-10208131
@@ -4655,6 +4656,7 @@
 /goz-kalemi/beaulis-fun-flossy-goz-kalemi-422-eclipse-p-10202896
 /goz-kalemi/beaulis-fun-flossy-goz-kalemi-617-mystic-p-10203448
 /goz-kalemi/beaulis-fun-flossy-goz-kalemi-618-candy-floss-p-10203446
+/goz-kalemi/beaulis-fun-flossy-goz-kalemi-724-green-elegance-p-10202894
 /goz-kalemi/beaulis-tune-it-goz-kalemi-100-black-p-10127692
 /goz-kalemi/beaulis-tune-it-goz-kalemi-199-dark-brown-p-10127684
 /goz-kalemi/beaulis-tune-it-goz-kalemi-201-cinnamon-p-10127686
@@ -4770,6 +4772,7 @@
 /goz-kalemi/love-generation-goz-kalemi-05-joking-lime-classic-pencil-for-bold-looks-p-10209409
 /goz-kalemi/love-generation-goz-kalemi-06-cotton-candy-cutie-classic-pencil-for-bold-looks-p-10209410
 /goz-kalemi/love-generation-goz-kalemi-07-flamingo-fizz-classic-pencil-for-bold-looks-p-10209411
+/goz-kalemi/love-generation-goz-kalemi-09-zesty-mood-classic-pencil-for-bold-looks-p-10209412
 /goz-kalemi/love-generation-jel-goz-kalemi-color-bunny-05-obsession-pink-gel-formula-for-longlasting-wear-p-10209385
 /goz-kalemi/love-generation-jel-goz-kalemi-color-bunny-07-look-my-best-orange-gel-formula-for-longlasting-wear-p-10209386
 /goz-kalemi/love-generation-jel-goz-kalemi-color-bunny-09-sunny-bunny-violet-gel-formula-for-longlasting-wear-p-10209388
@@ -4885,7 +4888,6 @@
 /goz-kremleri/mia-klinika-koyu-leke-kirisiklik-ve-morluk-karsiti-kolajen-ve-peptit-iceren-goz-cevresi-bakim-kremi-p-10202969
 /goz-kremleri/neutrogena-collagen-bank-canlandirici-jel-goz-kremi-15-gr-p-10213279
 /goz-kremleri/nivea-luminous630-thiamidol-etkili-koyu-halka-karsiti-goz-bakim-kremi-15-ml-p-10962929
-/goz-kremleri/nivea-q10-energyc-vitamini-canlandirici-goz-bakim-kremi-15-ml-p-10574768
 /goz-kremleri/nivea-q10-power-kirisiklik-karsiti-ve-sikilastirici-goz-bakim-kremi-15-ml-p-14000011
 /goz-kremleri/olalab-ince-cizgi-kirisiklik-karsiti-sikilastirici-mikroalg-peptit-goz-kremi-15-ml-p-10211147
 /goz-kremleri/olalab-torbalanma-koyu-halka-karsiti-aydinlatici-vitaminc-peptit-goz-kremi-15-ml-p-10211148
@@ -5112,7 +5114,6 @@
 /gunluk-nemlendirici-kremler-spreyler/bioxcin-gold-on-skin-isiltili-nemlendirici-yuz-kremi-50-ml-p-10222475
 /gunluk-nemlendirici-kremler-spreyler/bioxcin-hydra-nemlendirici-yuz-kremi-50-ml-karma-ve-yagli-ciltler-icin-p-10222474
 /gunluk-nemlendirici-kremler-spreyler/bioxcin-hydra-nemlendirici-yuz-kremi-50-ml-kuru-ve-normal-ciltler-icin-p-10222473
-/gunluk-nemlendirici-kremler-spreyler/bolbe-24-saat-etkili-nemlendirici-yuz-ve-vucut-losyonu-200-ml-p-10215179
 /gunluk-nemlendirici-kremler-spreyler/bolbe-yogun-nemlendirici-onarici-ve-besleyici-prebiyotikli-yuz-kremi-50-ml-hyaluronik-asit-p-10215166
 /gunluk-nemlendirici-kremler-spreyler/calliel-72-saat-yogun-nemlendirme-etikili-4d-hyaluronic-acid-ve-cica-complex-bariyer-destekleyici-nemlendirici-yuz-kremi-90-ml-p-10221281
 /gunluk-nemlendirici-kremler-spreyler/calliel-tint-repair-centella-ozlu-bariyer-onarici-yatistirici-kizariklik-karsiti-ton-esitleyici-yuz-kremi-50-ml-p-10221292
@@ -5562,6 +5563,10 @@
 /kadin-parfum/avon-summer-white-sunset-edt-kadin-parfum-50-ml-p-10221152
 /kadin-parfum/avon-today-tomorrow-always-love-quartz-edp-kadin-parfum-50-ml-p-10220300
 /kadin-parfum/avon-tta-today-edp-kadin-parfum-50-ml-p-10218440
+/kadin-parfum/bee-beauty-basics-edt-kadin-parfum-90-ml-no01-orchid-magic-p-10219937
+/kadin-parfum/bee-beauty-basics-edt-kadin-parfum-90-ml-no02-vanilla-latte-p-10219938
+/kadin-parfum/bee-beauty-basics-edt-kadin-parfum-90-ml-no03-sugar-crush-p-10219939
+/kadin-parfum/bee-beauty-basics-edt-kadin-parfum-90-ml-no04-tarte-violet-p-10220150
 /kadin-parfum/bee-beauty-city-lovers-barcelona-edt-kadin-parfum-50-ml-p-10557375
 /kadin-parfum/bee-beauty-edt-kadin-parfum-rose-sandalwood-50-ml-p-10210901
 /kadin-parfum/bee-beauty-edt-kadin-parfum-spiced-vanilla-bloom-50-ml-p-10210900
@@ -6592,9 +6597,6 @@
 /kati-sabun/maxrosa-kati-sabun-bergamot-patchouli-100-gr-p-10223133
 /kati-sabun/maxrosa-kati-sabun-dark-amber-oud-100-gr-p-10223118
 /kati-sabun/maxrosa-kati-sabun-vanilla-rose-100-gr-p-10223135
-/kati-sabun/otaci-dogal-sigla-kati-sabun-100-gr-p-15000266
-/kati-sabun/otaci-sabun-argan-100-gr-p-10013095
-/kati-sabun/otaci-sabun-defne-sac-vucut-100-gr-p-15000264
 /kati-sabun/otaci-sabun-kukurtlu-katranli-80-gr-p-15000263
 /kati-sabun/palmolive-aroma-sensations-tangerine-kati-sabun-90-gr-x4-p-10217006
 /kati-sabun/turkishcare-kabak-lifli-sabunlu-kese-esek-sutu-balli-p-10210913
@@ -6643,7 +6645,6 @@
 /kolonyalar/duru-limon-kolonya-150-ml-sprey-p-18000311
 /kolonyalar/duru-limon-kolonya-200-ml-cam-sise-p-10225260
 /kolonyalar/duru-limon-kolonya-400-ml-p-18000310
-/kolonyalar/duru-limon-kolonyasi-900-ml-p-10224719
 /kolonyalar/duru-okyanus-ferhaligi-kolonya-400-ml-pet-sise-p-10202389
 /kolonyalar/eyup-sabri-tuncer-bodrum-mandalinasi-kolonya-16-ml-p-10089575
 /kolonyalar/eyup-sabri-tuncer-bodrum-mandalinasi-kolonyasi-150-ml-silindir-pet-sise-sprey-p-10567187
@@ -6665,7 +6666,6 @@
 /kolonyalar/rebul-dark-spice-edc-unisex-kolonya-250-ml-p-10023652
 /kolonyalar/rebul-dark-spice-kolonya-50-ml-p-10277667
 /kolonyalar/rebul-green-tea-edc-kolonya-cam-sise-250-ml-p-10277662
-/kolonyalar/rebul-ice-cam-sise-kolonya-270-ml-p-10011805
 /kolonyalar/rebul-jasmine-edc-kolonya-cam-sise-250-ml-p-10011806
 /kolonyalar/rebul-lavanda-kolonya-50-ml-p-10277664
 /kolonyalar/rebul-lime-edc-kolonya-cam-sise-250-ml-p-10011807
@@ -9212,6 +9212,7 @@
 /sac-fircasi/eklips-desenli-sac-fircasi-p-10202736
 /sac-fircasi/eklips-dugum-acici-sac-fircasi-bd1920-asortili-p-10226476
 /sac-fircasi/eklips-fon-fircasi-p-10202923
+/sac-fircasi/eklips-gul-aromali-sac-acma-fircasi-p-10218391
 /sac-fircasi/eklips-hava-basincli-sac-fircasi-9551bb-p-10212061
 /sac-fircasi/eklips-hava-basincli-sac-fircasi-mor-p-10202918
 /sac-fircasi/eklips-hava-basincli-sac-fircasi-pembe-p-10202922
@@ -9228,6 +9229,7 @@
 /sac-fircasi/eklips-summer-sac-fircasi-ve-tarak-seti-asortili-p-10210999
 /sac-fircasi/eklips-uc-boyutlu-sac-fircasi-mor-p-10202919
 /sac-fircasi/eklips-uc-boyutlu-sac-fircasi-pembe-p-10202921
+/sac-fircasi/eklips-vanilya-karamel-kokulu-sac-acma-fircasi-p-10219224
 /sac-fircasi/eklips-yuvarlak-sac-fircasi-p-10202735
 /sac-fircasi/nascita-3d-cocuk-sac-fircasi-lila-p-10923518
 /sac-fircasi/nascita-3d-flexi-kontrol-acma-tarama-sac-fircasi-gumus-p-10923979
@@ -9484,7 +9486,6 @@
 /sac-tonik-kurleri/gliss-scalp-balance-sac-derisi-spreyi-100-ml-p-10216926
 /sac-tonik-kurleri/hoito-superfood-sac-dokulmesi-karsiti-karanfil-suyu-posbiyotik-sac-sac-derisi-bakim-tonigi-200-ml-p-10212889
 /sac-tonik-kurleri/hoito-superfood-sac-dokulmesi-karsiti-organik-biberiye-suyu-sac-ve-sac-derisi-bakim-tonigi-200-ml-p-10209047
-/sac-tonik-kurleri/john-frieda-blonde-yikama-oncesi-bakim-kompleksi-150-ml-p-10220221
 /sac-tonik-kurleri/jowe-sac-mayonezi-maskesi-170-ml-p-10299276
 /sac-tonik-kurleri/loreal-paris-elseve-ultimate-glycolic-gloss-parlakligi-saca-muhurleyen-laminasyon-200-ml-p-10200861
 /sac-tonik-kurleri/morfose-ossion-dokulme-karsiti-sac-tonigi-300-ml-p-10201483
@@ -10097,6 +10098,7 @@
 /sivi-sabun/rebul-sweet-lemon-sivi-sabun-500-ml-p-10214756
 /sivi-sabun/simple-pleasures-fruity-crush-ananas-kokulu-sivi-el-sabunu-350-ml-p-10218408
 /sivi-sabun/simple-pleasures-honey-lemon-sivi-el-sabunu-500-ml-p-10211561
+/sivi-sabun/simple-pleasures-sivi-sabun-vanilla-honey-500-ml-p-10211562
 /sivi-sabun/simple-pleasures-wicked-treats-yeniden-doldurulabilir-sivi-el-sabunu-500-ml-p-10220318
 /sivi-sabun/the-bath-factory-nemlendirici-arindirici-gold-aura-kopuk-el-sabunu-300-ml-p-10215002
 /sivi-sabun/the-bath-factory-nemlendirici-arindirici-hammam-ritual-kopuk-el-sabunu-300-ml-p-10215001
@@ -10989,8 +10991,8 @@
 /vucut-losyonlari/the-fine-organics-hint-dutu-ozlu-beyazlatici-yuz-ve-vucut-kremi-100-ml-p-10216497
 /vucut-losyonlari/the-fine-organics-isirgan-otu-ozlu-tuy-inceltici-ve-nemlendirici-vucut-bakim-sutu-50-ml-p-10215457
 /vucut-losyonlari/the-purest-solutions-cilt-bariyerini-destekleyen-yenileyici-vucut-losyonu-210-ml-p-10222612
+/vucut-losyonlari/urban-care-coconut-coffee-vucut-kremi-200-ml-p-10097113
 /vucut-losyonlari/urban-care-turmeric-honey-vucut-losyonu-250-ml-p-10097116
-/vucut-losyonlari/vaseline-gluta-hya-serum-etkili-yogun-nemlendirici-gece-losyonu-200-ml-p-10220800
 /vucut-losyonlari/vaseline-glutahya-serum-etkili-canlandirici-vucut-losyonu-200-ml-p-10202182
 /vucut-losyonlari/vaseline-glutahya-serum-etkili-uv-leke-karsiti-aydinlatici-losyon-200-ml-p-10202117
 /vucut-losyonlari/vaseline-glutahya-serum-etkili-vucut-losyonu-puruzsuzlestirici-170-ml-p-10208619
@@ -11074,6 +11076,7 @@
 /vucut-yaglari/life-in-corek-otu-yagi-20-ml-p-10833850
 /vucut-yaglari/life-in-gliserin-50-ml-p-10167315
 /vucut-yaglari/life-in-hindistan-cevizi-yagi-330-ml-p-10034429
+/vucut-yaglari/life-in-hindistan-cevizi-yagi-330-ml-p-10221984
 /vucut-yaglari/life-in-hint-yagi-50-ml-p-10167312
 /vucut-yaglari/life-in-jojoba-yagi-20-ml-p-10828482
 /vucut-yaglari/life-in-sari-kantaron-yagi-20-ml-p-10167317
@@ -11242,6 +11245,7 @@
 /yuz-bakim-bandi/bee-beauty-ayicik-desenli-akne-bandi-20-adet-p-10207789
 /yuz-bakim-bandi/garnier-pimple-patch-sivilce-bandi-22li-hidrokolloid-bant-p-10208156
 /yuz-bakim-bandi/mia-klinika-seffaf-akne-yara-bandi-36-adet-p-10207913
+/yuz-bakim-bandi/mia-klinika-sivilce-karsiti-kedili-akne-bandi-20-adet-p-10210911
 /yuz-bakim-bandi/pure-korean-akne-sivilce-seffaf-bakim-bandi-p-10864631
 /yuz-bakim-bandi/stick-on-spots-fun-20-li-akne-bandi-p-10214645
 /yuz-bakim-bandi/stick-on-spots-mixy-akne-bandi-24lu-p-10211790
@@ -11324,6 +11328,7 @@
 /yuz-bakim-maskesi-paket/bee-beauty-before-makeup-kagit-maske-p-10730523
 /yuz-bakim-maskesi-paket/bee-beauty-besleyici-aloe-vera-ozlu-kil-maskesi-p-10876098
 /yuz-bakim-maskesi-paket/bee-beauty-butterfly-kagit-maske-25-gr-p-10389185
+/yuz-bakim-maskesi-paket/bee-beauty-during-party-kagit-maske-p-10730525
 /yuz-bakim-maskesi-paket/bee-beauty-gunes-sonrasi-aloe-verali-kagit-maske-25-ml-p-10366900
 /yuz-bakim-maskesi-paket/bee-beauty-haftalik-bakim-seti-7x-maske-p-10110720
 /yuz-bakim-maskesi-paket/bee-beauty-kagit-maske-3lu-25-ml-p-10506408
@@ -11417,7 +11422,6 @@
 /yuz-bakim-maskesi-paket/garnier-hyaluronik-kriyojel-yorgunluk-karsiti-sogutucu-yuz-maskesi-p-10801206
 /yuz-bakim-maskesi-paket/garnier-nem-bombasi-canlandirici-kagit-maske-28-gr-p-10268670
 /yuz-bakim-maskesi-paket/garnier-nem-bombasi-dinlendirici-kagit-maske-28-gr-p-10045319
-/yuz-bakim-maskesi-paket/garnier-nem-bombasi-ferahlatici-kagit-maske-28-gr-p-10032187
 /yuz-bakim-maskesi-paket/garnier-proretinol-puruzsuzlestirici-kagit-maske-p-10207159
 /yuz-bakim-maskesi-paket/garnierc-vitamini-parlaklik-verici-kagit-yuz-maskesi-28-gr-p-10268671
 /yuz-bakim-maskesi-paket/himalaya-arindirici-kagit-maske-30-ml-p-10732603
@@ -11507,7 +11511,6 @@
 /yuz-gunes-kremleri/bee-beauty-gunesten-koruyucu-ve-ton-esitleyici-pembe-yuz-kremi-50spf-50-ml-p-10396669
 /yuz-gunes-kremleri/bee-beauty-gunesten-koruyucu-yaslanma-karsiti-yuz-kremi-50-spf-50-ml-p-10153737
 /yuz-gunes-kremleri/bee-beauty-koruyucu-nemlendirici-yuz-kremi-50-ml-p-10353172
-/yuz-gunes-kremleri/bolbe-spf-50-sun-drop-yuksek-korumali-leke-karsiti-ve-gunluk-gunes-serumu-30-ml-invisible-sun-fluid-p-10215165
 /yuz-gunes-kremleri/bolbe-spf-50-yuksek-korumali-leke-karsiti-gunluk-gunes-kremi-50-ml-p-10215164
 /yuz-gunes-kremleri/calliel-gorunmeyen-seffaf-dogal-bitisli-nemlendirici-etkili-spf50-yuz-gunes-kremi-80-ml-p-10221285
 /yuz-gunes-kremleri/calliel-hafif-yapi-ton-esitleyen-50-spf-gunluk-renkli-likit-yuz-gunes-kremi-50-ml-m02-p-10221287
@@ -11691,7 +11694,6 @@
 /yuz-maskeleri/guinot-nutri-confort-besleyici-yuz-maskesi-50-ml-p-10219863
 /yuz-maskeleri/guinot-pure-balance-dengeleyici-yuz-maskesi-50-ml-p-10219868
 /yuz-maskeleri/innisfree-gozenek-bakimi-yapan-cift-fazli-yuz-maskesi-110-gr-p-10214638
-/yuz-maskeleri/innisfree-gozenek-bakimi-yapan-kil-yuz-maskesi-100-ml-p-10214639
 /yuz-maskeleri/isntree-gim-pdrn-icerikli-gece-bakim-maskesi-80-ml-p-10214528
 /yuz-maskeleri/isntree-hyaluronik-asit-icerikli-gece-maskesi-100-ml-p-10214538
 /yuz-maskeleri/janssen-cosmetics-gozenek-sikilastirici-maske-75-ml-p-10169122
@@ -11903,6 +11905,7 @@
 /yuz-serumlari-cilt-serumu-yaglari/janssen-cosmetics-yuksek-nem-saglamaya-yardimci-ampul-3lu-p-10073564
 /yuz-serumlari-cilt-serumu-yaglari/janssen-cosmetics-yuksek-nem-saglayici-konsantre-serum-30-ml-p-10133421
 /yuz-serumlari-cilt-serumu-yaglari/janssen-cosmeticsc-vitamini-aydinlatici-ampul-3lu-p-10724825
+/yuz-serumlari-cilt-serumu-yaglari/jkosmec-skin-solution-sikilastirici-serum-collagen-32-ml-p-10200950
 /yuz-serumlari-cilt-serumu-yaglari/jumiso-10-niasinamid-yuz-serumu-40-ml-p-10218054
 /yuz-serumlari-cilt-serumu-yaglari/jumiso-20-niasinamid-yuz-serumu-40-ml-p-10218055
 /yuz-serumlari-cilt-serumu-yaglari/jumiso-aydinlatici-ve-dengeleyici-serum-50-ml-p-10204816

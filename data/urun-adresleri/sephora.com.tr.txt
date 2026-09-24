@@ -595,7 +595,6 @@
 /p/alien-extraintense---eau-de-parfum-intense-760394.html
 /p/alien-extraintense---eau-de-parfum-intense-760395.html
 /p/alien-extraintense---eau-de-parfum-intense-P1000205615.html
-/p/alien-extraintense---eau-de-parfum-intense-P1000205745.html
 /p/alien-goddess-553397.html
 /p/alien-goddess-553399.html
 /p/alien-goddess-616696.html
@@ -4779,7 +4778,6 @@
 /p/drink-up-intensive-overnight---avokadolu-nemlendirici-maske-692739.html
 /p/dry-and-rough-skin-slution-with-10%25-urea---yuz--serumu-P10043112.html
 /p/dry-body-brush---kuru-vucut-fircasi-P1000209430.html
-/p/dry-body-oil---vucut-yagi-P10046075.html
 /p/dry-body-oil-P10011005.html
 /p/dry-face-brush---kuru-yuz-fircasi-P1000209431.html
 /p/dry-shampoo---belirginlestirici-ve-tazeleyici-kuru-sampuan-P1000212053.html
@@ -5406,6 +5404,7 @@
 /p/face-body-bestsellers---seyahat-boy-set-P1000210057.html
 /p/face-cleanse---2%E2%80%99si-1-arada-makyaj-temizleyici-ve-nemlendirici-P1000205697.html
 /p/face-cleansing-stick-P4058126.html
+/p/face-et-body-kabuki-160-firca-P3469002.html
 /p/face-glow-kit-P10025090.html
 /p/face-jewels-makeup-accessories---makyaj-aksesuari-650874.html
 /p/face-jewels-makeup-accessories---makyaj-aksesuari-650876.html
@@ -5781,7 +5780,6 @@
 /p/full-cover-flesh-kapatici-n05-P19035.html
 /p/full-dry-volume-et-texture-spray---sekillendirici-sprey-seyahat-formati-P10034532.html
 /p/full-dry-volume-et-texture-spray---sonlandirici-sekillendirme-spreyi-P10024611.html
-/p/full-night-s-sleep---enerji-verici-goz-cevresi-balsami-P1000203150.html
 /p/full-shampoo---hacim-veren-sampuan-P1000207034.html
 /p/full-volume-et-root-lifting-spray---hacim-ve-kok-spreyi-P10052759.html
 /p/fulvic-acid-brightening-cleanser-P10014966.html
@@ -10285,7 +10283,6 @@
 /p/my-comfy-matte---aninda-renk-veren-nemlendirici-ruj-748357.html
 /p/my-comfy-matte---aninda-renk-veren-nemlendirici-ruj-P10060816.html
 /p/my-dream---dudak-parlaticisi-P10043579.html
-/p/my-dream-lipstick---ruj-P10043257.html
 /p/my-euphoria-for-women---eau-de-parfum-708280.html
 /p/my-euphoria-for-women---eau-de-parfum-708281.html
 /p/my-euphoria-for-women---eau-de-parfum-P10053632.html
@@ -11018,6 +11015,7 @@
 /p/peony-et-blush-suede-travel-candle---mum-P10016747.html
 /p/peptide---pro-collagen-peptide-dolgunlastirici-ve-nemlendirici-krem-P1000206067.html
 /p/peptide---pro-collagen-peptide-sikilastirici-goz-serumu-P1000210221.html
+/p/peptide-eye-prep---siskinlik-karsiti-goz-alti-pedleri-P1000214710.html
 /p/peptide-glazing-fluid---nemli-gorunum-veren-jel-serum-P1000215943.html
 /p/peptide-lip-boost---dolgunlastirici-dudak-maskesi-P1000212944.html
 /p/peptide-lip-shape---kontur-veren-dudak-sekillendirici-P1000209350.html
@@ -13631,6 +13629,7 @@
 /p/skin-caviar-luxe-cream---yuz-kremi-P1000213695.html
 /p/skin-caviar-luxe-cream-sheer---yuz-kremi-701788.html
 /p/skin-caviar-luxe-cream-sheer---yuz-kremi-P10058247.html
+/p/skin-caviar-luxe-cream-sheer---yuz-kremi-P10064373.html
 /p/skin-caviar-luxe-sleep-mask---gece-maskesi-P1000213696.html
 /p/skin-caviar-nighttime-oil---gece-bakim-yagi-P10018439.html
 /p/skin-caviar-the-mist---yuz-misti-P10059403.html
