@@ -72,7 +72,6 @@
 /tr/cizgili-orgu-tote-canta-l14020840
 /tr/cizgili-orgu-tote-canta-l14057840
 /tr/cizgili-oversize-tisort-l07230375
-/tr/cizgili-oversize-tisort-l07230381
 /tr/cizgili-pijama-pantolon-l07662502
 /tr/cizgili-relaxed-fit-kargo-jean-l07662507
 /tr/cizgili-uzun-kollu-oversize-tisort-l07231399
@@ -178,7 +177,7 @@
 /tr/keten-ksa-kollu-gomlek-l03460515
 /tr/kimono-tunik-l03720369
 /tr/kombin-cift-tarafl-ceket-l07700508
-/tr/kombin-suni-suet-ceket-l07721509
+/tr/kombine-suni-suet-ceket-l07721509
 /tr/kombini-kesfet-l90201114350BSBS
 /tr/kombini-kesfet-l90581460817BSBS
 /tr/kombini-kesfet-l91905363461BSBS
@@ -383,7 +382,6 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
-/tr/tokal-shopper-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
