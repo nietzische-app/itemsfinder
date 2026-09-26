@@ -583,7 +583,6 @@
 /p/airbrush-setting-spray---makyaj-sabitleyici-sprey-693844.html
 /p/airbrush-setting-spray---makyaj-sabitleyici-sprey-734682.html
 /p/airbrush-setting-spray---makyaj-sabitleyici-sprey-P10018525.html
-/p/airstrait%E2%84%A2---sac-duzlestirici-P1000207632.html
 /p/airwash-kuru-sampuan---yaglanmayi-azaltir-kokuyu-ortadan-kaldirir-719062.html
 /p/airwash-kuru-sampuan---yaglanmayi-azaltir-kokuyu-ortadan-kaldirir-P1000205354.html
 /p/airy-texture-spray---hacimli--belirgin-ve-esnek-saclar-icin-sprey-P1000212054.html
@@ -1288,6 +1287,7 @@
 /p/barrier-repair-eye-cream---goz-cevresi-kremi-P1000205643.html
 /p/barrier-rescue-repair-set---nemlendirici-bakim-seti-P1000203260.html
 /p/barrier-restore-cream---rahatlatici-gunluk-nemlendirici-P1000215942.html
+/p/barrier-restore-cream---rahatlatici-gunluk-nemlendirici-P1000216000.html
 /p/base-coat---oje-koruyucu-baz-P10055786.html
 /p/base-de-teint-hydratation-et-eclat---primer-P10061346.html
 /p/base-tape-hydrating-primer---nemlendirici-makyaj-bazi-P3643141.html
@@ -1817,6 +1817,7 @@
 /p/biochange-tissue-activator-serum-370382.html
 /p/biochange-tissue-activator-serum-P10016304.html
 /p/biochange-twentyfour-hours-extreme-P10019470.html
+/p/biodance-caviar-pdrn-eye-patches---isilti-veren-goz-bantlari-P10064365.html
 /p/biodance-caviar-pdrn-jelly-serum-mist---isilti-veren-sikilastirici-mist-P10064366.html
 /p/biodance-collagen-peptide-eye-patches---sikilastirici-goz-bantlari-P10064367.html
 /p/biodance-collagen-starter-kit---nemlendirici-ve-sikilastirici-yuz-bakim-seti-P1000214655.html
@@ -2049,6 +2050,7 @@
 /p/body-glow-%E2%80%93-pigmentli-vucut-nemlendiricisi-P10063120.html
 /p/body-lava---vucut-aydinlatici-757521.html
 /p/body-lava---vucut-aydinlatici-P1000208502.html
+/p/body-lotion---sandal-agaci-ve-vetiver-vucut-kremi-P1000207672.html
 /p/body-lotion---sandal-agaci-ve-vetiver-vucut-kremi-P1000207674.html
 /p/body-lotion-bergamte-611119.html
 /p/body-mist---bergamot-ve-hinoki-vucut-spreyi-P10057703.html
@@ -2637,6 +2639,7 @@
 /p/butta-drop-body-milk---nemlendirici-vucut-sutu-P10059471.html
 /p/butta-drop-cream-558096.html
 /p/butta-drop-cream-P10016432.html
+/p/butta-drop-guava-getaway---cirpilmis-yagli-nemlendirici-vucut-kremi-P10064697.html
 /p/butta-drop-vanilla-dream---vucut-kremi-P1000212063.html
 /p/butta-drop-whipped-body-cream---cirpilmis-guava-yagli-nemlendirici-vucut-kremi-P10062119.html
 /p/bvl-rose-goldea-blossom-delight-edt-587243.html
@@ -5310,6 +5313,7 @@
 /p/extra-firming---tum-cilt-tipleri-i%CC%87cin-yaslanma-karsiti-gece-kremi-P1000205766.html
 /p/extra-firming-energy-6---sikilastirici-et-isilti-artirici-gunduz-krem-P1000211919.html
 /p/extra-rich-cleansing-milk-P3473036.html
+/p/extra-volume-conditioner-P10010765.html
 /p/extreme-screen---vucut-ve-eller-icin-nemlendirici-gunes-kremi-spf50--P1000206825.html
 /p/eye-balm---canlandirici-goz-cevresi-balmi-P10059636.html
 /p/eye-blender-firca---goz-fircasi-P3491136.html
@@ -5616,6 +5620,8 @@
 /p/fine-linez---suya-dayanikli-jel-eyeliner-P1000212008.html
 /p/fine-medium-hair-treatment---sac-maskesi-739305.html
 /p/fine-medium-hair-treatment---sac-maskesi-P10015081.html
+/p/firca--152---orta-boy-allik-fircasi-P10010904.html
+/p/firca--248--cift-uclu-goz-fari-fircasi-P1000208320.html
 /p/firm-believer-neck-et-decollete-treatment---yogun-puruzsuzlestirici-bakim-maskesi-P10061572.html
 /p/fix-et-forget-it-sabi%CC%87tleyi%CC%87ci%CC%87-sprey-P3483105.html
 /p/fix-make-up---makyaj-sabitleyici-P1000203079.html
@@ -5629,6 +5635,7 @@
 /p/flashpatch-P3110018.html
 /p/flashpatch-illuminating-eye-gels-559616.html
 /p/flashpatch-illuminating-eye-gels-P3582001.html
+/p/flashpatch-restoring-night-eye-gels-P3196004.html
 /p/flat-allik-fircasi-P1213008.html
 /p/flat-claw-clip---duz-mandal-sac-tokasi-P1000211853.html
 /p/flawless-primer---isiya-karsi-koruyan-sac-sekillendirmeye-hazirlik-spreyi-P1000212051.html
@@ -5776,6 +5783,7 @@
 /p/full-cover-flesh-kapatici-n05-P19035.html
 /p/full-dry-volume-et-texture-spray---sekillendirici-sprey-seyahat-formati-P10034532.html
 /p/full-dry-volume-et-texture-spray---sonlandirici-sekillendirme-spreyi-P10024611.html
+/p/full-lash-serum-P2255029.html
 /p/full-shampoo---hacim-veren-sampuan-P1000207034.html
 /p/full-volume-et-root-lifting-spray---hacim-ve-kok-spreyi-P10052759.html
 /p/fulvic-acid-brightening-cleanser-P10014966.html
@@ -5924,6 +5932,7 @@
 /p/gerrard-street-eau-de-cologne-587147.html
 /p/gerrard-street-eau-de-cologne-P10026839.html
 /p/get-glowing-with-me---katie-fang-P10058783.html
+/p/get-into-balance-mode---karma-ve-yagli-ciltler-icin-dengeleyici-bakim-seti-P1000214941.html
 /p/get-rollin----roller-lash-maskara-seti-P1000213414.html
 /p/getaway-set*---mini-cilt-bakim-urunlerinden-olusan-uclu-set-ve-canta-P1000213373.html
 /p/gf-15%25-solution---olgun-cilt-destek-solusyonu-P1000205324.html
@@ -5933,7 +5942,6 @@
 /p/ghd-jelly-chronos---sac-duzlestirici-P1000213447.html
 /p/ghd-jelly-chronos-curve-max-wand---sac-masasi-P1000213828.html
 /p/ghd-jelly-chronos-max---sac-duzlestirici-P1000213827.html
-/p/ghd-jelly-duet-blowdry---i%CC%87kisi-bir-arada-P1000213448.html
 /p/ghd-speed---hassas-sekillendirici-konsantre-baslik-66-mm-P1000212374.html
 /p/ghd-speed---profesyonel-kivircik-sac-difuzoru-P1000212375.html
 /p/ghd-speed---profesyonel-tarak-baslik-P1000212576.html
@@ -6355,7 +6363,6 @@
 /p/grl-rouge-g-mat-20-lips-refill-518-557456.html
 /p/grl-rouge-g-mat-20-lips-refill-518-620384.html
 /p/grl-superaqua-20-emulsion-universal-50-ml-P4026123.html
-/p/grooming-creme-P666039.html
 /p/ground-rice-and-honey-glow-mask---hepsi-bir-arada-isilti-maskesi-P1000206859.html
 /p/growpotion---kirpik-ve-kas-kalinlastirici-serum-P10048931.html
 /p/gua-sha-quartz---yuz-masaj-tasi-P10017352.html
@@ -7619,6 +7626,7 @@
 /p/just-cavalli-for-her---eau-de-toilette-P1000207767.html
 /p/just-cavalli-for-him-edt-90ml-P1497001.html
 /p/just-cavalli-give-me-magic---eau-de-parfum-P1000211258.html
+/p/just-cavalli-give-me-magic-for-him--eau-de-toilette-P1000211255.html
 /p/just-cavalli-wild-heart-for-her---eau-de-parfum-P1000205606.html
 /p/just-cavalli-wild-heart-for-him---eau-de-toilette-P1000205526.html
 /p/just-love-aromaterapi-karisimi-P10024842.html
@@ -7857,6 +7865,7 @@
 /p/kure---cok-amacli-onarici-bakim-P10026573.html
 /p/kusburnu-cekirdegi-yagi---soguk-sikim-leke-karsiti-ve-aydinlatici-%25100-saf-P10060324.html
 /p/kusburnu-tonik---aydinlatici-ve-leke-karsiti-P10060015.html
+/p/kush-brow-lamination-gel---kas-jeli-P10050894.html
 /p/kush-brow-shadow-stick---kas-kalemi-693059.html
 /p/kush-brow-shadow-stick---kas-kalemi-693060.html
 /p/kush-brow-shadow-stick---kas-kalemi-693061.html
@@ -8501,6 +8510,7 @@
 /p/leave-in-molecular-repair-hair-mask---hasarli-sac-bakim-kuru---seyahat-boyu-P10052253.html
 /p/leave-in-perfecting-cream---sac-sekillendirici-krem-P1000204858.html
 /p/led-light-therapy-face-mask-series-1---led-isik-terapisi-yuz-maskesi-serisi-1-P1000214327.html
+/p/led-light-therapy-face-mask-series-2---led-isik-terapisi-yuz-maskesi-seri-2-P1000214319.html
 /p/led-lip-perfector---led-dudak-mukemmellestirici-P1000214329.html
 /p/legacy-azuree---eau-de-parfum-P10061152.html
 /p/legacy-estee---eau-de-parfum-P10061151.html
@@ -9962,6 +9972,7 @@
 /p/mini-but-mighty-moisture---nemlendirici-yuz-bakim-rutini-mini-seti-P1000214017.html
 /p/mini-climax-extreme-mascara-P10011396.html
 /p/mini-climax-maskara-P3592113.html
+/p/mini-dewy-set---nemlendirici-sabitleme-spreyi-P4128084.html
 /p/mini-dipbrow-gel-P3665028.html
 /p/mini-discovery-trio---bergamot-ve-hinoki---uclu-mini-tanitim-seti-P1000211819.html
 /p/mini-discovery-trio---sandal-agaci-ve-vetiver---uclu-mini-tanitim-seti-P1000211818.html
@@ -10171,6 +10182,7 @@
 /p/moistureglow%E2%84%A2-plumping-lip-serum---dolgunlastirici-dudak-balsami-729190.html
 /p/moistureglow%E2%84%A2-plumping-lip-serum---dolgunlastirici-dudak-balsami-729191.html
 /p/moistureglow%E2%84%A2-plumping-lip-serum---dolgunlastirici-dudak-balsami-P10044129.html
+/p/moisturize-et-mend-leave-in-conditioner---bag-guclendirici-durulanmayan-sac-kremi-P1000216794.html
 /p/moisturizing-body-lotion---vucut-bakimi-547634.html
 /p/moisturizing-conditioner-nemlendirici-sac-kremi-P1000205786.html
 /p/moisturizing-eye-sorbet-P10024869.html
@@ -10214,7 +10226,6 @@
 /p/mousse-autobronzante-express---bronzlasma-kopugu-P10049602.html
 /p/mousse-creme-eclat-P3851114.html
 /p/mousse-eclat-200-ml-P1641011.html
-/p/moving-lights---isikli-dostum-P10060291.html
 /p/msb-medical-spirit-of-beauty-pflege-spezialpflege-collagen-extreme-30-ml-P10019443.html
 /p/msb-medical-spirit-of-beauty-pflege-versorgen-night-et-day-collagen-30-ml-P10019442.html
 /p/muladhara-mist---kok-cakra-spreyi%CC%87-P1000208433.html
@@ -10922,6 +10933,7 @@
 /p/paradigme---eau-de-parfum-810582.html
 /p/paradigme---eau-de-parfum-P1000209183.html
 /p/paradigme-le-parfum---eau-de-parfum-P1000214806.html
+/p/paradiso----eau-de-parfum-P1000211519.html
 /p/paradiso-rosa---eau-de-parfum-P1000206585.html
 /p/paradoxe---eau-de-parfum-617049.html
 /p/paradoxe---eau-de-parfum-617051.html
@@ -10986,7 +10998,6 @@
 /p/pdrn-100-hyaluronic-acid-glow-pad---hyaluronik-asit-i%CC%87ceren-nemlendirici-pedler-P1000212554.html
 /p/pdrn-hyaluronic-acid-100-moisture-cream---hafif-nemlendirici-krem-P1000212552.html
 /p/pdrn-hyaluronic-acid-capsule-100-serum---hyaluronik-asitli-nemlendirici-serum-P1000212553.html
-/p/pdrn-hyaluronic-acid-capsule-100-serum-mask---yogun-nemlendirici-maske-P1000212539.html
 /p/pdrn-hyaluronic-acid-hydrating-capsule-mist---nemlendirici-yuz-misti-P10064145.html
 /p/pdrn-pink-cica-toner-apaisant---isilti-artirici-yuz-tonigi-P1000211597.html
 /p/pdrn-pink-collagen-exosome-shot-2000---isilti-ve-esneklik-saglayan-yuz-serumu-P1000212817.html
@@ -11005,6 +11016,7 @@
 /p/peeling-etkili-temizleyici---vucut-725466.html
 /p/peeling-etkili-temizleyici---vucut-P10061376.html
 /p/peeling-mask---yuz-maskesi-P10043641.html
+/p/pencil-sharpener---kalemtiras-P3491142.html
 /p/pencil-sharpener-P10017665.html
 /p/peony-et-blush-suede---cologne-816333.html
 /p/peony-et-blush-suede---cologne-P1000213887.html
@@ -11016,6 +11028,7 @@
 /p/peptide---pro-collagen-peptide-sikilastirici-goz-serumu-P1000210221.html
 /p/peptide-eye-prep---siskinlik-karsiti-goz-alti-pedleri-P1000214710.html
 /p/peptide-glazing-fluid---nemli-gorunum-veren-jel-serum-P1000215943.html
+/p/peptide-glazing-fluid---nemli-gorunum-veren-jel-serum-P1000216001.html
 /p/peptide-lip-boost---dolgunlastirici-dudak-maskesi-P1000212944.html
 /p/peptide-lip-shape---kontur-veren-dudak-sekillendirici-P1000209350.html
 /p/peptide-lip-tint---besleyici-glaze-P1000209342.html
@@ -11319,6 +11332,7 @@
 /p/pillow-talk-push-up-lashes---maskara-P10010614.html
 /p/pinceau--108---fondoten-fircasi-P1000215689.html
 /p/pinceau--118--makyaj-fircasi-P10056332.html
+/p/pinceau-bronzer-b2---makyaj-fircasi-P10056806.html
 /p/pinceau-fard-a-paupieres-P2970023.html
 /p/pinceau-fond-de-teint-blush-P2970022.html
 /p/pinceau-n%C2%B015---allik-fircasi-P10059162.html
@@ -11418,6 +11432,7 @@
 /p/plushtint---nemlendirici-ozellikli-mat-tint-ruj-P10057430.html
 /p/pocket-blush---katmanlanabilir-nemlendirici-krem-allik-P1000209341.html
 /p/pocket-bronze---uzun-sure-kalici-krem-bronzlastirici-P1000214746.html
+/p/pocket-brush---cift-uclu-makyaj-fircasi-P1000214748.html
 /p/poeme---eau-de-parfum-P14213.html
 /p/poison-eau-de-toilette-16156.html
 /p/poison-eau-de-toilette-P3104.html
@@ -12260,7 +12275,9 @@
 /p/renutriv-regenerating-youth-cream-rich-P10018627.html
 /p/renutriv-ultimate-lift-eye-rich-P10018628.html
 /p/repair-blow-dry-150ml-5floz-P2065146.html
+/p/repair-shine-set---aninda-etkili-yogun-onarici-bakim-et-parlaklik-katan-sac-set-P1000214960.html
 /p/repairwear-laser-focus-eye-goz-cevresi-bakim-kremi-upgraded-P1260043.html
+/p/replenish---yogun-sac-bakim-seti-P1000213978.html
 /p/replenish-cleanser---hassas-saclar-icin-zengin-ve-besleyici-sampuan-P1000212641.html
 /p/replenish-conditioner---hassas-saclar-icin-onarici-sac-bakim-kremi-P1000212034.html
 /p/replenish-light-cream-mask---i%CC%87nce-telli-ve-yipranmis-saclar-icin-hafif-maske-P1000212036.html
@@ -14248,7 +14265,6 @@
 /p/sun-stalk-r-souffle---krem-bronzlastirici-804963.html
 /p/sun-stalk-r-souffle---krem-bronzlastirici-804964.html
 /p/sun-stalk-r-souffle---krem-bronzlastirici-P10064040.html
-/p/sunday-clay-wash---sac-ve-sac-derisi-arindirici-bakim-P10048717.html
 /p/sunkiss-remedy-%E2%80%93-ultra-ferah--dolgunlastirici-jel-krem-P1000211769.html
 /p/sunkissed-goddess-%E2%80%93-eau-de-parfum-766088.html
 /p/sunkissed-goddess-%E2%80%93-eau-de-parfum-P1000207267.html
@@ -14922,7 +14938,6 @@
 /p/the-hand-treatment-P2701059.html
 /p/the-homecurl---bukle-tanimlayici-krem-756434.html
 /p/the-homecurl---bukle-tanimlayici-krem-P1000205504.html
-/p/the-hotel-beneville----yilbasi-ozel-makyaj-ve--cilt-bakimi-hediye-seti-P10064656.html
 /p/the-hydrating-infused-emulsion-494160.html
 /p/the-hydrating-infused-emulsion-P10017452.html
 /p/the-impossible-glow-P10014664.html
@@ -15157,6 +15172,7 @@
 /p/the-ritual-of-ayurveda---vucut-serumu-P1000213248.html
 /p/the-ritual-of-ayurveda---vucut-ve-saclar-icin-kuru-yag-P1000206745.html
 /p/the-ritual-of-karma---dus-kopugu-P10051172.html
+/p/the-ritual-of-karma---dus-yagi-P1000206445.html
 /p/the-ritual-of-karma---el-losyonu-P10051175.html
 /p/the-ritual-of-karma---en-cok-satan-gunes-urunleri-seyahat-seti-P10051179.html
 /p/the-ritual-of-karma---gunes-sonrasi-nemlendirici-jel-losyon-P10051182.html
@@ -15169,15 +15185,18 @@
 /p/the-ritual-of-karma---sac-ve-vucut-spreyi-P3802019.html
 /p/the-ritual-of-karma---seyahat-seti-P1000209480.html
 /p/the-ritual-of-karma---sut-formunda-gunes-koruyucu-sprey-spf-30-P10051180.html
+/p/the-ritual-of-karma---sut-formunda-gunes-koruyucu-sprey-spf-50-P10051181.html
 /p/the-ritual-of-karma---vucut-kremi-P1000209179.html
 /p/the-ritual-of-karma---vucut-kremi-yedek-paketi-P1000210705.html
 /p/the-ritual-of-karma---vucut-peelingi-P10051171.html
 /p/the-ritual-of-karma---vucut-ve-sac-icin-kalip-temizleyici-bakim-P1000206446.html
+/p/the-ritual-of-karma---yuz-gunes-kremi-spf-50--P10051184.html
 /p/the-ritual-of-karma-sun---gunes-koruyucu-kopuk-spf-50-P1000213253.html
 /p/the-ritual-of-karma-sun---yuz-i%CC%87cin-gunes-koruyucu-stick-spf-50--P1000213254.html
 /p/the-ritual-of-sakura---arac-parfumu-tutucu-ve-2-yedek-dolum-P10024347.html
 /p/the-ritual-of-sakura---dogal-deodorant-P1000208185.html
 /p/the-ritual-of-sakura---dus-kopugu-P10057499.html
+/p/the-ritual-of-sakura---dus-yagi-P10061281.html
 /p/the-ritual-of-sakura---kokulu-cubuklar-769060.html
 /p/the-ritual-of-sakura---kokulu-cubuklar-787322.html
 /p/the-ritual-of-sakura---kokulu-cubuklar-P1000209752.html
