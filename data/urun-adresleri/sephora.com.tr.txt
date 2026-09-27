@@ -246,6 +246,7 @@
 /p/a-day-in-the-sun---yuz-bakim-seti-P1000210673.html
 /p/a-gloei%E2%84%A2-P10023421.html
 /p/a-perfect-world-antioxidant-moisturizer-with-white-tea-P2886033.html
+/p/a-perfect-world-cleanser-150-ml-P2886031.html
 /p/a-shaba-complex%E2%84%A2---goz-serumu-P10051074.html
 /p/a.m-glow-before-noon-%E2%80%93-seramidli-isilti-artirici-sivi-sut-793955.html
 /p/a.m-glow-before-noon-%E2%80%93-seramidli-isilti-artirici-sivi-sut-P1000211762.html
@@ -2935,7 +2936,9 @@
 /p/charlotte-s-magic-water-cream---jel-yuz-kremi-689441.html
 /p/charlotte-s-magic-water-cream---jel-yuz-kremi-P10052795.html
 /p/charlotte-s-magic-water-cream---yuz-icin-nemlendirici-jel-krem-P10059215.html
+/p/checks-and-balances%E2%84%A2-frothy-face-wash-250ml-P2387014.html
 /p/checks-and-balances%E2%84%A2poli%CC%87shi%CC%87ng-face-scrub-P10016518.html
+/p/checks-et-balances-yuz-temizleyici-P2790004.html
 /p/cheek-clapper-3d---uclu-allik-paleti-812602.html
 /p/cheek-clapper-3d---uclu-allik-paleti-812603.html
 /p/cheek-clapper-3d---uclu-allik-paleti-812604.html
@@ -3050,6 +3053,7 @@
 /p/chroma-absolu---boyali-saclar-i%CC%87cin-renk-koruyucu-sac-bakim-maskesi-P10023425.html
 /p/chroma-absolu---boyali-saclar-i%CC%87cin-renk-koruyucu-termik-serum-P10023427.html
 /p/chroma-absolu-bain-riche%C2%A0---boyali-saclar-icin-besleyici-ve-koruyucu-sampuan-P10023422.html
+/p/chronologiste---yaslanma-belirtileriyle-zayiflamis-saclar-i%CC%87cin-sac-derisi-serumu-P10064706.html
 /p/chronologiste---yaslanma-belirtileriyle-zayiflayan-saclar-i%CC%87cin-sampuan-P1000212607.html
 /p/chronologiste---yaslanma-belirtileriyle-zayiflayan-saclar-i%CC%87cin-sampuan-P1000212785.html
 /p/chronologiste---yaslanma-belirtileriyle-zayiflayan-saclar-i%CC%87cin-yenileyici-maske-P1000212665.html
@@ -3172,6 +3176,7 @@
 /p/clear-et-purify---poliglutamik-asit-ve-prebiyotikli-dengeleyici-cift-fazli-losyon-P1000214793.html
 /p/clear-eyelash-glue---dayanikli--gorunmez--seffaf-takma-kirpik-yapistiricisi-P1000211852.html
 /p/clear-improvement%E2%84%A2---sivilce-karsiti-nemlendirici-losyon-P1000203429.html
+/p/clear-improvement%E2%84%A2---siyah-nokta-karsiti-peeling-et-mask-P1000203426.html
 /p/clear-improvement%E2%84%A2-active-charcoal-mask-to-clear-pores-P3607069.html
 /p/clear-improvement%E2%84%A2-active-charcoal-mask-to-clear-pores-P3655184.html
 /p/clearer-skin-starts-here---kusursuzluk-giderici-bakim-seti-P1000205726.html
@@ -4774,6 +4779,7 @@
 /p/dreamskin-care-et-perfect-le-fluide-perfecteur---anti-aging-skincare-P10059295.html
 /p/drink-up-hydrating-mask-with-apricot-et-swiss-glacier-water---nemlendirici-maske-P10050391.html
 /p/drink-up-intensive-overnight---avokadolu-nemlendirici-maske-692739.html
+/p/drink-up-intensive-overnight---avokadolu-nemlendirici-maske-P10050390.html
 /p/dry-and-rough-skin-slution-with-10%25-urea---yuz--serumu-P10043112.html
 /p/dry-body-brush---kuru-vucut-fircasi-P1000209430.html
 /p/dry-body-oil-P10011005.html
@@ -11374,6 +11380,7 @@
 /p/plantscription%E2%84%A2---kirisiklik-karsiti-serum-717001.html
 /p/plantscription%E2%84%A2---kirisiklik-karsiti-serum-P1000202914.html
 /p/plantscription%E2%84%A2---kirisiklik-karsiti-sikilastirici-krem-P10055429.html
+/p/plantscription---kirisiklik-gorunumu-karsiti-goz-kremi-P10045955.html
 /p/plantscription-anti-aging-power-eye-cream-P2387062.html
 /p/plantscription-retinol-night-moisturizer-with-alpine-flower-P3620033.html
 /p/plantscription-spf-25-power-cream-50-ml-P2615018.html
@@ -13989,7 +13996,6 @@
 /p/solar-the-protective-oil-spf15---gunes-koruyucu-yuz-ve-vucut-yagi-P10048875.html
 /p/solar-the-sublimating-oil---nemlendirici-ve-aydinlatici-yag-P10048873.html
 /p/soleil-blanc-all-over-body-spray-P3175011.html
-/p/soleil-blanc-atomizer-10ml-P3492039.html
 /p/soleil-blanc-edp-30ml-352078.html
 /p/soleil-blanc-edp-30ml-352079.html
 /p/soleil-blanc-edp-30ml-452040.html
