@@ -71,7 +71,6 @@
 /tr/cizgili-ksa-kollu-gomlek-l07460510
 /tr/cizgili-orgu-tote-canta-l14020840
 /tr/cizgili-orgu-tote-canta-l14057840
-/tr/cizgili-oversize-tisort-l07230375
 /tr/cizgili-oversize-tisort-l07230381
 /tr/cizgili-pijama-pantolon-l07662502
 /tr/cizgili-relaxed-fit-kargo-jean-l07662507
@@ -230,6 +229,7 @@
 /tr/kombini-tamamla-l96297918720BSBS
 /tr/kombini-tamamla-l97971478639BSBS
 /tr/kombini-tamamla-l98479351461BSBS
+/tr/kombini-tamamla-l98481007827BSBS
 /tr/kombini-tamamla-l98845565841BSBS
 /tr/kombini-tamamla-l99141399883BSBS
 /tr/kombini-tamamla-l99473103375BSBS
@@ -351,6 +351,7 @@
 /tr/stili-tamamla-l93776912463BSBS
 /tr/stili-tamamla-l96823333420BSBS
 /tr/straight-jean-l07660502
+/tr/stwd-biye-detayl-fermuarl-ceket-l07721537
 /tr/stwd-jogger-bermuda-sort-l03665509
 /tr/stwd-kare-desenli-ceket-l07721521
 /tr/stwd-kontrast-panelli-esofman-ceketi-l07721539
@@ -362,12 +363,14 @@
 /tr/suni-deri-biker-ceket-l03720323
 /tr/suni-deri-biker-ceket-l03720325
 /tr/suni-deri-ceket-l07720507
+/tr/suni-deri-ceket-l07721504
 /tr/suni-deri-ceket-l07721513
 /tr/suni-deri-dad-ceket-l07720381
 /tr/suni-deri-dokulu-ceket-l07721529
 /tr/suni-deri-ksa-trenckot-l07720351
 /tr/suni-deri-kurk-yakal-bomber-ceket-l07720363
 /tr/suni-suet-bomber-ceket-l07720354
+/tr/suni-suet-bomber-ceket-l07721534
 /tr/suni-suet-ceket-l07720512
 /tr/suni-yunlu-yakal-denim-ceket-l07701519
 /tr/super-genis-paca-comfort-jean-l07660317
