@@ -8,6 +8,7 @@
 /p/%25100-dogal-soguk-sikim-argan-yagi-P10025078.html
 /p/%25100-saf-gul-suyu-sprey-P10025069.html
 /p/%2512-askorbil-glikozit-cozeltisi---hafif-serum-P10014051.html
+/p/%252-behentrimonyum-klorur-iceren-sac-kremi-P10024620.html
 /p/%252-salisilik-asit-maskesi-P10014050.html
 /p/%255-kafein-solusyonu-egcg---goz-cevresi-P3921092.html
 /p/%255-mandelic-fluid-P10024878.html
@@ -1341,6 +1342,7 @@
 /p/bb.texture-P666038.html
 /p/be-curly---bukleli-saclar-i%CC%87cin-sampuan-251508.html
 /p/be-curly---bukleli-saclar-i%CC%87cin-sampuan-P1477006.html
+/p/be-curly-advanced%E2%84%A2---bukle-belirginlestirici-jel-P10057974.html
 /p/be-curly-advanced%E2%84%A2---bukleli-saclar-icin-sampuan-P10057969.html
 /p/be-curly-advanced%E2%84%A2---durulanmayan-mist-P10057972.html
 /p/be-curly-advanced-bukle-belirginlestirici-krem-seyahat-boy-40-ml-718168.html
@@ -4642,6 +4644,7 @@
 /p/dogal-nemlendirici-faktorler-beta-glukan---nemlendirici-jel-P10050003.html
 /p/dogal-nemlendirici-faktorler-ha---nemlendirici-krem-P3921101.html
 /p/dogal-nemlendirici-faktorler-ha---nemlendirici-krem-P3921107.html
+/p/dogal-nemlendirici-faktorler-ha---sac-derisi-nemlendiricisi-P10024618.html
 /p/dolce-blue-jasmine---eau-de-parfum-727597.html
 /p/dolce-blue-jasmine---eau-de-parfum-P1000203194.html
 /p/dolce-edp-75-ml-287202.html
@@ -5056,6 +5059,7 @@
 /p/elixir---eau-de-parfum-660502.html
 /p/elixir---eau-de-parfum-735136.html
 /p/elixir---eau-de-parfum-P10048526.html
+/p/elixir---eau-de-parfum-P10061179.html
 /p/elixir-des-merveilles--eau-de-parfum-145017.html
 /p/elixir-des-merveilles--eau-de-parfum-P1626002.html
 /p/elixir-ultime---parlaklik-veren-sac-bakim-P10058828.html
@@ -5274,6 +5278,7 @@
 /p/excess-oil-solution-with-20%25-niacinamide---yuz-serumu-P10043115.html
 /p/exfoliant-moussant-energisant-P579288.html
 /p/exfoliant-scrub-sampuan-610459.html
+/p/exfoliant-scrub-sampuan-P10014996.html
 /p/exfoliate---%253-aha-%252-c-vitamini-iceren-gunluk-peeling-losyonu-P1000211542.html
 /p/exfoliate---%255-ni%CC%87asi%CC%87nami%CC%87d-lakti%CC%87k-asi%CC%87t-i%CC%87ceren-esi%CC%87tleyi%CC%87ci%CC%87-serum-P1000211634.html
 /p/exfoliate---aha-iceren-puruzsuzlestirici-vucut-peelingi-P1000211844.html
@@ -5494,6 +5499,7 @@
 /p/faq---sac-derisi-et-gur-sac-probiyotik-serumu-P1000214472.html
 /p/faq-201---rgb-led-yuz-maskesi-P10051507.html
 /p/faq-202---yaslanma-karsiti-silikon-led-yuz-maskesi-P10051506.html
+/p/faq-202-plus---yaslanma-karsiti-led-maske-P1000214474.html
 /p/faq-301---kirmizi-led-li-sac-derisi-masaj-cihazi-P1000214490.html
 /p/faq-401---mikro-akimli-led-sikilastirma-cihazi-P1000214476.html
 /p/faq-402---cift-mikro-akimli-led-sikilastirma-cihazi-P1000214477.html
@@ -5591,6 +5597,8 @@
 /p/ferragamo-bright-leather---eau-de-toilette-615423.html
 /p/ferragamo-bright-leather---eau-de-toilette-P10025942.html
 /p/ferragamo-intense-leather---eau-de-parfum-547407.html
+/p/ferragamo-intense-leather---eau-de-parfum-P10014280.html
+/p/ferragamo-spicy-leather---parfum-P10020799.html
 /p/fiamma---eau-de-parfum-767333.html
 /p/fiamma---eau-de-parfum-P1000207211.html
 /p/fiamma-assoluta---eau-de-parfum-P1000213996.html
@@ -5659,6 +5667,7 @@
 /p/flex-foundation-stick-486080.html
 /p/flex-foundation-stick-486087.html
 /p/flex-foundation-stick-486089.html
+/p/flight--cantali-sac-kurutma-makinesi-P10052723.html
 /p/flip-play-advanced---led-isikli-sac-fircasi-826075.html
 /p/flip-play-advanced---led-isikli-sac-fircasi-826076.html
 /p/flip-play-advanced---led-isikli-sac-fircasi-P1000214473.html
@@ -5951,6 +5960,7 @@
 /p/ghd-jelly-chronos---sac-duzlestirici-P1000213447.html
 /p/ghd-jelly-chronos-curve-max-wand---sac-masasi-P1000213828.html
 /p/ghd-jelly-chronos-max---sac-duzlestirici-P1000213827.html
+/p/ghd-jelly-duet-blowdry---i%CC%87kisi-bir-arada-P1000213448.html
 /p/ghd-speed---hassas-sekillendirici-konsantre-baslik-66-mm-P1000212374.html
 /p/ghd-speed---profesyonel-kivircik-sac-difuzoru-P1000212375.html
 /p/ghd-speed---profesyonel-tarak-baslik-P1000212576.html
@@ -7446,6 +7456,7 @@
 /p/interstellar---aydinlatici-653737.html
 /p/interstellar---cok-amacli-aydinlatici-cubuk-P1000208319.html
 /p/invati-ultra-advanced-dokulme-karsiti-dolgunlastirici-sac-kremi--hafif-doku-P1000203732.html
+/p/invati-ultra-advanced-dokulme-karsiti-dolgunlastirici-sac-kremi--zengin-doku-P1000203733.html
 /p/invati-ultra-advanced-dokulme-karsiti-sac-serumu-P1000203727.html
 /p/invati-ultra-advanced-dokulme-karsiti-sekillendirici-dolgunlastirici-sac-kopugu-P1000203728.html
 /p/invati-ultra-advanced-guclendirici-durulanmayan-sac-bakim-kremi-P1000203729.html
@@ -8337,6 +8348,7 @@
 /p/le-parfum-essentiel---eau-de-parfum-P10056711.html
 /p/le-parfum-in-white---eau-de-parfum-P10056302.html
 /p/le-parfum-l-essentiel-P3989096.html
+/p/le-parfum-royal---eau-de-parfum-P10062340.html
 /p/le-phyto-blush-6-shimmer-543955.html
 /p/le-phyto-blush-6-shimmer-543957.html
 /p/le-phyto-blush-6-shimmer-543958.html
@@ -8521,6 +8533,7 @@
 /p/led-light-therapy-face-mask-series-1---led-isik-terapisi-yuz-maskesi-serisi-1-P1000214327.html
 /p/led-light-therapy-face-mask-series-2---led-isik-terapisi-yuz-maskesi-seri-2-P1000214319.html
 /p/led-lip-perfector---led-dudak-mukemmellestirici-P1000214329.html
+/p/led-neck-and-dec-perfector-series-2---led-boyun-ve-dekolte-maskesi-seri-2-P1000214313.html
 /p/legacy-azuree---eau-de-parfum-P10061152.html
 /p/legacy-estee---eau-de-parfum-P10061151.html
 /p/legacy-knowing---eau-de-parfum-P10061150.html
@@ -9588,6 +9601,7 @@
 /p/mandarin-et-ylang-ylang-roll---aromaterapi-roll-P1000209432.html
 /p/mandarine-basilic-edt-P10024232.html
 /p/mandarino-di-amalfi-edp-50ml-P1920019.html
+/p/mandelik-asit-%2510-ha---hassas-ciltler-icin-peeling-bakimi-P10014054.html
 /p/maneater-satin-blush-cheek-plump---likit-allik-711189.html
 /p/maneater-satin-blush-cheek-plump---likit-allik-711190.html
 /p/maneater-satin-blush-cheek-plump---likit-allik-P1000202910.html
@@ -9686,7 +9700,6 @@
 /p/masque-fesses-ou-decollete-hydratant-et-apaisant---gunes-sonrasi-vucut-maskesi-P1000213367.html
 /p/masque-peeling-532083.html
 /p/masque-peeling-532084.html
-/p/masque-peeling-P10023028.html
 /p/masque-purifiant-profond-P2860008.html
 /p/masque-soin-regenerant-P3254032.html
 /p/masque-visage-hydratant-et-apaisant---gunes-sonrasi-yuz-maskesi-P1000213368.html
@@ -9895,6 +9908,9 @@
 /p/microstroke-brow-pen---kas-kalemi-772768.html
 /p/microstroke-brow-pen---kas-kalemi-772771.html
 /p/microstroke-brow-pen---kas-kalemi-P1000209854.html
+/p/midnight-diamonds---all-over-diamond-veil-%E2%80%93-aydinlatici-P1000215452.html
+/p/midnight-diamonds---gloss-bomb-stix--yogun-parlaklik-veren-stick-parlatici-P1000215453.html
+/p/midnight-diamonds---smoke--n-diamonds-dumanli-goz-makyaji-seti-P1000215454.html
 /p/midnight-espresso---eau-de-parfum-P1000215059.html
 /p/midnight-espresso---eau-de-parfum-P10064609.html
 /p/midnight-mender---guclendirici-onarici-gece-maskesi-P1000206541.html
@@ -10667,10 +10683,12 @@
 /p/nutriplenish%E2%84%A2---bukle-belirginlestirici-nemlendirici-jel-krem-560395.html
 /p/nutriplenish%E2%84%A2---bukle-belirginlestirici-nemlendirici-jel-krem-P10017489.html
 /p/nutriplenish%E2%84%A2---cok-amacli-sac-bakim-yagi-P3994126.html
+/p/nutriplenish%E2%84%A2---gunluk-sac-nemlendirici-bakim-P10013573.html
 /p/nutriplenish%E2%84%A2---hafif-nemlendirici-sac-kremi-506829.html
 /p/nutriplenish%E2%84%A2---hafif-nemlendirici-sac-kremi-P3994120.html
 /p/nutriplenish%E2%84%A2---hafif-nemlendirici-sampuan-506833.html
 /p/nutriplenish%E2%84%A2---hafif-nemlendirici-sampuan-P3994118.html
+/p/nutriplenish%E2%84%A2---kuru-saclar-i%CC%87cin-hafif-nemlendirici-maske-P10023568.html
 /p/nutriplenish%E2%84%A2---kuru-saclar-i%CC%87cin-yogun-nemlendirici-maske-P10023567.html
 /p/nutriplenish%E2%84%A2---nemlendirici-durulanmayan-sac-kremi-P3994125.html
 /p/nutriplenish%E2%84%A2---sac-nemlendirici-kopuk-P10042962.html
@@ -13188,8 +13206,10 @@
 /p/scalp-serum---sac-derisi-serumu-P10026436.html
 /p/scalp-solutions---sac-derisi-i%CC%87cin-gece-serumu-P10047244.html
 /p/scalp-solutions---sac-derisi-i%CC%87cin-jel-peeling-P10047241.html
+/p/scalp-solutions---sac-derisi-i%CC%87cin-masaj-aleti-P10047245.html
 /p/scalp-solutions---sac-derisi-i%CC%87cin-sac-kremi-P10047243.html
 /p/scalp-solutions---sac-derisi-i%CC%87cin-sampuan-P10047242.html
+/p/scalp-solutions---sac-derisi-i%CC%87cin-sprey-P10047246.html
 /p/scalp-solutions---sac-derisi-icin-maske-P1000205356.html
 /p/scandal---eau-de-toilette-for-him-parfum-seti-P1000213087.html
 /p/scandal-absolu-parfum-concentre-50ml-720066.html
@@ -14724,6 +14744,7 @@
 /p/technosatin-gel-lipstick---ruj-657392.html
 /p/technosatin-gel-lipstick---ruj-657393.html
 /p/technosatin-gel-lipstick---ruj-P10048544.html
+/p/teeth-whitening-kit---dis-beyazlatma-kiti-P1000214370.html
 /p/teint-idole-stick---allik-814198.html
 /p/teint-idole-stick---allik-814199.html
 /p/teint-idole-stick---allik-P1000212825.html
@@ -15208,7 +15229,6 @@
 /p/the-ritual-of-sakura---kokulu-cubuklar-787322.html
 /p/the-ritual-of-sakura---kokulu-cubuklar-P1000209752.html
 /p/the-ritual-of-sakura---kokulu-mum-P10052718.html
-/p/the-ritual-of-sakura---l-banyo-ve-vucut-hediye-seti-P1000213817.html
 /p/the-ritual-of-sakura---l-vucut-ve-banyo-hediye-seti-P1000209226.html
 /p/the-ritual-of-sakura---m-vucut-ve-banyo-hediye-seti-P1000209225.html
 /p/the-ritual-of-sakura---nemlendirici-vucut-kopugu-P1000203058.html
@@ -16348,6 +16368,7 @@
 /p/watertone-fondoten-P10014628.html
 /p/watetone-makyaj-sungeri-P10014627.html
 /p/wattabrat-gloss-bomb-%E2%80%93-parlak-ve-simli-dudak-parlaticisi-P1000212525.html
+/p/wave---uclu-su-dalgasi-sac-sekillendirici--3x32mm--P1000207931.html
 /p/wave-spray---dalgalandirici-sprey-357945.html
 /p/wave-spray---dalgalandirici-sprey-P2753016.html
 /p/wave-spray---sac-dalgalandirici-sprey-760116.html
