@@ -1061,6 +1061,7 @@
 /bebek-sabunlari/dalin-nem-ve-koruma-bebek-sabunu-100-gr-p-10726391
 /bebek-sabunlari/dalin-orman-meyvesi-kokulu-kopuk-sabun-200-ml-p-10643716
 /bileklik-bilezik/eklips-2li-bilezik-kahve-p-10220077
+/bileklik-bilezik/eklips-2li-bilezik-mor-pembe-p-10220080
 /bileklik-bilezik/eklips-2li-bilezik-siyah-gri-p-10220078
 /bileklik-bilezik/eklips-2li-bilezik-yesil-krem-p-10220079
 /bileklik-bilezik/eklips-3lu-bilezik-kahve-renk-gecisli-p-10220081
@@ -1133,6 +1134,7 @@
 /canta/eklips-bordo-pelus-telefon-cantasi-p-10206314
 /canta/eklips-cherry-baskili-seffaf-clutch-canta-p-10216851
 /canta/eklips-goz-nakisli-plaj-cantasi-p-10217992
+/canta/eklips-kirazli-kapitone-makyaj-cantasi-p-10218340
 /canta/eklips-krem-fiyonk-kartlik-p-10216892
 /canta/eklips-krem-kartlik-p-10216890
 /canta/eklips-krem-para-cuzdani-p-10216893
@@ -1239,6 +1241,7 @@
 /corap/eklips-3lu-unisex-sporcu-sneaker-corap-mor-turuncu-bej-p-10218538
 /corap/eklips-5li-cok-renkli-unisex-sneaker-corap-bej-mavi-pembe-beyaz-lila-p-10218540
 /corap/eklips-5li-sneakers-corap-p-10042413
+/corap/eklips-acik-ten-kulotlu-corap-l-beden-p-10207825
 /corap/eklips-acik-ten-kulotlu-corap-m-beden-p-10207824
 /corap/eklips-beyaz-5li-sneakers-corap-p-10270560
 /corap/eklips-cizgili-corap-siyah-beyaz-2li-p-10864608
@@ -1870,6 +1873,7 @@
 /dudak-kalemi/stellary-automatic-lip-liner-04-plum-precise-application-matte-finish-p-10210344
 /dudak-kalemi/stellary-automatic-lip-liner-06-nude-precise-application-matte-finish-p-10210345
 /dudak-kalemi/stellary-lip-liner-dudak-kalemi-03-terra-cotta-high-pigmentation-smooth-application-p-10210337
+/dudak-kalemi/stellary-lip-liner-dudak-kalemi-05-latte-high-pigmentation-smooth-application-p-10210338
 /dudak-kalemi/stellary-lip-liner-dudak-kalemi-07-warm-nude-high-pigmentation-smooth-application-p-10210339
 /dudak-kalemi/stellary-lip-liner-dudak-kalemi-09-cappuchino-high-pigmentation-smooth-application-p-10210340
 /dudak-kalemi/stellary-lip-liner-dudak-kalemi-10-beige-high-pigmentation-smooth-application-p-10210341
@@ -2072,6 +2076,7 @@
 /dudak-parlaticisi/beaulis-must-have-it-mini-likit-parlak-ruj-seti-262-charming-p-10173181
 /dudak-parlaticisi/beaulis-must-have-it-mini-likit-parlak-ruj-seti-617-luminous-p-10207978
 /dudak-parlaticisi/beaulis-peel-me-up-soyulabilir-dudak-renklendiricisi-149-vanilla-nude-p-10215931
+/dudak-parlaticisi/beaulis-plump-it-dolgunlastirma-etkili-dudak-parlaticisi-517-bubblegum-p-10777410
 /dudak-parlaticisi/beaulis-plump-it-dolgunlastirma-etkili-dudak-parlaticisi-534-rose-p-10777413
 /dudak-parlaticisi/beaulis-plump-it-dolgunlastirma-etkili-dudak-parlaticisi-607-shine-coral-p-10777412
 /dudak-parlaticisi/beaulis-plump-it-dolgunlastirma-etkili-dudak-parlaticisi-906-sparkling-p-10777411
@@ -2872,6 +2877,7 @@
 /dus-jeli/bee-beauty-dus-jeli-coconut-song-400-ml-p-10219653
 /dus-jeli/bee-beauty-dus-jeli-coconut-song-400-ml-p-10478794
 /dus-jeli/bee-beauty-dus-jeli-coffee-mania-400-ml-p-10220247
+/dus-jeli/bee-beauty-dus-jeli-deniz-tuzu-bergamot-250-ml-p-10901201
 /dus-jeli/bee-beauty-dus-jeli-hindistan-cevizi-shea-butter-250-ml-p-10901199
 /dus-jeli/bee-beauty-dus-jeli-macaron-love-400-ml-p-10219655
 /dus-jeli/bee-beauty-dus-jeli-nar-bambu-250-ml-p-10901200
@@ -3051,6 +3057,7 @@
 /el-temizleme-urunleri/eklips-ahsap-tirnak-fircasi-p-10550769
 /el-temizleme-urunleri/eklips-pembe-tirnak-fircasi-p-10550768
 /el-vucut-kremleri/arko-classic-yagli-krem-20-cc-p-14000185
+/el-vucut-kremleri/arko-nem-badem-sutu-yogun-bakim-kremi-400-ml-p-10219671
 /el-vucut-kremleri/arko-nem-degerli-yaglar-avokado-krem-250-ml-p-10129326
 /el-vucut-kremleri/arko-nem-degerli-yaglar-avokado-krem-60-ml-p-10129317
 /el-vucut-kremleri/arko-nem-degerli-yaglar-hindistan-cevizi-krem-250-ml-p-10129327
@@ -3237,6 +3244,7 @@
 /elektrikli-kisisel-bakim/kiwi-sarjli-temizleme-nemlendirme-ve-gerdirme-etkili-cilt-temizleyici-kfm2822-p-10214587
 /elektrikli-kisisel-bakim/kiwi-soguk-goz-cevresi-masaj-aleti-ice-roller-kfm8600-p-10214589
 /elektrikli-supurge/aprilla-sarjli-el-supurgesi-avc4034-p-10221239
+/elektrikli-supurge/kiwi-dikey-hali-yikama-ve-leke-cikartma-makinesi-kcc4370-p-10206034
 /elektrikli-urunler/kiwi-otomatik-tuz-karabiber-ogutucu-p-10197417
 /epilasyon-yayi/eklips-epilasyon-yayi-p-10098273
 /epilasyon-yayi/nascita-helezon-kil-alma-yayi-asortili-p-10034179
@@ -3252,6 +3260,7 @@
 /epilasyon/philips-epilasyon-aleti-bre247-05-p-10214676
 /epilasyon/philips-epilasyon-aleti-mavi-bre228-05-p-10214675
 /epilasyon/philips-lumea-advanced-ipl-lazer-epilasyon-aleti-bri921-00-p-10200780
+/erkek-bakim/eklips-erkek-kisisel-bakim-seti-p-10199190
 /erkek-bakim/philips-oneblade-vucut-ve-yuz-tiras-makinesi-qp1624-10-p-10214223
 /erkek-bakim/philips-oneblade-yedek-bicak-2li-qp220-51-p-10214222
 /erkek-cilt-bakim/nivea-men-deep-erkek-sakal-ve-yuz-temizleme-jeli-100-ml-p-10084105
@@ -3419,6 +3428,7 @@
 /erkek-parfum/calvin-klein-obsession-edt-erkek-parfum-125-ml-p-10225908
 /erkek-parfum/christian-dior-fahrenheit-edp-erkek-parfum-75-ml-p-10270626
 /erkek-parfum/christian-dior-homme-intense-edp-erkek-parfum-150-ml-p-10270640
+/erkek-parfum/christian-dior-homme-intense-edp-erkek-parfum-50-ml-p-10270680
 /erkek-parfum/costume-national-scent-intense-edp-erkek-parfum-100-ml-p-10212143
 /erkek-parfum/davidoff-adventure-edt-erkek-parfum-100-ml-p-10555230
 /erkek-parfum/davidoff-cool-elixir-intense-erkek-parfum-100-ml-p-10213632
@@ -3435,6 +3445,7 @@
 /erkek-parfum/hermes-h24-edp-erkek-parfum-100-ml-p-10213645
 /erkek-parfum/hermes-h24-edt-erkek-parfum-100-ml-p-10213647
 /erkek-parfum/hermes-terre-dhermes-edt-erkek-parfum-100-ml-p-10055962
+/erkek-parfum/hermes-terre-edt-erkek-parfum-200-ml-p-10555253
 /erkek-parfum/hugo-boss-bottled-edp-erkek-parfum-200-ml-p-10555240
 /erkek-parfum/hugo-boss-bottled-edt-erkek-parfum-200-ml-p-10016053
 /erkek-parfum/hugo-boss-bottled-elixir-erkek-parfum-100-ml-p-10212141
@@ -3475,6 +3486,7 @@
 /erkek-parfum/paco-rabanne-million-gold-elixir-intense-erkek-parfum-100-ml-p-10213655
 /erkek-parfum/paco-rabanne-one-million-edp-erkek-parfum-100-ml-p-10771068
 /erkek-parfum/paco-rabanne-one-million-edt-erkek-parfum-100-ml-p-10270694
+/erkek-parfum/paco-rabanne-one-million-edt-erkek-parfum-200-ml-p-10555255
 /erkek-parfum/pierre-cardin-toulon-edp-erkek-parfum-50-ml-p-10206776
 /erkek-parfum/privacy-addiction-man-edt-100-ml-p-10167611
 /erkek-parfum/privacy-gold-sensation-erkek-parfum-edt-100-ml-p-10011500
@@ -3515,6 +3527,7 @@
 /erkek-parfum/versace-oud-noir-edp-erkek-parfum-100-ml-p-10422870
 /erkek-parfum/versace-pour-homme-edt-erkek-parfum-200-ml-p-10365252
 /erkek-parfum/yves-saint-laurent-m9-la-nuit-l-de-homme-edp-erkek-parfum-100-ml-p-10218384
+/erkek-rollon-stick/axe-erkek-roll-on-deodorant-dark-temptation-48-saat-etkileyici-koku-50-ml-p-10200838
 /erkek-rollon-stick/axe-premium-collection-erkek-stick-deodorant-blue-lavender-50-ml-p-10211934
 /erkek-rollon-stick/axe-premium-collection-erkek-stick-deodorant-cherry-spritz-50-ml-p-10211935
 /erkek-rollon-stick/blade-cool-fresh-erkek-deodorant-roll-on-50-ml-p-10210296
@@ -3898,8 +3911,10 @@
 /far/love-generation-duochrome-eyeshadow-palette-universe-give-me-money-01-shimmering-duochrome-shades-p-10209415
 /far/love-generation-eyeshadow-palette-i-see-it-i-like-it-i-want-it-i-got-it-01-9-bold-shimmering-shades-p-10209416
 /far/love-generation-my-iconic-era-far-paleti-01-p-10219720
+/far/love-generation-shine-likit-far-nirvana-03-mellow-glow-shimmering-liquid-eyeshadow-p-10209431
 /far/love-generation-shine-likit-far-nirvana-04-gentle-petal-shimmering-liquid-eyeshadow-p-10209432
 /far/love-generation-shine-likit-far-nirvana-05-serene-shimmering-liquid-eyeshadow-p-10209433
+/far/love-generation-shine-likit-far-nirvana-06-mystic-shimmering-liquid-eyeshadow-p-10209434
 /far/lykd-18li-far-paleti-grunge-edge-p-10211407
 /far/lykd-18li-far-paleti-nude-edge-p-10211405
 /far/lykd-9lu-far-paleti-197-glow-walk-p-10203491
@@ -4494,6 +4509,7 @@
 /gida-takviyeleri-vitaminler/qlife-plusc-d3-vitamini-ve-cinko-iceren-efervesan-takviye-edici-gida-20-tablet-1000mg-p-10212813
 /gida-takviyeleri-vitaminler/qlife-sambucus-beta-glucan-surup-takviye-edici-gida-150-ml-p-10212835
 /gida-takviyeleri-vitaminler/qlife-sambucus-gummies-cd-vitamini-cinko-kara-murver-iceren-gummies-60-adet-p-10206716
+/gida-takviyeleri-vitaminler/ulker-pastil-okaliptus-mentol-nane-8-adet-p-10215984
 /gida-takviyeleri-vitaminler/vita-ceel-bromelain-plus-green-tea-lkarnitin-60-tablet-p-10213457
 /gida-takviyeleri-vitaminler/vita-ceel-magnezyum-complex-tablet-60-adet-b6-sitrat-bisglisinat-malat-taurat-p-10212099
 /gida-takviyeleri-vitaminler/vita-ceel-vitamin-b12-plus-cignenebilir-dil-alti-tablet-60-tablet-p-10212098
@@ -4661,6 +4677,7 @@
 /goz-kalemi/love-generation-goz-kalemi-04-lemon-zest-classic-pencil-for-bold-looks-p-10209408
 /goz-kalemi/love-generation-goz-kalemi-05-joking-lime-classic-pencil-for-bold-looks-p-10209409
 /goz-kalemi/love-generation-goz-kalemi-06-cotton-candy-cutie-classic-pencil-for-bold-looks-p-10209410
+/goz-kalemi/love-generation-goz-kalemi-07-flamingo-fizz-classic-pencil-for-bold-looks-p-10209411
 /goz-kalemi/love-generation-goz-kalemi-10-orange-crush-classic-pencil-for-bold-looks-p-10209413
 /goz-kalemi/love-generation-jel-goz-kalemi-color-bunny-05-obsession-pink-gel-formula-for-longlasting-wear-p-10209385
 /goz-kalemi/love-generation-jel-goz-kalemi-color-bunny-11-judge-me-pearl-gel-formula-for-longlasting-wear-p-10209389
@@ -4925,7 +4942,7 @@
 /gunes-korumali-spf-yuz-kremleri/cosmogenesis-labs-tiger-grass-cica-krem-15-ml-p-10215218
 /gunes-korumali-spf-yuz-kremleri/garnierc-vitamini-3-etki-1-arada-spf-25-serum-krem-50-ml-p-10222465
 /gunes-korumali-spf-yuz-kremleri/herbaderm-77-leke-azaltici-30spf-yuz-kremi-55-ml-p-10220910
-/gunes-korumali-spf-yuz-kremleri/janssen-cosmetics-face-guard-advanced-spf30-gunes-korumali-isilti-veren-serum-etkili-nemlendirici-50-p-10203537
+/gunes-korumali-spf-yuz-kremleri/janssen-cosmetics-face-guard-advanced-spf30-gunes-korumali-isilti-veren-serum-etkili-nemlendirici-50-ml-p-10203537
 /gunes-korumali-spf-yuz-kremleri/maruderm-cica-cilt-tonu-esitleyici-15spf-krem-30-ml-p-10211519
 /gunes-korumali-spf-yuz-kremleri/neutrogena-collagen-bank-nemlendirici-gunduz-kremi-30spf-50-ml-p-10213281
 /gunes-korumali-spf-yuz-kremleri/neutrogena-hydro-boost-spf-50-gunes-koruyucu-nemlendirici-50-ml-p-10203087
@@ -4956,6 +4973,7 @@
 /gunes-spreyleri/benri-hassas-koruma-gunes-spreyi-50spf-150-ml-p-10924408
 /gunes-spreyleri/benri-nem-koruma-gunes-spreyi-50spf-150-ml-p-10923974
 /gunes-spreyleri/cire-aseptine-seffaf-aeresol-sprey-gunes-kremi-50-spf-200-ml-p-10208614
+/gunes-spreyleri/garnier-ambre-solaire-sensitive-advanced-hipoalerjenik-50-spf-gunes-koruyucu-sprey-150-ml-p-10211583
 /gunes-spreyleri/guinot-hydrazone-solaire-spf30-vucut-gunes-spreyi-150-ml-p-10219779
 /gunes-spreyleri/guinot-nutrizone-spf30-gunes-yagi-sprey-150-ml-p-10219780
 /gunes-spreyleri/nivea-sun-spf30-gunes-koruyucu-ve-ferahlik-vucut-spreyi-200-ml-p-14000314
@@ -4971,10 +4989,10 @@
 /gunes-yaglari/the-fair-sun-light-shine-spf50-pa-pariltili-gunes-koruyucu-vucut-ve-sac-yagi-100-ml-p-10203421
 /gunes-yaglari/the-fair-sun-light-shine-spf50-pa-pariltili-gunes-koruyucu-vucut-ve-sac-yagi-30-ml-p-10203420
 /gunessiz-bronzlastiricilar/benri-bronzlastirici-mendil-p-10068881
-/gunluk-nemlendirici-kremler-spreyler/anyong-akne-karsiti-set-tonik-50-ml-krem-20-ml-serum-12-ml-p-10213918
-/gunluk-nemlendirici-kremler-spreyler/anyong-bariyer-onarici-set-tonik-50-ml-krem-20-ml-serum-12-ml-p-10213919
-/gunluk-nemlendirici-kremler-spreyler/anyong-cilt-tonu-esitleyici-seti-tonik-50-ml-krem-20-ml-serum-12-ml-p-10213917
-/gunluk-nemlendirici-kremler-spreyler/anyong-nem-isiltisi-seti-tonik-50-ml-krem-20-ml-serum-12-ml-p-10213920
+/gunluk-nemlendirici-kremler-spreyler/anyong-30-gunluk-akne-karsiti-ve-gozenek-arindirici-bakim-kiti-tonik-50-ml-krem-20-ml-serum-12-ml-p-10213918
+/gunluk-nemlendirici-kremler-spreyler/anyong-30-gunluk-aydinlatici-nem-kiti-tonik-50-ml-krem-20-ml-serum-12-ml-p-10213920
+/gunluk-nemlendirici-kremler-spreyler/anyong-30-gunluk-bariyer-onarici-bakim-kiti-tonik-50-ml-krem-20-ml-serum-12-ml-p-10213919
+/gunluk-nemlendirici-kremler-spreyler/anyong-30-gunluk-leke-karsiti-ve-aydinlatici-bakim-kiti-tonik-50-ml-krem-20-ml-serum-12-ml-p-10213917
 /gunluk-nemlendirici-kremler-spreyler/anyong-yogun-nem-kremi-50-ml-p-10213940
 /gunluk-nemlendirici-kremler-spreyler/authoriderm-nemlendirici-yuz-kremi-50-ml-p-10214835
 /gunluk-nemlendirici-kremler-spreyler/baga-anti-dark-cilt-rengini-acici-aydinlatici-leke-kremi-50-ml-p-10206748
@@ -5419,6 +5437,7 @@
 /kadin-parfum/avon-perfect-nonsense-figgy-matcha-edp-kadin-parfum-50-ml-p-10221165
 /kadin-parfum/avon-perfect-nonsense-peppery-peaches-edp-kadin-parfum-50-ml-p-10218446
 /kadin-parfum/avon-summer-white-edt-kadin-parfum-50-ml-p-10221155
+/kadin-parfum/avon-summer-white-sunset-edt-kadin-parfum-50-ml-p-10221152
 /kadin-parfum/avon-today-tomorrow-always-love-quartz-edp-kadin-parfum-50-ml-p-10220300
 /kadin-parfum/avon-tta-today-edp-kadin-parfum-50-ml-p-10218440
 /kadin-parfum/bee-beauty-basics-edt-kadin-parfum-90-ml-no01-orchid-magic-p-10219937
@@ -5578,6 +5597,7 @@
 /kadin-parfum/memories-jewel-edt-kadin-parfum-60-ml-p-10218172
 /kadin-parfum/michael-kors-gorgeous-edp-kadin-parfum-50-ml-p-10212276
 /kadin-parfum/michael-kors-sexy-amber-edp-kadin-parfum-50-ml-p-10212278
+/kadin-parfum/michael-kors-wonderlust-edp-kadin-parfum-50-ml-p-10212284
 /kadin-parfum/micheal-kors-pour-femme-edp-kadin-parfum-50-ml-p-10213680
 /kadin-parfum/mimani-aqua-sorbet-edp-kadin-parfum-50-ml-p-10219266
 /kadin-parfum/mimani-berry-caramel-edp-kadin-parfum-50-ml-p-10219269
@@ -6419,7 +6439,9 @@
 /kati-sabun/duru-fresh-sensations-cicek-tazeligi-banyo-sabunu-150-gr-p-10226079
 /kati-sabun/duru-fresh-sensations-cicek-tazeligi-dus-sabunu-4x150-gr-p-10149678
 /kati-sabun/duru-fresh-sensations-cicek-tazeligi-guzellik-sabunu-4x100-gr-p-10226085
+/kati-sabun/duru-fresh-sensations-okyanus-esintisi-dus-sabunu-150-gr-x4-p-10149677
 /kati-sabun/duru-fresh-sensations-okyanus-esintisi-guzellik-sabunu-4x100-gr-p-10226084
+/kati-sabun/duru-natural-olive-zeytinyagli-dus-sabunu-150-gr-x4-p-10149679
 /kati-sabun/duru-saf-dogal-gul-kalip-sabun-150-gr-x4-p-15000009
 /kati-sabun/duru-saf-dogal-klasik-beyaz-kalip-sabun-4x150-gr-p-10149680
 /kati-sabun/duru-saf-dogal-lavanta-guzellik-sabunu-4x70-gr-p-15000020
@@ -6447,6 +6469,7 @@
 /kati-sabun/otaci-sabun-argan-80-gr-p-10013095
 /kati-sabun/otaci-sabun-defne-sac-vucut-80-gr-p-15000264
 /kati-sabun/otaci-sabun-kukurtlu-katranli-80-gr-p-15000263
+/kati-sabun/palmolive-aroma-sensations-massage-peeling-etkili-kati-sabun-4x-90-gr-p-10223136
 /kati-sabun/palmolive-aroma-sensations-tangerine-kati-sabun-90-gr-x4-p-10217006
 /kati-sabun/turkishcare-kabak-lifli-sabunlu-kese-esek-sutu-balli-p-10210913
 /kayganlastirici-jeller/durex-2in1-aloe-vera-masaj-jeli-200-ml-p-23000027
@@ -7448,6 +7471,7 @@
 /maskara/maybelline-new-york-lash-sensational-yelpaze-etkili-suya-dayanikli-siyah-maskara-p-10038649
 /maskara/maybelline-new-york-mascara-rocket-volume-black-p-10009848
 /maskara/maybelline-new-york-sky-high-rose-gold-glitz-maskara-p-10215421
+/maskara/maybelline-new-york-volume-express-over-the-top-hacim-etkili-maskara-p-10214775
 /maskara/new-well-bioherbal-7in1-maskara-p-10249190
 /maskara/note-curvaceous-hacim-ve-kivirma-etkili-maskara-siyah-p-10214651
 /maskara/note-desired-lash-mascara-uzunluk-ve-yogun-hacim-etkili-maskara-siyah-p-10219650
@@ -7587,6 +7611,7 @@
 /oje/beaulis-aura-oje-364-coral-vibe-p-10217170
 /oje/beaulis-aura-oje-683-blush-energy-p-10217165
 /oje/beaulis-cloud-veil-oje-547-raindrops-on-roses-p-10216847
+/oje/beaulis-cloud-veil-oje-675-orchid-tint-p-10217162
 /oje/beaulis-color-blast-oje-300-fire-red-p-10220682
 /oje/beaulis-color-blast-oje-383-sunset-orange-p-10220684
 /oje/beaulis-color-blast-oje-568-pink-splash-p-10220677
@@ -8906,6 +8931,7 @@
 /sac-bakim-sutu/the-ceel-kolay-taramaya-yardimci-biberiye-sac-bakim-sutu-cift-fazli-150-ml-p-10212484
 /sac-bakim-sutu/true-bee-pamuk-sutu-moringa-dokulme-karsiti-cift-fazli-fon-sutu-sprey-200-ml-p-10215892
 /sac-bakim-sutu/urban-care-brazilian-keratin-duzlestirici-etkili-keratin-bakim-sutu-200-ml-p-10205231
+/sac-bakim-sutu/urban-care-monoi-ylang-ylang-gunesten-yipranmis-mat-saclara-ozel-sac-bakim-sutu-200-ml-p-10211154
 /sac-bakim-sutu/urban-care-no-4-glycolic-retinol-parlaklik-etkili-onarici-sac-bakim-sutu-200-ml-p-10217327
 /sac-bakim-sutu/urban-care-no-5-bond-plex-sac-bakim-sutu-200-ml-p-10186758
 /sac-bakim-yaglari-serumlari/ashley-joy-argan-sac-bakim-serumu-100-ml-p-10208262
@@ -9067,6 +9093,7 @@
 /sac-kopukleri/otaci-botanics-bitkisel-sekillendirici-sac-kopugu-150-ml-orta-sert-tutus-p-10219000
 /sac-kopukleri/otaci-botanics-bitkisel-sekillendirici-sac-kopugu-150-ml-yumusak-orta-tutus-p-10218999
 /sac-kopukleri/panorama-professional-mega-hold-sac-kopugu-6-200-ml-p-10201545
+/sac-kopukleri/redist-full-force-guclu-tutus-ve-dogal-hacim-seyahat-boy-sac-kopugu-90-ml-p-10221353
 /sac-kopukleri/redist-full-force-sac-kopugu-300-ml-p-10198920
 /sac-kopukleri/taft-curl-flex-sac-kopugu-150-ml-p-12000671
 /sac-kopukleri/taft-power-kasmir-sac-kopugu-150-ml-p-12001117
@@ -9123,12 +9150,10 @@
 /sac-maskeleri/bioxcin-keratin-argan-onarici-sac-bakim-maskesi-225-ml-p-10205368
 /sac-maskeleri/botanica-comfort-eternisse-bliss-luxury-sac-bakim-maskesi-50-ml-p-10214797
 /sac-maskeleri/botanica-comfort-ultimate-precious-luxury-sac-bakim-maskesi-50-ml-p-10214796
-/sac-maskeleri/dove-amino-serum-yogun-onarici-sac-bakim-maskesi-265-ml-p-10217261
-/sac-maskeleri/dove-coconut-oil-besleyici-terapi-sac-bakim-maskesi-265-ml-p-10217274
-/sac-maskeleri/dove-peptit-bond-repair-sac-bakim-maskesi-265-ml-p-10217266
 /sac-maskeleri/duru-nem-bombasi-yogun-onarim-sac-bakim-maskesi-200-ml-p-10214960
 /sac-maskeleri/elidor-aninda-onarici-sac-maskesi-220-ml-p-10212782
 /sac-maskeleri/elidor-brezilya-keratin-terapisi-yogun-onarici-sac-bakim-maskesi-220-ml-p-10205551
+/sac-maskeleri/elidor-guclu-ve-parlak-yogun-sac-bakim-maskesi-220-ml-p-10212783
 /sac-maskeleri/elidor-ultra-isilti-yogun-parlaklik-yogun-onarici-maske-220-ml-p-10205550
 /sac-maskeleri/gliss-aqua-revive-4u-1-arada-nemlendirici-yeniden-yapilandirici-bakim-maskesi-400-ml-p-10199815
 /sac-maskeleri/gliss-full-hair-wonder-sac-maskesi-400-ml-p-10207881
@@ -9257,7 +9282,6 @@
 /sac-tonik-kurleri/ashley-joy-bitkisel-eksozom-destekli-dokulme-karsiti-tonik-sac-spreyi-150-ml-p-10218936
 /sac-tonik-kurleri/bade-natural-biberiye-arindirici-ve-canlandirici-sac-sirkesi-250-ml-p-10212132
 /sac-tonik-kurleri/bade-natural-biberiye-suyu-dokulme-karsiti-ve-sac-uzamasini-destekleyici-sac-tonigi-100-ml-p-10207307
-/sac-tonik-kurleri/bee-beauty-hyaluron-argan-sac-bakim-kuru-25-ml-p-10207529
 /sac-tonik-kurleri/bee-beauty-orman-meyveli-sirke-ve-sac-tonigi-400-ml-p-10761439
 /sac-tonik-kurleri/bioblas-biotin-kafein-tonik-200-ml-p-10210688
 /sac-tonik-kurleri/bioxcin-yogun-sac-dokulmesine-karsi-forte-sac-bakim-tonigi-200-ml-p-10219667
@@ -9380,12 +9404,14 @@
 /sampuan/duru-nem-bombasi-kepege-karsi-sampuan-400-ml-p-10214894
 /sampuan/duru-nem-bombasi-yogun-onarim-sampuan-400-ml-p-10214893
 /sampuan/elidor-aninda-onarici-bakim-sampuan-400-ml-serum-bakim-kremi-200-ml-p-10200923
+/sampuan/elidor-aninda-onarici-buyuk-boy-xxl-sampuan-880-ml-p-10222469
 /sampuan/elidor-aninda-onarici-sac-bakim-sampuani-400-ml-p-10237526
 /sampuan/elidor-belirgin-bukleler-sampuan-400-ml-p-10217286
 /sampuan/elidor-biberiye-dokulme-karsiti-sampuan-400-ml-p-10213359
 /sampuan/elidor-brezilya-keratin-terapisi-sac-bakim-sampuani-400-ml-p-10779716
 /sampuan/elidor-brezilya-keratin-terapisi-sac-bakim-sampuani-500-ml-p-10220789
 /sampuan/elidor-brezilya-keratin-terapisi-seyahat-boy-sampuan-90-ml-p-10211012
+/sampuan/elidor-guclu-ve-parlak-buyuk-boy-xxl-sampuan-880-ml-p-10222470
 /sampuan/elidor-guclu-ve-parlak-sac-bakim-sampuani-400-ml-p-10237527
 /sampuan/elidor-guclu-ve-parlak-sampuan-400-ml-serum-bakim-kremi-200-ml-p-10200922
 /sampuan/elidor-hindistan-cevizi-yumusakligi-sampuan-400-ml-p-10213371
@@ -9523,6 +9549,7 @@
 /sampuan/pantene-prov-guc-parlaklik-sampuan-625-ml-p-10222348
 /sampuan/pantene-prov-miracles-frizz-no-more-kivircik-saclar-icin-sampuan-325-ml-p-10204663
 /sampuan/pantene-prov-miracles-molecular-bond-repair-sampuan-yipranmis-saclar-icin-250-ml-p-10204661
+/sampuan/pantene-prov-onarici-koruyucu-sampuan-625-ml-p-10222347
 /sampuan/pantene-temel-bakim-sampuan-400-ml-p-10207319
 /sampuan/restorex-7-besleyici-yag-besleyici-sac-bakim-sampuani-500-ml-p-10948879
 /sampuan/restorex-7-besleyici-yag-sac-bakim-sampuani-900-ml-p-10214714
@@ -11046,7 +11073,7 @@
 /yuz-bakim-maskesi-paket/5c-cure-avocado-kore-yuz-maskesi-25-ml-p-10607507
 /yuz-bakim-maskesi-paket/bee-beauty-7li-kagit-yuz-maskesi-p-10198848
 /yuz-bakim-maskesi-paket/bee-beauty-after-party-gece-kagit-yuz-maskesi-p-10730524
-/yuz-bakim-maskesi-paket/bee-beauty-altin-soyulabilir-maske-10-ml-p-10492936
+/yuz-bakim-maskesi-paket/bee-beauty-altin-soyulabilir-aydinlatici-maske-10-ml-p-10492936
 /yuz-bakim-maskesi-paket/bee-beauty-arindirici-cay-agaci-yagi-kil-maskesi-p-10876099
 /yuz-bakim-maskesi-paket/bee-beauty-before-makeup-isilti-verici-kagit-yuz-maskesi-p-10730523
 /yuz-bakim-maskesi-paket/bee-beauty-besleyici-aloe-vera-ozlu-kil-maskesi-p-10876098
@@ -11054,30 +11081,30 @@
 /yuz-bakim-maskesi-paket/bee-beauty-during-party-aydinlatici-kagit-yuz-maskesi-p-10730525
 /yuz-bakim-maskesi-paket/bee-beauty-gunes-sonrasi-aloe-verali-kagit-maske-25-ml-p-10366900
 /yuz-bakim-maskesi-paket/bee-beauty-haftalik-bakim-seti-7x-maske-p-10110720
+/yuz-bakim-maskesi-paket/bee-beauty-hyaluronik-asit-arbutin-serum-kagit-yuz-maskesi-p-10204671
 /yuz-bakim-maskesi-paket/bee-beauty-kagit-maske-3lu-25-ml-p-10506408
 /yuz-bakim-maskesi-paket/bee-beauty-karpuz-desenli-arindirici-kagit-yuz-maskesi-p-10644269
 /yuz-bakim-maskesi-paket/bee-beauty-kivi-desenli-canlandirici-kagit-yuz-maskesi-p-10644270
 /yuz-bakim-maskesi-paket/bee-beauty-kolajen-icerikli-kagit-yuz-maskesi-25-ml-p-10213278
 /yuz-bakim-maskesi-paket/bee-beauty-leke-karsiti-kagit-maske-25-ml-p-10605519
 /yuz-bakim-maskesi-paket/bee-beauty-limon-desenli-aydinlatici-kagit-yuz-maskesi-p-10644271
-/yuz-bakim-maskesi-paket/bee-beauty-mor-soyulabilir-maske-10-ml-p-10492937
-/yuz-bakim-maskesi-paket/bee-beauty-pembe-soyulabilir-maske-10-ml-p-10492938
+/yuz-bakim-maskesi-paket/bee-beauty-mor-soyulabilir-nemlendirici-maske-10-ml-p-10492937
+/yuz-bakim-maskesi-paket/bee-beauty-nemlendirici-uyku-maskesi-2x5-ml-p-10171486
+/yuz-bakim-maskesi-paket/bee-beauty-niasinamid-cinko-pca-serum-kagit-yuz-maskesi-p-10204670
+/yuz-bakim-maskesi-paket/bee-beauty-pembe-soyulabilir-canlandirici-maske-10-ml-p-10492938
 /yuz-bakim-maskesi-paket/bee-beauty-pirinc-peeling-jel-40-ml-p-10202901
 /yuz-bakim-maskesi-paket/bee-beauty-rabbit-onarici-kagit-yuz-maskesi-25-gr-p-10389186
 /yuz-bakim-maskesi-paket/bee-beauty-serinletici-jel-yuz-maskesi-20-ml-p-10662669
-/yuz-bakim-maskesi-paket/bee-beauty-serum-maske-arbutin-p-10204671
-/yuz-bakim-maskesi-paket/bee-beauty-serum-maske-niasinamid-p-10204670
-/yuz-bakim-maskesi-paket/bee-beauty-serum-maskec-vitamini-p-10204673
-/yuz-bakim-maskesi-paket/bee-beauty-serumc-maske-8-ml-p-10167298
+/yuz-bakim-maskesi-paket/bee-beauty-serumc-canlandirici-maske-8-ml-p-10167298
 /yuz-bakim-maskesi-paket/bee-beauty-sikilastirici-kolajen-kil-maskesi-p-10876100
-/yuz-bakim-maskesi-paket/bee-beauty-superfood-uzum-maskesi-25-ml-p-10195968
+/yuz-bakim-maskesi-paket/bee-beauty-superfood-uzum-cekirdegi-puruzsuzlestirici-kagit-yuz-maskesi-p-10195968
 /yuz-bakim-maskesi-paket/bee-beauty-superfood-yaban-mersini-yaslanma-karsiti-kagit-yuz-maskesi-p-10198847
-/yuz-bakim-maskesi-paket/bee-beauty-termal-kil-yuz-maskesi-2x5-ml-p-10029051
+/yuz-bakim-maskesi-paket/bee-beauty-termal-kil-dengeleyici-yuz-maskesi-2x5-ml-p-10029051
 /yuz-bakim-maskesi-paket/bee-beauty-tiger-kolajen-kagit-yuz-maskesi-25-gr-p-10389187
-/yuz-bakim-maskesi-paket/bee-beauty-uyku-maskesi-2x5-ml-p-10171486
 /yuz-bakim-maskesi-paket/bee-beauty-visne-hidrojel-dudak-ve-goz-maske-seti-p-10197433
 /yuz-bakim-maskesi-paket/bee-beauty-yenileyici-nar-ozlu-kil-maskesi-p-10876101
 /yuz-bakim-maskesi-paket/bee-beauty-yuz-yagi-kontrol-kagidi-50-adet-p-10206419
+/yuz-bakim-maskesi-paket/bee-beautyc-vitamini-kolajen-serum-kagit-yuz-maskesi-p-10204673
 /yuz-bakim-maskesi-paket/claderm-arindirici-kil-maskesi-aloe-vera-20-ml-p-10340154
 /yuz-bakim-maskesi-paket/claderm-arindirici-kil-maskesi-coffee-20-ml-p-10340156
 /yuz-bakim-maskesi-paket/claderm-arindirici-kil-maskesi-collagen-20-ml-p-10340157
@@ -11297,6 +11324,7 @@
 /yuz-gunes-kremleri/the-purest-solutions-gorunmez-uv-korumasi-gunluk-yogun-nemlendirici-spf-50-50-ml-p-10072927
 /yuz-gunes-kremleri/the-purest-solutions-lekeli-ciltler-icin-antioksidan-destekli-gunes-kremi-50-spf-50-ml-p-10072928
 /yuz-gunes-kremleri/the-purest-solutions-yagli-ciltler-icin-mat-bitisli-gunes-kremi-50-spf-50-ml-p-10072929
+/yuz-gunes-kremleri/vaseline-gunluk-gunes-koruyucu-stick-spf-50-15-gr-p-10208294
 /yuz-makyaj-temizleme-suyu/bee-beauty-cift-fazli-yuz-makyaj-temizleyicisi-150-ml-p-10200450
 /yuz-makyaj-temizleme-suyu/bee-beauty-micellar-cift-fazli-makyaj-temizleme-suyu-400-ml-p-10200736
 /yuz-makyaj-temizleme-suyu/bee-beauty-micellar-makyaj-temizleme-suyu-400-ml-p-10203874
@@ -11446,7 +11474,7 @@
 /yuz-nemlendirici-gece-kremleri/the-purest-solutions-yenileyici-yaslanma-karsiti-20-lipozomal-retinol-gece-serumu-30-ml-p-10206787
 /yuz-nemlendirici-gece-kremleri/ziaja-gul-yagi-kirisiklik-karsiti-gece-kremi-50-ml-p-10222460
 /yuz-nemlendirici-gece-kremleri/ziaja-vitaminc-b3-niacinamide-gece-kremi-50-ml-p-10206654
-/yuz-peeling-urunleri/anyong-enzim-peeling-seti-solusyon-50-ml-peeling-tozu-2-gr-p-10213941
+/yuz-peeling-urunleri/anyong-30-gunluk-enzim-peeling-kit-solusyon-50-ml-peeling-tozu-2-gr-p-10213941
 /yuz-peeling-urunleri/baga-aydinlatici-yogun-nemlendirici-peeling-krem-200-ml-p-10206749
 /yuz-peeling-urunleri/bolbe-arindirici-papaya-enzim-peeling-2-ml-x-15-adet-p-10215182
 /yuz-peeling-urunleri/dermoten-kirmizi-yosun-ve-uzum-cekirdegi-iceren-sivi-peeling-150-ml-p-10214620

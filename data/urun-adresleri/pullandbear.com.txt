@@ -147,7 +147,6 @@
 /tr/islemeli-tote-canta-l14052840
 /tr/isltl-bootcut-jean-l03660178
 /tr/isltl-genis-paca-jean-l07660309
-/tr/isltl-straight-jean-l03661306
 /tr/kapitone-stwd-yelek-l07720599
 /tr/kapusonlu-bomber-ceket-l07720511
 /tr/kapusonlu-dolgulu-ceket-l07700369
@@ -161,6 +160,7 @@
 /tr/kapusonlu-sisme-mont-l07720369
 /tr/kapusonlu-sisme-mont-l07720503
 /tr/kapusonlu-sisme-stwd-mont-l07700501
+/tr/kapusonlu-stwd-sisme-mont-l07720502
 /tr/kapusonlu-suni-kurk-ceket-l07700324
 /tr/kapusonlu-suni-kurk-ceket-l07720324
 /tr/kapusonlu-suslu-dugmeli-ceket-l07721511
@@ -233,7 +233,6 @@
 /tr/kombini-tamamla-l96297918720BSBS
 /tr/kombini-tamamla-l97971478639BSBS
 /tr/kombini-tamamla-l98479351461BSBS
-/tr/kombini-tamamla-l98481007827BSBS
 /tr/kombini-tamamla-l98845565841BSBS
 /tr/kombini-tamamla-l99141399883BSBS
 /tr/kombini-tamamla-l99473103375BSBS
@@ -285,6 +284,7 @@
 /tr/pacas-katl-baggy-jean-l07660318
 /tr/panelli-baggy-relaxed-fit-jean-l07662518
 /tr/panelli-suni-deri-ceket-l07721506
+/tr/parltl-straight-fit-jean-l03661306
 /tr/patchwork-barrel-jean-l07662300
 /tr/patchwork-genis-paca-jean-l07660300
 /tr/pembe-barrel-jean-l07670309
@@ -353,7 +353,6 @@
 /tr/stili-tamamla-l96823333420BSBS
 /tr/straight-jean-l07660502
 /tr/stras-detayl-dusuk-bel-straight-jean-l07662307
-/tr/stwd-biye-detayl-fermuarl-ceket-l07721537
 /tr/stwd-jogger-bermuda-sort-l03665509
 /tr/stwd-kare-desenli-ceket-l07721521
 /tr/stwd-kontrast-panelli-esofman-ceketi-l07721539
@@ -387,6 +386,7 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
+/tr/tokal-shopper-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/toyota-celica-supra-sweatshirt-l07558527
 /tr/toyota-celica-tisort-l07231538
