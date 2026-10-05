@@ -362,7 +362,6 @@
 /tr/tr/1-5-6-yas---kabak-ve-snoopy-peanuts--desenli-pijama-p07099579.html
 /tr/tr/1-5-6-yas---karanlikta-parlayan-iskelet-pijama-takimi-p04424499.html
 /tr/tr/1-5-6-yas---puantiyeli-velur-pijama-p08501528.html
-/tr/tr/1-5-6-yas---sirk-desenli-pijama-p04424598.html
 /tr/tr/1-5-6-yas---tek-boynuzlu-at-desenli-pijama-p07099495.html
 /tr/tr/1-5-6-yas--3-lu-cars---disney-kulot-paketi-p08501580.html
 /tr/tr/1-5-6-yas--dinozor-desenli-pijama-takimi-p01716493.html
@@ -1735,7 +1734,6 @@
 /tr/tr/asimetrik-triko-top-p03646009.html
 /tr/tr/asimetrik-triko-top-p09598016.html
 /tr/tr/asimetrik-uzun-top-p05644732.html
-/tr/tr/asimetrik-yaka-mini-elbise-p02937111.html
 /tr/tr/asimetrik-yirtmacli-midi-etek-p00387056.html
 /tr/tr/asimetrik-yuvarlak-tepsi-p41312043.html
 /tr/tr/aski-detayli-capraz-canta-p16066810.html
@@ -3206,7 +3204,6 @@
 /tr/tr/cicek-desenli-liberty-kumasli-top-p01526809.html
 /tr/tr/cicek-desenli-makyaj-cantasi-p11587630.html
 /tr/tr/cicek-desenli-masa-runner-p46211024.html
-/tr/tr/cicek-desenli-minder-p46380009.html
 /tr/tr/cicek-desenli-mini-bebek-havlusu--3-lu-paket--p45674724.html
 /tr/tr/cicek-desenli-nakisli-yaka-tulum-p01165754.html
 /tr/tr/cicek-desenli-nervurlu-bluz-p07037120.html
@@ -4686,7 +4683,6 @@
 /tr/tr/daisy---disney-yun-karisimli-triko-kazak-p02209556.html
 /tr/tr/dal-desenli-keten-ve-pamuklu-yatak-ortusu-p45173006.html
 /tr/tr/dalga-desenli-balon-pelus-pantolon-p07878578.html
-/tr/tr/dalga-desenli-modal-ve-ipek-sal-p04758212.html
 /tr/tr/dalga-desenli-sardonlu-bermuda-p06208591.html
 /tr/tr/dalga-detayli-triko-hirka-p01822011.html
 /tr/tr/dalgal%C4%B1-metal-dekoratif-aksesuar-p44515043.html
@@ -5264,7 +5260,6 @@
 /tr/tr/deri-cizme-p12007830.html
 /tr/tr/deri-cizme-p12093720.html
 /tr/tr/deri-clutch-canta-p16304810.html
-/tr/tr/deri-clutch-canta-p16768810.html
 /tr/tr/deri-cuzdan-p13820820.html
 /tr/tr/deri-cuzdan-p13828820.html
 /tr/tr/deri-dagci-botu-p17109830.html
@@ -6261,7 +6256,6 @@
 /tr/tr/dut-ipegi-yastik-kilifi-p41362091.html
 /tr/tr/duut-ipek-etek-p49177720.html
 /tr/tr/duvar-tipi-ahsap-ve-yivli-cam-vitrin-p45570077.html
-/tr/tr/duz-100-kasmir-bandana-p05059201.html
 /tr/tr/duz-bagcikli-bikini-alti-p00167209.html
 /tr/tr/duz-bakim-cantasi-p13717820.html
 /tr/tr/duz-bantli-ve-tokali-ayakkabi-p12572710.html
@@ -8378,7 +8372,6 @@
 /tr/tr/islemeli-yamali-cizgili-triko-polo-t-shirt-p03166434.html
 /tr/tr/islemeli-yamali-fitilli-kadife-sapka-p05213740.html
 /tr/tr/islemeli-yari-transparan-bluz-p04786734.html
-/tr/tr/islemeli-yazili-fitilli-kumas-sapka-p00653220.html
 /tr/tr/islemeli-yelek-p05063838.html
 /tr/tr/islemeli-yildizli-gomlek-p08574596.html
 /tr/tr/islemeli-yonca-mutfak-bezi-p43291026.html
@@ -8997,7 +8990,6 @@
 /tr/tr/kareli-crop-fit-ceket-p02634312.html
 /tr/tr/kareli-crop-fit-gomlek-p07545313.html
 /tr/tr/kareli-crop-fit-trenckot-p04391420.html
-/tr/tr/kareli-desenli-balon-pantolon-p06138194.html
 /tr/tr/kareli-desenli-cukoha-bere-p00653276.html
 /tr/tr/kareli-desenli-etek-p06217267.html
 /tr/tr/kareli-desenli-gomlek-p01630601.html
@@ -12302,7 +12294,6 @@
 /tr/tr/parlak-halter-kisa-elbise-p03920241.html
 /tr/tr/parlak-kapusonlu-kostum-pelerini-p00653736.html
 /tr/tr/parlak-kapusonlu-sisme-mont-p04323711.html
-/tr/tr/parlak-korse-halter-elbise-p05063201.html
 /tr/tr/parlak-korse-tarzi-top-p01067452.html
 /tr/tr/parlak-kure-vazo-p47110046.html
 /tr/tr/parlak-metal-aski-p43514517.html
@@ -12793,7 +12784,6 @@
 /tr/tr/psg--sirt-cantasi-p11442730.html
 /tr/tr/psp--capraz-askili-canta-p11400830.html
 /tr/tr/puanli-tul-buzgulu-sutyen-p01223750.html
-/tr/tr/puanli-tul-kombinli-sort-p01223751.html
 /tr/tr/puantiye-baskili-sweatshirt-ve-can-tayt-takimi-p01880102.html
 /tr/tr/puantiye-desenli-bagcikli-midi-elbise-p04387108.html
 /tr/tr/puantiye-desenli-bakim-cantasi-p03920238.html
@@ -14773,7 +14763,6 @@
 /tr/tr/suni-deri-genis-paca-pantolon-p00562750.html
 /tr/tr/suni-deri-kemer-p01296650.html
 /tr/tr/suni-deri-kruvaze-ceket-p03046257.html
-/tr/tr/suni-deri-midi-elbise-p04764262.html
 /tr/tr/suni-deri-midi-etek-p02141683.html
 /tr/tr/suni-deri-midi-etek-p04391531.html
 /tr/tr/suni-deri-midi-katli-etek-p04387292.html
@@ -15039,7 +15028,6 @@
 /tr/tr/team-six-seven-felpa-bermuda-p06224696.html
 /tr/tr/team-six-seven-floklu-baskili-sweatshirt-p00208720.html
 /tr/tr/team-six-seven-reglan-kollu-t-shirt-p06224682.html
-/tr/tr/teddy-baskili-sweatshirt-p04424541.html
 /tr/tr/tek-boynuzlu-at-baskili-pazen-cocuk-pijama-takimi-p46622117.html
 /tr/tr/tek-kisilik-kapitone-uyku-tulumu-p49301501.html
 /tr/tr/tek-renk-kalin-tabanli-spor-ayakkabi-p12201820.html
