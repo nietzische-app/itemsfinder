@@ -587,7 +587,6 @@
 /p/airbrush-setting-spray---makyaj-sabitleyici-sprey-693844.html
 /p/airbrush-setting-spray---makyaj-sabitleyici-sprey-734682.html
 /p/airbrush-setting-spray---makyaj-sabitleyici-sprey-P10018525.html
-/p/airstrait%E2%84%A2---sac-duzlestirici-P1000207632.html
 /p/airwash-kuru-sampuan---yaglanmayi-azaltir-kokuyu-ortadan-kaldirir-719062.html
 /p/airwash-kuru-sampuan---yaglanmayi-azaltir-kokuyu-ortadan-kaldirir-P1000205354.html
 /p/airy-texture-spray---hacimli--belirgin-ve-esnek-saclar-icin-sprey-P1000212054.html
@@ -858,6 +857,7 @@
 /p/amplify-cleanser---i%CC%87nce-telli-saclar-icin-hacim-veren-sampuan-P1000214173.html
 /p/amplify-foam-conditioner---i%CC%87nce-telli-saclar-icin-hacim-veren-kopuk-bakim-kremi-P1000214174.html
 /p/amplify-mousse---hacim-veren-hafif-sac-sekillendirme-kopugu-P1000212050.html
+/p/amplify-mousse---hacim-veren-hafif-sac-sekillendirme-kopugu-P1000214778.html
 /p/amplify-root-lift-spray-conditioner---hacim-veren-durulanmayan-sac-bakim-spreyi-P1000214175.html
 /p/anahata-mist---kalp-cakrasi-spreyi%CC%87-P1000208434.html
 /p/ange-ou-demon-P26315.html
@@ -3714,6 +3714,7 @@
 /p/cooling-water-jelly-tint---yanak-ve-dudak-boyasi-P10056690.html
 /p/corrale---sac-duzlestirici-P10052980.html
 /p/corrector-goz-makyaji-fircasi-P1213010.html
+/p/cosmic-blow-dry-jelly---fonlu-veya-islak-gorunum-veren-sekillendirici-hibrit-jel-P1000214774.html
 /p/costa-azzurra-edp-50ml-529914.html
 /p/costa-azzurra-edp-50ml-P10013207.html
 /p/costa-azzurra-parfum-P10023528.html
@@ -3951,7 +3952,6 @@
 /p/curator----goz-fari-paleti-772366.html
 /p/curator----goz-fari-paleti-772367.html
 /p/curator----goz-fari-paleti-P1000208802.html
-/p/curl-anti-humidity-gel-oil-P10012050.html
 /p/curl-creme---bukle-olusturucu-krem-P10016514.html
 /p/curl-manifesto---besleyici-ve-bukle-belirginlestirici-sampuan-P10016329.html
 /p/curl-manifesto---kivircik-saclar-icin-bukle-belirginlestirici-jel-krem-P10016334.html
@@ -4673,7 +4673,6 @@
 /p/dolgunlastirici-guclendirici-serum---dolgunlastirir-puruzsuzlestirir-P10061382.html
 /p/dolgunlastirici-gunduz-kremi---dolgunlastirir-nemlendirir-743606.html
 /p/dolgunlastirici-gunduz-kremi---dolgunlastirir-nemlendirir-P10061369.html
-/p/don%E2%80%99t-despair--repair--megastrength--P10024578.html
 /p/don-t-despair--repair-%E2%84%A2----pirinc-sampuani-konsantresi-P10057199.html
 /p/donusum-maskeleri---hidrojel-yuz-maskeleri---c-vitamini-veya-peptitler-P10062367.html
 /p/donusum-maskeleri---isilti-verici-hidrojel-goz-maskesi---c-vitamini-P10062292.html
@@ -4817,7 +4816,6 @@
 /p/dudaklar-i%CC%87cin-nemlendirici-ve-dolgunlastirici-kapsuller---mini--baharatli-hacim-P10058962.html
 /p/duet-blowdry---2%E2%80%99si-1-arada-fon-fircasi-P1000203486.html
 /p/duet-blowdry---islaktan-fonluye-sac-kurutma-fircasi-P1000203500.html
-/p/duet-blowdry---islaktan-fonluye-sac-kurutma-fircasi-hediye-seti-P1000211073.html
 /p/duet-style---2%E2%80%99si-1-arada-kurutmali-duzlestirici-P10047778.html
 /p/duet-style-2-si-1-arada---islaktan-kuruya-sicak-hava-sekillendirici-hediye-seti-P1000213949.html
 /p/duet-style-2-si-1-arada-cherry-chich--islaktan-kuruya-sekillendirici-hediye-seti-P1000210852.html
@@ -8164,6 +8162,7 @@
 /p/lady-million-eau-de-parfum-80-ml-P111927.html
 /p/lady-million-royal---eau-de-parfum-654151.html
 /p/lady-million-royal---eau-de-parfum-P10048289.html
+/p/laguna-bronzing-cream---bronzlastirici-krem-P10026323.html
 /p/laguna-bronzing-powder---bronzlastirici-pudra-669594.html
 /p/laguna-bronzing-powder---bronzlastirici-pudra-669595.html
 /p/laguna-bronzing-powder---bronzlastirici-pudra-669596.html
@@ -10602,7 +10601,6 @@
 /p/niacinamide-serum-30ml-P3842089.html
 /p/niasinamid-%2510-cinko-%251---kusursuzluk-giderici-serum-548882.html
 /p/niasinamid-%2510-cinko-%251---kusursuzluk-giderici-serum-P3921091.html
-/p/night-care-favorite---gece-bakiminin-mucizevi-i%CC%87kilisi-P1000211912.html
 /p/night-oil---yuz-bakim-yagi-559247.html
 /p/night-oil---yuz-bakim-yagi-559248.html
 /p/night-oil---yuz-bakim-yagi-P10017338.html
@@ -10683,6 +10681,7 @@
 /p/nude-obsessions-far-paleti%CC%87-489140.html
 /p/nude-obsessions-far-paleti%CC%87-P3889096.html
 /p/nude-powder-spray---yumusak-saclar-icin-hacim-kazandiran-i%CC%87nce-pudra-sprey-P1000212702.html
+/p/nude-powder-spray---yumusak-saclar-icin-hacim-kazandiran-i%CC%87nce-pudra-sprey-P1000214773.html
 /p/nudescreen---renkli-allik-spf-30-715776.html
 /p/nudescreen---renkli-allik-spf-30-715777.html
 /p/nudescreen---renkli-allik-spf-30-715778.html
@@ -14089,6 +14088,7 @@
 /p/space-shape---kas-sabitleme-jeli-P10047907.html
 /p/sparkling-royal---eau-de-parfum-P1000215057.html
 /p/sparkling-royal---eau-de-parfum-P10064607.html
+/p/sparkling-seduction-liquid-eyeshadow-P1000215462.html
 /p/special-care-lotion-pre-soin-796992.html
 /p/special-care-lotion-pre-soin-P10024314.html
 /p/special-effects-12h-eyeliner---metalik-bitis-767747.html
@@ -14297,6 +14297,7 @@
 /p/sun-bunny-bronzer---pembe-alt-tonlu-bronzlastirici-pudra-800187.html
 /p/sun-bunny-bronzer---pembe-alt-tonlu-bronzlastirici-pudra-P1000212991.html
 /p/sun-care---gunes-sonrasi-sac-ve-vucut-temizleyici-P1477052.html
+/p/sun-dipped-bronzing-veil---likit-bronzlastirici-P1000216934.html
 /p/sun-kissed-face-gelee---bronz-isilti-etkili-cok-amacli-yuz-jeli-P10058426.html
 /p/sun-stalk-r-instant-warmth-bronzer-bronzlastirici-pudra-469340.html
 /p/sun-stalk-r-instant-warmth-bronzer-bronzlastirici-pudra-469341.html
@@ -14962,6 +14963,7 @@
 /p/the-dewy-skin-cream---dolgunlastirici-ve-nemlendirici-zengin-bakim-seyahat-boy-P10064075.html
 /p/the-dewy-skin-cream---zengin-dolgunlastirici-nemlendirici-bakim-774299.html
 /p/the-dewy-skin-cream---zengin-dolgunlastirici-nemlendirici-bakim-P1000208974.html
+/p/the-edge-lip-shaping-pencil---dudak-kalemi-P10064611.html
 /p/the-energizing-gel-cleanser---jel-temizleyici-P10056213.html
 /p/the-essence---canlandirici-cilt-bakimi-P1000208980.html
 /p/the-essence-P10009923.html

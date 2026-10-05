@@ -103,7 +103,6 @@
 /allik/beaulis-flame-it-mini-stick-allik-651-pink-sunset-p-10162610
 /allik/beaulis-flare-it-aydinlatici-concealer-137-fair-p-10202403
 /allik/beaulis-fun-fluffy-sugar-toz-allik-652-berry-bliss-p-10203091
-/allik/beaulis-fun-hot-cheek-allik-512-rose-stone-p-10208008
 /allik/beaulis-fun-sugar-and-spice-toz-allik-551-shimmer-blush-p-10203092
 /allik/beaulis-fun-sugar-softness-toz-allik-243-coral-crush-p-10203093
 /allik/beaulis-fun-sunset-to-starlight-allik-aydinlatici-set-139-moonlight-p-10217149
@@ -639,7 +638,6 @@
 /aydinlatici-highlighter/beaulis-fun-deep-glimmer-toz-aydinlatici-749-gold-radiance-p-10203097
 /aydinlatici-highlighter/beaulis-fun-glow-up-loading-toz-highlighter-aydinlatici-904-golden-hour-p-10218899
 /aydinlatici-highlighter/beaulis-fun-glow-up-loading-toz-highlighter-aydinlatici-908-sunset-bronze-p-10218900
-/aydinlatici-highlighter/beaulis-fun-hot-cheek-highlighter-917-silver-stone-p-10208057
 /aydinlatici-highlighter/beaulis-fun-marine-sparkle-toz-aydinlatici-640-rose-radiance-p-10203096
 /aydinlatici-highlighter/beaulis-fun-puff-glow-highlighter-929-white-glow-p-10215900
 /aydinlatici-highlighter/beaulis-fun-shimmer-pop-yuz-vucut-aydinlaticisi-915-prism-pop-p-10203396
@@ -2496,7 +2494,6 @@
 /dudak-parlaticisi/maybelline-new-york-lifter-gloss-nemlendirici-dudak-parlaticisi-005-petal-p-10256116
 /dudak-parlaticisi/maybelline-new-york-lifter-gloss-nemlendirici-dudak-parlaticisi-009-topaz-p-10969422
 /dudak-parlaticisi/maybelline-new-york-lifter-gloss-nemlendirici-dudak-parlaticisi-016-rust-p-10969416
-/dudak-parlaticisi/maybelline-new-york-lifter-gloss-nemlendirici-dudak-parlaticisi-022-peach-ring-p-10406464
 /dudak-parlaticisi/maybelline-new-york-lifter-gloss-nemlendirici-dudak-parlaticisi-025-taffy-p-10406462
 /dudak-parlaticisi/maybelline-new-york-lifter-plump-dudak-parlaticisi-005-peach-fever-p-10199489
 /dudak-parlaticisi/maybelline-new-york-lifter-plump-dudak-parlaticisi-006-hot-chili-p-10199492

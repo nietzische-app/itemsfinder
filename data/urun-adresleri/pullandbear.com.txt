@@ -69,13 +69,11 @@
 /tr/cizgili-ksa-kollu-gomlek-l07460510
 /tr/cizgili-orgu-tote-canta-l14020840
 /tr/cizgili-orgu-tote-canta-l14057840
-/tr/cizgili-oversize-tisort-l07230375
 /tr/cizgili-pijama-pantolon-l07662502
 /tr/cizgili-relaxed-fit-kargo-jean-l07662507
 /tr/cizgili-straight-jean-l07670424
 /tr/cizgili-uzun-kollu-oversize-tisort-l07231399
 /tr/cizgili-uzun-kollu-tisort-l07230374
-/tr/cizgili-uzun-kollu-tisort-l07230381
 /tr/cizgili-ve-cicek-islemeli-tote-canta-l14157740
 /tr/crop-denim-ceket-l07221301
 /tr/dantel-detayl-atlet-l07230300
