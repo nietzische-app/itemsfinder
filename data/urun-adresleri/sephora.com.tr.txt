@@ -587,6 +587,7 @@
 /p/airbrush-setting-spray---makyaj-sabitleyici-sprey-693844.html
 /p/airbrush-setting-spray---makyaj-sabitleyici-sprey-734682.html
 /p/airbrush-setting-spray---makyaj-sabitleyici-sprey-P10018525.html
+/p/airstrait%E2%84%A2---sac-duzlestirici-P1000207632.html
 /p/airwash-kuru-sampuan---yaglanmayi-azaltir-kokuyu-ortadan-kaldirir-719062.html
 /p/airwash-kuru-sampuan---yaglanmayi-azaltir-kokuyu-ortadan-kaldirir-P1000205354.html
 /p/airy-texture-spray---hacimli--belirgin-ve-esnek-saclar-icin-sprey-P1000212054.html
@@ -1939,7 +1940,6 @@
 /p/blossy---seftali-tonda-pudra-allik-P1000208080.html
 /p/blot-et-blur-matte-stick---baz-618030.html
 /p/blot-et-blur-matte-stick---baz-P10043415.html
-/p/blow-dry-brush---hacim-kazandiran-fon-fircasi-P1000210501.html
 /p/blowout-hero-premium-set---isisiz-bukle-seti-P1000212220.html
 /p/blowout-out-babe---termal-sac-fircasi-P1000204607.html
 /p/blue-orchid-bakim-yagi---nemlendirir--parlakligi-geri-kazandirir-586495.html
@@ -3036,7 +3036,6 @@
 /p/chitosan%E2%84%A2---sekillendirme-oncesi-sac-kremi-P1000203517.html
 /p/chitosan%E2%84%A2---sekillendirme-oncesi-sac-kremi-mini-boy-P1000207940.html
 /p/chitosan%E2%84%A2---sekillendirme-oncesi-sac-kremi-mini-boy-P1000207941.html
-/p/chitosan%E2%84%A2---sekillendirme-oncesi-sac-kremi-mini-boy-P1000207943.html
 /p/chitosan%E2%84%A2---sekillendirme-sonrasi-sac-serumu-741671.html
 /p/chitosan%E2%84%A2---sekillendirme-sonrasi-sac-serumu-P1000203519.html
 /p/chloe-signature-l-eau-de-parfum-lumineuse---eau-de-parfum-702363.html
@@ -5287,6 +5286,7 @@
 /p/everlift-luminizer---aydinlatici-P10058092.html
 /p/every-sun-day-ultra---seffaf-gunes-koruyucu-stick-spf-50-P1000213910.html
 /p/every.single.face-spr-shield-spf50---yuz-losyonu-P10051818.html
+/p/exagger-eyes-easy-eyeshadow-stick---stick-goz-fari-P1000214031.html
 /p/exagger-eyes-volume-mascara---hacim-veren-maskara-P10059696.html
 /p/excess-oil-solution-with-20%25-niacinamide---yuz-serumu-P10043115.html
 /p/exfoliant-moussant-energisant-P579288.html
@@ -11708,7 +11708,6 @@
 /p/precisely-my-brow-pencil-kas-kalemi%CC%87-03-me-P2578003.html
 /p/precisely-power-up---kas-makyaji-seti-P10063574.html
 /p/precision-concealer-brush-180-firca-P3595010.html
-/p/precision-foundation-brush-145---makyaj-fircasi-P10057914.html
 /p/precision-makyaj-sungeri-P3079038.html
 /p/precision-sculpt-shaping-balm-contour-stick---stick-kontur-780992.html
 /p/precision-sculpt-shaping-balm-contour-stick---stick-kontur-780993.html
@@ -13167,7 +13166,6 @@
 /p/sakral-cakra----premium-kokulu-mum-P10025057.html
 /p/salicylic-acid-cleanser-728168.html
 /p/salicylic-acid-cleanser-P3687080.html
-/p/salicylic-acid-exfol-scalp-treat-P10020761.html
 /p/salicylic-sulfur-mask-P10024879.html
 /p/samsara-eau-de-parfum-75ml-P10016857.html
 /p/santal-boise---eau-de-parfum-P10026796.html
@@ -13275,6 +13273,7 @@
 /p/scented-body-mist---vucut-ve-sac-icin-kokulu-sprey-547682.html
 /p/scented-body-mist---vucut-ve-sac-icin-kokulu-sprey-P10046070.html
 /p/scented-body-mist-486629.html
+/p/sculpt---profesyonel-sac-duzlestirici-P1000214874.html
 /p/sculpt-et-pop-on-the-go---i%CC%87kili-mini-kontur-ve-allik-747989.html
 /p/sculpt-et-pop-on-the-go---i%CC%87kili-mini-kontur-ve-allik-747991.html
 /p/sculpt-et-pop-on-the-go---i%CC%87kili-mini-kontur-ve-allik-795387.html
@@ -14148,6 +14147,7 @@
 /p/st.-barts----vucut-kremi-P1000206206.html
 /p/st.-barts----vucut-temizleyicisi-P1000206210.html
 /p/stabilised-vitamin-c-20%25---yuz-serumu-P10047739.html
+/p/star-oud---eau-de-parfum-P1000207098.html
 /p/star-power-duo---i%CC%87kili-set-P1000210360.html
 /p/starlaa---gul-kurusu-tonlarinda-allik-585616.html
 /p/starlaa---gul-kurusu-tonlarinda-allik-P10025830.html

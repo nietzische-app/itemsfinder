@@ -74,6 +74,7 @@
 /tr/cizgili-straight-jean-l07670424
 /tr/cizgili-uzun-kollu-oversize-tisort-l07231399
 /tr/cizgili-uzun-kollu-tisort-l07230374
+/tr/cizgili-uzun-kollu-tisort-l07230381
 /tr/cizgili-ve-cicek-islemeli-tote-canta-l14157740
 /tr/crop-denim-ceket-l07221301
 /tr/dantel-detayl-atlet-l07230300
@@ -82,7 +83,6 @@
 /tr/desenli-duz-kesim-jean-l07671309
 /tr/dickies-barrel-chino-pantolon-l07671304
 /tr/dickies-barrel-jean-l07660410
-/tr/dickies-desenli-ceket-l07721541
 /tr/dickies-duz-kesim-jean-l07662514
 /tr/dickies-fermuarl-ceket-l07720374
 /tr/dickies-suslu-dugmeli-ceket-l07720383
@@ -128,6 +128,7 @@
 /tr/gorunumu-satn-al-l91022888062BSBS
 /tr/gorunumu-satn-al-l99003235000BSBS
 /tr/gorunumu-tamamla-l97553750153BSBS
+/tr/grafik-baskl-baggy-relaxed-fit-jean-l07662552
 /tr/grafik-kemerli-barrel-jean-l07671506
 /tr/gunluk-tote-canta-l14064840
 /tr/hacimli-spor-ayakkab-l11303740
@@ -148,7 +149,6 @@
 /tr/islemeli-ay-detayl-baggy-jean-l07662310
 /tr/islemeli-barrel-jean-l07662522
 /tr/islemeli-ceket-l07721500
-/tr/islemeli-tote-canta-l14052840
 /tr/isltl-bootcut-jean-l03660178
 /tr/isltl-genis-paca-jean-l07660309
 /tr/kapitone-stwd-yelek-l07720599
@@ -238,7 +238,6 @@
 /tr/kombini-satn-al-l99359132699BSBS
 /tr/kombini-satn-al-l99581987692BSBS
 /tr/kombini-tamamla-l90177900270BSBS
-/tr/kombini-tamamla-l90672267250BSBS
 /tr/kombini-tamamla-l91784765243BSBS
 /tr/kombini-tamamla-l91942680505BSBS
 /tr/kombini-tamamla-l92050349786BSBS
@@ -262,7 +261,6 @@
 /tr/kombini-tamamla-l98845565841BSBS
 /tr/kombini-tamamla-l99123298840BSBS
 /tr/kombini-tamamla-l99141399883BSBS
-/tr/kombini-tamamla-l99319409261BSBS
 /tr/kombini-tamamla-l99473103375BSBS
 /tr/kombini-tamamla-l99810378230BSBS
 /tr/kombinini-tamamla-l92230762123BSBS
@@ -404,12 +402,15 @@
 /tr/suni-deri-ksa-trenckot-l07720351
 /tr/suni-deri-kurk-yakal-bomber-ceket-l07720363
 /tr/suni-deri-ribanal-bomber-l07720359
+/tr/suni-kurk-ksa-kaban-l07755320
+/tr/suni-kurk-yakal-parka-l07720364
+/tr/suni-kurk-yakal-sisme-mont-l07720367
 /tr/suni-suet-bomber-ceket-l07720354
 /tr/suni-suet-bomber-ceket-l07721534
 /tr/suni-suet-ceket-l07720512
+/tr/suni-yunlu-dik-yaka-ceket-l07720346
 /tr/suni-yunlu-yakal-denim-ceket-l07701519
 /tr/super-genis-paca-comfort-jean-l07660317
-/tr/suslemeli-file-tote-canta-l14191740
 /tr/suslemeli-omuz-cantas-l14006840
 /tr/suslu-dugme-detayl-dar-kesim-ceket-l07720373
 /tr/suslu-dugmeli-ceket-l07721501
