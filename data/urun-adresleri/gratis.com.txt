@@ -657,6 +657,7 @@
 /aydinlatici-highlighter/beaulis-fun-puff-glow-highlighter-511-pink-glow-p-10215901
 /aydinlatici-highlighter/beaulis-fun-puff-glow-highlighter-929-white-glow-p-10215900
 /aydinlatici-highlighter/beaulis-fun-shimmer-pop-yuz-vucut-aydinlaticisi-915-prism-pop-p-10203396
+/aydinlatici-highlighter/beaulis-glare-it-mini-stick-aydinlatici-953-fairy-dust-p-10162329
 /aydinlatici-highlighter/beaulis-light-it-likit-aydinlatici-633-pink-brigh-p-10524233
 /aydinlatici-highlighter/beaulis-light-it-likit-aydinlatici-905-sunshimmer-p-10524232
 /aydinlatici-highlighter/beaulis-light-it-likit-aydinlatici-913-moon-shine-p-10524234
@@ -1174,7 +1175,7 @@
 /burun-bandi/benri-nefes-acici-bant-12li-p-10198931
 /burun-bandi/stopever-nasal-plast-burun-plasteri-10lu-buyuk-boy-p-10212125
 /camasir-temizleyiciler/ariel-hepsi-1-arada-pods-kapsul-camasir-deterjani-beyazlar-ve-renkliler-12-yikama-p-10213149
-/camasir-temizleyiciler/ariel-hepsi-1-arada-pods-oxi-extra-leke-cikarma-kapsul-camasir-deterjani-beyazlar-ve-renkliler-10-yi-p-10213150
+/camasir-temizleyiciler/ariel-hepsi-1-arada-pods-oxi-extra-leke-cikarma-kapsul-camasir-deterjani-beyazlar-ve-renkliler-10-yikama-p-10213150
 /camasir-temizleyiciler/benri-camasir-sodasi-500-gr-p-10220334
 /camasir-temizleyiciler/dr-beckmann-leke-canavari-meyve-ve-icecekler-50-ml-p-26000046
 /camasir-temizleyiciler/dr-beckmann-leke-canavari-tukenmez-kalem-ve-murekkep-50-ml-p-26000045
@@ -2946,7 +2947,7 @@
 /durulanan-sac-kremleri/morfose-metamorfose-moist-boost-nemlendirici-bakim-sac-kremi-250-ml-p-10216998
 /durulanan-sac-kremleri/odid-onarici-sac-bakim-kuru-300-ml-p-10216841
 /durulanan-sac-kremleri/otaci-botanics-canlandirici-bitkisel-sac-bakim-kremi-10-bitki-ve-biotin-375-ml-p-10211099
-/durulanan-sac-kremleri/otaci-botanics-onarici-ve-guclendirici-bitkisel-sac-bakim-kremi-bal-kabagi-ve-bitkisel-keratin-375-p-10211097
+/durulanan-sac-kremleri/otaci-botanics-onarici-ve-guclendirici-bitkisel-sac-bakim-kremi-bal-kabagi-ve-bitkisel-keratin-375-ml-p-10211097
 /durulanan-sac-kremleri/otaci-naturway-bitki-ozlu-sarimsakli-sac-kremi-300-ml-p-10504484
 /durulanan-sac-kremleri/pantene-amor-yumusak-ve-puruzsuz-3-dakikalik-mucize-sac-bakim-kremi-220-ml-p-10216457
 /durulanan-sac-kremleri/pantene-dogal-sentez-guc-ve-parlaklik-sac-kremi-275-ml-p-10004807
@@ -3020,8 +3021,6 @@
 /durulanmayan-sac-bakim-kremleri/pantene-aninda-onarici-ve-nemlendirici-krem-300-ml-p-10015187
 /durulanmayan-sac-bakim-kremleri/pantene-isiyla-aktiflesen-kesintisiz-nem-takviyesi-durulanmayan-sac-bakim-kremi-135-ml-p-10212843
 /durulanmayan-sac-bakim-kremleri/pantene-kivircik-sekillendirici-durulanmayan-krem-300-ml-p-10015186
-/durulanmayan-sac-bakim-kremleri/taft-x-gliss-cok-amacli-sivi-sac-spreyi-lovely-long-150-ml-p-10223185
-/durulanmayan-sac-bakim-kremleri/taft-x-gliss-hacim-veren-fon-suyu-blow-dry-volume-mist-150-ml-p-10223186
 /durulanmayan-sac-bakim-kremleri/true-bee-rosemary-leave-in-butter-durulanmayan-sac-bakim-kremi-220-ml-p-10212886
 /durulanmayan-sac-bakim-kremleri/urban-care-argan-yagi-keratin-besleyici-ve-kirilma-karsiti-durulanmayan-sac-bakim-kremi-150-ml-p-10168653
 /durulanmayan-sac-bakim-kremleri/urban-care-perfecting-besleyici-parlaklik-veren-sac-bakim-kremi-150-ml-p-10220618
@@ -3416,8 +3415,7 @@
 /elektrikli-kisisel-bakim/kiwi-kirisiklik-ve-gozenek-karsiti-sarjli-ems-cilt-bakim-cihazi-kfm2823-p-10214581
 /elektrikli-kisisel-bakim/kiwi-sarjli-temizleme-nemlendirme-ve-gerdirme-etkili-cilt-temizleyici-kfm2822-p-10214587
 /elektrikli-kisisel-bakim/kiwi-soguk-goz-cevresi-masaj-aleti-ice-roller-kfm8600-p-10214589
-/elektrikli-supurge/aprilla-sarjli-el-supurgesi-avc4034-p-10221239
-/elektrikli-urunler/kiwi-otomatik-tuz-karabiber-ogutucu-p-10197417
+/elektrikli-supurge/kiwi-sarjli-el-supurgesi-avc4034-p-10221239
 /epilasyon-yayi/eklips-epilasyon-yayi-p-10098273
 /epilasyon-yayi/lionesse-epilasyon-yayi-4212-p-17000497
 /epilasyon-yayi/nascita-helezon-kil-alma-yayi-asortili-p-10034179
@@ -4650,6 +4648,7 @@
 /fondoten/vivienne-sabo-ocean-moisturizing-fondoten-02-warm-beige-hydrating-fluid-with-natural-radiant-finish-p-10209232
 /fondoten/vivienne-sabo-surrealist-nemlendirici-fondoten-01-p-10220032
 /fondoten/vivienne-sabo-surrealist-nemlendirici-fondoten-03-p-10220033
+/fondoten/vivienne-sabo-terra-matte-fondoten-01-light-beige-full-coverage-shinefree-finish-p-10209233
 /fondoten/vivienne-sabo-terra-matte-fondoten-02-beige-full-coverage-shinefree-finish-p-10209234
 /fondoten/wet-n-wild-bare-focus-tinted-hydrator-fair-p-10462133
 /fondoten/wet-n-wild-bare-focus-tinted-hydrator-light-medium-p-10462132
@@ -4681,7 +4680,7 @@
 /genel-temizlik-urunleri/vanish-3u-1-arada-hali-koltuk-ve-hayvan-lekeleri-icin-leke-cikarici-sprey-500-ml-p-10214468
 /genital-bolge-temizlik-ve-bakim-urunleri/baga-genital-bolge-beyazlatici-krem-100-ml-p-10206445
 /genital-bolge-temizlik-ve-bakim-urunleri/baga-genital-bolge-temizleme-kopugu-200-ml-p-10206446
-/genital-bolge-temizlik-ve-bakim-urunleri/bee-beauty-intim-beyazlatici-krem-p-10200936
+/genital-bolge-temizlik-ve-bakim-urunleri/bee-beauty-intim-beyazlatici-krem-75-ml-p-10200936
 /genital-bolge-temizlik-ve-bakim-urunleri/bee-beauty-intim-spreyi-155-ml-p-10955037
 /genital-bolge-temizlik-ve-bakim-urunleri/bee-beauty-intim-temizleme-mendili-20li-p-10442767
 /genital-bolge-temizlik-ve-bakim-urunleri/bee-beauty-intim-yikama-jeli-250-ml-p-10955036
@@ -5600,8 +5599,11 @@
 /islak-mendil/benri-islak-cep-mendili-15li-p-10035031
 /islak-mendil/benri-islak-mendil-15x3lu-p-10098259
 /islak-mendil/benri-islak-mendil-aloe-vera-120li-p-10041191
+/islak-mendil/benri-islak-mendil-aloe-vera-50li-p-10223085
 /islak-mendil/benri-islak-mendil-lavanta-120li-p-10041192
+/islak-mendil/benri-islak-mendil-lavanta-50li-p-10223084
 /islak-mendil/benri-islak-mendil-papatya-120li-p-10041176
+/islak-mendil/benri-islak-mendil-papatya-50li-p-10223086
 /islak-mendil/benri-mini-islak-cep-mendili-3lu-p-10015790
 /islak-mendil/benri-mini-islak-cep-mendili-coklu-8x8-adet-p-10217250
 /islak-mendil/benri-mini-islak-cep-mendili-tekli-8-adet-p-10217249
@@ -6042,6 +6044,7 @@
 /kadin-rollon-stick/deotak-unisex-krem-deodorant-klasik-35-ml-p-10018123
 /kadin-rollon-stick/deotak-unisex-krem-deodorant-plus-35-ml-p-10028120
 /kadin-rollon-stick/deotak-unisex-krem-deodorant-soft-35-ml-p-10028119
+/kadin-rollon-stick/dove-invisible-dry-antiperspirant-kadin-stick-deodorant-50-ml-p-18000480
 /kadin-rollon-stick/dove-kadin-roll-on-deodorant-eventone-50-ml-p-10208556
 /kadin-rollon-stick/dove-kadin-roll-on-deodorant-original-14-nemlendirici-krem-etkili-50-ml-p-18000212
 /kadin-rollon-stick/dove-original-krem-stick-deodorant-50-ml-p-10210533
@@ -7924,6 +7927,7 @@
 /mutfak-gerecleri/benri-buzdolabi-poseti-orta-boy-30lu-p-10286297
 /mutfak-gerecleri/benri-buzdolabi-poseti-orta-boy-4x-30-adet-p-10286298
 /mutfak-gerecleri/benri-pisirme-kagidi-16li-p-10634018
+/mutfak-gerecleri/kiwi-otomatik-tuz-karabiber-ogutucu-p-10197417
 /mutfak-temizleyiciler/benri-granul-lavabo-acici-3x-75-gr-p-10201549
 /mutfak-temizleyiciler/benri-krem-temizleyici-750-ml-p-10288155
 /mutfak-temizleyiciler/benri-limon-tuzu-100-gr-p-10286295
@@ -10336,7 +10340,7 @@
 /seyahat-boy-urunler/colgate-optic-white-dis-macunu-20-ml-dis-fircasi-seyahat-seti-p-10612743
 /seyahat-boy-urunler/humble-brush-mini-seyahat-seti-dis-fircasi-dis-macunu-7-gr-p-10212374
 /seyahat-boy-urunler/signal-seyahat-seti-dis-macunu-16-ml-dis-fircasi-p-10006000
-/sicak-agdalar/bee-beauty-klasik-el-agdasi-p-10210358
+/sicak-agdalar/bee-beauty-klasik-el-agdasi-250-gr-p-10210358
 /sicak-agdalar/sesu-ilik-agda-turuncu-250-gr-p-16000005
 /sicak-agdalar/sesu-klasik-agda-250-gr-p-16000004
 /sicak-agdalar/sesu-pembe-ilik-agda-250-gr-p-10219525
@@ -10470,6 +10474,8 @@
 /sivi-sac-kremleri/restorex-keratin-argan-onarici-sivi-sac-bakim-kremi-200-ml-p-10200754
 /sivi-sac-kremleri/restorex-kolajen-biotin-dolgunlastirici-sivi-sac-bakim-kremi-200-ml-p-10442497
 /sivi-sac-kremleri/restorex-saglikli-uzama-etkili-sivi-sac-bakim-kremi-200-ml-p-10032205
+/sivi-sac-kremleri/taft-x-gliss-cok-amacli-sivi-sac-spreyi-lovely-long-150-ml-p-10223185
+/sivi-sac-kremleri/taft-x-gliss-hacim-veren-fon-suyu-blow-dry-volume-mist-150-ml-p-10223186
 /sivi-sac-kremleri/urban-care-argan-oil-besleyici-ve-kirilma-karsiti-sivi-sac-kremi-200-ml-p-10016145
 /sivi-sac-kremleri/urban-care-hyaluronic-acid-collagen-kuru-ve-cansiz-saclara-ozel-sivi-sac-kremi-200-ml-p-10413422
 /sivi-sac-kremleri/urban-care-intense-keratin-hasar-onarimi-ve-parlaklik-veren-sivi-sac-bakim-kremi-200-ml-p-10016146
@@ -10581,6 +10587,7 @@
 /takma-tirnaklar/eklips-takma-tirnak-seti-seffaf-100lu-p-10206378
 /takma-tirnaklar/eklips-takma-tirnak-simli-koyu-renk-oval-24lu-p-10199459
 /takma-tirnaklar/eklips-takma-tirnak-turuncu-yesil-portakal-desenli-kare-24lu-p-10199457
+/takma-tirnaklar/eklips-takma-tirnak-yapistiricisi-2x2-gr-p-10203720
 /takma-tirnaklar/eklips-takma-tirnak-yesil-badem-24lu-p-10199455
 /takma-tirnaklar/lionesse-takma-tirnak-yapistirici-pembe-10-gr-p-10211003
 /takma-tirnaklar/lionesse-tirnak-yapistiricisi-10-gr-p-10006870
@@ -11039,7 +11046,7 @@
 /tonikler/calliel-antiaging-etkili-sikilastirici-dolgunlastirici-pha-tonik-200-ml-p-10221289
 /tonikler/calliel-aydinlatici-leke-karsiti-cilt-tonu-esitleyici-ve-aydinlatici-rice-tonik-200-ml-p-10221278
 /tonikler/calliel-aydinlatici-leke-ve-siyah-nokta-karsiti-kojik-asit-tonik-200-ml-p-10221276
-/tonikler/calliel-cilde-nufuzu-kolaylastiran-pamuk-tonik-pad-160-adet-p-10221283
+/tonikler/calliel-cilde-nufuzu-kolaylastiran-pamuk-tonik-ped-160-adet-p-10221283
 /tonikler/calliel-hassas-ciltler-icin-yatistirici-cilt-bariyeri-onarici-cica-tonik-200-ml-p-10221290
 /tonikler/calliel-leke-karsiti-gozenek-sikilastirici-glikolik-asit-tonik-200-ml-p-10221293
 /tonikler/calliel-nemlendirici-ozellikli-gozenek-kucultucu-yaslanma-karsiti-hassas-icerikli-lha-tonik-200-ml-p-10221284
@@ -11258,6 +11265,7 @@
 /vazelin/cire-aseptine-aloe-vera-vazelin-150-ml-p-10073576
 /vazelin/cire-aseptine-cilek-vazelin-150-ml-p-10218067
 /vazelin/cire-aseptine-gul-vazelin-150-ml-p-10073574
+/vazelin/cire-aseptine-klasik-vazelin-150-ml-p-10073573
 /vazelin/cire-aseptine-vazelin-avokado-150-ml-p-10205467
 /vazelin/cire-aseptine-vazelin-pure-150-ml-p-10205468
 /vazelin/vaseline-nemlendirici-jel-cocoa-butter-100-ml-p-10017266
@@ -11684,6 +11692,7 @@
 /yuz-bakim-maskesi-paket/claderm-arindirici-kil-maskesi-pomegranate-20-ml-p-10340153
 /yuz-bakim-maskesi-paket/claderm-arindirici-kil-maskesi-propolis-20-ml-p-10340152
 /yuz-bakim-maskesi-paket/claderm-arindirici-kil-maskesi-tea-tree-20-ml-p-10340155
+/yuz-bakim-maskesi-paket/claderm-avocado-arindirici-kil-maskesi-20-ml-p-10864632
 /yuz-bakim-maskesi-paket/claderm-pure-arindirici-kil-maskesi-20-ml-p-10613566
 /yuz-bakim-maskesi-paket/claderm-rice-arindirici-kil-maskesi-20-ml-p-10864629
 /yuz-bakim-maskesi-paket/cladermc-vitamini-arindirici-kil-maskesi-20-ml-p-10864630
@@ -11990,12 +11999,11 @@
 /yuz-maskeleri/bee-beauty-pariltili-soyulabilir-mor-maske-50-ml-p-10350985
 /yuz-maskeleri/bee-beauty-pembe-marshmallow-krem-maske-50-ml-p-10010453
 /yuz-maskeleri/bolbe-aydinlatici-cilt-tonu-esitleyici-leke-ve-kirisiklik-karsiti-2c-vitamini-krem-maske-50-ml-p-10215171
-/yuz-maskeleri/bolbe-dolgunlastirici-onarici-ve-elastikiyet-arttirici-multi-peptit-kompleksli-krem-yuz-maskesi-50-p-10215173
+/yuz-maskeleri/bolbe-dolgunlastirici-onarici-ve-elastikiyet-arttirici-multi-peptit-kompleksli-krem-yuz-maskesi-50-ml-p-10215173
 /yuz-maskeleri/bolbe-hassas-ciltler-icin-yatistirici-bariyer-destekleyici-nem-yuz-maskesi-50-ml-p-10215176
 /yuz-maskeleri/celenes-thermal-3u-1-arada-yikama-peeling-maske-150-ml-p-10268749
 /yuz-maskeleri/claderm-aloe-vera-killi-yuz-maskesi-50-ml-p-10213802
 /yuz-maskeleri/claderm-arindirici-kil-maskesi-collagen-50-ml-p-10340160
-/yuz-maskeleri/claderm-avocado-arindirici-kil-maskesi-20-ml-p-10864632
 /yuz-maskeleri/claderm-coffee-killi-yuz-maskesi-50-ml-p-10213800
 /yuz-maskeleri/claderm-nar-killi-yuz-maskesi-50-ml-p-10213804
 /yuz-maskeleri/claderm-sade-killi-yuz-maskesi-50-ml-p-10213801
@@ -12123,7 +12131,7 @@
 /yuz-serumlari-cilt-serumu-yaglari/authoriderm-35-askorbil-glukozit-icerikli-aydinlatici-yuz-serumu-30-ml-p-10214831
 /yuz-serumlari-cilt-serumu-yaglari/bade-natural-bitkisel-hyaluronik-asit-yuz-serumu-nemlendirici-ve-canlandirici-30-ml-p-10208492
 /yuz-serumlari-cilt-serumu-yaglari/bade-natural-bitkisel-kolajen-yuz-serumu-yaslanma-ve-kirisiklik-karsiti-30-ml-p-10208481
-/yuz-serumlari-cilt-serumu-yaglari/bade-natural-kusburnu-cekirdegi-yagi-soguk-sikim-leke-karsiti-ve-aydinlatici-yuz-serumu-100-saf-30-p-10208563
+/yuz-serumlari-cilt-serumu-yaglari/bade-natural-kusburnu-cekirdegi-yagi-soguk-sikim-leke-karsiti-ve-aydinlatici-yuz-serumu-100-saf-30-ml-p-10208563
 /yuz-serumlari-cilt-serumu-yaglari/bade-natural-pembe-kuvars-roll-on-antioksidan-yuz-masaj-serumu-10-ml-p-10208566
 /yuz-serumlari-cilt-serumu-yaglari/bade-naturalc-vitamini-yuz-serumu-aydinlatici-ton-esitleyici-ve-leke-karsiti-30-ml-p-10208480
 /yuz-serumlari-cilt-serumu-yaglari/baga-nemlendirici-vitamin-kompleks-serum-30-ml-p-10206746
@@ -12143,7 +12151,7 @@
 /yuz-serumlari-cilt-serumu-yaglari/bolbe-gozenek-sikilastirici-aydinlatici-bariyer-guclendirici-niacinamide-yuz-serumu-30-ml-p-10215172
 /yuz-serumlari-cilt-serumu-yaglari/bolbe-kirisiklik-karsiti-sikilastirici-ve-yenileyici-retinol-gece-serumu-30-ml-a-vitamini-p-10215167
 /yuz-serumlari-cilt-serumu-yaglari/bolbe-shine-drop-aydinlatici-leke-karsiti-niacinamide-iceren-isilti-veren-yuz-serumu-30-ml-p-10215170
-/yuz-serumlari-cilt-serumu-yaglari/bolbe-yogun-nemlendirici-dolgunlastirici-kirisiklik-karsiti-peptitli-hyaluronik-asit-yuz-serumu-30-p-10215180
+/yuz-serumlari-cilt-serumu-yaglari/bolbe-yogun-nemlendirici-dolgunlastirici-kirisiklik-karsiti-peptitli-hyaluronik-asit-yuz-serumu-30-ml-p-10215180
 /yuz-serumlari-cilt-serumu-yaglari/celenes-somon-dna-active-yuz-serumu-30-ml-p-10217194
 /yuz-serumlari-cilt-serumu-yaglari/cosmogenesis-labs-aha-bha-yuz-serumu-30-ml-p-10215212
 /yuz-serumlari-cilt-serumu-yaglari/cosmogenesis-labs-bitkisel-kolajen-yuz-serumu-30-ml-p-10215210

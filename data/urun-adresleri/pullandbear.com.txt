@@ -6,8 +6,8 @@
 /tr/ajurlu-triko-kazak-l07540500
 /tr/askl-tisort-l03232502
 /tr/ayarlanabilir-askl-basic-top-l03230394
-/tr/aynal-kimono-l03720350
 /tr/aynal-shopper-canta-l14019840
+/tr/aynal-tunik-l03720350
 /tr/bagckl-duz-deri-cizme-l11203840
 /tr/baggy-balon-jean-l07660505
 /tr/baggy-jean-l03660516
@@ -20,6 +20,7 @@
 /tr/balon-kesim-baggy-jean-l07662505
 /tr/balon-kesim-suni-deri-bomber-ceket-l07720317
 /tr/balon-siluet-kase-bomber-ceket-l07720320
+/tr/balon-tunik-l03720369
 /tr/bambula-genis-paca-pantolon-l03670330
 /tr/bambula-top-l03230364
 /tr/barrel-jean-l07660507
@@ -84,7 +85,6 @@
 /tr/dickies-barrel-chino-pantolon-l07671304
 /tr/dickies-barrel-jean-l07660410
 /tr/dickies-duz-kesim-jean-l07662514
-/tr/dickies-fermuarl-ceket-l07720374
 /tr/dickies-suslu-dugmeli-ceket-l07720383
 /tr/dik-yaka-kase-bomber-l07720308
 /tr/dik-yaka-oversize-bomber-ceket-l07720353
@@ -120,7 +120,7 @@
 /tr/fermuarl-kapusonlu-sweatshirt-l07558309
 /tr/fermuarl-tailored-fit-ceket-l07721519
 /tr/fitilli-ksa-kollu-t-shirt-l03230346
-/tr/frfrl-uzun-kimono-l03721301
+/tr/frfrl-uzun-ceket-l03721301
 /tr/genis-paca-jean-l07660340
 /tr/genis-paca-jean-l07662511
 /tr/genis-yaka-atlet-l03231308
@@ -151,6 +151,8 @@
 /tr/islemeli-ceket-l07721500
 /tr/isltl-bootcut-jean-l03660178
 /tr/isltl-genis-paca-jean-l07660309
+/tr/kadife-efektli-denim-ceket-l07720307
+/tr/kadife-gorunumlu-duz-pantolon-l07660307
 /tr/kapitone-stwd-yelek-l07720599
 /tr/kapusonlu-bomber-ceket-l07720511
 /tr/kapusonlu-dolgulu-ceket-l07700369
@@ -183,7 +185,6 @@
 /tr/kemerli-relaxed-baggy-jean-l07662406
 /tr/kemerli-uzun-kaban-l07755351
 /tr/keten-ksa-kollu-gomlek-l03460515
-/tr/kimono-tunik-l03720369
 /tr/kombin-cift-tarafl-ceket-l07700508
 /tr/kombine-suni-suet-ceket-l07721509
 /tr/kombini-kesfet-l90201114350BSBS
@@ -199,7 +200,6 @@
 /tr/kombini-kesfet-l95326071753BSBS
 /tr/kombini-kesfet-l96263220260BSBS
 /tr/kombini-kesfet-l99354103823BSBS
-/tr/kombini-kesfet-l99638972115BSBS
 /tr/kombini-kesfet-l99762554110BSBS
 /tr/kombini-satin-al-l91695832161BSBS
 /tr/kombini-satin-al-l91858168363BSBS
@@ -217,7 +217,6 @@
 /tr/kombini-satn-al-l94065025099BSBS
 /tr/kombini-satn-al-l94458485100BSBS
 /tr/kombini-satn-al-l94541052482BSBS
-/tr/kombini-satn-al-l94545380190BSBS
 /tr/kombini-satn-al-l94944175378BSBS
 /tr/kombini-satn-al-l95104261466BSBS
 /tr/kombini-satn-al-l95159006858BSBS
@@ -238,13 +237,13 @@
 /tr/kombini-satn-al-l99359132699BSBS
 /tr/kombini-satn-al-l99581987692BSBS
 /tr/kombini-tamamla-l90177900270BSBS
+/tr/kombini-tamamla-l91679682974BSBS
 /tr/kombini-tamamla-l91784765243BSBS
 /tr/kombini-tamamla-l91942680505BSBS
 /tr/kombini-tamamla-l92050349786BSBS
 /tr/kombini-tamamla-l92106439320BSBS
 /tr/kombini-tamamla-l92113879989BSBS
 /tr/kombini-tamamla-l92394719301BSBS
-/tr/kombini-tamamla-l92731341199BSBS
 /tr/kombini-tamamla-l93284337118BSBS
 /tr/kombini-tamamla-l93435890436BSBS
 /tr/kombini-tamamla-l94137003081BSBS
@@ -253,6 +252,7 @@
 /tr/kombini-tamamla-l95809658724BSBS
 /tr/kombini-tamamla-l96281452330BSBS
 /tr/kombini-tamamla-l96297918720BSBS
+/tr/kombini-tamamla-l96506518180BSBS
 /tr/kombini-tamamla-l97374687336BSBS
 /tr/kombini-tamamla-l97452010011BSBS
 /tr/kombini-tamamla-l97971478639BSBS
@@ -282,7 +282,7 @@
 /tr/ksa-kollu-interlok-polo-t-shirt-l03210507
 /tr/ksa-kollu-interlok-sweatshirt-l03231503
 /tr/ksa-kollu-orgu-polo-l03540525
-/tr/ksa-sile-bezi-kimono-l03721357
+/tr/ksa-sile-bezi-tunik-l03721357
 /tr/ksa-suni-suet-trenckot-l07720355
 /tr/ksa-trenckot-l07721531
 /tr/kusakl-uzun-trenckot-l07721532
@@ -297,6 +297,7 @@
 /tr/muscle-fit-tisort-l09247599
 /tr/naks-detayl-grafikli-tisort-l03231548
 /tr/naksl-relaxed-fit-tisort-l03231508
+/tr/naksl-suni-deri-ceket-l07721510
 /tr/naylon-suslemeli-tote-canta-l14058840
 /tr/on-dikisli-barrel-jean-l07662504
 /tr/orta-bel-baggy-jean-l07660312
@@ -411,6 +412,7 @@
 /tr/suni-yunlu-dik-yaka-ceket-l07720346
 /tr/suni-yunlu-yakal-denim-ceket-l07701519
 /tr/super-genis-paca-comfort-jean-l07660317
+/tr/suslemeli-file-tote-canta-l14191740
 /tr/suslemeli-omuz-cantas-l14006840
 /tr/suslu-dugme-detayl-dar-kesim-ceket-l07720373
 /tr/suslu-dugmeli-ceket-l07721501
@@ -421,7 +423,6 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
-/tr/tokal-shopper-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/toyota-celica-supra-sweatshirt-l07558527
 /tr/toyota-celica-tisort-l07231538
@@ -444,6 +445,7 @@
 /tr/vucuda-oturan-100-keten-blazer-ceket-l07790324
 /tr/vucuda-oturan-suni-suet-kaban-l07755362
 /tr/wide-straight-yuksek-bel-jean-l03660308
+/tr/yan-dikisli-barrel-fit-jean-l07660328
 /tr/yars-grafik-desenli-sisme-mont-l07721535
 /tr/ykamal-efektli-ceket-l07721520
 /tr/yrtk-detayl-baggy-jean-l07662303
