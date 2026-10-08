@@ -1062,7 +1062,6 @@
 /p/armani-si-edp-100-ml-541268.html
 /p/armani-si-edp-100-ml-719127.html
 /p/armani-si-edp-100-ml-P1547001.html
-/p/aromaterapi-yuz-yikama-jeli-%7C-aromatherapy-face-cleanser-P1000204501.html
 /p/aromatherapy-conditioner---aromaterapik-sac-kremi-P1000205397.html
 /p/aromatherapy-hand-et-body-lotion---aromaterapik-el-ve-vucut-losyonu-P1000205392.html
 /p/aromatherapy-hand-et-body-wash---aromaterapik-el-ve-vucut-sampuani-P1000205395.html
@@ -1155,6 +1154,7 @@
 /p/at-the-borderline-gel-eyeliner---jel-kalem-eyeliner-735541.html
 /p/at-the-borderline-gel-eyeliner---jel-kalem-eyeliner-P1000203510.html
 /p/atobarrier365-bestseller-kit---hassas-ciltler-i%CC%87cin-mini-yuz-bakim-seti-P1000209916.html
+/p/atobarrier365-body-lotion---nemlendirici-vucut-losyonu-P1000213461.html
 /p/atobarrier365-cream-mist---nemlendirici-ve-cilt-bariyeri-koruyucu-sprey-P1000209677.html
 /p/atobarrier365-creme---nemlendirici-ve-cilt-bariyeri-guclendirici-krem-783255.html
 /p/atobarrier365-creme---nemlendirici-ve-cilt-bariyeri-guclendirici-krem-P1000209671.html
@@ -1735,7 +1735,6 @@
 /p/best-skin-ever-matte---pudra-fondoten-645639.html
 /p/best-skin-ever-matte---pudra-fondoten-645640.html
 /p/best-skin-ever-matte---pudra-fondoten-P10052136.html
-/p/beste%E2%84%A2-no.-9-P10015061.html
 /p/beste-no.-9-jelly-cleanser-P10013696.html
 /p/better-balm---parlak-dudak-yagi-556579.html
 /p/better-balm---parlak-dudak-yagi-556580.html
@@ -4060,7 +4059,6 @@
 /p/designing-liquid-eyeliner---eyeliner-P10011209.html
 /p/destination-hydration---yuz-nemlendirme-icin-temel-urunler-seti-P1000210557.html
 /p/destined-for-density%E2%84%A2-conditioner---yogunlastirici-sac-bakim-kremi-P10048250.html
-/p/destined-for-density%E2%84%A2-density-serum---yogunlastirici-sac-serumu-P10048251.html
 /p/detangling--fine-et-fragile-P3861103.html
 /p/detangling-compact-styler-437502.html
 /p/detangling-compact-styler-P2052012.html
@@ -4854,6 +4852,7 @@
 /p/dyson-chitosan%E2%84%A2---sekillendirme-oncesi-sac-kremi-mini-boy-P1000207942.html
 /p/dyson-supersonic-r%E2%84%A2---sac-kurutma-makinesi-duz-dalgali-P1000207829.html
 /p/e-rase--240ml-P10013702.html
+/p/e3---goz-makyaji-fircasi-P10044669.html
 /p/e4---goz-makyaji-fircasi-P10044670.html
 /p/e6-brush---goz-makyaj-fircasi-P10057194.html
 /p/e7-brush---kas-fircasi-P10057195.html
@@ -5291,6 +5290,7 @@
 /p/excess-oil-solution-with-20%25-niacinamide---yuz-serumu-P10043115.html
 /p/exfoliant-moussant-energisant-P579288.html
 /p/exfoliant-scrub-sampuan-610459.html
+/p/exfoliant-scrub-sampuan-P10014996.html
 /p/exfoliate---%253-aha-%252-c-vitamini-iceren-gunluk-peeling-losyonu-P1000211542.html
 /p/exfoliate---%255-ni%CC%87asi%CC%87nami%CC%87d-lakti%CC%87k-asi%CC%87t-i%CC%87ceren-esi%CC%87tleyi%CC%87ci%CC%87-serum-P1000211634.html
 /p/exfoliate---aha-iceren-puruzsuzlestirici-vucut-peelingi-P1000211844.html
@@ -6817,6 +6817,7 @@
 /p/honey-infused-hair-perfume---wildflower-honey-P10062317.html
 /p/honey-infused-hair-perfume-ciceksi-sac-parfumu---yaban-gulu-P1000203715.html
 /p/honey-infused-hair-repair-serum-intense---sac-bakim-serumu-P10053274.html
+/p/honey-infused-lip-oil---balli-dudak-yagi-sonbahar-ozel-serisi-P1000215652.html
 /p/honey-infused-lip-oil---sari-bal-720758.html
 /p/honey-infused-lip-oil---sari-bal-720759.html
 /p/honey-infused-lip-oil---sari-bal-744666.html
@@ -15271,6 +15272,7 @@
 /p/the-ritual-of-sakura---vucut-kremi-yedek-paketi-P1000210704.html
 /p/the-ritual-of-sakura---vucut-peelingi-P2303009.html
 /p/the-ritual-of-yozakura----vucut-serumu-P1000206437.html
+/p/the-ritual-of-yozakura---kokulu-cubuklar-P1000213251.html
 /p/the-ritual-of-yozakura---kokulu-mum-P1000213250.html
 /p/the-ritual-of-yozakura---kopuklu-dus-jeli-P1000206438.html
 /p/the-ritual-of-yozakura---l-banyo-ve-vucut-urunleri-hediye-seti-P1000215996.html
@@ -15393,7 +15395,6 @@
 /p/thick-hair-treatment---sac-maskesi-P10015082.html
 /p/thickening-spray---saclari-kalinlastiran-ve-hacim-veren-sprey-P1000208215.html
 /p/thickening-volume-conditioner---sac-kremi-P10056953.html
-/p/thickening-volume-conditioner-P3498029.html
 /p/thin-wand---kisa-uzun-saclar-i%CC%87cin-i%CC%87nce-ve-belirgin-bukle-masasi-P10023225.html
 /p/this-is-him--undressed---eau-de-toilette-661617.html
 /p/this-is-him--undressed---eau-de-toilette-661618.html
