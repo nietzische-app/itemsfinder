@@ -78,11 +78,11 @@
 /tr/dantel-detayl-atlet-l07230300
 /tr/dar-kesim-ksa-kollu-tisort-l07150305
 /tr/deri-sabo-terlik-l12404840
-/tr/desenli-duz-kesim-jean-l07671309
 /tr/dickies-barrel-chino-pantolon-l07671304
 /tr/dickies-barrel-jean-l07660410
 /tr/dickies-desenli-ceket-l07721541
 /tr/dickies-duz-kesim-jean-l07662514
+/tr/dickies-fermuarl-ceket-l07720374
 /tr/dickies-suslu-dugmeli-ceket-l07720383
 /tr/dik-yaka-kase-bomber-l07720308
 /tr/dik-yaka-oversize-bomber-ceket-l07720353
@@ -148,7 +148,6 @@
 /tr/islemeli-ay-detayl-baggy-jean-l07662310
 /tr/islemeli-barrel-jean-l07662522
 /tr/islemeli-ceket-l07721500
-/tr/islemeli-tote-canta-l14052840
 /tr/isltl-bootcut-jean-l03660178
 /tr/isltl-genis-paca-jean-l07660309
 /tr/kadife-efektli-denim-ceket-l07720307
@@ -187,7 +186,6 @@
 /tr/keten-ksa-kollu-gomlek-l03460515
 /tr/kombin-cift-tarafl-ceket-l07700508
 /tr/kombine-suni-suet-ceket-l07721509
-/tr/kombini-kesfet-l90201114350BSBS
 /tr/kombini-kesfet-l90581460817BSBS
 /tr/kombini-kesfet-l91905363461BSBS
 /tr/kombini-kesfet-l92628726381BSBS
@@ -200,6 +198,7 @@
 /tr/kombini-kesfet-l95326071753BSBS
 /tr/kombini-kesfet-l96263220260BSBS
 /tr/kombini-kesfet-l99354103823BSBS
+/tr/kombini-kesfet-l99638972115BSBS
 /tr/kombini-kesfet-l99762554110BSBS
 /tr/kombini-satin-al-l91695832161BSBS
 /tr/kombini-satin-al-l91858168363BSBS
@@ -211,13 +210,13 @@
 /tr/kombini-satn-al-l92411955490BSBS
 /tr/kombini-satn-al-l93042750056BSBS
 /tr/kombini-satn-al-l93143227052BSBS
-/tr/kombini-satn-al-l93417240542BSBS
 /tr/kombini-satn-al-l93765627746BSBS
 /tr/kombini-satn-al-l93804088172BSBS
 /tr/kombini-satn-al-l93993405038BSBS
 /tr/kombini-satn-al-l94065025099BSBS
 /tr/kombini-satn-al-l94458485100BSBS
 /tr/kombini-satn-al-l94541052482BSBS
+/tr/kombini-satn-al-l94545380190BSBS
 /tr/kombini-satn-al-l94944175378BSBS
 /tr/kombini-satn-al-l95104261466BSBS
 /tr/kombini-satn-al-l95159006858BSBS
@@ -246,6 +245,7 @@
 /tr/kombini-tamamla-l92106439320BSBS
 /tr/kombini-tamamla-l92113879989BSBS
 /tr/kombini-tamamla-l92394719301BSBS
+/tr/kombini-tamamla-l92731341199BSBS
 /tr/kombini-tamamla-l93284337118BSBS
 /tr/kombini-tamamla-l93435890436BSBS
 /tr/kombini-tamamla-l94137003081BSBS
@@ -336,7 +336,6 @@
 /tr/puantiyeli-straight-jean-l07670457
 /tr/puantiyeli-vucuda-oturan-ceket-l07720403
 /tr/race-force-suni-deri-ceket-l07721505
-/tr/regular-fit-toyota-logolu-tisort-l07231916
 /tr/relaxed-fit-baggy-jean-l07662515
 /tr/relaxed-fit-baggy-jean-l07662523
 /tr/relaxed-fit-bermuda-sort-l07665505
@@ -429,12 +428,6 @@
 /tr/tokal-deri-sabo-l12419740
 /tr/tokal-shopper-canta-l14147840
 /tr/total-look-l92207538202BSBS
-/tr/toyota-celica-supra-sweatshirt-l07558527
-/tr/toyota-celica-tisort-l07231538
-/tr/toyota-celica-uzun-kollu-tisort-l07231539
-/tr/toyota-kanvas-shopper-canta-l15094840
-/tr/toyota-kapusonlu-sweatshirt-l07558917
-/tr/toyota-regular-fit-tisort-l07231537
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
 /tr/trucker-denim-ceket-l07720521

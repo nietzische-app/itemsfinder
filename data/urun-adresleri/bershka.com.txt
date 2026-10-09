@@ -1,6 +1,5 @@
 /tr/%100-y%C3%BCn-bisiklet-yaka-kazak-c0p226931307.html
 /tr/%100-y%C3%BCn-bisiklet-yaka-kazak-c0p226931308.html
-/tr/%100-y%C3%BCn-bisiklet-yaka-kazak-c0p242077247.html
 /tr/%100-y%C3%BCn-bisiklet-yaka-kazak-c0p245330260.html
 /tr/%C3%A7%C4%B1t%C3%A7%C4%B1tl%C4%B1-k%C4%B1sa-kollu-g%C3%B6mlek-c0p226931228.html
 /tr/%C3%A7%C4%B1t%C3%A7%C4%B1tl%C4%B1-k%C4%B1sa-kollu-g%C3%B6mlek-c0p226931229.html
@@ -12,7 +11,7 @@
 /tr/%C3%A7apraz-bel-geni%C5%9F-pa%C3%A7a-jean-c0p226927121.html
 /tr/%C3%A7apraz-bel-geni%C5%9F-pa%C3%A7a-jean-c0p226927122.html
 /tr/%C3%A7apraz-bel-geni%C5%9F-pa%C3%A7a-jean-c0p233408511.html
-/tr/%C3%A7apraz-bel-geni%C5%9F-pa%C3%A7a-jean-c0p237552616.html
+/tr/%C3%A7apraz-bel-geni%C5%9F-pa%C3%A7a-jean-c0p237552617.html
 /tr/%C3%A7apraz-bel-geni%C5%9F-pa%C3%A7a-jean-c0p243958911.html
 /tr/%C3%A7apraz-bel-geni%C5%9F-pa%C3%A7a-jean-c0p244456111.html
 /tr/%C3%A7apraz-belli-denim-bermuda-%C5%9Fort-c0p229723086.html
@@ -20,10 +19,13 @@
 /tr/%C3%A7apraz-belli-denim-bermuda-c0p229723085.html
 /tr/%C3%A7apraz-belli-geni%C5%9F-kesim-jean-c0p229736701.html
 /tr/%C3%A7apraz-belli-geni%C5%9F-kesim-jean-c0p230328176.html
+/tr/%C3%A7apraz-belli-geni%C5%9F-kesim-jean-c0p230329451.html
 /tr/%C3%A7apraz-belli-wide-leg-jean-c0p226927119.html
 /tr/%C3%A7apraz-belli-wide-leg-jean-c0p229736704.html
 /tr/%C3%A7apraz-d%C3%BC%C4%9Fmeli-k%C4%B1sa-kollu-g%C3%B6mlek-c0p226927037.html
 /tr/%C3%A7apraz-d%C3%BC%C4%9Fmeli-k%C4%B1sa-kollu-g%C3%B6mlek-c0p226927038.html
+/tr/%C3%A7apraz-d%C3%BC%C4%9Fmeli-k%C4%B1sa-kollu-g%C3%B6mlek-c0p234324824.html
+/tr/%C3%A7apraz-d%C3%BC%C4%9Fmeli-k%C4%B1sa-kollu-g%C3%B6mlek-c0p236554144.html
 /tr/%C3%A7apraz-d%C3%BC%C4%9Fmeli-k%C4%B1sa-kollu-g%C3%B6mlek-c0p242077226.html
 /tr/%C3%A7apraz-pileli-baggy-fit-baggy-pantolon-c0p230928382.html
 /tr/%C3%A7apraz-pileli-baggy-fit-baggy-pantolon-c0p245329892.html
@@ -35,7 +37,6 @@
 /tr/%C3%A7er%C3%A7evesiz-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p229737213.html
 /tr/%C3%A7er%C3%A7evesiz-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p229737229.html
 /tr/%C3%A7er%C3%A7evesiz-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p229737375.html
-/tr/%C3%A7er%C3%A7evesiz-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p230328200.html
 /tr/%C3%A7i%C3%A7ek-desenli-korse-ask%C4%B1l%C4%B1-top-c0p231022108.html
 /tr/%C3%A7i%C3%A7ek-desenli-korse-ask%C4%B1l%C4%B1-top-c0p238451379.html
 /tr/%C3%A7i%C3%A7ek-desenli-pencere-detayl%C4%B1-top-c0p229465993.html
@@ -55,7 +56,6 @@
 /tr/%C3%A7i%C3%A7ekli-kolye-c0p226927014.html
 /tr/%C3%A7i%C3%A7ekli-korse-ask%C4%B1l%C4%B1-top-c0p231022107.html
 /tr/%C3%A7i%C3%A7ekli-korse-ask%C4%B1l%C4%B1-top-c0p237552651.html
-/tr/%C3%A7i%C3%A7ekli-midi-ask%C4%B1l%C4%B1-elbise-c0p238451736.html
 /tr/%C3%A7i%C3%A7ekli-tanga-bikini-alt%C4%B1-c0p229736797.html
 /tr/%C3%A7i%C3%A7ekli-tanga-bikini-alt%C4%B1-c0p233573543.html
 /tr/%C3%A7i%C3%A7ekli-toka-c0p226926963.html
@@ -63,7 +63,6 @@
 /tr/%C3%A7i%C3%A7ekli-toka-paketi-c0p226927380.html
 /tr/%C3%A7i%C3%A7ekli-zincir-kemer-c0p226931376.html
 /tr/%C3%A7i%CC%87kolatali-dudak-renklendi%CC%87ri%CC%87ci%CC%87si%CC%87-c0p226926788.html
-/tr/%C3%A7i%CC%87kolatali-dudak-renklendi%CC%87ri%CC%87ci%CC%87si%CC%87-c0p240128396.html
 /tr/%C3%A7i%CC%87kolatali-dudak-renklendi%CC%87ri%CC%87ci%CC%87si%CC%87-c0p240128397.html
 /tr/%C3%A7i%CC%87lekli%CC%87-lip-tint-c0p226926720.html
 /tr/%C3%A7i%CC%87lekli%CC%87-lip-tint-c0p240127940.html
@@ -103,6 +102,7 @@
 /tr/%C3%A7ift-tarafl%C4%B1-kap%C3%BC%C5%9Fonlu-suni-k%C3%BCrk-ceket-c0p245329731.html
 /tr/%C3%A7ift-tarafl%C4%B1-suni-deri-ceket-c0p229627734.html
 /tr/%C3%A7ift-tarafl%C4%B1-suni-deri-ceket-c0p245329899.html
+/tr/%C3%A7ift-tarafl%C4%B1-suni-deri-ceket-c0p245329975.html
 /tr/%C3%A7ift-y%C3%BCzl%C3%BC-k%C4%B1sa-ceket-c0p229730775.html
 /tr/%C3%A7izgili-%C3%B6rg%C3%BC-eldiven-c0p230274144.html
 /tr/%C3%A7izgili-%C3%BC%C3%A7gen-bandana-c0p226927260.html
@@ -150,7 +150,6 @@
 /tr/%C3%A7izgili-dokulu-k%C4%B1sa-kollu-ti%C5%9F%C3%B6rt-c0p226931567.html
 /tr/%C3%A7izgili-dokulu-k%C4%B1sa-kollu-ti%C5%9F%C3%B6rt-c0p233573302.html
 /tr/%C3%A7izgili-fitted-uzun-kollu-polo-t-shirt-c0p233408513.html
-/tr/%C3%A7izgili-fitted-uzun-kollu-polo-t-shirt-c0p244572598.html
 /tr/%C3%A7izgili-halter-bikini-%C3%BCst%C3%BC-c0p229736819.html
 /tr/%C3%A7izgili-halter-yaka-mini-elbise-c0p229730665.html
 /tr/%C3%A7izgili-k%C4%B1sa-kollu-bask%C4%B1l%C4%B1-g%C3%B6mlek-c0p227269143.html
@@ -166,12 +165,12 @@
 /tr/%C3%A7izgili-oturtulmu%C5%9F-blazer-ceket-c0p227421714.html
 /tr/%C3%A7izgili-pensli-pantolon-c0p227229915.html
 /tr/%C3%A7izgili-pensli-pantolon-c0p227229917.html
+/tr/%C3%A7izgili-pensli-pantolon-c0p236213452.html
 /tr/%C3%A7izgili-pensli-pantolon-c0p242077279.html
 /tr/%C3%A7izgili-peplum-ask%C4%B1l%C4%B1-bluz-c0p229730726.html
 /tr/%C3%A7izgili-print-k%C4%B1sa-kollu-g%C3%B6mlek-c0p235814536.html
 /tr/%C3%A7izgili-straight-fit-pantolon-c0p226927308.html
 /tr/%C3%A7izgili-triko-balaklava-c0p231948414.html
-/tr/%C3%A7izgili-triko-balaklava-c0p245330173.html
 /tr/%C3%A7izgili-uzun-kollu-boxy-fit-g%C3%B6mlek-c0p235814534.html
 /tr/%C3%A7izgili-uzun-kollu-boxy-fit-ti%C5%9F%C3%B6rt-c0p234341897.html
 /tr/%C3%A7izgili-uzun-kollu-g%C3%B6mlek-c0p227421708.html
@@ -237,12 +236,9 @@
 /tr/%C3%B6rg%C3%BC-eldiven-c0p232210814.html
 /tr/%C3%B6rg%C3%BC-ipli-kemer-c0p234757844.html
 /tr/%C3%B6rg%C3%BC-kap%C3%BC%C5%9Fon-c0p231509797.html
-/tr/%C3%B6rg%C3%BC-kap%C3%BC%C5%9Fon-c0p242077324.html
-/tr/%C3%B6rg%C3%BC-kap%C3%BC%C5%9Fon-c0p242077592.html
 /tr/%C3%B6rg%C3%BC-kap%C3%BC%C5%9Fonlu-boyunluk-c0p228626940.html
 /tr/%C3%B6rg%C3%BC-kap%C3%BC%C5%9Fonlu-h%C4%B1rka-c0p228633827.html
 /tr/%C3%B6rg%C3%BC-kar-maskesi-c0p228633817.html
-/tr/%C3%B6rg%C3%BC-kar-maskesi-c0p242077325.html
 /tr/%C3%B6rg%C3%BC-kemer-c0p229737123.html
 /tr/%C3%B6rg%C3%BC-kese-%C3%A7anta-c0p229723197.html
 /tr/%C3%B6rg%C3%BC-kese-%C3%A7anta-c0p229723198.html
@@ -251,7 +247,6 @@
 /tr/%C3%B6rg%C3%BC-parmaks%C4%B1z-eldiven-c0p232210813.html
 /tr/%C3%B6rg%C3%BC-parmaks%C4%B1z-eldiven-c0p233943368.html
 /tr/%C3%B6rg%C3%BC-parmaks%C4%B1z-eldiven-c0p233943369.html
-/tr/%C3%B6rg%C3%BC-parmaks%C4%B1z-eldiven-c0p245330181.html
 /tr/%C3%B6rme-bere-c0p229499435.html
 /tr/%C3%BC%C3%A7gen-bikini-%C3%BCst%C3%BC-c0p226931250.html
 /tr/%C3%BC%C3%A7gen-bikini-%C3%BCst%C3%BC-c0p226931251.html
@@ -281,7 +276,6 @@
 /tr/%C5%9Fardonlu-para%C5%9F%C3%BCt-pantolon-c0p233573758.html
 /tr/%C5%9Fardonlu-para%C5%9F%C3%BCt-pantolon-c0p233900335.html
 /tr/%C5%9Fardonlu-para%C5%9F%C3%BCt-pantolon-c0p234325141.html
-/tr/%C5%9Fardonlu-para%C5%9F%C3%BCt-pantolon-c0p241489014.html
 /tr/%C5%9Fardonlu-para%C5%9F%C3%BCt-pantolon-c0p244572160.html
 /tr/%C5%9Feffaf-g%C3%B6r%C3%BCn%C3%BCml%C3%BC-kapitone-ceket-c0p226926892.html
 /tr/%C5%9Feffaf-g%C3%B6r%C3%BCn%C3%BCml%C3%BC-kapitone-ceket-c0p226926893.html
@@ -292,6 +286,7 @@
 /tr/%C5%9Feritli-bowling-%C3%A7anta-c0p231041393.html
 /tr/%C5%9Fi%C5%9Fme-suni-deri-ceket-c0p229723119.html
 /tr/%C5%9Fi%C5%9Fme-suni-deri-ceket-c0p231041616.html
+/tr/%C5%9Fi%C5%9Fme-suni-deri-ceket-c0p245330464.html
 /tr/2%E2%80%99li-ku%C5%9Fg%C3%B6z%C3%BC-detayl%C4%B1-sa%C3%A7-band%C4%B1-paketi-c0p232637585.html
 /tr/2%E2%80%99li-ku%C5%9Fg%C3%B6z%C3%BC-detayl%C4%B1-sa%C3%A7-band%C4%B1-paketi-c0p242077920.html
 /tr/2%E2%80%99li-paslanmaz-%C3%A7elik-y%C3%BCz%C3%BCk-seti-c0p236726579.html
@@ -320,9 +315,12 @@
 /tr/2&apos;li-sa%C3%A7-band%C4%B1-paketi-c0p232359277.html
 /tr/2&apos;li-sa%C3%A7-band%C4%B1-paketi-c0p232359284.html
 /tr/2&apos;li-sallant%C4%B1l%C4%B1-k%C3%BCpe-c0p235711287.html
+/tr/2&apos;li-spor-%C3%A7orap-c0p237553199.html
 /tr/2&apos;li-spor-%C3%A7orap-paketi-c0p229465984.html
 /tr/2&apos;li-spor-%C3%A7orap-paketi-c0p229466058.html
+/tr/2&apos;li-spor-%C3%A7orap-paketi-c0p237553201.html
 /tr/2&apos;li-ta%C5%9F-u%C3%A7lu-kolye-seti-c0p230006397.html
+/tr/2&apos;li-ta%C5%9F-u%C3%A7lu-kolye-seti-c0p238451675.html
 /tr/2&apos;li-ta%C5%9Fl%C4%B1-ve-zincirli-bileklik-seti-c0p228809190.html
 /tr/2&apos;li-tokal%C4%B1-bileklik-c0p228741272.html
 /tr/2&apos;li-zikzak-ta%C3%A7-c0p231378830.html
@@ -539,7 +537,6 @@
 /tr/asimetrik-f%C4%B1rf%C4%B1rl%C4%B1-etek-c0p226927101.html
 /tr/asimetrik-f%C4%B1rf%C4%B1rl%C4%B1-etek-c0p232227688.html
 /tr/asimetrik-fermuarl%C4%B1-triko-ceket-c0p229350167.html
-/tr/asimetrik-fermuarl%C4%B1-triko-ceket-c0p242077615.html
 /tr/asimetrik-fermuarl%C4%B1-triko-ceket-c0p245329693.html
 /tr/asimetrik-fermuarl%C4%B1-triko-h%C4%B1rka-c0p226931512.html
 /tr/asimetrik-fermuarl%C4%B1-triko-h%C4%B1rka-c0p235801185.html
@@ -572,6 +569,7 @@
 /tr/asimetrik-uzun-kollu-b%C3%BCzg%C3%BCl%C3%BC-ti%C5%9F%C3%B6rt-c0p231948409.html
 /tr/asimetrik-uzun-kollu-b%C3%BCzg%C3%BCl%C3%BC-ti%C5%9F%C3%B6rt-c0p233761086.html
 /tr/asimetrik-uzun-kollu-b%C3%BCzg%C3%BCl%C3%BC-ti%C5%9F%C3%B6rt-c0p237736588.html
+/tr/asimetrik-uzun-kollu-b%C3%BCzg%C3%BCl%C3%BC-ti%C5%9F%C3%B6rt-c0p238136088.html
 /tr/asimetrik-uzun-kollu-b%C3%BCzg%C3%BCl%C3%BC-ti%C5%9F%C3%B6rt-c0p244078540.html
 /tr/asimetrik-uzun-kollu-top-c0p240147200.html
 /tr/asimetrik-uzun-ti%C5%9F%C3%B6rt-c0p233943353.html
@@ -579,6 +577,7 @@
 /tr/asimetrik-yaka-%C3%A7izgili-kazak-c0p226927329.html
 /tr/asimetrik-yaka-bask%C4%B1l%C4%B1-kazak-c0p228562486.html
 /tr/asimetrik-yaka-bask%C4%B1l%C4%B1-kazak-c0p243743711.html
+/tr/asimetrik-yaka-bask%C4%B1l%C4%B1-kazak-c0p244572102.html
 /tr/asimetrik-yaka-kazak-c0p226926844.html
 /tr/asimetrik-yaka-kazak-c0p226926845.html
 /tr/asimetrik-yaka-kazak-c0p226926846.html
@@ -593,6 +592,8 @@
 /tr/asimetrik-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p235956525.html
 /tr/asimetrik-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p236594593.html
 /tr/asimetrik-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p238451267.html
+/tr/asimetrik-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p240128441.html
+/tr/asimetrik-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p241396428.html
 /tr/asimetrik-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p242077459.html
 /tr/asimetrik-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p242077916.html
 /tr/asimetrik-yakal%C4%B1-desenli-kazak-c0p228562485.html
@@ -637,6 +638,7 @@
 /tr/ayarlanabilir-slouchy-topuklu-%C3%A7izme-c0p226931364.html
 /tr/ayarlanabilir-slouchy-topuklu-%C3%A7izme-c0p238451590.html
 /tr/aynal%C4%B1-choker-kolye-c0p230593166.html
+/tr/aynal%C4%B1-choker-kolye-c0p237552660.html
 /tr/b%C3%BCzg%C3%BC-belli-%C5%9Falvar-pantolon-c0p230006369.html
 /tr/b%C3%BCzg%C3%BC-belli-%C5%9Falvar-pantolon-c0p242077227.html
 /tr/b%C3%BCzg%C3%BC-detayl%C4%B1-k%C4%B1sa-kollu-ti%C5%9F%C3%B6rt-c0p229723096.html
@@ -648,7 +650,6 @@
 /tr/b%C3%BCzg%C3%BCl%C3%BC-ask%C4%B1l%C4%B1-midi-elbise-c0p229730045.html
 /tr/b%C3%BCzg%C3%BCl%C3%BC-ask%C4%B1l%C4%B1-midi-elbise-c0p229730046.html
 /tr/b%C3%BCzg%C3%BCl%C3%BC-ask%C4%B1l%C4%B1-midi-elbise-c0p230328444.html
-/tr/b%C3%BCzg%C3%BCl%C3%BC-ask%C4%B1l%C4%B1-midi-elbise-c0p230329179.html
 /tr/b%C3%BCzg%C3%BCl%C3%BC-ask%C4%B1l%C4%B1-midi-elbise-c0p230329339.html
 /tr/b%C3%BCzg%C3%BCl%C3%BC-bandeau-top-c0p229723036.html
 /tr/b%C3%BCzg%C3%BCl%C3%BC-bandeau-top-c0p229723037.html
@@ -707,6 +708,7 @@
 /tr/ba%C4%9Fcikli-bot-c0p226931623.html
 /tr/ba%C4%9Fcikli-bot-c0p229386321.html
 /tr/ba%C4%9Fcikli-bot-c0p244078531.html
+/tr/ba%C4%9Fcikli-bot-c0p245329942.html
 /tr/ba%C4%9Fcikli-worker-bot-c0p226931620.html
 /tr/ba%C4%9Fcikli-worker-bot-c0p226931621.html
 /tr/ba%C4%9Flama-detayl%C4%B1-k%C4%B1sa-kollu-poplin-g%C3%B6mlek-c0p229723141.html
@@ -777,12 +779,14 @@
 /tr/baggy-fit-kargo-pantolon-c0p236228215.html
 /tr/baggy-fit-kargo-pantolon-c0p240127918.html
 /tr/baggy-fit-kargo-pantolon-c0p242077565.html
-/tr/baggy-fit-kargo-pantolon-c0p245329815.html
+/tr/baggy-fit-kargo-pantolon-c0p245329940.html
 /tr/baggy-fit-skater-jean-c0p229741736.html
 /tr/baggy-fit-skater-jean-c0p229741738.html
+/tr/baggy-fit-skater-jean-c0p236554538.html
 /tr/baggy-fit-skater-jean-c0p244572184.html
-/tr/baggy-fit-skater-jean-c0p245329689.html
+/tr/baggy-fit-skater-jean-c0p245329945.html
 /tr/baggy-fit-skater-jean-c0p245330219.html
+/tr/baggy-fit-skater-jean-c0p245330477.html
 /tr/baggy-fit-teknik-pantolon-c0p226931413.html
 /tr/baggy-fit-teknik-pantolon-c0p226931414.html
 /tr/baggy-fit-teknik-pantolon-c0p232668374.html
@@ -795,7 +799,9 @@
 /tr/baggy-flare-fit-jean-c0p229737337.html
 /tr/baggy-flare-fit-jean-c0p230327636.html
 /tr/baggy-flare-fit-jean-c0p230330032.html
+/tr/baggy-flare-fit-jean-c0p232227384.html
 /tr/baggy-pantolon,-baggy-fit-bask%C4%B1l%C4%B1-c0p236288791.html
+/tr/baggy-pantolon,-baggy-fit-bask%C4%B1l%C4%B1-c0p245329931.html
 /tr/baggy-pantolon-jogger-fit-y%C4%B1kamal%C4%B1-c0p233503186.html
 /tr/baggy-pantolon-jogger-fit-y%C4%B1kamal%C4%B1-c0p242077426.html
 /tr/baggy-pantolon-jogger-fit-y%C4%B1kamal%C4%B1-c0p242077567.html
@@ -807,6 +813,7 @@
 /tr/baggy-rustik-pantolon-c0p229737069.html
 /tr/baggy-rustik-pantolon-c0p230329421.html
 /tr/baggy-rustik-pantolon-c0p230330450.html
+/tr/baggy-rustik-pantolon-c0p231041324.html
 /tr/baklava-desenli-%C3%B6rg%C3%BC-atk%C4%B1-c0p236228214.html
 /tr/baklava-desenli-bere-c0p236228222.html
 /tr/baklava-desenli-kap%C3%BC%C5%9Fonlu-teknik-ceket-c0p226931783.html
@@ -820,6 +827,7 @@
 /tr/balloon-fit-%C5%9Fardonlu-e%C5%9Fofman-alt%C4%B1-out-of-core-c0p244572609.html
 /tr/balloon-fit-%C5%9Fardonlu-e%C5%9Fofman-alt%C4%B1-out-of-core-c0p244572646.html
 /tr/balloon-fit-a%C3%A7%C4%B1k-renk-d%C3%BC%C4%9F%C3%BCml%C3%BC-jean-c0p226926797.html
+/tr/balloon-fit-a%C3%A7%C4%B1k-renk-d%C3%BC%C4%9F%C3%BCml%C3%BC-jean-c0p236554414.html
 /tr/balloon-fit-diki%C5%9F-detayl%C4%B1-jean-c0p228453288.html
 /tr/balloon-fit-diki%C5%9F-detayl%C4%B1-jean-c0p245330235.html
 /tr/balloon-fit-pensli-bermuda-%C5%9Fort-c0p226927154.html
@@ -849,6 +857,7 @@
 /tr/bandeau-midi-elbise-c0p227531232.html
 /tr/bandeau-midi-elbise-c0p235801176.html
 /tr/bandeau-mini-elbise-c0p227382005.html
+/tr/bandeau-mini-elbise-c0p237552639.html
 /tr/bandeau-mini-elbise-c0p237553141.html
 /tr/bantl%C4%B1-ve-tokal%C4%B1-sabo-c0p226931555.html
 /tr/bantl%C4%B1-ve-tokal%C4%B1-sabo-c0p230064962.html
@@ -888,6 +897,7 @@
 /tr/barrel-fit-ask%C4%B1l%C4%B1-%C3%A7anta-c0p234044307.html
 /tr/barrel-fit-crop-jean-c0p227381984.html
 /tr/barrel-fit-crop-jean-c0p227381985.html
+/tr/barrel-fit-crop-jean-c0p238451718.html
 /tr/barrel-fit-crop-jean-c0p244078538.html
 /tr/barrel-fit-denim-bermuda-c0p229737085.html
 /tr/barrel-fit-denim-bermuda-c0p229737086.html
@@ -929,19 +939,21 @@
 /tr/bask%C4%B1l%C4%B1-%C5%9Fapka-c0p230006384.html
 /tr/bask%C4%B1l%C4%B1-%C5%9Fapka-c0p234047702.html
 /tr/bask%C4%B1l%C4%B1-%C5%9Fardonlu-e%C5%9Fofman-alt%C4%B1-c0p235319921.html
-/tr/bask%C4%B1l%C4%B1-%C5%9Fardonlu-e%C5%9Fofman-alt%C4%B1-c0p242077764.html
 /tr/bask%C4%B1l%C4%B1-%C5%9Fardonlu-e%C5%9Fofman-alt%C4%B1-c0p245329688.html
 /tr/bask%C4%B1l%C4%B1-%C5%9Fardonlu-straight-fit-e%C5%9Fofman-alt%C4%B1-c0p233590600.html
 /tr/bask%C4%B1l%C4%B1-%C5%9Fardonlu-straight-fit-pantolon-c0p233590601.html
 /tr/bask%C4%B1l%C4%B1-barrel-fit-bermuda-c0p230182161.html
 /tr/bask%C4%B1l%C4%B1-barrel-fit-bermuda-kot-%C5%9Fort-c0p242077239.html
+/tr/bask%C4%B1l%C4%B1-barrel-fit-bermuda-kot-%C5%9Fort-c0p245329944.html
 /tr/bask%C4%B1l%C4%B1-barrel-fit-jean-bermuda-c0p231799613.html
 /tr/bask%C4%B1l%C4%B1-barrel-fit-pantolon-c0p226931703.html
 /tr/bask%C4%B1l%C4%B1-barrel-fit-pantolon-c0p230048837.html
 /tr/bask%C4%B1l%C4%B1-barrel-fit-pantolon-c0p232227299.html
 /tr/bask%C4%B1l%C4%B1-barrel-fit-pantolon-c0p242078027.html
+/tr/bask%C4%B1l%C4%B1-barrel-fit-pantolon-c0p245329919.html
 /tr/bask%C4%B1l%C4%B1-bere-c0p230270436.html
 /tr/bask%C4%B1l%C4%B1-bisiklet-yaka-crop-sweatshirt-c0p230141753.html
+/tr/bask%C4%B1l%C4%B1-bisiklet-yaka-crop-sweatshirt-c0p238136103.html
 /tr/bask%C4%B1l%C4%B1-bisiklet-yaka-kazak-c0p226927027.html
 /tr/bask%C4%B1l%C4%B1-bisiklet-yaka-kazak-c0p226927028.html
 /tr/bask%C4%B1l%C4%B1-bisiklet-yaka-kazak-c0p226931356.html
@@ -959,6 +971,7 @@
 /tr/bask%C4%B1l%C4%B1-bisiklet-yaka-sweatshirt-c0p233510448.html
 /tr/bask%C4%B1l%C4%B1-bisiklet-yaka-sweatshirt-c0p233510449.html
 /tr/bask%C4%B1l%C4%B1-bisiklet-yaka-sweatshirt-c0p236891226.html
+/tr/bask%C4%B1l%C4%B1-bisiklet-yaka-sweatshirt-c0p237553128.html
 /tr/bask%C4%B1l%C4%B1-bisiklet-yaka-sweatshirt-c0p238329776.html
 /tr/bask%C4%B1l%C4%B1-bisiklet-yaka-sweatshirt-c0p238451237.html
 /tr/bask%C4%B1l%C4%B1-bisiklet-yaka-sweatshirt-c0p240128356.html
@@ -983,6 +996,7 @@
 /tr/bask%C4%B1l%C4%B1-fermuarl%C4%B1-ceket-c0p226927185.html
 /tr/bask%C4%B1l%C4%B1-fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p226931697.html
 /tr/bask%C4%B1l%C4%B1-fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p226931698.html
+/tr/bask%C4%B1l%C4%B1-fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p237552611.html
 /tr/bask%C4%B1l%C4%B1-fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p237552612.html
 /tr/bask%C4%B1l%C4%B1-fitilli-kuma%C5%9F-tote-%C3%A7anta-c0p226931667.html
 /tr/bask%C4%B1l%C4%B1-geni%C5%9F-pa%C3%A7a-e%C5%9Fofman-alt%C4%B1-c0p243958883.html
@@ -994,6 +1008,7 @@
 /tr/bask%C4%B1l%C4%B1-k%C4%B1sa-kollu-relaxed-fit-ti%C5%9F%C3%B6rt-c0p233886482.html
 /tr/bask%C4%B1l%C4%B1-k%C4%B1sa-kollu-ti%C5%9F%C3%B6rt-c0p226931757.html
 /tr/bask%C4%B1l%C4%B1-k%C4%B1sa-kollu-ti%C5%9F%C3%B6rt-c0p231022096.html
+/tr/bask%C4%B1l%C4%B1-k%C4%B1sa-kollu-ti%C5%9F%C3%B6rt-c0p236214008.html
 /tr/bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p226926736.html
 /tr/bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p226926737.html
 /tr/bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p226927106.html
@@ -1005,7 +1020,6 @@
 /tr/bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p233590610.html
 /tr/bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p238450963.html
 /tr/bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p238450968.html
-/tr/bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p238451089.html
 /tr/bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p238451277.html
 /tr/bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p238451745.html
 /tr/bask%C4%B1l%C4%B1-kargo-bermuda-%C5%9Fort-c0p240127751.html
@@ -1056,8 +1070,10 @@
 /tr/bask%C4%B1l%C4%B1-uzun-kollu-d%C3%BC%C4%9Fmeli-yaka-ti%C5%9F%C3%B6rt-c0p232076805.html
 /tr/bask%C4%B1l%C4%B1-uzun-kollu-d%C3%BC%C4%9Fmeli-yaka-ti%C5%9F%C3%B6rt-c0p243958889.html
 /tr/bask%C4%B1l%C4%B1-uzun-kollu-d%C3%BC%C4%9Fmeli-yaka-ti%C5%9F%C3%B6rt-c0p243958890.html
+/tr/bask%C4%B1l%C4%B1-uzun-kollu-d%C3%BC%C4%9Fmeli-yaka-ti%C5%9F%C3%B6rt-c0p245330474.html
 /tr/bask%C4%B1l%C4%B1-uzun-kollu-g%C3%B6mlek-c0p227741821.html
 /tr/bask%C4%B1l%C4%B1-uzun-kollu-g%C3%B6mlek-c0p241396367.html
+/tr/bask%C4%B1l%C4%B1-uzun-kollu-g%C3%B6mlek-c0p245329932.html
 /tr/bask%C4%B1l%C4%B1-uzun-kollu-ti%C5%9F%C3%B6rt-c0p233488858.html
 /tr/bask%C4%B1l%C4%B1-v-yaka-ti%C5%9F%C3%B6rt-c0p226927130.html
 /tr/bask%C4%B1l%C4%B1-ve-distressed-detayl%C4%B1-%C5%9Fapka-c0p230006382.html
@@ -1065,6 +1081,7 @@
 /tr/bebe-yaka-k%C4%B1sa-kollu-g%C3%B6mlek-c0p226931248.html
 /tr/bebe-yaka-k%C4%B1sa-kollu-g%C3%B6mlek-c0p235801206.html
 /tr/belden-b%C3%BCzg%C3%BCl%C3%BC-suni-deri-ceket-c0p227120984.html
+/tr/belden-b%C3%BCzg%C3%BCl%C3%BC-suni-deri-ceket-c0p245329875.html
 /tr/beli-ba%C4%9Flamal%C4%B1-mini-%C5%9Fort-etek-c0p229730145.html
 /tr/beli-ba%C4%9Flamal%C4%B1-mini-%C5%9Fort-etek-c0p229730146.html
 /tr/beli-ba%C4%9Flamal%C4%B1-mini-%C5%9Fort-etek-c0p230327954.html
@@ -1087,6 +1104,7 @@
 /tr/beli-lastikli-straight-fit-pantolon-c0p230327854.html
 /tr/benekli-%C3%A7apraz-baggy-fit-pantolon-c0p243958926.html
 /tr/bengal-kuma%C5%9F-flare-fit-pantolon-c0p226926597.html
+/tr/bengal-kuma%C5%9F-flare-fit-pantolon-c0p237553172.html
 /tr/bengal-kuma%C5%9F-korse-%C3%BCst-c0p229730014.html
 /tr/bengalin-%C5%9Fort,-d%C3%BC%C4%9Fmeli-c0p227381988.html
 /tr/bengalin-korse-tarz%C4%B1-%C3%BCst-c0p229730012.html
@@ -1117,6 +1135,7 @@
 /tr/bisiklet-yaka-bask%C4%B1l%C4%B1-sweatshirt-c0p233590602.html
 /tr/bisiklet-yaka-bask%C4%B1l%C4%B1-sweatshirt-c0p233590603.html
 /tr/bisiklet-yaka-bask%C4%B1l%C4%B1-sweatshirt-c0p243958876.html
+/tr/bisiklet-yaka-bask%C4%B1l%C4%B1-sweatshirt-c0p244572225.html
 /tr/bisiklet-yaka-boxy-fit-kazak-c0p226931700.html
 /tr/bisiklet-yaka-boxy-fit-kazak-c0p226931701.html
 /tr/bisiklet-yaka-boxy-fit-kazak-c0p226931702.html
@@ -1134,6 +1153,7 @@
 /tr/bisiklet-yaka-boxy-fit-kazak-c0p245329704.html
 /tr/bisiklet-yaka-boxy-fit-kazak-c0p245330226.html
 /tr/bisiklet-yaka-boxy-fit-kazak-c0p245330227.html
+/tr/bisiklet-yaka-boxy-fit-kazak-c0p245330467.html
 /tr/bisiklet-yaka-boxy-fit-out-of-core-sweatshirt-c0p233590598.html
 /tr/bisiklet-yaka-boxy-fit-out-of-core-sweatshirt-c0p244572139.html
 /tr/bisiklet-yaka-boxy-fit-out-of-core-sweatshirt-c0p244572612.html
@@ -1149,6 +1169,7 @@
 /tr/bisiklet-yaka-kazak-c0p226931239.html
 /tr/bisiklet-yaka-kazak-c0p231517319.html
 /tr/bisiklet-yaka-kazak-c0p236213953.html
+/tr/bisiklet-yaka-kazak-c0p238348330.html
 /tr/bisiklet-yaka-kazak-c0p242077217.html
 /tr/bisiklet-yaka-kazak-c0p242077219.html
 /tr/bisiklet-yaka-kazak-c0p244572193.html
@@ -1172,6 +1193,8 @@
 /tr/bisiklet-yaka-reglan-kol-kazak-c0p226927161.html
 /tr/bisiklet-yaka-reglan-kollu-kazak-c0p226927160.html
 /tr/bisiklet-yaka-reglan-kollu-kazak-c0p226927162.html
+/tr/bisiklet-yaka-reglan-kollu-kazak-c0p236554533.html
+/tr/bisiklet-yaka-reglan-kollu-kazak-c0p238451565.html
 /tr/bisiklet-yaka-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-h%C4%B1rka-c0p228192797.html
 /tr/bisiklet-yaka-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-h%C4%B1rka-c0p228192798.html
 /tr/bisiklet-yaka-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-h%C4%B1rka-c0p245329692.html
@@ -1187,8 +1210,8 @@
 /tr/bisiklet-yaka-sweatshirt-c0p241489006.html
 /tr/bisiklet-yaka-sweatshirt-c0p241489007.html
 /tr/bisiklet-yaka-triko-s%C3%BCveter-c0p226927069.html
+/tr/bisiklet-yaka-triko-s%C3%BCveter-c0p238451669.html
 /tr/bisiklet-yaka-triko-yelek-c0p226927070.html
-/tr/bisiklet-yaka-triko-yelek-c0p238451720.html
 /tr/bisiklet-yaka-yamal%C4%B1-sweatshirt-c0p233420891.html
 /tr/bisiklet-yaka-yamal%C4%B1-sweatshirt-c0p233420892.html
 /tr/bisiklet-yaka-yamal%C4%B1-sweatshirt-c0p233420893.html
@@ -1302,6 +1325,7 @@
 /tr/boxy-mayo-c0p230328527.html
 /tr/boxy-uzun-kollu-g%C3%B6mlek-c0p231799599.html
 /tr/boya-efektli-y%C4%B1kamal%C4%B1-loose-fit-jean-c0p227263452.html
+/tr/boya-efektli-y%C4%B1kamal%C4%B1-loose-fit-jean-c0p240128002.html
 /tr/brezilya-i%CC%87%C5%9Flemeli-%C5%9Fapka-c0p229737032.html
 /tr/brezilya-modeli-bikini-alt%C4%B1-c0p229736892.html
 /tr/brezilya-modeli-halkal%C4%B1-bikini-alt%C4%B1-c0p229736864.html
@@ -1316,6 +1340,7 @@
 /tr/burun-tokal%C4%B1-kemer-c0p236213935.html
 /tr/casual-bilekte-bot-c0p228309063.html
 /tr/casual-bilekte-bot-c0p245330417.html
+/tr/cep-detayl%C4%B1-d%C3%BCz-bot-c0p226926793.html
 /tr/charm-bilekte-spor-ayakkab%C4%B1-c0p226926761.html
 /tr/charm-bilekte-spor-ayakkab%C4%B1-c0p238298521.html
 /tr/charms-detayl%C4%B1-xl-platformlu-spor-ayakkab%C4%B1-c0p242077530.html
@@ -1337,6 +1362,7 @@
 /tr/culotte-bikini-alt%C4%B1-c0p231041514.html
 /tr/d%C3%B6k%C3%BCml%C3%BC-f%C4%B1rf%C4%B1rl%C4%B1-ti%C5%9F%C3%B6rt-c0p232554431.html
 /tr/d%C3%B6k%C3%BCml%C3%BC-f%C4%B1rf%C4%B1rl%C4%B1-ti%C5%9F%C3%B6rt-c0p240128376.html
+/tr/d%C3%B6k%C3%BCml%C3%BC-pullu-dantel-%C5%9Fort-c0p245329982.html
 /tr/d%C3%B6k%C3%BCml%C3%BC-pullu-dantel-%C5%9Fort-c0p245330155.html
 /tr/d%C3%B6k%C3%BCml%C3%BC-pullu-dantelli-%C5%9Fort-c0p231417644.html
 /tr/d%C3%B6k%C3%BCml%C3%BC-uzun-kollu-g%C3%B6mlek-c0p240128368.html
@@ -1357,10 +1383,8 @@
 /tr/d%C3%BC%C4%9F%C3%BCm-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p226926859.html
 /tr/d%C3%BC%C4%9Fme-detayl%C4%B1-bisiklet-yaka-kazak-c0p227741815.html
 /tr/d%C3%BC%C4%9Fme-detayl%C4%B1-bisiklet-yaka-kazak-c0p227741816.html
-/tr/d%C3%BC%C4%9Fme-detayl%C4%B1-bisiklet-yaka-kazak-c0p236554393.html
 /tr/d%C3%BC%C4%9Fme-detayl%C4%B1-blazer-ceket-c0p226931227.html
-/tr/d%C3%BC%C4%9Fme-detayl%C4%B1-blazer-ceket-c0p242077288.html
-/tr/d%C3%BC%C4%9Fme-detayl%C4%B1-blazer-ceket-c0p244456138.html
+/tr/d%C3%BC%C4%9Fme-detayl%C4%B1-blazer-ceket-c0p245329977.html
 /tr/d%C3%BC%C4%9Fme-detayl%C4%B1-geni%C5%9F-pa%C3%A7a-jean-c0p230270424.html
 /tr/d%C3%BC%C4%9Fme-detayl%C4%B1-mini-jakarl%C4%B1-kuma%C5%9F-%C5%9Fort-c0p226931819.html
 /tr/d%C3%BC%C4%9Fme-detayl%C4%B1-mini-jakarl%C4%B1-kuma%C5%9F-%C5%9Fort-c0p236213484.html
@@ -1378,6 +1402,7 @@
 /tr/d%C3%BC%C4%9Fmeli-denim-ceket-c0p238451479.html
 /tr/d%C3%BC%C4%9Fmeli-denim-g%C3%B6mlek-c0p227043407.html
 /tr/d%C3%BC%C4%9Fmeli-denim-g%C3%B6mlek-c0p245330220.html
+/tr/d%C3%BC%C4%9Fmeli-denim-g%C3%B6mlek-c0p245330476.html
 /tr/d%C3%BC%C4%9Fmeli-dokuma-blazer-ceket-c0p245329757.html
 /tr/d%C3%BC%C4%9Fmeli-flare-fit-pantolon-c0p227229909.html
 /tr/d%C3%BC%C4%9Fmeli-flare-fit-pantolon-c0p245329671.html
@@ -1412,7 +1437,6 @@
 /tr/d%C3%BC%C4%9Fmeli-triko-tozluk-c0p236919371.html
 /tr/d%C3%BC%C4%9Fmeli-v-yaka-kazak-c0p232554433.html
 /tr/d%C3%BC%C4%9Fmeli-v-yaka-kazak-c0p233109727.html
-/tr/d%C3%BC%C4%9Fmeli-v-yaka-kazak-c0p242077293.html
 /tr/d%C3%BC%C4%9Fmeli-yaka-dantelli-ask%C4%B1l%C4%B1-top-c0p229723074.html
 /tr/d%C3%BC%C4%9Fmeli-yaka-dantelli-ask%C4%B1l%C4%B1-top-c0p229723075.html
 /tr/d%C3%BC%C4%9Fmeli-yaka-dantelli-ask%C4%B1l%C4%B1-top-c0p229723077.html
@@ -1438,12 +1462,15 @@
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-baggy-barrel-fit-jean-c0p226926937.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-baggy-barrel-fit-jean-c0p227421702.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-baggy-barrel-fit-jean-c0p228202947.html
+/tr/d%C3%BC%C5%9F%C3%BCk-bel-baggy-barrel-fit-jean-c0p230329737.html
+/tr/d%C3%BC%C5%9F%C3%BCk-bel-baggy-barrel-fit-jean-c0p236554885.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-barrel-fit-jean-c0p226926881.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-barrel-fit-jean-c0p226926882.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-barrel-fit-jean-c0p226926883.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-barrel-fit-jean-c0p226926884.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-barrel-fit-jean-c0p240127909.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-barrel-fit-jean-c0p244572203.html
+/tr/d%C3%BC%C5%9F%C3%BCk-bel-barrel-fit-jean-c0p245330452.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-barrel-jean-c0p226926936.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-barrel-jean-c0p226931654.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-barrel-jean-c0p232227374.html
@@ -1452,7 +1479,6 @@
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-bootcut-jean-c0p229730095.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-bootcut-jean-c0p229730096.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-bootcut-jean-c0p229730097.html
-/tr/d%C3%BC%C5%9F%C3%BCk-bel-bootcut-jean-c0p230327613.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-bootcut-jean-c0p230328068.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-bootcut-jean-c0p231041451.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-bootcut-jean-c0p234324938.html
@@ -1484,14 +1510,13 @@
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-i%C5%9Flemeli-i%CC%87spanyol-pa%C3%A7a-jean-c0p229723157.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-i%C5%9Flemeli-i%CC%87spanyol-pa%C3%A7a-jean-c0p230327622.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-i%C5%9Flemeli-i%CC%87spanyol-pa%C3%A7a-jean-c0p231041464.html
-/tr/d%C3%BC%C5%9F%C3%BCk-bel-i%C5%9Flemeli-i%CC%87spanyol-pa%C3%A7a-jean-c0p237736592.html
-/tr/d%C3%BC%C5%9F%C3%BCk-bel-i%C5%9Flemeli-i%CC%87spanyol-pa%C3%A7a-jean-c0p238136092.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-parlak-geni%C5%9F-pa%C3%A7a-jean-c0p231834573.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-pullu-straight-fit-jean-c0p234910894.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-slim-fit-bootcut-jean-c0p226926784.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-slim-fit-bootcut-jean-c0p231042284.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-slim-fit-bootcut-jean-c0p240128187.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-slim-fit-jean-c0p227269137.html
+/tr/d%C3%BC%C5%9F%C3%BCk-bel-slim-fit-jean-c0p245329796.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-slim-fit-pantolon-c0p229350180.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-slim-fit-pantolon-c0p242077765.html
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-slim-fit-pantolon-c0p243743727.html
@@ -1519,11 +1544,12 @@
 /tr/d%C3%BC%C5%9F%C3%BCk-bel-wide-leg-jean-c0p245330267.html
 /tr/d%C3%BCz-bel-suni-deri-slim-fit-pantolon-c0p229350165.html
 /tr/d%C3%BCz-bel-suni-deri-slim-fit-pantolon-c0p229710775.html
+/tr/d%C3%BCz-bel-suni-deri-slim-fit-pantolon-c0p238451212.html
 /tr/d%C3%BCz-bel-suni-deri-slim-fit-pantolon-c0p245330229.html
+/tr/d%C3%BCz-bel-suni-deri-slim-fit-pantolon-c0p245330455.html
 /tr/d%C3%BCz-bere-c0p245329763.html
 /tr/d%C3%BCz-biker-slouchy-bot-c0p240128452.html
 /tr/d%C3%BCz-deri%CC%87-tokali-bot-c0p235801199.html
-/tr/d%C3%BCz-deri%CC%87-tokali-bot-c0p236554430.html
 /tr/d%C3%BCz-deri-kovboy-%C3%A7izme-c0p226931355.html
 /tr/d%C3%BCz-deri-kovboy-%C3%A7izme-c0p238450930.html
 /tr/d%C3%BCz-kovboy-%C3%A7izme-c0p226931291.html
@@ -1536,6 +1562,8 @@
 /tr/d%C3%BCz-parmak-aras%C4%B1-sandalet-c0p233573502.html
 /tr/d%C3%BCz-renk-kravat-c0p226926698.html
 /tr/d%C3%BCz-slouchy-biker-bot-c0p226927013.html
+/tr/d%C3%BCz-tabanl%C4%B1,-cepli-%C3%A7izme-c0p238451399.html
+/tr/d%C3%BCz-tabanl%C4%B1,-cepli-%C3%A7izme-c0p238451421.html
 /tr/d%C3%BCz-trouser-%C3%A7izme-c0p226931404.html
 /tr/d%C3%BCz-trouser-bot-c0p230065037.html
 /tr/d%C3%BCz-trouser-bot-c0p238451422.html
@@ -1559,6 +1587,9 @@
 /tr/dancer-pamuklu-jogger-fit-pantolon-c0p233573645.html
 /tr/dancer-pamuklu-jogger-fit-pantolon-c0p233573667.html
 /tr/dancer-pamuklu-jogger-fit-pantolon-c0p238450864.html
+/tr/dancer-pamuklu-jogger-fit-pantolon-c0p238450920.html
+/tr/dancer-pamuklu-jogger-fit-pantolon-c0p238451158.html
+/tr/dancer-pamuklu-jogger-fit-pantolon-c0p245330275.html
 /tr/dantel-%C3%BC%C3%A7gen-bikini-%C3%BCst%C3%BC-c0p226927173.html
 /tr/dantel-%C3%BC%C3%A7gen-bikini-%C3%BCst%C3%BC-c0p234324903.html
 /tr/dantel-ask%C4%B1l%C4%B1-midi-elbise-c0p230141770.html
@@ -1566,7 +1597,6 @@
 /tr/dantel-ask%C4%B1l%C4%B1-romantik-mini-elbise-c0p226927054.html
 /tr/dantel-ask%C4%B1l%C4%B1-romantik-mini-elbise-c0p237553144.html
 /tr/dantel-ask%C4%B1l%C4%B1-romantik-tulum-c0p226931392.html
-/tr/dantel-ask%C4%B1l%C4%B1-romantik-tulum-c0p237552677.html
 /tr/dantel-detayl%C4%B1-desenli-midi-elbise-c0p229736905.html
 /tr/dantel-detayl%C4%B1-desenli-midi-elbise-c0p229736906.html
 /tr/dantel-detayl%C4%B1-desenli-midi-elbise-c0p229736907.html
@@ -1579,7 +1609,6 @@
 /tr/dantel-pullu-mini-etek-c0p229730478.html
 /tr/dantel-pullu-mini-etek-c0p229730479.html
 /tr/dantel-pullu-mini-etek-c0p230065243.html
-/tr/dantel-pullu-mini-etek-c0p230328875.html
 /tr/dantel-pullu-mini-etek-c0p230329778.html
 /tr/dantel-pullu-mini-etek-c0p230329892.html
 /tr/dantel-pullu-mini-etek-c0p231042122.html
@@ -1589,8 +1618,8 @@
 /tr/dantelli,-pullu,-ince-ask%C4%B1l%C4%B1-top-c0p235045387.html
 /tr/dantelli,-pullu,-ince-ask%C4%B1l%C4%B1-top-c0p245329900.html
 /tr/dantelli,-pullu,-ince-ask%C4%B1l%C4%B1-top-c0p245329901.html
-/tr/dantelli,-pullu,-ince-ask%C4%B1l%C4%B1-top-c0p245330163.html
 /tr/dantelli,-pullu,-ince-ask%C4%B1l%C4%B1-top-c0p245330265.html
+/tr/dantelli,-pullu,-ince-ask%C4%B1l%C4%B1-top-c0p245330515.html
 /tr/dantelli-ask%C4%B1l%C4%B1-body-c0p226926696.html
 /tr/dantelli-ask%C4%B1l%C4%B1-body-c0p226926697.html
 /tr/dantelli-ask%C4%B1l%C4%B1-body-c0p229736860.html
@@ -1614,6 +1643,9 @@
 /tr/dantelli-ask%C4%B1l%C4%B1-top-c0p230141773.html
 /tr/dantelli-ask%C4%B1l%C4%B1-top-c0p230141774.html
 /tr/dantelli-ask%C4%B1l%C4%B1-top-c0p230141775.html
+/tr/dantelli-ask%C4%B1l%C4%B1-top-c0p236213929.html
+/tr/dantelli-ask%C4%B1l%C4%B1-top-c0p236554517.html
+/tr/dantelli-ask%C4%B1l%C4%B1-top-c0p238451706.html
 /tr/dantelli-ask%C4%B1l%C4%B1-top-c0p240128109.html
 /tr/dantelli-b%C3%BCr%C3%BCmc%C3%BCk-%C5%9Fort-c0p226927104.html
 /tr/dantelli-b%C3%BCr%C3%BCmc%C3%BCk-%C5%9Fort-c0p236213997.html
@@ -1626,11 +1658,12 @@
 /tr/dantelli-halter-midi-elbise-c0p233799899.html
 /tr/dantelli-korse-%C3%BCst-c0p226926919.html
 /tr/dantelli-korse-%C3%BCst-c0p228633800.html
-/tr/dantelli-korse-%C3%BCst-c0p237552605.html
 /tr/dantelli-korse-ask%C4%B1l%C4%B1-top-c0p237552657.html
 /tr/dantelli-korse-halter-top-c0p228633828.html
 /tr/dantelli-korse-halter-top-c0p228633829.html
 /tr/dantelli-korse-halter-top-c0p228633830.html
+/tr/dantelli-korse-halter-top-c0p237553159.html
+/tr/dantelli-korse-halter-top-c0p237553160.html
 /tr/dantelli-korse-halter-top-c0p237553161.html
 /tr/dantelli-midi-elbise-c0p229730060.html
 /tr/dantelli-midi-elbise-c0p229730061.html
@@ -1664,8 +1697,8 @@
 /tr/dar-kesim-reglan-kollu-ti%C5%9F%C3%B6rt-c0p234325028.html
 /tr/dar-kesim-reglan-kollu-ti%C5%9F%C3%B6rt-c0p234325038.html
 /tr/dar-kesim-reglan-kollu-ti%C5%9F%C3%B6rt-c0p235339727.html
+/tr/dar-kesim-reglan-kollu-ti%C5%9F%C3%B6rt-c0p236554335.html
 /tr/dar-kesim-topuklu-%C3%A7izme-c0p229737392.html
-/tr/dar-kesim-topuklu-%C3%A7izme-c0p230064521.html
 /tr/dar-kesim-topuklu-bot-c0p226926625.html
 /tr/dar-kesim-uzun-kollu-saten-g%C3%B6mlek-c0p236877202.html
 /tr/dar-kon%C3%A7lu-topuklu-%C3%A7i%CC%87zme-c0p229633286.html
@@ -1716,6 +1749,7 @@
 /tr/deri%CC%87-topuklu-bot-c0p229737391.html
 /tr/deri%CC%87-topuklu-bot-c0p230064955.html
 /tr/deri-biker-ceket-c0p229730573.html
+/tr/deri-biker-ceket-c0p230328690.html
 /tr/deri-cepli-ceket-c0p229730542.html
 /tr/deri-cepli-ceket-c0p244572712.html
 /tr/deri-cepli-kemer-c0p229736888.html
@@ -1761,6 +1795,7 @@
 /tr/desenli-c%C3%BCzdan-c0p229016055.html
 /tr/desenli-dantelli-t%C3%BCl-mini-elbise-c0p240147193.html
 /tr/desenli-fitilli-kuma%C5%9F-%C3%A7anta-c0p226931249.html
+/tr/desenli-fitilli-kuma%C5%9F-%C3%A7anta-c0p238451389.html
 /tr/desenli-halter-top-c0p229723123.html
 /tr/desenli-halter-yaka-top-c0p226931811.html
 /tr/desenli-halter-yaka-top-c0p226931812.html
@@ -1776,6 +1811,7 @@
 /tr/desenli-tokal%C4%B1-kemer-c0p226927115.html
 /tr/desenli-tokal%C4%B1-kemer-c0p229016052.html
 /tr/desenli-tokal%C4%B1-kemer-c0p229016054.html
+/tr/desenli-tokal%C4%B1-kemer-c0p237553129.html
 /tr/detayl%C4%B1-kese-%C3%A7anta-c0p226931268.html
 /tr/di%CC%87ki%CC%87%C5%9Fli%CC%87-burun-blucher-c0p226931624.html
 /tr/di%CC%87ki%CC%87%C5%9Fli%CC%87-burun-blucher-c0p238451594.html
@@ -1784,6 +1820,7 @@
 /tr/dik-yaka-d%C3%BC%C4%9Fmeli-h%C4%B1rka-c0p228236235.html
 /tr/dik-yaka-d%C3%BC%C4%9Fmeli-h%C4%B1rka-c0p229350166.html
 /tr/dik-yaka-d%C3%BC%C4%9Fmeli-h%C4%B1rka-c0p245330196.html
+/tr/dik-yaka-d%C3%BC%C4%9Fmeli-h%C4%B1rka-c0p245330458.html
 /tr/dik-yaka-fermuarl%C4%B1-sweatshirt-c0p226927206.html
 /tr/dik-yaka-fermuarl%C4%B1-sweatshirt-c0p226927207.html
 /tr/dik-yaka-fermuarl%C4%B1-sweatshirt-c0p226927208.html
@@ -1792,7 +1829,6 @@
 /tr/dik-yaka-fermuarl%C4%B1-sweatshirt-c0p234325063.html
 /tr/dik-yaka-fermuarl%C4%B1-sweatshirt-c0p238450975.html
 /tr/dik-yaka-fermuarl%C4%B1-sweatshirt-c0p240127911.html
-/tr/dik-yaka-fermuarl%C4%B1-sweatshirt-c0p240127946.html
 /tr/dik-yaka-k%C4%B1sa-kollu-kazak-c0p227732134.html
 /tr/dik-yaka-kapitone-ceket-c0p229736840.html
 /tr/dik-yaka-kapitone-ceket-c0p229736841.html
@@ -1814,6 +1850,7 @@
 /tr/dik-yaka-tren%C3%A7kot-c0p229723082.html
 /tr/dik-yaka-triko-pon%C3%A7o-c0p231378828.html
 /tr/dik-yaka-triko-pon%C3%A7o-c0p231378829.html
+/tr/dik-yaka-triko-pon%C3%A7o-c0p243743747.html
 /tr/dik-yaka-triko-pon%C3%A7o-c0p245329687.html
 /tr/dik-yaka-triko-s%C3%BCveter-c0p227753565.html
 /tr/dik-yaka-triko-s%C3%BCveter-c0p227753566.html
@@ -1836,6 +1873,7 @@
 /tr/diki%C5%9F-detayl%C4%B1-balloon-fit-jean-c0p228453287.html
 /tr/diki%C5%9F-detayl%C4%B1-denim-bermuda-%C5%9Fort-c0p234044310.html
 /tr/diki%C5%9F-detayl%C4%B1-denim-bermuda-%C5%9Fort-c0p244572643.html
+/tr/diki%C5%9F-detayl%C4%B1-denim-bermuda-%C5%9Fort-c0p245330462.html
 /tr/distressed-arkas%C4%B1-tokal%C4%B1-balloon-fit-jean-c0p230328432.html
 /tr/distressed-barrel-fit-loose-fit-jean-c0p232765279.html
 /tr/distressed-barrel-fit-loose-fit-jean-c0p232765280.html
@@ -1934,14 +1972,12 @@
 /tr/ekose-etek-%C3%BCst%C3%BC-c0p226927256.html
 /tr/ekose-etek-%C3%BCst%C3%BC-c0p237552632.html
 /tr/ekose-midi-etek-c0p231417645.html
-/tr/ekose-midi-etek-c0p237553168.html
 /tr/ekoseli-fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p234811112.html
 /tr/ekoseli-fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p244572099.html
 /tr/ekoseli-kap%C3%BC%C5%9Fonlu-ceket-c0p226927135.html
 /tr/ekoseli-kap%C3%BC%C5%9Fonlu-ceket-c0p240127895.html
 /tr/ekstra-uzun-%C3%B6rg%C3%BC-atk%C4%B1-c0p239258024.html
 /tr/ekstra-uzun-triko-atk%C4%B1-c0p230270427.html
-/tr/ekstra-uzun-triko-atk%C4%B1-c0p245330270.html
 /tr/elastik-belli-kargo-bermuda-%C5%9Fort-c0p226931261.html
 /tr/elastik-belli-kargo-bermuda-%C5%9Fort-c0p226931262.html
 /tr/elastik-belli-kargo-bermuda-%C5%9Fort-c0p229336852.html
@@ -1962,7 +1998,6 @@
 /tr/eva-s%C3%BCet-nefes-alabilir-kuma%C5%9Fl%C4%B1-fuseau-tayt-c0p243958884.html
 /tr/eva-s%C3%BCet-teknik-%C5%9Fort-%E2%80%93-nefes-alabilir,-h%C4%B1zl%C4%B1-kuruyan-c0p227962159.html
 /tr/f%C4%B1rf%C4%B1rl%C4%B1-ask%C4%B1l%C4%B1-midi-elbise-c0p233799907.html
-/tr/f%C4%B1rf%C4%B1rl%C4%B1-ask%C4%B1l%C4%B1-midi-elbise-c0p238451263.html
 /tr/f%C4%B1rf%C4%B1rl%C4%B1-ask%C4%B1l%C4%B1-top-c0p228809192.html
 /tr/f%C4%B1rf%C4%B1rl%C4%B1-ask%C4%B1l%C4%B1-top-c0p228809193.html
 /tr/f%C4%B1rf%C4%B1rl%C4%B1-dantel-ceket-c0p227229887.html
@@ -1979,17 +2014,16 @@
 /tr/f%C4%B1rf%C4%B1rl%C4%B1-suni-deri-mini-etek-c0p228096715.html
 /tr/f%C4%B1rf%C4%B1rl%C4%B1-suni-deri-mini-etek-c0p243743745.html
 /tr/f%C4%B1rf%C4%B1rl%C4%B1-t%C3%BCl-body-c0p226931529.html
+/tr/f%C4%B1rf%C4%B1rl%C4%B1-t%C3%BCl-body-c0p236214013.html
 /tr/f%C4%B1rf%C4%B1rl%C4%B1-t%C3%BCl-uzun-etek-c0p235947714.html
 /tr/f%C4%B1rf%C4%B1rl%C4%B1-t%C3%BCl-uzun-etek-c0p243743246.html
 /tr/f%C4%B1rf%C4%B1rl%C4%B1-uzun-kollu-ti%C5%9F%C3%B6rt-c0p233903168.html
 /tr/f%C4%B1rf%C4%B1rl%C4%B1-uzun-kollu-ti%C5%9F%C3%B6rt-c0p235500703.html
-/tr/f%C4%B1rf%C4%B1rl%C4%B1-uzun-kollu-ti%C5%9F%C3%B6rt-c0p238451677.html
 /tr/f%C4%B1rf%C4%B1rl%C4%B1-uzun-kollu-ti%C5%9F%C3%B6rt-c0p243743666.html
 /tr/farkl%C4%B1-boyutlarda-2&apos;li-bileklik-seti-c0p238451674.html
 /tr/fermuar-detayl%C4%B1-mini-%C3%A7anta-c0p227222217.html
 /tr/fermuarl%C4%B1,-dar-kesim,-uzun-kollu-g%C3%B6mlek-c0p232637586.html
 /tr/fermuarl%C4%B1,-dar-kesim,-uzun-kollu-g%C3%B6mlek-c0p232637587.html
-/tr/fermuarl%C4%B1,-dar-kesim,-uzun-kollu-g%C3%B6mlek-c0p245329745.html
 /tr/fermuarl%C4%B1-%C3%A7anta-c0p229723169.html
 /tr/fermuarl%C4%B1-%C3%A7anta-c0p229723170.html
 /tr/fermuarl%C4%B1-%C3%A7anta-c0p229723171.html
@@ -1997,20 +2031,23 @@
 /tr/fermuarl%C4%B1-%C3%A7anta-c0p244572707.html
 /tr/fermuarl%C4%B1-bask%C4%B1l%C4%B1-sweatshirt-c0p230182178.html
 /tr/fermuarl%C4%B1-bask%C4%B1l%C4%B1-sweatshirt-c0p242077844.html
+/tr/fermuarl%C4%B1-bask%C4%B1l%C4%B1-sweatshirt-c0p245330465.html
 /tr/fermuarl%C4%B1-bomber-ceket-c0p233488855.html
 /tr/fermuarl%C4%B1-bomber-ceket-c0p233488856.html
+/tr/fermuarl%C4%B1-bomber-ceket-c0p245329954.html
+/tr/fermuarl%C4%B1-bomber-ceket-c0p245330485.html
 /tr/fermuarl%C4%B1-bowling-%C3%A7anta-c0p226931359.html
 /tr/fermuarl%C4%B1-bowling-%C3%A7anta-c0p227042040.html
 /tr/fermuarl%C4%B1-bowling-%C3%A7anta-c0p242078007.html
 /tr/fermuarl%C4%B1-boxy-fit-triko-h%C4%B1rka-c0p226931709.html
 /tr/fermuarl%C4%B1-boxy-fit-triko-h%C4%B1rka-c0p226931710.html
 /tr/fermuarl%C4%B1-boxy-fit-triko-h%C4%B1rka-c0p226931711.html
+/tr/fermuarl%C4%B1-boxy-fit-triko-h%C4%B1rka-c0p245330468.html
 /tr/fermuarl%C4%B1-dar-kesim-suni-deri-g%C3%B6mlek-c0p230006380.html
 /tr/fermuarl%C4%B1-dar-kesim-suni-deri-g%C3%B6mlek-c0p230006381.html
 /tr/fermuarl%C4%B1-dar-kesim-suni-deri-g%C3%B6mlek-c0p230928386.html
-/tr/fermuarl%C4%B1-dar-kesim-suni-deri-g%C3%B6mlek-c0p242077290.html
-/tr/fermuarl%C4%B1-dar-kesim-suni-deri-g%C3%B6mlek-c0p242077414.html
 /tr/fermuarl%C4%B1-dar-kesim-suni-deri-g%C3%B6mlek-c0p242077771.html
+/tr/fermuarl%C4%B1-dar-kesim-suni-deri-g%C3%B6mlek-c0p245330337.html
 /tr/fermuarl%C4%B1-denim-%C3%BCst-c0p227962139.html
 /tr/fermuarl%C4%B1-ekose-ceket-c0p226927131.html
 /tr/fermuarl%C4%B1-ekose-ceket-c0p231228264.html
@@ -2027,6 +2064,7 @@
 /tr/fermuarl%C4%B1-fitilli-h%C4%B1rka-c0p226931224.html
 /tr/fermuarl%C4%B1-i%C5%9Flemeli-kazak-c0p226931343.html
 /tr/fermuarl%C4%B1-i%C5%9Flemeli-kazak-c0p226931344.html
+/tr/fermuarl%C4%B1-i%C5%9Flemeli-kazak-c0p236554145.html
 /tr/fermuarl%C4%B1-i%C5%9Flemeli-kazak-c0p245329680.html
 /tr/fermuarl%C4%B1-k%C4%B1sa-kollu-g%C3%B6mlek-c0p229633285.html
 /tr/fermuarl%C4%B1-k%C4%B1sa-kollu-g%C3%B6mlek-c0p242077453.html
@@ -2060,8 +2098,6 @@
 /tr/fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p236554095.html
 /tr/fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p236554485.html
 /tr/fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p236554578.html
-/tr/fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p237552602.html
-/tr/fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p237552603.html
 /tr/fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p237552733.html
 /tr/fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p238451178.html
 /tr/fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p238451645.html
@@ -2098,7 +2134,6 @@
 /tr/fermuarl%C4%B1-yamal%C4%B1-sweatshirt-c0p238451595.html
 /tr/fermuarl%C4%B1-yamal%C4%B1-sweatshirt-c0p242077455.html
 /tr/fermuarl%C4%B1-yamal%C4%B1-sweatshirt-c0p242077722.html
-/tr/fi%CC%87le-babet-c0p230330073.html
 /tr/fi%CC%87yonklu-babet-c0p230600944.html
 /tr/fierce-savage-kiss-v%C3%BCcut-spreyi-250-ml-c0p229723168.html
 /tr/fierce-savage-kiss-v%C3%BCcut-spreyi-250-ml-c0p230329279.html
@@ -2122,6 +2157,7 @@
 /tr/file-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p231041850.html
 /tr/file-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p233573563.html
 /tr/file-detayl%C4%B1-%C4%B1%C5%9F%C4%B1lt%C4%B1l%C4%B1-ask%C4%B1l%C4%B1-top-c0p226927237.html
+/tr/file-detayl%C4%B1-%C4%B1%C5%9F%C4%B1lt%C4%B1l%C4%B1-ask%C4%B1l%C4%B1-top-c0p235339618.html
 /tr/fit-kesim-%C3%A7izgili-bisiklet-yaka-kazak-c0p226927142.html
 /tr/fitilli-kolsuz-ti%C5%9F%C3%B6rt-c0p229737120.html
 /tr/fitilli-kolsuz-ti%C5%9F%C3%B6rt-c0p229737122.html
@@ -2133,6 +2169,7 @@
 /tr/fitilli-kolsuz-ti%C5%9F%C3%B6rt-c0p235339712.html
 /tr/fitilli-kuma%C5%9F-%C5%9Fapka-c0p229730022.html
 /tr/fitilli-kuma%C5%9F-%C5%9Fapka-c0p230328303.html
+/tr/fitilli-kuma%C5%9F-%C5%9Fapka-c0p234325035.html
 /tr/fitilli-kuma%C5%9F-mini-elbise-c0p226927363.html
 /tr/fitilli-kuma%C5%9F-z%C4%B1mbal%C4%B1-%C5%9Fort-c0p229730119.html
 /tr/fitilli-kuma%C5%9F-z%C4%B1mbal%C4%B1-%C5%9Fort-c0p229730120.html
@@ -2141,6 +2178,7 @@
 /tr/fitilli-kuma%C5%9F-z%C4%B1mbal%C4%B1-%C5%9Fort-c0p230329901.html
 /tr/fitilli-kuma%C5%9F-z%C4%B1mbal%C4%B1-%C5%9Fort-c0p231815798.html
 /tr/fitilli-polo-yaka-kazak-c0p226926835.html
+/tr/fitilli-polo-yaka-kazak-c0p245330453.html
 /tr/fitilli-z%C4%B1mbal%C4%B1-%C5%9Fort-c0p230329354.html
 /tr/fitted-dik-yaka-rib-kazak-c0p227754023.html
 /tr/fitted-reglan-ti%C5%9F%C3%B6rt-c0p226927043.html
@@ -2184,6 +2222,7 @@
 /tr/funnel-yaka-pelerin-ceket-c0p226927151.html
 /tr/funnel-yaka-pelerin-ceket-c0p245329691.html
 /tr/funnel-yaka-pelerin-ceket-c0p245329779.html
+/tr/funnel-yaka-pelerin-ceket-c0p245329921.html
 /tr/funnel-yaka-pelerin-ceket-c0p245330211.html
 /tr/funnel-yaka-pelerin-ceket-c0p245330317.html
 /tr/funnel-yaka-suni-deri-kemerli-uzun-tren%C3%A7kot-c0p226926854.html
@@ -2222,14 +2261,16 @@
 /tr/geni%C5%9F-yaka-kazak-c0p226931730.html
 /tr/geni%C5%9F-yaka-kazak-c0p226931731.html
 /tr/geni%C5%9F-yaka-kazak-c0p231517323.html
+/tr/geni%C5%9F-yaka-kazak-c0p236554911.html
 /tr/geni%C5%9F-yaka-kazak-c0p240128094.html
 /tr/geni%C5%9F-yaka-kazak-c0p241489019.html
 /tr/geni%C5%9F-yaka-top-c0p229723019.html
 /tr/geni%C5%9F-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p231022112.html
 /tr/geni%C5%9F-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p231022114.html
 /tr/geni%C5%9F-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p231022115.html
-/tr/geni%C5%9F-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p241396425.html
+/tr/geni%C5%9F-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p236213496.html
 /tr/geni%C5%9F-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p245329685.html
+/tr/geni%C5%9F-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p245329918.html
 /tr/gofre-kuma%C5%9F-bask%C4%B1l%C4%B1-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p229737041.html
 /tr/gofre-kuma%C5%9F-bask%C4%B1l%C4%B1-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p229737045.html
 /tr/gofre-kuma%C5%9F-bask%C4%B1l%C4%B1-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p230328313.html
@@ -2261,6 +2302,7 @@
 /tr/grafik-desenli-kazak,-yar%C4%B1m-fermuar-c0p232765278.html
 /tr/grafik-desenli-kazak,-yar%C4%B1m-fermuar-c0p242077428.html
 /tr/grafik-desenli-triko-bere-c0p236228216.html
+/tr/grafik-desenli-triko-bere-c0p241396423.html
 /tr/grafik-desenli-yar%C4%B1m-fermuarl%C4%B1-kazak-c0p228633805.html
 /tr/grafik-geni%C5%9F-yaka-kazak-c0p226927287.html
 /tr/grafik-geni%C5%9F-yaka-kazak-c0p240127864.html
@@ -2272,6 +2314,7 @@
 /tr/hacimli-teknik-crop-pantolon-c0p227381994.html
 /tr/hacimli-teknik-crop-pantolon-c0p236554924.html
 /tr/hacimli-teknik-cropped-pantolon-c0p227381995.html
+/tr/hacimli-teknik-cropped-pantolon-c0p238451088.html
 /tr/hafif-kareli-ceket-c0p226926687.html
 /tr/hakim-yaka,-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-uzun-kollu-sweatshirt-c0p228626941.html
 /tr/hakim-yaka,-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-uzun-kollu-sweatshirt-c0p236554436.html
@@ -2334,6 +2377,7 @@
 /tr/halter-yaka-top-c0p229730677.html
 /tr/halter-yaka-top-c0p229730678.html
 /tr/halter-yaka-top-c0p230327813.html
+/tr/halter-yaka-top-c0p237552631.html
 /tr/hilary-duff-oversize-k%C4%B1sa-kollu-t-shirt-c0p233943367.html
 /tr/hilary-duff-oversize-k%C4%B1sa-kollu-t-shirt-c0p242077877.html
 /tr/i%C5%9F%C4%B1lt%C4%B1l%C4%B1-b%C3%BCzg%C3%BCl%C3%BC-v%C3%BCcuda-oturan-mini-elbise-c0p245330268.html
@@ -2372,6 +2416,7 @@
 /tr/i%CC%87%C5%9Flemeli-%C5%9Fapka-c0p230328934.html
 /tr/i%CC%87%C5%9Flemeli-%C5%9Fapka-c0p230420775.html
 /tr/i%CC%87%C5%9Flemeli-%C5%9Fapka-c0p231815900.html
+/tr/i%CC%87%C5%9Flemeli-%C5%9Fapka-c0p238451423.html
 /tr/i%CC%87%C5%9Flemeli-%C5%9Fapka-c0p240127949.html
 /tr/i%CC%87%C5%9Flemeli-%C5%9Fapka-c0p240127950.html
 /tr/i%CC%87%C5%9Flemeli-%C5%9Fapka-c0p242077322.html
@@ -2530,9 +2575,11 @@
 /tr/jakarl%C4%B1-kuma%C5%9F-sa%C3%A7akl%C4%B1-mini-etek-c0p235801182.html
 /tr/jakarl%C4%B1-kuma%C5%9F-saten-midi-elbise-c0p230006398.html
 /tr/jakarl%C4%B1-pantolon-c0p226927114.html
+/tr/jakarl%C4%B1-pantolon-c0p238136085.html
 /tr/jakarl%C4%B1-saten-midi-elbise-c0p230006399.html
 /tr/jakarl%C4%B1-saten-mini-elbise-c0p226926598.html
 /tr/jakarl%C4%B1-saten-mini-elbise-c0p226926599.html
+/tr/jakarl%C4%B1-saten-mini-elbise-c0p236213505.html
 /tr/jakarl%C4%B1-saten-mini-elbise-c0p236213507.html
 /tr/jartiyer-g%C3%B6r%C3%BCn%C3%BCml%C3%BC-bask%C4%B1l%C4%B1-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p229466055.html
 /tr/jartiyer-kemeri-efektli-bask%C4%B1l%C4%B1-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p237553153.html
@@ -2631,7 +2678,6 @@
 /tr/k%C3%BCrk-detayli-skate-spor-ayakkabi-c0p243743723.html
 /tr/k%C3%BCrk-kap%C3%BC%C5%9Fonlu-%C5%9Fi%C5%9Fme-ceket-c0p226931777.html
 /tr/k%C3%BCrk-kap%C3%BC%C5%9Fonlu-%C5%9Fi%C5%9Fme-ceket-c0p226931778.html
-/tr/k%C3%BCrk-kap%C3%BC%C5%9Fonlu-%C5%9Fi%C5%9Fme-ceket-c0p240128326.html
 /tr/k%C3%BCrk-kap%C3%BC%C5%9Fonlu-suni-deri-ceket-c0p226931763.html
 /tr/k%C3%BCrk-kap%C3%BC%C5%9Fonlu-suni-deri-ceket-c0p243743260.html
 /tr/k%C3%BCrk-kap%C3%BC%C5%9Fonlu-suni-deri-ceket-c0p245330217.html
@@ -2649,7 +2695,6 @@
 /tr/k%C3%BCrkl%C3%BC-yaka-ceket-c0p245330189.html
 /tr/k%C3%BCrkl%C3%BC-yaka-ceket-c0p245330303.html
 /tr/k%C4%B1sa-kesim-denim-ceket-c0p227263457.html
-/tr/k%C4%B1sa-kesim-denim-ceket-c0p242078054.html
 /tr/k%C4%B1sa-kollu,-bask%C4%B1l%C4%B1,-y%C4%B1kama-efektli-sweatshirt-c0p235036680.html
 /tr/k%C4%B1sa-kollu,-y%C4%B1kama-efektli,-nak%C4%B1%C5%9Fl%C4%B1-ti%C5%9F%C3%B6rt-c0p226927386.html
 /tr/k%C4%B1sa-kollu-%C3%A7izgili-g%C3%B6mlek-c0p229737232.html
@@ -2689,7 +2734,6 @@
 /tr/k%C4%B1sa-kollu-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p232359276.html
 /tr/k%C4%B1sa-kollu-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p233632269.html
 /tr/k%C4%B1sa-kollu-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p236233931.html
-/tr/k%C4%B1sa-kollu-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p237553169.html
 /tr/k%C4%B1sa-kollu-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p240127892.html
 /tr/k%C4%B1sa-kollu-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p240185691.html
 /tr/k%C4%B1sa-kollu-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p242077360.html
@@ -2747,6 +2791,7 @@
 /tr/k%C4%B1sa-kollu-boxy-zoo-york-x-bershka-t-shirt-c0p227222219.html
 /tr/k%C4%B1sa-kollu-d%C3%BC%C4%9Fmeli-kazak-c0p226927067.html
 /tr/k%C4%B1sa-kollu-d%C3%BC%C4%9Fmeli-kazak-c0p226927068.html
+/tr/k%C4%B1sa-kollu-d%C3%BC%C4%9Fmeli-kazak-c0p240128300.html
 /tr/k%C4%B1sa-kollu-d%C3%BC%C4%9Fmeli-mini-elbise-c0p231834568.html
 /tr/k%C4%B1sa-kollu-d%C3%BC%C4%9Fmeli-mini-elbise-c0p231834569.html
 /tr/k%C4%B1sa-kollu-d%C3%BC%C4%9Fmeli-yaka-ti%C5%9F%C3%B6rt-c0p229737128.html
@@ -2758,7 +2803,6 @@
 /tr/k%C4%B1sa-kollu-d%C3%BC%C4%9Fmeli-yaka-ti%C5%9F%C3%B6rt-c0p234325306.html
 /tr/k%C4%B1sa-kollu-d%C3%BC%C4%9Fmeli-yaka-ti%C5%9F%C3%B6rt-c0p234325307.html
 /tr/k%C4%B1sa-kollu-d%C3%BC%C4%9Fmeli-yaka-ti%C5%9F%C3%B6rt-c0p235339718.html
-/tr/k%C4%B1sa-kollu-dar-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p242077276.html
 /tr/k%C4%B1sa-kollu-dar-kesim-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p233632265.html
 /tr/k%C4%B1sa-kollu-dokulu-ti%C5%9F%C3%B6rt-c0p229737102.html
 /tr/k%C4%B1sa-kollu-dokulu-ti%C5%9F%C3%B6rt-c0p229737105.html
@@ -2789,6 +2833,7 @@
 /tr/k%C4%B1sa-kollu-kap%C3%BC%C5%9Fonlu-fermuarl%C4%B1-sweatshirt-c0p236554498.html
 /tr/k%C4%B1sa-kollu-kap%C3%BC%C5%9Fonlu-fermuarl%C4%B1-sweatshirt-c0p236554582.html
 /tr/k%C4%B1sa-kollu-kap%C3%BC%C5%9Fonlu-fermuarl%C4%B1-sweatshirt-c0p236554864.html
+/tr/k%C4%B1sa-kollu-kap%C3%BC%C5%9Fonlu-fermuarl%C4%B1-sweatshirt-c0p237552607.html
 /tr/k%C4%B1sa-kollu-katlamal%C4%B1-ti%C5%9F%C3%B6rt-c0p229737285.html
 /tr/k%C4%B1sa-kollu-katlamal%C4%B1-ti%C5%9F%C3%B6rt-c0p230329295.html
 /tr/k%C4%B1sa-kollu-klimt-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p226927167.html
@@ -2817,7 +2862,6 @@
 /tr/k%C4%B1sa-kollu-oversize-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p230141777.html
 /tr/k%C4%B1sa-kollu-oversize-simli-yaz%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p237441671.html
 /tr/k%C4%B1sa-kollu-pelerin-detayl%C4%B1-ti%C5%9F%C3%B6rt-c0p233903164.html
-/tr/k%C4%B1sa-kollu-pelerin-detayl%C4%B1-ti%C5%9F%C3%B6rt-c0p240128311.html
 /tr/k%C4%B1sa-kollu-pelerin-ti%C5%9F%C3%B6rt-c0p233903163.html
 /tr/k%C4%B1sa-kollu-pelerin-ti%C5%9F%C3%B6rt-c0p233903165.html
 /tr/k%C4%B1sa-kollu-pelerin-ti%C5%9F%C3%B6rt-c0p240127848.html
@@ -2841,6 +2885,7 @@
 /tr/k%C4%B1sa-kollu-poplin-g%C3%B6mlek-c0p229723140.html
 /tr/k%C4%B1sa-kollu-puantiyeli-t%C3%BCl-ti%C5%9F%C3%B6rt-c0p229466062.html
 /tr/k%C4%B1sa-kollu-puantiyeli-t%C3%BCl-ti%C5%9F%C3%B6rt-c0p237552647.html
+/tr/k%C4%B1sa-kollu-puantiyeli-t%C3%BCl-ti%C5%9F%C3%B6rt-c0p237552648.html
 /tr/k%C4%B1sa-kollu-puantiyeli-t%C3%BCl-ti%C5%9F%C3%B6rt-c0p237553154.html
 /tr/k%C4%B1sa-kollu-puantiyeli-t%C3%BCl-ti%C5%9F%C3%B6rt-c0p239400805.html
 /tr/k%C4%B1sa-kollu-racing-g%C3%B6mlek-c0p229737327.html
@@ -2851,6 +2896,7 @@
 /tr/k%C4%B1sa-kollu-reglan-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p230182177.html
 /tr/k%C4%B1sa-kollu-reglan-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p233109726.html
 /tr/k%C4%B1sa-kollu-reglan-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p236214028.html
+/tr/k%C4%B1sa-kollu-reglan-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p237552644.html
 /tr/k%C4%B1sa-kollu-regular-fit-ti%C5%9F%C3%B6rt-c0p229737322.html
 /tr/k%C4%B1sa-kollu-regular-fit-ti%C5%9F%C3%B6rt-c0p229737324.html
 /tr/k%C4%B1sa-kollu-regular-fit-ti%C5%9F%C3%B6rt-c0p229737325.html
@@ -2890,9 +2936,9 @@
 /tr/k%C4%B1sa-kollu-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p236213480.html
 /tr/k%C4%B1sa-kollu-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-triko-c0p226931470.html
 /tr/k%C4%B1sa-kollu-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-triko-c0p226931471.html
-/tr/k%C4%B1sa-kollu-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-triko-c0p240127878.html
 /tr/k%C4%B1sa-kollu-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-triko-kazak-c0p242077450.html
 /tr/k%C4%B1sa-kollu-scooby-doo-ti%C5%9F%C3%B6rt-c0p238524026.html
+/tr/k%C4%B1sa-kollu-scream-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p245329981.html
 /tr/k%C4%B1sa-kollu-spider-man-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p238644119.html
 /tr/k%C4%B1sa-kollu-spider-man-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p244572157.html
 /tr/k%C4%B1sa-kollu-spider-man-ti%C5%9F%C3%B6rt-c0p238646249.html
@@ -2905,7 +2951,6 @@
 /tr/k%C4%B1sa-kollu-spor-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p230328428.html
 /tr/k%C4%B1sa-kollu-spor-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p230329257.html
 /tr/k%C4%B1sa-kollu-spor-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p230329545.html
-/tr/k%C4%B1sa-kollu-spor-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p231042189.html
 /tr/k%C4%B1sa-kollu-t%C3%BCl-desenli-ti%C5%9F%C3%B6rt-c0p229466061.html
 /tr/k%C4%B1sa-kollu-t%C3%BCl-ti%C5%9F%C3%B6rt-c0p229466060.html
 /tr/k%C4%B1sa-kollu-teknik-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p230182174.html
@@ -2934,8 +2979,8 @@
 /tr/k%C4%B1sa-kollu-yungblud-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p226927211.html
 /tr/k%C4%B1sa-kruvaze-ka%C5%9Fe-ceket-c0p226931296.html
 /tr/k%C4%B1sa-kruvaze-ka%C5%9Fe-ceket-c0p226931297.html
+/tr/k%C4%B1sa-kruvaze-ka%C5%9Fe-ceket-c0p245330450.html
 /tr/k%C4%B1sa-pilili-tren%C3%A7kot-c0p226927093.html
-/tr/k%C4%B1sa-pilili-tren%C3%A7kot-c0p238451220.html
 /tr/k%C4%B1sa-sivri-topuklu-%C3%A7izme-c0p226926842.html
 /tr/k%C4%B1sa-sivri-topuklu-%C3%A7izme-c0p226931370.html
 /tr/k%C4%B1sa-sivri-topuklu-%C3%A7izme-c0p238348327.html
@@ -2956,10 +3001,7 @@
 /tr/k%C4%B1sa-suni-k%C3%BCrkl%C3%BC-biker-ceket-c0p226926941.html
 /tr/k%C4%B1sa-suni-k%C3%BCrkl%C3%BC-biker-ceket-c0p226926942.html
 /tr/k%C4%B1sa-suni-k%C3%BCrkl%C3%BC-biker-ceket-c0p226926943.html
-/tr/k%C4%B1sa-suni-k%C3%BCrkl%C3%BC-biker-ceket-c0p240128527.html
-/tr/k%C4%B1sa-suni-k%C3%BCrkl%C3%BC-biker-ceket-c0p240128528.html
-/tr/k%C4%B1sa-suni-k%C3%BCrkl%C3%BC-biker-ceket-c0p240128529.html
-/tr/k%C4%B1sa-suni-k%C3%BCrkl%C3%BC-biker-ceket-c0p244572132.html
+/tr/k%C4%B1sa-suni-k%C3%BCrkl%C3%BC-biker-ceket-c0p245330449.html
 /tr/k%C4%B1sa-tren%C3%A7kot-c0p226973371.html
 /tr/k%C4%B1sa-tren%C3%A7kot-c0p241489033.html
 /tr/k%C4%B1vr%C4%B1k-bel-midi-etek-c0p229723051.html
@@ -2997,7 +3039,6 @@
 /tr/ka%C5%9Fe-ceket,-kemer-k%C3%B6pr%C3%BCl%C3%BC-c0p226926637.html
 /tr/ka%C5%9Fe-ceket,-kemer-k%C3%B6pr%C3%BCl%C3%BC-c0p242077435.html
 /tr/ka%C5%9Fe-kuma%C5%9Fl%C4%B1-dik-yakal%C4%B1-ceket-c0p226926876.html
-/tr/ka%C5%9Fmir-y%C3%BCnl%C3%BC-v-yaka-kazak-c0p242077248.html
 /tr/kabartma-detayl%C4%B1-y%C4%B1kamal%C4%B1-jean-c0p232210792.html
 /tr/kabartma-detayl%C4%B1-y%C4%B1kanm%C4%B1%C5%9F-jean-c0p234769969.html
 /tr/kabartma-detayl%C4%B1-y%C4%B1kanm%C4%B1%C5%9F-jean-c0p245329895.html
@@ -3065,13 +3106,14 @@
 /tr/kap%C3%BC%C5%9Fon-aries-x-bershka-bask%C4%B1l%C4%B1-ceket-c0p242077874.html
 /tr/kap%C3%BC%C5%9Fon-suni-k%C3%BCrk-ceket-c0p226926921.html
 /tr/kap%C3%BC%C5%9Fonlu-%C3%A7izgili-triko-h%C4%B1rka-c0p228192799.html
+/tr/kap%C3%BC%C5%9Fonlu-%C3%A7izgili-triko-h%C4%B1rka-c0p244572595.html
+/tr/kap%C3%BC%C5%9Fonlu-%C3%B6rg%C3%BC-kolluk-c0p245330180.html
 /tr/kap%C3%BC%C5%9Fonlu-%C5%9Fi%C5%9Fme-ceket-c0p226931280.html
 /tr/kap%C3%BC%C5%9Fonlu-%C5%9Fi%C5%9Fme-ceket-c0p226931281.html
 /tr/kap%C3%BC%C5%9Fonlu-%C5%9Fi%C5%9Fme-mont-c0p226931282.html
 /tr/kap%C3%BC%C5%9Fonlu-%C5%9Fi%C5%9Fme-mont-c0p229737166.html
 /tr/kap%C3%BC%C5%9Fonlu-%C5%9Fi%C5%9Fme-mont-c0p229737167.html
 /tr/kap%C3%BC%C5%9Fonlu-%C5%9Fi%C5%9Fme-mont-c0p229737168.html
-/tr/kap%C3%BC%C5%9Fonlu-%C5%9Fi%C5%9Fme-mont-c0p240127875.html
 /tr/kap%C3%BC%C5%9Fonlu-%C5%9Fi%C5%9Fme-mont-c0p245330264.html
 /tr/kap%C3%BC%C5%9Fonlu-bask%C4%B1l%C4%B1-ceket-c0p226967302.html
 /tr/kap%C3%BC%C5%9Fonlu-bask%C4%B1l%C4%B1-ceket-c0p236396810.html
@@ -3120,7 +3162,6 @@
 /tr/kapitone-ceket-c0p229723173.html
 /tr/kapitone-ceket-c0p229723174.html
 /tr/kapitone-ceket-c0p229736982.html
-/tr/kapitone-ceket-c0p230328559.html
 /tr/kapitone-ceket-c0p230328931.html
 /tr/kapitone-kap%C3%BC%C5%9Fonlu-grid-ceket-c0p226926915.html
 /tr/kapitone-platform-sandalet-c0p229741625.html
@@ -3162,13 +3203,13 @@
 /tr/kare-deri%CC%87-mokasen-c0p231282619.html
 /tr/kare-desenli-pileli-pantolon-c0p233408521.html
 /tr/kare-dokulu-jean-c0p227229878.html
-/tr/kare-dokulu-jean-c0p236554802.html
 /tr/kare-tokal%C4%B1-kemer-c0p230006394.html
 /tr/kareli,-dik-yakal%C4%B1-uzun-kollu-g%C3%B6mlek-c0p226931444.html
 /tr/kareli-%C3%BC%C3%A7gen-bikini-%C3%BCst%C3%BC-c0p226931443.html
 /tr/kareli-%C3%BC%C3%A7gen-bikini-%C3%BCst%C3%BC-c0p229736935.html
 /tr/kareli-%C5%9Fardonlu-e%C5%9Fofman-alt%C4%B1-c0p234811111.html
 /tr/kareli-%C5%9Fardonlu-e%C5%9Fofman-alt%C4%B1-c0p243743755.html
+/tr/kareli-%C5%9Fardonlu-e%C5%9Fofman-alt%C4%B1-c0p244572599.html
 /tr/kareli-atk%C4%B1-c0p227962140.html
 /tr/kareli-atk%C4%B1-c0p227962141.html
 /tr/kareli-atk%C4%B1-c0p227962142.html
@@ -3179,12 +3220,13 @@
 /tr/kareli-baggy-fit-bermuda-c0p226927310.html
 /tr/kareli-baggy-pantolon-c0p232962124.html
 /tr/kareli-baggy-pantolon-c0p244572186.html
+/tr/kareli-baggy-pantolon-c0p245330203.html
 /tr/kareli-barrel-fit-pantolon-c0p227382011.html
 /tr/kareli-bikini-alt%C4%B1-c0p226931535.html
 /tr/kareli-bikini-alt%C4%B1-c0p229730502.html
 /tr/kareli-blazer-c0p226931347.html
 /tr/kareli-bloomer-%C5%9Fort-c0p227381998.html
-/tr/kareli-bloomer-%C5%9Fort-c0p242077417.html
+/tr/kareli-bloomer-%C5%9Fort-c0p245329916.html
 /tr/kareli-bloomer-pantolon-c0p227381997.html
 /tr/kareli-bowling-%C3%A7anta-c0p226931746.html
 /tr/kareli-d%C3%B6k%C3%BCml%C3%BC-midi-etek-c0p231799615.html
@@ -3202,11 +3244,11 @@
 /tr/kareli-kap%C3%BC%C5%9Fonlu-%C3%A7ift-kollu-g%C3%B6mlek-c0p242077572.html
 /tr/kareli-korseli-uzun-kollu-g%C3%B6mlek-c0p232637568.html
 /tr/kareli-kravat-c0p231981442.html
-/tr/kareli-kravat-c0p242077803.html
 /tr/kareli-kruvaze-ka%C5%9Fe-ceket-c0p226931611.html
 /tr/kareli-mayo-c0p226926770.html
 /tr/kareli-mini-balon-%C5%9Fort-c0p231799611.html
 /tr/kareli-naylon-ceket-c0p226931603.html
+/tr/kareli-naylon-ceket-c0p232227306.html
 /tr/kareli-sa%C3%A7akl%C4%B1-atk%C4%B1-c0p243743255.html
 /tr/kareli-teknik-kuma%C5%9F-%C5%9Fort-etek-c0p231799596.html
 /tr/kareli-telefon-k%C4%B1l%C4%B1f%C4%B1-c0p227229912.html
@@ -3230,8 +3272,8 @@
 /tr/kargo-para%C5%9F%C3%BCt-pantolon-c0p227042041.html
 /tr/kargo-para%C5%9F%C3%BCt-pantolon-c0p228892893.html
 /tr/kargo-para%C5%9F%C3%BCt-pantolon-c0p236554382.html
-/tr/kargo-para%C5%9F%C3%BCt-pantolon-c0p236554882.html
-/tr/kargo-para%C5%9F%C3%BCt-pantolon-c0p237553136.html
+/tr/kargo-para%C5%9F%C3%BCt-pantolon-c0p237553138.html
+/tr/kargo-para%C5%9F%C3%BCt-pantolon-c0p237553152.html
 /tr/kargo-para%C5%9F%C3%BCt-pantolon-c0p240127539.html
 /tr/kargo-para%C5%9F%C3%BCt-pantolon-c0p240127611.html
 /tr/kargo-para%C5%9F%C3%BCt-pantolon-c0p240127613.html
@@ -3261,6 +3303,7 @@
 /tr/katseye-bask%C4%B1l%C4%B1-uzun-kollu-ti%C5%9F%C3%B6rt-c0p231948401.html
 /tr/katseye-bask%C4%B1l%C4%B1-uzun-kollu-ti%C5%9F%C3%B6rt-c0p238451401.html
 /tr/kay%C4%B1k-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p233109732.html
+/tr/kay%C4%B1k-yaka-uzun-kollu-ti%C5%9F%C3%B6rt-c0p245329924.html
 /tr/kaykay-ayakkabisi-c0p226216492.html
 /tr/kaykay-spor-ayakkab%C4%B1-c0p238450954.html
 /tr/kazaya%C4%9F%C4%B1-desenli-ka%C5%9Fe-bomber-ceket-c0p226926928.html
@@ -3301,6 +3344,7 @@
 /tr/kemerli-suni-deri-ceket-c0p226931585.html
 /tr/kemerli-tren%C3%A7kot-ceket-c0p226927090.html
 /tr/kemerli-tren%C3%A7kot-ceket-c0p226927091.html
+/tr/kemerli-tren%C3%A7kot-ceket-c0p245329917.html
 /tr/kemerli-uzun-dik-yaka-kaban-c0p226927191.html
 /tr/kemerli-uzun-dik-yaka-kaban-c0p226927193.html
 /tr/kemerli-uzun-dik-yaka-kaban-c0p226927195.html
@@ -3308,6 +3352,7 @@
 /tr/kemerli-uzun-dik-yaka-kaban-c0p244572161.html
 /tr/kemerli-uzun-dik-yaka-kaban-c0p244572162.html
 /tr/kemerli-uzun-dik-yaka-kaban-c0p244572675.html
+/tr/kemerli-uzun-dik-yaka-kaban-c0p245329922.html
 /tr/kemerli-uzun-soft-kaban-c0p226927128.html
 /tr/kemerli-ve-pensli-barrel-fit-pantolon-c0p226926621.html
 /tr/kemerli-wide-leg-jean-c0p233408549.html
@@ -3342,6 +3387,7 @@
 /tr/kisa-si%CC%87vri%CC%87-topuklu-%C3%A7i%CC%87zme-c0p240127977.html
 /tr/kivrik-detayli-topuklu-bot-c0p238348328.html
 /tr/kivrim-detayli-topuklu-bot-c0p226931328.html
+/tr/kivrim-detayli-topuklu-bot-c0p240127928.html
 /tr/klasik-bask%C4%B1l%C4%B1-bandana-c0p226927008.html
 /tr/klasik-skate-ayakkab%C4%B1-c0p226926756.html
 /tr/klasik-skate-model-c0p230064558.html
@@ -3353,13 +3399,11 @@
 /tr/klo%C5%9F-midi-etek-c0p229350173.html
 /tr/klo%C5%9F-midi-etek-c0p237552645.html
 /tr/klo%C5%9F-mini-etek-c0p233761084.html
-/tr/klo%C5%9F-mini-etek-c0p240127866.html
 /tr/kol-g%C3%B6r%C3%BCn%C3%BCml%C3%BC-%C3%B6rg%C3%BC-atk%C4%B1-c0p238375267.html
 /tr/kol-g%C3%B6r%C3%BCn%C3%BCml%C3%BC-%C3%B6rg%C3%BC-atk%C4%B1-c0p242077804.html
 /tr/kolsuz-ti%C5%9F%C3%B6rt-c0p229737245.html
 /tr/kolsuz-triko-%C3%BCst-c0p226927077.html
 /tr/kolsuz-triko-top-c0p226927076.html
-/tr/kolsuz-triko-top-c0p238451436.html
 /tr/kolsuz-worker-ti%C5%9F%C3%B6rt-c0p229737247.html
 /tr/kombine-%C3%A7elik-zincir-c0p235814549.html
 /tr/kombine-t%C3%BCl-korse-top-c0p226927210.html
@@ -3494,7 +3538,6 @@
 /tr/kontrast-nak%C4%B1%C5%9Fl%C4%B1-v-yaka-kazak-c0p233009530.html
 /tr/kontrast-nak%C4%B1%C5%9Fl%C4%B1-v-yaka-kazak-c0p245330247.html
 /tr/kontrast-perkins-yaka-ceket-c0p228633797.html
-/tr/kontrast-perkins-yaka-ceket-c0p234324816.html
 /tr/kontrast-tanga-bikini-alt%C4%B1-c0p229723224.html
 /tr/kontrast-tanga-bikini-alt%C4%B1-c0p229723226.html
 /tr/kontrast-tanga-bikini-alt%C4%B1-c0p229723227.html
@@ -3512,6 +3555,7 @@
 /tr/kontrast-teknik-ceket-c0p230330505.html
 /tr/kontrast-teknik-ceket-c0p231041396.html
 /tr/kontrast-teknik-kuma%C5%9Fl%C4%B1,-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-%C3%BCst-c0p238451452.html
+/tr/kontrast-teknik-kuma%C5%9Fl%C4%B1,-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-%C3%BCst-c0p240127585.html
 /tr/kontrast-teknik-kuma%C5%9Fl%C4%B1,-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-%C3%BCst-c0p240127591.html
 /tr/kontrast-teknik-kuma%C5%9Fl%C4%B1,-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-%C3%BCst-c0p245329801.html
 /tr/kontrast-teknik-kuma%C5%9Fl%C4%B1,-nefes-alabilir-&amp;-h%C4%B1zl%C4%B1-kuruyan-top-c0p228309037.html
@@ -3530,6 +3574,7 @@
 /tr/kop%C3%A7al%C4%B1-uzun-kollu-korse-top-c0p234080195.html
 /tr/korse-ask%C4%B1l%C4%B1-mini-elbise-c0p226927188.html
 /tr/korse-ask%C4%B1l%C4%B1-mini-elbise-c0p231815797.html
+/tr/korse-ask%C4%B1l%C4%B1-top-c0p238451676.html
 /tr/korse-ask%C4%B1l%C4%B1-top-c0p242077460.html
 /tr/korse-bandeau-%C3%BCst-c0p226931793.html
 /tr/korse-bandeau-%C3%BCst-c0p226931794.html
@@ -3547,6 +3592,7 @@
 /tr/korse-etkili-uzun-kollu-g%C3%B6mlek-c0p240127913.html
 /tr/korse-g%C3%B6r%C3%BCn%C3%BCml%C3%BC-bask%C4%B1l%C4%B1-t-shirt-c0p228809180.html
 /tr/korse-g%C3%B6r%C3%BCn%C3%BCml%C3%BC-bask%C4%B1l%C4%B1-t-shirt-c0p236213434.html
+/tr/korse-kisa-si%CC%87vri%CC%87-topuklu-ayakkabi-c0p234324904.html
 /tr/korse-model-kisa-si%CC%87vri%CC%87-topuklu-ayakkabi-c0p226931259.html
 /tr/korse-s%C4%B1rt-detayl%C4%B1-ask%C4%B1l%C4%B1-midi-elbise-c0p226926910.html
 /tr/korse-tarz%C4%B1-bengal-top-c0p229730011.html
@@ -3560,7 +3606,6 @@
 /tr/kremal%C4%B1-mocha-parf%C3%BCm-100-ml-c0p229723064.html
 /tr/kro%C5%9Fe-k%C3%BCrk-bant-c0p229736899.html
 /tr/krokodil-g%C3%B6r%C3%BCn%C3%BCml%C3%BC-kemer-c0p226927284.html
-/tr/kruvaze-d%C3%BC%C4%9Fmeli-blazer-c0p238450969.html
 /tr/kruvaze-d%C3%BC%C4%9Fmeli-blazer-c0p240127906.html
 /tr/kruvaze-d%C3%BC%C4%9Fmeli-blazer-ceket-c0p226926851.html
 /tr/kruvaze-d%C3%BC%C4%9Fmeli-culotte-bermuda-c0p227229913.html
@@ -3600,6 +3645,7 @@
 /tr/lastikli-belli-%C5%9Fort-c0p241185513.html
 /tr/lastikli-belli-midi-etek-c0p226931411.html
 /tr/lastikli-belli-midi-etek-c0p226931412.html
+/tr/lastikli-belli-midi-etek-c0p236554415.html
 /tr/lastikli-belli-midi-etek-c0p240127730.html
 /tr/lastikli-belli-rustik-%C5%9Fort-c0p229730154.html
 /tr/le-sserafim-bask%C4%B1l%C4%B1-oversize-kap%C3%BC%C5%9Fon-sweatshirt-c0p240149456.html
@@ -3609,9 +3655,10 @@
 /tr/leopar-desenli%CC%87-i%CC%87nce-tabanli-spor-ayakkabi-c0p241488994.html
 /tr/leopar-desenli%CC%87-tokali-babet-c0p230600945.html
 /tr/leopar-desenli%CC%87-tokali-babet-c0p242077734.html
+/tr/leopar-desenli%CC%87-tokali-babet-c0p244572076.html
 /tr/leopar-desenli-triko-kar-maskesi-c0p228633815.html
-/tr/leopar-desenli-triko-kar-maskesi-c0p242077327.html
 /tr/looney-tunes-bask%C4%B1l%C4%B1-oversize-uzun-kollu-ti%C5%9F%C3%B6rt-c0p234955769.html
+/tr/looney-tunes-bask%C4%B1l%C4%B1-oversize-uzun-kollu-ti%C5%9F%C3%B6rt-c0p245330463.html
 /tr/looney-tunes-bask%C4%B1l%C4%B1-uzun-kollu-oversize-polo-c0p238315285.html
 /tr/looney-tunes-bask%C4%B1l%C4%B1-uzun-kollu-oversize-polo-c0p242078028.html
 /tr/looney-tunes-bask%C4%B1l%C4%B1-uzun-kollu-oversize-ti%C5%9F%C3%B6rt-c0p242078025.html
@@ -3703,7 +3750,6 @@
 /tr/mochi-berry-cloud-150-ml-v%C3%BCcut-spreyi%CC%87-c0p230328809.html
 /tr/mochi-berry-cloud-v%C3%BCcut-spreyi%CC%87-150ml-c0p229736902.html
 /tr/mochi-coco-s%C3%BCt-v%C3%BCcut-spreyi%CC%87-150ml-c0p229730008.html
-/tr/mochi-hi%CC%87ndi%CC%87stan-cevi%CC%87zi%CC%87-s%C3%BCt%C3%BC-v%C3%BCcut-spreyi%CC%87-150-ml-c0p230328066.html
 /tr/mochi-matcha-cream-body-mist-150-ml-c0p229722982.html
 /tr/mochi-matcha-cream-v%C3%BCcut-spreyi%CC%87-150-ml-c0p230328778.html
 /tr/mochi-yuzu-candy-v%C3%BCcut-spreyi%CC%87-150ml-c0p229736920.html
@@ -3722,7 +3768,6 @@
 /tr/nak%C4%B1%C5%9F-ve-z%C4%B1mba-detayl%C4%B1-desenli-pantolon-c0p230834572.html
 /tr/nak%C4%B1%C5%9Fl%C4%B1-baggy-fit-jean-c0p227962137.html
 /tr/nak%C4%B1%C5%9Fl%C4%B1-baggy-fit-jean-c0p236554100.html
-/tr/nak%C4%B1%C5%9Fl%C4%B1-baggy-fit-jean-c0p237736625.html
 /tr/nak%C4%B1%C5%9Fl%C4%B1-boxy-fit-k%C4%B1sa-kollu-g%C3%B6mlek-c0p226931283.html
 /tr/nak%C4%B1%C5%9Fl%C4%B1-boxy-fit-k%C4%B1sa-kollu-g%C3%B6mlek-c0p231815912.html
 /tr/nak%C4%B1%C5%9Fl%C4%B1-boxy-fit-k%C4%B1sa-kollu-g%C3%B6mlek-c0p232227598.html
@@ -3735,6 +3780,7 @@
 /tr/nak%C4%B1%C5%9Fl%C4%B1-d%C3%BC%C5%9F%C3%BCk-bel-flare-fit-jean-c0p226927365.html
 /tr/nak%C4%B1%C5%9Fl%C4%B1-d%C3%BC%C5%9F%C3%BCk-bel-flare-fit-jean-c0p226927366.html
 /tr/nak%C4%B1%C5%9Fl%C4%B1-d%C3%BC%C5%9F%C3%BCk-bel-flare-fit-jean-c0p242077924.html
+/tr/nak%C4%B1%C5%9Fl%C4%B1-d%C3%BC%C5%9F%C3%BCk-bel-flare-fit-jean-c0p245330451.html
 /tr/nak%C4%B1%C5%9Fl%C4%B1-fermuarl%C4%B1-ceket-c0p227042043.html
 /tr/nak%C4%B1%C5%9Fl%C4%B1-fermuarl%C4%B1-ceket-c0p227042044.html
 /tr/nak%C4%B1%C5%9Fl%C4%B1-fermuarl%C4%B1-ceket-c0p242077831.html
@@ -3801,7 +3847,6 @@
 /tr/nts-x-thaiboy-digital-bask%C4%B1l%C4%B1-k%C4%B1sa-kollu-ti%C5%9F%C3%B6rt-c0p226927202.html
 /tr/nts-x-thaiboy-digital-boxy-fit-bermuda-c0p226927098.html
 /tr/olivia-rodrigo-bask%C4%B1l%C4%B1-oversize-t-shirt-c0p227229879.html
-/tr/olivia-rodrigo-bask%C4%B1l%C4%B1-oversize-t-shirt-c0p234324819.html
 /tr/one-piece-anahtarl%C4%B1kl%C4%B1-kaykay-ayakkab%C4%B1s%C4%B1-c0p226931438.html
 /tr/one-piece-anahtarl%C4%B1kl%C4%B1-kaykay-ayakkab%C4%B1s%C4%B1-c0p229337175.html
 /tr/orta-bel-geni%C5%9F-pa%C3%A7a-jean-c0p229730561.html
@@ -3836,6 +3881,7 @@
 /tr/oval-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p229723005.html
 /tr/oval-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p229737024.html
 /tr/oval-kemik-%C3%A7er%C3%A7eveli-g%C3%B6zl%C3%BCk-c0p229730128.html
+/tr/oval-kemik-%C3%A7er%C3%A7eveli-g%C3%B6zl%C3%BCk-c0p236554455.html
 /tr/oval-kemik-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p229723114.html
 /tr/oval-kemik-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p229737004.html
 /tr/oval-kemik-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p229737333.html
@@ -3911,6 +3957,7 @@
 /tr/oversize-suni-deri-kruvaze-ceket-c0p226927270.html
 /tr/oversize-suni-deri-kruvaze-yaka-ceket-c0p226927271.html
 /tr/oversize-suni-deri-kruvaze-yaka-ceket-c0p242077603.html
+/tr/oversize-suni-deri-kruvaze-yaka-ceket-c0p245330448.html
 /tr/oversize-v-yaka-soft-touch-kazak-c0p227421704.html
 /tr/oversize-worker-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p229737198.html
 /tr/oversize-worker-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p229737199.html
@@ -3918,6 +3965,8 @@
 /tr/oversize-worker-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p231041763.html
 /tr/oversize-worker-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p231042144.html
 /tr/oversize-yarasa-kollu-naylon-ceket-c0p226931531.html
+/tr/oversize-yarasa-kollu-naylon-ceket-c0p229396881.html
+/tr/oversize-yarasa-kollu-naylon-ceket-c0p245329795.html
 /tr/oversize-yarasa-kollu-naylon-ceket-c0p245330192.html
 /tr/p%C3%BCsk%C3%BCll%C3%BC-alt-kenar-mini-denim-%C5%9Fort-c0p229723176.html
 /tr/p%C3%BCsk%C3%BCll%C3%BC-alt-kesim-denim-mini-%C5%9Fort-c0p230329952.html
@@ -3934,6 +3983,7 @@
 /tr/p%C3%BCsk%C3%BCll%C3%BC-fular-c0p237553140.html
 /tr/p%C3%BCsk%C3%BCll%C3%BC-ince-atk%C4%B1-c0p228633818.html
 /tr/p%C3%BCsk%C3%BCll%C3%BC-ince-atk%C4%B1-c0p228633819.html
+/tr/p%C3%BCsk%C3%BCll%C3%BC-ince-atk%C4%B1-c0p238451114.html
 /tr/p%C3%BCsk%C3%BCll%C3%BC-ince-atk%C4%B1-c0p238451115.html
 /tr/p%C3%BCsk%C3%BCll%C3%BC-jakarl%C4%B1-kuma%C5%9F-%C5%9Fort-c0p231022100.html
 /tr/p%C3%BCsk%C3%BCll%C3%BC-kareli-atk%C4%B1-c0p228633834.html
@@ -3968,15 +4018,11 @@
 /tr/pa%C3%A7as%C4%B1-y%C4%B1rtma%C3%A7l%C4%B1-kapri-pantolon-c0p231041866.html
 /tr/pa%C3%A7as%C4%B1-y%C4%B1rtma%C3%A7l%C4%B1-kapri-pantolon-c0p232227305.html
 /tr/pa%C3%A7as%C4%B1-y%C4%B1rtma%C3%A7l%C4%B1-kapri-pantolon-c0p232227323.html
-/tr/pa%C3%A7as%C4%B1-y%C4%B1rtma%C3%A7l%C4%B1-kapri-pantolon-c0p234324840.html
 /tr/pa%C3%A7as%C4%B1-y%C4%B1rtma%C3%A7l%C4%B1-kapri-pantolon-c0p234324929.html
 /tr/pa%C3%A7as%C4%B1-y%C4%B1rtma%C3%A7l%C4%B1-kapri-pantolon-c0p234325166.html
 /tr/pa%C3%A7as%C4%B1-y%C4%B1rtma%C3%A7l%C4%B1-kapri-pantolon-c0p235801205.html
 /tr/pa%C3%A7as%C4%B1-y%C4%B1rtma%C3%A7l%C4%B1-kapri-pantolon-c0p238451477.html
 /tr/panelli-kal%C4%B1n-tabanl%C4%B1-spor-ayakkab%C4%B1-c0p240128044.html
-/tr/pantolon-cepli-d%C3%BCz-bot-c0p226926793.html
-/tr/pantolon-cepli-d%C3%BCz-bot-c0p238451399.html
-/tr/pantolon-cepli-d%C3%BCz-bot-c0p238451421.html
 /tr/par%C3%A7al%C4%B1-casual-spor-ayakkab%C4%B1-c0p226931596.html
 /tr/par%C3%A7al%C4%B1-casual-spor-ayakkab%C4%B1-c0p236554025.html
 /tr/par%C3%A7al%C4%B1-kal%C4%B1n-tabanl%C4%B1-spor-ayakkab%C4%B1-c0p226931385.html
@@ -4003,7 +4049,6 @@
 /tr/para%C5%9F%C3%BCt-kargo-denim-bermuda-c0p229737227.html
 /tr/para%C5%9F%C3%BCt-midi-etek-c0p232962109.html
 /tr/para%C5%9F%C3%BCt-midi-etek-c0p232962110.html
-/tr/para%C5%9F%C3%BCt-midi-etek-c0p241489028.html
 /tr/para%C5%9F%C3%BCt-midi-etek-c0p242077741.html
 /tr/parlak-halter-yaka-uzun-elbise-c0p237446982.html
 /tr/parlak-halter-yaka-uzun-elbise-c0p244572745.html
@@ -4023,7 +4068,6 @@
 /tr/parmak-aras%C4%B1-sandalet-c0p226931430.html
 /tr/parmak-aras%C4%B1-sandalet-c0p226931431.html
 /tr/parmak-aras%C4%B1-sandalet-c0p228297025.html
-/tr/parmak-aras%C4%B1-topuklu-sandalet-c0p233573316.html
 /tr/paslanmaz-%C3%A7elik-dikenli-zincir-c0p235561022.html
 /tr/paslanmaz-%C3%A7elik-zincir-c0p234922497.html
 /tr/paslanmaz-%C3%A7elik-zincir-kolye-c0p229737057.html
@@ -4047,13 +4091,13 @@
 /tr/pencere-detayl%C4%B1-poliamid-ti%C5%9F%C3%B6rt-c0p232637572.html
 /tr/pencere-detayl%C4%B1-poliamid-ti%C5%9F%C3%B6rt-c0p232637573.html
 /tr/pencere-detayl%C4%B1-poliamid-ti%C5%9F%C3%B6rt-c0p232637574.html
-/tr/pencere-detayl%C4%B1-poliamid-ti%C5%9F%C3%B6rt-c0p242077289.html
 /tr/pencere-detayl%C4%B1-topuklu-ayakkab%C4%B1-c0p242077287.html
 /tr/pencere-detayli-topuklu-ayakkabi-c0p230593167.html
 /tr/pensli-baggy-pantolon-out-of-core-c0p244572124.html
 /tr/pensli-baggy-pantolon-out-of-core-c0p244572614.html
 /tr/pensli-balloon-fit-ka%C5%9Fe-pantolon-c0p231517322.html
-/tr/pensli-balloon-fit-ka%C5%9Fe-pantolon-c0p236554057.html
+/tr/pensli-balloon-fit-ka%C5%9Fe-pantolon-c0p245330486.html
+/tr/pensli-balloon-fit-ka%C5%9Fe-pantolon-c0p245330487.html
 /tr/pensli-barrel-fit-pantolon-c0p226931676.html
 /tr/pensli-barrel-fit-pantolon-c0p226931677.html
 /tr/pensli-barrel-fit-pantolon-c0p236554011.html
@@ -4061,7 +4105,6 @@
 /tr/pensli-barrel-fit-pantolon-c0p240128048.html
 /tr/pensli-barrel-fit-pantolon-c0p242078017.html
 /tr/pensli-ka%C5%9Fe-balloon-fit-pantolon-c0p231517321.html
-/tr/pensli-ka%C5%9Fe-balloon-fit-pantolon-c0p236554545.html
 /tr/pensli-ve-fularl%C4%B1-pantolon-c0p229736707.html
 /tr/pensli-wide-leg-jean-c0p227531254.html
 /tr/peplum-ask%C4%B1l%C4%B1-%C3%BCst-c0p230328591.html
@@ -4081,7 +4124,7 @@
 /tr/peplum-belli-%C5%9Falvar-pantolon-c0p228480481.html
 /tr/peplum-detayl%C4%B1-fermuarl%C4%B1-ceket-c0p237552646.html
 /tr/peplum-detayl%C4%B1-teknik-pantolon-c0p234583820.html
-/tr/peplum-detayl%C4%B1-teknik-pantolon-c0p242078060.html
+/tr/peplum-detayl%C4%B1-teknik-pantolon-c0p245330459.html
 /tr/peplum-korse-%C3%BCst-c0p226927196.html
 /tr/peplum-korse-%C3%BCst-c0p240128373.html
 /tr/peplum-korse-top-c0p226927197.html
@@ -4101,6 +4144,7 @@
 /tr/pileli,-d%C3%BC%C4%9Fmeli-balloon-fit-pantolon-c0p227382009.html
 /tr/pileli,-d%C3%BC%C4%9Fmeli-balloon-fit-pantolon-c0p227994911.html
 /tr/pileli,-d%C3%BC%C4%9Fmeli-balloon-fit-pantolon-c0p243743662.html
+/tr/pileli,-d%C3%BC%C4%9Fmeli-balloon-fit-pantolon-c0p245329925.html
 /tr/pileli-baggy-pantolon-c0p226927133.html
 /tr/pileli-baggy-pantolon-c0p231815770.html
 /tr/pileli-baggy-pantolon-c0p235339752.html
@@ -4121,6 +4165,7 @@
 /tr/piliseli-jogger-fit-baggy-pantolon-c0p229737218.html
 /tr/piliseli-jogger-fit-baggy-pantolon-c0p230327951.html
 /tr/piliseli-jogger-fit-baggy-pantolon-c0p230327952.html
+/tr/piliseli-jogger-fit-baggy-pantolon-c0p230328423.html
 /tr/piliseli-jogger-fit-baggy-pantolon-c0p235801200.html
 /tr/piliseli-super-baggy-fit-jogger-pantolon-c0p229737220.html
 /tr/piliseli-superbaggy-jogger-fit-pantolon-c0p229737222.html
@@ -4142,13 +4187,10 @@
 /tr/poliamid-drapeli-uzun-kollu-ti%C5%9F%C3%B6rt-c0p242953459.html
 /tr/poliamid-v%C3%BCcudu-saran-midi-elbise-c0p232637580.html
 /tr/poliamid-v%C3%BCcudu-saran-midi-elbise-c0p232637581.html
-/tr/poliamid-v%C3%BCcudu-saran-midi-elbise-c0p238136110.html
 /tr/poliamid-v%C3%BCcudu-saran-midi-elbise-c0p239302882.html
-/tr/poliamid-v%C3%BCcudu-saran-midi-elbise-c0p243743716.html
 /tr/poliamit-dar-kesim-ask%C4%B1l%C4%B1-top-c0p232637583.html
 /tr/poliamit-dar-kesim-ask%C4%B1l%C4%B1-top-c0p232637584.html
 /tr/poliamit-dar-kesim-ask%C4%B1l%C4%B1-top-c0p237736609.html
-/tr/poliamit-dar-kesim-ask%C4%B1l%C4%B1-top-c0p238136112.html
 /tr/poliamit-dar-kesim-ask%C4%B1l%C4%B1-top-c0p240128108.html
 /tr/polo-yaka-%C3%A7izgili-kazak-c0p227754025.html
 /tr/polo-yaka-%C3%A7izgili-kazak-c0p227754026.html
@@ -4194,6 +4236,7 @@
 /tr/puantiye-desenli-file-midi-etek-c0p233590595.html
 /tr/puantiye-desenli-file-midi-etek-c0p233590596.html
 /tr/puantiye-desenli-file-midi-etek-c0p237552662.html
+/tr/puantiye-desenli-file-midi-etek-c0p237553170.html
 /tr/puantiye-desenli-telefon-k%C4%B1l%C4%B1f%C4%B1-c0p229737005.html
 /tr/puantiye-desenli-telefon-k%C4%B1l%C4%B1f%C4%B1-c0p229737006.html
 /tr/puantiye-desenli-toka-seti-c0p229736898.html
@@ -4218,6 +4261,7 @@
 /tr/pullu-dantelli-top-c0p230924899.html
 /tr/pullu-dantelli-v-yaka-top-c0p229089086.html
 /tr/pullu-dantelli-v-yaka-top-c0p229089087.html
+/tr/pullu-dantelli-v-yaka-top-c0p245329983.html
 /tr/pullu-fular-c0p231022092.html
 /tr/pullu-halter-slip-top-c0p226926701.html
 /tr/pullu-halter-yaka-slip-top-c0p237553106.html
@@ -4238,12 +4282,12 @@
 /tr/rafaela-mascaro-k%C4%B1sa-kollu-boxy-fit-g%C3%B6mlek-c0p230006372.html
 /tr/rafaela-mascaro-k%C4%B1sa-kollu-boxy-fit-g%C3%B6mlek-c0p238451369.html
 /tr/raglan-kol-bisiklet-yaka-kazak-c0p227753568.html
+/tr/raglan-kol-bisiklet-yaka-kazak-c0p245329920.html
 /tr/raglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p228633808.html
 /tr/raglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p228633809.html
 /tr/raglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p228633811.html
 /tr/raglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p230048844.html
 /tr/raglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p238450923.html
-/tr/raglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p238451095.html
 /tr/raglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p238451412.html
 /tr/raglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p238451413.html
 /tr/raglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p238451414.html
@@ -4266,6 +4310,7 @@
 /tr/reglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p242077264.html
 /tr/reglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p242077752.html
 /tr/reglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p242077756.html
+/tr/reglan-kol-uzun-kollu-ti%C5%9F%C3%B6rt-c0p245330473.html
 /tr/reglan-kollu-bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p229579234.html
 /tr/reglan-kollu-bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p242077351.html
 /tr/reglan-uzun-kollu-par%C4%B1lt%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p241942734.html
@@ -4287,6 +4332,7 @@
 /tr/retro-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p226926711.html
 /tr/retro-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p229722973.html
 /tr/retro-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p229737019.html
+/tr/retro-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p230329396.html
 /tr/retro-g%C3%BCne%C5%9F-g%C3%B6zl%C3%BC%C4%9F%C3%BC-c0p236554478.html
 /tr/retro-i%CC%87nce-tabanli-spor-ayakkabi-c0p226926688.html
 /tr/retro-i%CC%87nce-tabanli-spor-ayakkabi-c0p226926798.html
@@ -4331,6 +4377,7 @@
 /tr/rib-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p234324975.html
 /tr/rib-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p234324977.html
 /tr/rib-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p237552715.html
+/tr/rib-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p237553181.html
 /tr/rib-polo-yaka-kazak-c0p226926836.html
 /tr/ribanal%C4%B1-slim-fit-k%C4%B1sa-kollu-ti%C5%9F%C3%B6rt-c0p226927274.html
 /tr/ribanal%C4%B1-slim-fit-k%C4%B1sa-kollu-ti%C5%9F%C3%B6rt-c0p226927275.html
@@ -4400,6 +4447,7 @@
 /tr/rustik-mini-korse-elbise-c0p243093347.html
 /tr/rustik-pileli-geni%C5%9F-pa%C3%A7a-pantolon-c0p229730556.html
 /tr/rustik-pileli-geni%C5%9F-pa%C3%A7a-pantolon-c0p230065281.html
+/tr/rustik-pileli-geni%C5%9F-pa%C3%A7a-pantolon-c0p230327527.html
 /tr/rustik-pileli-geni%C5%9F-pa%C3%A7a-pantolon-c0p230329400.html
 /tr/rustik-pileli-geni%C5%9F-pa%C3%A7a-pantolon-c0p239406358.html
 /tr/rustik-pileli-wide-leg-pantolon-c0p229730555.html
@@ -4408,7 +4456,6 @@
 /tr/s%C3%BCet-efektli-ceket-c0p226931693.html
 /tr/s%C3%BCet-efektli-desenli-tote-%C3%A7anta-c0p226931562.html
 /tr/s%C3%BCet-efektli-desenli-tote-%C3%A7anta-c0p238450888.html
-/tr/s%C3%BCet-efektli-desenli-tote-%C3%A7anta-c0p242077323.html
 /tr/s%C3%BCet-eva-file-dokulu,-nefes-alabilen-bolerolu-top-c0p232962092.html
 /tr/s%C3%BCet-eva-nefes-alabilir-kuma%C5%9Fl%C4%B1-fuseau-tayt-c0p233420899.html
 /tr/s%C3%BCet-f%C4%B1rf%C4%B1rl%C4%B1-ba%C4%9Fc%C4%B1kl%C4%B1-ceket-c0p228741269.html
@@ -4439,6 +4486,7 @@
 /tr/s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-mini-denim-elbise-c0p237553135.html
 /tr/s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-mini-etek-c0p229499427.html
 /tr/s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-naylon-ceket-c0p226926679.html
+/tr/s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-naylon-ceket-c0p245330457.html
 /tr/s%C4%B1rt%C4%B1-a%C3%A7%C4%B1k-b%C3%BCzg%C3%BCl%C3%BC-mini-elbise-c0p245329746.html
 /tr/s%C4%B1rt%C4%B1-a%C3%A7%C4%B1k-b%C3%BCzg%C3%BCl%C3%BC-mini-elbise-c0p245329752.html
 /tr/s%C4%B1rt%C4%B1-ask%C4%B1l%C4%B1-body-c0p226927248.html
@@ -4446,12 +4494,14 @@
 /tr/s%C4%B1rt%C4%B1-ba%C4%9Fc%C4%B1kl%C4%B1-dokulu-top-c0p226931246.html
 /tr/s%C4%B1rt%C4%B1-ba%C4%9Fc%C4%B1kl%C4%B1-dokulu-top-c0p245329681.html
 /tr/s%C4%B1rt%C4%B1-ba%C4%9Fc%C4%B1kl%C4%B1-yap%C4%B1l%C4%B1-top-c0p226931245.html
+/tr/s%C4%B1rt%C4%B1-ba%C4%9Fc%C4%B1kl%C4%B1-yap%C4%B1l%C4%B1-top-c0p240127874.html
 /tr/s%C4%B1rt%C4%B1-d%C3%BC%C4%9F%C3%BCml%C3%BC-bisiklet-yaka-top-c0p226931766.html
 /tr/s%C4%B1rt%C4%B1-d%C3%BC%C4%9F%C3%BCml%C3%BC-bisiklet-yaka-top-c0p226931767.html
 /tr/s%C4%B1rt%C4%B1-d%C3%BC%C4%9F%C3%BCml%C3%BC-bisiklet-yaka-top-c0p231042177.html
 /tr/s%C4%B1rt%C4%B1-d%C3%BC%C4%9F%C3%BCml%C3%BC-bisiklet-yaka-top-c0p232227482.html
 /tr/s%C4%B1rt%C4%B1-d%C3%BC%C4%9F%C3%BCml%C3%BC-geni%C5%9F-yaka-ti%C5%9F%C3%B6rt-c0p229466053.html
 /tr/s%C4%B1rt%C4%B1-d%C3%BC%C4%9F%C3%BCml%C3%BC-geni%C5%9F-yaka-ti%C5%9F%C3%B6rt-c0p229466054.html
+/tr/s%C4%B1rt%C4%B1-d%C3%BC%C4%9F%C3%BCml%C3%BC-geni%C5%9F-yaka-ti%C5%9F%C3%B6rt-c0p240127838.html
 /tr/s%C4%B1rt%C4%B1-d%C3%BC%C4%9F%C3%BCml%C3%BC-geni%C5%9F-yaka-ti%C5%9F%C3%B6rt-c0p240128298.html
 /tr/s%C4%B1rt%C4%B1-d%C3%BC%C4%9F%C3%BCml%C3%BC-halter-yaka-top-c0p226927311.html
 /tr/s%C4%B1rt%C4%B1-d%C3%BC%C4%9F%C3%BCml%C3%BC-halter-yaka-top-c0p226927312.html
@@ -4491,16 +4541,17 @@
 /tr/saten-bikini-alt%C4%B1-c0p230065233.html
 /tr/saten-slim-fit-pantolon-c0p241795646.html
 /tr/saten-slim-fit-pantolon-c0p245330296.html
+/tr/saten-y%C3%BCzeyli-zincirli-%C3%A7anta-c0p230327639.html
 /tr/saten-zincirli-%C3%A7anta-c0p229723112.html
 /tr/scream-bask%C4%B1l%C4%B1-k%C4%B1sa-kollu-ti%C5%9F%C3%B6rt-c0p241507350.html
 /tr/scuba-dokuma-barrel-fit-pantolon-c0p229341675.html
 /tr/scuba-dokuma-barrel-fit-pantolon-c0p229341676.html
 /tr/scuba-dokuma-barrel-fit-pantolon-c0p243483251.html
-/tr/scuba-dokuma-barrel-fit-pantolon-c0p244572085.html
-/tr/scuba-dokuma-barrel-fit-pantolon-c0p244572584.html
+/tr/scuba-dokuma-barrel-fit-pantolon-c0p245330190.html
 /tr/scuba-kuma%C5%9F-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p230141771.html
 /tr/scuba-kuma%C5%9F-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p230141772.html
 /tr/scuba-kuma%C5%9F-pensli-barrel-fit-pantolon-c0p228633807.html
+/tr/scuba-kuma%C5%9F-pensli-barrel-fit-pantolon-c0p241489025.html
 /tr/scuba-kuma%C5%9F-peplum-top-c0p226927187.html
 /tr/scuba-kuma%C5%9Fl%C4%B1-pensli-pantolon-c0p238154923.html
 /tr/scuba-kuma%C5%9Fl%C4%B1-pensli-pantolon-c0p241795638.html
@@ -4512,10 +4563,8 @@
 /tr/shrek-bask%C4%B1l%C4%B1-k%C4%B1sa-kollu-reglan-ti%C5%9F%C3%B6rt-c0p231799618.html
 /tr/shrek-bask%C4%B1l%C4%B1-k%C4%B1sa-kollu-reglan-ti%C5%9F%C3%B6rt-c0p240127868.html
 /tr/shrek-bask%C4%B1l%C4%B1-k%C4%B1sa-kollu-reglan-ti%C5%9F%C3%B6rt-c0p240128400.html
-/tr/shrek-bask%C4%B1l%C4%B1-k%C4%B1sa-kollu-reglan-ti%C5%9F%C3%B6rt-c0p241396424.html
 /tr/shrek-bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-ceket-c0p229089097.html
 /tr/shrek-bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-ceket-c0p240127947.html
-/tr/shrek-bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fonlu-ceket-c0p242077740.html
 /tr/si%CC%87yah-out-of-core-spor-ayakkabi-c0p226926857.html
 /tr/si%CC%87yah-out-of-core-spor-ayakkabi-c0p244572682.html
 /tr/silky-vanilla-cloud-v%C3%BCcut-spreyi%CC%87-250-ml-c0p229737011.html
@@ -4566,6 +4615,7 @@
 /tr/slim-fit-uzun-kollu-d%C3%BC%C4%9Fmeli-yaka-ti%C5%9F%C3%B6rt-c0p242077755.html
 /tr/slim-fit-uzun-kollu-d%C3%BC%C4%9Fmeli-yaka-ti%C5%9F%C3%B6rt-c0p244455619.html
 /tr/slim-fit-uzun-kollu-d%C3%BC%C4%9Fmeli-yaka-ti%C5%9F%C3%B6rt-c0p244456113.html
+/tr/slim-fit-uzun-kollu-d%C3%BC%C4%9Fmeli-yaka-ti%C5%9F%C3%B6rt-c0p245329930.html
 /tr/slouchy-denim-bermuda-%C5%9Fort-c0p226931817.html
 /tr/slouchy-denim-bermuda-%C5%9Fort-c0p227229875.html
 /tr/slouchy-denim-bermuda-%C5%9Fort-c0p229730047.html
@@ -4582,7 +4632,6 @@
 /tr/soft-touch-bisiklet-yaka-ceket-c0p226927216.html
 /tr/soft-touch-bisiklet-yaka-ceket-c0p226927218.html
 /tr/soft-touch-bisiklet-yaka-ceket-c0p242077716.html
-/tr/soft-touch-bisiklet-yaka-ceket-c0p242077769.html
 /tr/soft-touch-bisiklet-yaka-ceket-c0p243958915.html
 /tr/soft-touch-bisiklet-yaka-ceket-c0p244078532.html
 /tr/soft-touch-bisiklet-yaka-ceket-c0p244078533.html
@@ -4686,6 +4735,7 @@
 /tr/straight-fit-kapri-pantolon-c0p237552678.html
 /tr/straight-fit-kargo-pantolon-c0p226931263.html
 /tr/straight-fit-kargo-pantolon-c0p228236228.html
+/tr/straight-fit-kargo-pantolon-c0p240128337.html
 /tr/straight-fit-kargo-pantolon-c0p242077225.html
 /tr/straight-fit-z%C4%B1mbal%C4%B1-pantolon-c0p235711282.html
 /tr/straight-flare-jean-c0p226926790.html
@@ -4724,7 +4774,6 @@
 /tr/su-ge%C3%A7irmez,-oversize,-kap%C3%BC%C5%9Fonlu-dolgulu-ceket-c0p226926825.html
 /tr/su-ge%C3%A7irmez-dolgulu-ceket-c0p226926750.html
 /tr/su-ge%C3%A7irmez-dolgulu-ceket-c0p226926751.html
-/tr/su-ge%C3%A7irmez-kareli-oversize-kapitone-ceket-c0p245330346.html
 /tr/su-ge%C3%A7irmez-out-of-core-teknik-ceket-c0p228202942.html
 /tr/su-ge%C3%A7irmez-out-of-core-teknik-ceket-c0p244572093.html
 /tr/su-ge%C3%A7irmez-out-of-core-teknik-ceket-c0p244572130.html
@@ -4734,7 +4783,6 @@
 /tr/su-ge%C3%A7irmez-teknik-ceket-out-of-core-c0p228202943.html
 /tr/su-ve-r%C3%BCzgar-ge%C3%A7irmez-naylon-kap%C3%BC%C5%9Fonlu-ceket-c0p226931764.html
 /tr/suni-deri-%C5%9Falvar-pantolon-c0p234769968.html
-/tr/suni-deri-%C5%9Falvar-pantolon-c0p240127941.html
 /tr/suni-deri-%C5%9Fi%C5%9Fme-ceket-c0p229723120.html
 /tr/suni-deri-%C5%9Fi%C5%9Fme-ceket-c0p236554530.html
 /tr/suni-deri-baker-%C5%9Fapkas%C4%B1-c0p235852755.html
@@ -4754,6 +4802,8 @@
 /tr/suni-deri-boxy-fit-ceket-c0p242077250.html
 /tr/suni-deri-boxy-fit-ceket-c0p244455620.html
 /tr/suni-deri-boxy-fit-ceket-c0p244572644.html
+/tr/suni-deri-boxy-fit-ceket-c0p245329933.html
+/tr/suni-deri-boxy-fit-ceket-c0p245330466.html
 /tr/suni-deri-c%C3%BCzdan-c0p229737047.html
 /tr/suni-deri-ceket,-tokal%C4%B1-c0p226931784.html
 /tr/suni-deri-ceket-c0p226931285.html
@@ -4773,7 +4823,6 @@
 /tr/suni-deri-ceket-c0p245330232.html
 /tr/suni-deri-detayl%C4%B1-eldiven-c0p235545585.html
 /tr/suni-deri-detayl%C4%B1-jean-c0p232765266.html
-/tr/suni-deri-detayl%C4%B1-jean-c0p240127942.html
 /tr/suni-deri-detayl%C4%B1-jean-c0p242077998.html
 /tr/suni-deri-dik-yaka-ceket-c0p226931823.html
 /tr/suni-deri-dik-yaka-ceket-c0p226931824.html
@@ -4782,32 +4831,35 @@
 /tr/suni-deri-dik-yaka-kolsuz-top-c0p226931808.html
 /tr/suni-deri-dik-yaka-kolsuz-top-c0p226931809.html
 /tr/suni-deri-eldiven-c0p228633802.html
+/tr/suni-deri-eldiven-c0p245330175.html
 /tr/suni-deri-kap%C3%BC%C5%9Fonlu-ceket-c0p226926795.html
 /tr/suni-deri-kapri-pantolon-c0p237334883.html
 /tr/suni-deri-kapri-pantolon-c0p242077608.html
+/tr/suni-deri-kapri-pantolon-c0p245329923.html
 /tr/suni-deri-kol-%C3%A7antas%C4%B1-c0p229730529.html
 /tr/suni-deri-mini-etek-c0p237334884.html
 /tr/suni-deri-mini-perkins-yaka-elbise-c0p232637570.html
 /tr/suni-deri-mini-perkins-yaka-elbise-c0p232637571.html
-/tr/suni-deri-mini-perkins-yaka-elbise-c0p238451121.html
+/tr/suni-deri-mini-perkins-yaka-elbise-c0p238451122.html
 /tr/suni-deri-omuz-%C3%A7antas%C4%B1-c0p229730527.html
 /tr/suni-deri-omuz-%C3%A7antas%C4%B1-c0p229730528.html
 /tr/suni-deri-peplum-ceket-c0p230053452.html
-/tr/suni-deri-peplum-ceket-c0p244455636.html
 /tr/suni-deri-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-ceket-c0p226926781.html
 /tr/suni-deri-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-ceket-c0p243958925.html
 /tr/suni-deri-tokal%C4%B1-kemer-c0p226931426.html
 /tr/suni-deri-tokal%C4%B1-kemer-c0p229723083.html
 /tr/suni-deri-tokal%C4%B1-kemer-c0p229723084.html
+/tr/suni-deri-tokal%C4%B1-kemer-c0p237552619.html
 /tr/suni-s%C3%BCet-ceket-c0p226926913.html
 /tr/suni-s%C3%BCet-ceket-c0p226926914.html
 /tr/suni-s%C3%BCet-ceket-c0p233573552.html
 /tr/suni-s%C3%BCet-ceket-c0p236554472.html
 /tr/suni-s%C3%BCet-dik-yaka-ceket-c0p226926593.html
-/tr/suni-s%C3%BCet-dik-yaka-ceket-c0p240127944.html
+/tr/suni-s%C3%BCet-dik-yaka-ceket-c0p244572202.html
 /tr/suni-s%C3%BCet-fermuarl%C4%B1-ceket-c0p226926815.html
 /tr/suni-s%C3%BCet-s%C3%BCet-fermuarl%C4%B1-ceket-c0p233573385.html
 /tr/suni-s%C3%BCet-s%C3%BCet-fermuarl%C4%B1-ceket-c0p243958920.html
+/tr/suni-s%C3%BCet-s%C3%BCet-fermuarl%C4%B1-ceket-c0p245330478.html
 /tr/suni-s%C3%BCet-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-ceket-c0p226926982.html
 /tr/suni-s%C3%BCet-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-ceket-c0p227263456.html
 /tr/suni-s%C3%BCet-s%C3%BCsl%C3%BC-d%C3%BC%C4%9Fmeli-ceket-c0p242077563.html
@@ -4823,6 +4875,7 @@
 /tr/super-baggy-fit-denim-bermuda-c0p229737081.html
 /tr/super-baggy-fit-denim-bermuda-c0p229737082.html
 /tr/super-baggy-fit-denim-bermuda-c0p230327603.html
+/tr/super-baggy-fit-denim-bermuda-c0p230327903.html
 /tr/super-baggy-fit-denim-bermuda-c0p230328071.html
 /tr/super-baggy-fit-denim-bermuda-c0p230328517.html
 /tr/super-baggy-fit-denim-bermuda-c0p231041619.html
@@ -4830,7 +4883,6 @@
 /tr/super-baggy-fit-ince-%C3%A7izgili-pantolon-c0p241396429.html
 /tr/super-baggy-fit-ince-%C3%A7izgili-pensli-pantolon-c0p227962143.html
 /tr/super-baggy-fit-ince-%C3%A7izgili-pensli-pantolon-c0p233573398.html
-/tr/super-baggy-fit-ince-%C3%A7izgili-pensli-pantolon-c0p236213911.html
 /tr/super-baggy-fit-jean-c0p226926738.html
 /tr/super-baggy-fit-jean-c0p226926739.html
 /tr/super-baggy-fit-jean-c0p226926740.html
@@ -4849,6 +4901,7 @@
 /tr/super-baggy-fit-jean-c0p240128395.html
 /tr/super-baggy-fit-jean-c0p242077238.html
 /tr/super-baggy-fit-jean-c0p242078035.html
+/tr/super-baggy-fit-jean-c0p245330475.html
 /tr/super-baggy-fit-pantolon-c0p229737241.html
 /tr/super-baggy-fit-pantolon-c0p229737242.html
 /tr/super-baggy-fit-pantolon-c0p230327993.html
@@ -4856,18 +4909,19 @@
 /tr/super-baggy-fit-pantolon-c0p230328050.html
 /tr/super-baggy-fit-pantolon-c0p230328052.html
 /tr/super-baggy-fit-pantolon-c0p230328464.html
+/tr/super-baggy-fit-pantolon-c0p230328466.html
 /tr/super-baggy-fit-pensli-pantolon-c0p227962145.html
 /tr/super-baggy-fit-pensli-pantolon-c0p229737238.html
 /tr/super-baggy-fit-pensli-pantolon-c0p229737239.html
 /tr/super-baggy-fit-pensli-pantolon-c0p230064775.html
-/tr/super-baggy-fit-pensli-pantolon-c0p230328131.html
 /tr/super-baggy-fit-pensli-pantolon-c0p232227705.html
 /tr/super-baggy-fit-pensli-pantolon-c0p234324948.html
-/tr/super-baggy-fit-pensli-pantolon-c0p236213912.html
 /tr/super-baggy-fit-pileli-pantolon-c0p233420889.html
 /tr/super-baggy-fit-pileli-pantolon-c0p233420890.html
 /tr/super-baggy-fit-pileli-pantolon-c0p240127920.html
 /tr/super-baggy-fit-pileli-pantolon-c0p242077235.html
+/tr/super-baggy-fit-pileli-pantolon-c0p242077262.html
+/tr/super-baggy-fit-pileli-pantolon-c0p242077429.html
 /tr/super-baggy-fit-pileli-pantolon-c0p242077735.html
 /tr/super-baggy-fit-pileli-pantolon-c0p242077754.html
 /tr/super-baggy-fit-pileli-pantolon-c0p242077792.html
@@ -4917,13 +4971,14 @@
 /tr/teknik-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p242077751.html
 /tr/teknik-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p242077795.html
 /tr/teknik-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p242077797.html
+/tr/teknik-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p245329946.html
 /tr/teknik-kareli-%C3%A7anta-c0p226933487.html
+/tr/teknik-kareli-%C3%A7anta-c0p240127586.html
 /tr/teknik-kareli-%C5%9Fapka-c0p227531256.html
 /tr/teknik-kareli-%C5%9Fapka-c0p238451451.html
 /tr/teknik-kargo-straight-fit-pantolon-c0p231799617.html
-/tr/teknik-kuma%C5%9F-fuseaux-pantolon-c0p238451438.html
 /tr/teknik-kuma%C5%9F-kargo-barrel-fit-pantolon-c0p236233932.html
-/tr/teknik-kuma%C5%9F-kargo-barrel-fit-pantolon-c0p245330279.html
+/tr/teknik-kuma%C5%9F-kargo-barrel-fit-pantolon-c0p245330514.html
 /tr/teknik-kuma%C5%9F-tayt-pantolon-c0p227962134.html
 /tr/teknik-kuma%C5%9Fl%C4%B1-fermuarl%C4%B1-ceket,-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-c0p228309054.html
 /tr/teknik-kuma%C5%9Fl%C4%B1-fermuarl%C4%B1-ceket,-nefes-alabilir-&amp;-h%C4%B1zl%C4%B1-kuruyan-c0p228309055.html
@@ -4946,10 +5001,11 @@
 /tr/teknik-para%C5%9F%C3%BCt-pantolon-c0p233408538.html
 /tr/teknik-para%C5%9F%C3%BCt-pantolon-c0p233408539.html
 /tr/teknik-para%C5%9F%C3%BCt-pantolon-c0p235036685.html
-/tr/teknik-para%C5%9F%C3%BCt-pantolon-c0p236554421.html
 /tr/teknik-para%C5%9F%C3%BCt-pantolon-c0p236554528.html
+/tr/teknik-para%C5%9F%C3%BCt-pantolon-c0p236554594.html
 /tr/teknik-para%C5%9F%C3%BCt-pantolon-c0p242077913.html
 /tr/teknik-para%C5%9F%C3%BCt-pantolon-c0p243743247.html
+/tr/teknik-para%C5%9F%C3%BCt-pantolon-c0p243743248.html
 /tr/teknik-para%C5%9F%C3%BCt-pantolon-c0p244572720.html
 /tr/teknik-uzun-kollu-ti%C5%9F%C3%B6rt-c0p233408553.html
 /tr/teknik-uzun-kollu-ti%C5%9F%C3%B6rt-c0p243744195.html
@@ -4973,6 +5029,7 @@
 /tr/temel-spor-ayakkab%C4%B1-c0p226931486.html
 /tr/temel-spor-ayakkab%C4%B1-c0p230064505.html
 /tr/temel-spor-ayakkab%C4%B1-c0p230064970.html
+/tr/temel-spor-ayakkab%C4%B1-c0p231042042.html
 /tr/temel-spor-ayakkabi-c0p226931594.html
 /tr/temel-spor-ayakkabi-c0p226931595.html
 /tr/temel-spor-ayakkabi-c0p236213975.html
@@ -4991,7 +5048,6 @@
 /tr/toka-detayli-topuklu-ayakkabi-c0p238451465.html
 /tr/tokal%C4%B1-%C3%A7izgili-v-yaka-kazak-c0p227753556.html
 /tr/tokal%C4%B1-%C3%A7izgili-v-yaka-kazak-c0p242077589.html
-/tr/tokal%C4%B1-%C3%A7izgili-v-yaka-kazak-c0p242078055.html
 /tr/tokal%C4%B1-arkas%C4%B1-a%C3%A7%C4%B1k-babet-c0p226926757.html
 /tr/tokal%C4%B1-arkas%C4%B1-a%C3%A7%C4%B1k-babet-c0p230064959.html
 /tr/tokal%C4%B1-arkas%C4%B1-a%C3%A7%C4%B1k-babet-c0p236554443.html
@@ -5033,15 +5089,17 @@
 /tr/tokal%C4%B1-pantolon-%C3%A7izmesi-c0p240128450.html
 /tr/tokal%C4%B1-para%C5%9F%C3%BCt-bermuda-c0p236233933.html
 /tr/tokal%C4%B1-para%C5%9F%C3%BCt-bermuda-c0p242077770.html
+/tr/tokal%C4%B1-para%C5%9F%C3%BCt-bermuda-c0p245330461.html
 /tr/tokal%C4%B1-parmak-aras%C4%B1-d%C3%BCz-sandalet-c0p227950340.html
 /tr/tokal%C4%B1-sabo-c0p226926996.html
 /tr/tokal%C4%B1-sabo-c0p229336726.html
 /tr/tokal%C4%B1-sabo-c0p231041642.html
 /tr/tokal%C4%B1-sandalet-c0p226927057.html
 /tr/tokal%C4%B1-suni-deri-kemer-c0p226931425.html
+/tr/tokal%C4%B1-suni-deri-kemer-c0p237553117.html
 /tr/tokal%C4%B1-suni-deri-kese-%C3%A7anta-c0p226931252.html
+/tr/tokal%C4%B1-suni-deri-kese-%C3%A7anta-c0p238450889.html
 /tr/tokal%C4%B1-suni-k%C3%BCrk-kemer-c0p227229907.html
-/tr/tokal%C4%B1-suni-s%C3%BCet-%C3%A7anta-c0p242077970.html
 /tr/tokal%C4%B1-topuklu-arkas%C4%B1-a%C3%A7%C4%B1k-ayakkab%C4%B1-c0p226931499.html
 /tr/tokal%C4%B1-topuklu-arkas%C4%B1-a%C3%A7%C4%B1k-ayakkab%C4%B1-c0p226933486.html
 /tr/tokal%C4%B1-topuklu-arkas%C4%B1-a%C3%A7%C4%B1k-ayakkab%C4%B1-c0p227950816.html
@@ -5092,7 +5150,6 @@
 /tr/topuklu-trouser-%C3%A7izme-c0p230065220.html
 /tr/toy-story-bask%C4%B1l%C4%B1-t-shirt-c0p226926735.html
 /tr/triko-balaclava-c0p228633816.html
-/tr/triko-balaclava-c0p242077326.html
 /tr/triko-bere-c0p229499436.html
 /tr/triko-bere-c0p229579224.html
 /tr/triko-bere-c0p241488981.html
@@ -5122,7 +5179,6 @@
 /tr/uzun-%C5%9Fardonlu-bermuda-c0p236213942.html
 /tr/uzun-%C5%9Fardonlu-bermuda-c0p237553262.html
 /tr/uzun-asimetrik-ti%C5%9F%C3%B6rt-c0p233943352.html
-/tr/uzun-asimetrik-ti%C5%9F%C3%B6rt-c0p240128360.html
 /tr/uzun-asimetrik-ti%C5%9F%C3%B6rt-c0p242077923.html
 /tr/uzun-cepli-denim-bermuda-%C5%9Fort-c0p229710774.html
 /tr/uzun-cepli-denim-bermuda-%C5%9Fort-c0p240128306.html
@@ -5141,6 +5197,7 @@
 /tr/uzun-kollu,-ba%C4%9Fc%C4%B1kl%C4%B1-dekolteli-ti%C5%9F%C3%B6rt-c0p232637565.html
 /tr/uzun-kollu,-ba%C4%9Fc%C4%B1kl%C4%B1-dekolteli-ti%C5%9F%C3%B6rt-c0p232637567.html
 /tr/uzun-kollu,-ba%C4%9Fc%C4%B1kl%C4%B1-dekolteli-ti%C5%9F%C3%B6rt-c0p245330198.html
+/tr/uzun-kollu,-ba%C4%9Fc%C4%B1kl%C4%B1-dekolteli-ti%C5%9F%C3%B6rt-c0p245330460.html
 /tr/uzun-kollu,-ba%C4%9Fc%C4%B1kl%C4%B1-ve-dekolteli-t-shirt-c0p232637566.html
 /tr/uzun-kollu,-dar-kesim-saten-g%C3%B6mlek-c0p236877203.html
 /tr/uzun-kollu,-dekolte-detayl%C4%B1-dantel-body-c0p232637575.html
@@ -5170,7 +5227,6 @@
 /tr/uzun-kollu-aries-x-bershka-ti%C5%9F%C3%B6rt-c0p242077408.html
 /tr/uzun-kollu-asimetrik-b%C3%BCzg%C3%BCl%C3%BC-ti%C5%9F%C3%B6rt-c0p231948407.html
 /tr/uzun-kollu-asimetrik-yaka-ti%C5%9F%C3%B6rt-c0p234044300.html
-/tr/uzun-kollu-b%C3%BCzg%C3%BCl%C3%BC-t%C3%BCl-top-c0p245329749.html
 /tr/uzun-kollu-b%C3%BCzg%C3%BCl%C3%BC-ti%C5%9F%C3%B6rt-c0p230048840.html
 /tr/uzun-kollu-b%C3%BCzg%C3%BCl%C3%BC-ti%C5%9F%C3%B6rt-c0p230048841.html
 /tr/uzun-kollu-b%C3%BCzg%C3%BCl%C3%BC-ti%C5%9F%C3%B6rt-c0p230048842.html
@@ -5216,6 +5272,7 @@
 /tr/uzun-kollu-bisiklet-yaka-ti%C5%9F%C3%B6rt-c0p226931584.html
 /tr/uzun-kollu-bisiklet-yaka-ti%C5%9F%C3%B6rt-c0p227229910.html
 /tr/uzun-kollu-bisiklet-yaka-ti%C5%9F%C3%B6rt-c0p227229911.html
+/tr/uzun-kollu-bisiklet-yaka-ti%C5%9F%C3%B6rt-c0p231815835.html
 /tr/uzun-kollu-bisiklet-yaka-ti%C5%9F%C3%B6rt-c0p232227397.html
 /tr/uzun-kollu-bisiklet-yaka-ti%C5%9F%C3%B6rt-c0p233573670.html
 /tr/uzun-kollu-bisiklet-yaka-ti%C5%9F%C3%B6rt-c0p233573671.html
@@ -5228,9 +5285,9 @@
 /tr/uzun-kollu-bisiklet-yaka-ti%C5%9F%C3%B6rt-c0p238451150.html
 /tr/uzun-kollu-bisiklet-yaka-ti%C5%9F%C3%B6rt-c0p238451411.html
 /tr/uzun-kollu-bisiklet-yaka-ti%C5%9F%C3%B6rt-c0p242077906.html
+/tr/uzun-kollu-bisiklet-yaka-ti%C5%9F%C3%B6rt-c0p245330454.html
 /tr/uzun-kollu-body-c0p233488836.html
 /tr/uzun-kollu-body-c0p233488838.html
-/tr/uzun-kollu-body-c0p243743236.html
 /tr/uzun-kollu-body-c0p243743240.html
 /tr/uzun-kollu-boxy-fit-%C3%A7izgili-ti%C5%9F%C3%B6rt-c0p233408517.html
 /tr/uzun-kollu-boxy-fit-g%C3%B6mlek-c0p231948421.html
@@ -5285,7 +5342,6 @@
 /tr/uzun-kollu-fitted-aries-x-bershka-ti%C5%9F%C3%B6rt-c0p235319928.html
 /tr/uzun-kollu-fitted-aries-x-bershka-ti%C5%9F%C3%B6rt-c0p242077873.html
 /tr/uzun-kollu-flok-bask%C4%B1l%C4%B1-body-c0p233488835.html
-/tr/uzun-kollu-flok-bask%C4%B1l%C4%B1-body-c0p243743237.html
 /tr/uzun-kollu-i%C5%9Flemeli-g%C3%B6mlek-c0p228309035.html
 /tr/uzun-kollu-i%C5%9Flemeli-g%C3%B6mlek-c0p241396382.html
 /tr/uzun-kollu-kareli-g%C3%B6mlek-c0p232962098.html
@@ -5298,10 +5354,10 @@
 /tr/uzun-kollu-man%C5%9Fetli-ceket-c0p230144660.html
 /tr/uzun-kollu-man%C5%9Fetli-ceket-c0p230144661.html
 /tr/uzun-kollu-man%C5%9Fetli-ceket-c0p230144663.html
+/tr/uzun-kollu-man%C5%9Fetli-ceket-c0p238451238.html
 /tr/uzun-kollu-man%C5%9Fetli-ceket-c0p240127543.html
 /tr/uzun-kollu-metalik-iplikli-ti%C5%9F%C3%B6rt-c0p241942727.html
 /tr/uzun-kollu-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-teknik-ti%C5%9F%C3%B6rt-c0p228309030.html
-/tr/uzun-kollu-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-teknik-ti%C5%9F%C3%B6rt-c0p238451724.html
 /tr/uzun-kollu-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-teknik-ti%C5%9F%C3%B6rt-c0p240128191.html
 /tr/uzun-kollu-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-teknik-ti%C5%9F%C3%B6rt-c0p243743234.html
 /tr/uzun-kollu-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-teknik-ti%C5%9F%C3%B6rt-c0p243743729.html
@@ -5314,9 +5370,11 @@
 /tr/uzun-kollu-poliamid-drapeli-ti%C5%9F%C3%B6rt-c0p245329747.html
 /tr/uzun-kollu-reglan-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p227962158.html
 /tr/uzun-kollu-reglan-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p234769970.html
+/tr/uzun-kollu-reglan-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p236554661.html
 /tr/uzun-kollu-reglan-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p240128107.html
 /tr/uzun-kollu-reglan-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p240459589.html
 /tr/uzun-kollu-saten-kurdeleli-ti%C5%9F%C3%B6rt-c0p236401931.html
+/tr/uzun-kollu-saten-kurdeleli-ti%C5%9F%C3%B6rt-c0p245329927.html
 /tr/uzun-kollu-slim-fit-ti%C5%9F%C3%B6rt-c0p230182171.html
 /tr/uzun-kollu-slim-fit-ti%C5%9F%C3%B6rt-c0p230182172.html
 /tr/uzun-kollu-slim-fit-ti%C5%9F%C3%B6rt-c0p230182173.html
@@ -5328,7 +5386,6 @@
 /tr/uzun-kollu-slim-fit-ti%C5%9F%C3%B6rt-c0p245329701.html
 /tr/uzun-kollu-spider-man-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p238644118.html
 /tr/uzun-kollu-spider-man-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p244572671.html
-/tr/uzun-kollu-spider-man-bask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p245330184.html
 /tr/uzun-kollu-teknik-kuma%C5%9F-bolero,-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-c0p228309048.html
 /tr/uzun-kollu-teknik-kuma%C5%9F-bolero---nefes-alabilen-&amp;-h%C4%B1zl%C4%B1-kuruyan-c0p228309047.html
 /tr/uzun-kollu-teknik-kuma%C5%9F-bolero---nefes-alabilen-&amp;-h%C4%B1zl%C4%B1-kuruyan-c0p240127595.html
@@ -5336,6 +5393,7 @@
 /tr/uzun-kollu-teknik-kuma%C5%9Fl%C4%B1,-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-ti%C5%9F%C3%B6rt-c0p228309029.html
 /tr/uzun-kollu-teknik-nefes-alabilen-ve-h%C4%B1zl%C4%B1-kuruyan-ti%C5%9F%C3%B6rt-c0p228309031.html
 /tr/uzun-kollu-v-yaka-body-c0p233488846.html
+/tr/uzun-mumlu-kareli-tren%C3%A7kot-c0p228633825.html
 /tr/v-yaka,-jakarl%C4%B1-kuma%C5%9F,-grafik-desenli-boxy-fit-kazak-c0p232765274.html
 /tr/v-yaka-%C3%A7izgili-kazak-c0p226926839.html
 /tr/v-yaka-%C3%A7izgili-tokal%C4%B1-kazak-c0p227753557.html
@@ -5360,12 +5418,13 @@
 /tr/v-yaka-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p234324968.html
 /tr/v-yaka-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p234324970.html
 /tr/v-yaka-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p234324972.html
-/tr/v-yaka-ask%C4%B1l%C4%B1-ti%C5%9F%C3%B6rt-c0p236554904.html
 /tr/v-yaka-ba%C4%9Fc%C4%B1kl%C4%B1-kazak-c0p226931267.html
 /tr/v-yaka-bask%C4%B1l%C4%B1-sweatshirt-c0p229465992.html
+/tr/v-yaka-bask%C4%B1l%C4%B1-sweatshirt-c0p238451246.html
 /tr/v-yaka-crop-ceket-c0p226931513.html
 /tr/v-yaka-crop-ceket-c0p226931514.html
 /tr/v-yaka-ka%C5%9Fmir-y%C3%BCn-kazak-c0p226931466.html
+/tr/v-yaka-ka%C5%9Fmir-y%C3%BCn-kazak-c0p242078052.html
 /tr/v-yaka-tokal%C4%B1-kazak-c0p229579227.html
 /tr/v-yaka-uzun-kollu-body-c0p233488847.html
 /tr/v-yaka-uzun-kollu-dantel-ti%C5%9F%C3%B6rt-c0p231948403.html
@@ -5378,8 +5437,8 @@
 /tr/v-yaka-uzun-kollu-dantel-ti%C5%9F%C3%B6rt-c0p243744213.html
 /tr/v-yakal%C4%B1,-yumu%C5%9Fak-dokulu-oversize-kazak-c0p226927292.html
 /tr/v-yakal%C4%B1,-yumu%C5%9Fak-dokulu-oversize-kazak-c0p226927293.html
+/tr/v-yakal%C4%B1,-yumu%C5%9Fak-dokulu-oversize-kazak-c0p236213449.html
 /tr/v-yakal%C4%B1-ka%C5%9Fmir-y%C3%BCn-kazak-c0p226931465.html
-/tr/v-yakal%C4%B1-ka%C5%9Fmir-y%C3%BCn-kazak-c0p242078050.html
 /tr/vanilla-lipgloss-c0p226926722.html
 /tr/vanilla-lipgloss-c0p240127939.html
 /tr/vantuzlu-desenli-telefon-k%C4%B1l%C4%B1f%C4%B1-c0p230006368.html
@@ -5399,13 +5458,11 @@
 /tr/volanl%C4%B1-halter-top-c0p229729999.html
 /tr/volanl%C4%B1-halter-top-c0p229730000.html
 /tr/volanl%C4%B1-halter-top-c0p230328803.html
-/tr/volanl%C4%B1-halter-top-c0p230329416.html
 /tr/volanl%C4%B1-halter-yaka-top-c0p229386313.html
 /tr/volanl%C4%B1-korse-bardot-%C3%BCst-c0p230144666.html
 /tr/volanl%C4%B1-korse-bardot-%C3%BCst-c0p238451735.html
 /tr/volcom-sandalet-c0p226931615.html
 /tr/volcom-sandalet-c0p226931616.html
-/tr/waterproof-&amp;-windproof-kap%C3%BC%C5%9Fonlu-naylon-ceket-c0p237552748.html
 /tr/wide-leg-pantolon-c0p226926807.html
 /tr/wide-pa%C3%A7a-kargo-bermuda-c0p229737317.html
 /tr/wild-jungle-love-v%C3%BCcut-spreyi-250-ml-c0p229730173.html
@@ -5429,7 +5486,6 @@
 /tr/y%C3%BCksek-bel-barrel-fit-jean-c0p235852751.html
 /tr/y%C3%BCksek-bel-barrel-fit-jean-c0p238451233.html
 /tr/y%C3%BCksek-bel-barrel-fit-jean-c0p240128188.html
-/tr/y%C3%BCksek-bel-barrel-fit-jean-c0p240128391.html
 /tr/y%C3%BCksek-bel-barrel-fit-jean-c0p242077782.html
 /tr/y%C3%BCksek-bel-barrel-fit-jean-c0p242077783.html
 /tr/y%C3%BCksek-bel-barrel-fit-jean-c0p242077843.html
@@ -5453,9 +5509,8 @@
 /tr/y%C3%BCksek-bel-loose-fit-jean-c0p232484805.html
 /tr/y%C3%BCksek-bel-skinny-fit-jean-c0p226927249.html
 /tr/y%C3%BCksek-bel-skinny-fit-jean-c0p226927251.html
-/tr/y%C3%BCksek-bel-skinny-fit-jean-c0p238451106.html
+/tr/y%C3%BCksek-bel-skinny-fit-jean-c0p238451108.html
 /tr/y%C3%BCksek-bel-skinny-jean-c0p226927250.html
-/tr/y%C3%BCksek-bel-skinny-jean-c0p238451107.html
 /tr/y%C3%BCksek-bel-straight-fit-geni%C5%9F-pa%C3%A7a-jean-c0p226926706.html
 /tr/y%C3%BCksek-bel-straight-fit-jean-c0p226926704.html
 /tr/y%C3%BCksek-bel-wide-jean-c0p230274141.html
@@ -5510,7 +5565,6 @@
 /tr/y%C4%B1kama-efektli-ceket-c0p229730004.html
 /tr/y%C4%B1kama-efektli-ceket-c0p229730005.html
 /tr/y%C4%B1kama-efektli-ceket-c0p229730006.html
-/tr/y%C4%B1kama-efektli-ceket-c0p236213970.html
 /tr/y%C4%B1kama-efektli-denim-%C5%9Fapka-c0p229737383.html
 /tr/y%C4%B1kama-efektli-i%C5%9Flemeli-%C5%9Fapka-c0p226927348.html
 /tr/y%C4%B1kama-efektli-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p233420886.html
@@ -5520,7 +5574,6 @@
 /tr/y%C4%B1kama-efektli-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p238451188.html
 /tr/y%C4%B1kama-efektli-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p238451664.html
 /tr/y%C4%B1kama-efektli-kap%C3%BC%C5%9Fonlu-yelek-c0p233761085.html
-/tr/y%C4%B1kama-efektli-kap%C3%BC%C5%9Fonlu-yelek-c0p238451425.html
 /tr/y%C4%B1kama-efektli-yamal%C4%B1-%C5%9Fapka-c0p226931770.html
 /tr/y%C4%B1kamal%C4%B1,-yamal%C4%B1-%C5%9Fardonlu-bermuda-c0p226927100.html
 /tr/y%C4%B1kamal%C4%B1,-yamal%C4%B1-%C5%9Fardonlu-bermuda-c0p231041762.html
@@ -5540,7 +5593,6 @@
 /tr/y%C4%B1kamal%C4%B1-super-baggy-fit-pantolon-c0p233510453.html
 /tr/y%C4%B1kamal%C4%B1-super-baggy-fit-pantolon-c0p240127570.html
 /tr/y%C4%B1kamal%C4%B1-super-baggy-fit-pantolon-c0p242077832.html
-/tr/y%C4%B1kamal%C4%B1-super-baggy-fit-pantolon-c0p243743677.html
 /tr/y%C4%B1kamal%C4%B1-y%C4%B1rt%C4%B1k-bask%C4%B1l%C4%B1-sweatshirt-c0p228480474.html
 /tr/y%C4%B1kanm%C4%B1%C5%9F-%C3%A7apraz-ask%C4%B1l%C4%B1-kese-%C3%A7anta-c0p230471623.html
 /tr/y%C4%B1kanm%C4%B1%C5%9F-bask%C4%B1l%C4%B1-kap%C3%BC%C5%9Fon-sweatshirt-c0p235655193.html
@@ -5586,6 +5638,7 @@
 /tr/yamal%C4%B1-kareli-uzun-kollu-g%C3%B6mlek-c0p230924894.html
 /tr/yamal%C4%B1-kareli-uzun-kollu-g%C3%B6mlek-c0p243743762.html
 /tr/yamal%C4%B1-kuma%C5%9F-kep-c0p235961970.html
+/tr/yamal%C4%B1-kuma%C5%9F-kep-c0p242077613.html
 /tr/yamal%C4%B1-polo-kazak-c0p227042046.html
 /tr/yan-%C5%9Feritli-%C5%9Fardonlu-e%C5%9Fofman-alt%C4%B1-c0p226926661.html
 /tr/yan-%C5%9Feritli-%C5%9Fardonlu-e%C5%9Fofman-alt%C4%B1-c0p226926662.html
@@ -5688,7 +5741,7 @@
 /tr/yuvarlak-yaka-ask%C4%B1l%C4%B1-body-c0p229730539.html
 /tr/yuvarlak-yaka-ask%C4%B1l%C4%B1-body-c0p229730540.html
 /tr/yuvarlak-yaka-ask%C4%B1l%C4%B1-body-c0p229730541.html
-/tr/yuvarlak-yaka-ask%C4%B1l%C4%B1-body-c0p230065270.html
+/tr/yuvarlak-yaka-ask%C4%B1l%C4%B1-body-c0p230329043.html
 /tr/yuvarlak-yaka-ask%C4%B1l%C4%B1-body-c0p233573610.html
 /tr/yuvarlak-yaka-ask%C4%B1l%C4%B1-body-c0p234325010.html
 /tr/z%C4%B1mba-detayl%C4%B1,-kap%C3%BC%C5%9Fonlu-suni-deri-ceket-c0p243093342.html
@@ -5702,7 +5755,6 @@
 /tr/z%C4%B1mba-detayl%C4%B1-fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p238451710.html
 /tr/z%C4%B1mba-detayl%C4%B1-fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p240127646.html
 /tr/z%C4%B1mba-detayl%C4%B1-fermuarl%C4%B1-kap%C3%BC%C5%9Fonlu-sweatshirt-c0p242077724.html
-/tr/z%C4%B1mba-detayl%C4%B1-i%C5%9Flemeli-desenli-pantolon-c0p243743251.html
 /tr/z%C4%B1mba-detayl%C4%B1-k%C4%B1sa-sivri-topuklu-ayakkab%C4%B1-c0p240127978.html
 /tr/z%C4%B1mba-detayl%C4%B1-orta-bel-straight-fit-jean-c0p230270435.html
 /tr/z%C4%B1mba-detayl%C4%B1-spor-bot-c0p226926758.html
@@ -5714,7 +5766,6 @@
 /tr/z%C4%B1mbal%C4%B1-barrel-fit-%C3%A7anta-c0p228741261.html
 /tr/z%C4%B1mbal%C4%B1-barrel-fit-%C3%A7anta-c0p234811105.html
 /tr/z%C4%B1mbal%C4%B1-bilekte-sneaker-c0p234325181.html
-/tr/z%C4%B1mbal%C4%B1-bilekte-sneaker-c0p242077249.html
 /tr/z%C4%B1mbal%C4%B1-brezilya-modeli-bikini-alt%C4%B1-c0p229737008.html
 /tr/z%C4%B1mbal%C4%B1-culotte-bikini-alt%C4%B1-c0p229723202.html
 /tr/z%C4%B1mbal%C4%B1-deri-geni%C5%9F-kon%C3%A7lu-d%C3%BCz-bot-c0p227850029.html
@@ -5724,6 +5775,7 @@
 /tr/z%C4%B1mbal%C4%B1-flare-fit-pantolon-c0p233590614.html
 /tr/z%C4%B1mbal%C4%B1-geni%C5%9F-kon%C3%A7lu-d%C3%BCz-deri-bot-c0p227850030.html
 /tr/z%C4%B1mbal%C4%B1-geni%C5%9F-kon%C3%A7lu-d%C3%BCz-deri-bot-c0p240128051.html
+/tr/z%C4%B1mbal%C4%B1-geni%C5%9F-kon%C3%A7lu-d%C3%BCz-deri-bot-c0p241396396.html
 /tr/z%C4%B1mbal%C4%B1-geni%C5%9F-kon%C3%A7lu-d%C3%BCz-deri-bot-c0p244572147.html
 /tr/z%C4%B1mbal%C4%B1-jean-c0p232543378.html
 /tr/z%C4%B1mbal%C4%B1-jean-c0p236554551.html
@@ -5758,7 +5810,6 @@
 /tr/zincir-kemer-c0p234324943.html
 /tr/zincir-y%C4%B1ld%C4%B1zl%C4%B1-kemer-c0p229723021.html
 /tr/zincirli-kapitone-%C3%A7apraz-ask%C4%B1l%C4%B1-%C3%A7anta-c0p229730755.html
-/tr/zincirli-kapitone-%C3%A7apraz-ask%C4%B1l%C4%B1-%C3%A7anta-c0p230328375.html
 /tr/zincirli-kargo-bermuda-c0p226926901.html
 /tr/zincirli-suni-deri-kemer-c0p231378806.html
 /tr/zoo-york-boxy-fit-k%C4%B1sa-kollu-g%C3%B6mlek-c0p228809187.html

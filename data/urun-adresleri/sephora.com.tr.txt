@@ -591,6 +591,7 @@
 /p/airwash-kuru-sampuan---yaglanmayi-azaltir-kokuyu-ortadan-kaldirir-719062.html
 /p/airwash-kuru-sampuan---yaglanmayi-azaltir-kokuyu-ortadan-kaldirir-P1000205354.html
 /p/airy-texture-spray---hacimli--belirgin-ve-esnek-saclar-icin-sprey-P1000212054.html
+/p/airy-texture-spray---hacimli--belirgin-ve-esnek-saclar-icin-sprey-P1000214777.html
 /p/ajna-mist---ucuncu-goz-cakra-spreyi%CC%87-P1000208437.html
 /p/alien-edp-178622.html
 /p/alien-edp-616695.html
@@ -905,7 +906,6 @@
 /p/anti-imperfection-lotion---arindirici-yuz-losyonu-P10027007.html
 /p/anti-redness-clarifying-care---kizariklik-ve-leke-karsiti-serum-P1000211395.html
 /p/anti-wrinkle-eye-treatment-kit-P10025091.html
-/p/antioksidan-etkili-pembe-kuvars-roll-on-serum-kirisiklik-karsiti-ve-yenileyici-P10024830.html
 /p/antioxidant-tonic---koruyucu-tonik-serum-718131.html
 /p/antioxidant-tonic---koruyucu-tonik-serum-P10056373.html
 /p/antioxifeye---goz-cevresi-maskesi-P1000212437.html
@@ -3691,6 +3691,7 @@
 /p/contouring-lipstick---lipstick-610073.html
 /p/contouring-lipstick---lipstick-610074.html
 /p/contouring-lipstick---lipstick-P10026084.html
+/p/contouring-lipstick-holder---ruj-case-P10026085.html
 /p/controlled-chaos-mascara-ink-468448.html
 /p/controlled-chaos-mascara-ink-468449.html
 /p/controlled-chaos-mascara-ink-468450.html
@@ -5656,7 +5657,6 @@
 /p/flacon-spray-vide-30-ml-P10016478.html
 /p/flash---aninda-isiltili-parlaklik-maskesi-P10057394.html
 /p/flash-nap-instant-revival-goz-jel-krem-536384.html
-/p/flash-nap-instant-revival-goz-jel-krem-P10013987.html
 /p/flashpatch%C2%AE-rejuvenating-eye-gels-P3345005.html
 /p/flashpatch-illuminating-eye-gels-559616.html
 /p/flashpatch-illuminating-eye-gels-P3582001.html
@@ -6240,7 +6240,6 @@
 /p/glow-makyaj-sabitleme-spreyi---12-saat-kalici--akmaz--aydinlik-sonuc-751989.html
 /p/glow-makyaj-sabitleme-spreyi---12-saat-kalici--akmaz--aydinlik-sonuc-P10061919.html
 /p/glow-mask---boyali-saclar-icin-yogun-nemlendirici-maske-P1000212041.html
-/p/glow-mist-P10014547.html
 /p/glow-moisturizer---glass-skin-etkili-24-saat-nemlendirici-krem-P1000213913.html
 /p/glow-mud-cleanser-P3417059.html
 /p/glow-perfection-fondoten-467293.html
@@ -8219,7 +8218,6 @@
 /p/lash-clash---suya-dayanikli-maskara-P10056931.html
 /p/lash-clash-01-travel-size---mascara-811256.html
 /p/lash-clash-01-travel-size---mascara-P1000208576.html
-/p/lash-curler---kirpik-kivirici-P3770066.html
 /p/lash-drama---mascara-set-P1000211372.html
 /p/lash-et-brow-double-fix---maskara-P10034251.html
 /p/lash-fan-club-mascara---fan-fest-maskara-seti-P1000207166.html
@@ -9951,7 +9949,6 @@
 /p/milky-boost-cream-549134.html
 /p/milky-boost-cream-P10016833.html
 /p/milky-oil-cleanser---makyaj-temizleyici-P10051669.html
-/p/milky-tonic-P3959103.html
 /p/million-gold---eau-de-parfum-intense-734914.html
 /p/million-gold---eau-de-parfum-intense-734915.html
 /p/million-gold---eau-de-parfum-intense-P1000203532.html
@@ -14209,6 +14206,7 @@
 /p/strength-et-shine-hair-oil---sac-bakim-yagi-P1000205398.html
 /p/strength-et-shine-set---aninda-etkili--yogun-onarici-bakim-et-parlaklik-katan-set-P1000214959.html
 /p/strong-hold-hairspray---hizli-kuruyan-ve-uzun-sure-kalici-ultra-i%CC%87nce-sac-spreyi-P1000212057.html
+/p/strong-hold-hairspray---hizli-kuruyan-ve-uzun-sure-kalici-ultra-i%CC%87nce-sac-spreyi-P1000214776.html
 /p/stronger-with-you---parfum-754505.html
 /p/stronger-with-you---parfum-P1000205700.html
 /p/stronger-with-you-amber---parfum-P1000209337.html
@@ -14223,7 +14221,6 @@
 /p/stunna-lip-paint-P3169001.html
 /p/style--shine-et-spritz-trio---sac-bakim-seti-P1000214783.html
 /p/style-lab-air-dry-styler---cok-islevli-sekillendirici-bakim-P1000206042.html
-/p/style-treat-yuzu-plum-oil---kendiliginden-kurutma-icin-sac-kremi-P1000203446.html
 /p/styler-gold---tum-sac-tipleri-i%CC%87cin-duzlestirici-P3394016.html
 /p/styler-max---uzun--kalin-telli-ve-kivircik-saclar-i%CC%87cin-duzlestirici-P10014405.html
 /p/styler-platinum----boyali-saclar-i%CC%87cin--sik-kullanima-uygun-duzlestirici-457077.html
