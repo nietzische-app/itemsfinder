@@ -41,7 +41,6 @@
 /tr/boncuk-detayl-duz-sandalet-l11706740
 /tr/boncuk-detayl-el-cantas-l14012840
 /tr/boncuk-detayl-omuz-cantas-l14025840
-/tr/boncuk-detayl-shopper-canta-l14004840
 /tr/boncuklu-omuz-cantas-l14014840
 /tr/boncuklu-omuz-cantas-l14029840
 /tr/bootcut-jean-l07660308
@@ -78,6 +77,7 @@
 /tr/dantel-detayl-atlet-l07230300
 /tr/dar-kesim-ksa-kollu-tisort-l07150305
 /tr/deri-sabo-terlik-l12404840
+/tr/detayl-shopper-canta-l14094840
 /tr/dickies-barrel-chino-pantolon-l07671304
 /tr/dickies-barrel-jean-l07660410
 /tr/dickies-desenli-ceket-l07721541
@@ -301,6 +301,7 @@
 /tr/muscle-fit-tisort-l09247599
 /tr/naks-detayl-grafikli-tisort-l03231548
 /tr/naksl-relaxed-fit-tisort-l03231508
+/tr/naksl-shopper-canta-l14023840
 /tr/naksl-suni-deri-ceket-l07721510
 /tr/naylon-suslemeli-tote-canta-l14058840
 /tr/on-dikisli-barrel-jean-l07662504
