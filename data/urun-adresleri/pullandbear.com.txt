@@ -123,6 +123,7 @@
 /tr/frfrl-uzun-ceket-l03721301
 /tr/genis-paca-jean-l07660340
 /tr/genis-paca-jean-l07662511
+/tr/genis-paca-jean-l07662531
 /tr/genis-yaka-atlet-l03231308
 /tr/gorunumu-kesfet-l97910558281BSBS
 /tr/gorunumu-satn-al-l91022888062BSBS
@@ -174,6 +175,7 @@
 /tr/kareli-ceket-l07721515
 /tr/kareli-dik-yakal-ceket-l07720375
 /tr/kareli-grafikli-bermuda-sort-l07665502
+/tr/kareli-kase-boxy-ceket-l07720362
 /tr/kareli-paca-devetli-jean-l07662508
 /tr/kareli-suni-yunlu-ceket-l07720372
 /tr/kareli-uzun-kollu-overshirt-l07460551
@@ -182,6 +184,7 @@
 /tr/kemer-koprulu-balon-jean-l07660301
 /tr/kemer-koprulu-super-genis-paca-jean-l07662301
 /tr/kemer-tipi-bel-cantas-l14149840
+/tr/kemerli-ksa-kase-trenckot-l07755321
 /tr/kemerli-relaxed-baggy-jean-l07662406
 /tr/kemerli-uzun-kaban-l07755351
 /tr/keten-ksa-kollu-gomlek-l03460515
@@ -317,10 +320,13 @@
 /tr/pacas-dubleli-jean-l07660306
 /tr/pacas-katl-baggy-jean-l07660318
 /tr/panelli-baggy-relaxed-fit-jean-l07662518
+/tr/panelli-fermuarl-ceket-l07721545
+/tr/panelli-sisme-mont-l07720515
 /tr/panelli-suni-deri-ceket-l07721506
 /tr/parltl-straight-fit-jean-l03661306
 /tr/patchwork-barrel-jean-l07662300
 /tr/patchwork-genis-paca-jean-l07660300
+/tr/patchwork-genis-paca-jean-l07662412
 /tr/pembe-barrel-jean-l07670309
 /tr/pencere-detayl-aplikeli-top-l07231336
 /tr/pileli-bermuda-sort-l07665501
@@ -341,6 +347,7 @@
 /tr/relaxed-fit-baggy-jean-l07662515
 /tr/relaxed-fit-baggy-jean-l07662523
 /tr/relaxed-fit-bermuda-sort-l07665505
+/tr/relaxed-fit-jakarl-kumas-jean-l07662530
 /tr/relaxed-fit-jean-l07662509
 /tr/relaxed-fit-overlok-dikisli-tisort-l03231509
 /tr/relaxed-kargo-jean-l07660512
@@ -403,6 +410,7 @@
 /tr/suni-deri-balon-kesim-ceket-l07721530
 /tr/suni-deri-biker-ceket-l03720323
 /tr/suni-deri-biker-ceket-l03720325
+/tr/suni-deri-bomber-ceket-l07720506
 /tr/suni-deri-ceket-l07720507
 /tr/suni-deri-ceket-l07721504
 /tr/suni-deri-ceket-l07721513
@@ -431,6 +439,7 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
+/tr/tokal-shopper-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
