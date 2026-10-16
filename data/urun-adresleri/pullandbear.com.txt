@@ -5,6 +5,8 @@
 /tr/100-pamuklu-ceket-l07721311
 /tr/ajurlu-ksa-kollu-gomlek-l07460513
 /tr/ajurlu-triko-kazak-l07540500
+/tr/asimetrik-triko-kazak-l07540325
+/tr/asimetrik-yaka-kazak-l07540333
 /tr/askl-tisort-l03232502
 /tr/ayarlanabilir-askl-basic-top-l03230394
 /tr/aynal-shopper-canta-l14019840
@@ -31,10 +33,13 @@
 /tr/basic-bol-kesim-spor-pantolon-l07670507
 /tr/basic-kapusonlu-sweatshirt-l07551501
 /tr/basic-mayo-l03000500
+/tr/basic-orgu-kazak-l07540504
 /tr/basic-short-sleeve-tisort-l03230337
 /tr/basic-slim-fit-tisort-l03231506
 /tr/basic-tisort-l08242500
 /tr/basic-trenckot-l07721300
+/tr/basic-triko-hrka-l07563300
+/tr/basic-yumusak-orgu-kazak-l07540323
 /tr/beli-buzgulu-ceket-l07720368
 /tr/bisiklet-yaka-atlet-l03230353
 /tr/bisiklet-yaka-relaxed-fit-sweatshirt-l07558514
@@ -109,6 +114,7 @@
 /tr/dusuk-bel-barrel-jean-l07660310
 /tr/dusuk-bel-barrel-jean-l07670310
 /tr/dusuk-bel-bootcut-jean-l07660323
+/tr/dusuk-bel-denim-sort-l03666306
 /tr/dusuk-bel-jogger-jean-l03660335
 /tr/dusuk-bel-straight-jean-l07662410
 /tr/dusuk-bel-straight-jean-l07683329
@@ -217,6 +223,7 @@
 /tr/kombini-satn-al-l93143227052BSBS
 /tr/kombini-satn-al-l93765627746BSBS
 /tr/kombini-satn-al-l93804088172BSBS
+/tr/kombini-satn-al-l93864727412BSBS
 /tr/kombini-satn-al-l93993405038BSBS
 /tr/kombini-satn-al-l94065025099BSBS
 /tr/kombini-satn-al-l94458485100BSBS
@@ -242,6 +249,7 @@
 /tr/kombini-satn-al-l99359132699BSBS
 /tr/kombini-satn-al-l99581987692BSBS
 /tr/kombini-tamamla-l90177900270BSBS
+/tr/kombini-tamamla-l90358541018BSBS
 /tr/kombini-tamamla-l90672267250BSBS
 /tr/kombini-tamamla-l91679682974BSBS
 /tr/kombini-tamamla-l91784765243BSBS
@@ -259,6 +267,7 @@
 /tr/kombini-tamamla-l95809658724BSBS
 /tr/kombini-tamamla-l96281452330BSBS
 /tr/kombini-tamamla-l96297918720BSBS
+/tr/kombini-tamamla-l96375008937BSBS
 /tr/kombini-tamamla-l96506518180BSBS
 /tr/kombini-tamamla-l97374687336BSBS
 /tr/kombini-tamamla-l97452010011BSBS
@@ -466,6 +475,7 @@
 /tr/yuksek-bel-mom-fit-jean-l07687305
 /tr/yuksek-bel-skinny-jean-l03660305
 /tr/yuksek-bel-slim-fit-jean-l07662400
+/tr/yumusak-dokulu-boxy-kazak-l07540331
 /tr/yumusak-dokulu-boxy-tisort-l07558306
 /tr/yumusak-dokulu-fermuarl-kapusonlu-sweatshirt-l07558305
 /tr/yumusak-dokulu-genis-paca-pantolon-l07670319
