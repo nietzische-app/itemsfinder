@@ -19,6 +19,7 @@
 /tr/baggy-relaxed-fit-jean-l07660508
 /tr/balon-bomber-ceket-l03720372
 /tr/balon-jakarl-kumas-baggy-jean-l07662521
+/tr/balon-jean-l07662314
 /tr/balon-kargo-pantolon-l07670353
 /tr/balon-kesim-baggy-jean-l07662505
 /tr/balon-kesim-suni-deri-bomber-ceket-l07720317
@@ -190,6 +191,7 @@
 /tr/kemer-koprulu-balon-jean-l07660301
 /tr/kemer-koprulu-super-genis-paca-jean-l07662301
 /tr/kemer-tipi-bel-cantas-l14149840
+/tr/kemerli-kase-trenckot-l07755355
 /tr/kemerli-ksa-kase-trenckot-l07755321
 /tr/kemerli-relaxed-baggy-jean-l07662406
 /tr/kemerli-uzun-kaban-l07755351
@@ -238,6 +240,7 @@
 /tr/kombini-satn-al-l96963257941BSBS
 /tr/kombini-satn-al-l97384191063BSBS
 /tr/kombini-satn-al-l97846602360BSBS
+/tr/kombini-satn-al-l97950826766BSBS
 /tr/kombini-satn-al-l98329123032BSBS
 /tr/kombini-satn-al-l98345989911BSBS
 /tr/kombini-satn-al-l98554081474BSBS
@@ -387,6 +390,7 @@
 /tr/stili-kesfet-l93586429563BSBS
 /tr/stili-kesfet-l93853896536BSBS
 /tr/stili-kesfet-l94246416890BSBS
+/tr/stili-kesfet-l94276538778BSBS
 /tr/stili-kesfet-l94906867946BSBS
 /tr/stili-kesfet-l95226268101BSBS
 /tr/stili-kesfet-l95925852603BSBS
@@ -425,6 +429,7 @@
 /tr/suni-deri-ksa-trenckot-l07720351
 /tr/suni-deri-kurk-yakal-bomber-ceket-l07720363
 /tr/suni-deri-ribanal-bomber-l07720359
+/tr/suni-deri-sisme-mont-l07720330
 /tr/suni-kurk-ksa-kaban-l07755320
 /tr/suni-kurk-yakal-parka-l07720364
 /tr/suni-kurk-yakal-sisme-mont-l07720367
@@ -445,6 +450,7 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
+/tr/tokal-shopper-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
@@ -468,7 +474,6 @@
 /tr/yrtk-detayl-skinny-jean-l07660521
 /tr/yrtk-detayl-straight-jean-l07662506
 /tr/yrtk-mom-fit-jean-l03660302
-/tr/yrtk-relaxed-fit-jean-l03661518
 /tr/yuksek-bel-balon-jean-l07660320
 /tr/yuksek-bel-mom-fit-jean-l07687305
 /tr/yuksek-bel-skinny-jean-l03660305
