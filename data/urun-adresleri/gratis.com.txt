@@ -694,6 +694,7 @@
 /aydinlatici-highlighter/judydoll-glow-magnify-highlighter-aydinlatici-06-rosy-gleam-p-10222896
 /aydinlatici-highlighter/lykd-aydinlatici-yuz-paleti-p-10203249
 /aydinlatici-highlighter/lykd-glow-frenzy-aydinlatici-spot-p-10203507
+/aydinlatici-highlighter/lykd-likit-aydinlatici-bronz-beam-p-10203495
 /aydinlatici-highlighter/lykd-likit-aydinlatici-moon-flare-p-10203494
 /aydinlatici-highlighter/lykd-lykdustrial-mirror-skin-body-glow-highlighter-979-gilded-voltage-p-10217413
 /aydinlatici-highlighter/lykd-silky-touch-highlighter-toz-aydinlatici-979-fayelle-p-10211528
@@ -752,7 +753,6 @@
 /aydinlatici/loreal-paris-lumi-glotion-all-in-one-dogal-isilti-highlighter-901-fair-glow-p-10208070
 /aydinlatici/loreal-paris-lumi-glotion-all-in-one-dogal-isilti-highlighter-902-light-glow-p-10208071
 /aydinlatici/loreal-paris-lumi-glotion-all-in-one-dogal-isilti-highlighter-903-medium-glow-p-10208069
-/aydinlatici/lykd-likit-aydinlatici-bronz-beam-p-10203495
 /aydinlatici/note-drop-highlighter-likit-aydinlatici-01-pearl-rose-p-10823258
 /aydinlatici/note-drop-highlighter-likit-aydinlatici-02-charming-desert-p-10823259
 /aydinlatici/note-drop-highlighter-likit-aydinlatici-03-candlelight-p-10204601
@@ -4552,6 +4552,7 @@
 /genital-bolge-temizlik-ve-bakim-urunleri/ziaja-intim-kremli-yikama-hyaluronik-asitli-500-ml-p-10209356
 /genital-bolge-temizlik-ve-bakim-urunleri/ziaja-intim-kremli-yikama-laktik-asitli-500-ml-p-10209358
 /genital-bolge-temizlik-ve-bakim-urunleri/ziaja-intim-kremli-yikama-laktobionik-asitli-500-ml-p-10209357
+/gida-takviyeleri-vitaminler/gumitamin-keratin-sac-ve-tirnak-vitamini-60-tablet-gummy-biotin-5000-cinko-e-b12-b6-b5-p-10202668
 /gida-takviyeleri-vitaminler/gummylab-beauty-cilt-korumasina-destek-glutatyon-resveratrol-hyaluronik-asit-iceren-gummy-60-adet-p-10011363
 /gida-takviyeleri-vitaminler/gummylab-green-omega-tarla-taskeseni-tohumu-yagi-ve-e-vitamini-iceren-portakal-aromali-gummy-60-adet-p-10011364
 /gida-takviyeleri-vitaminler/gummylab-hair-nail-sac-ve-tirnak-korumasina-destek-biotin-keratin-cinko-iceren-gummy-60-adet-p-10011362
@@ -5958,8 +5959,6 @@
 /kadin-vucut-spreyi/body-fantasies-vucut-spreyi-vanilla-94-ml-p-10752538
 /kadin-vucut-spreyi/body-fantasies-vucut-spreyi-wedding-day-fantasy-94-ml-p-10031082
 /kadin-vucut-spreyi/lumiere-joy-elixir-sac-ve-vucut-spreyi-200-ml-p-10220513
-/kadin-vucut-spreyi/lumiere-kadin-vucut-spreyi-sunrise-blush-200-ml-p-10221430
-/kadin-vucut-spreyi/lumiere-kadin-vucut-spreyi-sunset-bronze-200-ml-p-10221431
 /kadin-vucut-spreyi/lumiere-red-rouge-sac-ve-vucut-spreyi-200-ml-p-10220512
 /kadin-vucut-spreyi/lumiere-vanilla-whisper-sac-ve-vucut-spreyi-200-ml-p-10220511
 /kadin-vucut-spreyi/mimani-aqua-sorbet-kadin-sac-ve-vucut-spreyi-38-ml-p-10219261
@@ -5968,6 +5967,8 @@
 /kadin-vucut-spreyi/mimani-pistachio-cake-kadin-sac-ve-vucut-spreyi-38-ml-p-10219263
 /kadin-vucut-spreyi/mimani-whipped-cream-kadin-sac-ve-vucut-spreyi-38-ml-p-10219265
 /kadin-vucut-spreyi/mixup-shimmer-glace-vanilla-beam-simli-kadin-vucut-spreyi-200-ml-p-10211766
+/kadin-vucut-spreyi/selin-lumiere-kadin-vucut-spreyi-sunrise-blush-200-ml-p-10221430
+/kadin-vucut-spreyi/selin-lumiere-kadin-vucut-spreyi-sunset-bronze-200-ml-p-10221431
 /kadin-vucut-spreyi/sorvella-bella-vista-vucut-sac-spreyi-100-ml-p-10211656
 /kadin-vucut-spreyi/sorvella-bonita-vucut-sac-spreyi-100-ml-p-10213299
 /kadin-vucut-spreyi/sorvella-miss-baccarat-vucut-sac-spreyi-100-ml-p-10211655
@@ -6598,7 +6599,7 @@
 /kolonyalar/duru-limon-kolonya-150-ml-sprey-p-18000311
 /kolonyalar/duru-limon-kolonya-200-ml-cam-sise-p-10225260
 /kolonyalar/duru-limon-kolonya-400-ml-p-18000310
-/kolonyalar/duru-okyanus-ferhaligi-kolonya-400-ml-pet-sise-p-10202389
+/kolonyalar/duru-okyanus-ferahligi-kolonya-400-ml-pet-sise-p-10202389
 /kolonyalar/eyup-sabri-tuncer-bodrum-mandalinasi-kolonya-16-ml-p-10089575
 /kolonyalar/eyup-sabri-tuncer-bodrum-mandalinasi-kolonyasi-150-ml-silindir-pet-sise-sprey-p-10567187
 /kolonyalar/eyup-sabri-tuncer-cesme-limonu-kolonya-16-ml-p-10089581
@@ -8332,8 +8333,6 @@
 /oje/pastel-pure-oje-618-p-10800370
 /oje/pastel-pure-oje-621-p-10800429
 /oje/pastel-pure-oje-623-p-10800431
-/oje/pastel-x-arzu-sabanci-yaz-renkleri-ve-parlak-bitisli-3-lu-oje-setleri-809810811-p-10219668
-/oje/pastel-x-arzu-sabanci-yaz-renkleri-ve-parlak-bitisli-3-lu-oje-setleri-812813814-p-10219669
 /parfum-deodorant/bee-beauty-kadin-deo-ped-creamy-comfort-30-adet-p-10217331
 /parfum-deodorant/bee-beauty-kadin-deo-ped-flower-fresh-30-adet-p-10217330
 /parfum-deodorant/benri-ter-emici-koltuk-alti-ped-14lu-p-10200937
@@ -9148,7 +9147,7 @@
 /sac-fircasi/eklips-sac-fircasi-paragon-8686c-asortili-p-10028561
 /sac-fircasi/eklips-sac-masaj-fircasi-p-10202917
 /sac-fircasi/eklips-siyah-profesyonel-sac-acma-fircasi-p-10589603
-/sac-fircasi/eklips-slick-bun-sac-topuz-seti-p-10220057
+/sac-fircasi/eklips-sleek-bun-sac-topuz-seti-p-10220057
 /sac-fircasi/eklips-summer-sac-fircasi-ve-tarak-seti-asortili-p-10210999
 /sac-fircasi/eklips-uc-boyutlu-sac-fircasi-mor-p-10202919
 /sac-fircasi/eklips-uc-boyutlu-sac-fircasi-pembe-p-10202921
@@ -10521,8 +10520,8 @@
 /toka-tac/eklips-kivrimli-mandal-toka-p-10215668
 /toka-tac/eklips-kivrimli-mandal-toka-simli-seffaf-p-10096911
 /toka-tac/eklips-kivrimli-mandal-toka-simli-turuncu-p-10096910
+/toka-tac/eklips-kumas-lastik-toka-beyaz-p-10217219
 /toka-tac/eklips-kumas-lastik-toka-mavi-p-10217218
-/toka-tac/eklips-kumas-lastik-toka-p-10217219
 /toka-tac/eklips-kumas-lastik-toka-pembe-p-10218680
 /toka-tac/eklips-kurdele-manda-toka-beyaz-p-10096908
 /toka-tac/eklips-kurdele-mandal-toka-krem-p-10096905

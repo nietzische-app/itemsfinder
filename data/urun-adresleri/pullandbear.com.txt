@@ -23,6 +23,7 @@
 /tr/balon-kargo-pantolon-l07670353
 /tr/balon-kesim-baggy-jean-l07662505
 /tr/balon-kesim-suni-deri-bomber-ceket-l07720317
+/tr/balon-relaxed-fit-kvrlms-belli-dusuk-bel-jean-l07662411
 /tr/balon-siluet-kase-bomber-ceket-l07720320
 /tr/balon-tunik-l03720369
 /tr/bambula-genis-paca-pantolon-l03670330
@@ -291,7 +292,6 @@
 /tr/koruklu-balon-fit-bol-paca-jean-l07683440
 /tr/kot-jogger-pantolon-l03660518
 /tr/krokodil-suni-deri-ceket-l07750370
-/tr/kruvaze-boncuklu-gomlek-l03671306
 /tr/kruvaze-kase-kaban-l07755302
 /tr/ksa-balon-trenckot-l07721321
 /tr/ksa-denim-tulum-l03021100
@@ -390,7 +390,6 @@
 /tr/stili-kesfet-l93586429563BSBS
 /tr/stili-kesfet-l93853896536BSBS
 /tr/stili-kesfet-l94246416890BSBS
-/tr/stili-kesfet-l94276538778BSBS
 /tr/stili-kesfet-l94906867946BSBS
 /tr/stili-kesfet-l95226268101BSBS
 /tr/stili-kesfet-l95925852603BSBS
@@ -450,7 +449,6 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
-/tr/tokal-shopper-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
