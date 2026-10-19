@@ -3129,6 +3129,7 @@
 /duzlestirici/philips-stylecare-essential-sac-duzlestirici-tarak-bhh880-00-p-10200782
 /duzlestirici/remington-keratin-protect-seramik-sac-duzlestirici-s8540-p-10318395
 /duzlestirici/remington-sapphire-luxe-sac-duzlestirici-s5805-p-10197426
+/duzlestirici/revlon-easy-heat-25-mm-seramik-turmalin-sac-duzlestirici-rvst2217e-p-10221422
 /el-maskesi/bee-beauty-manikur-maskesi-2x5-ml-p-10029052
 /el-maskesi/bee-beauty-nemlendirici-kolajen-manikur-el-maskesi-p-10200740
 /el-maskesi/dermokil-gunes-koruyucu-leke-karsiti-el-maskesi-vitaminc-30-ml-p-10211541
@@ -4552,7 +4553,6 @@
 /genital-bolge-temizlik-ve-bakim-urunleri/ziaja-intim-kremli-yikama-hyaluronik-asitli-500-ml-p-10209356
 /genital-bolge-temizlik-ve-bakim-urunleri/ziaja-intim-kremli-yikama-laktik-asitli-500-ml-p-10209358
 /genital-bolge-temizlik-ve-bakim-urunleri/ziaja-intim-kremli-yikama-laktobionik-asitli-500-ml-p-10209357
-/gida-takviyeleri-vitaminler/gumitamin-keratin-sac-ve-tirnak-vitamini-60-tablet-gummy-biotin-5000-cinko-e-b12-b6-b5-p-10202668
 /gida-takviyeleri-vitaminler/gummylab-beauty-cilt-korumasina-destek-glutatyon-resveratrol-hyaluronik-asit-iceren-gummy-60-adet-p-10011363
 /gida-takviyeleri-vitaminler/gummylab-green-omega-tarla-taskeseni-tohumu-yagi-ve-e-vitamini-iceren-portakal-aromali-gummy-60-adet-p-10011364
 /gida-takviyeleri-vitaminler/gummylab-hair-nail-sac-ve-tirnak-korumasina-destek-biotin-keratin-cinko-iceren-gummy-60-adet-p-10011362
@@ -8086,8 +8086,6 @@
 /oje/lykd-my-style-up-nail-enamel-oje-966-pink-pop-p-10211965
 /oje/lykd-my-style-up-nail-enamel-oje-968-lylaze-aura-p-10211980
 /oje/lykd-my-style-up-nail-enamel-oje-999-crystal-top-p-10211966
-/oje/mixup-wouw-me-inci-tozu-isiltili-beyaz-6-gr-p-10216539
-/oje/mixup-wouw-me-inci-tozu-saf-beyaz-6-gr-p-10216540
 /oje/mov-glitter-oje-no-02-p-10200120
 /oje/mov-glitter-oje-no-03-p-10199816
 /oje/mov-glitter-oje-no-08-p-10200126
@@ -9218,7 +9216,6 @@
 /sac-kurutma-ve-sekillendirme/philips-argan-yagi-seramik-kaplama-sac-sekillendirme-ve-kurutma-seti-bha530-00-p-10132500
 /sac-kurutma-ve-sekillendirme/philips-sac-kurutma-makinesi-bhd340-10-p-10215310
 /sac-kurutma-ve-sekillendirme/philips-sac-sekillendirici-tarak-bha301-00-p-10094478
-/sac-kurutma-ve-sekillendirme/revlon-easy-heat-25-mm-seramik-turmalin-sac-duzlestirici-rvst2217e-p-10221422
 /sac-kurutma-ve-sekillendirme/revlon-one-step-volumiser-sac-sekillendirici-sac-kurutma-makinesi-siyah-rvdr5222e-p-10199622
 /sac-maskarasi/bee-beauty-sac-maskarasi-acik-kahve-p-10205435
 /sac-maskarasi/bee-beauty-sac-maskarasi-koyu-kahve-p-10205436
