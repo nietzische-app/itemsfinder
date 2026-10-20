@@ -23,7 +23,6 @@
 /tr/balon-kargo-pantolon-l07670353
 /tr/balon-kesim-baggy-jean-l07662505
 /tr/balon-kesim-suni-deri-bomber-ceket-l07720317
-/tr/balon-relaxed-fit-kvrlms-belli-dusuk-bel-jean-l07662411
 /tr/balon-siluet-kase-bomber-ceket-l07720320
 /tr/balon-tunik-l03720369
 /tr/bambula-genis-paca-pantolon-l03670330
@@ -84,6 +83,7 @@
 /tr/crop-denim-ceket-l07221301
 /tr/dantel-detayl-atlet-l07230300
 /tr/dar-kesim-ksa-kollu-tisort-l07150305
+/tr/dar-kesim-suni-suet-ceket-l07720358
 /tr/deri-sabo-terlik-l12404840
 /tr/detayl-shopper-canta-l14094840
 /tr/dickies-barrel-chino-pantolon-l07671304
@@ -194,7 +194,6 @@
 /tr/kemer-tipi-bel-cantas-l14149840
 /tr/kemerli-kase-trenckot-l07755355
 /tr/kemerli-ksa-kase-trenckot-l07755321
-/tr/kemerli-relaxed-baggy-jean-l07662406
 /tr/kemerli-uzun-kaban-l07755351
 /tr/keten-ksa-kollu-gomlek-l03460515
 /tr/kombin-cift-tarafl-ceket-l07700508
@@ -276,6 +275,7 @@
 /tr/kombini-tamamla-l97971478639BSBS
 /tr/kombini-tamamla-l98479351461BSBS
 /tr/kombini-tamamla-l98481007827BSBS
+/tr/kombini-tamamla-l98609486530BSBS
 /tr/kombini-tamamla-l98845565841BSBS
 /tr/kombini-tamamla-l99123298840BSBS
 /tr/kombini-tamamla-l99141399883BSBS
@@ -354,6 +354,7 @@
 /tr/puantiyeli-straight-jean-l07670457
 /tr/puantiyeli-vucuda-oturan-ceket-l07720403
 /tr/race-force-suni-deri-ceket-l07721505
+/tr/regular-straight-jean-l07660517
 /tr/relaxed-fit-baggy-jean-l07662515
 /tr/relaxed-fit-baggy-jean-l07662523
 /tr/relaxed-fit-bermuda-sort-l07665505
@@ -390,11 +391,13 @@
 /tr/stili-kesfet-l93586429563BSBS
 /tr/stili-kesfet-l93853896536BSBS
 /tr/stili-kesfet-l94246416890BSBS
+/tr/stili-kesfet-l94276538778BSBS
 /tr/stili-kesfet-l94906867946BSBS
 /tr/stili-kesfet-l95226268101BSBS
 /tr/stili-kesfet-l95925852603BSBS
 /tr/stili-kesfet-l97158830554BSBS
 /tr/stili-kesfet-l97359849211BSBS
+/tr/stili-kesfet-l97499431100BSBS
 /tr/stili-kesfet-l98550184201BSBS
 /tr/stili-kesfet-l99097778562BSBS
 /tr/stili-kesfet-l99123615612BSBS
@@ -406,6 +409,7 @@
 /tr/stili-tamamla-l93776912463BSBS
 /tr/stili-tamamla-l94769754238BSBS
 /tr/stili-tamamla-l96823333420BSBS
+/tr/straight-jean-l07660315
 /tr/straight-jean-l07660502
 /tr/stras-detayl-dusuk-bel-straight-jean-l07662307
 /tr/stwd-biye-detayl-fermuarl-ceket-l07721537
