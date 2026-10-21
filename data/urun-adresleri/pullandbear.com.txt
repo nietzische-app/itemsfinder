@@ -126,6 +126,7 @@
 /tr/fermuarl-ince-ceket-l07460528
 /tr/fermuarl-kapusonlu-sentetik-kaucuk-etkili-sweatshirt-l07720501
 /tr/fermuarl-kapusonlu-sweatshirt-l07558309
+/tr/fermuarl-kase-ceket-l07721527
 /tr/fermuarl-tailored-fit-ceket-l07721519
 /tr/fitilli-ksa-kollu-t-shirt-l03230346
 /tr/frfrl-uzun-ceket-l03721301
@@ -197,6 +198,7 @@
 /tr/kemerli-uzun-kaban-l07755351
 /tr/keten-ksa-kollu-gomlek-l03460515
 /tr/kombin-cift-tarafl-ceket-l07700508
+/tr/kombine-cift-tarafl-ceket-l07720513
 /tr/kombine-suni-suet-ceket-l07721509
 /tr/kombini-kesfet-l90581460817BSBS
 /tr/kombini-kesfet-l91905363461BSBS
@@ -240,7 +242,6 @@
 /tr/kombini-satn-al-l96963257941BSBS
 /tr/kombini-satn-al-l97384191063BSBS
 /tr/kombini-satn-al-l97846602360BSBS
-/tr/kombini-satn-al-l97950826766BSBS
 /tr/kombini-satn-al-l98329123032BSBS
 /tr/kombini-satn-al-l98345989911BSBS
 /tr/kombini-satn-al-l98554081474BSBS
@@ -333,6 +334,7 @@
 /tr/panelli-fermuarl-ceket-l07721545
 /tr/panelli-sisme-mont-l07720515
 /tr/panelli-suni-deri-ceket-l07721506
+/tr/parlak-bitisli-sisme-mont-l07721517
 /tr/parltl-straight-fit-jean-l03661306
 /tr/patchwork-barrel-jean-l07662300
 /tr/patchwork-genis-paca-jean-l07660300
@@ -391,13 +393,11 @@
 /tr/stili-kesfet-l93586429563BSBS
 /tr/stili-kesfet-l93853896536BSBS
 /tr/stili-kesfet-l94246416890BSBS
-/tr/stili-kesfet-l94276538778BSBS
 /tr/stili-kesfet-l94906867946BSBS
 /tr/stili-kesfet-l95226268101BSBS
 /tr/stili-kesfet-l95925852603BSBS
 /tr/stili-kesfet-l97158830554BSBS
 /tr/stili-kesfet-l97359849211BSBS
-/tr/stili-kesfet-l97499431100BSBS
 /tr/stili-kesfet-l98550184201BSBS
 /tr/stili-kesfet-l99097778562BSBS
 /tr/stili-kesfet-l99123615612BSBS
@@ -477,6 +477,7 @@
 /tr/yrtk-detayl-straight-jean-l07662506
 /tr/yrtk-mom-fit-jean-l03660302
 /tr/yuksek-bel-balon-jean-l07660320
+/tr/yuksek-bel-barrel-jean-l07660329
 /tr/yuksek-bel-mom-fit-jean-l07687305
 /tr/yuksek-bel-skinny-jean-l03660305
 /tr/yuksek-bel-slim-fit-jean-l07662400
