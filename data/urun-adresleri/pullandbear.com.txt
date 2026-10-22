@@ -19,6 +19,7 @@
 /tr/baggy-relaxed-fit-jean-l07660508
 /tr/balon-bomber-ceket-l03720372
 /tr/balon-jakarl-kumas-baggy-jean-l07662521
+/tr/balon-jean-l07662304
 /tr/balon-jean-l07662314
 /tr/balon-kargo-pantolon-l07670353
 /tr/balon-kesim-baggy-jean-l07662505
@@ -159,12 +160,14 @@
 /tr/islemeli-ay-detayl-baggy-jean-l07662310
 /tr/islemeli-barrel-jean-l07662522
 /tr/islemeli-ceket-l07721500
+/tr/isltl-baggy-jean-l07662414
 /tr/isltl-bootcut-jean-l03660178
 /tr/isltl-genis-paca-jean-l07660309
 /tr/kadife-efektli-denim-ceket-l07720307
 /tr/kadife-gorunumlu-duz-pantolon-l07660307
 /tr/kapitone-stwd-yelek-l07720599
 /tr/kapusonlu-bomber-ceket-l07720511
+/tr/kapusonlu-ceket-l07720304
 /tr/kapusonlu-dolgulu-ceket-l07700369
 /tr/kapusonlu-dolgulu-ceket-l07700536
 /tr/kapusonlu-fermuarl-stwd-denim-ceket-l07720519
@@ -181,6 +184,7 @@
 /tr/kapusonlu-suni-kurk-ceket-l07720324
 /tr/kapusonlu-suslu-dugmeli-ceket-l07721511
 /tr/kapusonlu-syla-muhurlenmis-sisme-ceket-l07700505
+/tr/kapusonlu-syla-muhurlenmis-su-gecirmez-ceket-l07720377
 /tr/kareli-ceket-l07721515
 /tr/kareli-dik-yakal-ceket-l07720375
 /tr/kareli-grafikli-bermuda-sort-l07665502
@@ -242,6 +246,7 @@
 /tr/kombini-satn-al-l96963257941BSBS
 /tr/kombini-satn-al-l97384191063BSBS
 /tr/kombini-satn-al-l97846602360BSBS
+/tr/kombini-satn-al-l97950826766BSBS
 /tr/kombini-satn-al-l98329123032BSBS
 /tr/kombini-satn-al-l98345989911BSBS
 /tr/kombini-satn-al-l98554081474BSBS
@@ -305,6 +310,7 @@
 /tr/ksa-sile-bezi-tunik-l03721357
 /tr/ksa-suni-suet-trenckot-l07720355
 /tr/ksa-trenckot-l07721531
+/tr/ksa-vucuda-oturan-trenckot-l07720327
 /tr/kusakl-uzun-trenckot-l07721532
 /tr/kusgozu-detayl-baggy-jean-l07662309
 /tr/leopar-desenli-baggy-jean-l07670372
@@ -313,6 +319,7 @@
 /tr/mini-dusuk-bel-sort-l03667300
 /tr/modal-askl-tank-top-l03230354
 /tr/mumlu-gorunumlu-bomber-ceket-l07720302
+/tr/mumlu-gorunumlu-bomber-ceket-l07720305
 /tr/mumlu-gorunumlu-fitilli-kadife-yakal-ceket-l07721508
 /tr/muscle-fit-tisort-l09247599
 /tr/naks-detayl-grafikli-tisort-l03231548
@@ -393,6 +400,7 @@
 /tr/stili-kesfet-l93586429563BSBS
 /tr/stili-kesfet-l93853896536BSBS
 /tr/stili-kesfet-l94246416890BSBS
+/tr/stili-kesfet-l94276538778BSBS
 /tr/stili-kesfet-l94906867946BSBS
 /tr/stili-kesfet-l95226268101BSBS
 /tr/stili-kesfet-l95925852603BSBS
@@ -453,6 +461,7 @@
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
+/tr/tokal-shopper-canta-l14147840
 /tr/total-look-l92207538202BSBS
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
