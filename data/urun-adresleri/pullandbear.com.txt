@@ -83,7 +83,6 @@
 /tr/cizgili-ve-cicek-islemeli-tote-canta-l14157740
 /tr/crop-denim-ceket-l07221301
 /tr/dantel-detayl-atlet-l07230300
-/tr/dar-kesim-ksa-kollu-tisort-l07150305
 /tr/dar-kesim-suni-suet-ceket-l07720358
 /tr/deri-sabo-terlik-l12404840
 /tr/detayl-shopper-canta-l14094840
@@ -223,6 +222,7 @@
 /tr/kombini-satin-al-l94882337618BSBS
 /tr/kombini-satin-al-l99883121048BSBS
 /tr/kombini-satn-al-l90156316876BSBS
+/tr/kombini-satn-al-l90246723300BSBS
 /tr/kombini-satn-al-l90948021089BSBS
 /tr/kombini-satn-al-l91417781091BSBS
 /tr/kombini-satn-al-l92411955490BSBS
@@ -244,6 +244,7 @@
 /tr/kombini-satn-al-l96707424074BSBS
 /tr/kombini-satn-al-l96767022563BSBS
 /tr/kombini-satn-al-l96963257941BSBS
+/tr/kombini-satn-al-l97299473002BSBS
 /tr/kombini-satn-al-l97384191063BSBS
 /tr/kombini-satn-al-l97846602360BSBS
 /tr/kombini-satn-al-l97950826766BSBS
@@ -272,6 +273,7 @@
 /tr/kombini-tamamla-l94733377179BSBS
 /tr/kombini-tamamla-l94852706261BSBS
 /tr/kombini-tamamla-l95809658724BSBS
+/tr/kombini-tamamla-l96133543313BSBS
 /tr/kombini-tamamla-l96281452330BSBS
 /tr/kombini-tamamla-l96297918720BSBS
 /tr/kombini-tamamla-l96375008937BSBS
@@ -298,6 +300,7 @@
 /tr/koruklu-balon-fit-bol-paca-jean-l07683440
 /tr/kot-jogger-pantolon-l03660518
 /tr/krokodil-suni-deri-ceket-l07750370
+/tr/kruvaze-boncuklu-gomlek-l03671306
 /tr/kruvaze-kase-kaban-l07755302
 /tr/ksa-balon-trenckot-l07721321
 /tr/ksa-denim-tulum-l03021100
@@ -406,14 +409,18 @@
 /tr/stili-kesfet-l95925852603BSBS
 /tr/stili-kesfet-l97158830554BSBS
 /tr/stili-kesfet-l97359849211BSBS
+/tr/stili-kesfet-l97499431100BSBS
 /tr/stili-kesfet-l98550184201BSBS
 /tr/stili-kesfet-l99097778562BSBS
 /tr/stili-kesfet-l99123615612BSBS
 /tr/stili-kesfet-l99946702797BSBS
 /tr/stili-satin-al-l91531749432BSBS
+/tr/stili-satn-al-l97151936493BSBS
 /tr/stili-satn-al-l98043960572BSBS
+/tr/stili-satn-al-l98995069627BSBS
 /tr/stili-tamamla-l90476060180BSBS
 /tr/stili-tamamla-l92251482076BSBS
+/tr/stili-tamamla-l92748597695BSBS
 /tr/stili-tamamla-l93776912463BSBS
 /tr/stili-tamamla-l94769754238BSBS
 /tr/stili-tamamla-l96823333420BSBS
@@ -450,7 +457,6 @@
 /tr/suni-yunlu-dik-yaka-ceket-l07720346
 /tr/suni-yunlu-yakal-denim-ceket-l07701519
 /tr/super-genis-paca-comfort-jean-l07660317
-/tr/suslemeli-file-tote-canta-l14191740
 /tr/suslemeli-omuz-cantas-l14006840
 /tr/suslu-dugme-detayl-dar-kesim-ceket-l07720373
 /tr/suslu-dugmeli-ceket-l07721501
@@ -458,6 +464,7 @@
 /tr/suslu-dugmeli-denim-ceket-l07720309
 /tr/suslu-dugmeli-suni-deri-bomber-l07720365
 /tr/suslu-dugmeli-yelek-l07778300
+/tr/tam-ksa-kollu-tisort-l07150305
 /tr/tapered-fit-jean-l07662501
 /tr/timsah-efektli-cuzdan-l14135840
 /tr/tokal-deri-sabo-l12419740
