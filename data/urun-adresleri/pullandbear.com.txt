@@ -49,6 +49,7 @@
 /tr/boncuk-detayl-duz-sandalet-l11706740
 /tr/boncuk-detayl-el-cantas-l14012840
 /tr/boncuk-detayl-omuz-cantas-l14025840
+/tr/boncuk-detayl-shopper-canta-l14004840
 /tr/boncuklu-omuz-cantas-l14014840
 /tr/boncuklu-omuz-cantas-l14029840
 /tr/bootcut-jean-l07660308
@@ -409,7 +410,6 @@
 /tr/stili-kesfet-l95925852603BSBS
 /tr/stili-kesfet-l97158830554BSBS
 /tr/stili-kesfet-l97359849211BSBS
-/tr/stili-kesfet-l97499431100BSBS
 /tr/stili-kesfet-l98550184201BSBS
 /tr/stili-kesfet-l99097778562BSBS
 /tr/stili-kesfet-l99123615612BSBS
