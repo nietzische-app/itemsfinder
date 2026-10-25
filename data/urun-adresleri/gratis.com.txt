@@ -2832,6 +2832,7 @@
 /durulanan-sac-kremleri/kativa-keratinli-vegan-sac-bakim-kremi-355-ml-p-10216757
 /durulanan-sac-kremleri/loreal-paris-elseve-collagen-lifter-kolajen-peptitleri-iceren-hacim-veren-sac-bakim-kremi-250-ml-p-10218998
 /durulanan-sac-kremleri/loreal-paris-elseve-colorvive-renk-koruyucu-sac-bakim-kremi-250-ml-p-10210472
+/durulanan-sac-kremleri/loreal-paris-elseve-dream-long-kolay-tarama-sac-bakim-kremi-250-ml-p-10210469
 /durulanan-sac-kremleri/loreal-paris-elseve-glycolic-gloss-parlaklik-veren-sac-bakim-kremi-250-ml-p-10212423
 /durulanan-sac-kremleri/loreal-paris-elseve-growth-booster-dokulme-karsiti-sac-bakim-kremi-150-ml-p-10212849
 /durulanan-sac-kremleri/loreal-paris-elseve-hydra-hyaluronic-nem-dolduran-sac-bakim-kremi-250-ml-p-10210471
@@ -2895,7 +2896,6 @@
 /durulanmayan-sac-bakim-kremleri/dove-coconut-oil-besleyici-terapi-sac-guzellestirici-krem-150-ml-p-10217275
 /durulanmayan-sac-bakim-kremleri/dove-keratin-uzun-sac-terapisi-kirik-onleyici-krem-150-ml-p-10217284
 /durulanmayan-sac-bakim-kremleri/dove-peptit-bond-repair-sac-bakim-kremi-150-ml-p-10217267
-/durulanmayan-sac-bakim-kremleri/dp-daily-perfection-durulanmayan-kamelya-yagi-sivi-sac-kremi-200-ml-p-10223151
 /durulanmayan-sac-bakim-kremleri/elidor-aninda-onarici-sos-kurtarici-sac-bakim-kremi-130-ml-p-10217285
 /durulanmayan-sac-bakim-kremleri/elidor-aninda-onarici-yipranmis-saclar-icin-kurtarici-sac-bakim-kremi-240-ml-p-10202936
 /durulanmayan-sac-bakim-kremleri/elidor-belirgin-bukleler-7-24-sekillendirici-sac-bakim-kremi-240-ml-x2-p-10220782
@@ -2909,7 +2909,6 @@
 /durulanmayan-sac-bakim-kremleri/kativa-curly-plex-bukle-belirginlestirici-sekillendirici-krem-240-ml-p-10217350
 /durulanmayan-sac-bakim-kremleri/kativa-curly-plex-guclu-bukle-belirginlestirici-sekillendirici-jel-krem-240-ml-p-10217349
 /durulanmayan-sac-bakim-kremleri/loreal-paris-elseve-dream-long-byebye-makas-sac-bakim-kremi-200-ml-p-10170355
-/durulanmayan-sac-bakim-kremleri/loreal-paris-elseve-dream-long-kolay-tarama-sac-bakim-kremi-250-ml-p-10210469
 /durulanmayan-sac-bakim-kremleri/loreal-paris-elseve-mucizevi-yag-sac-guzellestirici-krem-150-ml-her-sac-tipi-p-10025082
 /durulanmayan-sac-bakim-kremleri/loreal-paris-elseve-mucizevi-yag-sac-guzellestirici-krem-150-ml-kuru-ve-sert-saclar-p-10025085
 /durulanmayan-sac-bakim-kremleri/milk-shake-sun-more-bphase-leave-in-conditioner-sac-kremi-250-ml-p-10217346
@@ -2974,8 +2973,10 @@
 /dus-jeli/dove-sugar-cookie-dus-jeli-450-ml-p-10209058
 /dus-jeli/dove-sugar-cookie-dus-kopugu-200-ml-p-10209048
 /dus-jeli/duru-body-scrub-dus-jeli-ametist-450-ml-p-10202799
+/dus-jeli/duru-body-scrub-dus-jeli-gold-450-ml-p-10202798
 /dus-jeli/duru-body-scrub-dus-jeli-ice-light-450-ml-p-10212852
 /dus-jeli/duru-body-scrub-dus-jeli-pink-delight-450-ml-p-10212854
+/dus-jeli/duru-body-scrub-dus-jeli-silver-450-ml-p-10202810
 /dus-jeli/duru-dus-jeli-pirinc-sutu-nar-450-ml-p-10732478
 /dus-jeli/duru-fresh-sensations-dus-jeli-kaktus-cicegi-450-ml-p-10342161
 /dus-jeli/duru-fresh-sensations-dus-jeli-okyanus-ferahligi-650-ml-p-10342160
@@ -6675,7 +6676,6 @@
 /kontur/wet-n-wild-megaglo-dualended-stick-kontur-light-medium-p-10031102
 /kucuk-ev-aletleri/kiwi-baby-sicaklik-ve-nem-olcer-kbaby90-p-10199808
 /kucuk-ev-aletleri/kiwi-hayvan-figurlu-pembe-waffle-makinesi-ksm2407k-p-10221501
-/kucuk-ev-aletleri/kiwi-kahve-ve-baharat-ogutucu-kspg4817-p-10206670
 /kucuk-ev-aletleri/kiwi-sarjli-mini-fan-kfan7400-asortili-p-10221238
 /kulak-temizleme-cubugu/benri-bio-kulak-cubugu-200-adet-p-10206349
 /kulak-temizleme-cubugu/benri-kulak-temizleme-cubugu-200-adet-p-10005055
@@ -7603,6 +7603,8 @@
 /mutfak-gerecleri/benri-buzdolabi-poseti-orta-boy-4x-30-adet-p-10286298
 /mutfak-gerecleri/benri-pisirme-kagidi-16li-p-10634018
 /mutfak-gerecleri/kiwi-bicak-bileyici-ksm8303-p-10853160
+/mutfak-gerecleri/kiwi-kahve-ve-baharat-ogutucu-kspg4812-p-10540402
+/mutfak-gerecleri/kiwi-kahve-ve-baharat-ogutucu-kspg4817-p-10206670
 /mutfak-gerecleri/kiwi-otomatik-kahve-baharat-ogutucu-kspg4810-asortili-p-10321960
 /mutfak-gerecleri/kiwi-otomatik-tuz-karabiber-ogutucu-kspg4850-p-10197417
 /mutfak-temizleyiciler/benri-granul-lavabo-acici-3x-75-gr-p-10201549
@@ -9682,7 +9684,6 @@
 /semsiye/eklips-semsiye-otomatik-lacivert-yildiz-210203-p-10531875
 /semsiye/eklips-siyah-kazayagi-otomatik-semsiye-p-10531872
 /semsiye/eklips-siyah-manuel-semsiye-p-10531866
-/servis-sunum/kiwi-kahve-ve-baharat-ogutucu-kspg4812-p-10540402
 /servis-sunum/luna-cucina-yikanabilir-supla-amerikan-servis-gri-32-cm-p-10198710
 /set-boyalar/bee-beauty-deluxe-color-kit-sac-boyasi-10-siyah-p-10203347
 /set-boyalar/bee-beauty-deluxe-color-kit-sac-boyasi-11-mavi-siyah-p-10203346
@@ -10003,6 +10004,7 @@
 /sivi-sac-kremleri/bioxcin-besleyici-yaglar-sivi-sac-kremi-200-ml-p-10204298
 /sivi-sac-kremleri/bioxcin-collagen-biotin-hacim-verici-sivi-sac-kremi-200-ml-p-10217512
 /sivi-sac-kremleri/bioxcin-keratin-argan-onarici-sivi-sac-kremi-200-ml-p-10217513
+/sivi-sac-kremleri/dp-daily-perfection-durulanmayan-kamelya-yagi-sivi-sac-kremi-200-ml-p-10223151
 /sivi-sac-kremleri/dp-daily-perfection-pamuk-sutlu-cift-fazli-fon-suyu-200-ml-p-10218034
 /sivi-sac-kremleri/dp-durulanmayan-dolgunlastirici-sivi-sac-kremi-pamuk-sutu-200-ml-p-10215885
 /sivi-sac-kremleri/dp-durulanmayan-kirik-onarici-sivi-sac-kremi-karanfil-200-ml-p-10215886
@@ -11201,7 +11203,6 @@
 /yuz-bakim-maskesi-paket/claderm-pure-arindirici-kil-maskesi-20-ml-p-10613566
 /yuz-bakim-maskesi-paket/claderm-rice-arindirici-kil-maskesi-20-ml-p-10864629
 /yuz-bakim-maskesi-paket/cladermc-vitamini-arindirici-kil-maskesi-20-ml-p-10864630
-/yuz-bakim-maskesi-paket/cosnori-pdrn-gunluk-yenileyici-kagit-maske-30-adet-p-10219277
 /yuz-bakim-maskesi-paket/dermal-aydinlatici-nemlendirici-inci-ozlu-kolajen-gece-maske-23-gr-p-10760489
 /yuz-bakim-maskesi-paket/dermal-beyazlatici-nemlendirici-ve-arindirici-arbutin-kolajen-maske-23-gr-p-10760491
 /yuz-bakim-maskesi-paket/dermal-cica-kolajen-maskesi-23-gr-p-10590216
@@ -11270,7 +11271,6 @@
 /yuz-bakim-maskesi-paket/innisfree-green-tea-pdrn-retinol-skin-booster-ampul-jel-yuz-maskesi-25-ml-p-10219529
 /yuz-bakim-maskesi-paket/innisfree-retinol-cica-onarici-ampul-jel-yuz-maskesi-23-ml-p-10219531
 /yuz-bakim-maskesi-paket/isntree-iki-parca-eriyen-jel-yuz-maskesi-30-gr-p-10214903
-/yuz-bakim-maskesi-paket/isntree-iki-parca-eriyen-jel-yuz-maskesi-30-gr-x4-adet-p-10214533
 /yuz-bakim-maskesi-paket/isntree-onion-newpair-soothing-yuz-maskesi-25-ml-p-10217384
 /yuz-bakim-maskesi-paket/isntree-ultra-dusuk-molekullu-hyaluronik-asit-icerikli-yuz-maskesi-25-gr-p-10209125
 /yuz-bakim-maskesi-paket/jkosmec-hydrating-aloe-vera-kore-yuz-maskesi-25-ml-p-10607523
@@ -11288,9 +11288,6 @@
 /yuz-bakim-maskesi-paket/mamonde-calming-shot-azulen-ampul-kagit-yuz-maskesi-23-ml-p-10216725
 /yuz-bakim-maskesi-paket/mamonde-flora-glow-rose-hidrojel-yuz-maskesi-42-gr-p-10216752
 /yuz-bakim-maskesi-paket/mamonde-skin-barrier-probiyotik-ve-seramid-icerikli-ampul-kagit-yuz-maskesi-23-ml-p-10216738
-/yuz-bakim-maskesi-paket/mary-may-idebenon-ve-bogurtlen-kompleksi-ozu-iceren-yuz-maskesi-20-adet-p-10213062
-/yuz-bakim-maskesi-paket/mary-may-kolajen-ve-peptit-icerikli-vital-kagit-yuz-maskesi-30-adet-p-10213061
-/yuz-bakim-maskesi-paket/mary-may-niasinamid-vec-vitamini-icerikli-aydinlatici-kagit-yuz-maskesi-30-adet-p-10213060
 /yuz-bakim-maskesi-paket/planet-essence-botulux-kagit-maske-20-ml-p-10439263
 /yuz-bakim-maskesi-paket/pure-korean-aloe-vera-yuz-maskesi-p-10213229
 /yuz-bakim-maskesi-paket/pure-korean-antiaging-yuz-maskesi-p-10205117
@@ -11316,21 +11313,15 @@
 /yuz-bakim-maskesi-paket/pure-korean-snail-yuz-maskesi-p-10205112
 /yuz-bakim-maskesi-paket/pure-korean-vline-lifting-glutathione-x-collagen-yuz-cene-maskesi-15-gr-p-10217366
 /yuz-bakim-maskesi-paket/remove-care-siyah-nokta-burun-bandi-6li-p-10213451
-/yuz-bakim-maskesi-paket/skin1004-centella-kagit-ampul-maske-5x-25-ml-p-10218112
-/yuz-bakim-maskesi-paket/skin1004-centella-tone-brightening-glow-yuz-maskesi-5x-25-ml-p-10218128
 /yuz-bakim-maskesi-paket/skin1004-hyalucica-hydrating-nemlendirici-yuz-maskesi-23-ml-p-10218120
-/yuz-bakim-maskesi-paket/skin1004-hyalucica-hydrating-nemlendirici-yuz-maskesi-5x-23-ml-p-10218119
 /yuz-bakim-maskesi-paket/skin1004-madagascar-centella-serum-icerikli-kagit-maske-p-10205430
 /yuz-bakim-maskesi-paket/skin1004-promizing-kagit-yuz-maskesi-23-ml-p-10208627
 /yuz-bakim-maskesi-paket/some-by-mi-aloe-vera-icerikli-kagit-yuz-maskesi-20-gr-p-10212827
 /yuz-bakim-maskesi-paket/some-by-mi-bal-ozlu-kagit-yuz-maskesi-20-gr-p-10212829
-/yuz-bakim-maskesi-paket/some-by-mi-galactomyces-glutatyon-icerikli-aydinlatici-kagit-yuz-maskesi-30-adet-p-10212832
 /yuz-bakim-maskesi-paket/some-by-mi-galactomyces-glutatyonlu-aydinlatici-kagit-maske-22-gr-p-10206216
 /yuz-bakim-maskesi-paket/some-by-mi-glutatyon-icerikli-kagit-yuz-maskesi-20-gr-p-10212826
 /yuz-bakim-maskesi-paket/some-by-mi-matcha-icerikli-kagit-yuz-maskesi-20-gr-p-10212828
-/yuz-bakim-maskesi-paket/some-by-mi-pdrn-spirulina-icerikli-serbet-yuz-maskesi-1-gr-x-10-adet-p-10212838
 /yuz-bakim-maskesi-paket/some-by-mi-retinol-icerikli-kagit-maske-22-gr-p-10206215
-/yuz-bakim-maskesi-paket/some-by-mi-retinol-icerikli-kagit-yuz-maskesi-30-adet-p-10212831
 /yuz-bakim-maskesi-paket/some-by-mi-salyangoz-musini-icerikli-kagit-yuz-maskesi-20-gr-p-10212830
 /yuz-bakim-maskesi-paket/stopever-charcoal-pore-strip-komurlu-siyah-nokta-bandi-6li-p-10212385
 /yuz-bakim-maskesi-paket/stopever-pore-strip-siyah-nokta-bandi-6li-p-10212386
@@ -11508,6 +11499,7 @@
 /yuz-maskeleri/cosmogenesis-labs-kirisiklik-karsiti-vitamin-a-krem-yuz-maskesi-50-ml-p-10215226
 /yuz-maskeleri/cosmogenesis-labs-ton-esitleyici-vitaminc-krem-yuz-maskesi-50-ml-p-10215224
 /yuz-maskeleri/cosmogenesis-labs-yenileyici-ve-bariyer-guclendirici-ginseng-krem-yuz-maskesi-50-ml-p-10215233
+/yuz-maskeleri/cosnori-pdrn-gunluk-yenileyici-kagit-maske-30-adet-p-10219277
 /yuz-maskeleri/dermokil-akne-ve-siyah-nokta-karsiti-kil-maskesi-50-ml-p-10203594
 /yuz-maskeleri/dermokil-beyazlatici-pirinc-ozlu-kil-maskesi-9-ml-p-10216582
 /yuz-maskeleri/dermokil-gozenek-sikilastirici-kil-maskesi-50-ml-p-10203595
@@ -11530,6 +11522,7 @@
 /yuz-maskeleri/innisfree-gozenek-bakimi-yapan-kil-yuz-maskesi-100-ml-p-10214639
 /yuz-maskeleri/isntree-gim-pdrn-icerikli-gece-bakim-maskesi-80-ml-p-10214528
 /yuz-maskeleri/isntree-hyaluronik-asit-icerikli-gece-maskesi-100-ml-p-10214538
+/yuz-maskeleri/isntree-iki-parca-eriyen-jel-yuz-maskesi-30-gr-x4-adet-p-10214533
 /yuz-maskeleri/janssen-cosmetics-gozenek-sikilastirici-maske-75-ml-p-10169122
 /yuz-maskeleri/janssen-cosmetics-nemlendirici-yosun-icerikli-jel-maske-75-ml-p-10133422
 /yuz-maskeleri/korelya-soyulabilir-salyangoz-yuz-maskesi-50-ml-p-10217495
@@ -11544,8 +11537,11 @@
 /yuz-maskeleri/mary-may-cica-ve-cay-agaci-ozlu-kil-maskesi-125-gr-p-10211322
 /yuz-maskeleri/mary-may-gul-suyu-ve-hyaluronik-asit-icerikli-kil-maskesi-125-gr-p-10211323
 /yuz-maskeleri/mary-may-hyaluronik-asit-ve-pantenol-icerikli-kagit-yuz-maskesi-30-adet-p-10214659
+/yuz-maskeleri/mary-may-idebenon-ve-bogurtlen-kompleksi-ozu-iceren-yuz-maskesi-20-adet-p-10213062
 /yuz-maskeleri/mary-may-kalendula-ve-peptit-icerikli-uyku-maskesi-110-gr-p-10211324
+/yuz-maskeleri/mary-may-kolajen-ve-peptit-icerikli-vital-kagit-yuz-maskesi-30-adet-p-10213061
 /yuz-maskeleri/mary-may-limon-ve-niasinamid-icerikli-kil-yuz-maskesi-125-gr-p-10214661
+/yuz-maskeleri/mary-may-niasinamid-vec-vitamini-icerikli-aydinlatici-kagit-yuz-maskesi-30-adet-p-10213060
 /yuz-maskeleri/mia-klinika-arindirici-ve-akne-karsiti-azelaik-kil-yuz-maskesi-7-ml-p-10223649
 /yuz-maskeleri/mia-klinika-nemlendirici-ve-canlandirici-gul-yuz-maskesi-7-ml-p-10223650
 /yuz-maskeleri/mia-klinika-panthenol-bal-ve-cicali-leke-kirisiklik-karsiti-isilti-veren-nemlendirici-yuz-maskesi-50-ml-p-10202966
@@ -11553,9 +11549,15 @@
 /yuz-maskeleri/pure-korean-collagen-peel-off-pack-yuz-maskesi-100-ml-p-10213234
 /yuz-maskeleri/pure-korean-egg-white-pore-cok-kullanimlik-yuz-maskesi-100-ml-p-10468887
 /yuz-maskeleri/she-vec-rice-vibes-only-aydinlatici-leke-karsiti-ve-nemlendirici-pirinc-yuz-maskesi-50-ml-p-10215121
+/yuz-maskeleri/skin1004-centella-kagit-ampul-maske-5x-25-ml-p-10218112
+/yuz-maskeleri/skin1004-centella-tone-brightening-glow-yuz-maskesi-5x-25-ml-p-10218128
 /yuz-maskeleri/skin1004-gozenek-bakimi-yapan-stick-kil-maskesi-27-gr-p-10208626
+/yuz-maskeleri/skin1004-hyalucica-hydrating-nemlendirici-yuz-maskesi-5x-23-ml-p-10218119
 /yuz-maskeleri/skin1004-madagascar-centella-hyalucica-uyku-maskesi-100-ml-p-10213894
 /yuz-maskeleri/skinfood-egg-white-pore-cok-kullanimlik-yuz-bakim-maskesi-120-ml-p-10132477
+/yuz-maskeleri/some-by-mi-galactomyces-glutatyon-icerikli-aydinlatici-kagit-yuz-maskesi-30-adet-p-10212832
+/yuz-maskeleri/some-by-mi-pdrn-spirulina-icerikli-serbet-yuz-maskesi-1-gr-x-10-adet-p-10212838
+/yuz-maskeleri/some-by-mi-retinol-icerikli-kagit-yuz-maskesi-30-adet-p-10212831
 /yuz-maskeleri/thalia-clay-stick-yuz-maskesi-calmpink-30-gr-p-10220263
 /yuz-maskeleri/thalia-clay-stick-yuz-maskesi-charcool-30-gr-p-10220262
 /yuz-maskeleri/the-ceel-yogun-nemlendirici-kolajen-maske-50-ml-p-10208179
