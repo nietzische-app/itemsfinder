@@ -228,6 +228,7 @@
 /tr/kombini-satn-al-l92411955490BSBS
 /tr/kombini-satn-al-l93042750056BSBS
 /tr/kombini-satn-al-l93143227052BSBS
+/tr/kombini-satn-al-l93417240542BSBS
 /tr/kombini-satn-al-l93765627746BSBS
 /tr/kombini-satn-al-l93804088172BSBS
 /tr/kombini-satn-al-l93864727412BSBS
@@ -247,7 +248,6 @@
 /tr/kombini-satn-al-l97299473002BSBS
 /tr/kombini-satn-al-l97384191063BSBS
 /tr/kombini-satn-al-l97846602360BSBS
-/tr/kombini-satn-al-l97950826766BSBS
 /tr/kombini-satn-al-l98329123032BSBS
 /tr/kombini-satn-al-l98345989911BSBS
 /tr/kombini-satn-al-l98554081474BSBS
@@ -402,7 +402,6 @@
 /tr/stili-kesfet-l93586429563BSBS
 /tr/stili-kesfet-l93853896536BSBS
 /tr/stili-kesfet-l94246416890BSBS
-/tr/stili-kesfet-l94276538778BSBS
 /tr/stili-kesfet-l94906867946BSBS
 /tr/stili-kesfet-l95226268101BSBS
 /tr/stili-kesfet-l95925852603BSBS
