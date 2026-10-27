@@ -16,7 +16,6 @@
 /tr/baggy-jean-l03660516
 /tr/baggy-jean-l07660500
 /tr/baggy-jean-l07662510
-/tr/baggy-relaxed-fit-jean-l07660508
 /tr/balon-bomber-ceket-l03720372
 /tr/balon-jakarl-kumas-baggy-jean-l07662521
 /tr/balon-jean-l07662304
@@ -49,6 +48,7 @@
 /tr/boncuk-detayl-duz-sandalet-l11706740
 /tr/boncuk-detayl-el-cantas-l14012840
 /tr/boncuk-detayl-omuz-cantas-l14025840
+/tr/boncuk-detayl-shopper-canta-l14004840
 /tr/boncuklu-omuz-cantas-l14014840
 /tr/boncuklu-omuz-cantas-l14029840
 /tr/bootcut-jean-l07660308
@@ -127,6 +127,7 @@
 /tr/fermuarl-kapusonlu-sentetik-kaucuk-etkili-sweatshirt-l07720501
 /tr/fermuarl-kapusonlu-sweatshirt-l07558309
 /tr/fermuarl-kase-ceket-l07721527
+/tr/fermuarl-kase-ince-ceket-l07460560
 /tr/fermuarl-tailored-fit-ceket-l07721519
 /tr/fitilli-ksa-kollu-t-shirt-l03230346
 /tr/frfrl-uzun-ceket-l03721301
@@ -160,6 +161,7 @@
 /tr/islemeli-barrel-jean-l07662522
 /tr/islemeli-ceket-l07721500
 /tr/isltl-baggy-jean-l07662414
+/tr/isltl-barrel-jean-l07660326
 /tr/isltl-bootcut-jean-l03660178
 /tr/isltl-genis-paca-jean-l07660309
 /tr/kadife-efektli-denim-ceket-l07720307
@@ -177,6 +179,7 @@
 /tr/kapusonlu-sisme-mont-l07720325
 /tr/kapusonlu-sisme-mont-l07720369
 /tr/kapusonlu-sisme-mont-l07720503
+/tr/kapusonlu-sisme-mont-l07720510
 /tr/kapusonlu-sisme-stwd-mont-l07700501
 /tr/kapusonlu-stwd-sisme-mont-l07720502
 /tr/kapusonlu-suni-kurk-ceket-l07700324
@@ -184,6 +187,7 @@
 /tr/kapusonlu-suslu-dugmeli-ceket-l07721511
 /tr/kapusonlu-syla-muhurlenmis-sisme-ceket-l07700505
 /tr/kapusonlu-syla-muhurlenmis-su-gecirmez-ceket-l07720377
+/tr/kare-desenli-sisme-mont-l07721549
 /tr/kareli-ceket-l07721515
 /tr/kareli-dik-yakal-ceket-l07720375
 /tr/kareli-grafikli-bermuda-sort-l07665502
@@ -191,6 +195,7 @@
 /tr/kareli-paca-devetli-jean-l07662508
 /tr/kareli-suni-yunlu-ceket-l07720372
 /tr/kareli-uzun-kollu-overshirt-l07460551
+/tr/kargo-relaxed-fit-jean-l07662534
 /tr/kase-ceket-l07720303
 /tr/kemer-koprulu-balon-baggy-jean-l07662312
 /tr/kemer-koprulu-balon-jean-l07660301
@@ -202,6 +207,7 @@
 /tr/keten-ksa-kollu-gomlek-l03460515
 /tr/kombin-cift-tarafl-ceket-l07700508
 /tr/kombine-cift-tarafl-ceket-l07720513
+/tr/kombine-kapusonlu-suni-deri-ceket-l07721516
 /tr/kombine-suni-suet-ceket-l07721509
 /tr/kombini-kesfet-l90581460817BSBS
 /tr/kombini-kesfet-l91905363461BSBS
@@ -241,6 +247,7 @@
 /tr/kombini-satn-al-l95104261466BSBS
 /tr/kombini-satn-al-l95159006858BSBS
 /tr/kombini-satn-al-l95748338530BSBS
+/tr/kombini-satn-al-l95797564516BSBS
 /tr/kombini-satn-al-l96405336504BSBS
 /tr/kombini-satn-al-l96707424074BSBS
 /tr/kombini-satn-al-l96767022563BSBS
@@ -273,6 +280,7 @@
 /tr/kombini-tamamla-l94733377179BSBS
 /tr/kombini-tamamla-l94852706261BSBS
 /tr/kombini-tamamla-l95809658724BSBS
+/tr/kombini-tamamla-l95929786062BSBS
 /tr/kombini-tamamla-l96133543313BSBS
 /tr/kombini-tamamla-l96281452330BSBS
 /tr/kombini-tamamla-l96297918720BSBS
@@ -280,6 +288,7 @@
 /tr/kombini-tamamla-l96506518180BSBS
 /tr/kombini-tamamla-l97374687336BSBS
 /tr/kombini-tamamla-l97452010011BSBS
+/tr/kombini-tamamla-l97826607062BSBS
 /tr/kombini-tamamla-l97971478639BSBS
 /tr/kombini-tamamla-l98479351461BSBS
 /tr/kombini-tamamla-l98481007827BSBS
@@ -304,6 +313,7 @@
 /tr/ksa-balon-trenckot-l07721321
 /tr/ksa-denim-tulum-l03021100
 /tr/ksa-kase-kaban-l07720311
+/tr/ksa-kase-kaban-l07721554
 /tr/ksa-kollu-crop-tisort-l03231511
 /tr/ksa-kollu-dar-kesim-tisort-l03230326
 /tr/ksa-kollu-interlok-polo-t-shirt-l03210507
@@ -315,6 +325,7 @@
 /tr/ksa-vucuda-oturan-trenckot-l07720327
 /tr/kusakl-uzun-trenckot-l07721532
 /tr/kusgozu-detayl-baggy-jean-l07662309
+/tr/kvrk-belli-baggy-jean-l07662315
 /tr/leopar-desenli-baggy-jean-l07670372
 /tr/looku-satn-al-l96621470641BSBS
 /tr/loose-fit-tisort-l03231507
@@ -326,6 +337,7 @@
 /tr/muscle-fit-tisort-l09247599
 /tr/naks-detayl-grafikli-tisort-l03231548
 /tr/naksl-relaxed-fit-tisort-l03231508
+/tr/naksl-shopper-canta-l14023840
 /tr/naksl-suni-deri-ceket-l07721510
 /tr/naylon-suslemeli-tote-canta-l14058840
 /tr/on-dikisli-barrel-jean-l07662504
@@ -364,13 +376,16 @@
 /tr/puantiyeli-pencere-detayl-top-l07461300
 /tr/puantiyeli-straight-jean-l07670457
 /tr/puantiyeli-vucuda-oturan-ceket-l07720403
+/tr/puskullu-ceket-l07720385
 /tr/race-force-suni-deri-ceket-l07721505
 /tr/regular-straight-jean-l07660517
+/tr/relaxed-fit-baggy-jean-l07660508
 /tr/relaxed-fit-baggy-jean-l07662515
 /tr/relaxed-fit-baggy-jean-l07662523
 /tr/relaxed-fit-bermuda-sort-l07665505
 /tr/relaxed-fit-jakarl-kumas-jean-l07662530
 /tr/relaxed-fit-jean-l07662509
+/tr/relaxed-fit-kontrast-detayl-baggy-jean-l07662529
 /tr/relaxed-fit-overlok-dikisli-tisort-l03231509
 /tr/relaxed-kargo-jean-l07660512
 /tr/ribanal-atlet-l03248502
@@ -423,6 +438,7 @@
 /tr/stili-tamamla-l96823333420BSBS
 /tr/straight-jean-l07660315
 /tr/straight-jean-l07660502
+/tr/straight-jean-l07662533
 /tr/stras-detayl-dusuk-bel-straight-jean-l07662307
 /tr/stwd-biye-detayl-fermuarl-ceket-l07721537
 /tr/stwd-jogger-bermuda-sort-l03665509
@@ -449,6 +465,7 @@
 /tr/suni-kurk-yakal-parka-l07720364
 /tr/suni-kurk-yakal-sisme-mont-l07720367
 /tr/suni-suet-bomber-ceket-l07720354
+/tr/suni-suet-bomber-ceket-l07721524
 /tr/suni-suet-bomber-ceket-l07721534
 /tr/suni-suet-ceket-l07720512
 /tr/suni-yunlu-dik-yaka-ceket-l07720346
@@ -477,6 +494,7 @@
 /tr/uzun-kollu-gomlek-ceket-l07460550
 /tr/uzun-kollu-reglan-tisort-l07230387
 /tr/uzun-kollu-vucuda-oturan-tisort-l07230386
+/tr/uzun-trenckot-l07721536
 /tr/v-neck-tisort-l03230317
 /tr/v-yaka-buzgulu-top-l07230317
 /tr/vucuda-oturan-100-keten-blazer-ceket-l07790324
@@ -485,6 +503,7 @@
 /tr/yan-dikisli-barrel-fit-jean-l07660328
 /tr/yars-grafik-desenli-sisme-mont-l07721535
 /tr/ykamal-efektli-ceket-l07721520
+/tr/ykamal-suni-deri-ceket-l07721507
 /tr/yrtk-detayl-baggy-jean-l07662303
 /tr/yrtk-detayl-skinny-jean-l07660521
 /tr/yrtk-detayl-straight-jean-l07662506
@@ -500,6 +519,7 @@
 /tr/yumusak-dokulu-genis-paca-pantolon-l07670319
 /tr/yumusak-dokunuslu-can-pantolon-l07670320
 /tr/zmba-detayl-omuz-cantas-l14037840
+/tr/zmba-detayl-straight-jean-l07662415
 /tr/zmba-detayl-topuklu-sandalet-l11619740
 /tr/zmbal-baggy-jean-l07670305
 /tr/zmbal-genis-paca-jean-l03660389
