@@ -23,7 +23,6 @@
 /tr/balon-kargo-pantolon-l07670353
 /tr/balon-kesim-baggy-jean-l07662505
 /tr/balon-kesim-suni-deri-bomber-ceket-l07720317
-/tr/balon-siluet-kase-bomber-ceket-l07720320
 /tr/balon-tunik-l03720369
 /tr/bambula-genis-paca-pantolon-l03670330
 /tr/bambula-top-l03230364
@@ -61,11 +60,8 @@
 /tr/cepli-denim-ceket-l07721538
 /tr/cepli-denim-ceket-l07721540
 /tr/cepli-denim-ceket-l07721544
-/tr/cepli-sisme-mont-l07720340
 /tr/cicek-desenli-el-cantas-l14034840
 /tr/cicekli-kahverengi-tg-isi-pantolon-l07670338
-/tr/cift-tarafl-ceket-l07720321
-/tr/cift-tarafl-ksa-ceket-l07700337
 /tr/cizgili-barrel-fit-jean-l07662313
 /tr/cizgili-barrel-jean-l07670332
 /tr/cizgili-denim-ceket-l07721526
@@ -153,6 +149,8 @@
 /tr/halter-yaka-ksa-elbise-l07380322
 /tr/hasr-canta-l14047840
 /tr/henley-yaka-slim-fit-tisort-l03231546
+/tr/ici-kurklu-biker-ceket-l07700337
+/tr/ici-kurklu-biker-ceket-l07720321
 /tr/ince-askl-poliamid-body-l03230388
 /tr/ince-askl-top-l03230367
 /tr/interlok-jogger-bermuda-l03665513
@@ -169,12 +167,13 @@
 /tr/kapitone-stwd-yelek-l07720599
 /tr/kapusonlu-bomber-ceket-l07720511
 /tr/kapusonlu-ceket-l07720304
-/tr/kapusonlu-dolgulu-ceket-l07700369
 /tr/kapusonlu-dolgulu-ceket-l07700536
 /tr/kapusonlu-fermuarl-stwd-denim-ceket-l07720519
-/tr/kapusonlu-hafif-mont-l07720333
+/tr/kapusonlu-hafif-ceket-l07720333
 /tr/kapusonlu-hafif-yagmurluk-l07720504
 /tr/kapusonlu-kanguru-ceket-l07720598
+/tr/kapusonlu-ksa-sisme-mont-l07700369
+/tr/kapusonlu-sisme-mont-l03721325
 /tr/kapusonlu-sisme-mont-l07701369
 /tr/kapusonlu-sisme-mont-l07720325
 /tr/kapusonlu-sisme-mont-l07720369
@@ -186,7 +185,7 @@
 /tr/kapusonlu-suni-kurk-ceket-l07720324
 /tr/kapusonlu-suslu-dugmeli-ceket-l07721511
 /tr/kapusonlu-syla-muhurlenmis-sisme-ceket-l07700505
-/tr/kapusonlu-syla-muhurlenmis-su-gecirmez-ceket-l07720377
+/tr/kapusonlu-syla-muhurlenmis-su-gecirmez-mont-l07720377
 /tr/kare-desenli-sisme-mont-l07721549
 /tr/kareli-ceket-l07721515
 /tr/kareli-dik-yakal-ceket-l07720375
@@ -310,6 +309,7 @@
 /tr/kot-jogger-pantolon-l03660518
 /tr/krokodil-suni-deri-ceket-l07750370
 /tr/kruvaze-kase-kaban-l07755302
+/tr/ksa-balon-kesim-kase-bomber-ceket-l07720320
 /tr/ksa-balon-trenckot-l07721321
 /tr/ksa-denim-tulum-l03021100
 /tr/ksa-kase-kaban-l07720311
@@ -399,7 +399,7 @@
 /tr/serit-detayl-capraz-askl-canta-l14138840
 /tr/shop-the-look-l94132144881BSBS
 /tr/sisme-bomber-ceket-l07720500
-/tr/sisme-ceket-l03721325
+/tr/sisme-kapitone-ceket-l07720340
 /tr/sisme-yelek-l07778320
 /tr/slim-fit-jean-l03660512
 /tr/slim-fit-jean-l07660503

@@ -600,6 +600,7 @@
 /ayak-bakim-kremi/lapitak-ayak-bakim-kremi-60-ml-p-10013766
 /ayak-bakim-kremi/lapitak-ayak-kokusu-onleyici-krem-60-ml-p-10022396
 /ayak-bakim-kremi/lapitak-topuk-catlak-kremi-60-ml-p-10013767
+/ayak-bakim-kremi/mixup-cracked-heel-foot-onarici-ayak-bakim-stick-krem-35-gr-p-10221001
 /ayak-bakim-kremi/neutrogena-catlak-topuklar-icin-ayak-kremi-50-ml-p-10064904
 /ayak-bakim-kremi/neutrogena-nasirlasmis-ayaklar-icin-ayak-kremi-50-ml-p-10001901
 /ayak-bakim-tirnak-bakim/aprilla-tirnak-bakim-seti-anc6808-p-10508197
@@ -950,6 +951,7 @@
 /bebek-cocuk-dis-bakimi/colgate-dr-rabbit-bubblegum-cocuk-dis-macunu-50-ml-p-10212137
 /bebek-cocuk-dis-bakimi/colgate-dr-rabbit-strawberry-cocuk-dis-macunu-50-ml-p-10212136
 /bebek-cocuk-dis-bakimi/colgate-fluffy-paws-cocuk-dis-fircasi-ekstra-yumusak-asortili-p-10217258
+/bebek-cocuk-dis-bakimi/colgate-harry-potter-cocuk-dis-bakim-seti-dis-fircasi-dis-macunu-50-ml-p-10223130
 /bebek-cocuk-dis-bakimi/colgate-harry-potter-cocuk-dis-fircasi-ultra-yumusak-p-10221191
 /bebek-cocuk-dis-bakimi/colgate-harry-potter-cocuk-dis-macunu-50-ml-p-10221192
 /bebek-cocuk-dis-bakimi/colgate-harry-potter-kids-power-cocuk-dis-fircasi-ekstra-yumusak-p-10221193
@@ -1144,7 +1146,6 @@
 /bulasik-temizleyiciler/benri-bulasik-makinesi-parlaticisi-450-ml-p-10217335
 /bulasik-temizleyiciler/benri-sivi-bulasik-deterjani-750-gr-p-10286294
 /bulasik-temizleyiciler/dr-beckmann-bulasik-makinesi-temizleyici-doypack-p-10200335
-/bulasik-temizleyiciler/fairy-platinum-fresh-bulasik-tableti-30lu-p-10223395
 /bulasik-temizleyiciler/porcoz-bulasik-elde-yikama-deterjani-aloe-vera-675-ml-p-10590185
 /bulasik-temizleyiciler/porcoz-bulasik-makinesi-parlaticisi-500-ml-p-10590188
 /bulasik-temizleyiciler/porcoz-bulasik-makinesi-temizleyici-250-ml-p-10590190
@@ -1173,6 +1174,7 @@
 /canta/eklips-buyuk-boy-renkli-makyaj-cantasi-p-10217397
 /canta/eklips-deniz-yildizi-canta-p-10216778
 /canta/eklips-hasir-plaj-cantasi-bej-duz-p-10207756
+/canta/eklips-hasir-plaj-cantasi-siyah-duz-p-10207759
 /canta/eklips-kirazli-kapitone-makyaj-cantasi-p-10218340
 /canta/eklips-kirpik-seffaf-makyaj-cantasi-p-10209037
 /canta/eklips-krem-fiyonk-kartlik-p-10216892
@@ -1466,12 +1468,14 @@
 /dis-fircalari/benri-dent-yuvarlak-dis-fircasi-yumusak-p-10211527
 /dis-fircalari/colgate-360-advanced-dis-fircasi-orta-p-10776959
 /dis-fircalari/colgate-360-dis-arasi-temizligi-dis-fircasi-11-orta-p-10018759
+/dis-fircalari/colgate-360-freshn-protect-dis-fircasi-11-p-10219136
 /dis-fircalari/colgate-360-komple-agiz-temizligi-dis-fircasi-11-orta-p-13000132
 /dis-fircalari/colgate-360-optik-beyaz-dis-fircasi-11-orta-p-10009186
 /dis-fircalari/colgate-extra-clean-colors-3lu-dis-fircasi-p-10162868
 /dis-fircalari/colgate-extra-clean-dis-fircasi-11-orta-p-13000133
 /dis-fircalari/colgate-extra-clean-orta-dis-fircasi-21-p-10237416
 /dis-fircalari/colgate-gentle-clean-21-dis-fircasi-hassas-yumusak-p-10208347
+/dis-fircalari/colgate-gentle-clean-gum-care-dis-fircasi-11-p-10221424
 /dis-fircalari/colgate-mikro-ince-advance-dis-fircasi-p-10361276
 /dis-fircalari/colgate-neo-tekli-dis-fircasi-p-10570803
 /dis-fircalari/colgate-total-foaming-clean-dis-fircasi-11-yumusak-p-10211506
@@ -1676,6 +1680,7 @@
 /dis-macunlari/splat-ultra-complex-dis-macunu-100-ml-p-10023116
 /dis-macunlari/the-ceel-aktif-mor-karbon-dis-beyazlatma-seti-dis-macunu-75-gr-dis-tozu-50-gr-p-10204573
 /dis-macunlari/the-ceel-dis-beyazlatici-mor-karbon-dis-macunu-75-gr-p-10214595
+/dis-macunlari/the-ceel-sigara-icenler-icin-beyazlatici-dis-macunu-75-gr-p-10214596
 /dis-macunlari/toothwak-misvakli-naneli-dis-macunu-75-ml-p-10218062
 /disk-pamuk/benri-disk-makyaj-temizleme-pamugu-80-adet-p-10005052
 /disk-pamuk/benri-disk-pamuk-140-adet-p-10211602
@@ -3984,8 +3989,12 @@
 /far/cheeryep-eyeshadow-far-paleti-04-neon-p-10223078
 /far/cheeryep-eyeshadow-far-paleti-06-dearii-p-10223069
 /far/cheeryep-eyeshadow-far-paleti-07-closer-p-10223070
+/far/cheeryep-eyeshadow-far-paleti-09-floating-life-p-10223079
 /far/cheeryep-eyeshadow-far-paleti-10-lively-p-10223072
+/far/cheeryep-eyeshadow-far-paleti-12-admiring-p-10223075
 /far/cheeryep-eyeshadow-far-paleti-14-flipped-p-10223073
+/far/cheeryep-eyeshadow-far-paleti-15-starcore-p-10223077
+/far/cheeryep-eyeshadow-far-paleti-16-dreamcatcher-p-10223076
 /far/cheeryep-eyeshadow-far-paleti-17-nude-heart-p-10223067
 /far/cheeryep-eyeshadow-far-paleti-18-wishes-starlight-p-10223066
 /far/cheeryep-eyeshadow-far-paleti-19-prelude-p-10223065
@@ -4702,6 +4711,7 @@
 /gida-takviyeleri-vitaminler/qlife-plusc-d3-vitamini-ve-cinko-iceren-efervesan-takviye-edici-gida-20-tablet-1000mg-p-10212813
 /gida-takviyeleri-vitaminler/qlife-sambucus-beta-glucan-surup-takviye-edici-gida-150-ml-p-10212835
 /gida-takviyeleri-vitaminler/qlife-sambucus-gummies-cd-vitamini-cinko-kara-murver-iceren-gummies-60-adet-p-10206716
+/gida-takviyeleri-vitaminler/ulker-pastil-kara-murver-aserola-cinko-propolis-8-adet-p-10204828
 /gida-takviyeleri-vitaminler/ulker-pastil-okaliptus-mentol-nane-8-adet-p-10215984
 /gida-takviyeleri-vitaminler/ulker-pastil-zencefil-zerdecal-propolis-8-adet-p-10204827
 /gida-takviyeleri-vitaminler/vita-ceel-bromelain-plus-green-tea-lkarnitin-60-tablet-p-10213457
@@ -4917,6 +4927,7 @@
 /goz-kalemi/show-by-pastel-show-your-game-waterproof-goz-kalemi-414-p-10061804
 /goz-kalemi/show-by-pastel-show-your-game-waterproof-goz-kalemi-415-p-10217190
 /goz-kalemi/show-by-pastel-show-your-sweetness-cil-kalemi-p-10202517
+/goz-kalemi/stellary-automatic-eyeliner-01-black-smooth-glide-longlasting-wear-p-10209419
 /goz-kalemi/stellary-automatic-eyeliner-03-brown-smooth-glide-longlasting-wear-p-10209420
 /goz-kalemi/stellary-automatic-eyeliner-05-blue-smooth-glide-longlasting-wear-p-10209421
 /goz-kalemi/stellary-eyeliner-kajal-01-black-intense-color-soft-application-p-10209424
@@ -5665,6 +5676,7 @@
 /kadin-deodorant-sprey/fa-grapefruit-lychee-kadin-deo-sprey-150-ml-p-10264072
 /kadin-deodorant-sprey/fa-pink-passion-kadin-deo-sprey-150-ml-p-18000091
 /kadin-deodorant-sprey/nivea-black-white-invisible-authentic-kadin-deodorant-sprey-150-ml-p-10218696
+/kadin-deodorant-sprey/nivea-black-white-invisible-clear-kadin-sprey-deodorant-200-ml-p-10199257
 /kadin-deodorant-sprey/nivea-fresh-natural-kadin-deodorant-sprey-150-ml-mini-rollon-25-ml-p-10380368
 /kadin-deodorant-sprey/nivea-fresh-natural-kadin-sprey-deodorant-200-ml-p-10199256
 /kadin-deodorant-sprey/nivea-kadin-pump-sprey-deodorant-75-ml-p-18000101
@@ -6584,6 +6596,7 @@
 /kas-kirpik-bakim-aksesuarlari/nascita-ustura-ve-kas-makasi-seti-2li-p-10494417
 /kas-kirpik-bakim-aksesuarlari/nascita-ustura-yay-2li-set-p-10445258
 /kas-kirpik-bakim-aksesuarlari/solingen-kas-makasi-2136-p-10016822
+/kas-kirpik-serumu/ashley-joy-kas-kirpik-serumu-6-ml-p-10208189
 /kas-kirpik-serumu/bioxcin-kas-ve-kirpik-serumu-3-ml-p-10211491
 /kas-kirpik-serumu/cosmogenesis-labs-dolgunlastirici-ve-guclendirici-kas-kirpik-serumu-3-ml-p-10215239
 /kas-kirpik-serumu/cosmogenesis-labs-parlatici-ve-nemlendirici-kas-kirpik-maskesi-95-ml-p-10215240
@@ -7484,6 +7497,13 @@
 /makyaj-fircalari/pastel-profashion-02-foundation-brush-fondoten-fircasi-p-10352856
 /makyaj-fircalari/pastel-profashion-04-blush-brush-allik-fircasi-p-10352858
 /makyaj-fircalari/perge-makyaj-firca-seti-pbt900-p-10016883
+/makyaj-fircalari/soho-nyc-pinky-pro-allik-fircasi-p002-p-10223389
+/makyaj-fircalari/soho-nyc-pinky-pro-aydinlatici-fircasi-p006-p-10223393
+/makyaj-fircalari/soho-nyc-pinky-pro-bronzlastirici-fircasi-p001-p-10223388
+/makyaj-fircalari/soho-nyc-pinky-pro-cift-uclu-kapatici-fondoten-fircasi-p003-p-10223390
+/makyaj-fircalari/soho-nyc-pinky-pro-duz-yuvarlak-aci-fondoten-fircasi-p007-p-10223394
+/makyaj-fircalari/soho-nyc-pinky-pro-genis-acili-kontur-fircasi-p004-p-10223391
+/makyaj-fircalari/soho-nyc-pinky-pro-kabuki-fondoten-fircasi-p005-p-10223392
 /makyaj-fircalari/soho-nyc-vegan-acili-detay-makyaj-fircasi-v711-p-10081231
 /makyaj-fircalari/soho-nyc-vegan-acili-dudak-makyaj-fircasi-v708-p-10081234
 /makyaj-fircalari/soho-nyc-vegan-acili-yuz-kontur-makyaj-fircasi-v704-p-10081225
@@ -7611,6 +7631,7 @@
 /manikur-pedikur-urunleri/nghia-tirnak-eti-makasi-kd710-103-mm-p-10220133
 /manikur-pedikur-urunleri/nucci-jel-tirnak-cikarma-kagidi-p-10214744
 /masa/aprilla-su-dalgasi-masasi-ahs2008-p-10492868
+/masa/aprilla-su-dalgasi-masasi-ahs2027-p-10474306
 /masa/remington-coconut-smooth-sac-masasi-ci5901-e51-p-10206567
 /masa/remington-keratin-protect-19-mm-sac-masasi-ci5318-p-10200591
 /masa/remington-pro-soft-curl-25-mm-sac-masasi-ci6525-p-10488470
@@ -7838,6 +7859,7 @@
 /mutfak-temizleyiciler/benri-limon-tuzu-100-gr-p-10286295
 /mutfak-temizleyiciler/benri-temizlik-karbonati-1-kg-p-10468375
 /mutfak-temizleyiciler/benri-yag-cozucu-750-ml-p-10221237
+/mutfak-temizleyiciler/cif-power-shine-sprey-temizleyici-mutfak-yag-cozucu-750-ml-p-10014322
 /mutfak-temizleyiciler/diversey-clonet-kirec-cozucu-750-ml-p-10122855
 /mutfak-temizleyiciler/fairy-power-sprey-3u1-arada-limon-kokulu-500-ml-p-10243763
 /mutfak-temizleyiciler/porcoz-firin-temizleyici-sprey-750-ml-p-10590205
@@ -8692,6 +8714,8 @@
 /pudra/note-luminous-silk-compact-powder-pudra-06-dark-honey-p-10215741
 /pudra/note-luminous-silk-cream-powder-02-p-10201076
 /pudra/note-pink-loose-powder-pudra-pembe-p-10218913
+/pudra/note-pure-guard-compact-powder-pudra-100-p-10218910
+/pudra/note-pure-guard-compact-powder-pudra-110-p-10218911
 /pudra/note-pure-guard-compact-powder-pudra-120-beige-harmony-p-10218912
 /pudra/note-translucent-setting-powder-makyaj-sabitleyici-transparan-pudra-p-10680002
 /pudra/pastel-profashion-fixing-powder-00-p-10167794
@@ -9391,7 +9415,6 @@
 /sac-fircasi/nascita-3d-flexi-kontrol-acma-tarama-sac-fircasi-gumus-p-10923979
 /sac-fircasi/nascita-3d-flexi-kontrol-acma-tarama-sac-fircasi-pembe-p-10923531
 /sac-fircasi/nascita-ac-kapa-sac-fircasi-p-10212811
-/sac-fircasi/nascita-ahsap-yassi-topuz-sac-fircasi-p-10212812
 /sac-fircasi/nascita-beyaz-mermer-pro-sac-fircasi-p-10677926
 /sac-fircasi/nascita-geri-donusumlu-sac-fircasi-pro2g-p-10626564
 /sac-fircasi/nascita-geri-donusumlu-sampuan-fircasi-bambu-asortili-p-10186767
@@ -9665,6 +9688,7 @@
 /sac-vitamini/hyp-me-hacim-veren-etki-sac-serumu-6-li-p-10202737
 /sac-vitamini/hyp-me-kopma-kirilma-karsti-sac-serumu-6li-p-10202738
 /sac-vitamini/intenpure-nemlendirici-sac-vitamini-30-kapsul-p-10213492
+/saglik/mixup-cracked-heel-foot-intensive-yogun-nem-ve-catlak-karsiti-bakim-balmi-100-ml-p-10221002
 /sakal-biyik-bakimi/orien-sakal-ve-biyik-serumu-50-ml-p-10508352
 /sampuan/360-hair-professional-be-volume-sampuan-450-ml-p-10208973
 /sampuan/ashley-joy-acik-renkler-boyali-saclar-icin-sampuan-250-ml-p-10208266
@@ -9887,6 +9911,7 @@
 /sampuan/pantene-grow-abundant-sac-dokulmesine-karsi-sampuan-290-ml-p-10216922
 /sampuan/pantene-guc-parlaklik-3u-1-arada-sampuan-400-ml-p-10207317
 /sampuan/pantene-guc-parlaklik-sampuan-400-ml-p-10207312
+/sampuan/pantene-guc-ve-parlaklik-sampuan-800-ml-p-10208554
 /sampuan/pantene-kepek-karsiti-sampuan-400-ml-p-10207323
 /sampuan/pantene-kesintisiz-nem-takviyesi-sampuan-400-ml-p-10212840
 /sampuan/pantene-onarici-koruyucu-3u-1-arada-sampuan-400-ml-p-10207315
@@ -10782,6 +10807,7 @@
 /toka-tac/eklips-istiridye-balik-kuyrugu-pens-toka-asortili-p-10202755
 /toka-tac/eklips-kahve-tasli-tac-p-10217595
 /toka-tac/eklips-kelebek-beyaz-mandal-toka-p-10215681
+/toka-tac/eklips-kelebek-mandal-toka-set-lila-p-10201032
 /toka-tac/eklips-kirazli-mandal-toka-p-10215678
 /toka-tac/eklips-kivrimli-beyaz-mandal-toka-p-10215679
 /toka-tac/eklips-kivrimli-mandal-toka-fume-p-10096909
@@ -10812,6 +10838,7 @@
 /toka-tac/eklips-neon-kulakli-toka-seti-asortili-p-10570587
 /toka-tac/eklips-otomatik-fiyonk-toka-leopar-p-10208433
 /toka-tac/eklips-oval-mandal-toka-ekru-p-10204183
+/toka-tac/eklips-papatya-2li-kucuk-lastik-toka-sari-p-10218725
 /toka-tac/eklips-pastel-mavi-mandal-toka-p-10201031
 /toka-tac/eklips-premium-ahtapot-pembe-mandal-toka-p-10215670
 /toka-tac/eklips-premium-bulut-beyaz-mandal-toka-p-10215671
@@ -11577,6 +11604,11 @@
 /yuz-bakim-maskesi-paket/dermokil-yesil-kil-maskesi-2x75-ml-p-10199187
 /yuz-bakim-maskesi-paket/dermokil-yumurta-maskesi-20-gr-aknejenik-ve-yagli-ciltler-icin-p-10202398
 /yuz-bakim-maskesi-paket/dermokilc-vitamini-kagit-serum-kagit-maske-p-10793843
+/yuz-bakim-maskesi-paket/emoi-pdrn-collagen-anti-age-care-yaslanma-karsiti-yuz-maskesi-27-ml-p-10224117
+/yuz-bakim-maskesi-paket/emoi-pdrn-glutathione-calming-yatistirici-yuz-maskesi-27-ml-p-10224115
+/yuz-bakim-maskesi-paket/emoi-pdrn-hyaluronic-acid-hydra-nemlendirici-yuz-maskesi-27-ml-p-10224116
+/yuz-bakim-maskesi-paket/emoi-pdrn-retinol-calming-canlandirici-yuz-maskesi-27-ml-p-10224114
+/yuz-bakim-maskesi-paket/emoi-pdrn-vitaminc-brightening-aydinlatici-yuz-maskesi-27-ml-p-10224113
 /yuz-bakim-maskesi-paket/etude-cay-agaci-ozlu-nemlendirici-kagit-maske-20-ml-p-10214057
 /yuz-bakim-maskesi-paket/etude-hyaluronik-asit-icerikli-nemlendirici-kagit-maske-20-ml-p-10214054
 /yuz-bakim-maskesi-paket/etude-inci-icerikli-aydinlatici-kagit-maske-20-ml-p-10214055
