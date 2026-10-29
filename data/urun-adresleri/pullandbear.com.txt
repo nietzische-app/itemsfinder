@@ -39,7 +39,6 @@
 /tr/basic-tisort-l08242500
 /tr/basic-trenckot-l07721300
 /tr/basic-triko-hrka-l07563300
-/tr/basic-yumusak-orgu-kazak-l07540323
 /tr/beli-buzgulu-ceket-l07720368
 /tr/bisiklet-yaka-atlet-l03230353
 /tr/bisiklet-yaka-relaxed-fit-sweatshirt-l07558514
@@ -62,6 +61,8 @@
 /tr/cepli-denim-ceket-l07721544
 /tr/cicek-desenli-el-cantas-l14034840
 /tr/cicekli-kahverengi-tg-isi-pantolon-l07670338
+/tr/cift-tarafl-biker-ceket-l07720406
+/tr/cift-tarafl-dik-yaka-ceket-l07720402
 /tr/cizgili-barrel-fit-jean-l07662313
 /tr/cizgili-barrel-jean-l07670332
 /tr/cizgili-denim-ceket-l07721526
@@ -116,6 +117,7 @@
 /tr/dusuk-bel-straight-jean-l07662410
 /tr/dusuk-bel-straight-jean-l07683329
 /tr/dusuk-bel-zmbal-straight-jean-l07662308
+/tr/ekose-sisme-mont-l07720405
 /tr/eskitme-gorunumlu-tote-canta-l14051840
 /tr/fermuarl-denim-ceket-l07720517
 /tr/fermuarl-dik-yaka-sweatshirt-l07558508
@@ -251,9 +253,11 @@
 /tr/kombini-satn-al-l96707424074BSBS
 /tr/kombini-satn-al-l96767022563BSBS
 /tr/kombini-satn-al-l96963257941BSBS
+/tr/kombini-satn-al-l97247530546BSBS
 /tr/kombini-satn-al-l97299473002BSBS
 /tr/kombini-satn-al-l97384191063BSBS
 /tr/kombini-satn-al-l97846602360BSBS
+/tr/kombini-satn-al-l98234774363BSBS
 /tr/kombini-satn-al-l98329123032BSBS
 /tr/kombini-satn-al-l98345989911BSBS
 /tr/kombini-satn-al-l98554081474BSBS
@@ -275,9 +279,12 @@
 /tr/kombini-tamamla-l92731341199BSBS
 /tr/kombini-tamamla-l93284337118BSBS
 /tr/kombini-tamamla-l93435890436BSBS
+/tr/kombini-tamamla-l93543998987BSBS
+/tr/kombini-tamamla-l93769142262BSBS
 /tr/kombini-tamamla-l94137003081BSBS
 /tr/kombini-tamamla-l94733377179BSBS
 /tr/kombini-tamamla-l94852706261BSBS
+/tr/kombini-tamamla-l95064612418BSBS
 /tr/kombini-tamamla-l95809658724BSBS
 /tr/kombini-tamamla-l95929786062BSBS
 /tr/kombini-tamamla-l96133543313BSBS
@@ -296,6 +303,7 @@
 /tr/kombini-tamamla-l99123298840BSBS
 /tr/kombini-tamamla-l99141399883BSBS
 /tr/kombini-tamamla-l99319409261BSBS
+/tr/kombini-tamamla-l99443203159BSBS
 /tr/kombini-tamamla-l99473103375BSBS
 /tr/kombini-tamamla-l99810378230BSBS
 /tr/kombinini-tamamla-l92230762123BSBS
@@ -361,6 +369,7 @@
 /tr/patchwork-genis-paca-jean-l07660300
 /tr/patchwork-genis-paca-jean-l07662412
 /tr/pembe-barrel-jean-l07670309
+/tr/pembe-kadife-bomber-ceket-l07720313
 /tr/pencere-detayl-aplikeli-top-l07231336
 /tr/pileli-bermuda-sort-l07665501
 /tr/pileli-kemerli-relaxed-jean-l07662517
@@ -382,6 +391,7 @@
 /tr/relaxed-fit-baggy-jean-l07660508
 /tr/relaxed-fit-baggy-jean-l07662515
 /tr/relaxed-fit-baggy-jean-l07662523
+/tr/relaxed-fit-baggy-jean-l07662528
 /tr/relaxed-fit-bermuda-sort-l07665505
 /tr/relaxed-fit-jakarl-kumas-jean-l07662530
 /tr/relaxed-fit-jean-l07662509
@@ -442,6 +452,7 @@
 /tr/stras-detayl-dusuk-bel-straight-jean-l07662307
 /tr/stwd-biye-detayl-fermuarl-ceket-l07721537
 /tr/stwd-jogger-bermuda-sort-l03665509
+/tr/stwd-kapusonlu-denim-ceket-l07721560
 /tr/stwd-kare-desenli-ceket-l07721521
 /tr/stwd-kontrast-panelli-esofman-ceketi-l07721539
 /tr/stwd-ksa-kollu-sweatshirt-l03232501
@@ -469,8 +480,10 @@
 /tr/suni-suet-bomber-ceket-l07721534
 /tr/suni-suet-ceket-l07720512
 /tr/suni-yunlu-dik-yaka-ceket-l07720346
+/tr/suni-yunlu-dik-yaka-ceket-l07720380
 /tr/suni-yunlu-yakal-denim-ceket-l07701519
 /tr/super-genis-paca-comfort-jean-l07660317
+/tr/suslemeli-file-tote-canta-l14191740
 /tr/suslemeli-omuz-cantas-l14006840
 /tr/suslu-dugme-detayl-dar-kesim-ceket-l07720373
 /tr/suslu-dugmeli-ceket-l07721501
@@ -487,6 +500,7 @@
 /tr/trucker-ceket-l07720516
 /tr/trucker-denim-ceket-l07720518
 /tr/trucker-denim-ceket-l07720521
+/tr/turuncu-stwd-sisme-mont-l07721551
 /tr/ucgen-bikini-ustu-l03000335
 /tr/utility-parka-l07721523
 /tr/uzun-denim-tulum-l03021300
@@ -505,6 +519,7 @@
 /tr/ykamal-efektli-ceket-l07721520
 /tr/ykamal-suni-deri-ceket-l07721507
 /tr/yrtk-detayl-baggy-jean-l07662303
+/tr/yrtk-detayl-baggy-jean-l07662311
 /tr/yrtk-detayl-skinny-jean-l07660521
 /tr/yrtk-detayl-straight-jean-l07662506
 /tr/yrtk-mom-fit-jean-l03660302
