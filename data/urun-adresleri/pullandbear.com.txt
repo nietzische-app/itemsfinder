@@ -46,7 +46,6 @@
 /tr/boncuk-detayl-duz-sandalet-l11706740
 /tr/boncuk-detayl-el-cantas-l14012840
 /tr/boncuk-detayl-omuz-cantas-l14025840
-/tr/boncuk-detayl-shopper-canta-l14004840
 /tr/boncuklu-omuz-cantas-l14014840
 /tr/boncuklu-omuz-cantas-l14029840
 /tr/bootcut-jean-l07660308
@@ -257,6 +256,7 @@
 /tr/kombini-satn-al-l97299473002BSBS
 /tr/kombini-satn-al-l97384191063BSBS
 /tr/kombini-satn-al-l97846602360BSBS
+/tr/kombini-satn-al-l97950826766BSBS
 /tr/kombini-satn-al-l98234774363BSBS
 /tr/kombini-satn-al-l98329123032BSBS
 /tr/kombini-satn-al-l98345989911BSBS
@@ -427,6 +427,7 @@
 /tr/stili-kesfet-l93586429563BSBS
 /tr/stili-kesfet-l93853896536BSBS
 /tr/stili-kesfet-l94246416890BSBS
+/tr/stili-kesfet-l94276538778BSBS
 /tr/stili-kesfet-l94906867946BSBS
 /tr/stili-kesfet-l95226268101BSBS
 /tr/stili-kesfet-l95925852603BSBS

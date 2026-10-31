@@ -2684,7 +2684,6 @@
 /p/bust-your-brass-blond-polaire---yogun-onarici-maske-P10059158.html
 /p/butta-drop-body-cream---losyon-et-tuzlu-karamel-vucut-kremi-P10062490.html
 /p/butta-drop-body-cream-amber-bouquet---nemlendirici-vucut-kremi-P10064321.html
-/p/butta-drop-body-milk---nemlendirici-vucut-sutu-P10059471.html
 /p/butta-drop-cream-558096.html
 /p/butta-drop-cream-P10016432.html
 /p/butta-drop-guava-getaway---cirpilmis-yagli-nemlendirici-vucut-kremi-P10064697.html
@@ -3153,6 +3152,7 @@
 /p/ck-eternity-amber-essence-for-woman---parfum-intense-762024.html
 /p/ck-eternity-amber-essence-for-woman---parfum-intense-P1000206237.html
 /p/ck-eternity-suede-essence-for-men---parfum-intense-P1000215523.html
+/p/ck-eternity-suede-essence-for-women---parfum-intense-P1000215085.html
 /p/ck-euphoria-bold-elixir---parfum-intense-P1000213184.html
 /p/ck-euphoria-magnetic-elixir---parfum-intense-P1000213182.html
 /p/ck-euphoria-solar-elixir---parfum-intense-P1000213183.html
@@ -5116,7 +5116,6 @@
 /p/el-kremi---10-saat-nemlendirme-P10057541.html
 /p/el-maskeleri--emdirilmis-eldivenler---15-dakikada-el-nemlendirme-690819.html
 /p/el-maskeleri--emdirilmis-eldivenler---15-dakikada-el-nemlendirme-P10057542.html
-/p/el-sabunu---peeling-yapan-el-temizleyici-P10014724.html
 /p/el-sensuous-edp-100ml-3.4floz-P103812.html
 /p/el-temizleme-spreyi---yapiskan-olmayan-formul--hizli-kurur-768968.html
 /p/el-temizleme-spreyi---yapiskan-olmayan-formul--hizli-kurur-768971.html
@@ -5426,7 +5425,6 @@
 /p/eye-revive-serum---yenileyici-gozalti-serumu-P10025083.html
 /p/eye-sculpt-texture-and-tone-paleti---midi-far-paleti---776483.html
 /p/eye-sculpt-texture-and-tone-paleti---midi-far-paleti---P1000209424.html
-/p/eye-smudger-brush---goz-fircasi-P3491137.html
 /p/eye-tint-li%CC%87ki%CC%87t-goz-fari-471835.html
 /p/eye-tint-li%CC%87ki%CC%87t-goz-fari-471836.html
 /p/eye-tint-li%CC%87ki%CC%87t-goz-fari-478082.html
@@ -5986,6 +5984,7 @@
 /p/genesis-masque-reconstituant---dokulme-karsiti-sac-bakim-maskesi-P4010101.html
 /p/genifique---goz-kremi-P10061697.html
 /p/genifique---repair-shot-serum-P1000215810.html
+/p/genifique---temizleyici-P1000215801.html
 /p/genifique-creme-50-ml-P92512.html
 /p/genifique-eye-et-lash-concentrate-P10025439.html
 /p/genifique-ultimate---serum-735170.html
@@ -6391,6 +6390,7 @@
 /p/gold-fair-in-mayfair-eau-de-parfum-P10026841.html
 /p/golden-palette---goz-fari-paleti-P10057671.html
 /p/good-girl---eau-de-parfum-set-P1000215284.html
+/p/good-girl---eau-de-parfum-set-P1000216918.html
 /p/good-girl-363325.html
 /p/good-girl-717298.html
 /p/good-girl-717299.html
@@ -7301,7 +7301,6 @@
 /p/hypernova---saten-mat-allik-721372.html
 /p/hypernova---saten-mat-allik-721373.html
 /p/hypernova---saten-mat-allik-721374.html
-/p/hypernova---saten-mat-allik-P10056808.html
 /p/hypernova---saten-mat-bronzlastirici-722016.html
 /p/hypernova---saten-mat-bronzlastirici-722017.html
 /p/hypernova---saten-mat-bronzlastirici-722019.html
@@ -8262,7 +8261,6 @@
 /p/lady-bold-707752.html
 /p/lady-bold-729953.html
 /p/lady-bold-P10021336.html
-/p/lady-million---set-eau-de-parfum--sensual-body-lotion-P1000215312.html
 /p/lady-million-P111929.html
 /p/lady-million-eau-de-parfum-80-ml-204166.html
 /p/lady-million-eau-de-parfum-80-ml-804798.html
@@ -9214,7 +9212,6 @@
 /p/lip-sleeping-mask-615228.html
 /p/lip-sleeping-mask-P3662005.html
 /p/lip-sleeping-mask-blue-lemonade---sinirli-uretim-gece-dudak-maskesi-P1000212170.html
-/p/lip-sleeping-mask-gingerbread---sinirli-uretim-gece-dudak-maskesi-P1000215152.html
 /p/lip-sleeping-mask-pumpkin-pie---dudaklar-icin-gece-bakim-maskesi-P1000210214.html
 /p/lip-sleeping-mask-smoothie-acai-mangue---sinirli-uretim-gece-dudak-maskesi-P1000214533.html
 /p/lip-souffle---mat-likit-ruj-528101.html
@@ -9788,7 +9785,6 @@
 /p/maracuja-juicy-plumping-lip-oil---dolgunlastirici-dudak-yagi-P10059428.html
 /p/maracuja-juicy-shift---parlak-dolgunlastirici-dudak-balmi-668695.html
 /p/marine-hyaluronics-nemlendirici-serum-P10048407.html
-/p/mario-bade-lip-balm-P4036142.html
 /p/mario-s-face-et-eye-brush-trio---yuz-ve-goz-fircasi-seti-P1000217079.html
 /p/marrakesh-in-a-bottle-orange-blossom--24---eau-de-parfum-766203.html
 /p/marrakesh-in-a-bottle-orange-blossom--24---eau-de-parfum-P10059772.html
@@ -12395,7 +12391,6 @@
 /p/rare-fragrance-layering-balm-fresh-bergamot--parfumlu-balsam-P10064777.html
 /p/rare-moments---roll-on-eau-de-parfum-i%CC%87kilisi-P1000215073.html
 /p/rc-paradiso---eau-de-parfum-P10060196.html
-/p/rc-paradiso-assoluto---eau-de-parfum-P10060197.html
 /p/rc-signature---eau-de-parfum-P10060195.html
 /p/rc-uomo---eau-de-toilette-P10060198.html
 /p/re-birth-niacinamide-serum---cilt-tonu-esitleyici-ve-leke-karsiti-serum-P10062073.html
@@ -12453,6 +12448,7 @@
 /p/renergie-kolajen---krem-P1000212206.html
 /p/renergie-multi-lift-creme-50-ml-P2112015.html
 /p/renergie-multi-lift-night-50-ml-P770058.html
+/p/renergie-triple-serum---anneler-gunu-seti-P1000212731.html
 /p/renergie-triple-serum---cilt-bakim-seti-P1000216808.html
 /p/renergie-triple-serum-737635.html
 /p/renergie-triple-serum-P10023689.html
@@ -13745,6 +13741,7 @@
 /p/si-passione-intense---eau-de-parfum-P1000203470.html
 /p/si-passione-red-musk---eau-de-parfum-770609.html
 /p/si-passione-red-musk---eau-de-parfum-P1000206612.html
+/p/signature---set-eau-de-parfum-P1000215614.html
 /p/signature--eau-de-parfum-818274.html
 /p/signature--eau-de-parfum-P1000214266.html
 /p/signature-absolue-for-woman---eau-de-parfum-609516.html
@@ -14207,6 +14204,7 @@
 /p/soleil-neige---eau-de-parfum-797002.html
 /p/soleil-neige---eau-de-parfum-800687.html
 /p/soleil-neige---eau-de-parfum-P1000211517.html
+/p/soleil-neige---eau-de-parfum-set-P1000215297.html
 /p/solo-shadow-matte---mat-goz-fari-P1000213284.html
 /p/soothing-et-barrier-support-serum---yatistirici-et-bariyer-destekleyici-serum-P10058249.html
 /p/sos-lashes-serum-mascara---kirpik-temizleyici-P10034250.html
